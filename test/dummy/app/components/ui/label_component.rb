@@ -19,6 +19,7 @@ module Ui
 
     def label_classes
       cn(
+        # Matching shadcn/ui label
         "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
         @class_name
       )

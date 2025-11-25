@@ -1,11 +1,17 @@
-<div class="flex flex-col gap-4 max-w-lg">
-  <%= render Ui::AlertComponent.new(variant: :default) do |alert| %>
-    <% alert.with_title { "Heads up!" } %>
-    <% alert.with_description { "You can add components to your app using the cli." } %>
-  <% end %>
+<div class="flex flex-col gap-6 max-w-lg">
+  <div>
+    <h4 class="text-sm font-medium mb-4">Default</h4>
+    <%= render Ui::AlertComponent.new do |alert| %>
+      <% alert.with_title { "Heads up!" } %>
+      <% alert.with_description { "You can add components to your app using the CLI." } %>
+    <% end %>
+  </div>
 
-  <%= render Ui::AlertComponent.new(variant: :destructive) do |alert| %>
-    <% alert.with_title { "Error" } %>
-    <% alert.with_description { "Your session has expired. Please log in again." } %>
-  <% end %>
+  <div>
+    <h4 class="text-sm font-medium mb-4">Destructive</h4>
+    <%= render Ui::AlertComponent.new(variant: :destructive) do |alert| %>
+      <% alert.with_title { "Error" } %>
+      <% alert.with_description { "Your session has expired. Please log in again." } %>
+    <% end %>
+  </div>
 </div>

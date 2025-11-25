@@ -44,7 +44,7 @@ module Ui
     private
 
     def spinner_classes
-      cn("animate-spin", SIZES[@size], @class_name)
+      cn("animate-spin text-primary", SIZES[@size], @class_name)
     end
   end
 end

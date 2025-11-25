@@ -12,8 +12,6 @@ module Ui
     renders_one :image, "ImageComponent"
     renders_one :fallback, "FallbackComponent"
 
-    attr_reader :size, :class_name, :html_options
-
     # @param size [Symbol] The avatar size (:sm, :default, :lg, :xl)
     # @param class_name [String] Additional CSS classes
     # @param html_options [Hash] Additional HTML attributes
@@ -24,7 +22,7 @@ module Ui
     end
 
     def call
-      tag.span(class: avatar_classes, **html_options) do
+      tag.span(class: avatar_classes, **@html_options) do
         safe_join([image, fallback].compact)
       end
     end
@@ -33,15 +31,14 @@ module Ui
 
     def avatar_classes
       cn(
+        # Matching shadcn/ui avatar
         "relative flex shrink-0 overflow-hidden rounded-full",
-        SIZES[size],
-        class_name
+        SIZES[@size],
+        @class_name
       )
     end
 
     class ImageComponent < BaseComponent
-      attr_reader :src, :alt, :class_name, :html_options
-
       def initialize(src:, alt: "", class_name: nil, **html_options)
         @src = src
         @alt = alt
@@ -51,18 +48,16 @@ module Ui
 
       def call
         tag.img(
-          src: src,
-          alt: alt,
-          class: cn("aspect-square h-full w-full object-cover", class_name),
+          src: @src,
+          alt: @alt,
+          class: cn("aspect-square h-full w-full", @class_name),
           loading: "lazy",
-          **html_options
+          **@html_options
         )
       end
     end
 
     class FallbackComponent < BaseComponent
-      attr_reader :class_name, :html_options
-
       def initialize(class_name: nil, **html_options)
         @class_name = class_name
         @html_options = html_options
@@ -71,8 +66,8 @@ module Ui
       def call
         tag.span(
           content,
-          class: cn("flex h-full w-full items-center justify-center rounded-full bg-muted text-muted-foreground font-medium", class_name),
-          **html_options
+          class: cn("flex h-full w-full items-center justify-center rounded-full bg-muted", @class_name),
+          **@html_options
         )
       end
     end

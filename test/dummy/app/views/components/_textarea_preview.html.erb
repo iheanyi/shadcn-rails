@@ -1,4 +1,19 @@
-<div class="flex flex-col gap-4 max-w-sm">
-  <%= render Ui::TextareaComponent.new(placeholder: "Type your message here...") %>
-  <%= render Ui::TextareaComponent.new(placeholder: "Disabled textarea", disabled: true) %>
+<div class="flex flex-col gap-8 max-w-md">
+  <div>
+    <h4 class="text-sm font-medium mb-4">Default</h4>
+    <%= render Ui::TextareaComponent.new(placeholder: "Type your message here.") %>
+  </div>
+
+  <div>
+    <h4 class="text-sm font-medium mb-4">With Label</h4>
+    <div class="grid gap-2">
+      <%= render Ui::LabelComponent.new(for_id: "message") { "Your message" } %>
+      <%= render Ui::TextareaComponent.new(id: "message", placeholder: "Type your message here.") %>
+    </div>
+  </div>
+
+  <div>
+    <h4 class="text-sm font-medium mb-4">Disabled</h4>
+    <%= render Ui::TextareaComponent.new(placeholder: "Disabled", disabled: true) %>
+  </div>
 </div>

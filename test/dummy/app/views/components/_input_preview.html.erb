@@ -1,6 +1,37 @@
-<div class="flex flex-col gap-4 max-w-sm">
-  <%= render Ui::InputComponent.new(type: "text", placeholder: "Enter text...") %>
-  <%= render Ui::InputComponent.new(type: "email", placeholder: "Enter email...") %>
-  <%= render Ui::InputComponent.new(type: "password", placeholder: "Enter password...") %>
-  <%= render Ui::InputComponent.new(disabled: true, placeholder: "Disabled") %>
+<div class="flex flex-col gap-8 max-w-md">
+  <div>
+    <h4 class="text-sm font-medium mb-4">Default</h4>
+    <%= render Ui::InputComponent.new(placeholder: "Email") %>
+  </div>
+
+  <div>
+    <h4 class="text-sm font-medium mb-4">With Label</h4>
+    <div class="grid gap-2">
+      <%= render Ui::LabelComponent.new(for_id: "email-example") { "Email" } %>
+      <%= render Ui::InputComponent.new(type: "email", id: "email-example", placeholder: "Enter your email") %>
+    </div>
+  </div>
+
+  <div>
+    <h4 class="text-sm font-medium mb-4">Types</h4>
+    <div class="grid gap-4">
+      <div class="grid gap-2">
+        <%= render Ui::LabelComponent.new(for_id: "text") { "Text" } %>
+        <%= render Ui::InputComponent.new(id: "text", placeholder: "Enter text") %>
+      </div>
+      <div class="grid gap-2">
+        <%= render Ui::LabelComponent.new(for_id: "password") { "Password" } %>
+        <%= render Ui::InputComponent.new(type: "password", id: "password") %>
+      </div>
+      <div class="grid gap-2">
+        <%= render Ui::LabelComponent.new(for_id: "number") { "Number" } %>
+        <%= render Ui::InputComponent.new(type: "number", id: "number", placeholder: "0") %>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h4 class="text-sm font-medium mb-4">Disabled</h4>
+    <%= render Ui::InputComponent.new(placeholder: "Disabled", disabled: true) %>
+  </div>
 </div>

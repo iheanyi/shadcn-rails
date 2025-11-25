@@ -2,87 +2,118 @@
 
 module Ui
   class SelectComponent < BaseComponent
-    renders_many :options, "OptionComponent"
-
-    attr_reader :name, :value, :placeholder, :disabled, :required, :multiple,
-                :class_name, :html_options
-
     # @param name [String] The select name attribute
-    # @param value [String, Array] The selected value(s)
-    # @param placeholder [String] The placeholder text for the first option
+    # @param value [String] The currently selected value
+    # @param placeholder [String] Placeholder text
     # @param disabled [Boolean] Whether the select is disabled
-    # @param required [Boolean] Whether the select is required
-    # @param multiple [Boolean] Whether multiple selections are allowed
+    # @param options [Array<Hash>] Options array with :value and :label keys
+    # @param id [String] The select ID
     # @param class_name [String] Additional CSS classes
     # @param html_options [Hash] Additional HTML attributes
-    def initialize(
-      name: nil,
-      value: nil,
-      placeholder: nil,
-      disabled: false,
-      required: false,
-      multiple: false,
-      class_name: nil,
-      **html_options
-    )
+    def initialize(name: nil, value: nil, placeholder: "Select an option...", disabled: false, options: [], id: nil, class_name: nil, **html_options)
       @name = name
       @value = value
       @placeholder = placeholder
       @disabled = disabled
-      @required = required
-      @multiple = multiple
+      @options = options
+      @id = id || "select-#{SecureRandom.hex(4)}"
       @class_name = class_name
       @html_options = html_options
     end
 
     def call
-      tag.select(
-        name: name,
-        disabled: disabled,
-        required: required,
-        multiple: multiple,
-        class: select_classes,
-        **html_options
-      ) do
-        safe_join([placeholder_option, options].compact)
+      # Using native select with custom styling for better accessibility and form support
+      tag.div(class: "relative", "data-controller": "select") do
+        native_select + custom_trigger + dropdown
       end
     end
 
     private
 
-    def select_classes
-      cn(
-        "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
-        class_name
-      )
+    def native_select
+      tag.select(
+        name: @name,
+        id: @id,
+        disabled: @disabled,
+        class: "sr-only",
+        "data-select-target": "native",
+        "data-action": "change->select#sync"
+      ) do
+        placeholder_option + option_elements
+      end
     end
 
     def placeholder_option
-      return unless placeholder
+      return unless @placeholder
 
-      tag.option(placeholder, value: "", disabled: true, selected: value.blank?)
+      tag.option(value: "", disabled: true, selected: @value.nil?) { @placeholder }
     end
 
-    class OptionComponent < BaseComponent
-      attr_reader :value, :selected, :disabled, :class_name, :html_options
-
-      def initialize(value:, selected: false, disabled: false, class_name: nil, **html_options)
-        @value = value
-        @selected = selected
-        @disabled = disabled
-        @class_name = class_name
-        @html_options = html_options
-      end
-
-      def call
+    def option_elements
+      safe_join(@options.map do |opt|
         tag.option(
-          content,
-          value: value,
-          selected: selected,
-          disabled: disabled,
-          class: class_name,
-          **html_options
+          opt[:label],
+          value: opt[:value],
+          selected: opt[:value].to_s == @value.to_s
         )
+      end)
+    end
+
+    def custom_trigger
+      selected_label = @options.find { |o| o[:value].to_s == @value.to_s }&.dig(:label)
+      
+      tag.button(
+        type: "button",
+        class: trigger_classes,
+        disabled: @disabled,
+        "aria-haspopup": "listbox",
+        "data-select-target": "trigger",
+        "data-action": "click->select#toggle"
+      ) do
+        tag.span(selected_label || @placeholder, class: selected_label ? "" : "text-muted-foreground", "data-select-target": "label") +
+          chevron_icon
+      end
+    end
+
+    def trigger_classes
+      cn(
+        "flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+        @class_name
+      )
+    end
+
+    def dropdown
+      tag.div(
+        class: "absolute z-50 mt-1 hidden min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md w-full",
+        "data-select-target": "dropdown"
+      ) do
+        tag.div(class: "p-1") do
+          safe_join(@options.map do |opt|
+            tag.div(
+              class: "relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none hover:bg-accent hover:text-accent-foreground data-[selected=true]:bg-accent",
+              "data-value": opt[:value],
+              "data-selected": (opt[:value].to_s == @value.to_s).to_s,
+              "data-action": "click->select#select"
+            ) do
+              opt[:label]
+            end
+          end)
+        end
+      end
+    end
+
+    def chevron_icon
+      tag.svg(
+        xmlns: "http://www.w3.org/2000/svg",
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        "stroke-width": "2",
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round",
+        class: "h-4 w-4 opacity-50"
+      ) do
+        tag.path(d: "m6 9 6 6 6-6")
       end
     end
   end

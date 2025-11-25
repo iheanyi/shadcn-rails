@@ -1,0 +1,95 @@
+import { Controller } from "@hotwired/stimulus"
+
+// Connects to data-controller="select"
+export default class extends Controller {
+  static targets = ["native", "trigger", "label", "dropdown"]
+
+  connect() {
+    // Handle clicks outside
+    this.boundClickOutside = this.handleClickOutside.bind(this)
+    document.addEventListener("click", this.boundClickOutside)
+    
+    // Handle escape key
+    this.boundKeydown = this.handleKeydown.bind(this)
+    document.addEventListener("keydown", this.boundKeydown)
+  }
+
+  disconnect() {
+    document.removeEventListener("click", this.boundClickOutside)
+    document.removeEventListener("keydown", this.boundKeydown)
+  }
+
+  toggle(event) {
+    event.stopPropagation()
+    if (this.isOpen()) {
+      this.close()
+    } else {
+      this.open()
+    }
+  }
+
+  open() {
+    if (this.hasDropdownTarget) {
+      this.dropdownTarget.classList.remove("hidden")
+    }
+  }
+
+  close() {
+    if (this.hasDropdownTarget) {
+      this.dropdownTarget.classList.add("hidden")
+    }
+  }
+
+  isOpen() {
+    return this.hasDropdownTarget && !this.dropdownTarget.classList.contains("hidden")
+  }
+
+  select(event) {
+    const item = event.currentTarget
+    const value = item.dataset.value
+    const label = item.textContent.trim()
+    
+    // Update native select
+    if (this.hasNativeTarget) {
+      this.nativeTarget.value = value
+      this.nativeTarget.dispatchEvent(new Event("change", { bubbles: true }))
+    }
+    
+    // Update label
+    if (this.hasLabelTarget) {
+      this.labelTarget.textContent = label
+      this.labelTarget.classList.remove("text-muted-foreground")
+    }
+    
+    // Update selected state
+    this.dropdownTarget.querySelectorAll("[data-value]").forEach(el => {
+      el.dataset.selected = (el.dataset.value === value).toString()
+    })
+    
+    this.close()
+  }
+
+  sync() {
+    // Sync from native select to custom UI
+    if (this.hasNativeTarget && this.hasLabelTarget) {
+      const selectedOption = this.nativeTarget.options[this.nativeTarget.selectedIndex]
+      if (selectedOption && selectedOption.value) {
+        this.labelTarget.textContent = selectedOption.textContent
+        this.labelTarget.classList.remove("text-muted-foreground")
+      }
+    }
+  }
+
+  handleClickOutside(event) {
+    if (this.isOpen() && !this.element.contains(event.target)) {
+      this.close()
+    }
+  }
+
+  handleKeydown(event) {
+    if (event.key === "Escape" && this.isOpen()) {
+      this.close()
+      if (this.hasTriggerTarget) this.triggerTarget.focus()
+    }
+  }
+}

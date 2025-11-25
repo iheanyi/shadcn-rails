@@ -9,9 +9,6 @@ module Ui
 
     renders_one :title, "TitleComponent"
     renders_one :description, "DescriptionComponent"
-    renders_one :icon
-
-    attr_reader :variant, :class_name, :html_options
 
     # @param variant [Symbol] The alert variant (:default, :destructive)
     # @param class_name [String] Additional CSS classes
@@ -23,8 +20,8 @@ module Ui
     end
 
     def call
-      tag.div(role: "alert", class: alert_classes, **html_options) do
-        safe_join([icon, title, description, content].compact)
+      tag.div(role: "alert", class: alert_classes, **@html_options) do
+        safe_join([title, description, content].compact)
       end
     end
 
@@ -32,39 +29,32 @@ module Ui
 
     def alert_classes
       cn(
-        base_classes,
-        VARIANTS[variant],
-        class_name
+        # Base classes matching shadcn/ui
+        "relative w-full rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7",
+        VARIANTS[@variant],
+        @class_name
       )
     end
 
-    def base_classes
-      "relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground"
-    end
-
     class TitleComponent < BaseComponent
-      attr_reader :class_name, :html_options
-
       def initialize(class_name: nil, **html_options)
         @class_name = class_name
         @html_options = html_options
       end
 
       def call
-        tag.h5(content, class: cn("mb-1 font-medium leading-none tracking-tight", class_name), **html_options)
+        tag.h5(content, class: cn("mb-1 font-medium leading-none tracking-tight", @class_name), **@html_options)
       end
     end
 
     class DescriptionComponent < BaseComponent
-      attr_reader :class_name, :html_options
-
       def initialize(class_name: nil, **html_options)
         @class_name = class_name
         @html_options = html_options
       end
 
       def call
-        tag.div(content, class: cn("text-sm [&_p]:leading-relaxed", class_name), **html_options)
+        tag.div(content, class: cn("text-sm [&_p]:leading-relaxed", @class_name), **@html_options)
       end
     end
   end

@@ -1,10 +1,22 @@
-<div class="flex flex-col gap-4">
-  <div class="grid gap-1.5">
-    <%= render Ui::LabelComponent.new(for_id: "email") { "Email" } %>
-    <%= render Ui::InputComponent.new(type: "email", id: "email", placeholder: "Enter email") %>
+<div class="flex flex-col gap-8 max-w-md">
+  <div>
+    <h4 class="text-sm font-medium mb-4">Default</h4>
+    <%= render Ui::LabelComponent.new { "Email" } %>
   </div>
-  <div class="grid gap-1.5">
-    <%= render Ui::LabelComponent.new(for_id: "name", required: true) { "Name" } %>
-    <%= render Ui::InputComponent.new(id: "name", placeholder: "Enter name") %>
+
+  <div>
+    <h4 class="text-sm font-medium mb-4">With Input</h4>
+    <div class="grid gap-2">
+      <%= render Ui::LabelComponent.new(for_id: "email") { "Email" } %>
+      <%= render Ui::InputComponent.new(type: "email", id: "email", placeholder: "m@example.com") %>
+    </div>
+  </div>
+
+  <div>
+    <h4 class="text-sm font-medium mb-4">Required</h4>
+    <div class="grid gap-2">
+      <%= render Ui::LabelComponent.new(for_id: "required-field", required: true) { "Required field" } %>
+      <%= render Ui::InputComponent.new(id: "required-field", placeholder: "This field is required") %>
+    </div>
   </div>
 </div>

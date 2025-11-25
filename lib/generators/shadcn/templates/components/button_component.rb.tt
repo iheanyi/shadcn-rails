@@ -2,6 +2,7 @@
 
 module Ui
   class ButtonComponent < BaseComponent
+    # Matches shadcn/ui button variants exactly
     VARIANTS = {
       default: "bg-primary text-primary-foreground hover:bg-primary/90",
       destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
@@ -12,67 +13,41 @@ module Ui
     }.freeze
 
     SIZES = {
-      default: "h-10 px-4 py-2",
-      sm: "h-9 rounded-md px-3",
-      lg: "h-11 rounded-md px-8",
-      icon: "h-10 w-10"
+      default: "h-9 px-4 py-2",
+      sm: "h-8 rounded-md px-3 text-xs",
+      lg: "h-10 rounded-md px-8",
+      icon: "h-9 w-9"
     }.freeze
-
-    attr_reader :variant, :size, :type, :disabled, :as_child, :class_name, :html_options
 
     # @param variant [Symbol] The button variant (:default, :destructive, :outline, :secondary, :ghost, :link)
     # @param size [Symbol] The button size (:default, :sm, :lg, :icon)
     # @param type [String] The button type attribute (button, submit, reset)
     # @param disabled [Boolean] Whether the button is disabled
-    # @param as_child [Boolean] Whether to render as a child element (for composition)
     # @param class_name [String] Additional CSS classes
     # @param html_options [Hash] Additional HTML attributes
-    def initialize(
-      variant: :default,
-      size: :default,
-      type: "button",
-      disabled: false,
-      as_child: false,
-      class_name: nil,
-      **html_options
-    )
+    def initialize(variant: :default, size: :default, type: "button", disabled: false, class_name: nil, **html_options)
       @variant = variant.to_sym
       @size = size.to_sym
       @type = type
       @disabled = disabled
-      @as_child = as_child
       @class_name = class_name
       @html_options = html_options
     end
 
     def call
-      tag.button(
-        content,
-        type: type,
-        disabled: disabled,
-        class: button_classes,
-        **html_options
-      )
+      tag.button(content, type: @type, disabled: @disabled, class: button_classes, **@html_options)
     end
 
     private
 
     def button_classes
       cn(
-        base_classes,
-        VARIANTS[variant],
-        SIZES[size],
-        disabled_classes,
-        class_name
+        # Base classes matching shadcn/ui
+        "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+        VARIANTS[@variant],
+        SIZES[@size],
+        @class_name
       )
-    end
-
-    def base_classes
-      "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-    end
-
-    def disabled_classes
-      "pointer-events-none opacity-50" if disabled
     end
   end
 end

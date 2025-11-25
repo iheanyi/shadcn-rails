@@ -1,42 +1,38 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Tooltip controller for shadcn tooltip component
 // Connects to data-controller="tooltip"
 export default class extends Controller {
-  static targets = ["content"]
+  static targets = ["trigger", "content"]
   static values = { delay: { type: Number, default: 200 } }
 
   connect() {
-    this.showTimeout = null
-    this.hideTimeout = null
+    this.timeout = null
   }
 
   disconnect() {
-    this.clearTimeouts()
+    this.clearTimeout()
   }
 
   show() {
-    this.clearTimeouts()
-    this.showTimeout = setTimeout(() => {
+    this.clearTimeout()
+    this.timeout = setTimeout(() => {
       if (this.hasContentTarget) {
-        this.contentTarget.classList.remove('invisible')
-        this.contentTarget.classList.add('visible')
+        this.contentTarget.classList.remove("hidden")
       }
     }, this.delayValue)
   }
 
   hide() {
-    this.clearTimeouts()
-    this.hideTimeout = setTimeout(() => {
-      if (this.hasContentTarget) {
-        this.contentTarget.classList.remove('visible')
-        this.contentTarget.classList.add('invisible')
-      }
-    }, 100)
+    this.clearTimeout()
+    if (this.hasContentTarget) {
+      this.contentTarget.classList.add("hidden")
+    }
   }
 
-  clearTimeouts() {
-    if (this.showTimeout) clearTimeout(this.showTimeout)
-    if (this.hideTimeout) clearTimeout(this.hideTimeout)
+  clearTimeout() {
+    if (this.timeout) {
+      clearTimeout(this.timeout)
+      this.timeout = null
+    }
   }
 }

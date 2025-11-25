@@ -1,14 +1,42 @@
-<div class="flex flex-col gap-4 w-[60%]">
-  <div class="space-y-1">
-    <span class="text-sm text-muted-foreground">33%</span>
-    <%= render Ui::ProgressComponent.new(value: 33) %>
+<div class="flex flex-col gap-8 max-w-md">
+  <div>
+    <h4 class="text-sm font-medium mb-4">Default</h4>
+    <%= render Ui::ProgressComponent.new(value: 60) %>
   </div>
-  <div class="space-y-1">
-    <span class="text-sm text-muted-foreground">66%</span>
-    <%= render Ui::ProgressComponent.new(value: 66) %>
-  </div>
-  <div class="space-y-1">
-    <span class="text-sm text-muted-foreground">100%</span>
-    <%= render Ui::ProgressComponent.new(value: 100) %>
+
+  <div>
+    <h4 class="text-sm font-medium mb-4">Various Values</h4>
+    <div class="grid gap-4">
+      <div class="grid gap-2">
+        <div class="flex justify-between text-sm">
+          <span>0%</span>
+        </div>
+        <%= render Ui::ProgressComponent.new(value: 0) %>
+      </div>
+      <div class="grid gap-2">
+        <div class="flex justify-between text-sm">
+          <span>25%</span>
+        </div>
+        <%= render Ui::ProgressComponent.new(value: 25) %>
+      </div>
+      <div class="grid gap-2">
+        <div class="flex justify-between text-sm">
+          <span>50%</span>
+        </div>
+        <%= render Ui::ProgressComponent.new(value: 50) %>
+      </div>
+      <div class="grid gap-2">
+        <div class="flex justify-between text-sm">
+          <span>75%</span>
+        </div>
+        <%= render Ui::ProgressComponent.new(value: 75) %>
+      </div>
+      <div class="grid gap-2">
+        <div class="flex justify-between text-sm">
+          <span>100%</span>
+        </div>
+        <%= render Ui::ProgressComponent.new(value: 100) %>
+      </div>
+    </div>
   </div>
 </div>

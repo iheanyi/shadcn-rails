@@ -2,9 +2,7 @@
 
 module Ui
   class SkeletonComponent < BaseComponent
-    attr_reader :class_name, :html_options
-
-    # @param class_name [String] Additional CSS classes (use to set dimensions)
+    # @param class_name [String] Additional CSS classes
     # @param html_options [Hash] Additional HTML attributes
     def initialize(class_name: nil, **html_options)
       @class_name = class_name
@@ -12,15 +10,16 @@ module Ui
     end
 
     def call
-      tag.div(class: skeleton_classes, **html_options)
+      tag.div(class: skeleton_classes, **@html_options)
     end
 
     private
 
     def skeleton_classes
       cn(
-        "animate-pulse rounded-md bg-muted",
-        class_name
+        # Matching shadcn/ui skeleton
+        "animate-pulse rounded-md bg-primary/10",
+        @class_name
       )
     end
   end

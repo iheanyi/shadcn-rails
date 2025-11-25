@@ -3,65 +3,41 @@
 module Ui
   class DialogComponent < BaseComponent
     renders_one :trigger, "TriggerComponent"
-    renders_one :content, "ContentComponent"
+    renders_one :dialog_content, "ContentComponent"
 
-    attr_reader :open, :modal, :class_name, :html_options
-
-    # @param open [Boolean] Whether the dialog is open (controlled mode)
-    # @param modal [Boolean] Whether the dialog is modal (prevents interaction with outside elements)
+    # @param open [Boolean] Whether the dialog is open
     # @param class_name [String] Additional CSS classes
     # @param html_options [Hash] Additional HTML attributes
-    def initialize(open: false, modal: true, class_name: nil, **html_options)
+    def initialize(open: false, class_name: nil, **html_options)
       @open = open
-      @modal = modal
       @class_name = class_name
       @html_options = html_options
-      @dialog_id = generate_id("dialog")
     end
 
     def call
       tag.div(
-        class: cn("relative", class_name),
-        data: { controller: "dialog", dialog_open_value: open },
-        **html_options
+        class: @class_name,
+        "data-controller": "dialog",
+        "data-dialog-open-value": @open.to_s,
+        **@html_options
       ) do
-        safe_join([trigger, content_wrapper].compact)
+        safe_join([trigger, dialog_content].compact)
       end
-    end
-
-    private
-
-    def content_wrapper
-      return unless content?
-
-      # The overlay and dialog content
-      tag.template(data: { dialog_target: "template" }) do
-        safe_join([overlay, content])
-      end
-    end
-
-    def overlay
-      tag.div(
-        class: "fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
-        data: { dialog_target: "overlay", action: "click->dialog#close" }
-      )
     end
 
     class TriggerComponent < BaseComponent
-      attr_reader :class_name, :html_options
-
       def initialize(class_name: nil, **html_options)
         @class_name = class_name
         @html_options = html_options
       end
 
       def call
-        tag.button(
+        tag.span(
           content,
-          type: "button",
-          class: class_name,
-          data: { action: "dialog#open" },
-          **html_options
+          class: @class_name,
+          "data-dialog-target": "trigger",
+          "data-action": "click->dialog#open",
+          **@html_options
         )
       end
     end
@@ -71,9 +47,6 @@ module Ui
       renders_one :title, "TitleComponent"
       renders_one :description, "DescriptionComponent"
       renders_one :footer, "FooterComponent"
-      renders_one :close_button, "CloseButtonComponent"
-
-      attr_reader :class_name, :html_options
 
       def initialize(class_name: nil, **html_options)
         @class_name = class_name
@@ -81,35 +54,45 @@ module Ui
       end
 
       def call
-        tag.div(
+        # Overlay
+        overlay = tag.div(
+          class: "fixed inset-0 z-50 bg-black/80 hidden",
+          "data-dialog-target": "overlay",
+          "data-action": "click->dialog#close"
+        )
+
+        # Content
+        dialog_content = tag.div(
           role: "dialog",
+          "aria-modal": "true",
           class: content_classes,
-          data: { dialog_target: "content" },
-          **html_options
+          "data-dialog-target": "content",
+          **@html_options
         ) do
-          safe_join([close_button || default_close_button, header, title, description, content, footer].compact)
+          safe_join([header, title, description, content, footer, close_button].compact)
         end
+
+        overlay + dialog_content
       end
 
       private
 
       def content_classes
         cn(
-          "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg",
-          class_name
+          # Matching shadcn/ui dialog content
+          "fixed left-[50%] top-[50%] z-50 hidden w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg",
+          @class_name
         )
       end
 
-      def default_close_button
+      def close_button
         tag.button(
-          class: "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground",
-          data: { action: "dialog#close" }
+          type: "button",
+          class: "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none",
+          "data-action": "click->dialog#close"
         ) do
-          # X icon using SVG
           tag.svg(
             xmlns: "http://www.w3.org/2000/svg",
-            width: "24",
-            height: "24",
             viewBox: "0 0 24 24",
             fill: "none",
             stroke: "currentColor",
@@ -118,83 +101,54 @@ module Ui
             "stroke-linejoin": "round",
             class: "h-4 w-4"
           ) do
-            safe_join([
-              tag.path(d: "M18 6 6 18"),
-              tag.path(d: "m6 6 12 12")
-            ])
-          end
+            tag.path(d: "M18 6 6 18") + tag.path(d: "m6 6 12 12")
+          end +
+            tag.span("Close", class: "sr-only")
         end
       end
-    end
 
-    class HeaderComponent < BaseComponent
-      attr_reader :class_name, :html_options
+      class HeaderComponent < BaseComponent
+        def initialize(class_name: nil, **html_options)
+          @class_name = class_name
+          @html_options = html_options
+        end
 
-      def initialize(class_name: nil, **html_options)
-        @class_name = class_name
-        @html_options = html_options
+        def call
+          tag.div(content, class: cn("flex flex-col space-y-1.5 text-center sm:text-left", @class_name), **@html_options)
+        end
       end
 
-      def call
-        tag.div(content, class: cn("flex flex-col space-y-1.5 text-center sm:text-left", class_name), **html_options)
-      end
-    end
+      class TitleComponent < BaseComponent
+        def initialize(class_name: nil, **html_options)
+          @class_name = class_name
+          @html_options = html_options
+        end
 
-    class TitleComponent < BaseComponent
-      attr_reader :class_name, :html_options
-
-      def initialize(class_name: nil, **html_options)
-        @class_name = class_name
-        @html_options = html_options
+        def call
+          tag.h2(content, class: cn("text-lg font-semibold leading-none tracking-tight", @class_name), **@html_options)
+        end
       end
 
-      def call
-        tag.h2(content, class: cn("text-lg font-semibold leading-none tracking-tight", class_name), **html_options)
-      end
-    end
+      class DescriptionComponent < BaseComponent
+        def initialize(class_name: nil, **html_options)
+          @class_name = class_name
+          @html_options = html_options
+        end
 
-    class DescriptionComponent < BaseComponent
-      attr_reader :class_name, :html_options
-
-      def initialize(class_name: nil, **html_options)
-        @class_name = class_name
-        @html_options = html_options
+        def call
+          tag.p(content, class: cn("text-sm text-muted-foreground", @class_name), **@html_options)
+        end
       end
 
-      def call
-        tag.p(content, class: cn("text-sm text-muted-foreground", class_name), **html_options)
-      end
-    end
+      class FooterComponent < BaseComponent
+        def initialize(class_name: nil, **html_options)
+          @class_name = class_name
+          @html_options = html_options
+        end
 
-    class FooterComponent < BaseComponent
-      attr_reader :class_name, :html_options
-
-      def initialize(class_name: nil, **html_options)
-        @class_name = class_name
-        @html_options = html_options
-      end
-
-      def call
-        tag.div(content, class: cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", class_name), **html_options)
-      end
-    end
-
-    class CloseButtonComponent < BaseComponent
-      attr_reader :class_name, :html_options
-
-      def initialize(class_name: nil, **html_options)
-        @class_name = class_name
-        @html_options = html_options
-      end
-
-      def call
-        tag.button(
-          content,
-          type: "button",
-          class: cn("absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2", class_name),
-          data: { action: "dialog#close" },
-          **html_options
-        )
+        def call
+          tag.div(content, class: cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", @class_name), **@html_options)
+        end
       end
     end
   end

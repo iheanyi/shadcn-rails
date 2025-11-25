@@ -2,8 +2,6 @@
 
 module Ui
   class LabelComponent < BaseComponent
-    attr_reader :for_id, :required, :class_name, :html_options
-
     # @param for_id [String] The ID of the form element this label is for
     # @param required [Boolean] Whether to show a required indicator
     # @param class_name [String] Additional CSS classes
@@ -16,7 +14,7 @@ module Ui
     end
 
     def call
-      tag.label(for: for_id, class: label_classes, **html_options) do
+      tag.label(for: @for_id, class: label_classes, **@html_options) do
         safe_join([content, required_indicator].compact)
       end
     end
@@ -25,13 +23,14 @@ module Ui
 
     def label_classes
       cn(
+        # Matching shadcn/ui label
         "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
-        class_name
+        @class_name
       )
     end
 
     def required_indicator
-      return unless required
+      return unless @required
 
       tag.span(" *", class: "text-destructive")
     end

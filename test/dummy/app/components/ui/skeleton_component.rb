@@ -14,7 +14,11 @@ module Ui
     private
 
     def skeleton_classes
-      cn("animate-pulse rounded-md bg-muted", @class_name)
+      cn(
+        # Matching shadcn/ui skeleton
+        "animate-pulse rounded-md bg-primary/10",
+        @class_name
+      )
     end
   end
 end

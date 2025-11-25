@@ -9,8 +9,6 @@ module Ui
       xl: "h-12 w-12"
     }.freeze
 
-    attr_reader :size, :class_name, :html_options
-
     # @param size [Symbol] The spinner size (:sm, :default, :lg, :xl)
     # @param class_name [String] Additional CSS classes
     # @param html_options [Hash] Additional HTML attributes
@@ -26,7 +24,7 @@ module Ui
         fill: "none",
         viewBox: "0 0 24 24",
         class: spinner_classes,
-        **html_options
+        **@html_options
       ) do
         safe_join([
           tag.circle(
@@ -49,11 +47,7 @@ module Ui
     private
 
     def spinner_classes
-      cn(
-        "animate-spin",
-        SIZES[size],
-        class_name
-      )
+      cn("animate-spin text-primary", SIZES[@size], @class_name)
     end
   end
 end

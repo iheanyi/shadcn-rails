@@ -2,10 +2,8 @@
 
 module Ui
   class SeparatorComponent < BaseComponent
-    attr_reader :orientation, :decorative, :class_name, :html_options
-
     # @param orientation [Symbol] The separator orientation (:horizontal, :vertical)
-    # @param decorative [Boolean] Whether the separator is decorative (aria-hidden)
+    # @param decorative [Boolean] Whether the separator is purely decorative
     # @param class_name [String] Additional CSS classes
     # @param html_options [Hash] Additional HTML attributes
     def initialize(orientation: :horizontal, decorative: true, class_name: nil, **html_options)
@@ -17,11 +15,10 @@ module Ui
 
     def call
       tag.div(
-        role: decorative ? "none" : "separator",
-        "aria-orientation": orientation,
-        "aria-hidden": decorative,
+        role: @decorative ? "none" : "separator",
+        "aria-orientation": @orientation == :vertical ? "vertical" : nil,
         class: separator_classes,
-        **html_options
+        **@html_options
       )
     end
 
@@ -30,8 +27,8 @@ module Ui
     def separator_classes
       cn(
         "shrink-0 bg-border",
-        orientation == :horizontal ? "h-[1px] w-full" : "h-full w-[1px]",
-        class_name
+        @orientation == :horizontal ? "h-[1px] w-full" : "h-full w-[1px]",
+        @class_name
       )
     end
   end

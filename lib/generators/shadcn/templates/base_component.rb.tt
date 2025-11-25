@@ -8,11 +8,15 @@ module Ui
     private
 
     # Merge CSS classes intelligently, handling Tailwind conflicts
+    # Uses tailwind_merge gem if available, otherwise falls back to simple join
     def cn(*classes)
-      TailwindMerge::Merger.new.merge(classes.flatten.compact.join(" "))
-    rescue NameError
-      # Fallback if tailwind_merge gem is not available
-      classes.flatten.compact.uniq.join(" ")
+      merged_classes = classes.flatten.compact.reject(&:empty?).join(" ")
+      
+      if defined?(TailwindMerge::Merger)
+        TailwindMerge::Merger.new.merge(merged_classes)
+      else
+        merged_classes.split.uniq.join(" ")
+      end
     end
 
     # Generate a unique ID for accessibility
@@ -20,40 +24,14 @@ module Ui
       "#{prefix}-#{SecureRandom.hex(4)}"
     end
 
-    # Common variant styles that can be overridden
-    def variant_classes(variant)
-      case variant.to_sym
-      when :default
-        "bg-primary text-primary-foreground hover:bg-primary/90"
-      when :destructive
-        "bg-destructive text-destructive-foreground hover:bg-destructive/90"
-      when :outline
-        "border border-input bg-background hover:bg-accent hover:text-accent-foreground"
-      when :secondary
-        "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-      when :ghost
-        "hover:bg-accent hover:text-accent-foreground"
-      when :link
-        "text-primary underline-offset-4 hover:underline"
-      else
-        ""
-      end
+    # Common focus ring styles
+    def focus_ring_classes
+      "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
     end
 
-    # Common size styles
-    def size_classes(size)
-      case size.to_sym
-      when :sm
-        "h-9 px-3 text-sm"
-      when :default
-        "h-10 px-4 py-2"
-      when :lg
-        "h-11 px-8 text-lg"
-      when :icon
-        "h-10 w-10"
-      else
-        ""
-      end
+    # Common disabled styles
+    def disabled_classes
+      "disabled:pointer-events-none disabled:opacity-50"
     end
   end
 end

@@ -5,10 +5,8 @@ module Ui
     renders_one :header, "HeaderComponent"
     renders_one :title, "TitleComponent"
     renders_one :description, "DescriptionComponent"
-    renders_one :content, "ContentComponent"
+    renders_one :card_content, "ContentComponent"
     renders_one :footer, "FooterComponent"
-
-    attr_reader :class_name, :html_options
 
     # @param class_name [String] Additional CSS classes
     # @param html_options [Hash] Additional HTML attributes
@@ -18,8 +16,8 @@ module Ui
     end
 
     def call
-      tag.div(class: card_classes, **html_options) do
-        safe_join([header, title, description, content, footer, self.content].compact)
+      tag.div(class: card_classes, **@html_options) do
+        safe_join([header, title, description, card_content, footer, content].compact)
       end
     end
 
@@ -27,73 +25,64 @@ module Ui
 
     def card_classes
       cn(
-        "rounded-lg border bg-card text-card-foreground shadow-sm",
-        class_name
+        # Base classes matching shadcn/ui
+        "rounded-xl border bg-card text-card-foreground shadow",
+        @class_name
       )
     end
 
     class HeaderComponent < BaseComponent
-      attr_reader :class_name, :html_options
-
       def initialize(class_name: nil, **html_options)
         @class_name = class_name
         @html_options = html_options
       end
 
       def call
-        tag.div(content, class: cn("flex flex-col space-y-1.5 p-6", class_name), **html_options)
+        tag.div(content, class: cn("flex flex-col space-y-1.5 p-6", @class_name), **@html_options)
       end
     end
 
     class TitleComponent < BaseComponent
-      attr_reader :class_name, :html_options
-
       def initialize(class_name: nil, **html_options)
         @class_name = class_name
         @html_options = html_options
       end
 
       def call
-        tag.h3(content, class: cn("text-2xl font-semibold leading-none tracking-tight", class_name), **html_options)
+        tag.h3(content, class: cn("font-semibold leading-none tracking-tight", @class_name), **@html_options)
       end
     end
 
     class DescriptionComponent < BaseComponent
-      attr_reader :class_name, :html_options
-
       def initialize(class_name: nil, **html_options)
         @class_name = class_name
         @html_options = html_options
       end
 
       def call
-        tag.p(content, class: cn("text-sm text-muted-foreground", class_name), **html_options)
+        tag.p(content, class: cn("text-sm text-muted-foreground", @class_name), **@html_options)
       end
     end
 
     class ContentComponent < BaseComponent
-      attr_reader :class_name, :html_options
-
       def initialize(class_name: nil, **html_options)
         @class_name = class_name
         @html_options = html_options
       end
 
       def call
-        tag.div(content, class: cn("p-6 pt-0", class_name), **html_options)
+        tag.div(content, class: cn("p-6 pt-0", @class_name), **@html_options)
       end
     end
 
     class FooterComponent < BaseComponent
-      attr_reader :class_name, :html_options
-
       def initialize(class_name: nil, **html_options)
         @class_name = class_name
         @html_options = html_options
       end
 
       def call
-        tag.div(content, class: cn("flex items-center p-6 pt-0", class_name), **html_options)
+        tag.div(content, class: cn("flex items-center p-6 pt-0", @class_name), **@html_options)
       end
     end
   end

@@ -1,22 +1,27 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Dropdown menu controller for shadcn dropdown component
 // Connects to data-controller="dropdown"
 export default class extends Controller {
   static targets = ["trigger", "menu"]
-  static values = { open: { type: Boolean, default: false } }
 
   connect() {
-    this.boundHandleClickOutside = this.handleClickOutside.bind(this)
-    this.boundHandleKeydown = this.handleKeydown.bind(this)
+    // Handle clicks outside
+    this.boundClickOutside = this.handleClickOutside.bind(this)
+    document.addEventListener("click", this.boundClickOutside)
+    
+    // Handle escape key
+    this.boundKeydown = this.handleKeydown.bind(this)
+    document.addEventListener("keydown", this.boundKeydown)
   }
 
   disconnect() {
-    this.removeListeners()
+    document.removeEventListener("click", this.boundClickOutside)
+    document.removeEventListener("keydown", this.boundKeydown)
   }
 
-  toggle() {
-    if (this.openValue) {
+  toggle(event) {
+    event.stopPropagation()
+    if (this.isOpen()) {
       this.close()
     } else {
       this.open()
@@ -24,79 +29,60 @@ export default class extends Controller {
   }
 
   open() {
-    this.openValue = true
-    this.menuTarget.classList.remove('hidden')
-    this.menuTarget.setAttribute('data-state', 'open')
-    this.triggerTarget.setAttribute('aria-expanded', 'true')
-
-    // Add listeners
-    document.addEventListener('click', this.boundHandleClickOutside)
-    document.addEventListener('keydown', this.boundHandleKeydown)
-
-    // Focus first item
-    requestAnimationFrame(() => {
-      const firstItem = this.menuTarget.querySelector('[role="menuitem"]')
+    if (this.hasMenuTarget) {
+      this.menuTarget.classList.remove("hidden")
+      // Focus first menu item
+      const firstItem = this.menuTarget.querySelector("[role='menuitem']")
       if (firstItem) firstItem.focus()
-    })
+    }
   }
 
   close() {
-    this.openValue = false
-    this.menuTarget.setAttribute('data-state', 'closed')
-    this.triggerTarget.setAttribute('aria-expanded', 'false')
+    if (this.hasMenuTarget) {
+      this.menuTarget.classList.add("hidden")
+    }
+  }
 
-    // Remove after animation
-    setTimeout(() => {
-      if (!this.openValue) {
-        this.menuTarget.classList.add('hidden')
-      }
-    }, 150)
-
-    this.removeListeners()
+  isOpen() {
+    return this.hasMenuTarget && !this.menuTarget.classList.contains("hidden")
   }
 
   handleClickOutside(event) {
-    if (!this.element.contains(event.target)) {
+    if (this.isOpen() && !this.element.contains(event.target)) {
       this.close()
     }
   }
 
   handleKeydown(event) {
+    if (!this.isOpen()) return
+
     switch (event.key) {
-      case 'Escape':
+      case "Escape":
         this.close()
-        this.triggerTarget.focus()
+        if (this.hasTriggerTarget) this.triggerTarget.focus()
         break
-      case 'ArrowDown':
+      case "ArrowDown":
         event.preventDefault()
         this.focusNextItem()
         break
-      case 'ArrowUp':
+      case "ArrowUp":
         event.preventDefault()
         this.focusPreviousItem()
-        break
-      case 'Tab':
-        this.close()
         break
     }
   }
 
   focusNextItem() {
-    const items = this.menuTarget.querySelectorAll('[role="menuitem"]:not([disabled])')
+    const items = this.menuTarget.querySelectorAll("[role='menuitem']:not([disabled])")
     const currentIndex = Array.from(items).indexOf(document.activeElement)
     const nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0
     items[nextIndex]?.focus()
   }
 
   focusPreviousItem() {
-    const items = this.menuTarget.querySelectorAll('[role="menuitem"]:not([disabled])')
+    const items = this.menuTarget.querySelectorAll("[role='menuitem']:not([disabled])")
     const currentIndex = Array.from(items).indexOf(document.activeElement)
     const prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1
     items[prevIndex]?.focus()
-  }
-
-  removeListeners() {
-    document.removeEventListener('click', this.boundHandleClickOutside)
-    document.removeEventListener('keydown', this.boundHandleKeydown)
   }
 }

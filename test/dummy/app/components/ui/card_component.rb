@@ -22,7 +22,11 @@ module Ui
     private
 
     def card_classes
-      cn("rounded-lg border bg-card text-card-foreground shadow-sm", @class_name)
+      cn(
+        # Base classes matching shadcn/ui
+        "rounded-xl border bg-card text-card-foreground shadow",
+        @class_name
+      )
     end
 
     class HeaderComponent < BaseComponent
@@ -43,7 +47,7 @@ module Ui
       end
 
       def call
-        tag.h3(content, class: cn("text-2xl font-semibold leading-none tracking-tight", @class_name), **@html_options)
+        tag.h3(content, class: cn("font-semibold leading-none tracking-tight", @class_name), **@html_options)
       end
     end
 

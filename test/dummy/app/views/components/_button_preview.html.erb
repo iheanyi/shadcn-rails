@@ -1,16 +1,33 @@
-<div class="flex flex-wrap gap-4">
-  <%= render Ui::ButtonComponent.new(variant: :default) { "Default" } %>
-  <%= render Ui::ButtonComponent.new(variant: :destructive) { "Destructive" } %>
-  <%= render Ui::ButtonComponent.new(variant: :outline) { "Outline" } %>
-  <%= render Ui::ButtonComponent.new(variant: :secondary) { "Secondary" } %>
-  <%= render Ui::ButtonComponent.new(variant: :ghost) { "Ghost" } %>
-  <%= render Ui::ButtonComponent.new(variant: :link) { "Link" } %>
-</div>
+<div class="flex flex-col gap-8">
+  <div>
+    <h4 class="text-sm font-medium mb-4">Variants</h4>
+    <div class="flex flex-wrap items-center gap-4">
+      <%= render Ui::ButtonComponent.new(variant: :default) { "Default" } %>
+      <%= render Ui::ButtonComponent.new(variant: :secondary) { "Secondary" } %>
+      <%= render Ui::ButtonComponent.new(variant: :destructive) { "Destructive" } %>
+      <%= render Ui::ButtonComponent.new(variant: :outline) { "Outline" } %>
+      <%= render Ui::ButtonComponent.new(variant: :ghost) { "Ghost" } %>
+      <%= render Ui::ButtonComponent.new(variant: :link) { "Link" } %>
+    </div>
+  </div>
 
-<div class="mt-6 flex flex-wrap items-center gap-4">
-  <h4 class="w-full font-medium">Sizes</h4>
-  <%= render Ui::ButtonComponent.new(size: :sm) { "Small" } %>
-  <%= render Ui::ButtonComponent.new(size: :default) { "Default" } %>
-  <%= render Ui::ButtonComponent.new(size: :lg) { "Large" } %>
-  <%= render Ui::ButtonComponent.new(size: :icon) { "🔔" } %>
+  <div>
+    <h4 class="text-sm font-medium mb-4">Sizes</h4>
+    <div class="flex flex-wrap items-center gap-4">
+      <%= render Ui::ButtonComponent.new(size: :sm) { "Small" } %>
+      <%= render Ui::ButtonComponent.new(size: :default) { "Default" } %>
+      <%= render Ui::ButtonComponent.new(size: :lg) { "Large" } %>
+      <%= render Ui::ButtonComponent.new(size: :icon) do %>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+      <% end %>
+    </div>
+  </div>
+
+  <div>
+    <h4 class="text-sm font-medium mb-4">States</h4>
+    <div class="flex flex-wrap items-center gap-4">
+      <%= render Ui::ButtonComponent.new { "Normal" } %>
+      <%= render Ui::ButtonComponent.new(disabled: true) { "Disabled" } %>
+    </div>
+  </div>
 </div>

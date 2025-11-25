@@ -2,10 +2,8 @@
 
 module Ui
   class ProgressComponent < BaseComponent
-    attr_reader :value, :max, :class_name, :html_options
-
-    # @param value [Integer] The current progress value
-    # @param max [Integer] The maximum progress value
+    # @param value [Integer] Current progress value
+    # @param max [Integer] Maximum progress value
     # @param class_name [String] Additional CSS classes
     # @param html_options [Hash] Additional HTML attributes
     def initialize(value: 0, max: 100, class_name: nil, **html_options)
@@ -19,10 +17,10 @@ module Ui
       tag.div(
         role: "progressbar",
         "aria-valuemin": 0,
-        "aria-valuemax": max,
-        "aria-valuenow": value,
+        "aria-valuemax": @max,
+        "aria-valuenow": @value,
         class: progress_classes,
-        **html_options
+        **@html_options
       ) do
         tag.div(class: indicator_classes, style: indicator_style)
       end
@@ -32,8 +30,9 @@ module Ui
 
     def progress_classes
       cn(
-        "relative h-4 w-full overflow-hidden rounded-full bg-secondary",
-        class_name
+        # Matching shadcn/ui progress
+        "relative h-2 w-full overflow-hidden rounded-full bg-primary/20",
+        @class_name
       )
     end
 
@@ -42,7 +41,7 @@ module Ui
     end
 
     def indicator_style
-      percentage = max.positive? ? (value.to_f / max * 100).clamp(0, 100) : 0
+      percentage = @max.positive? ? (@value.to_f / @max * 100).clamp(0, 100) : 0
       "transform: translateX(-#{100 - percentage}%)"
     end
   end

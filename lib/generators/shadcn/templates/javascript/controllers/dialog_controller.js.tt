@@ -1,98 +1,75 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Dialog controller for shadcn dialog component
 // Connects to data-controller="dialog"
 export default class extends Controller {
-  static targets = ["template", "overlay", "content"]
+  static targets = ["trigger", "overlay", "content"]
   static values = { open: Boolean }
 
   connect() {
-    this.dialog = null
+    // Handle escape key
+    this.boundKeydown = this.handleKeydown.bind(this)
+    document.addEventListener("keydown", this.boundKeydown)
+    
+    // Set initial state
     if (this.openValue) {
-      this.open()
+      this.show()
     }
   }
 
   disconnect() {
-    this.close()
+    document.removeEventListener("keydown", this.boundKeydown)
   }
 
   open() {
-    if (this.dialog) return
-
-    // Clone template content
-    const template = this.templateTarget
-    this.dialog = template.content.cloneNode(true)
-
-    // Append to body
-    document.body.appendChild(this.dialog)
-
-    // Set state attributes
-    document.querySelectorAll('[data-dialog-target="overlay"], [data-dialog-target="content"]').forEach(el => {
-      el.setAttribute('data-state', 'open')
-    })
-
-    // Prevent body scroll
-    document.body.style.overflow = 'hidden'
-
-    // Focus trap
-    this.trapFocus()
-
-    // Listen for escape key
-    this.boundHandleKeydown = this.handleKeydown.bind(this)
-    document.addEventListener('keydown', this.boundHandleKeydown)
+    this.show()
   }
 
   close() {
-    if (!this.dialog) return
-
-    // Remove state attributes
-    document.querySelectorAll('[data-dialog-target="overlay"], [data-dialog-target="content"]').forEach(el => {
-      el.setAttribute('data-state', 'closed')
-    })
-
-    // Remove from DOM after animation
-    setTimeout(() => {
-      document.querySelectorAll('[data-dialog-target="overlay"], [data-dialog-target="content"]').forEach(el => {
-        el.remove()
-      })
-    }, 200)
-
-    // Restore body scroll
-    document.body.style.overflow = ''
-
-    // Remove escape key listener
-    if (this.boundHandleKeydown) {
-      document.removeEventListener('keydown', this.boundHandleKeydown)
-    }
-
-    this.dialog = null
+    this.hide()
   }
 
   toggle() {
-    if (this.dialog) {
-      this.close()
+    if (this.isOpen()) {
+      this.hide()
     } else {
-      this.open()
+      this.show()
     }
+  }
+
+  show() {
+    if (this.hasOverlayTarget) {
+      this.overlayTarget.classList.remove("hidden")
+    }
+    if (this.hasContentTarget) {
+      this.contentTarget.classList.remove("hidden")
+      // Focus the first focusable element
+      const focusable = this.contentTarget.querySelector("button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])")
+      if (focusable) focusable.focus()
+    }
+    // Prevent body scroll
+    document.body.style.overflow = "hidden"
+    this.openValue = true
+  }
+
+  hide() {
+    if (this.hasOverlayTarget) {
+      this.overlayTarget.classList.add("hidden")
+    }
+    if (this.hasContentTarget) {
+      this.contentTarget.classList.add("hidden")
+    }
+    // Restore body scroll
+    document.body.style.overflow = ""
+    this.openValue = false
+  }
+
+  isOpen() {
+    return this.hasContentTarget && !this.contentTarget.classList.contains("hidden")
   }
 
   handleKeydown(event) {
-    if (event.key === 'Escape') {
-      this.close()
-    }
-  }
-
-  trapFocus() {
-    const content = document.querySelector('[data-dialog-target="content"]')
-    if (!content) return
-
-    const focusableElements = content.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    )
-
-    if (focusableElements.length > 0) {
-      focusableElements[0].focus()
+    if (event.key === "Escape" && this.isOpen()) {
+      this.hide()
     }
   }
 }

@@ -1,0 +1,31 @@
+import { Controller } from "@hotwired/stimulus"
+
+// Connects to data-controller="checkbox"
+export default class extends Controller {
+  static targets = ["input", "icon"]
+
+  toggle() {
+    const isChecked = this.element.dataset.state === "checked"
+    const newState = !isChecked
+    
+    // Update visual state
+    this.element.dataset.state = newState ? "checked" : "unchecked"
+    this.element.setAttribute("aria-checked", newState.toString())
+    
+    // Update hidden input
+    if (this.hasInputTarget) {
+      this.inputTarget.value = newState ? this.inputTarget.dataset.value || "1" : ""
+    }
+    
+    // Update icon visibility
+    if (this.hasIconTarget) {
+      this.iconTarget.classList.toggle("hidden", !newState)
+    }
+    
+    // Dispatch change event
+    this.element.dispatchEvent(new CustomEvent("change", { 
+      bubbles: true, 
+      detail: { checked: newState } 
+    }))
+  }
+}

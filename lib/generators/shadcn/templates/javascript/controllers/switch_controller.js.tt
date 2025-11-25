@@ -1,0 +1,31 @@
+import { Controller } from "@hotwired/stimulus"
+
+// Connects to data-controller="switch"
+export default class extends Controller {
+  static targets = ["input", "thumb"]
+
+  toggle() {
+    const isChecked = this.element.dataset.state === "checked"
+    const newState = !isChecked
+    
+    // Update visual state
+    this.element.dataset.state = newState ? "checked" : "unchecked"
+    this.element.setAttribute("aria-checked", newState.toString())
+    
+    // Update thumb
+    if (this.hasThumbTarget) {
+      this.thumbTarget.dataset.state = newState ? "checked" : "unchecked"
+    }
+    
+    // Update hidden input
+    if (this.hasInputTarget) {
+      this.inputTarget.value = newState ? "1" : "0"
+    }
+    
+    // Dispatch change event
+    this.element.dispatchEvent(new CustomEvent("change", { 
+      bubbles: true, 
+      detail: { checked: newState } 
+    }))
+  }
+}

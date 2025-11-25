@@ -1,6 +1,21 @@
-<div class="flex flex-wrap gap-2">
-  <%= render Ui::BadgeComponent.new(variant: :default) { "Default" } %>
-  <%= render Ui::BadgeComponent.new(variant: :secondary) { "Secondary" } %>
-  <%= render Ui::BadgeComponent.new(variant: :destructive) { "Destructive" } %>
-  <%= render Ui::BadgeComponent.new(variant: :outline) { "Outline" } %>
+<div class="flex flex-col gap-8">
+  <div>
+    <h4 class="text-sm font-medium mb-4">Variants</h4>
+    <div class="flex flex-wrap items-center gap-2">
+      <%= render Ui::BadgeComponent.new(variant: :default) { "Default" } %>
+      <%= render Ui::BadgeComponent.new(variant: :secondary) { "Secondary" } %>
+      <%= render Ui::BadgeComponent.new(variant: :destructive) { "Destructive" } %>
+      <%= render Ui::BadgeComponent.new(variant: :outline) { "Outline" } %>
+    </div>
+  </div>
+
+  <div>
+    <h4 class="text-sm font-medium mb-4">Examples</h4>
+    <div class="flex flex-wrap items-center gap-2">
+      <%= render Ui::BadgeComponent.new { "New" } %>
+      <%= render Ui::BadgeComponent.new(variant: :secondary) { "v1.0.0" } %>
+      <%= render Ui::BadgeComponent.new(variant: :destructive) { "Deprecated" } %>
+      <%= render Ui::BadgeComponent.new(variant: :outline) { "Beta" } %>
+    </div>
+  </div>
 </div>

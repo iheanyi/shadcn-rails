@@ -18,14 +18,22 @@ module Ui
         class: progress_classes,
         **@html_options
       ) do
-        tag.div(class: "h-full w-full flex-1 bg-primary transition-all", style: indicator_style)
+        tag.div(class: indicator_classes, style: indicator_style)
       end
     end
 
     private
 
     def progress_classes
-      cn("relative h-4 w-full overflow-hidden rounded-full bg-secondary", @class_name)
+      cn(
+        # Matching shadcn/ui progress
+        "relative h-2 w-full overflow-hidden rounded-full bg-primary/20",
+        @class_name
+      )
+    end
+
+    def indicator_classes
+      "h-full w-full flex-1 bg-primary transition-all"
     end
 
     def indicator_style

@@ -3,11 +3,10 @@
 module Ui
   class DropdownMenuComponent < BaseComponent
     renders_one :trigger, "TriggerComponent"
-    renders_one :content, "ContentComponent"
+    renders_many :items, "ItemComponent"
+    renders_many :separators, "SeparatorComponent"
 
-    attr_reader :align, :class_name, :html_options
-
-    # @param align [Symbol] The dropdown alignment (:start, :center, :end)
+    # @param align [Symbol] Alignment of the dropdown (:start, :center, :end)
     # @param class_name [String] Additional CSS classes
     # @param html_options [Hash] Additional HTML attributes
     def initialize(align: :start, class_name: nil, **html_options)
@@ -18,138 +17,97 @@ module Ui
 
     def call
       tag.div(
-        class: cn("relative inline-block text-left", class_name),
-        data: { controller: "dropdown" },
-        **html_options
+        class: cn("relative inline-block text-left", @class_name),
+        "data-controller": "dropdown",
+        **@html_options
       ) do
-        safe_join([trigger, content].compact)
+        safe_join([trigger, menu_content].compact)
+      end
+    end
+
+    private
+
+    def menu_content
+      tag.div(
+        class: menu_classes,
+        role: "menu",
+        "data-dropdown-target": "menu"
+      ) do
+        tag.div(class: "py-1") do
+          safe_join(items.zip(separators.to_a + [nil]).flatten.compact)
+        end
+      end
+    end
+
+    def menu_classes
+      cn(
+        # Matching shadcn/ui dropdown menu
+        "absolute z-50 mt-1 hidden min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md",
+        alignment_classes
+      )
+    end
+
+    def alignment_classes
+      case @align
+      when :start
+        "left-0"
+      when :center
+        "left-1/2 -translate-x-1/2"
+      when :end
+        "right-0"
       end
     end
 
     class TriggerComponent < BaseComponent
-      attr_reader :class_name, :html_options
-
       def initialize(class_name: nil, **html_options)
         @class_name = class_name
         @html_options = html_options
       end
 
       def call
-        tag.button(
+        tag.span(
           content,
-          type: "button",
-          class: class_name,
-          data: { action: "dropdown#toggle", dropdown_target: "trigger" },
-          "aria-haspopup": "true",
-          **html_options
+          class: @class_name,
+          "data-dropdown-target": "trigger",
+          "data-action": "click->dropdown#toggle",
+          **@html_options
         )
-      end
-    end
-
-    class ContentComponent < BaseComponent
-      renders_many :items, "ItemComponent"
-      renders_many :labels, "LabelComponent"
-      renders_many :separators, "SeparatorComponent"
-
-      attr_reader :align, :class_name, :html_options
-
-      def initialize(align: :start, class_name: nil, **html_options)
-        @align = align.to_sym
-        @class_name = class_name
-        @html_options = html_options
-      end
-
-      def call
-        tag.div(
-          role: "menu",
-          class: content_classes,
-          data: { dropdown_target: "menu" },
-          "aria-orientation": "vertical",
-          **html_options
-        ) do
-          content.presence || safe_join([labels, items, separators].flatten.compact)
-        end
-      end
-
-      private
-
-      def content_classes
-        cn(
-          "hidden absolute z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md",
-          alignment_classes,
-          "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
-          class_name
-        )
-      end
-
-      def alignment_classes
-        case align
-        when :start
-          "left-0 origin-top-left"
-        when :center
-          "left-1/2 -translate-x-1/2 origin-top"
-        when :end
-          "right-0 origin-top-right"
-        end
       end
     end
 
     class ItemComponent < BaseComponent
-      attr_reader :disabled, :destructive, :class_name, :html_options
-
-      def initialize(disabled: false, destructive: false, class_name: nil, **html_options)
+      # @param href [String] Link URL (optional, makes item a link)
+      # @param disabled [Boolean] Whether the item is disabled
+      # @param class_name [String] Additional CSS classes
+      # @param html_options [Hash] Additional HTML attributes
+      def initialize(href: nil, disabled: false, class_name: nil, **html_options)
+        @href = href
         @disabled = disabled
-        @destructive = destructive
         @class_name = class_name
         @html_options = html_options
       end
 
       def call
-        tag.div(
-          content,
-          role: "menuitem",
-          tabindex: disabled ? nil : "-1",
-          class: item_classes,
-          data: { action: "click->dropdown#close" },
-          **html_options
-        )
+        if @href
+          tag.a(content, href: @href, class: item_classes, role: "menuitem", **@html_options)
+        else
+          tag.button(content, type: "button", class: item_classes, role: "menuitem", disabled: @disabled, **@html_options)
+        end
       end
 
       private
 
       def item_classes
         cn(
-          "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-          destructive ? "text-destructive hover:text-destructive focus:text-destructive" : nil,
-          disabled ? "pointer-events-none opacity-50" : nil,
-          class_name
+          "relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+          @class_name
         )
       end
     end
 
-    class LabelComponent < BaseComponent
-      attr_reader :class_name, :html_options
-
-      def initialize(class_name: nil, **html_options)
-        @class_name = class_name
-        @html_options = html_options
-      end
-
-      def call
-        tag.div(content, class: cn("px-2 py-1.5 text-sm font-semibold", class_name), **html_options)
-      end
-    end
-
     class SeparatorComponent < BaseComponent
-      attr_reader :class_name, :html_options
-
-      def initialize(class_name: nil, **html_options)
-        @class_name = class_name
-        @html_options = html_options
-      end
-
       def call
-        tag.div(class: cn("-mx-1 my-1 h-px bg-muted", class_name), role: "separator", **html_options)
+        tag.div(class: "-mx-1 my-1 h-px bg-border")
       end
     end
   end

@@ -2,74 +2,64 @@
 
 module Ui
   class CheckboxComponent < BaseComponent
-    attr_reader :name, :value, :checked, :disabled, :required, :id, :class_name, :html_options
-
     # @param name [String] The checkbox name attribute
     # @param value [String] The checkbox value
     # @param checked [Boolean] Whether the checkbox is checked
     # @param disabled [Boolean] Whether the checkbox is disabled
-    # @param required [Boolean] Whether the checkbox is required
     # @param id [String] The checkbox ID
     # @param class_name [String] Additional CSS classes
     # @param html_options [Hash] Additional HTML attributes
-    def initialize(
-      name: nil,
-      value: "1",
-      checked: false,
-      disabled: false,
-      required: false,
-      id: nil,
-      class_name: nil,
-      **html_options
-    )
+    def initialize(name: nil, value: "1", checked: false, disabled: false, id: nil, class_name: nil, **html_options)
       @name = name
       @value = value
       @checked = checked
       @disabled = disabled
-      @required = required
-      @id = id || generate_id("checkbox")
+      @id = id || "checkbox-#{SecureRandom.hex(4)}"
       @class_name = class_name
       @html_options = html_options
     end
 
     def call
-      tag.div(class: "relative flex items-start") do
-        safe_join([
-          hidden_field,
-          checkbox_input,
-          checkmark_overlay
-        ])
+      tag.button(
+        type: "button",
+        role: "checkbox",
+        "aria-checked": @checked.to_s,
+        "data-state": @checked ? "checked" : "unchecked",
+        disabled: @disabled,
+        class: checkbox_classes,
+        id: @id,
+        "data-controller": "checkbox",
+        "data-action": "click->checkbox#toggle",
+        **@html_options
+      ) do
+        # Hidden input for form submission
+        hidden_input + checkmark_icon
       end
     end
 
     private
 
-    def hidden_field
-      return unless name
-
-      tag.input(type: "hidden", name: name, value: "0")
-    end
-
-    def checkbox_input
-      tag.input(
-        type: "checkbox",
-        name: name,
-        value: value,
-        checked: checked,
-        disabled: disabled,
-        required: required,
-        id: id,
-        class: checkbox_classes,
-        **html_options
+    def checkbox_classes
+      cn(
+        # Matching shadcn/ui checkbox
+        "peer h-4 w-4 shrink-0 rounded-sm border border-primary shadow focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground",
+        @class_name
       )
     end
 
-    def checkmark_overlay
-      tag.div(class: "pointer-events-none absolute inset-0 flex items-center justify-center text-current opacity-0 peer-checked:opacity-100") do
+    def hidden_input
+      tag.input(
+        type: "hidden",
+        name: @name,
+        value: @checked ? @value : "",
+        "data-checkbox-target": "input"
+      )
+    end
+
+    def checkmark_icon
+      tag.span(class: "flex items-center justify-center text-current #{@checked ? '' : 'hidden'}", "data-checkbox-target": "icon") do
         tag.svg(
           xmlns: "http://www.w3.org/2000/svg",
-          width: "24",
-          height: "24",
           viewBox: "0 0 24 24",
           fill: "none",
           stroke: "currentColor",
@@ -78,16 +68,9 @@ module Ui
           "stroke-linejoin": "round",
           class: "h-3 w-3"
         ) do
-          tag.path(d: "M20 6 9 17l-5-5")
+          tag.polyline(points: "20 6 9 17 4 12")
         end
       end
-    end
-
-    def checkbox_classes
-      cn(
-        "peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 checked:bg-primary checked:text-primary-foreground",
-        class_name
-      )
     end
   end
 end

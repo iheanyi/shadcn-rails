@@ -1,0 +1,72 @@
+# frozen_string_literal: true
+
+module Ui
+  class AvatarComponent < BaseComponent
+    SIZES = {
+      sm: "h-8 w-8",
+      default: "h-10 w-10",
+      lg: "h-14 w-14",
+      xl: "h-20 w-20"
+    }.freeze
+
+    renders_one :image, "ImageComponent"
+    renders_one :fallback, "FallbackComponent"
+
+    def initialize(size: :default, class_name: nil, **html_options)
+      @size = size.to_sym
+      @class_name = class_name
+      @html_options = html_options
+    end
+
+    def call
+      tag.span(class: avatar_classes, **@html_options) do
+        safe_join([image, fallback].compact)
+      end
+    end
+
+    private
+
+    def avatar_classes
+      cn(
+        # Matching shadcn/ui avatar
+        "relative flex shrink-0 overflow-hidden rounded-full",
+        SIZES[@size],
+        @class_name
+      )
+    end
+
+    class ImageComponent < BaseComponent
+      def initialize(src:, alt: "", class_name: nil, **html_options)
+        @src = src
+        @alt = alt
+        @class_name = class_name
+        @html_options = html_options
+      end
+
+      def call
+        tag.img(
+          src: @src,
+          alt: @alt,
+          class: cn("aspect-square h-full w-full", @class_name),
+          loading: "lazy",
+          **@html_options
+        )
+      end
+    end
+
+    class FallbackComponent < BaseComponent
+      def initialize(class_name: nil, **html_options)
+        @class_name = class_name
+        @html_options = html_options
+      end
+
+      def call
+        tag.span(
+          content,
+          class: cn("flex h-full w-full items-center justify-center rounded-full bg-muted", @class_name),
+          **@html_options
+        )
+      end
+    end
+  end
+end

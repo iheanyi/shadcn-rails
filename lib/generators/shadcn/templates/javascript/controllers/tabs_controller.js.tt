@@ -1,62 +1,36 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Tabs controller for shadcn tabs component
 // Connects to data-controller="tabs"
 export default class extends Controller {
-  static targets = ["trigger", "content"]
+  static targets = ["tab", "panel"]
   static values = { default: String }
 
   connect() {
-    // Set initial active tab
-    const defaultValue = this.defaultValue || this.triggerTargets[0]?.dataset.tabsValue
+    // Activate default tab or first tab
+    const defaultValue = this.defaultValue || this.tabTargets[0]?.dataset.value
     if (defaultValue) {
-      this.select({ currentTarget: { dataset: { tabsValue: defaultValue } } })
+      this.activate(defaultValue)
     }
   }
 
   select(event) {
-    const value = event.currentTarget.dataset.tabsValue
-
-    // Update triggers
-    this.triggerTargets.forEach(trigger => {
-      const isActive = trigger.dataset.tabsValue === value
-      trigger.setAttribute('data-state', isActive ? 'active' : 'inactive')
-      trigger.setAttribute('aria-selected', isActive ? 'true' : 'false')
-    })
-
-    // Update content panels
-    this.contentTargets.forEach(content => {
-      const isActive = content.dataset.tabsValue === value
-      content.hidden = !isActive
-      content.setAttribute('data-state', isActive ? 'active' : 'inactive')
-    })
+    const value = event.currentTarget.dataset.value
+    this.activate(value)
   }
 
-  // Keyboard navigation
-  keydown(event) {
-    const triggers = this.triggerTargets.filter(t => !t.disabled)
-    const currentIndex = triggers.indexOf(event.currentTarget)
+  activate(value) {
+    // Update tabs
+    this.tabTargets.forEach(tab => {
+      const isActive = tab.dataset.value === value
+      tab.dataset.state = isActive ? "active" : "inactive"
+      tab.setAttribute("aria-selected", isActive.toString())
+    })
 
-    let nextIndex
-    switch (event.key) {
-      case 'ArrowRight':
-        nextIndex = currentIndex < triggers.length - 1 ? currentIndex + 1 : 0
-        break
-      case 'ArrowLeft':
-        nextIndex = currentIndex > 0 ? currentIndex - 1 : triggers.length - 1
-        break
-      case 'Home':
-        nextIndex = 0
-        break
-      case 'End':
-        nextIndex = triggers.length - 1
-        break
-      default:
-        return
-    }
-
-    event.preventDefault()
-    triggers[nextIndex].focus()
-    this.select({ currentTarget: triggers[nextIndex] })
+    // Update panels
+    this.panelTargets.forEach(panel => {
+      const isActive = panel.dataset.value === value
+      panel.hidden = !isActive
+      panel.dataset.state = isActive ? "active" : "inactive"
+    })
   }
 }

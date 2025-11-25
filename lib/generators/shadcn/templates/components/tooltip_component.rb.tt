@@ -2,24 +2,14 @@
 
 module Ui
   class TooltipComponent < BaseComponent
-    POSITIONS = {
-      top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
-      bottom: "top-full left-1/2 -translate-x-1/2 mt-2",
-      left: "right-full top-1/2 -translate-y-1/2 mr-2",
-      right: "left-full top-1/2 -translate-y-1/2 ml-2"
-    }.freeze
-
-    renders_one :trigger
-    renders_one :content_slot, "ContentComponent"
-
-    attr_reader :position, :delay, :class_name, :html_options
-
-    # @param position [Symbol] The tooltip position (:top, :bottom, :left, :right)
-    # @param delay [Integer] Delay in milliseconds before showing tooltip
+    # @param content_text [String] The tooltip content
+    # @param side [Symbol] The tooltip position (:top, :right, :bottom, :left)
+    # @param delay [Integer] Delay in milliseconds before showing
     # @param class_name [String] Additional CSS classes
     # @param html_options [Hash] Additional HTML attributes
-    def initialize(position: :top, delay: 200, class_name: nil, **html_options)
-      @position = position.to_sym
+    def initialize(content_text:, side: :top, delay: 200, class_name: nil, **html_options)
+      @content_text = content_text
+      @side = side.to_sym
       @delay = delay
       @class_name = class_name
       @html_options = html_options
@@ -27,44 +17,54 @@ module Ui
 
     def call
       tag.div(
-        class: cn("group relative inline-block", class_name),
-        data: {
-          controller: "tooltip",
-          tooltip_delay_value: delay
-        },
-        **html_options
+        class: "relative inline-block",
+        "data-controller": "tooltip",
+        "data-tooltip-delay-value": @delay,
+        **@html_options
       ) do
-        safe_join([trigger, content_slot].compact)
+        trigger + tooltip_content
       end
     end
 
-    class ContentComponent < BaseComponent
-      attr_reader :position, :class_name, :html_options
+    private
 
-      def initialize(position: :top, class_name: nil, **html_options)
-        @position = position.to_sym
-        @class_name = class_name
-        @html_options = html_options
-      end
+    def trigger
+      tag.span(
+        content,
+        "data-tooltip-target": "trigger",
+        "data-action": "mouseenter->tooltip#show mouseleave->tooltip#hide focus->tooltip#show blur->tooltip#hide"
+      )
+    end
 
-      def call
-        tag.div(
-          content,
-          role: "tooltip",
-          class: tooltip_classes,
-          data: { tooltip_target: "content" },
-          **html_options
-        )
-      end
+    def tooltip_content
+      tag.div(
+        @content_text,
+        role: "tooltip",
+        class: tooltip_classes,
+        "data-tooltip-target": "content",
+        "data-side": @side
+      )
+    end
 
-      private
+    def tooltip_classes
+      cn(
+        # Matching shadcn/ui tooltip
+        "absolute z-50 hidden overflow-hidden rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground animate-in fade-in-0 zoom-in-95",
+        position_classes,
+        @class_name
+      )
+    end
 
-      def tooltip_classes
-        cn(
-          "invisible group-hover:visible absolute z-50 overflow-hidden rounded-md border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95",
-          POSITIONS[position],
-          class_name
-        )
+    def position_classes
+      case @side
+      when :top
+        "bottom-full left-1/2 -translate-x-1/2 mb-2"
+      when :bottom
+        "top-full left-1/2 -translate-x-1/2 mt-2"
+      when :left
+        "right-full top-1/2 -translate-y-1/2 mr-2"
+      when :right
+        "left-full top-1/2 -translate-y-1/2 ml-2"
       end
     end
   end

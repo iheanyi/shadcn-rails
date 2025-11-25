@@ -26,7 +26,8 @@ module Ui
 
     def alert_classes
       cn(
-        "relative w-full rounded-lg border p-4",
+        # Base classes matching shadcn/ui
+        "relative w-full rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7",
         VARIANTS[@variant],
         @class_name
       )
