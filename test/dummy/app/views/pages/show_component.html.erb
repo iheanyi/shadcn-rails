@@ -16,7 +16,20 @@
         <h2 class="font-semibold">Preview</h2>
       </div>
       <div class="p-6">
-        <%= render "components/#{@component}_preview" rescue content_tag(:p, "Preview not available", class: "text-muted-foreground") %>
+        <% begin %>
+          <%= render "components/#{@component}_preview" %>
+        <% rescue ActionView::MissingTemplate %>
+          <p class="text-muted-foreground">Preview not available for this component yet.</p>
+        <% rescue => e %>
+          <% if Rails.env.development? %>
+            <div class="rounded-md border border-destructive bg-destructive/10 p-4">
+              <p class="font-medium text-destructive"><%= e.class %>: <%= e.message %></p>
+              <pre class="mt-2 text-xs text-muted-foreground overflow-auto"><%= e.backtrace.first(5).join("\n") %></pre>
+            </div>
+          <% else %>
+            <p class="text-muted-foreground">Preview not available</p>
+          <% end %>
+        <% end %>
       </div>
     </div>
 
