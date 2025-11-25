@@ -1,0 +1,22 @@
+<div class="flex flex-col gap-4 w-[60%]">
+  <div class="space-y-1">
+    <span class="text-sm text-muted-foreground">0%</span>
+    <%= render Ui::ProgressComponent.new(value: 0) %>
+  </div>
+  <div class="space-y-1">
+    <span class="text-sm text-muted-foreground">25%</span>
+    <%= render Ui::ProgressComponent.new(value: 25) %>
+  </div>
+  <div class="space-y-1">
+    <span class="text-sm text-muted-foreground">50%</span>
+    <%= render Ui::ProgressComponent.new(value: 50) %>
+  </div>
+  <div class="space-y-1">
+    <span class="text-sm text-muted-foreground">75%</span>
+    <%= render Ui::ProgressComponent.new(value: 75) %>
+  </div>
+  <div class="space-y-1">
+    <span class="text-sm text-muted-foreground">100%</span>
+    <%= render Ui::ProgressComponent.new(value: 100) %>
+  </div>
+</div>

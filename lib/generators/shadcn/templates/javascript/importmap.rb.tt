@@ -1,0 +1,4 @@
+# Pin shadcn-rails Stimulus controllers
+# Add these lines to your config/importmap.rb
+
+pin_all_from "app/javascript/controllers/shadcn", under: "controllers/shadcn"

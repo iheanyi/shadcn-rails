@@ -1,0 +1,21 @@
+<%= render Ui::CardComponent.new(class_name: "w-[350px]") do |card| %>
+  <% card.with_header do %>
+    <% card.with_title { "Create account" } %>
+    <% card.with_description { "Enter your email below to create your account." } %>
+  <% end %>
+  <% card.with_card_content do %>
+    <div class="grid gap-4">
+      <div class="grid gap-2">
+        <label for="email" class="text-sm font-medium">Email</label>
+        <%= render Ui::InputComponent.new(id: "email", type: "email", placeholder: "m@example.com") %>
+      </div>
+      <div class="grid gap-2">
+        <label for="password" class="text-sm font-medium">Password</label>
+        <%= render Ui::InputComponent.new(id: "password", type: "password") %>
+      </div>
+    </div>
+  <% end %>
+  <% card.with_footer do %>
+    <%= render Ui::ButtonComponent.new(class_name: "w-full") { "Create account" } %>
+  <% end %>
+<% end %>

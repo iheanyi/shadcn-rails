@@ -1,0 +1,16 @@
+<div class="flex flex-wrap gap-4">
+  <%= render Ui::ButtonComponent.new(variant: :default) { "Default" } %>
+  <%= render Ui::ButtonComponent.new(variant: :destructive) { "Destructive" } %>
+  <%= render Ui::ButtonComponent.new(variant: :outline) { "Outline" } %>
+  <%= render Ui::ButtonComponent.new(variant: :secondary) { "Secondary" } %>
+  <%= render Ui::ButtonComponent.new(variant: :ghost) { "Ghost" } %>
+  <%= render Ui::ButtonComponent.new(variant: :link) { "Link" } %>
+</div>
+
+<div class="mt-6 flex flex-wrap items-center gap-4">
+  <h4 class="w-full font-medium">Sizes</h4>
+  <%= render Ui::ButtonComponent.new(size: :sm) { "Small" } %>
+  <%= render Ui::ButtonComponent.new(size: :default) { "Default" } %>
+  <%= render Ui::ButtonComponent.new(size: :lg) { "Large" } %>
+  <%= render Ui::ButtonComponent.new(size: :icon) { "🔔" } %>
+</div>

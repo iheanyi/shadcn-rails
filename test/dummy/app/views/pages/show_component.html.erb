@@ -1,0 +1,32 @@
+<% content_for :title, @component.titleize %>
+
+<div class="container mx-auto px-4 py-8">
+  <div class="flex flex-col gap-4">
+    <div class="flex items-center gap-2 text-sm text-muted-foreground">
+      <a href="/components" class="hover:text-foreground">Components</a>
+      <span>/</span>
+      <span><%= @component.titleize %></span>
+    </div>
+    <h1 class="text-3xl font-bold tracking-tight capitalize"><%= @component.titleize %></h1>
+  </div>
+
+  <div class="mt-8">
+    <div class="rounded-lg border">
+      <div class="border-b px-4 py-3">
+        <h2 class="font-semibold">Preview</h2>
+      </div>
+      <div class="p-6">
+        <%= render "components/#{@component}_preview" rescue content_tag(:p, "Preview not available", class: "text-muted-foreground") %>
+      </div>
+    </div>
+
+    <div class="mt-6 rounded-lg border">
+      <div class="border-b px-4 py-3">
+        <h2 class="font-semibold">Usage</h2>
+      </div>
+      <div class="p-6">
+        <pre class="overflow-x-auto rounded-md bg-muted p-4 text-sm"><code><%= component_usage(@component) %></code></pre>
+      </div>
+    </div>
+  </div>
+</div>

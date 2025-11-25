@@ -1,0 +1,22 @@
+// shadcn-rails Stimulus controllers
+// This file can be used with esbuild, webpack, or other bundlers
+
+import DialogController from "./controllers/dialog_controller"
+import DropdownController from "./controllers/dropdown_controller"
+import TabsController from "./controllers/tabs_controller"
+import TooltipController from "./controllers/tooltip_controller"
+
+export {
+  DialogController,
+  DropdownController,
+  TabsController,
+  TooltipController
+}
+
+// Register all controllers with Stimulus
+export function registerControllers(application) {
+  application.register("dialog", DialogController)
+  application.register("dropdown", DropdownController)
+  application.register("tabs", TabsController)
+  application.register("tooltip", TooltipController)
+}

@@ -1,0 +1,23 @@
+<% content_for :title, "Components" %>
+
+<div class="container mx-auto px-4 py-8">
+  <div class="flex flex-col gap-4">
+    <h1 class="text-3xl font-bold tracking-tight">Components</h1>
+    <p class="text-muted-foreground">
+      Browse all available shadcn-rails components. Click on a component to see examples and usage.
+    </p>
+  </div>
+
+  <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <% @components.each do |component| %>
+      <a href="<%= component_path(component) %>" class="group rounded-lg border bg-card p-4 transition-colors hover:bg-accent">
+        <h3 class="font-semibold capitalize group-hover:text-accent-foreground">
+          <%= component.titleize %>
+        </h3>
+        <p class="mt-1 text-sm text-muted-foreground">
+          <%= component_description(component) %>
+        </p>
+      </a>
+    <% end %>
+  </div>
+</div>

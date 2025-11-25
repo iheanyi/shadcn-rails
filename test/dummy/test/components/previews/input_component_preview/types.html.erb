@@ -1,0 +1,26 @@
+<div class="flex flex-col gap-4 max-w-sm">
+  <div class="grid gap-1.5">
+    <label class="text-sm font-medium">Text</label>
+    <%= render Ui::InputComponent.new(type: "text", placeholder: "Enter text") %>
+  </div>
+
+  <div class="grid gap-1.5">
+    <label class="text-sm font-medium">Email</label>
+    <%= render Ui::InputComponent.new(type: "email", placeholder: "Enter email") %>
+  </div>
+
+  <div class="grid gap-1.5">
+    <label class="text-sm font-medium">Password</label>
+    <%= render Ui::InputComponent.new(type: "password", placeholder: "Enter password") %>
+  </div>
+
+  <div class="grid gap-1.5">
+    <label class="text-sm font-medium">Number</label>
+    <%= render Ui::InputComponent.new(type: "number", placeholder: "Enter number") %>
+  </div>
+
+  <div class="grid gap-1.5">
+    <label class="text-sm font-medium">Date</label>
+    <%= render Ui::InputComponent.new(type: "date") %>
+  </div>
+</div>

@@ -1,0 +1,57 @@
+# frozen_string_literal: true
+
+module Ui
+  class AlertComponent < BaseComponent
+    VARIANTS = {
+      default: "bg-background text-foreground",
+      destructive: "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive"
+    }.freeze
+
+    renders_one :title, "TitleComponent"
+    renders_one :description, "DescriptionComponent"
+
+    def initialize(variant: :default, class_name: nil, **html_options)
+      @variant = variant.to_sym
+      @class_name = class_name
+      @html_options = html_options
+    end
+
+    def call
+      tag.div(role: "alert", class: alert_classes, **@html_options) do
+        safe_join([title, description, content].compact)
+      end
+    end
+
+    private
+
+    def alert_classes
+      cn(
+        "relative w-full rounded-lg border p-4",
+        VARIANTS[@variant],
+        @class_name
+      )
+    end
+
+    class TitleComponent < BaseComponent
+      def initialize(class_name: nil, **html_options)
+        @class_name = class_name
+        @html_options = html_options
+      end
+
+      def call
+        tag.h5(content, class: cn("mb-1 font-medium leading-none tracking-tight", @class_name), **@html_options)
+      end
+    end
+
+    class DescriptionComponent < BaseComponent
+      def initialize(class_name: nil, **html_options)
+        @class_name = class_name
+        @html_options = html_options
+      end
+
+      def call
+        tag.div(content, class: cn("text-sm [&_p]:leading-relaxed", @class_name), **@html_options)
+      end
+    end
+  end
+end

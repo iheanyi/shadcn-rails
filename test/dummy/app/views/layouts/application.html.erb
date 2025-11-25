@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= content_for(:title) || "shadcn-rails" %> - Component Library</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <!-- Tailwind CSS via CDN for demo -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwindcss.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            border: 'hsl(var(--border))',
+            input: 'hsl(var(--input))',
+            ring: 'hsl(var(--ring))',
+            background: 'hsl(var(--background))',
+            foreground: 'hsl(var(--foreground))',
+            primary: {
+              DEFAULT: 'hsl(var(--primary))',
+              foreground: 'hsl(var(--primary-foreground))',
+            },
+            secondary: {
+              DEFAULT: 'hsl(var(--secondary))',
+              foreground: 'hsl(var(--secondary-foreground))',
+            },
+            destructive: {
+              DEFAULT: 'hsl(var(--destructive))',
+              foreground: 'hsl(var(--destructive-foreground))',
+            },
+            muted: {
+              DEFAULT: 'hsl(var(--muted))',
+              foreground: 'hsl(var(--muted-foreground))',
+            },
+            accent: {
+              DEFAULT: 'hsl(var(--accent))',
+              foreground: 'hsl(var(--accent-foreground))',
+            },
+            popover: {
+              DEFAULT: 'hsl(var(--popover))',
+              foreground: 'hsl(var(--popover-foreground))',
+            },
+            card: {
+              DEFAULT: 'hsl(var(--card))',
+              foreground: 'hsl(var(--card-foreground))',
+            },
+          },
+          borderRadius: {
+            lg: 'var(--radius)',
+            md: 'calc(var(--radius) - 2px)',
+            sm: 'calc(var(--radius) - 4px)',
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    :root {
+      --background: 0 0% 100%;
+      --foreground: 222.2 84% 4.9%;
+      --card: 0 0% 100%;
+      --card-foreground: 222.2 84% 4.9%;
+      --popover: 0 0% 100%;
+      --popover-foreground: 222.2 84% 4.9%;
+      --primary: 222.2 47.4% 11.2%;
+      --primary-foreground: 210 40% 98%;
+      --secondary: 210 40% 96.1%;
+      --secondary-foreground: 222.2 47.4% 11.2%;
+      --muted: 210 40% 96.1%;
+      --muted-foreground: 215.4 16.3% 46.9%;
+      --accent: 210 40% 96.1%;
+      --accent-foreground: 222.2 47.4% 11.2%;
+      --destructive: 0 84.2% 60.2%;
+      --destructive-foreground: 210 40% 98%;
+      --border: 214.3 31.8% 91.4%;
+      --input: 214.3 31.8% 91.4%;
+      --ring: 222.2 84% 4.9%;
+      --radius: 0.5rem;
+    }
+
+    .dark {
+      --background: 222.2 84% 4.9%;
+      --foreground: 210 40% 98%;
+      --card: 222.2 84% 4.9%;
+      --card-foreground: 210 40% 98%;
+      --popover: 222.2 84% 4.9%;
+      --popover-foreground: 210 40% 98%;
+      --primary: 210 40% 98%;
+      --primary-foreground: 222.2 47.4% 11.2%;
+      --secondary: 217.2 32.6% 17.5%;
+      --secondary-foreground: 210 40% 98%;
+      --muted: 217.2 32.6% 17.5%;
+      --muted-foreground: 215 20.2% 65.1%;
+      --accent: 217.2 32.6% 17.5%;
+      --accent-foreground: 210 40% 98%;
+      --destructive: 0 62.8% 30.6%;
+      --destructive-foreground: 210 40% 98%;
+      --border: 217.2 32.6% 17.5%;
+      --input: 217.2 32.6% 17.5%;
+      --ring: 212.7 26.8% 83.9%;
+    }
+
+    * {
+      border-color: hsl(var(--border));
+    }
+
+    body {
+      background-color: hsl(var(--background));
+      color: hsl(var(--foreground));
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .animate-spin {
+      animation: spin 1s linear infinite;
+    }
+
+    .animate-pulse {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .5; }
+    }
+  </style>
+</head>
+<body class="min-h-full bg-background text-foreground antialiased">
+  <div class="flex min-h-screen flex-col">
+    <!-- Navigation -->
+    <header class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div class="container mx-auto flex h-14 items-center px-4">
+        <div class="mr-4 flex">
+          <a href="/" class="mr-6 flex items-center space-x-2">
+            <span class="font-bold">shadcn-rails</span>
+          </a>
+          <nav class="flex items-center space-x-6 text-sm font-medium">
+            <a href="/components" class="transition-colors hover:text-foreground/80">Components</a>
+            <a href="/lookbook" class="transition-colors hover:text-foreground/80">Lookbook</a>
+          </nav>
+        </div>
+        <div class="flex flex-1 items-center justify-end space-x-2">
+          <button id="theme-toggle" class="inline-flex h-9 w-9 items-center justify-center rounded-md border hover:bg-accent">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dark:hidden"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden dark:block"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="flex-1">
+      <%= yield %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t py-6 md:py-0">
+      <div class="container mx-auto flex flex-col items-center justify-between gap-4 md:h-14 md:flex-row px-4">
+        <p class="text-center text-sm leading-loose text-muted-foreground md:text-left">
+          Built with shadcn-rails. Components inspired by
+          <a href="https://ui.shadcn.com" class="font-medium underline underline-offset-4" target="_blank">shadcn/ui</a>.
+        </p>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+
+    themeToggle.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // Check for saved theme preference
+    if (localStorage.getItem('theme') === 'dark' ||
+        (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      html.classList.add('dark');
+    }
+  </script>
+</body>
+</html>

@@ -212,7 +212,115 @@ Since components are copied to your application, you have full control over cust
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests.
+### Setup
+
+After checking out the repo, run `bin/setup` to install dependencies:
+
+```bash
+bin/setup
+```
+
+### Running Tests
+
+Run the test suite with:
+
+```bash
+bundle exec rake test
+```
+
+### Running the Dummy App
+
+The gem includes a Rails dummy app for testing components locally with Lookbook:
+
+```bash
+# Install dependencies
+cd test/dummy && bin/setup
+
+# Start the server
+bundle exec rake dummy:server
+
+# Or manually
+cd test/dummy && bin/rails server
+```
+
+Then visit:
+- **Home**: http://localhost:3000
+- **Components**: http://localhost:3000/components
+- **Lookbook**: http://localhost:3000/lookbook
+
+### Component Previews with Lookbook
+
+Lookbook provides an interactive UI for browsing and testing components. Component previews are located in `test/dummy/test/components/previews/`.
+
+To add a new preview:
+
+```ruby
+# test/dummy/test/components/previews/my_component_preview.rb
+class MyComponentPreview < ViewComponent::Preview
+  def default
+    render Ui::MyComponent.new
+  end
+end
+```
+
+## JavaScript Bundler Compatibility
+
+shadcn-rails works with all Rails JavaScript bundling solutions:
+
+### Importmap (Rails 7+ default)
+
+```bash
+rails g shadcn:js --bundler=importmap
+```
+
+Controllers are pinned automatically in your `config/importmap.rb`.
+
+### esbuild
+
+```bash
+rails g shadcn:js --bundler=esbuild
+```
+
+Import in your `application.js`:
+
+```javascript
+import { registerControllers } from "./shadcn"
+registerControllers(application)
+```
+
+### Webpack
+
+```bash
+rails g shadcn:js --bundler=webpack
+```
+
+Import in your entrypoint:
+
+```javascript
+import { registerControllers } from "./shadcn"
+registerControllers(application)
+```
+
+### Vite (vite-rails)
+
+```bash
+rails g shadcn:js --bundler=vite
+```
+
+Controllers are installed to `app/frontend/controllers`. Import in your entrypoint:
+
+```javascript
+import { registerControllers } from "@/shadcn"
+registerControllers(application)
+```
+
+### Auto-detection
+
+By default, the generator auto-detects your bundler:
+
+```bash
+rails g shadcn:js  # Auto-detects importmap, esbuild, webpack, or vite
+```
 
 ## Contributing
 

@@ -19,19 +19,18 @@ Gem::Specification.new do |spec|
   spec.metadata["changelog_uri"] = "#{spec.homepage}/blob/main/CHANGELOG.md"
 
   spec.files = Dir.chdir(__dir__) do
-    `git ls-files -z`.split("\x0").reject do |f|
-      (File.expand_path(f) == __FILE__) ||
-        f.start_with?(*%w[bin/ test/ spec/ features/ .git .github appveyor Gemfile])
-    end
+    Dir["{lib}/**/*", "LICENSE.txt", "README.md", "CHANGELOG.md"]
   end
   spec.bindir = "exe"
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  # Runtime dependencies
   spec.add_dependency "railties", ">= 7.0"
   spec.add_dependency "view_component", ">= 3.0"
 
+  # Development dependencies
   spec.add_development_dependency "rake", "~> 13.0"
-  spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency "minitest", "~> 5.0"
   spec.add_development_dependency "rubocop", "~> 1.21"
 end

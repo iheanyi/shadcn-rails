@@ -1,0 +1,13 @@
+<%= render Ui::CardComponent.new(class_name: "w-[350px]") do |card| %>
+  <% card.with_header do %>
+    <% card.with_title { "Card Title" } %>
+    <% card.with_description { "Card description goes here." } %>
+  <% end %>
+  <% card.with_card_content do %>
+    <p>Card content with any HTML you want.</p>
+  <% end %>
+  <% card.with_footer do %>
+    <%= render Ui::ButtonComponent.new(variant: :outline) { "Cancel" } %>
+    <%= render Ui::ButtonComponent.new(class_name: "ml-2") { "Submit" } %>
+  <% end %>
+<% end %>

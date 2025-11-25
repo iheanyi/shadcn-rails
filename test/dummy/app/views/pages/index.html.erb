@@ -1,0 +1,53 @@
+<% content_for :title, "Home" %>
+
+<div class="container mx-auto px-4 py-16">
+  <div class="flex flex-col items-center text-center">
+    <h1 class="text-4xl font-bold tracking-tight sm:text-6xl">
+      shadcn-rails
+    </h1>
+    <p class="mt-6 text-lg leading-8 text-muted-foreground max-w-2xl">
+      Beautiful, accessible UI components for Rails applications.
+      Built with ViewComponent and styled with Tailwind CSS.
+    </p>
+    <div class="mt-10 flex items-center justify-center gap-x-6">
+      <a href="/components" class="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
+        Browse Components
+      </a>
+      <a href="/lookbook" class="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium shadow-sm hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
+        Open Lookbook →
+      </a>
+    </div>
+  </div>
+
+  <div class="mt-24 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="rounded-lg border bg-card p-6">
+      <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m9 12 2 2 4-4"/></svg>
+      </div>
+      <h3 class="mt-4 font-semibold">ViewComponent Based</h3>
+      <p class="mt-2 text-sm text-muted-foreground">
+        Components are built with ViewComponent for better testing, performance, and code organization.
+      </p>
+    </div>
+
+    <div class="rounded-lg border bg-card p-6">
+      <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
+      <h3 class="mt-4 font-semibold">Fully Customizable</h3>
+      <p class="mt-2 text-sm text-muted-foreground">
+        Components are copied to your project. Customize them to match your design system.
+      </p>
+    </div>
+
+    <div class="rounded-lg border bg-card p-6">
+      <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      </div>
+      <h3 class="mt-4 font-semibold">Accessible</h3>
+      <p class="mt-2 text-sm text-muted-foreground">
+        Components follow WAI-ARIA guidelines and include proper keyboard navigation.
+      </p>
+    </div>
+  </div>
+</div>
