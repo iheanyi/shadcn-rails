@@ -21,11 +21,4 @@ Rails.application.configure do
   config.active_support.deprecation = :log
   config.active_support.disallowed_deprecation = :raise
   config.active_support.disallowed_deprecation_warnings = []
-
-  # ViewComponent previews
-  config.view_component.preview_paths << Rails.root.join("test/components/previews")
-  config.view_component.show_previews = true
-
-  # Lookbook
-  config.lookbook.preview_paths = [Rails.root.join("test/components/previews")]
 end
