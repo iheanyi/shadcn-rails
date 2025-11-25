@@ -1,0 +1,33 @@
+# frozen_string_literal: true
+
+module Ui
+  class LabelComponent < BaseComponent
+    def initialize(for_id: nil, required: false, class_name: nil, **html_options)
+      @for_id = for_id
+      @required = required
+      @class_name = class_name
+      @html_options = html_options
+    end
+
+    def call
+      tag.label(for: @for_id, class: label_classes, **@html_options) do
+        safe_join([content, required_indicator].compact)
+      end
+    end
+
+    private
+
+    def label_classes
+      cn(
+        "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+        @class_name
+      )
+    end
+
+    def required_indicator
+      return unless @required
+
+      tag.span(" *", class: "text-destructive")
+    end
+  end
+end
