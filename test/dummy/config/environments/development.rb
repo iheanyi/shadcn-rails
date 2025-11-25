@@ -8,6 +8,9 @@ Rails.application.configure do
   config.consider_all_requests_local = true
   config.server_timing = true
 
+  # Allow all hosts in development
+  config.hosts = nil
+
   if Rails.root.join("tmp/caching-dev.txt").exist?
     config.cache_store = :memory_store
     config.public_file_server.headers = {
