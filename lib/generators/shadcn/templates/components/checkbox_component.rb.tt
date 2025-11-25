@@ -1,0 +1,93 @@
+# frozen_string_literal: true
+
+module Ui
+  class CheckboxComponent < BaseComponent
+    attr_reader :name, :value, :checked, :disabled, :required, :id, :class_name, :html_options
+
+    # @param name [String] The checkbox name attribute
+    # @param value [String] The checkbox value
+    # @param checked [Boolean] Whether the checkbox is checked
+    # @param disabled [Boolean] Whether the checkbox is disabled
+    # @param required [Boolean] Whether the checkbox is required
+    # @param id [String] The checkbox ID
+    # @param class_name [String] Additional CSS classes
+    # @param html_options [Hash] Additional HTML attributes
+    def initialize(
+      name: nil,
+      value: "1",
+      checked: false,
+      disabled: false,
+      required: false,
+      id: nil,
+      class_name: nil,
+      **html_options
+    )
+      @name = name
+      @value = value
+      @checked = checked
+      @disabled = disabled
+      @required = required
+      @id = id || generate_id("checkbox")
+      @class_name = class_name
+      @html_options = html_options
+    end
+
+    def call
+      tag.div(class: "relative flex items-start") do
+        safe_join([
+          hidden_field,
+          checkbox_input,
+          checkmark_overlay
+        ])
+      end
+    end
+
+    private
+
+    def hidden_field
+      return unless name
+
+      tag.input(type: "hidden", name: name, value: "0")
+    end
+
+    def checkbox_input
+      tag.input(
+        type: "checkbox",
+        name: name,
+        value: value,
+        checked: checked,
+        disabled: disabled,
+        required: required,
+        id: id,
+        class: checkbox_classes,
+        **html_options
+      )
+    end
+
+    def checkmark_overlay
+      tag.div(class: "pointer-events-none absolute inset-0 flex items-center justify-center text-current opacity-0 peer-checked:opacity-100") do
+        tag.svg(
+          xmlns: "http://www.w3.org/2000/svg",
+          width: "24",
+          height: "24",
+          viewBox: "0 0 24 24",
+          fill: "none",
+          stroke: "currentColor",
+          "stroke-width": "2",
+          "stroke-linecap": "round",
+          "stroke-linejoin": "round",
+          class: "h-3 w-3"
+        ) do
+          tag.path(d: "M20 6 9 17l-5-5")
+        end
+      end
+    end
+
+    def checkbox_classes
+      cn(
+        "peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 checked:bg-primary checked:text-primary-foreground",
+        class_name
+      )
+    end
+  end
+end

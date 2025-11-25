@@ -1,0 +1,134 @@
+# frozen_string_literal: true
+
+module Ui
+  class TabsComponent < BaseComponent
+    renders_one :list, "ListComponent"
+    renders_many :triggers, "TriggerComponent"
+    renders_many :contents, "ContentComponent"
+
+    attr_reader :default_value, :class_name, :html_options
+
+    # @param default_value [String] The default active tab value
+    # @param class_name [String] Additional CSS classes
+    # @param html_options [Hash] Additional HTML attributes
+    def initialize(default_value: nil, class_name: nil, **html_options)
+      @default_value = default_value
+      @class_name = class_name
+      @html_options = html_options
+      @tabs_id = generate_id("tabs")
+    end
+
+    def call
+      tag.div(
+        class: cn("w-full", class_name),
+        data: {
+          controller: "tabs",
+          tabs_default_value: default_value
+        },
+        **html_options
+      ) do
+        safe_join([list, triggers_wrapper, contents_wrapper].compact)
+      end
+    end
+
+    private
+
+    def triggers_wrapper
+      return if triggers.blank?
+
+      tag.div(class: "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground") do
+        safe_join(triggers)
+      end
+    end
+
+    def contents_wrapper
+      return if contents.blank?
+
+      safe_join(contents)
+    end
+
+    class ListComponent < BaseComponent
+      attr_reader :class_name, :html_options
+
+      def initialize(class_name: nil, **html_options)
+        @class_name = class_name
+        @html_options = html_options
+      end
+
+      def call
+        tag.div(
+          content,
+          role: "tablist",
+          class: cn("inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground", class_name),
+          **html_options
+        )
+      end
+    end
+
+    class TriggerComponent < BaseComponent
+      attr_reader :value, :class_name, :html_options
+
+      def initialize(value:, class_name: nil, **html_options)
+        @value = value
+        @class_name = class_name
+        @html_options = html_options
+      end
+
+      def call
+        tag.button(
+          content,
+          type: "button",
+          role: "tab",
+          class: trigger_classes,
+          data: {
+            tabs_target: "trigger",
+            tabs_value: value,
+            action: "tabs#select"
+          },
+          **html_options
+        )
+      end
+
+      private
+
+      def trigger_classes
+        cn(
+          "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm",
+          class_name
+        )
+      end
+    end
+
+    class ContentComponent < BaseComponent
+      attr_reader :value, :class_name, :html_options
+
+      def initialize(value:, class_name: nil, **html_options)
+        @value = value
+        @class_name = class_name
+        @html_options = html_options
+      end
+
+      def call
+        tag.div(
+          content,
+          role: "tabpanel",
+          class: content_classes,
+          data: {
+            tabs_target: "content",
+            tabs_value: value
+          },
+          **html_options
+        )
+      end
+
+      private
+
+      def content_classes
+        cn(
+          "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+          class_name
+        )
+      end
+    end
+  end
+end

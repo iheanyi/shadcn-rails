@@ -1,0 +1,18 @@
+# frozen_string_literal: true
+
+Shadcn::Rails.configure do |config|
+  # Path where components will be installed
+  # Default: "app/components/ui"
+  config.components_path = "<%= options[:components_path] %>"
+
+  # Path to your Tailwind CSS configuration file
+  # Default: "config/tailwind.config.js"
+  # config.tailwind_config_path = "config/tailwind.config.js"
+
+  # Default style options applied to components
+  # config.default_styles = {
+  #   rounded: "rounded-md",
+  #   shadow: "shadow-sm",
+  #   transition: "transition-colors"
+  # }
+end

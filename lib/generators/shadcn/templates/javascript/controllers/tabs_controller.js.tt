@@ -1,0 +1,62 @@
+import { Controller } from "@hotwired/stimulus"
+
+// Tabs controller for shadcn tabs component
+// Connects to data-controller="tabs"
+export default class extends Controller {
+  static targets = ["trigger", "content"]
+  static values = { default: String }
+
+  connect() {
+    // Set initial active tab
+    const defaultValue = this.defaultValue || this.triggerTargets[0]?.dataset.tabsValue
+    if (defaultValue) {
+      this.select({ currentTarget: { dataset: { tabsValue: defaultValue } } })
+    }
+  }
+
+  select(event) {
+    const value = event.currentTarget.dataset.tabsValue
+
+    // Update triggers
+    this.triggerTargets.forEach(trigger => {
+      const isActive = trigger.dataset.tabsValue === value
+      trigger.setAttribute('data-state', isActive ? 'active' : 'inactive')
+      trigger.setAttribute('aria-selected', isActive ? 'true' : 'false')
+    })
+
+    // Update content panels
+    this.contentTargets.forEach(content => {
+      const isActive = content.dataset.tabsValue === value
+      content.hidden = !isActive
+      content.setAttribute('data-state', isActive ? 'active' : 'inactive')
+    })
+  }
+
+  // Keyboard navigation
+  keydown(event) {
+    const triggers = this.triggerTargets.filter(t => !t.disabled)
+    const currentIndex = triggers.indexOf(event.currentTarget)
+
+    let nextIndex
+    switch (event.key) {
+      case 'ArrowRight':
+        nextIndex = currentIndex < triggers.length - 1 ? currentIndex + 1 : 0
+        break
+      case 'ArrowLeft':
+        nextIndex = currentIndex > 0 ? currentIndex - 1 : triggers.length - 1
+        break
+      case 'Home':
+        nextIndex = 0
+        break
+      case 'End':
+        nextIndex = triggers.length - 1
+        break
+      default:
+        return
+    }
+
+    event.preventDefault()
+    triggers[nextIndex].focus()
+    this.select({ currentTarget: triggers[nextIndex] })
+  }
+}

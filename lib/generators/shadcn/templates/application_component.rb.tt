@@ -1,0 +1,18 @@
+# frozen_string_literal: true
+
+class ApplicationComponent < ViewComponent::Base
+  # Base component for all ViewComponents in the application
+  # Extend this class to inherit common functionality
+
+  # Include Rails helpers
+  include ActionView::Helpers::TagHelper
+  include ActionView::Helpers::UrlHelper
+  include ActionView::Context
+
+  private
+
+  # Override this method to provide default options for all components
+  def default_options
+    {}
+  end
+end

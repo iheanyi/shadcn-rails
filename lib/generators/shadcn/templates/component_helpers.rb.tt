@@ -1,0 +1,49 @@
+# frozen_string_literal: true
+
+module ShadcnHelpers
+  extend ActiveSupport::Concern
+
+  # Helper to merge Tailwind CSS classes intelligently
+  # Handles conflicting classes by using tailwind-merge logic
+  #
+  # @example
+  #   cn("px-4 py-2", "px-6") # => "py-2 px-6"
+  #   cn("text-red-500", condition ? "text-blue-500" : nil) # => "text-blue-500" or "text-red-500"
+  #
+  def cn(*classes)
+    TailwindMerge::Merger.new.merge(classes.flatten.compact.join(" "))
+  rescue NameError
+    # Fallback if tailwind_merge gem is not available
+    classes.flatten.compact.uniq.join(" ")
+  end
+
+  # Render a shadcn component by name
+  #
+  # @example
+  #   shadcn(:button, variant: :primary) { "Click me" }
+  #   shadcn(:card) do |card|
+  #     card.with_header { "Title" }
+  #     card.with_content { "Content" }
+  #   end
+  #
+  def shadcn(component_name, **options, &block)
+    component_class = "Ui::#{component_name.to_s.camelize}Component".constantize
+    render(component_class.new(**options), &block)
+  rescue NameError => e
+    raise ArgumentError, "Component '#{component_name}' not found. " \
+                         "Run `rails g shadcn:component #{component_name}` to install it. " \
+                         "Original error: #{e.message}"
+  end
+
+  # Check if a component is installed
+  #
+  # @example
+  #   shadcn_component_installed?(:button) # => true/false
+  #
+  def shadcn_component_installed?(component_name)
+    "Ui::#{component_name.to_s.camelize}Component".constantize
+    true
+  rescue NameError
+    false
+  end
+end

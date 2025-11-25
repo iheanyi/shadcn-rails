@@ -1,0 +1,89 @@
+# frozen_string_literal: true
+
+module Ui
+  class SelectComponent < BaseComponent
+    renders_many :options, "OptionComponent"
+
+    attr_reader :name, :value, :placeholder, :disabled, :required, :multiple,
+                :class_name, :html_options
+
+    # @param name [String] The select name attribute
+    # @param value [String, Array] The selected value(s)
+    # @param placeholder [String] The placeholder text for the first option
+    # @param disabled [Boolean] Whether the select is disabled
+    # @param required [Boolean] Whether the select is required
+    # @param multiple [Boolean] Whether multiple selections are allowed
+    # @param class_name [String] Additional CSS classes
+    # @param html_options [Hash] Additional HTML attributes
+    def initialize(
+      name: nil,
+      value: nil,
+      placeholder: nil,
+      disabled: false,
+      required: false,
+      multiple: false,
+      class_name: nil,
+      **html_options
+    )
+      @name = name
+      @value = value
+      @placeholder = placeholder
+      @disabled = disabled
+      @required = required
+      @multiple = multiple
+      @class_name = class_name
+      @html_options = html_options
+    end
+
+    def call
+      tag.select(
+        name: name,
+        disabled: disabled,
+        required: required,
+        multiple: multiple,
+        class: select_classes,
+        **html_options
+      ) do
+        safe_join([placeholder_option, options].compact)
+      end
+    end
+
+    private
+
+    def select_classes
+      cn(
+        "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+        class_name
+      )
+    end
+
+    def placeholder_option
+      return unless placeholder
+
+      tag.option(placeholder, value: "", disabled: true, selected: value.blank?)
+    end
+
+    class OptionComponent < BaseComponent
+      attr_reader :value, :selected, :disabled, :class_name, :html_options
+
+      def initialize(value:, selected: false, disabled: false, class_name: nil, **html_options)
+        @value = value
+        @selected = selected
+        @disabled = disabled
+        @class_name = class_name
+        @html_options = html_options
+      end
+
+      def call
+        tag.option(
+          content,
+          value: value,
+          selected: selected,
+          disabled: disabled,
+          class: class_name,
+          **html_options
+        )
+      end
+    end
+  end
+end

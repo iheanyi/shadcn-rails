@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+# Script for setting up development dependencies
+
+echo "Installing gem dependencies..."
+bundle install
+
+echo ""
+echo "Setup complete! You can now:"
+echo "  - Run tests: bundle exec rspec"
+echo "  - Run linter: bundle exec rubocop"
+echo ""

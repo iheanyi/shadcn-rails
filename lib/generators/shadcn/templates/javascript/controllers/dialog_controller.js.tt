@@ -1,0 +1,98 @@
+import { Controller } from "@hotwired/stimulus"
+
+// Dialog controller for shadcn dialog component
+// Connects to data-controller="dialog"
+export default class extends Controller {
+  static targets = ["template", "overlay", "content"]
+  static values = { open: Boolean }
+
+  connect() {
+    this.dialog = null
+    if (this.openValue) {
+      this.open()
+    }
+  }
+
+  disconnect() {
+    this.close()
+  }
+
+  open() {
+    if (this.dialog) return
+
+    // Clone template content
+    const template = this.templateTarget
+    this.dialog = template.content.cloneNode(true)
+
+    // Append to body
+    document.body.appendChild(this.dialog)
+
+    // Set state attributes
+    document.querySelectorAll('[data-dialog-target="overlay"], [data-dialog-target="content"]').forEach(el => {
+      el.setAttribute('data-state', 'open')
+    })
+
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden'
+
+    // Focus trap
+    this.trapFocus()
+
+    // Listen for escape key
+    this.boundHandleKeydown = this.handleKeydown.bind(this)
+    document.addEventListener('keydown', this.boundHandleKeydown)
+  }
+
+  close() {
+    if (!this.dialog) return
+
+    // Remove state attributes
+    document.querySelectorAll('[data-dialog-target="overlay"], [data-dialog-target="content"]').forEach(el => {
+      el.setAttribute('data-state', 'closed')
+    })
+
+    // Remove from DOM after animation
+    setTimeout(() => {
+      document.querySelectorAll('[data-dialog-target="overlay"], [data-dialog-target="content"]').forEach(el => {
+        el.remove()
+      })
+    }, 200)
+
+    // Restore body scroll
+    document.body.style.overflow = ''
+
+    // Remove escape key listener
+    if (this.boundHandleKeydown) {
+      document.removeEventListener('keydown', this.boundHandleKeydown)
+    }
+
+    this.dialog = null
+  }
+
+  toggle() {
+    if (this.dialog) {
+      this.close()
+    } else {
+      this.open()
+    }
+  }
+
+  handleKeydown(event) {
+    if (event.key === 'Escape') {
+      this.close()
+    }
+  }
+
+  trapFocus() {
+    const content = document.querySelector('[data-dialog-target="content"]')
+    if (!content) return
+
+    const focusableElements = content.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )
+
+    if (focusableElements.length > 0) {
+      focusableElements[0].focus()
+    }
+  }
+}

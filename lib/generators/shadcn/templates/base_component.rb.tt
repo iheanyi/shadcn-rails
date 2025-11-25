@@ -1,0 +1,59 @@
+# frozen_string_literal: true
+
+module Ui
+  class BaseComponent < ApplicationComponent
+    # Base class for all shadcn UI components
+    # Provides common functionality and styling utilities
+
+    private
+
+    # Merge CSS classes intelligently, handling Tailwind conflicts
+    def cn(*classes)
+      TailwindMerge::Merger.new.merge(classes.flatten.compact.join(" "))
+    rescue NameError
+      # Fallback if tailwind_merge gem is not available
+      classes.flatten.compact.uniq.join(" ")
+    end
+
+    # Generate a unique ID for accessibility
+    def generate_id(prefix = "shadcn")
+      "#{prefix}-#{SecureRandom.hex(4)}"
+    end
+
+    # Common variant styles that can be overridden
+    def variant_classes(variant)
+      case variant.to_sym
+      when :default
+        "bg-primary text-primary-foreground hover:bg-primary/90"
+      when :destructive
+        "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+      when :outline
+        "border border-input bg-background hover:bg-accent hover:text-accent-foreground"
+      when :secondary
+        "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+      when :ghost
+        "hover:bg-accent hover:text-accent-foreground"
+      when :link
+        "text-primary underline-offset-4 hover:underline"
+      else
+        ""
+      end
+    end
+
+    # Common size styles
+    def size_classes(size)
+      case size.to_sym
+      when :sm
+        "h-9 px-3 text-sm"
+      when :default
+        "h-10 px-4 py-2"
+      when :lg
+        "h-11 px-8 text-lg"
+      when :icon
+        "h-10 w-10"
+      else
+        ""
+      end
+    end
+  end
+end
