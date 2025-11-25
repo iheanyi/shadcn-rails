@@ -31,18 +31,22 @@ module Shadcn
       end
 
       # Autoload component paths
+      # We add the parent of components_path (e.g., app/components) so that
+      # the ui folder creates the Ui:: namespace properly
       initializer "shadcn-rails.autoload", before: :set_autoload_paths do |app|
         components_path = ::Rails.root.join(Shadcn::Rails.configuration.components_path)
-        if components_path.exist?
-          app.config.autoload_paths << components_path.to_s
+        parent_path = components_path.parent
+        if parent_path.exist?
+          app.config.autoload_paths << parent_path.to_s
         end
       end
 
       # Eager load components in production
       initializer "shadcn-rails.eager_load", before: :set_autoload_paths do |app|
         components_path = ::Rails.root.join(Shadcn::Rails.configuration.components_path)
-        if components_path.exist?
-          app.config.eager_load_paths << components_path.to_s
+        parent_path = components_path.parent
+        if parent_path.exist?
+          app.config.eager_load_paths << parent_path.to_s
         end
       end
     end
