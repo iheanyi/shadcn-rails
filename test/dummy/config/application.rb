@@ -16,7 +16,6 @@ Bundler.require(*Rails.groups)
 
 # Require shadcn-rails
 require "shadcn/rails"
-require "view_component"
 
 module Dummy
   class Application < Rails::Application
@@ -24,9 +23,5 @@ module Dummy
 
     # Configuration for the application, engines, and railties
     config.eager_load = false
-
-    # ViewComponent configuration
-    config.view_component.preview_paths << Rails.root.join("test/components/previews")
-    config.view_component.show_previews = true
   end
 end
