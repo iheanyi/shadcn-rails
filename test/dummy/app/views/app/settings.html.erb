@@ -6,7 +6,7 @@
     <p class="text-muted-foreground">Manage your account settings and preferences.</p>
   </div>
 
-  <%= render Shadcn::TabsComponent.new(default_value: "general") do |tabs| %>
+  <%= render Shadcn::TabsComponent.new(default_value: "general", url_param: "tab") do |tabs| %>
     <% tabs.with_list do |list| %>
       <% list.with_trigger(value: "general") { "General" } %>
       <% list.with_trigger(value: "notifications") { "Notifications" } %>

@@ -111,39 +111,66 @@
     // Tabs Controller
     Stimulus.register("shadcn--tabs", class extends Controller {
       static targets = ["trigger", "content"]
-      static values = { default: String }
+      static values = { default: String, urlParam: String }
 
       connect() {
-        if (this.defaultValue) {
-          this.showTab(this.defaultValue)
-        } else if (this.triggerTargets.length > 0) {
-          const firstValue = this.triggerTargets[0].dataset.value
-          this.showTab(firstValue)
+        // Determine initial tab value from URL or default
+        let initialValue = this.getValueFromUrl() || this.defaultValue
+        if (!initialValue && this.triggerTargets.length > 0) {
+          initialValue = this.triggerTargets[0].dataset.value
         }
+        if (initialValue) {
+          // Validate that the value exists
+          const validValues = this.triggerTargets.map(t => t.dataset.value)
+          if (!validValues.includes(initialValue)) {
+            initialValue = this.defaultValue || this.triggerTargets[0]?.dataset.value
+          }
+          this.showTab(initialValue, false) // Don't update URL on initial load
+        }
+      }
+
+      getValueFromUrl() {
+        if (!this.hasUrlParamValue) return null
+        const url = new URL(window.location.href)
+        return url.searchParams.get(this.urlParamValue)
+      }
+
+      updateUrl(value) {
+        if (!this.hasUrlParamValue) return
+        const url = new URL(window.location.href)
+        url.searchParams.set(this.urlParamValue, value)
+        window.history.replaceState({}, "", url.toString())
       }
 
       select(event) {
         const value = event.currentTarget.dataset.value
-        this.showTab(value)
+        this.showTab(value, true)
       }
 
       selectTab(event) {
         const value = event.currentTarget.dataset.value
-        this.showTab(value)
+        this.showTab(value, true)
       }
 
-      showTab(value) {
+      showTab(value, updateUrl = true) {
+        // Update triggers
         this.triggerTargets.forEach(trigger => {
           const isActive = trigger.dataset.value === value
           trigger.dataset.state = isActive ? "active" : "inactive"
           trigger.setAttribute("aria-selected", isActive.toString())
         })
 
+        // Update content
         this.contentTargets.forEach(content => {
           const isActive = content.dataset.value === value
           content.hidden = !isActive
           content.dataset.state = isActive ? "active" : "inactive"
         })
+
+        // Update URL if enabled
+        if (updateUrl) {
+          this.updateUrl(value)
+        }
       }
     })
 
@@ -483,7 +510,8 @@
     document.addEventListener("submit", (e) => {
       if (e.target.dataset.remote === "true") {
         e.preventDefault()
-        const btn = e.target.querySelector('button[type="submit"]')
+        const form = e.target
+        const btn = form.querySelector('button[type="submit"]')
         const originalText = btn?.textContent
         if (btn) {
           btn.disabled = true
@@ -495,6 +523,18 @@
             btn.textContent = originalText
             btn.disabled = false
           }
+
+          // Close any parent dialog after successful save
+          const dialogPortal = form.closest('.shadcn-dialog-portal')
+          if (dialogPortal) {
+            const overlay = dialogPortal.querySelector('[data-shadcn--dialog-target="overlay"]')
+            const content = dialogPortal.querySelector('[data-shadcn--dialog-target="content"]')
+            if (overlay) overlay.dataset.state = "closed"
+            if (content) content.dataset.state = "closed"
+            document.body.style.overflow = ""
+            setTimeout(() => dialogPortal.remove(), 200)
+          }
+
           // Show success toast
           const toast = document.createElement("div")
           toast.className = "fixed bottom-4 right-4 px-4 py-3 rounded-lg shadow-lg border bg-background text-foreground transition-all duration-300"
