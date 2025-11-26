@@ -1,0 +1,19 @@
+<%= render Shadcn::ContextMenuComponent.new do |menu| %>
+  <% menu.with_trigger do %>
+    <div class="flex h-[100px] w-[200px] items-center justify-center rounded-md border border-dashed text-sm">
+      Right click
+    </div>
+  <% end %>
+  <% menu.with_menu do |content| %>
+    <% content.with_label { "Edit" } %>
+    <% content.with_separator %>
+    <% content.with_item(href: "#") { "Cut" } %>
+    <% content.with_item(href: "#") { "Copy" } %>
+    <% content.with_item(href: "#") { "Paste" } %>
+    <% content.with_separator %>
+    <% content.with_label { "View" } %>
+    <% content.with_separator %>
+    <% content.with_item(href: "#") { "Zoom In" } %>
+    <% content.with_item(href: "#") { "Zoom Out" } %>
+  <% end %>
+<% end %>

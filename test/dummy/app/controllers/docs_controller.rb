@@ -255,6 +255,13 @@ class DocsController < ApplicationController
       has_stimulus: true,
       controller: "shadcn--dropdown"
     },
+    "context-menu" => {
+      name: "Context Menu",
+      category: "Overlays",
+      description: "Displays a menu to the user triggered by right-click.",
+      has_stimulus: true,
+      controller: "shadcn--context-menu"
+    },
 
     # Navigation
     "tabs" => {
