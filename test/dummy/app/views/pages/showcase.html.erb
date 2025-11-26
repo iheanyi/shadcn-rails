@@ -652,7 +652,17 @@
         <span class="text-xs text-muted-foreground font-mono">Shadcn::PaginationComponent</span>
       </div>
       <p class="text-sm text-muted-foreground">Navigation between pages of content.</p>
-      <%= render(Shadcn::PaginationComponent.new(current_page: 2, total_pages: 10)) %>
+      <%= render Shadcn::PaginationComponent.new do |pagination| %>
+        <% pagination.with_pagination_content do |content| %>
+          <% content.with_previous(href: "#", disabled: true) %>
+          <% content.with_item(href: "#") { "1" } %>
+          <% content.with_item(href: "#", active: true) { "2" } %>
+          <% content.with_item(href: "#") { "3" } %>
+          <% content.with_ellipse %>
+          <% content.with_item(href: "#") { "10" } %>
+          <% content.with_next_page(href: "#") %>
+        <% end %>
+      <% end %>
     </div>
 
     <!-- Collapsible -->

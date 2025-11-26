@@ -825,19 +825,84 @@ Displays the path to the current resource using a hierarchy of links.
 
 #### Pagination
 
-Pagination with page navigation, next and previous links.
+Pagination with page navigation, next and previous links. Supports three usage patterns:
+
+**1. Auto-generated from Kaminari collection:**
+
+```erb
+<%# Works with Kaminari paginated collections %>
+<%= render Shadcn::PaginationComponent.new(collection: @posts) %>
+```
+
+**2. Auto-generated from will_paginate collection:**
+
+```erb
+<%# Works with will_paginate collections %>
+<%= render Shadcn::PaginationComponent.new(collection: @users) %>
+```
+
+**3. Auto-generated from Pagy object:**
+
+```erb
+<%# Works with Pagy pagination objects %>
+<%= render Shadcn::PaginationComponent.new(pagy: @pagy) %>
+```
+
+**4. Custom URL builder:**
+
+```erb
+<%# Use a custom URL builder for complex routes %>
+<%= render Shadcn::PaginationComponent.new(
+  collection: @posts,
+  url_builder: ->(page) { posts_path(page: page, sort: params[:sort]) }
+) %>
+```
+
+**5. Full slot-based control:**
 
 ```erb
 <%= render Shadcn::PaginationComponent.new do |pagination| %>
-  <% pagination.with_previous(href: "?page=1") %>
-  <% pagination.with_page(href: "?page=1", number: 1) %>
-  <% pagination.with_page(href: "?page=2", number: 2, current: true) %>
-  <% pagination.with_page(href: "?page=3", number: 3) %>
-  <% pagination.with_ellipsis %>
-  <% pagination.with_page(href: "?page=10", number: 10) %>
-  <% pagination.with_next(href: "?page=3") %>
+  <% pagination.with_pagination_content do |content| %>
+    <% content.with_previous(href: "?page=1") %>
+    <% content.with_item(href: "?page=1") { "1" } %>
+    <% content.with_item(href: "?page=2", active: true) { "2" } %>
+    <% content.with_item(href: "?page=3") { "3" } %>
+    <% content.with_ellipse %>
+    <% content.with_item(href: "?page=10") { "10" } %>
+    <% content.with_next_page(href: "?page=3") %>
+  <% end %>
 <% end %>
 ```
+
+**6. Using the `shadcn_paginate` helper:**
+
+```erb
+<%# Simple one-liner that auto-detects your pagination gem %>
+<%= shadcn_paginate @posts %>
+
+<%# With Pagy %>
+<%= shadcn_paginate @pagy %>
+
+<%# Custom URL builder and window size %>
+<%= shadcn_paginate @posts,
+    url_builder: ->(page) { posts_path(page: page) },
+    window: 3 %>
+```
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `collection` | Object | `nil` | Kaminari or will_paginate collection |
+| `pagy` | Object | `nil` | Pagy pagination object |
+| `url_builder` | Proc | `"?page=N"` | Lambda to generate page URLs |
+| `window` | Integer | `2` | Pages to show around current page |
+
+**Supported Pagination Gems:**
+
+| Gem | Usage |
+|-----|-------|
+| [Kaminari](https://github.com/kaminari/kaminari) | `collection: @posts.page(1).per(10)` |
+| [will_paginate](https://github.com/mislav/will_paginate) | `collection: @posts.paginate(page: 1)` |
+| [Pagy](https://github.com/ddnexus/pagy) | `pagy: @pagy` (from `pagy(@posts)`) |
 
 #### Collapsible
 

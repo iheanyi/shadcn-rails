@@ -16,6 +16,7 @@ require_relative "rails/configuration"
 require_relative "rails/class_merger"
 require_relative "rails/helpers/class_name_helper"
 require_relative "rails/helpers/component_helper"
+require_relative "rails/helpers/pagination_helper"
 require_relative "rails/engine"
 
 module Shadcn

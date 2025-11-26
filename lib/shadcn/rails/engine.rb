@@ -30,6 +30,7 @@ module Shadcn
         ActiveSupport.on_load(:action_view) do
           include Shadcn::Rails::Helpers::ClassNameHelper
           include Shadcn::Rails::Helpers::ComponentHelper
+          include Shadcn::Rails::Helpers::PaginationHelper
         end
       end
 
