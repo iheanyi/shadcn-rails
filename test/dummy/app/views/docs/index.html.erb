@@ -45,9 +45,42 @@
     <p class="leading-7">This will:</p>
     <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
       <li>Add the base CSS with theme variables to your stylesheets</li>
+      <li>Add component CSS for interactive elements (switches, sliders, etc.)</li>
       <li>Configure Tailwind CSS with shadcn theme colors</li>
       <li>Set up Stimulus controllers for interactive components</li>
     </ul>
+  </div>
+
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Stylesheets</h2>
+    <p class="leading-7">shadcn-rails includes two CSS files that work together:</p>
+
+    <div class="space-y-4">
+      <div class="rounded-lg border p-4">
+        <h3 class="font-semibold mb-2"><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">shadcn/base.css</code></h3>
+        <p class="text-sm text-muted-foreground">CSS custom properties for theming (colors, border radius), animations (accordion, dialog, toast), and focus styles.</p>
+      </div>
+
+      <div class="rounded-lg border p-4">
+        <h3 class="font-semibold mb-2"><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">shadcn/components.css</code></h3>
+        <p class="text-sm text-muted-foreground">Component-specific styles for interactive elements that use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">data-state</code> attributes (Switch, Accordion, Dialog, etc.) and custom form inputs (Slider, Checkbox, Radio).</p>
+      </div>
+    </div>
+
+    <p class="leading-7">For Tailwind CSS (application.tailwind.css):</p>
+    <%= render "docs/code_example", language: "css", code: '@import "shadcn/base";
+@import "shadcn/components";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;' %>
+
+    <p class="leading-7">For Sprockets (application.css):</p>
+    <%= render "docs/code_example", language: "css", code: '/*
+ *= require shadcn/base
+ *= require shadcn/components
+ *= require_self
+ */' %>
   </div>
 
   <div class="space-y-4">
