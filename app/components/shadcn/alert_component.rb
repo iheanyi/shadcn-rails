@@ -72,22 +72,4 @@ module Shadcn
       attrs.compact
     end
   end
-
-  # Alert Title component
-  class AlertTitleComponent < BaseComponent
-    BASE_CLASSES = "mb-1 font-medium leading-none tracking-tight"
-
-    def call
-      content_tag(:h5, content, class: merge_classes(BASE_CLASSES), **html_options)
-    end
-  end
-
-  # Alert Description component
-  class AlertDescriptionComponent < BaseComponent
-    BASE_CLASSES = "text-sm [&_p]:leading-relaxed"
-
-    def call
-      content_tag(:div, content, class: merge_classes(BASE_CLASSES), **html_options)
-    end
-  end
 end

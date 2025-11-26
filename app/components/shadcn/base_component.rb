@@ -13,10 +13,24 @@ module Shadcn
     # @param class_name [String, nil] Additional CSS classes
     # @param data [Hash] Data attributes (will be prefixed with data-)
     # @param html_options [Hash] Additional HTML attributes
-    def initialize(class_name: nil, data: {}, **html_options)
+    def initialize(class_name: nil, data: {}, **html_options, &block)
       @class_name = class_name
       @data = data
       @html_options = html_options
+      @constructor_block = block
+    end
+
+    # Override content to support blocks passed to new()
+    # This allows both syntaxes:
+    #   render Component.new { "text" }  # block to new()
+    #   render Component.new do %>text<% end  # block to render()
+    # Note: Only calls blocks with arity 0 (no arguments).
+    # Blocks expecting arguments (like slot blocks) are handled by ViewComponent.
+    def content
+      return super if super.present?
+      return @constructor_block.call if @constructor_block && @constructor_block.arity == 0
+
+      nil
     end
 
     private

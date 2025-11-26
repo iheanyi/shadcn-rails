@@ -111,46 +111,4 @@ module Shadcn
       attrs.compact
     end
   end
-
-  # Toast Title component
-  class ToastTitleComponent < BaseComponent
-    BASE_CLASSES = "text-sm font-semibold [&+div]:text-xs"
-
-    def call
-      content_tag(:div, content, class: merge_classes(BASE_CLASSES))
-    end
-  end
-
-  # Toast Description component
-  class ToastDescriptionComponent < BaseComponent
-    BASE_CLASSES = "text-sm opacity-90"
-
-    def call
-      content_tag(:div, content, class: merge_classes(BASE_CLASSES))
-    end
-  end
-
-  # Toast Action component
-  class ToastActionComponent < BaseComponent
-    BASE_CLASSES = "inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium transition-colors hover:bg-secondary focus:outline-none focus:ring-1 focus:ring-ring disabled:pointer-events-none disabled:opacity-50 group-[.destructive]:border-muted/40 group-[.destructive]:hover:border-destructive/30 group-[.destructive]:hover:bg-destructive group-[.destructive]:hover:text-destructive-foreground group-[.destructive]:focus:ring-destructive"
-
-    # @param alt_text [String] Alternative text for accessibility
-    def initialize(alt_text:, **options)
-      super(**options)
-      @alt_text = alt_text
-    end
-
-    def call
-      content_tag(:div, content, class: merge_classes(BASE_CLASSES), "aria-label": @alt_text)
-    end
-  end
-
-  # Toast Viewport (container for all toasts)
-  class ToastViewportComponent < BaseComponent
-    BASE_CLASSES = "fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]"
-
-    def call
-      content_tag(:ol, content, class: merge_classes(BASE_CLASSES), tabindex: "-1", "data-shadcn--toaster-target": "viewport")
-    end
-  end
 end

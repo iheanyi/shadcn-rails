@@ -30,7 +30,7 @@ module Shadcn
     end
 
     def call
-      tag(:div, separator_attributes)
+      tag.div(**separator_attributes)
     end
 
     private

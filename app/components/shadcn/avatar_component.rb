@@ -14,7 +14,15 @@ module Shadcn
   #   <%= render Shadcn::AvatarComponent.new(src: url, alt: name, size: :sm) %>
   #   <%= render Shadcn::AvatarComponent.new(src: url, alt: name, size: :lg) %>
   #
+  # @example With slot-based fallback
+  #   <%= render Shadcn::AvatarComponent.new(size: :sm) do |avatar| %>
+  #     <% avatar.with_fallback { "JD" } %>
+  #   <% end %>
+  #
   class AvatarComponent < BaseComponent
+    renders_one :fallback, ->(class: nil, **options, &block) {
+      AvatarFallbackComponent.new(class: binding.local_variable_get(:class), **options, &block)
+    }
     SIZES = {
       sm: "h-8 w-8 text-xs",
       default: "h-10 w-10 text-sm",
@@ -47,6 +55,8 @@ module Shadcn
     def avatar_content
       if @src.present?
         image_with_fallback
+      elsif fallback?
+        fallback
       else
         fallback_element
       end
