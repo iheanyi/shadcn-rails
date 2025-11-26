@@ -28,10 +28,12 @@ module Shadcn
       DialogContentComponent.new(**options)
     }
 
+    # @param id [String] Unique identifier for the dialog (used for Turbo Stream targeting)
     # @param open [Boolean] Whether dialog starts open
     # @param modal [Boolean] Whether dialog is modal (traps focus, blocks interaction)
-    def initialize(open: false, modal: true, **options)
+    def initialize(id: nil, open: false, modal: true, **options)
       super(**options)
+      @id = id
       @open = open
       @modal = modal
     end
@@ -60,10 +62,12 @@ module Shadcn
 
     def dialog_attributes
       attrs = {
+        id: @id,
         class: class_name,
         "data-controller": "shadcn--dialog",
         "data-shadcn--dialog-open-value": @open.to_s,
-        "data-shadcn--dialog-modal-value": @modal.to_s
+        "data-shadcn--dialog-modal-value": @modal.to_s,
+        "data-dialog-id": @id
       }
       attrs.merge!(html_options)
       attrs.merge!(build_data)
