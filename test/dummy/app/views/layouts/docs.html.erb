@@ -868,6 +868,28 @@
       opacity: 0.5;
     }
 
+    /* Button-based Switch Component (data-state) */
+    button[role="switch"] {
+      background-color: hsl(var(--input));
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    button[role="switch"][data-state="checked"] {
+      background-color: hsl(var(--primary));
+    }
+
+    button[role="switch"][data-state="unchecked"] {
+      background-color: hsl(var(--input));
+    }
+
+    button[role="switch"] > span[data-state="checked"] {
+      transform: translateX(1rem);
+    }
+
+    button[role="switch"] > span[data-state="unchecked"] {
+      transform: translateX(0);
+    }
+
     /* tailwindcss-animate utilities */
     @keyframes enter {
       from {
