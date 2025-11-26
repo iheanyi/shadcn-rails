@@ -17,7 +17,7 @@
     <%= render Shadcn::MenubarComponent.new do |menubar| %>
       <% menubar.with_menu do |menu| %>
         <% menu.with_trigger { "File" } %>
-        <% menu.with_content do |content| %>
+        <% menu.with_menu do |content| %>
           <% content.with_item(href: "#") do |item| %>
             New Tab
             <% item.with_shortcut { "⌘T" } %>
@@ -42,7 +42,7 @@
       <% end %>
       <% menubar.with_menu do |menu| %>
         <% menu.with_trigger { "Edit" } %>
-        <% menu.with_content do |content| %>
+        <% menu.with_menu do |content| %>
           <% content.with_item(href: "#") do |item| %>
             Undo
             <% item.with_shortcut { "⌘Z" } %>
@@ -68,7 +68,7 @@
       <% end %>
       <% menubar.with_menu do |menu| %>
         <% menu.with_trigger { "View" } %>
-        <% menu.with_content do |content| %>
+        <% menu.with_menu do |content| %>
           <% content.with_checkbox_item(checked: true) { "Always Show Bookmarks Bar" } %>
           <% content.with_checkbox_item(checked: false) { "Always Show Full URLs" } %>
           <% content.with_separator %>
@@ -87,7 +87,7 @@
       <% end %>
       <% menubar.with_menu do |menu| %>
         <% menu.with_trigger { "Profiles" } %>
-        <% menu.with_content do |content| %>
+        <% menu.with_menu do |content| %>
           <% content.with_radio_group(value: "benoit") do |group| %>
             <% group.with_item(value: "andy") { "Andy" } %>
             <% group.with_item(value: "benoit", checked: true) { "Benoit" } %>
@@ -126,7 +126,7 @@
         <%= render Shadcn::MenubarComponent.new do |menubar| %>
           <% menubar.with_menu do |menu| %>
             <% menu.with_trigger { "File" } %>
-            <% menu.with_content do |content| %>
+            <% menu.with_menu do |content| %>
               <% content.with_item(href: "#") { "New File" } %>
               <% content.with_item(href: "#") { "Open..." } %>
               <% content.with_item(href: "#") { "Save" } %>
@@ -134,7 +134,7 @@
           <% end %>
           <% menubar.with_menu do |menu| %>
             <% menu.with_trigger { "Edit" } %>
-            <% menu.with_content do |content| %>
+            <% menu.with_menu do |content| %>
               <% content.with_item(href: "#") { "Undo" } %>
               <% content.with_item(href: "#") { "Redo" } %>
             <% end %>
@@ -152,7 +152,7 @@
         <%= render Shadcn::MenubarComponent.new do |menubar| %>
           <% menubar.with_menu do |menu| %>
             <% menu.with_trigger { "File" } %>
-            <% menu.with_content do |content| %>
+            <% menu.with_menu do |content| %>
               <% content.with_item(href: "#") do |item| %>
                 New Tab
                 <% item.with_shortcut { "⌘T" } %>
@@ -181,7 +181,7 @@
         <%= render Shadcn::MenubarComponent.new do |menubar| %>
           <% menubar.with_menu do |menu| %>
             <% menu.with_trigger { "View" } %>
-            <% menu.with_content do |content| %>
+            <% menu.with_menu do |content| %>
               <% content.with_checkbox_item(checked: true) { "Show Toolbar" } %>
               <% content.with_checkbox_item(checked: false) { "Show Sidebar" } %>
               <% content.with_checkbox_item(checked: true) { "Show Status Bar" } %>
@@ -203,7 +203,7 @@
         <%= render Shadcn::MenubarComponent.new do |menubar| %>
           <% menubar.with_menu do |menu| %>
             <% menu.with_trigger { "Profiles" } %>
-            <% menu.with_content do |content| %>
+            <% menu.with_menu do |content| %>
               <% content.with_label { "Switch Profile" } %>
               <% content.with_separator %>
               <% content.with_radio_group(value: "default") do |group| %>
@@ -228,7 +228,7 @@
         <%= render Shadcn::MenubarComponent.new do |menubar| %>
           <% menubar.with_menu do |menu| %>
             <% menu.with_trigger { "Edit" } %>
-            <% menu.with_content do |content| %>
+            <% menu.with_menu do |content| %>
               <% content.with_item(href: "#") { "Undo" } %>
               <% content.with_item(href: "#") { "Redo" } %>
               <% content.with_separator %>

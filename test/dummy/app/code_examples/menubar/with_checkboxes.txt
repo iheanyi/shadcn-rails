@@ -1,7 +1,7 @@
 <%= render Shadcn::MenubarComponent.new do |menubar| %>
   <% menubar.with_menu do |menu| %>
     <% menu.with_trigger { "View" } %>
-    <% menu.with_content do |content| %>
+    <% menu.with_menu do |content| %>
       <% content.with_checkbox_item(checked: true) { "Show Toolbar" } %>
       <% content.with_checkbox_item(checked: false) { "Show Sidebar" } %>
       <% content.with_checkbox_item(checked: true) { "Show Status Bar" } %>

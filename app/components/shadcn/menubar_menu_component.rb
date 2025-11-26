@@ -7,18 +7,18 @@ module Shadcn
     renders_one :trigger, lambda { |**options|
       MenubarTriggerComponent.new(**options)
     }
-    renders_one :content, lambda { |**options|
+    renders_one :menu, lambda { |**options|
       MenubarContentComponent.new(**options)
     }
 
     def call
-      content_tag(:div, menu_content, menu_attributes)
+      content_tag(:div, menu_body, menu_attributes)
     end
 
     private
 
-    def menu_content
-      safe_join([trigger, content].compact)
+    def menu_body
+      safe_join([trigger, menu].compact)
     end
 
     def menu_attributes
