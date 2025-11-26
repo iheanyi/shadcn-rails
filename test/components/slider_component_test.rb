@@ -3,66 +3,72 @@
 require "test_helper"
 
 class SliderComponentTest < ViewComponent::TestCase
-  def test_renders_slider_container
+  def test_renders_native_range_input
     render_inline(Shadcn::SliderComponent.new)
 
-    assert_selector "div[role='slider']"
-    assert_selector "div[data-controller='shadcn--slider']"
+    assert_selector "input[type='range']"
+    assert_selector "input[data-controller='shadcn--slider']"
   end
 
-  def test_renders_with_aria_attributes
+  def test_renders_with_value_attributes
     render_inline(Shadcn::SliderComponent.new(min: 0, max: 100, value: 50))
 
-    assert_selector "div[aria-valuemin='0.0']"
-    assert_selector "div[aria-valuemax='100.0']"
-    assert_selector "div[aria-valuenow='50.0']"
+    assert_selector "input[min='0.0']"
+    assert_selector "input[max='100.0']"
+    assert_selector "input[value='50.0']"
   end
 
   def test_renders_with_custom_range
     render_inline(Shadcn::SliderComponent.new(min: 1, max: 10, value: 5, step: 1))
 
-    assert_selector "div[data-shadcn--slider-min-value='1.0']"
-    assert_selector "div[data-shadcn--slider-max-value='10.0']"
-    assert_selector "div[data-shadcn--slider-step-value='1.0']"
+    assert_selector "input[min='1.0']"
+    assert_selector "input[max='10.0']"
+    assert_selector "input[step='1.0']"
+    assert_selector "input[value='5.0']"
   end
 
-  def test_renders_track_and_thumb
-    render_inline(Shadcn::SliderComponent.new)
-
-    assert_selector "div[data-shadcn--slider-target='track']"
-    assert_selector "div[data-shadcn--slider-target='range']"
-    assert_selector "div[data-shadcn--slider-target='thumb']"
-  end
-
-  def test_renders_hidden_input_when_name_provided
+  def test_renders_with_name_attribute
     render_inline(Shadcn::SliderComponent.new(name: "volume", value: 50))
 
-    assert_selector "input[type='hidden'][name='volume'][value='50.0']", visible: :all
+    assert_selector "input[type='range'][name='volume'][value='50.0']"
   end
 
-  def test_does_not_render_hidden_input_without_name
+  def test_does_not_render_name_without_name_param
     result = render_inline(Shadcn::SliderComponent.new(value: 50))
 
-    refute result.css("input[type='hidden']").any?
+    refute result.css("input[name]").any?
   end
 
   def test_renders_with_disabled_state
     render_inline(Shadcn::SliderComponent.new(disabled: true))
 
-    assert_selector "div[aria-disabled='true']"
-    assert_selector "div[data-shadcn--slider-disabled-value='true']"
+    assert_selector "input[disabled]"
   end
 
   def test_renders_with_custom_class
     render_inline(Shadcn::SliderComponent.new(class_name: "my-slider"))
 
-    assert_selector "div.my-slider"
+    assert_selector "input.my-slider"
   end
 
-  def test_calculates_percentage_correctly
-    render_inline(Shadcn::SliderComponent.new(min: 0, max: 100, value: 25))
+  def test_calculates_percentage_style
+    result = render_inline(Shadcn::SliderComponent.new(min: 0, max: 100, value: 25))
 
-    # The range should have 25% width
-    assert_selector "div[data-shadcn--slider-target='range'][style*='width: 25.0%']"
+    # The style should include the fill percentage
+    html = result.to_html
+    assert html.include?("--slider-fill: 25.0%")
+  end
+
+  def test_renders_with_stimulus_action
+    render_inline(Shadcn::SliderComponent.new)
+
+    assert_selector "input[data-action='input->shadcn--slider#updateStyle']"
+  end
+
+  def test_renders_base_classes
+    render_inline(Shadcn::SliderComponent.new)
+
+    assert_selector "input.shadcn-slider"
+    assert_selector "input.w-full"
   end
 end
