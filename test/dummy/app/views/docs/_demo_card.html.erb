@@ -1,0 +1,26 @@
+<%# Renders a demo card with a live component preview
+    locals:
+      - title: String (optional) - Title for the demo
+      - description: String (optional) - Description text
+      - class_name: String (optional) - Additional CSS classes for the preview area
+%>
+<% title ||= nil %>
+<% description ||= nil %>
+<% class_name ||= "" %>
+
+<div class="my-6">
+  <% if title || description %>
+    <div class="mb-4">
+      <% if title %>
+        <h3 class="text-lg font-semibold"><%= title %></h3>
+      <% end %>
+      <% if description %>
+        <p class="text-sm text-muted-foreground"><%= description %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="component-preview <%= class_name %>">
+    <%= yield %>
+  </div>
+</div>

@@ -1,0 +1,3 @@
+<%= render Shadcn::ButtonComponent.new(variant: :ghost) do %>
+  Ghost
+<% end %>

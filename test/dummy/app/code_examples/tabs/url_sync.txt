@@ -1,0 +1,9 @@
+<%= render Shadcn::TabsComponent.new(default_value: "account", url_param: "tab") do |tabs| %>
+  <% tabs.with_list do |list| %>
+    <% list.with_trigger(value: "account") { "Account" } %>
+    <% list.with_trigger(value: "settings") { "Settings" } %>
+  <% end %>
+  ...
+<% end %>
+
+<%# URL will update to ?tab=account or ?tab=settings when tabs are clicked %>

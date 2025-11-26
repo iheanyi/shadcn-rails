@@ -1,0 +1,197 @@
+<% content_for :title, "Button" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Button</h1>
+    <p class="text-xl text-muted-foreground">Displays a button or a component that looks like a button.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+        No JavaScript Required
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::ButtonComponent.new do %>Button<% end %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component button" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("button/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Default -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Default</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ButtonComponent.new do %>Default<% end %>
+      <% end %>
+      <%= erb_example("button/default") %>
+    </div>
+
+    <!-- Secondary -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Secondary</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ButtonComponent.new(variant: :secondary) do %>Secondary<% end %>
+      <% end %>
+      <%= erb_example("button/secondary") %>
+    </div>
+
+    <!-- Destructive -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Destructive</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ButtonComponent.new(variant: :destructive) do %>Destructive<% end %>
+      <% end %>
+      <%= erb_example("button/destructive") %>
+    </div>
+
+    <!-- Outline -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Outline</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Outline<% end %>
+      <% end %>
+      <%= erb_example("button/outline") %>
+    </div>
+
+    <!-- Ghost -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Ghost</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ButtonComponent.new(variant: :ghost) do %>Ghost<% end %>
+      <% end %>
+      <%= erb_example("button/ghost") %>
+    </div>
+
+    <!-- Link -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Link</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ButtonComponent.new(variant: :link) do %>Link<% end %>
+      <% end %>
+      <%= erb_example("button/link") %>
+    </div>
+
+    <!-- Sizes -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Sizes</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="flex items-center gap-4">
+          <%= render Shadcn::ButtonComponent.new(size: :sm) do %>Small<% end %>
+          <%= render Shadcn::ButtonComponent.new do %>Default<% end %>
+          <%= render Shadcn::ButtonComponent.new(size: :lg) do %>Large<% end %>
+        </div>
+      <% end %>
+      <%= erb_example("button/sizes") %>
+    </div>
+
+    <!-- Icon Button -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Icon</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="flex items-center gap-4">
+          <%= render Shadcn::ButtonComponent.new(variant: :outline, size: :icon) do %>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          <% end %>
+          <%= render Shadcn::ButtonComponent.new(variant: :outline, size: :icon_sm) do %>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          <% end %>
+          <%= render Shadcn::ButtonComponent.new(variant: :outline, size: :icon_lg) do %>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          <% end %>
+        </div>
+      <% end %>
+      <%= erb_example("button/icon") %>
+    </div>
+
+    <!-- With Icon -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Icon</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ButtonComponent.new do %>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+          Upload
+        <% end %>
+      <% end %>
+      <%= erb_example("button/with_icon") %>
+    </div>
+
+    <!-- Loading -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Loading</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ButtonComponent.new(loading: true, disabled: true) do %>Please wait<% end %>
+      <% end %>
+      <%= erb_example("button/loading") %>
+    </div>
+
+    <!-- Disabled -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ButtonComponent.new(disabled: true) do %>Disabled<% end %>
+      <% end %>
+      <%= erb_example("button/disabled") %>
+    </div>
+
+    <!-- As Link -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">As Link</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ButtonComponent.new(href: "#", variant: :outline) do %>Go to page<% end %>
+      <% end %>
+      <%= erb_example("button/as_link") %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <%= render "docs/props_table", props: [
+      { name: "variant", type: "Symbol", default: ":default", description: "Button style variant. Options: :default, :destructive, :outline, :secondary, :ghost, :link" },
+      { name: "size", type: "Symbol", default: ":default", description: "Button size. Options: :default, :sm, :lg, :icon, :icon_sm, :icon_lg" },
+      { name: "href", type: "String", default: "nil", description: "If provided, renders as an anchor tag instead of button" },
+      { name: "type", type: "String", default: '"button"', description: "Button type attribute. Options: button, submit, reset" },
+      { name: "disabled", type: "Boolean", default: "false", description: "Whether the button is disabled" },
+      { name: "loading", type: "Boolean", default: "false", description: "Shows loading spinner and disables button" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" },
+      { name: "data", type: "Hash", default: "{}", description: "Data attributes to add to the element" }
+    ] %>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses native <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">&lt;button&gt;</code> element for proper keyboard and screen reader support</li>
+      <li>When <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">disabled: true</code>, sets <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-disabled="true"</code></li>
+      <li>When <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">loading: true</code>, sets <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-busy="true"</code></li>
+      <li>When rendered as a link, includes <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="button"</code></li>
+      <li>For icon-only buttons, add an <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-label</code> via the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria:</code> option</li>
+    </ul>
+  </div>
+</div>

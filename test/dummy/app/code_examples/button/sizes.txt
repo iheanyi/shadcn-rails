@@ -1,0 +1,3 @@
+<%= render Shadcn::ButtonComponent.new(size: :sm) do %>Small<% end %>
+<%= render Shadcn::ButtonComponent.new do %>Default<% end %>
+<%= render Shadcn::ButtonComponent.new(size: :lg) do %>Large<% end %>

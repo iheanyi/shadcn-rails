@@ -1,0 +1,45 @@
+<%# Renders a code block with syntax highlighting and copy button
+    locals:
+      - code: String (required) - The code to display
+      - language: String (optional) - The language for syntax highlighting (ruby, erb, bash, javascript)
+      - title: String (optional) - Title to show above the code block
+      - show_copy: Boolean (optional) - Whether to show the copy button (default: true)
+%>
+<% language ||= "ruby" %>
+<% title ||= nil %>
+<% show_copy = local_assigns.fetch(:show_copy, true) %>
+
+<div class="relative my-4" data-controller="clipboard">
+  <% if title %>
+    <div class="flex items-center justify-between rounded-t-lg border border-b-0 bg-muted px-4 py-2">
+      <span class="text-sm font-medium text-muted-foreground"><%= title %></span>
+      <% if show_copy %>
+        <button
+          type="button"
+          data-action="click->clipboard#copy"
+          data-clipboard-target="button"
+          class="inline-flex items-center justify-center rounded-md text-sm font-medium h-8 px-3 hover:bg-accent hover:text-accent-foreground"
+        >
+          Copy
+        </button>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="<%= title ? 'rounded-b-lg border-t-0' : 'rounded-lg' %> code-block border">
+    <pre data-clipboard-target="source"><code class="language-<%= language %>"><%= code %></code></pre>
+  </div>
+
+  <% unless title %>
+    <% if show_copy %>
+      <button
+        type="button"
+        data-action="click->clipboard#copy"
+        data-clipboard-target="button"
+        class="absolute right-2 top-2 inline-flex items-center justify-center rounded-md text-sm font-medium h-8 px-3 bg-muted hover:bg-accent hover:text-accent-foreground"
+      >
+        Copy
+      </button>
+    <% end %>
+  <% end %>
+</div>

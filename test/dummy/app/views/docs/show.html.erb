@@ -1,0 +1,82 @@
+<% content_for :title, @component[:name] %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+    <% if @component[:has_stimulus] %>
+      <a href="#stimulus-controller" class="text-muted-foreground hover:text-foreground">Stimulus Controller</a>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight"><%= @component[:name] %></h1>
+    <p class="text-xl text-muted-foreground"><%= @component[:description] %></p>
+    <% if @component[:has_stimulus] %>
+      <div class="flex items-center gap-2 mt-4">
+        <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+          Requires JavaScript
+        </span>
+      </div>
+    <% else %>
+      <div class="flex items-center gap-2 mt-4">
+        <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+          No JavaScript Required
+        </span>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component #{@slug}" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <p class="leading-7">Basic usage example:</p>
+    <% component_class = "Shadcn::#{@slug.gsub('-', '_').camelize}Component" %>
+    <% usage_code = '<' + '%=' + " render #{component_class}.new do " + '%' + ">\n  Content here\n<" + '%' + ' end ' + '%' + '>' %>
+    <%= render "docs/code_example", language: "erb", code: usage_code %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-6">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <div class="rounded-lg border bg-muted/50 p-8 text-center">
+      <p class="text-muted-foreground">
+        Live examples for this component are coming soon.
+      </p>
+      <p class="text-sm text-muted-foreground mt-2">
+        Check the <a href="/lookbook" class="underline hover:text-foreground">Lookbook previews</a> for interactive demos.
+      </p>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <%= render "docs/props_table", props: [
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" },
+      { name: "data", type: "Hash", default: "{}", description: "Data attributes to add to the element" }
+    ] %>
+  </div>
+
+  <!-- Stimulus Controller (if applicable) -->
+  <% if @component[:has_stimulus] %>
+    <div id="stimulus-controller">
+      <%= render "docs/stimulus_docs",
+        controller_name: @component[:controller],
+        description: "Provides interactivity for the #{@component[:name]} component."
+      %>
+    </div>
+  <% end %>
+</div>

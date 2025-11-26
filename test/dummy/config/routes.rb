@@ -12,6 +12,11 @@ Rails.application.routes.draw do
   get "cards", to: "pages#cards"
   get "tabs", to: "pages#tabs"
 
+  # Component Documentation
+  get "docs", to: "docs#index", as: :docs
+  get "docs/components", to: "docs#index", as: :docs_components
+  get "docs/components/:slug", to: "docs#show", as: :docs_component
+
   # UX Test Application
   get "app", to: "app#dashboard"
   get "app/dashboard", to: "app#dashboard"

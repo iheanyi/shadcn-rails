@@ -1,0 +1,261 @@
+<%# Renders documentation for a Stimulus controller
+    locals:
+      - controller_name: String (required) - The Stimulus controller name (e.g., "shadcn--dialog")
+      - description: String (optional) - Description of what the controller does
+      - targets: Array of Hashes (optional) - Each hash has :name, :description
+      - values: Array of Hashes (optional) - Each hash has :name, :type, :default, :description
+      - actions: Array of Hashes (optional) - Each hash has :name, :description
+%>
+<% description ||= nil %>
+<% targets ||= [] %>
+<% values ||= [] %>
+<% actions ||= [] %>
+
+<div class="my-6 space-y-6">
+  <div>
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Stimulus Controller</h2>
+    <p class="text-sm text-muted-foreground mt-2">
+      This component requires JavaScript. The Stimulus controller <code class="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm"><%= controller_name %></code> provides interactivity.
+    </p>
+    <% if description %>
+      <p class="text-muted-foreground mt-2"><%= description %></p>
+    <% end %>
+  </div>
+
+  <!-- Installation -->
+  <div class="space-y-4">
+    <h3 class="text-lg font-semibold">Installation</h3>
+
+    <div data-controller="shadcn--tabs" data-shadcn--tabs-value-value="importmap">
+      <!-- Tab triggers -->
+      <div class="inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground mb-4">
+        <button
+          type="button"
+          data-shadcn--tabs-target="trigger"
+          data-value="importmap"
+          data-action="click->shadcn--tabs#selectTab"
+          data-state="active"
+          class="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+        >
+          Importmap
+        </button>
+        <button
+          type="button"
+          data-shadcn--tabs-target="trigger"
+          data-value="esbuild"
+          data-action="click->shadcn--tabs#selectTab"
+          data-state="inactive"
+          class="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+        >
+          esbuild
+        </button>
+        <button
+          type="button"
+          data-shadcn--tabs-target="trigger"
+          data-value="webpack"
+          data-action="click->shadcn--tabs#selectTab"
+          data-state="inactive"
+          class="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+        >
+          Webpack
+        </button>
+        <button
+          type="button"
+          data-shadcn--tabs-target="trigger"
+          data-value="vite"
+          data-action="click->shadcn--tabs#selectTab"
+          data-state="inactive"
+          class="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+        >
+          Vite
+        </button>
+      </div>
+
+      <!-- Tab content: Importmap -->
+      <div
+        data-shadcn--tabs-target="content"
+        data-value="importmap"
+        data-state="active"
+        role="tabpanel"
+      >
+        <p class="text-sm text-muted-foreground mb-2">Add to your <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">config/importmap.rb</code>:</p>
+        <%= render "docs/code_example", language: "ruby", code: <<~CODE
+pin "shadcn-rails", to: "shadcn/index.js"
+CODE
+        %>
+        <p class="text-sm text-muted-foreground mb-2">Then in your <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">app/javascript/controllers/index.js</code>:</p>
+        <%= render "docs/code_example", language: "javascript", code: <<~CODE
+import { Application } from "@hotwired/stimulus"
+import { registerShadcnControllers } from "shadcn-rails"
+
+const application = Application.start()
+registerShadcnControllers(application)
+CODE
+        %>
+      </div>
+
+      <!-- Tab content: esbuild -->
+      <div
+        data-shadcn--tabs-target="content"
+        data-value="esbuild"
+        data-state="inactive"
+        role="tabpanel"
+        hidden
+      >
+        <p class="text-sm text-muted-foreground mb-2">Install the package:</p>
+        <%= render "docs/code_example", language: "bash", code: "npm install shadcn-rails" %>
+        <p class="text-sm text-muted-foreground mb-2">Then in your <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">app/javascript/controllers/index.js</code>:</p>
+        <%= render "docs/code_example", language: "javascript", code: <<~CODE
+import { Application } from "@hotwired/stimulus"
+import { registerShadcnControllers } from "shadcn-rails"
+
+const application = Application.start()
+registerShadcnControllers(application)
+CODE
+        %>
+      </div>
+
+      <!-- Tab content: Webpack -->
+      <div
+        data-shadcn--tabs-target="content"
+        data-value="webpack"
+        data-state="inactive"
+        role="tabpanel"
+        hidden
+      >
+        <p class="text-sm text-muted-foreground mb-2">Install the package:</p>
+        <%= render "docs/code_example", language: "bash", code: "yarn add shadcn-rails" %>
+        <p class="text-sm text-muted-foreground mb-2">Then in your <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">app/javascript/controllers/index.js</code>:</p>
+        <%= render "docs/code_example", language: "javascript", code: <<~CODE
+import { Application } from "@hotwired/stimulus"
+import { registerShadcnControllers } from "shadcn-rails"
+
+const application = Application.start()
+registerShadcnControllers(application)
+CODE
+        %>
+      </div>
+
+      <!-- Tab content: Vite -->
+      <div
+        data-shadcn--tabs-target="content"
+        data-value="vite"
+        data-state="inactive"
+        role="tabpanel"
+        hidden
+      >
+        <p class="text-sm text-muted-foreground mb-2">Install the package:</p>
+        <%= render "docs/code_example", language: "bash", code: "npm install shadcn-rails" %>
+        <p class="text-sm text-muted-foreground mb-2">Then in your <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">app/javascript/controllers/index.js</code>:</p>
+        <%= render "docs/code_example", language: "javascript", code: <<~CODE
+import { Application } from "@hotwired/stimulus"
+import { registerShadcnControllers } from "shadcn-rails"
+
+const application = Application.start()
+registerShadcnControllers(application)
+CODE
+        %>
+      </div>
+    </div>
+
+    <p class="text-sm text-muted-foreground">Or import just this controller:</p>
+    <% controller_file = controller_name.gsub("shadcn--", "").gsub("-", "_") %>
+    <%= render "docs/code_example", language: "javascript", code: <<~CODE
+import #{controller_file.camelize}Controller from "shadcn-rails/controllers/#{controller_file}_controller"
+
+application.register("#{controller_name}", #{controller_file.camelize}Controller)
+CODE
+    %>
+  </div>
+
+  <!-- Targets -->
+  <% if targets.any? %>
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Targets</h3>
+      <div class="relative w-full overflow-auto">
+        <table class="w-full caption-bottom text-sm">
+          <thead class="[&_tr]:border-b">
+            <tr class="border-b transition-colors">
+              <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Name</th>
+              <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+            </tr>
+          </thead>
+          <tbody class="[&_tr:last-child]:border-0">
+            <% targets.each do |target| %>
+              <tr class="border-b transition-colors hover:bg-muted/50">
+                <td class="p-4 align-middle font-mono text-sm"><%= target[:name] %></td>
+                <td class="p-4 align-middle text-muted-foreground"><%= target[:description] %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Values -->
+  <% if values.any? %>
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Values</h3>
+      <div class="relative w-full overflow-auto">
+        <table class="w-full caption-bottom text-sm">
+          <thead class="[&_tr]:border-b">
+            <tr class="border-b transition-colors">
+              <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Name</th>
+              <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Type</th>
+              <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Default</th>
+              <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+            </tr>
+          </thead>
+          <tbody class="[&_tr:last-child]:border-0">
+            <% values.each do |value| %>
+              <tr class="border-b transition-colors hover:bg-muted/50">
+                <td class="p-4 align-middle font-mono text-sm"><%= value[:name] %></td>
+                <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm"><%= value[:type] %></code></td>
+                <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm"><%= value[:default] %></code></td>
+                <td class="p-4 align-middle text-muted-foreground"><%= value[:description] %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Actions -->
+  <% if actions.any? %>
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Actions</h3>
+      <div class="relative w-full overflow-auto">
+        <table class="w-full caption-bottom text-sm">
+          <thead class="[&_tr]:border-b">
+            <tr class="border-b transition-colors">
+              <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Action</th>
+              <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+            </tr>
+          </thead>
+          <tbody class="[&_tr:last-child]:border-0">
+            <% actions.each do |action| %>
+              <tr class="border-b transition-colors hover:bg-muted/50">
+                <td class="p-4 align-middle font-mono text-sm"><%= action[:name] %></td>
+                <td class="p-4 align-middle text-muted-foreground"><%= action[:description] %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- TypeScript -->
+  <div class="space-y-4">
+    <h3 class="text-lg font-semibold">TypeScript</h3>
+    <p class="text-sm text-muted-foreground">
+      Type definitions are included. Import types as needed:
+    </p>
+    <%= render "docs/code_example", language: "typescript", code: <<~CODE
+import type { #{controller_file.camelize}Controller } from "shadcn-rails"
+CODE
+    %>
+  </div>
+</div>

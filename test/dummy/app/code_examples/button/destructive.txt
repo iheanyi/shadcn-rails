@@ -1,0 +1,3 @@
+<%= render Shadcn::ButtonComponent.new(variant: :destructive) do %>
+  Destructive
+<% end %>

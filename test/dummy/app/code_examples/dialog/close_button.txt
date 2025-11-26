@@ -1,0 +1,7 @@
+<%= render Shadcn::ButtonComponent.new(
+  variant: :ghost,
+  size: :icon,
+  data: { action: "click->shadcn--dialog#close" }
+) do %>
+  <svg>X</svg>
+<% end %>

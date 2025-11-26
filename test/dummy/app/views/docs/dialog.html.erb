@@ -1,0 +1,238 @@
+<% content_for :title, "Dialog" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+    <a href="#stimulus-controller" class="text-muted-foreground hover:text-foreground">Stimulus Controller</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Dialog</h1>
+    <p class="text-xl text-muted-foreground">A modal dialog that interrupts the user with important content and expects a response.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Requires JavaScript
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::DialogComponent.new do |dialog| %>
+      <% dialog.with_trigger do %>
+        <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Open Dialog<% end %>
+      <% end %>
+      <% dialog.with_body do |content| %>
+        <% content.with_header do |header| %>
+          <% header.with_title { "Edit Profile" } %>
+          <% header.with_description { "Make changes to your profile here. Click save when you're done." } %>
+        <% end %>
+        <div class="grid gap-4 py-4">
+          <div class="grid grid-cols-4 items-center gap-4">
+            <%= render Shadcn::LabelComponent.new(for: "name", class_name: "text-right") { "Name" } %>
+            <%= render Shadcn::InputComponent.new(id: "name", value: "John Doe", class_name: "col-span-3") %>
+          </div>
+          <div class="grid grid-cols-4 items-center gap-4">
+            <%= render Shadcn::LabelComponent.new(for: "username", class_name: "text-right") { "Username" } %>
+            <%= render Shadcn::InputComponent.new(id: "username", value: "@johndoe", class_name: "col-span-3") %>
+          </div>
+        </div>
+        <% content.with_footer do %>
+          <%= render Shadcn::ButtonComponent.new(type: "submit") { "Save changes" } %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component dialog" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("dialog/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Basic Dialog -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Basic Dialog</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::DialogComponent.new do |dialog| %>
+          <% dialog.with_trigger do %>
+            <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Basic Dialog<% end %>
+          <% end %>
+          <% dialog.with_body do |content| %>
+            <% content.with_header do |header| %>
+              <% header.with_title { "Are you sure?" } %>
+              <% header.with_description { "This action cannot be undone." } %>
+            <% end %>
+            <% content.with_footer do %>
+              <div class="flex gap-2 justify-end">
+                <%= render Shadcn::ButtonComponent.new(variant: :outline, data: { action: "click->shadcn--dialog#close" }) { "Cancel" } %>
+                <%= render Shadcn::ButtonComponent.new(variant: :destructive) { "Delete" } %>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("dialog/basic") %>
+    </div>
+
+    <!-- Custom Close Button -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Custom Close Button</h3>
+      <p class="text-sm text-muted-foreground">
+        Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">data-action="click->shadcn--dialog#close"</code> on any element to close the dialog.
+      </p>
+      <%= erb_example("dialog/close_button") %>
+    </div>
+
+    <!-- With Form -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Form</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::DialogComponent.new do |dialog| %>
+          <% dialog.with_trigger do %>
+            <%= render Shadcn::ButtonComponent.new do %>Create Account<% end %>
+          <% end %>
+          <% dialog.with_body do |content| %>
+            <% content.with_header do |header| %>
+              <% header.with_title { "Create Account" } %>
+              <% header.with_description { "Enter your details to create a new account." } %>
+            <% end %>
+            <div class="grid gap-4 py-4">
+              <div class="space-y-2">
+                <%= render Shadcn::LabelComponent.new(for: "email") { "Email" } %>
+                <%= render Shadcn::InputComponent.new(id: "email", type: "email", placeholder: "email@example.com") %>
+              </div>
+              <div class="space-y-2">
+                <%= render Shadcn::LabelComponent.new(for: "password") { "Password" } %>
+                <%= render Shadcn::InputComponent.new(id: "password", type: "password") %>
+              </div>
+            </div>
+            <% content.with_footer do %>
+              <%= render Shadcn::ButtonComponent.new(type: "submit", class_name: "w-full") { "Create Account" } %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">DialogComponent</h3>
+    <%= render "docs/props_table", title: nil, props: [
+      { name: "id", type: "String", default: "nil", description: "Unique identifier for the dialog (useful for Turbo Stream targeting)" },
+      { name: "open", type: "Boolean", default: "false", description: "Whether the dialog starts in open state" },
+      { name: "modal", type: "Boolean", default: "true", description: "Whether dialog is modal (traps focus, blocks background interaction)" }
+    ] %>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">Slots</h3>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Slot</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_trigger</td>
+            <td class="p-4 align-middle text-muted-foreground">The element that opens the dialog (usually a button)</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_body</td>
+            <td class="p-4 align-middle text-muted-foreground">The dialog content container (yields DialogContentComponent)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">DialogContentComponent Slots</h3>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Slot</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_header</td>
+            <td class="p-4 align-middle text-muted-foreground">Header section (yields with_title and with_description slots)</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_title</td>
+            <td class="p-4 align-middle text-muted-foreground">Dialog title text</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_description</td>
+            <td class="p-4 align-middle text-muted-foreground">Dialog description text</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_footer</td>
+            <td class="p-4 align-middle text-muted-foreground">Footer section (usually contains action buttons)</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_close_button</td>
+            <td class="p-4 align-middle text-muted-foreground">Custom close button element</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Stimulus Controller -->
+  <div id="stimulus-controller">
+    <%= render "docs/stimulus_docs",
+      controller_name: "shadcn--dialog",
+      description: "Manages dialog open/close state, focus trapping, keyboard navigation, and accessibility.",
+      targets: [
+        { name: "trigger", description: "The element that triggers the dialog to open" },
+        { name: "template", description: "Template containing the dialog content (for portal rendering)" },
+        { name: "overlay", description: "The backdrop overlay element" },
+        { name: "content", description: "The dialog content container" }
+      ],
+      values: [
+        { name: "open", type: "Boolean", default: "false", description: "Current open/closed state" },
+        { name: "modal", type: "Boolean", default: "true", description: "Whether dialog is modal" }
+      ],
+      actions: [
+        { name: "open", description: "Opens the dialog" },
+        { name: "close", description: "Closes the dialog" }
+      ]
+    %>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="dialog"</code> for proper screen reader announcement</li>
+      <li>Sets <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-modal="true"</code> when modal is enabled</li>
+      <li>Traps focus within the dialog when open</li>
+      <li>Pressing <kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Escape</kbd> closes the dialog</li>
+      <li>Returns focus to trigger element when closed</li>
+      <li>Links title and description via <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-labelledby</code> and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-describedby</code></li>
+    </ul>
+  </div>
+</div>

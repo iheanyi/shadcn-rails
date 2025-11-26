@@ -1,0 +1,44 @@
+<%# Renders an API reference table for component props
+    locals:
+      - props: Array of Hashes (required) - Each hash should have :name, :type, :default, :description
+      - title: String (optional) - Section title (default: "API Reference")
+%>
+<% title ||= "API Reference" %>
+
+<div class="my-6">
+  <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4"><%= title %></h2>
+  <div class="relative w-full overflow-auto">
+    <table class="w-full caption-bottom text-sm">
+      <thead class="[&_tr]:border-b">
+        <tr class="border-b transition-colors hover:bg-muted/50">
+          <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Prop</th>
+          <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Type</th>
+          <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Default</th>
+          <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+        </tr>
+      </thead>
+      <tbody class="[&_tr:last-child]:border-0">
+        <% props.each do |prop| %>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm"><%= prop[:name] %></td>
+            <td class="p-4 align-middle">
+              <code class="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm">
+                <%= prop[:type] %>
+              </code>
+            </td>
+            <td class="p-4 align-middle">
+              <% if prop[:default] %>
+                <code class="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm">
+                  <%= prop[:default] %>
+                </code>
+              <% else %>
+                <span class="text-muted-foreground">-</span>
+              <% end %>
+            </td>
+            <td class="p-4 align-middle text-muted-foreground"><%= prop[:description] %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

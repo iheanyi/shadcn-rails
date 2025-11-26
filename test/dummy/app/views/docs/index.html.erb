@@ -1,0 +1,78 @@
+<% content_for :title, "Introduction" %>
+
+<div class="space-y-8">
+  <div class="space-y-4">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Introduction</h1>
+    <p class="text-xl text-muted-foreground">
+      Beautifully designed components built with ViewComponent and Tailwind CSS for Ruby on Rails.
+    </p>
+  </div>
+
+  <div class="space-y-4">
+    <p class="leading-7">
+      <strong>shadcn-rails</strong> is a Ruby port of <a href="https://ui.shadcn.com" class="font-medium underline underline-offset-4" target="_blank">shadcn/ui</a>
+      for Rails applications. It provides a collection of re-usable components built using
+      <a href="https://viewcomponent.org" class="font-medium underline underline-offset-4" target="_blank">ViewComponent</a>,
+      <a href="https://stimulus.hotwired.dev" class="font-medium underline underline-offset-4" target="_blank">Stimulus</a>, and
+      <a href="https://tailwindcss.com" class="font-medium underline underline-offset-4" target="_blank">Tailwind CSS</a>.
+    </p>
+    <p class="leading-7">
+      This is <strong>NOT</strong> a component library. It's a collection of re-usable components that you can copy and paste
+      into your apps. Pick the components you need, customize them to fit your needs, and ship faster.
+    </p>
+  </div>
+
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Why shadcn-rails?</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li><strong>Copy and paste</strong> - No npm package to install. Components are yours to customize.</li>
+      <li><strong>ViewComponent</strong> - Built with Ruby's ViewComponent for clean, testable, and reusable UI.</li>
+      <li><strong>Stimulus</strong> - Interactive components powered by Hotwire's Stimulus framework.</li>
+      <li><strong>Tailwind CSS</strong> - Styled with Tailwind CSS utility classes for easy customization.</li>
+      <li><strong>Accessible</strong> - Components follow WAI-ARIA guidelines for accessibility.</li>
+      <li><strong>Dark mode</strong> - Built-in dark mode support with CSS custom properties.</li>
+    </ul>
+  </div>
+
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add shadcn-rails to your Gemfile:</p>
+    <%= render "docs/code_example", language: "ruby", code: 'gem "shadcn-rails"' %>
+
+    <p class="leading-7">Then run the install generator:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:install" %>
+
+    <p class="leading-7">This will:</p>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Add the base CSS with theme variables to your stylesheets</li>
+      <li>Configure Tailwind CSS with shadcn theme colors</li>
+      <li>Set up Stimulus controllers for interactive components</li>
+    </ul>
+  </div>
+
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Adding Components</h2>
+    <p class="leading-7">Add individual components as needed:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component button\nrails generate shadcn:component dialog\nrails generate shadcn:component tabs" %>
+  </div>
+
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Components</h2>
+    <p class="leading-7">Browse all available components:</p>
+
+    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <% @categories.each do |category| %>
+        <div class="rounded-lg border bg-card p-4">
+          <h3 class="font-semibold mb-3"><%= category %></h3>
+          <ul class="space-y-1">
+            <% @components_by_category[category]&.each do |slug, meta| %>
+              <li>
+                <%= link_to meta[:name], docs_component_path(slug: slug), class: "text-sm text-muted-foreground hover:text-foreground hover:underline" %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= content_for?(:title) ? "#{yield(:title)} - " : "" %>shadcn-rails Documentation</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag rescue nil %>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            border: "hsl(var(--border))",
+            input: "hsl(var(--input))",
+            ring: "hsl(var(--ring))",
+            background: "hsl(var(--background))",
+            foreground: "hsl(var(--foreground))",
+            primary: {
+              DEFAULT: "hsl(var(--primary))",
+              foreground: "hsl(var(--primary-foreground))",
+            },
+            secondary: {
+              DEFAULT: "hsl(var(--secondary))",
+              foreground: "hsl(var(--secondary-foreground))",
+            },
+            destructive: {
+              DEFAULT: "hsl(var(--destructive))",
+              foreground: "hsl(var(--destructive-foreground))",
+            },
+            muted: {
+              DEFAULT: "hsl(var(--muted))",
+              foreground: "hsl(var(--muted-foreground))",
+            },
+            accent: {
+              DEFAULT: "hsl(var(--accent))",
+              foreground: "hsl(var(--accent-foreground))",
+            },
+            popover: {
+              DEFAULT: "hsl(var(--popover))",
+              foreground: "hsl(var(--popover-foreground))",
+            },
+            card: {
+              DEFAULT: "hsl(var(--card))",
+              foreground: "hsl(var(--card-foreground))",
+            },
+          },
+          borderRadius: {
+            lg: "var(--radius)",
+            md: "calc(var(--radius) - 2px)",
+            sm: "calc(var(--radius) - 4px)",
+          },
+          keyframes: {
+            "accordion-down": {
+              from: { height: "0" },
+              to: { height: "var(--radix-accordion-content-height)" },
+            },
+            "accordion-up": {
+              from: { height: "var(--radix-accordion-content-height)" },
+              to: { height: "0" },
+            },
+            "fade-in": {
+              from: { opacity: "0" },
+              to: { opacity: "1" },
+            },
+            "fade-out": {
+              from: { opacity: "1" },
+              to: { opacity: "0" },
+            },
+            "zoom-in": {
+              from: { opacity: "0", transform: "scale(0.95)" },
+              to: { opacity: "1", transform: "scale(1)" },
+            },
+            "zoom-out": {
+              from: { opacity: "1", transform: "scale(1)" },
+              to: { opacity: "0", transform: "scale(0.95)" },
+            },
+            "slide-in-from-top": {
+              from: { transform: "translateY(-100%)" },
+              to: { transform: "translateY(0)" },
+            },
+            "slide-in-from-bottom": {
+              from: { transform: "translateY(100%)" },
+              to: { transform: "translateY(0)" },
+            },
+            "slide-in-from-left": {
+              from: { transform: "translateX(-100%)" },
+              to: { transform: "translateX(0)" },
+            },
+            "slide-in-from-right": {
+              from: { transform: "translateX(100%)" },
+              to: { transform: "translateX(0)" },
+            },
+          },
+          animation: {
+            "accordion-down": "accordion-down 0.2s ease-out",
+            "accordion-up": "accordion-up 0.2s ease-out",
+            "fade-in": "fade-in 0.2s ease-out",
+            "fade-out": "fade-out 0.2s ease-out",
+            "zoom-in": "zoom-in 0.2s ease-out",
+            "zoom-out": "zoom-out 0.2s ease-out",
+            "slide-in-from-top": "slide-in-from-top 0.3s ease-out",
+            "slide-in-from-bottom": "slide-in-from-bottom 0.3s ease-out",
+            "slide-in-from-left": "slide-in-from-left 0.3s ease-out",
+            "slide-in-from-right": "slide-in-from-right 0.3s ease-out",
+          },
+        },
+      },
+    }
+  </script>
+  <script type="module">
+    import { Application, Controller } from "https://unpkg.com/@hotwired/stimulus/dist/stimulus.js"
+    const Stimulus = Application.start()
+
+    // Dialog Controller
+    Stimulus.register("shadcn--dialog", class extends Controller {
+      static targets = ["trigger", "template", "overlay", "content"]
+      static values = { open: { type: Boolean, default: false }, modal: { type: Boolean, default: true } }
+
+      connect() {
+        this.portal = null
+        this.previousActiveElement = null
+        this.boundHandleKeydown = this.handleKeydown.bind(this)
+      }
+
+      disconnect() { this.close(); if (this.portal) this.portal.remove() }
+
+      open() {
+        if (this.openValue) return
+        this.previousActiveElement = document.activeElement
+        this.openValue = true
+        if (this.hasTemplateTarget && !this.portal) {
+          this.portal = document.createElement("div")
+          this.portal.className = "shadcn-dialog-portal"
+          this.portal.innerHTML = this.templateTarget.innerHTML
+          document.body.appendChild(this.portal)
+          this.portalOverlay = this.portal.querySelector('[data-shadcn--dialog-target="overlay"]')
+          this.portalContent = this.portal.querySelector('[data-shadcn--dialog-target="content"]')
+          const closeButtons = this.portal.querySelectorAll('[data-action*="shadcn--dialog#close"]')
+          closeButtons.forEach(btn => btn.addEventListener("click", () => this.close()))
+        }
+        requestAnimationFrame(() => {
+          if (this.portalOverlay) { this.portalOverlay.dataset.state = "open"; this.portalOverlay.removeAttribute("hidden") }
+          if (this.portalContent) { this.portalContent.dataset.state = "open"; this.portalContent.removeAttribute("hidden") }
+          document.addEventListener("keydown", this.boundHandleKeydown)
+          document.body.style.overflow = "hidden"
+        })
+      }
+
+      close() {
+        if (!this.openValue) return
+        this.openValue = false
+        if (this.portalOverlay) this.portalOverlay.dataset.state = "closed"
+        if (this.portalContent) this.portalContent.dataset.state = "closed"
+        document.removeEventListener("keydown", this.boundHandleKeydown)
+        document.body.style.overflow = ""
+        if (this.previousActiveElement) this.previousActiveElement.focus()
+        setTimeout(() => { if (this.portal) { this.portal.remove(); this.portal = null } }, 200)
+      }
+
+      handleKeydown(event) { if (event.key === "Escape") this.close() }
+    })
+
+    // Tabs Controller
+    Stimulus.register("shadcn--tabs", class extends Controller {
+      static targets = ["trigger", "content"]
+      static values = { value: String }
+
+      connect() {
+        if (!this.valueValue && this.hasTriggerTarget) {
+          this.valueValue = this.triggerTargets[0].dataset.value
+        }
+        this.updateTabs()
+      }
+
+      selectTab(event) {
+        const trigger = event.currentTarget
+        const value = trigger.dataset.value
+        this.valueValue = value
+      }
+
+      valueValueChanged() { this.updateTabs() }
+
+      updateTabs() {
+        this.triggerTargets.forEach(trigger => {
+          const isActive = trigger.dataset.value === this.valueValue
+          trigger.dataset.state = isActive ? "active" : "inactive"
+          trigger.setAttribute("aria-selected", isActive)
+        })
+        this.contentTargets.forEach(content => {
+          const isActive = content.dataset.value === this.valueValue
+          content.dataset.state = isActive ? "active" : "inactive"
+          content.hidden = !isActive
+        })
+      }
+    })
+
+    // Accordion Controller
+    Stimulus.register("shadcn--accordion", class extends Controller {
+      static targets = ["item", "trigger", "content"]
+      static values = { type: { type: String, default: "single" }, collapsible: { type: Boolean, default: true }, value: Array }
+
+      connect() { this.updateAccordion() }
+
+      toggle(event) {
+        const trigger = event.currentTarget
+        const item = trigger.closest('[data-shadcn--accordion-target="item"]')
+        const value = item.dataset.value
+        if (this.typeValue === "single") {
+          if (this.valueValue.includes(value) && this.collapsibleValue) {
+            this.valueValue = []
+          } else {
+            this.valueValue = [value]
+          }
+        } else {
+          if (this.valueValue.includes(value)) {
+            this.valueValue = this.valueValue.filter(v => v !== value)
+          } else {
+            this.valueValue = [...this.valueValue, value]
+          }
+        }
+      }
+
+      valueValueChanged() { this.updateAccordion() }
+
+      updateAccordion() {
+        this.itemTargets.forEach(item => {
+          const value = item.dataset.value
+          const isOpen = this.valueValue.includes(value)
+          const trigger = item.querySelector('[data-shadcn--accordion-target="trigger"]')
+          const content = item.querySelector('[data-shadcn--accordion-target="content"]')
+          if (trigger) {
+            trigger.dataset.state = isOpen ? "open" : "closed"
+            trigger.setAttribute("aria-expanded", isOpen)
+          }
+          if (content) {
+            content.dataset.state = isOpen ? "open" : "closed"
+            content.hidden = !isOpen
+          }
+        })
+      }
+    })
+
+    // Toggle Controller
+    Stimulus.register("shadcn--toggle", class extends Controller {
+      static values = { pressed: { type: Boolean, default: false } }
+
+      toggle() { this.pressedValue = !this.pressedValue }
+
+      pressedValueChanged() {
+        this.element.dataset.state = this.pressedValue ? "on" : "off"
+        this.element.setAttribute("aria-pressed", this.pressedValue)
+      }
+    })
+
+    // Toggle Group Controller
+    Stimulus.register("shadcn--toggle-group", class extends Controller {
+      static targets = ["item"]
+      static values = { type: { type: String, default: "single" }, value: Array }
+
+      connect() { this.updateItems() }
+
+      toggle(event) {
+        const item = event.currentTarget
+        const value = item.dataset.value
+        if (this.typeValue === "single") {
+          this.valueValue = this.valueValue.includes(value) ? [] : [value]
+        } else {
+          if (this.valueValue.includes(value)) {
+            this.valueValue = this.valueValue.filter(v => v !== value)
+          } else {
+            this.valueValue = [...this.valueValue, value]
+          }
+        }
+      }
+
+      valueValueChanged() { this.updateItems() }
+
+      updateItems() {
+        this.itemTargets.forEach(item => {
+          const isPressed = this.valueValue.includes(item.dataset.value)
+          item.dataset.state = isPressed ? "on" : "off"
+          item.setAttribute("aria-pressed", isPressed)
+        })
+      }
+    })
+
+    // Checkbox Controller
+    Stimulus.register("shadcn--checkbox", class extends Controller {
+      static targets = ["input", "indicator"]
+      static values = { checked: { type: Boolean, default: false }, indeterminate: { type: Boolean, default: false } }
+
+      connect() { this.updateState() }
+
+      toggle() {
+        if (this.indeterminateValue) {
+          this.indeterminateValue = false
+          this.checkedValue = true
+        } else {
+          this.checkedValue = !this.checkedValue
+        }
+      }
+
+      checkedValueChanged() { this.updateState() }
+      indeterminateValueChanged() { this.updateState() }
+
+      updateState() {
+        const state = this.indeterminateValue ? "indeterminate" : (this.checkedValue ? "checked" : "unchecked")
+        this.element.dataset.state = state
+        this.element.setAttribute("aria-checked", this.indeterminateValue ? "mixed" : this.checkedValue)
+        if (this.hasInputTarget) {
+          this.inputTarget.checked = this.checkedValue
+          this.inputTarget.indeterminate = this.indeterminateValue
+        }
+        if (this.hasIndicatorTarget) {
+          this.indicatorTarget.dataset.state = state
+        }
+      }
+    })
+
+    // Switch Controller
+    Stimulus.register("shadcn--switch", class extends Controller {
+      static targets = ["input", "thumb"]
+      static values = { checked: { type: Boolean, default: false } }
+
+      connect() { this.updateState() }
+
+      toggle() { this.checkedValue = !this.checkedValue }
+
+      checkedValueChanged() { this.updateState() }
+
+      updateState() {
+        this.element.dataset.state = this.checkedValue ? "checked" : "unchecked"
+        this.element.setAttribute("aria-checked", this.checkedValue)
+        if (this.hasInputTarget) this.inputTarget.checked = this.checkedValue
+        if (this.hasThumbTarget) this.thumbTarget.dataset.state = this.checkedValue ? "checked" : "unchecked"
+      }
+    })
+
+    // Collapsible Controller
+    Stimulus.register("shadcn--collapsible", class extends Controller {
+      static targets = ["trigger", "content"]
+      static values = { open: { type: Boolean, default: false } }
+
+      connect() { this.updateState() }
+
+      toggle() { this.openValue = !this.openValue }
+
+      openValueChanged() { this.updateState() }
+
+      updateState() {
+        this.element.dataset.state = this.openValue ? "open" : "closed"
+        if (this.hasTriggerTarget) {
+          this.triggerTarget.setAttribute("aria-expanded", this.openValue)
+        }
+        if (this.hasContentTarget) {
+          this.contentTarget.dataset.state = this.openValue ? "open" : "closed"
+          this.contentTarget.hidden = !this.openValue
+        }
+      }
+    })
+
+    // Tooltip Controller
+    Stimulus.register("shadcn--tooltip", class extends Controller {
+      static targets = ["trigger", "content"]
+      static values = { open: { type: Boolean, default: false }, delay: { type: Number, default: 200 } }
+
+      connect() {
+        this.timeout = null
+        this.updateState()
+      }
+
+      show() {
+        this.timeout = setTimeout(() => { this.openValue = true }, this.delayValue)
+      }
+
+      hide() {
+        if (this.timeout) clearTimeout(this.timeout)
+        this.openValue = false
+      }
+
+      openValueChanged() { this.updateState() }
+
+      updateState() {
+        if (this.hasContentTarget) {
+          this.contentTarget.dataset.state = this.openValue ? "open" : "closed"
+          this.contentTarget.hidden = !this.openValue
+        }
+      }
+    })
+
+    // Popover Controller
+    Stimulus.register("shadcn--popover", class extends Controller {
+      static targets = ["trigger", "content"]
+      static values = { open: { type: Boolean, default: false } }
+
+      connect() {
+        this.boundHandleClickOutside = this.handleClickOutside.bind(this)
+        this.updateState()
+      }
+
+      disconnect() { document.removeEventListener("click", this.boundHandleClickOutside) }
+
+      toggle() { this.openValue = !this.openValue }
+
+      openValueChanged() {
+        this.updateState()
+        if (this.openValue) {
+          setTimeout(() => document.addEventListener("click", this.boundHandleClickOutside), 0)
+        } else {
+          document.removeEventListener("click", this.boundHandleClickOutside)
+        }
+      }
+
+      handleClickOutside(event) {
+        if (!this.element.contains(event.target)) this.openValue = false
+      }
+
+      updateState() {
+        this.element.dataset.state = this.openValue ? "open" : "closed"
+        if (this.hasTriggerTarget) this.triggerTarget.setAttribute("aria-expanded", this.openValue)
+        if (this.hasContentTarget) {
+          this.contentTarget.dataset.state = this.openValue ? "open" : "closed"
+          this.contentTarget.hidden = !this.openValue
+        }
+      }
+    })
+
+    // Copy to Clipboard Controller for code examples
+    Stimulus.register("clipboard", class extends Controller {
+      static targets = ["source", "button"]
+      static values = { copied: { type: Boolean, default: false } }
+
+      copy() {
+        const text = this.hasSourceTarget ? this.sourceTarget.textContent : this.element.textContent
+        navigator.clipboard.writeText(text).then(() => {
+          this.copiedValue = true
+          setTimeout(() => { this.copiedValue = false }, 2000)
+        })
+      }
+
+      copiedValueChanged() {
+        if (this.hasButtonTarget) {
+          this.buttonTarget.textContent = this.copiedValue ? "Copied!" : "Copy"
+        }
+      }
+    })
+  </script>
+  <style>
+    <%= Shadcn::Rails.theme_css %>
+
+    /* tailwindcss-animate utilities */
+    @keyframes enter {
+      from {
+        opacity: var(--tw-enter-opacity, 1);
+        transform: translate3d(var(--tw-enter-translate-x, 0), var(--tw-enter-translate-y, 0), 0) scale3d(var(--tw-enter-scale, 1), var(--tw-enter-scale, 1), var(--tw-enter-scale, 1));
+      }
+    }
+    @keyframes exit {
+      to {
+        opacity: var(--tw-exit-opacity, 1);
+        transform: translate3d(var(--tw-exit-translate-x, 0), var(--tw-exit-translate-y, 0), 0) scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1));
+      }
+    }
+
+    .animate-in {
+      animation-name: enter;
+      animation-duration: 150ms;
+      --tw-enter-opacity: initial;
+      --tw-enter-scale: initial;
+      --tw-enter-translate-x: initial;
+      --tw-enter-translate-y: initial;
+    }
+    .animate-out {
+      animation-name: exit;
+      animation-duration: 150ms;
+      --tw-exit-opacity: initial;
+      --tw-exit-scale: initial;
+      --tw-exit-translate-x: initial;
+      --tw-exit-translate-y: initial;
+    }
+
+    /* Fade animations */
+    .fade-in-0 { --tw-enter-opacity: 0; }
+    .fade-out-0 { --tw-exit-opacity: 0; }
+
+    /* Zoom animations */
+    .zoom-in-95 { --tw-enter-scale: .95; }
+    .zoom-out-95 { --tw-exit-scale: .95; }
+
+    /* Slide animations */
+    .slide-in-from-top { --tw-enter-translate-y: -100%; }
+    .slide-in-from-bottom { --tw-enter-translate-y: 100%; }
+    .slide-in-from-left { --tw-enter-translate-x: -100%; }
+    .slide-in-from-right { --tw-enter-translate-x: 100%; }
+
+    .slide-out-to-top { --tw-exit-translate-y: -100%; }
+    .slide-out-to-bottom { --tw-exit-translate-y: 100%; }
+    .slide-out-to-left { --tw-exit-translate-x: -100%; }
+    .slide-out-to-right { --tw-exit-translate-x: 100%; }
+
+    /* Duration utilities */
+    .duration-200 { animation-duration: 200ms; }
+    .duration-300 { animation-duration: 300ms; }
+
+    /* Data state selectors for animations */
+    [data-state="open"].animate-in,
+    [data-state="open"] .animate-in { animation-name: enter; }
+    [data-state="closed"].animate-out,
+    [data-state="closed"] .animate-out { animation-name: exit; }
+
+    /* Portal styles */
+    .shadcn-dialog-portal [data-shadcn--dialog-target="overlay"] {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background-color: rgb(0 0 0 / 0.8);
+    }
+
+    .shadcn-dialog-portal [data-shadcn--dialog-target="content"] {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      z-index: 50;
+      display: grid;
+      width: 100%;
+      max-width: 32rem;
+      transform: translate(-50%, -50%);
+      gap: 1rem;
+      border: 1px solid hsl(var(--border));
+      background-color: hsl(var(--background));
+      padding: 1.5rem;
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      border-radius: 0.5rem;
+    }
+
+    .shadcn-dialog-portal [data-state="open"],
+    .shadcn-sheet-portal [data-state="open"] {
+      animation: enter 200ms ease-out;
+    }
+
+    .shadcn-dialog-portal [data-state="closed"],
+    .shadcn-sheet-portal [data-state="closed"] {
+      animation: exit 300ms ease-in forwards;
+    }
+
+    .shadcn-dialog-portal [data-shadcn--dialog-target="overlay"][data-state="open"] {
+      --tw-enter-opacity: 0;
+    }
+
+    .shadcn-dialog-portal [data-shadcn--dialog-target="overlay"][data-state="closed"] {
+      --tw-exit-opacity: 0;
+    }
+
+    .shadcn-dialog-portal [data-shadcn--dialog-target="content"][data-state="open"] {
+      --tw-enter-opacity: 0;
+      --tw-enter-scale: 0.95;
+    }
+
+    .shadcn-dialog-portal [data-shadcn--dialog-target="content"][data-state="closed"] {
+      --tw-exit-opacity: 0;
+      --tw-exit-scale: 0.95;
+    }
+
+    /* Code block styling */
+    .code-block {
+      background-color: hsl(var(--muted));
+      border-radius: 0.5rem;
+      padding: 1rem;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+
+    .code-block code {
+      color: hsl(var(--foreground));
+    }
+
+    /* Sidebar navigation */
+    .docs-sidebar {
+      position: sticky;
+      top: 4rem;
+      height: calc(100vh - 4rem);
+      overflow-y: auto;
+    }
+
+    .docs-sidebar::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .docs-sidebar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .docs-sidebar::-webkit-scrollbar-thumb {
+      background: hsl(var(--border));
+      border-radius: 2px;
+    }
+
+    /* Component preview */
+    .component-preview {
+      border: 1px solid hsl(var(--border));
+      border-radius: 0.5rem;
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 150px;
+      background-color: hsl(var(--background));
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-background text-foreground antialiased">
+  <!-- Header -->
+  <header class="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div class="container mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-6">
+        <%= link_to root_path, class: "flex items-center gap-2" do %>
+          <span class="text-xl font-bold">shadcn-rails</span>
+        <% end %>
+        <nav class="hidden md:flex items-center gap-6 text-sm">
+          <%= link_to "Docs", docs_path, class: "font-medium transition-colors hover:text-foreground/80 #{controller_name == 'docs' ? 'text-foreground' : 'text-foreground/60'}" %>
+          <%= link_to "Showcase", showcase_path, class: "font-medium transition-colors hover:text-foreground/80 text-foreground/60" %>
+          <a href="https://github.com/your-repo/shadcn-rails" target="_blank" class="font-medium transition-colors hover:text-foreground/80 text-foreground/60">GitHub</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <div class="container mx-auto flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10">
+    <!-- Sidebar -->
+    <aside class="docs-sidebar hidden md:block py-6 pr-2 lg:py-8">
+      <nav class="flex flex-col gap-4">
+        <!-- Getting Started -->
+        <div class="flex flex-col gap-1">
+          <h4 class="mb-1 px-2 text-sm font-semibold">Getting Started</h4>
+          <%= link_to "Introduction", docs_path, class: "group flex w-full items-center rounded-md px-2 py-1.5 text-sm font-medium #{action_name == 'index' && !params[:slug] ? 'bg-accent text-accent-foreground' : 'hover:bg-accent hover:text-accent-foreground'}" %>
+        </div>
+
+        <!-- Components by Category -->
+        <% DocsController::CATEGORIES.each do |category| %>
+          <div class="flex flex-col gap-1">
+            <h4 class="mb-1 px-2 text-sm font-semibold"><%= category %></h4>
+            <% DocsController::COMPONENTS.select { |_, meta| meta[:category] == category }.each do |slug, meta| %>
+              <%= link_to meta[:name], docs_component_path(slug: slug), class: "group flex w-full items-center rounded-md px-2 py-1.5 text-sm #{@slug == slug ? 'bg-accent text-accent-foreground font-medium' : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'}" %>
+            <% end %>
+          </div>
+        <% end %>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="relative py-6 lg:py-8 lg:gap-10 xl:grid xl:grid-cols-[1fr_200px]">
+      <div class="mx-auto w-full min-w-0">
+        <!-- Breadcrumb -->
+        <% if @component %>
+          <nav class="mb-4 flex items-center text-sm text-muted-foreground">
+            <%= link_to "Docs", docs_path, class: "hover:text-foreground" %>
+            <svg class="mx-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+            <span>Components</span>
+            <svg class="mx-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+            <span class="text-foreground"><%= @component[:name] %></span>
+          </nav>
+        <% end %>
+
+        <%= yield %>
+      </div>
+
+      <!-- Table of Contents (for component pages) -->
+      <% if content_for?(:toc) %>
+        <div class="hidden xl:block">
+          <div class="sticky top-16 -mt-10 pt-10">
+            <div class="space-y-2">
+              <p class="font-medium text-sm">On This Page</p>
+              <%= yield(:toc) %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </main>
+  </div>
+</body>
+</html>

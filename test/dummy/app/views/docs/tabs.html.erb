@@ -1,0 +1,242 @@
+<% content_for :title, "Tabs" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+    <a href="#stimulus-controller" class="text-muted-foreground hover:text-foreground">Stimulus Controller</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Tabs</h1>
+    <p class="text-xl text-muted-foreground">A set of layered sections of content, known as tab panels, that are displayed one at a time.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Requires JavaScript
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::TabsComponent.new(default_value: "account", class_name: "w-[400px]") do |tabs| %>
+      <% tabs.with_list do |list| %>
+        <% list.with_trigger(value: "account") { "Account" } %>
+        <% list.with_trigger(value: "password") { "Password" } %>
+      <% end %>
+      <% tabs.with_panel(value: "account") do %>
+        <%= render Shadcn::CardComponent.new do |card| %>
+          <% card.with_header do |header| %>
+            <% header.with_title { "Account" } %>
+            <% header.with_description { "Make changes to your account here. Click save when you're done." } %>
+          <% end %>
+          <% card.with_content_slot do %>
+            <div class="space-y-4">
+              <div class="space-y-2">
+                <%= render Shadcn::LabelComponent.new(for: "name") { "Name" } %>
+                <%= render Shadcn::InputComponent.new(id: "name", value: "John Doe") %>
+              </div>
+              <div class="space-y-2">
+                <%= render Shadcn::LabelComponent.new(for: "username") { "Username" } %>
+                <%= render Shadcn::InputComponent.new(id: "username", value: "@johndoe") %>
+              </div>
+            </div>
+          <% end %>
+          <% card.with_footer do %>
+            <%= render Shadcn::ButtonComponent.new { "Save changes" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <% tabs.with_panel(value: "password") do %>
+        <%= render Shadcn::CardComponent.new do |card| %>
+          <% card.with_header do |header| %>
+            <% header.with_title { "Password" } %>
+            <% header.with_description { "Change your password here. After saving, you'll be logged out." } %>
+          <% end %>
+          <% card.with_content_slot do %>
+            <div class="space-y-4">
+              <div class="space-y-2">
+                <%= render Shadcn::LabelComponent.new(for: "current") { "Current password" } %>
+                <%= render Shadcn::InputComponent.new(id: "current", type: "password") %>
+              </div>
+              <div class="space-y-2">
+                <%= render Shadcn::LabelComponent.new(for: "new") { "New password" } %>
+                <%= render Shadcn::InputComponent.new(id: "new", type: "password") %>
+              </div>
+            </div>
+          <% end %>
+          <% card.with_footer do %>
+            <%= render Shadcn::ButtonComponent.new { "Save password" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component tabs" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("tabs/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Basic Tabs -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Basic</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::TabsComponent.new(default_value: "tab1", class_name: "w-[400px]") do |tabs| %>
+          <% tabs.with_list do |list| %>
+            <% list.with_trigger(value: "tab1") { "Tab 1" } %>
+            <% list.with_trigger(value: "tab2") { "Tab 2" } %>
+            <% list.with_trigger(value: "tab3") { "Tab 3" } %>
+          <% end %>
+          <% tabs.with_panel(value: "tab1") do %>
+            <div class="p-4">Content for Tab 1</div>
+          <% end %>
+          <% tabs.with_panel(value: "tab2") do %>
+            <div class="p-4">Content for Tab 2</div>
+          <% end %>
+          <% tabs.with_panel(value: "tab3") do %>
+            <div class="p-4">Content for Tab 3</div>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("tabs/basic") %>
+    </div>
+
+    <!-- URL Sync -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">URL Sync</h3>
+      <p class="text-sm text-muted-foreground">
+        Sync the active tab with the URL using the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">url_param</code> option.
+        This is useful for shareable links and browser back/forward navigation.
+      </p>
+      <%= erb_example("tabs/url_sync") %>
+    </div>
+
+    <!-- Disabled Tab -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled Tab</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::TabsComponent.new(default_value: "active", class_name: "w-[400px]") do |tabs| %>
+          <% tabs.with_list do |list| %>
+            <% list.with_trigger(value: "active") { "Active" } %>
+            <% list.with_trigger(value: "disabled", disabled: true) { "Disabled" } %>
+            <% list.with_trigger(value: "another") { "Another" } %>
+          <% end %>
+          <% tabs.with_panel(value: "active") do %>
+            <div class="p-4">Active tab content</div>
+          <% end %>
+          <% tabs.with_panel(value: "disabled") do %>
+            <div class="p-4">Disabled tab content</div>
+          <% end %>
+          <% tabs.with_panel(value: "another") do %>
+            <div class="p-4">Another tab content</div>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("tabs/disabled") %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">TabsComponent</h3>
+    <%= render "docs/props_table", title: nil, props: [
+      { name: "default_value", type: "String", default: "nil", description: "The value of the initially active tab" },
+      { name: "orientation", type: "Symbol", default: ":horizontal", description: "Tab orientation (:horizontal or :vertical)" },
+      { name: "url_param", type: "String", default: "nil", description: "Query parameter name to sync active tab with URL" }
+    ] %>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">Slots</h3>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Slot</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_list</td>
+            <td class="p-4 align-middle text-muted-foreground">Container for tab triggers (yields TabsListComponent)</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_panel(value:)</td>
+            <td class="p-4 align-middle text-muted-foreground">Tab panel content, matched by value to trigger</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">TabsListComponent Slots</h3>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Slot</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Props</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_trigger</td>
+            <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">value:</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">disabled:</code></td>
+            <td class="p-4 align-middle text-muted-foreground">Tab trigger button</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Stimulus Controller -->
+  <div id="stimulus-controller">
+    <%= render "docs/stimulus_docs",
+      controller_name: "shadcn--tabs",
+      description: "Manages tab switching, keyboard navigation, and URL synchronization.",
+      targets: [
+        { name: "trigger", description: "Tab trigger buttons" },
+        { name: "content", description: "Tab content panels" }
+      ],
+      values: [
+        { name: "value", type: "String", default: '""', description: "Currently active tab value" },
+        { name: "defaultValue", type: "String", default: '""', description: "Initial tab value" },
+        { name: "urlParam", type: "String", default: "null", description: "URL parameter name for syncing" }
+      ],
+      actions: [
+        { name: "selectTab", description: "Switches to a specific tab (triggered by click)" }
+      ]
+    %>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="tablist"</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="tab"</code>, and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="tabpanel"</code></li>
+      <li>Sets <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-selected</code> on active tab</li>
+      <li>Links tabs to panels via <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-controls</code> and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-labelledby</code></li>
+      <li>Keyboard navigation: <kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Arrow Left</kbd>/<kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Arrow Right</kbd> to navigate between tabs</li>
+      <li><kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Home</kbd>/<kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">End</kbd> to jump to first/last tab</li>
+    </ul>
+  </div>
+</div>
