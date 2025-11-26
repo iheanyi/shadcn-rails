@@ -115,6 +115,36 @@
   </section>
 
   <section class="space-y-4">
+    <h2 class="text-xl font-semibold">URL Sync</h2>
+    <p class="text-sm text-muted-foreground">Tabs that sync with URL query parameters. Click a tab and notice the URL changes. You can also bookmark or share specific tabs!</p>
+    <%= render Shadcn::TabsComponent.new(default_value: "general", url_param: "settings") do |tabs| %>
+      <% tabs.with_list do |list| %>
+        <% list.with_trigger(value: "general") { "General" } %>
+        <% list.with_trigger(value: "security") { "Security" } %>
+        <% list.with_trigger(value: "billing") { "Billing" } %>
+      <% end %>
+      <% tabs.with_panel(value: "general") do %>
+        <div class="p-4 border rounded-lg mt-2">
+          <h3 class="font-medium">General Settings</h3>
+          <p class="text-sm text-muted-foreground mt-2">Configure your general preferences. Notice the URL now shows <code class="bg-muted px-1 rounded">?settings=general</code></p>
+        </div>
+      <% end %>
+      <% tabs.with_panel(value: "security") do %>
+        <div class="p-4 border rounded-lg mt-2">
+          <h3 class="font-medium">Security Settings</h3>
+          <p class="text-sm text-muted-foreground mt-2">Manage your security options. The URL shows <code class="bg-muted px-1 rounded">?settings=security</code></p>
+        </div>
+      <% end %>
+      <% tabs.with_panel(value: "billing") do %>
+        <div class="p-4 border rounded-lg mt-2">
+          <h3 class="font-medium">Billing Settings</h3>
+          <p class="text-sm text-muted-foreground mt-2">Update your billing information. The URL shows <code class="bg-muted px-1 rounded">?settings=billing</code></p>
+        </div>
+      <% end %>
+    <% end %>
+  </section>
+
+  <section class="space-y-4">
     <h2 class="text-xl font-semibold">Disabled Tab</h2>
     <p class="text-sm text-muted-foreground">Tabs with a disabled option.</p>
     <%= render Shadcn::TabsComponent.new(default_value: "active") do |tabs| %>

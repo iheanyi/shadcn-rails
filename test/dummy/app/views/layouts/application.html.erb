@@ -464,28 +464,48 @@
     // Tabs Controller
     Stimulus.register("shadcn--tabs", class extends Controller {
       static targets = ["trigger", "content"]
-      static values = { default: String }
+      static values = { default: String, urlParam: String }
 
       connect() {
-        if (this.defaultValue) {
-          this.showTab(this.defaultValue)
-        } else if (this.triggerTargets.length > 0) {
-          const firstValue = this.triggerTargets[0].dataset.value
-          this.showTab(firstValue)
+        // Determine initial tab value from URL or default
+        let initialValue = this.getValueFromUrl() || this.defaultValue
+        if (!initialValue && this.triggerTargets.length > 0) {
+          initialValue = this.triggerTargets[0].dataset.value
         }
+        if (initialValue) {
+          // Validate that the value exists
+          const validValues = this.triggerTargets.map(t => t.dataset.value)
+          if (!validValues.includes(initialValue)) {
+            initialValue = this.defaultValue || this.triggerTargets[0]?.dataset.value
+          }
+          this.showTab(initialValue, false) // Don't update URL on initial load
+        }
+      }
+
+      getValueFromUrl() {
+        if (!this.hasUrlParamValue) return null
+        const url = new URL(window.location.href)
+        return url.searchParams.get(this.urlParamValue)
+      }
+
+      updateUrl(value) {
+        if (!this.hasUrlParamValue) return
+        const url = new URL(window.location.href)
+        url.searchParams.set(this.urlParamValue, value)
+        window.history.replaceState({}, "", url.toString())
       }
 
       select(event) {
         const value = event.currentTarget.dataset.value
-        this.showTab(value)
+        this.showTab(value, true)
       }
 
       selectTab(event) {
         const value = event.currentTarget.dataset.value
-        this.showTab(value)
+        this.showTab(value, true)
       }
 
-      showTab(value) {
+      showTab(value, updateUrl = true) {
         // Update triggers
         this.triggerTargets.forEach(trigger => {
           const isActive = trigger.dataset.value === value
@@ -499,6 +519,11 @@
           content.hidden = !isActive
           content.dataset.state = isActive ? "active" : "inactive"
         })
+
+        // Update URL if enabled
+        if (updateUrl) {
+          this.updateUrl(value)
+        }
       }
     })
 

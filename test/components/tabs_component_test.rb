@@ -113,4 +113,29 @@ class TabsComponentTest < ViewComponent::TestCase
 
     assert_selector "div.my-tabs"
   end
+
+  def test_renders_with_url_param
+    render_inline(Shadcn::TabsComponent.new(default_value: "account", url_param: "tab"))
+
+    assert_selector "div[data-shadcn--tabs-url-param-value='tab']"
+  end
+
+  def test_renders_without_url_param_when_not_specified
+    render_inline(Shadcn::TabsComponent.new(default_value: "account"))
+
+    assert_no_selector "div[data-shadcn--tabs-url-param-value]"
+  end
+
+  def test_url_param_is_passed_to_stimulus_controller
+    render_inline(Shadcn::TabsComponent.new(default_value: "settings", url_param: "section")) do |tabs|
+      tabs.with_list do |list|
+        list.with_trigger(value: "general") { "General" }
+        list.with_trigger(value: "security") { "Security" }
+      end
+      tabs.with_panel(value: "general") { "General content" }
+      tabs.with_panel(value: "security") { "Security content" }
+    end
+
+    assert_selector "div[data-controller='shadcn--tabs'][data-shadcn--tabs-url-param-value='section']"
+  end
 end
