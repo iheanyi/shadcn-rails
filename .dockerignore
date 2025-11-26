@@ -1,0 +1,40 @@
+# .dockerignore for shadcn-rails
+# Keep the build context small while including necessary files
+
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Ruby
+*.gem
+.bundle
+vendor/bundle
+
+# Logs
+log/*
+tmp/*
+*.log
+
+# Test artifacts
+coverage/
+test/dummy/tmp/
+test/dummy/log/
+test/dummy/storage/
+
+# Node (if any)
+node_modules/
+
+# Keep these (don't ignore)
+# !app/
+# !lib/
+# !test/dummy/

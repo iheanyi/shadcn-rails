@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  # Health check for Fly.io
+  get "up", to: ->(_env) { [200, {}, ["OK"]] }
+
   root "pages#index"
 
   get "components", to: "pages#components"

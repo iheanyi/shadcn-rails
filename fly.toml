@@ -1,0 +1,26 @@
+# fly.toml - Fly.io configuration for shadcn-rails documentation site
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+
+app = 'shadcn-rails-docs'
+primary_region = 'iad'
+
+[build]
+  dockerfile = 'test/dummy/Dockerfile'
+
+[env]
+  RAILS_ENV = 'production'
+  RAILS_LOG_TO_STDOUT = 'true'
+  RAILS_SERVE_STATIC_FILES = 'true'
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '512mb'
+  cpu_kind = 'shared'
+  cpus = 1
