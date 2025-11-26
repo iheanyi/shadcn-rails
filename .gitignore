@@ -7,3 +7,4 @@
 /spec/reports/
 /tmp/
 /.playwright-mcp/
+/.claude/.settings.local.json

@@ -1,0 +1,191 @@
+<div class="max-w-6xl mx-auto space-y-12">
+  <div class="text-center space-y-4">
+    <h1 class="text-4xl font-bold">Theme Gallery</h1>
+    <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
+      Preview all available color themes. Each theme provides a cohesive set of colors for light and dark modes.
+    </p>
+  </div>
+
+  <!-- Theme Selector -->
+  <div class="flex justify-center gap-4 flex-wrap">
+    <a href="?theme=neutral" class="px-4 py-2 rounded-md border hover:bg-accent <%= params[:theme] == 'neutral' || params[:theme].nil? ? 'bg-accent' : '' %>">Neutral</a>
+    <a href="?theme=slate" class="px-4 py-2 rounded-md border hover:bg-accent <%= params[:theme] == 'slate' ? 'bg-accent' : '' %>">Slate</a>
+    <a href="?theme=stone" class="px-4 py-2 rounded-md border hover:bg-accent <%= params[:theme] == 'stone' ? 'bg-accent' : '' %>">Stone</a>
+    <a href="?theme=gray" class="px-4 py-2 rounded-md border hover:bg-accent <%= params[:theme] == 'gray' ? 'bg-accent' : '' %>">Gray</a>
+    <a href="?theme=zinc" class="px-4 py-2 rounded-md border hover:bg-accent <%= params[:theme] == 'zinc' ? 'bg-accent' : '' %>">Zinc</a>
+  </div>
+
+  <% current_theme = (params[:theme] || 'neutral').to_sym %>
+  <% theme_vars = Shadcn::Rails::Configuration::THEME_VARIABLES[current_theme] || Shadcn::Rails::Configuration::THEME_VARIABLES[:neutral] %>
+  <% dark_theme_vars = Shadcn::Rails::Configuration::DARK_THEME_VARIABLES[current_theme] || Shadcn::Rails::Configuration::DARK_THEME_VARIABLES[:neutral] %>
+
+  <!-- Theme Info -->
+  <div class="text-center">
+    <h2 class="text-2xl font-bold capitalize"><%= current_theme %> Theme</h2>
+    <p class="text-muted-foreground mt-2">A <%= current_theme %> color palette for your application.</p>
+  </div>
+
+  <!-- Color Palette Preview -->
+  <div class="grid md:grid-cols-2 gap-8">
+    <!-- Light Mode -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold text-center">Light Mode</h3>
+      <div class="rounded-lg border overflow-hidden" style="<%= theme_vars.map { |k, v| "--#{k.to_s.tr('_', '-')}: #{v}" }.join('; ') %>; --radius: 0.5rem;">
+        <div class="p-6 space-y-4" style="background: hsl(var(--background)); color: hsl(var(--foreground));">
+          <!-- Sample UI -->
+          <div class="rounded-lg border p-4 space-y-4" style="background: hsl(var(--card)); color: hsl(var(--card-foreground)); border-color: hsl(var(--border));">
+            <div class="space-y-1">
+              <h4 class="font-semibold">Card Title</h4>
+              <p class="text-sm" style="color: hsl(var(--muted-foreground));">Card description with muted text.</p>
+            </div>
+            <div class="flex gap-2">
+              <button class="px-4 py-2 rounded-md text-sm font-medium" style="background: hsl(var(--primary)); color: hsl(var(--primary-foreground));">Primary</button>
+              <button class="px-4 py-2 rounded-md text-sm font-medium" style="background: hsl(var(--secondary)); color: hsl(var(--secondary-foreground));">Secondary</button>
+              <button class="px-4 py-2 rounded-md text-sm font-medium" style="background: hsl(var(--destructive)); color: hsl(var(--destructive-foreground));">Destructive</button>
+            </div>
+            <div class="flex gap-2">
+              <button class="px-4 py-2 rounded-md text-sm font-medium border" style="background: transparent; border-color: hsl(var(--input));">Outline</button>
+              <button class="px-4 py-2 rounded-md text-sm font-medium" style="background: hsl(var(--accent)); color: hsl(var(--accent-foreground));">Accent</button>
+              <button class="px-4 py-2 rounded-md text-sm font-medium" style="background: hsl(var(--muted)); color: hsl(var(--muted-foreground));">Muted</button>
+            </div>
+            <input type="text" placeholder="Input field" class="w-full px-3 py-2 rounded-md text-sm" style="background: hsl(var(--background)); border: 1px solid hsl(var(--input)); color: hsl(var(--foreground));" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dark Mode -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold text-center">Dark Mode</h3>
+      <div class="rounded-lg border overflow-hidden" style="<%= dark_theme_vars.map { |k, v| "--#{k.to_s.tr('_', '-')}: #{v}" }.join('; ') %>; --radius: 0.5rem;">
+        <div class="p-6 space-y-4" style="background: hsl(var(--background)); color: hsl(var(--foreground));">
+          <!-- Sample UI -->
+          <div class="rounded-lg border p-4 space-y-4" style="background: hsl(var(--card)); color: hsl(var(--card-foreground)); border-color: hsl(var(--border));">
+            <div class="space-y-1">
+              <h4 class="font-semibold">Card Title</h4>
+              <p class="text-sm" style="color: hsl(var(--muted-foreground));">Card description with muted text.</p>
+            </div>
+            <div class="flex gap-2">
+              <button class="px-4 py-2 rounded-md text-sm font-medium" style="background: hsl(var(--primary)); color: hsl(var(--primary-foreground));">Primary</button>
+              <button class="px-4 py-2 rounded-md text-sm font-medium" style="background: hsl(var(--secondary)); color: hsl(var(--secondary-foreground));">Secondary</button>
+              <button class="px-4 py-2 rounded-md text-sm font-medium" style="background: hsl(var(--destructive)); color: hsl(var(--destructive-foreground));">Destructive</button>
+            </div>
+            <div class="flex gap-2">
+              <button class="px-4 py-2 rounded-md text-sm font-medium border" style="background: transparent; border-color: hsl(var(--input));">Outline</button>
+              <button class="px-4 py-2 rounded-md text-sm font-medium" style="background: hsl(var(--accent)); color: hsl(var(--accent-foreground));">Accent</button>
+              <button class="px-4 py-2 rounded-md text-sm font-medium" style="background: hsl(var(--muted)); color: hsl(var(--muted-foreground));">Muted</button>
+            </div>
+            <input type="text" placeholder="Input field" class="w-full px-3 py-2 rounded-md text-sm" style="background: hsl(var(--background)); border: 1px solid hsl(var(--input)); color: hsl(var(--foreground));" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Color Variables Reference -->
+  <div class="space-y-6">
+    <h3 class="text-xl font-semibold text-center">CSS Variables</h3>
+    <p class="text-center text-muted-foreground">All color values use HSL format without the hsl() wrapper for flexibility.</p>
+
+    <div class="grid md:grid-cols-2 gap-8">
+      <!-- Light Mode Variables -->
+      <div class="space-y-4">
+        <h4 class="font-semibold">Light Mode Variables</h4>
+        <div class="rounded-lg border overflow-hidden">
+          <table class="w-full text-sm">
+            <thead class="bg-muted">
+              <tr>
+                <th class="px-4 py-2 text-left">Variable</th>
+                <th class="px-4 py-2 text-left">Value</th>
+                <th class="px-4 py-2 text-left">Preview</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% theme_vars.each do |key, value| %>
+                <% next if key.to_s.start_with?('chart_') || key == :radius %>
+                <tr class="border-t">
+                  <td class="px-4 py-2 font-mono text-xs">--<%= key.to_s.tr('_', '-') %></td>
+                  <td class="px-4 py-2 font-mono text-xs"><%= value %></td>
+                  <td class="px-4 py-2">
+                    <div class="w-6 h-6 rounded border" style="background: hsl(<%= value %>);"></div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Dark Mode Variables -->
+      <div class="space-y-4">
+        <h4 class="font-semibold">Dark Mode Variables</h4>
+        <div class="rounded-lg border overflow-hidden">
+          <table class="w-full text-sm">
+            <thead class="bg-muted">
+              <tr>
+                <th class="px-4 py-2 text-left">Variable</th>
+                <th class="px-4 py-2 text-left">Value</th>
+                <th class="px-4 py-2 text-left">Preview</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% dark_theme_vars.each do |key, value| %>
+                <% next if key.to_s.start_with?('chart_') %>
+                <tr class="border-t">
+                  <td class="px-4 py-2 font-mono text-xs">--<%= key.to_s.tr('_', '-') %></td>
+                  <td class="px-4 py-2 font-mono text-xs"><%= value %></td>
+                  <td class="px-4 py-2">
+                    <div class="w-6 h-6 rounded border" style="background: hsl(<%= value %>);"></div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Usage Instructions -->
+  <div class="space-y-4 p-6 bg-muted rounded-lg">
+    <h3 class="text-xl font-semibold">How to Use Themes</h3>
+    <div class="space-y-4 text-sm">
+      <p>To change the theme in your Rails application, configure it in an initializer:</p>
+      <pre class="bg-background p-4 rounded-md overflow-x-auto font-mono text-xs"><code># config/initializers/shadcn.rb
+Shadcn::Rails.configure do |config|
+  config.base_color = "<%= current_theme %>"  # Options: neutral, slate, stone, gray, zinc
+  config.dark_mode = :class  # Options: :class, :media, :selector
+end</code></pre>
+
+      <p>Or generate the theme using the CLI:</p>
+      <pre class="bg-background p-4 rounded-md overflow-x-auto font-mono text-xs"><code>rails generate shadcn:theme <%= current_theme %></code></pre>
+
+      <p>For dark mode, add the <code class="bg-background px-1 py-0.5 rounded">dark</code> class to your <code class="bg-background px-1 py-0.5 rounded">&lt;html&gt;</code> element:</p>
+      <pre class="bg-background p-4 rounded-md overflow-x-auto font-mono text-xs"><code>&lt;html class="dark"&gt;
+  &lt;!-- Your app content --&gt;
+&lt;/html&gt;</code></pre>
+    </div>
+  </div>
+
+  <!-- All Themes Comparison -->
+  <div class="space-y-6">
+    <h3 class="text-xl font-semibold text-center">All Themes Comparison</h3>
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+      <% %i[neutral slate stone gray zinc].each do |theme_name| %>
+        <% vars = Shadcn::Rails::Configuration::THEME_VARIABLES[theme_name] %>
+        <div class="rounded-lg border overflow-hidden">
+          <div class="p-4 text-center border-b">
+            <span class="font-semibold capitalize"><%= theme_name %></span>
+          </div>
+          <div class="p-4 space-y-2" style="<%= vars.map { |k, v| "--#{k.to_s.tr('_', '-')}: #{v}" }.join('; ') %>; background: hsl(var(--background));">
+            <div class="h-8 rounded" style="background: hsl(var(--primary));"></div>
+            <div class="h-8 rounded" style="background: hsl(var(--secondary));"></div>
+            <div class="h-8 rounded" style="background: hsl(var(--muted));"></div>
+            <div class="h-8 rounded" style="background: hsl(var(--accent));"></div>
+            <div class="h-8 rounded" style="background: hsl(var(--destructive));"></div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

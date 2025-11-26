@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   root "pages#index"
 
   get "components", to: "pages#components"
+  get "showcase", to: "pages#showcase"
+  get "themes", to: "pages#themes"
   get "buttons", to: "pages#buttons"
   get "forms", to: "pages#forms"
   get "dialogs", to: "pages#dialogs"

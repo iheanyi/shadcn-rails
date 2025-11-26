@@ -7,6 +7,12 @@ class PagesController < ApplicationController
   def components
   end
 
+  def showcase
+  end
+
+  def themes
+  end
+
   def buttons
   end
 

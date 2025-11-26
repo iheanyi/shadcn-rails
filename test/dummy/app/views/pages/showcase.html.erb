@@ -1,0 +1,706 @@
+<div class="max-w-6xl mx-auto space-y-12 pb-12">
+  <div class="text-center space-y-4">
+    <h1 class="text-4xl font-bold">Component Showcase</h1>
+    <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
+      A comprehensive gallery of all shadcn-rails components.
+    </p>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-4 border-b">
+    <div class="flex flex-wrap gap-2 justify-center text-sm">
+      <a href="#buttons" class="px-3 py-1.5 rounded-md hover:bg-accent">Buttons</a>
+      <a href="#inputs" class="px-3 py-1.5 rounded-md hover:bg-accent">Inputs</a>
+      <a href="#display" class="px-3 py-1.5 rounded-md hover:bg-accent">Display</a>
+      <a href="#feedback" class="px-3 py-1.5 rounded-md hover:bg-accent">Feedback</a>
+      <a href="#overlays" class="px-3 py-1.5 rounded-md hover:bg-accent">Overlays</a>
+      <a href="#navigation" class="px-3 py-1.5 rounded-md hover:bg-accent">Navigation</a>
+    </div>
+  </nav>
+
+  <!-- BUTTONS & ACTIONS -->
+  <section id="buttons" class="space-y-8">
+    <div class="space-y-2">
+      <h2 class="text-2xl font-bold">Buttons & Actions</h2>
+      <p class="text-muted-foreground">Interactive button and action components.</p>
+    </div>
+
+    <!-- Button -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Button</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::ButtonComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">Displays a button with various styles and sizes.</p>
+      <div class="flex flex-wrap gap-4">
+        <%= render(Shadcn::ButtonComponent.new) { "Default" } %>
+        <%= render(Shadcn::ButtonComponent.new(variant: :secondary)) { "Secondary" } %>
+        <%= render(Shadcn::ButtonComponent.new(variant: :destructive)) { "Destructive" } %>
+        <%= render(Shadcn::ButtonComponent.new(variant: :outline)) { "Outline" } %>
+        <%= render(Shadcn::ButtonComponent.new(variant: :ghost)) { "Ghost" } %>
+        <%= render(Shadcn::ButtonComponent.new(variant: :link)) { "Link" } %>
+      </div>
+      <div class="flex flex-wrap gap-4 items-center">
+        <%= render(Shadcn::ButtonComponent.new(size: :sm)) { "Small" } %>
+        <%= render(Shadcn::ButtonComponent.new(size: :default)) { "Default" } %>
+        <%= render(Shadcn::ButtonComponent.new(size: :lg)) { "Large" } %>
+        <%= render(Shadcn::ButtonComponent.new(size: :icon)) do %>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Toggle -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Toggle</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::ToggleComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">A two-state button that can be either on or off.</p>
+      <div class="flex flex-wrap gap-4">
+        <%= render(Shadcn::ToggleComponent.new) do %>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/></svg>
+        <% end %>
+        <%= render(Shadcn::ToggleComponent.new(variant: :outline)) do %>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/></svg>
+        <% end %>
+        <%= render(Shadcn::ToggleComponent.new(pressed: true)) do %>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Toggle Group -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Toggle Group</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::ToggleGroupComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">A group of toggle buttons.</p>
+      <div class="flex flex-wrap gap-4">
+        <%= render(Shadcn::ToggleGroupComponent.new(type: :single, default_value: "center")) do |group| %>
+          <% group.with_item(value: "left") do %>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="6" x2="3" y2="6"/><line x1="15" y1="12" x2="3" y2="12"/><line x1="17" y1="18" x2="3" y2="18"/></svg>
+          <% end %>
+          <% group.with_item(value: "center") do %>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="6" x2="3" y2="6"/><line x1="18" y1="12" x2="6" y2="12"/><line x1="21" y1="18" x2="3" y2="18"/></svg>
+          <% end %>
+          <% group.with_item(value: "right") do %>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="12" x2="9" y2="12"/><line x1="21" y1="18" x2="7" y2="18"/></svg>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORM INPUTS -->
+  <section id="inputs" class="space-y-8">
+    <div class="space-y-2">
+      <h2 class="text-2xl font-bold">Form Inputs</h2>
+      <p class="text-muted-foreground">Form control components.</p>
+    </div>
+
+    <!-- Input -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Input</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::InputComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">Displays a form input field.</p>
+      <div class="max-w-sm space-y-4">
+        <%= render(Shadcn::InputComponent.new(placeholder: "Email", type: :email)) %>
+        <%= render(Shadcn::InputComponent.new(placeholder: "Password", type: :password)) %>
+        <%= render(Shadcn::InputComponent.new(placeholder: "Disabled", disabled: true)) %>
+      </div>
+    </div>
+
+    <!-- Textarea -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Textarea</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::TextareaComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">Displays a multi-line text input.</p>
+      <div class="max-w-sm">
+        <%= render(Shadcn::TextareaComponent.new(placeholder: "Type your message here...")) %>
+      </div>
+    </div>
+
+    <!-- Label -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Label</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::LabelComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">Renders an accessible label for form controls.</p>
+      <div class="max-w-sm space-y-2">
+        <%= render(Shadcn::LabelComponent.new(for: "demo-email")) { "Email" } %>
+        <%= render(Shadcn::InputComponent.new(id: "demo-email", placeholder: "Enter your email")) %>
+      </div>
+    </div>
+
+    <!-- Checkbox -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Checkbox</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::CheckboxComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">A control that toggles a boolean state.</p>
+      <div class="flex flex-col gap-4">
+        <div class="flex items-center space-x-2">
+          <%= render(Shadcn::CheckboxComponent.new(id: "terms")) %>
+          <%= render(Shadcn::LabelComponent.new(for: "terms")) { "Accept terms and conditions" } %>
+        </div>
+        <div class="flex items-center space-x-2">
+          <%= render(Shadcn::CheckboxComponent.new(id: "checked", checked: true)) %>
+          <%= render(Shadcn::LabelComponent.new(for: "checked")) { "Checked by default" } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Switch -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Switch</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::SwitchComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">A control for toggling between two states.</p>
+      <div class="flex flex-col gap-4">
+        <div class="flex items-center space-x-2">
+          <%= render(Shadcn::SwitchComponent.new(id: "airplane")) %>
+          <%= render(Shadcn::LabelComponent.new(for: "airplane")) { "Airplane Mode" } %>
+        </div>
+        <div class="flex items-center space-x-2">
+          <%= render(Shadcn::SwitchComponent.new(id: "notifications", checked: true)) %>
+          <%= render(Shadcn::LabelComponent.new(for: "notifications")) { "Notifications" } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slider -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Slider</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::SliderComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">An input for selecting a value from a range.</p>
+      <div class="max-w-sm space-y-4">
+        <%= render(Shadcn::SliderComponent.new(value: 50, max: 100)) %>
+        <%= render(Shadcn::SliderComponent.new(value: 33, max: 100)) %>
+      </div>
+    </div>
+
+    <!-- Select -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Select</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::SelectComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">Displays a list of options for the user to pick from.</p>
+      <div class="max-w-sm">
+        <%= render(Shadcn::SelectComponent.new(placeholder: "Select a fruit")) do |select| %>
+          <% select.with_item(value: "apple") { "Apple" } %>
+          <% select.with_item(value: "banana") { "Banana" } %>
+          <% select.with_item(value: "orange") { "Orange" } %>
+          <% select.with_item(value: "grape") { "Grape" } %>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+  <!-- DATA DISPLAY -->
+  <section id="display" class="space-y-8">
+    <div class="space-y-2">
+      <h2 class="text-2xl font-bold">Data Display</h2>
+      <p class="text-muted-foreground">Components for displaying content and data.</p>
+    </div>
+
+    <!-- Badge -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Badge</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::BadgeComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">Displays a badge with various styles.</p>
+      <div class="flex flex-wrap gap-4">
+        <%= render(Shadcn::BadgeComponent.new) { "Default" } %>
+        <%= render(Shadcn::BadgeComponent.new(variant: :secondary)) { "Secondary" } %>
+        <%= render(Shadcn::BadgeComponent.new(variant: :destructive)) { "Destructive" } %>
+        <%= render(Shadcn::BadgeComponent.new(variant: :outline)) { "Outline" } %>
+      </div>
+    </div>
+
+    <!-- Avatar -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Avatar</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::AvatarComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">An image element with fallback for representing a user.</p>
+      <div class="flex gap-4 items-center">
+        <%= render(Shadcn::AvatarComponent.new(src: "https://github.com/shadcn.png", alt: "shadcn", fallback: "CN")) %>
+        <%= render(Shadcn::AvatarComponent.new(alt: "John Doe", fallback: "JD")) %>
+        <%= render(Shadcn::AvatarComponent.new(alt: "Jane Smith", fallback: "JS", size: :lg)) %>
+      </div>
+    </div>
+
+    <!-- Card -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Card</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::CardComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">Displays a card with header, content, and footer.</p>
+      <div class="max-w-sm">
+        <%= render(Shadcn::CardComponent.new) do |card| %>
+          <% card.with_header do |header| %>
+            <% header.with_title { "Card Title" } %>
+            <% header.with_description { "Card description goes here" } %>
+          <% end %>
+          <% card.with_content_slot do %>
+            <p class="text-sm text-muted-foreground">This is the main content of the card.</p>
+          <% end %>
+          <% card.with_footer do %>
+            <%= render(Shadcn::ButtonComponent.new(variant: :outline, size: :sm)) { "Cancel" } %>
+            <%= render(Shadcn::ButtonComponent.new(size: :sm, class_name: "ml-2")) { "Save" } %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Table</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::TableComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">A responsive table component.</p>
+      <%= render(Shadcn::TableComponent.new) do |table| %>
+        <% table.with_header do |header| %>
+          <% header.with_row do |row| %>
+            <% row.with_head { "Name" } %>
+            <% row.with_head { "Status" } %>
+            <% row.with_head(class_name: "text-right") { "Amount" } %>
+          <% end %>
+        <% end %>
+        <% table.with_body do |body| %>
+          <% body.with_row do |row| %>
+            <% row.with_cell { "John Doe" } %>
+            <% row.with_cell { "Active" } %>
+            <% row.with_cell(class_name: "text-right") { "$250.00" } %>
+          <% end %>
+          <% body.with_row do |row| %>
+            <% row.with_cell { "Jane Smith" } %>
+            <% row.with_cell { "Pending" } %>
+            <% row.with_cell(class_name: "text-right") { "$150.00" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Progress -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Progress</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::ProgressComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">Displays a progress bar.</p>
+      <div class="max-w-md space-y-4">
+        <%= render(Shadcn::ProgressComponent.new(value: 33)) %>
+        <%= render(Shadcn::ProgressComponent.new(value: 66)) %>
+        <%= render(Shadcn::ProgressComponent.new(value: 100)) %>
+      </div>
+    </div>
+
+    <!-- Skeleton -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Skeleton</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::SkeletonComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">Used to show a placeholder while content is loading.</p>
+      <div class="flex items-center space-x-4">
+        <%= render(Shadcn::SkeletonComponent.new(class_name: "h-12 w-12 rounded-full")) %>
+        <div class="space-y-2">
+          <%= render(Shadcn::SkeletonComponent.new(class_name: "h-4 w-[250px]")) %>
+          <%= render(Shadcn::SkeletonComponent.new(class_name: "h-4 w-[200px]")) %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Aspect Ratio -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Aspect Ratio</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::AspectRatioComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">Displays content within a fixed aspect ratio.</p>
+      <div class="max-w-sm">
+        <%= render(Shadcn::AspectRatioComponent.new(ratio: 16.0/9)) do %>
+          <div class="bg-muted rounded-md flex items-center justify-center h-full">
+            <span class="text-muted-foreground">16:9</span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEEDBACK -->
+  <section id="feedback" class="space-y-8">
+    <div class="space-y-2">
+      <h2 class="text-2xl font-bold">Feedback</h2>
+      <p class="text-muted-foreground">Components for user feedback.</p>
+    </div>
+
+    <!-- Alert -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Alert</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::AlertComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">Displays an important message to the user.</p>
+      <div class="space-y-4">
+        <%= render(Shadcn::AlertComponent.new) do |alert| %>
+          <% alert.with_title { "Heads up!" } %>
+          <% alert.with_description { "You can add components to your app using the CLI." } %>
+        <% end %>
+        <%= render(Shadcn::AlertComponent.new(variant: :destructive)) do |alert| %>
+          <% alert.with_title { "Error" } %>
+          <% alert.with_description { "Something went wrong. Please try again." } %>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Tooltip</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::TooltipComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">A popup that displays information on hover.</p>
+      <div class="flex gap-4">
+        <%= render(Shadcn::TooltipComponent.new(text: "Add to library", side: :top)) do %>
+          <%= render(Shadcn::ButtonComponent.new(variant: :outline, size: :icon)) do %>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          <% end %>
+        <% end %>
+        <%= render(Shadcn::TooltipComponent.new(text: "Bold", side: :bottom)) do %>
+          <%= render(Shadcn::ButtonComponent.new(variant: :outline, size: :icon)) do %>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/></svg>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+  <!-- OVERLAYS -->
+  <section id="overlays" class="space-y-8">
+    <div class="space-y-2">
+      <h2 class="text-2xl font-bold">Overlays</h2>
+      <p class="text-muted-foreground">Modal and popup components.</p>
+    </div>
+
+    <!-- Dialog -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Dialog</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::DialogComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">A modal dialog that appears in front of the page.</p>
+      <%= render(Shadcn::DialogComponent.new) do |dialog| %>
+        <% dialog.with_trigger do %>
+          <%= render(Shadcn::ButtonComponent.new(variant: :outline)) { "Open Dialog" } %>
+        <% end %>
+        <% dialog.with_body do |body| %>
+          <% body.with_header do |header| %>
+            <% header.with_title { "Edit Profile" } %>
+            <% header.with_description { "Make changes to your profile here." } %>
+          <% end %>
+          <div class="py-4 space-y-4">
+            <div class="space-y-2">
+              <%= render(Shadcn::LabelComponent.new(for: "name")) { "Name" } %>
+              <%= render(Shadcn::InputComponent.new(id: "name", value: "John Doe")) %>
+            </div>
+            <div class="space-y-2">
+              <%= render(Shadcn::LabelComponent.new(for: "username")) { "Username" } %>
+              <%= render(Shadcn::InputComponent.new(id: "username", value: "@johndoe")) %>
+            </div>
+          </div>
+          <% body.with_footer do %>
+            <%= render(Shadcn::ButtonComponent.new) { "Save changes" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Alert Dialog -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Alert Dialog</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::AlertDialogComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">A modal dialog for important confirmation actions.</p>
+      <%= render(Shadcn::AlertDialogComponent.new) do |dialog| %>
+        <% dialog.with_trigger do %>
+          <%= render(Shadcn::ButtonComponent.new(variant: :destructive)) { "Delete Account" } %>
+        <% end %>
+        <% dialog.with_body do |body| %>
+          <% body.with_header do |header| %>
+            <% header.with_title { "Are you absolutely sure?" } %>
+            <% header.with_description { "This action cannot be undone. This will permanently delete your account and remove your data from our servers." } %>
+          <% end %>
+          <% body.with_footer do |footer| %>
+            <% footer.with_cancel { "Cancel" } %>
+            <% footer.with_action { "Delete" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Sheet -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Sheet</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::SheetComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">A slide-out panel from the edge of the screen.</p>
+      <div class="flex gap-4">
+        <%= render(Shadcn::SheetComponent.new(side: :right)) do |sheet| %>
+          <% sheet.with_trigger do %>
+            <%= render(Shadcn::ButtonComponent.new(variant: :outline)) { "Open Sheet" } %>
+          <% end %>
+          <% sheet.with_body do |body| %>
+            <% body.with_header do |header| %>
+              <% header.with_title { "Edit Profile" } %>
+              <% header.with_description { "Make changes to your profile here." } %>
+            <% end %>
+            <div class="py-4">
+              <p class="text-sm text-muted-foreground">Sheet content goes here...</p>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Drawer -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Drawer</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::DrawerComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">A mobile-optimized modal panel.</p>
+      <%= render(Shadcn::DrawerComponent.new(direction: :bottom)) do |drawer| %>
+        <% drawer.with_trigger do %>
+          <%= render(Shadcn::ButtonComponent.new(variant: :outline)) { "Open Drawer" } %>
+        <% end %>
+        <% drawer.with_body do |body| %>
+          <% body.with_header do |header| %>
+            <% header.with_title { "Move Goal" } %>
+            <% header.with_description { "Set your daily activity goal." } %>
+          <% end %>
+          <div class="p-4 pb-0">
+            <p class="text-sm text-muted-foreground">Drawer content goes here...</p>
+          </div>
+          <% body.with_footer do %>
+            <%= render(Shadcn::ButtonComponent.new(class_name: "w-full")) { "Submit" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Popover -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Popover</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::PopoverComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">Displays rich content in a portal.</p>
+      <%= render(Shadcn::PopoverComponent.new) do |popover| %>
+        <% popover.with_trigger do %>
+          <%= render(Shadcn::ButtonComponent.new(variant: :outline)) { "Open Popover" } %>
+        <% end %>
+        <% popover.with_body do %>
+          <div class="grid gap-4">
+            <div class="space-y-2">
+              <h4 class="font-medium leading-none">Dimensions</h4>
+              <p class="text-sm text-muted-foreground">Set the dimensions for the layer.</p>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Hover Card -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Hover Card</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::HoverCardComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">Displays a card when hovering over an element.</p>
+      <%= render(Shadcn::HoverCardComponent.new) do |card| %>
+        <% card.with_trigger do %>
+          <a href="#" class="underline">@shadcn</a>
+        <% end %>
+        <% card.with_card_content do %>
+          <div class="flex justify-between space-x-4">
+            <%= render(Shadcn::AvatarComponent.new(src: "https://github.com/shadcn.png", alt: "shadcn", fallback: "SC")) %>
+            <div class="space-y-1">
+              <h4 class="text-sm font-semibold">@shadcn</h4>
+              <p class="text-sm">The creator of shadcn/ui.</p>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Dropdown Menu -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Dropdown Menu</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::DropdownMenuComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">Displays a menu when triggered.</p>
+      <%= render(Shadcn::DropdownMenuComponent.new) do |menu| %>
+        <% menu.with_trigger do %>
+          <%= render(Shadcn::ButtonComponent.new(variant: :outline)) { "Open Menu" } %>
+        <% end %>
+        <% menu.with_menu do |content| %>
+          <% content.with_label { "My Account" } %>
+          <% content.with_separator %>
+          <% content.with_item { "Profile" } %>
+          <% content.with_item { "Settings" } %>
+          <% content.with_separator %>
+          <% content.with_item(variant: :destructive) { "Log out" } %>
+        <% end %>
+      <% end %>
+    </div>
+  </section>
+
+  <!-- NAVIGATION -->
+  <section id="navigation" class="space-y-8">
+    <div class="space-y-2">
+      <h2 class="text-2xl font-bold">Navigation</h2>
+      <p class="text-muted-foreground">Navigation and organization components.</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Tabs</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::TabsComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">Switches between different views.</p>
+      <%= render(Shadcn::TabsComponent.new(default_value: "account")) do |tabs| %>
+        <% tabs.with_list do |list| %>
+          <% list.with_trigger(value: "account") { "Account" } %>
+          <% list.with_trigger(value: "password") { "Password" } %>
+        <% end %>
+        <% tabs.with_panel(value: "account") do %>
+          <div class="p-4">
+            <p class="text-sm text-muted-foreground">Make changes to your account here.</p>
+          </div>
+        <% end %>
+        <% tabs.with_panel(value: "password") do %>
+          <div class="p-4">
+            <p class="text-sm text-muted-foreground">Change your password here.</p>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Accordion -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Accordion</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::AccordionComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">A collapsible list of items.</p>
+      <%= render(Shadcn::AccordionComponent.new(type: :single, collapsible: true)) do |accordion| %>
+        <% accordion.with_item(value: "item-1") do |item| %>
+          <% item.with_trigger { "Is it accessible?" } %>
+          <% item.with_body { "Yes. It adheres to the WAI-ARIA design pattern." } %>
+        <% end %>
+        <% accordion.with_item(value: "item-2") do |item| %>
+          <% item.with_trigger { "Is it styled?" } %>
+          <% item.with_body { "Yes. It comes with default styles that match the other components." } %>
+        <% end %>
+        <% accordion.with_item(value: "item-3") do |item| %>
+          <% item.with_trigger { "Is it animated?" } %>
+          <% item.with_body { "Yes. It's animated by default." } %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Breadcrumb</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::BreadcrumbComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">Displays navigation hierarchy.</p>
+      <%= render(Shadcn::BreadcrumbComponent.new) do |breadcrumb| %>
+        <% breadcrumb.with_item(href: "/") { "Home" } %>
+        <% breadcrumb.with_item(href: "/components") { "Components" } %>
+        <% breadcrumb.with_item(current: true) { "Breadcrumb" } %>
+      <% end %>
+    </div>
+
+    <!-- Pagination -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Pagination</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::PaginationComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">Navigation between pages of content.</p>
+      <%= render(Shadcn::PaginationComponent.new(current_page: 2, total_pages: 10)) %>
+    </div>
+
+    <!-- Collapsible -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Collapsible</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::CollapsibleComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">A collapsible section.</p>
+      <%= render(Shadcn::CollapsibleComponent.new) do |collapsible| %>
+        <% collapsible.with_trigger do %>
+          <div class="flex items-center justify-between space-x-4 px-4">
+            <h4 class="text-sm font-semibold">@peduarte starred 3 repositories</h4>
+            <%= render(Shadcn::ButtonComponent.new(variant: :ghost, size: :sm)) { "Toggle" } %>
+          </div>
+        <% end %>
+        <% collapsible.with_body do %>
+          <div class="rounded-md border px-4 py-2 font-mono text-sm shadow-sm">
+            @radix-ui/primitives
+          </div>
+          <div class="rounded-md border px-4 py-2 font-mono text-sm shadow-sm mt-2">
+            @radix-ui/colors
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Separator -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Separator</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::SeparatorComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">Visually separates content.</p>
+      <div class="space-y-4">
+        <div>
+          <p class="text-sm">Content above</p>
+          <%= render(Shadcn::SeparatorComponent.new(class_name: "my-4")) %>
+          <p class="text-sm">Content below</p>
+        </div>
+        <div class="flex h-5 items-center space-x-4 text-sm">
+          <span>Blog</span>
+          <%= render(Shadcn::SeparatorComponent.new(orientation: :vertical)) %>
+          <span>Docs</span>
+          <%= render(Shadcn::SeparatorComponent.new(orientation: :vertical)) %>
+          <span>Source</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
