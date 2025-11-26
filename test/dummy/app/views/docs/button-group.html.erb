@@ -40,14 +40,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= render "docs/code_example", language: "erb", code: <<~ERB
-<%%= render Shadcn::ButtonGroupComponent.new do |group| %>
-  <%% group.with_button(variant: :outline) { "Left" } %>
-  <%% group.with_button(variant: :outline) { "Center" } %>
-  <%% group.with_button(variant: :outline) { "Right" } %>
-<%% end %>
-ERB
-    %>
+    <%= erb_example("button_group/default") %>
   </div>
 
   <!-- Examples -->
@@ -64,14 +57,7 @@ ERB
           <% group.with_button(variant: :outline) { "Bottom" } %>
         <% end %>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: <<~ERB
-<%%= render Shadcn::ButtonGroupComponent.new(orientation: :vertical) do |group| %>
-  <%% group.with_button(variant: :outline) { "Top" } %>
-  <%% group.with_button(variant: :outline) { "Middle" } %>
-  <%% group.with_button(variant: :outline) { "Bottom" } %>
-<%% end %>
-ERB
-      %>
+      <%= erb_example("button_group/vertical") %>
     </div>
 
     <!-- Mixed Variants -->
@@ -83,13 +69,7 @@ ERB
           <% group.with_button(variant: :outline) { "Cancel" } %>
         <% end %>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: <<~ERB
-<%%= render Shadcn::ButtonGroupComponent.new do |group| %>
-  <%% group.with_button { "Save" } %>
-  <%% group.with_button(variant: :outline) { "Cancel" } %>
-<%% end %>
-ERB
-      %>
+      <%= erb_example("button_group/mixed") %>
     </div>
 
     <!-- Icon Buttons -->

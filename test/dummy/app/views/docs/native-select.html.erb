@@ -43,14 +43,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= render "docs/code_example", language: "erb", code: <<~ERB
-<%%= render Shadcn::NativeSelectComponent.new(name: "country") do |select| %>
-  <%% select.with_option(value: "", disabled: true, selected: true) { "Select a country" } %>
-  <%% select.with_option(value: "us") { "United States" } %>
-  <%% select.with_option(value: "uk") { "United Kingdom" } %>
-<%% end %>
-ERB
-    %>
+    <%= erb_example("native_select/default") %>
   </div>
 
   <!-- Examples -->
@@ -74,19 +67,7 @@ ERB
           <% end %>
         </div>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: <<~ERB
-<%%= render Shadcn::NativeSelectComponent.new(name: "car") do |select| %>
-  <%% select.with_optgroup(label: "Swedish Cars") do |group| %>
-    <%% group.with_option(value: "volvo") { "Volvo" } %>
-    <%% group.with_option(value: "saab") { "Saab" } %>
-  <%% end %>
-  <%% select.with_optgroup(label: "German Cars") do |group| %>
-    <%% group.with_option(value: "mercedes") { "Mercedes" } %>
-    <%% group.with_option(value: "audi") { "Audi" } %>
-  <%% end %>
-<%% end %>
-ERB
-      %>
+      <%= erb_example("native_select/optgroups") %>
     </div>
 
     <!-- Disabled -->
@@ -100,13 +81,7 @@ ERB
           <% end %>
         </div>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: <<~ERB
-<%%= render Shadcn::NativeSelectComponent.new(name: "status", disabled: true) do |select| %>
-  <%% select.with_option(value: "active", selected: true) { "Active" } %>
-  <%% select.with_option(value: "inactive") { "Inactive" } %>
-<%% end %>
-ERB
-      %>
+      <%= erb_example("native_select/disabled") %>
     </div>
 
     <!-- Required -->

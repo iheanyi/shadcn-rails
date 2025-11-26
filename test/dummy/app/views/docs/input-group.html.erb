@@ -41,13 +41,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= render "docs/code_example", language: "erb", code: <<~ERB
-<%%= render Shadcn::InputGroupComponent.new do |group| %>
-  <%% group.with_prefix { "https://" } %>
-  <%% group.with_input(placeholder: "example.com") %>
-<%% end %>
-ERB
-    %>
+    <%= erb_example("input_group/default") %>
   </div>
 
   <!-- Examples -->
@@ -65,13 +59,7 @@ ERB
           <% end %>
         </div>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: <<~ERB
-<%%= render Shadcn::InputGroupComponent.new do |group| %>
-  <%% group.with_input(placeholder: "username") %>
-  <%% group.with_suffix { "@example.com" } %>
-<%% end %>
-ERB
-      %>
+      <%= erb_example("input_group/with_suffix") %>
     </div>
 
     <!-- With Both -->
@@ -86,14 +74,7 @@ ERB
           <% end %>
         </div>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: <<~ERB
-<%%= render Shadcn::InputGroupComponent.new do |group| %>
-  <%% group.with_prefix { "$" } %>
-  <%% group.with_input(type: :number, placeholder: "0.00") %>
-  <%% group.with_suffix { "USD" } %>
-<%% end %>
-ERB
-      %>
+      <%= erb_example("input_group/with_both") %>
     </div>
 
     <!-- With Icon -->
@@ -112,15 +93,7 @@ ERB
           <% end %>
         </div>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: <<~ERB
-<%%= render Shadcn::InputGroupComponent.new do |group| %>
-  <%% group.with_prefix do %>
-    <svg><!-- search icon --></svg>
-  <%% end %>
-  <%% group.with_input(type: :search, placeholder: "Search...") %>
-<%% end %>
-ERB
-      %>
+      <%= erb_example("input_group/with_icon") %>
     </div>
 
     <!-- Currency Input -->

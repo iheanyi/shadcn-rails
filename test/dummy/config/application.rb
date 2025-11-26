@@ -21,10 +21,14 @@ module Dummy
     config.active_support.deprecation = :stderr
 
     # ViewComponent configuration
-    config.view_component.previews.paths = [Rails.root.join("../../test/components/previews")]
-    config.view_component.previews.default_layout = "component_preview"
+    if Rails.env.development? || Rails.env.test?
+      config.view_component.previews.paths = [Rails.root.join("../../test/components/previews")]
+      config.view_component.previews.default_layout = "component_preview"
+    end
 
-    # Lookbook configuration
-    config.lookbook.preview_paths = [Rails.root.join("../../test/components/previews")]
+    # Lookbook configuration (development only)
+    if defined?(Lookbook)
+      config.lookbook.preview_paths = [Rails.root.join("../../test/components/previews")]
+    end
   end
 end
