@@ -4,6 +4,7 @@ PATH
     shadcn-rails (0.1.0)
       railties (>= 7.0)
       stimulus-rails (>= 1.0)
+      tailwind_merge (>= 0.10)
       turbo-rails (>= 1.0)
       view_component (>= 3.0)
 
@@ -178,21 +179,8 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.5)
-    nokogiri (1.18.10-aarch64-linux-gnu)
-      racc (~> 1.4)
-    nokogiri (1.18.10-aarch64-linux-musl)
-      racc (~> 1.4)
-    nokogiri (1.18.10-arm-linux-gnu)
-      racc (~> 1.4)
-    nokogiri (1.18.10-arm-linux-musl)
-      racc (~> 1.4)
-    nokogiri (1.18.10-arm64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.18.10-x86_64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.18.10-x86_64-linux-gnu)
-      racc (~> 1.4)
-    nokogiri (1.18.10-x86_64-linux-musl)
+    nokogiri (1.18.10)
+      mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     pp (0.6.3)
       prettyprint
@@ -252,6 +240,7 @@ GEM
     rouge (4.6.1)
     ruby-progressbar (1.13.0)
     securerandom (0.4.1)
+    sin_lru_redux (2.5.2)
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
       logger
@@ -265,14 +254,12 @@ GEM
     stimulus-rails (1.3.4)
       railties (>= 6.0.0)
     stringio (3.1.8)
+    tailwind_merge (1.3.1)
+      sin_lru_redux (~> 2.5)
     tailwindcss-rails (3.3.2)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 3.0)
-    tailwindcss-ruby (3.4.17-aarch64-linux)
-    tailwindcss-ruby (3.4.17-arm-linux)
-    tailwindcss-ruby (3.4.17-arm64-darwin)
-    tailwindcss-ruby (3.4.17-x86_64-darwin)
-    tailwindcss-ruby (3.4.17-x86_64-linux)
+    tailwindcss-ruby (3.4.17)
     thor (1.4.0)
     timeout (0.4.4)
     tsort (0.2.0)
@@ -298,17 +285,7 @@ GEM
     zeitwerk (2.7.3)
 
 PLATFORMS
-  aarch64-linux
-  aarch64-linux-gnu
-  aarch64-linux-musl
-  arm-linux
-  arm-linux-gnu
-  arm-linux-musl
-  arm64-darwin
-  x86_64-darwin
-  x86_64-linux
-  x86_64-linux-gnu
-  x86_64-linux-musl
+  ruby
 
 DEPENDENCIES
   capybara (~> 3.0, >= 0)
