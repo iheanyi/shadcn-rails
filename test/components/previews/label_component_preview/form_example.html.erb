@@ -1,0 +1,28 @@
+<div class="w-full max-w-sm space-y-4">
+  <div class="grid w-full items-center gap-1.5">
+    <%= render Shadcn::LabelComponent.new(for: "name", required: true) { "Name" } %>
+    <%= render Shadcn::InputComponent.new(
+      type: "text",
+      id: "name",
+      placeholder: "John Doe"
+    ) %>
+  </div>
+
+  <div class="grid w-full items-center gap-1.5">
+    <%= render Shadcn::LabelComponent.new(for: "email-form", required: true) { "Email" } %>
+    <%= render Shadcn::InputComponent.new(
+      type: "email",
+      id: "email-form",
+      placeholder: "email@example.com"
+    ) %>
+  </div>
+
+  <div class="grid w-full items-center gap-1.5">
+    <%= render Shadcn::LabelComponent.new(for: "phone") { "Phone (Optional)" } %>
+    <%= render Shadcn::InputComponent.new(
+      type: "tel",
+      id: "phone",
+      placeholder: "+1 (555) 000-0000"
+    ) %>
+  </div>
+</div>

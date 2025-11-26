@@ -1,0 +1,14 @@
+<div class="w-full max-w-sm space-y-4">
+  <div class="space-y-2">
+    <div class="flex justify-between">
+      <%= render Shadcn::LabelComponent.new(for: "volume-slider") { "Volume" } %>
+      <span class="text-sm text-muted-foreground">50%</span>
+    </div>
+    <%= render Shadcn::SliderComponent.new(
+      name: "volume",
+      id: "volume-slider",
+      value: 50,
+      max: 100
+    ) %>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<div class="grid w-full max-w-sm items-center gap-1.5">
+  <%= render Shadcn::LabelComponent.new(for: "disabled-input") { "Disabled Field" } %>
+  <%= render Shadcn::InputComponent.new(
+    type: "text",
+    id: "disabled-input",
+    class_name: "peer",
+    disabled: true,
+    value: "This field is disabled"
+  ) %>
+  <p class="text-sm text-muted-foreground">
+    Note how the label opacity changes when the input is disabled (using peer classes).
+  </p>
+</div>
