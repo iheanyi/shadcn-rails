@@ -1,0 +1,328 @@
+<% content_for :title, "Menubar" %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Menubar</h1>
+    <p class="text-xl text-muted-foreground">
+      A visually persistent menu common in desktop applications that provides quick access to a consistent set of commands.
+    </p>
+    <div class="flex items-center gap-2 mt-4">
+      <%= render Shadcn::BadgeComponent.new(variant: :secondary) { "Requires JavaScript" } %>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::MenubarComponent.new do |menubar| %>
+      <% menubar.with_menu do |menu| %>
+        <% menu.with_trigger { "File" } %>
+        <% menu.with_content do |content| %>
+          <% content.with_item(href: "#") do |item| %>
+            New Tab
+            <% item.with_shortcut { "⌘T" } %>
+          <% end %>
+          <% content.with_item(href: "#") do |item| %>
+            New Window
+            <% item.with_shortcut { "⌘N" } %>
+          <% end %>
+          <% content.with_item(href: "#", disabled: true) do |item| %>
+            New Incognito Window
+          <% end %>
+          <% content.with_separator %>
+          <% content.with_item(href: "#") do |item| %>
+            Share
+          <% end %>
+          <% content.with_separator %>
+          <% content.with_item(href: "#") do |item| %>
+            Print
+            <% item.with_shortcut { "⌘P" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <% menubar.with_menu do |menu| %>
+        <% menu.with_trigger { "Edit" } %>
+        <% menu.with_content do |content| %>
+          <% content.with_item(href: "#") do |item| %>
+            Undo
+            <% item.with_shortcut { "⌘Z" } %>
+          <% end %>
+          <% content.with_item(href: "#") do |item| %>
+            Redo
+            <% item.with_shortcut { "⇧⌘Z" } %>
+          <% end %>
+          <% content.with_separator %>
+          <% content.with_item(href: "#") do |item| %>
+            Cut
+            <% item.with_shortcut { "⌘X" } %>
+          <% end %>
+          <% content.with_item(href: "#") do |item| %>
+            Copy
+            <% item.with_shortcut { "⌘C" } %>
+          <% end %>
+          <% content.with_item(href: "#") do |item| %>
+            Paste
+            <% item.with_shortcut { "⌘V" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <% menubar.with_menu do |menu| %>
+        <% menu.with_trigger { "View" } %>
+        <% menu.with_content do |content| %>
+          <% content.with_checkbox_item(checked: true) { "Always Show Bookmarks Bar" } %>
+          <% content.with_checkbox_item(checked: false) { "Always Show Full URLs" } %>
+          <% content.with_separator %>
+          <% content.with_item(href: "#") do |item| %>
+            Reload
+            <% item.with_shortcut { "⌘R" } %>
+          <% end %>
+          <% content.with_item(href: "#", disabled: true) do |item| %>
+            Force Reload
+            <% item.with_shortcut { "⇧⌘R" } %>
+          <% end %>
+          <% content.with_separator %>
+          <% content.with_item(href: "#") { "Toggle Fullscreen" } %>
+          <% content.with_item(href: "#") { "Hide Sidebar" } %>
+        <% end %>
+      <% end %>
+      <% menubar.with_menu do |menu| %>
+        <% menu.with_trigger { "Profiles" } %>
+        <% menu.with_content do |content| %>
+          <% content.with_radio_group(value: "benoit") do |group| %>
+            <% group.with_item(value: "andy") { "Andy" } %>
+            <% group.with_item(value: "benoit", checked: true) { "Benoit" } %>
+            <% group.with_item(value: "luis") { "Luis" } %>
+          <% end %>
+          <% content.with_separator %>
+          <% content.with_item(href: "#") { "Edit..." } %>
+          <% content.with_separator %>
+          <% content.with_item(href: "#") { "Add Profile..." } %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component menubar" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("menubar/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Basic -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Basic</h3>
+      <p class="text-muted-foreground">A simple menubar with basic menu items.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::MenubarComponent.new do |menubar| %>
+          <% menubar.with_menu do |menu| %>
+            <% menu.with_trigger { "File" } %>
+            <% menu.with_content do |content| %>
+              <% content.with_item(href: "#") { "New File" } %>
+              <% content.with_item(href: "#") { "Open..." } %>
+              <% content.with_item(href: "#") { "Save" } %>
+            <% end %>
+          <% end %>
+          <% menubar.with_menu do |menu| %>
+            <% menu.with_trigger { "Edit" } %>
+            <% menu.with_content do |content| %>
+              <% content.with_item(href: "#") { "Undo" } %>
+              <% content.with_item(href: "#") { "Redo" } %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("menubar/basic") %>
+    </div>
+
+    <!-- With Shortcuts -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Shortcuts</h3>
+      <p class="text-muted-foreground">Menu items with keyboard shortcuts displayed.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::MenubarComponent.new do |menubar| %>
+          <% menubar.with_menu do |menu| %>
+            <% menu.with_trigger { "File" } %>
+            <% menu.with_content do |content| %>
+              <% content.with_item(href: "#") do |item| %>
+                New Tab
+                <% item.with_shortcut { "⌘T" } %>
+              <% end %>
+              <% content.with_item(href: "#") do |item| %>
+                New Window
+                <% item.with_shortcut { "⌘N" } %>
+              <% end %>
+              <% content.with_separator %>
+              <% content.with_item(href: "#") do |item| %>
+                Print
+                <% item.with_shortcut { "⌘P" } %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("menubar/with_shortcuts") %>
+    </div>
+
+    <!-- With Checkboxes -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Checkboxes</h3>
+      <p class="text-muted-foreground">Menu items that can be checked/unchecked.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::MenubarComponent.new do |menubar| %>
+          <% menubar.with_menu do |menu| %>
+            <% menu.with_trigger { "View" } %>
+            <% menu.with_content do |content| %>
+              <% content.with_checkbox_item(checked: true) { "Show Toolbar" } %>
+              <% content.with_checkbox_item(checked: false) { "Show Sidebar" } %>
+              <% content.with_checkbox_item(checked: true) { "Show Status Bar" } %>
+              <% content.with_separator %>
+              <% content.with_item(href: "#") { "Zoom In" } %>
+              <% content.with_item(href: "#") { "Zoom Out" } %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("menubar/with_checkboxes") %>
+    </div>
+
+    <!-- With Radio Group -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Radio Group</h3>
+      <p class="text-muted-foreground">Menu items with mutually exclusive selection.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::MenubarComponent.new do |menubar| %>
+          <% menubar.with_menu do |menu| %>
+            <% menu.with_trigger { "Profiles" } %>
+            <% menu.with_content do |content| %>
+              <% content.with_label { "Switch Profile" } %>
+              <% content.with_separator %>
+              <% content.with_radio_group(value: "default") do |group| %>
+                <% group.with_item(value: "default", checked: true) { "Default" } %>
+                <% group.with_item(value: "work") { "Work" } %>
+                <% group.with_item(value: "personal") { "Personal" } %>
+              <% end %>
+              <% content.with_separator %>
+              <% content.with_item(href: "#") { "Manage Profiles..." } %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("menubar/with_radio_group") %>
+    </div>
+
+    <!-- Disabled Items -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled Items</h3>
+      <p class="text-muted-foreground">Menu items that cannot be selected.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::MenubarComponent.new do |menubar| %>
+          <% menubar.with_menu do |menu| %>
+            <% menu.with_trigger { "Edit" } %>
+            <% menu.with_content do |content| %>
+              <% content.with_item(href: "#") { "Undo" } %>
+              <% content.with_item(href: "#") { "Redo" } %>
+              <% content.with_separator %>
+              <% content.with_item(href: "#") { "Cut" } %>
+              <% content.with_item(href: "#") { "Copy" } %>
+              <% content.with_item(href: "#", disabled: true) { "Paste (empty clipboard)" } %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("menubar/disabled") %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+
+    <h3 class="text-lg font-semibold mt-6 mb-2">MenubarComponent</h3>
+    <%= render "docs/props_table", props: [
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" }
+    ] %>
+
+    <h3 class="text-lg font-semibold mt-6 mb-2">MenubarMenuComponent</h3>
+    <p class="text-muted-foreground mb-4">Container for a single menu in the menubar.</p>
+
+    <h4 class="font-medium mt-4 mb-2">Slots</h4>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li><code>trigger</code> - The button that opens the menu</li>
+      <li><code>content</code> - The dropdown content container</li>
+    </ul>
+
+    <h3 class="text-lg font-semibold mt-6 mb-2">MenubarItemComponent</h3>
+    <%= render "docs/props_table", props: [
+      { name: "href", type: "String", default: "nil", description: "Optional link URL" },
+      { name: "variant", type: "Symbol", default: ":default", description: "Item variant (:default, :destructive)" },
+      { name: "disabled", type: "Boolean", default: "false", description: "Whether the item is disabled" },
+      { name: "inset", type: "Boolean", default: "false", description: "Add left padding for alignment with icons" }
+    ] %>
+
+    <h3 class="text-lg font-semibold mt-6 mb-2">MenubarCheckboxItemComponent</h3>
+    <%= render "docs/props_table", props: [
+      { name: "checked", type: "Boolean", default: "false", description: "Whether the checkbox is checked" },
+      { name: "disabled", type: "Boolean", default: "false", description: "Whether the item is disabled" }
+    ] %>
+
+    <h3 class="text-lg font-semibold mt-6 mb-2">MenubarRadioGroupComponent</h3>
+    <%= render "docs/props_table", props: [
+      { name: "value", type: "String", default: "nil", description: "Currently selected value" }
+    ] %>
+
+    <h3 class="text-lg font-semibold mt-6 mb-2">MenubarRadioItemComponent</h3>
+    <%= render "docs/props_table", props: [
+      { name: "value", type: "String", default: "nil", description: "Value of this radio option" },
+      { name: "checked", type: "Boolean", default: "false", description: "Whether this option is selected" },
+      { name: "disabled", type: "Boolean", default: "false", description: "Whether the item is disabled" }
+    ] %>
+  </div>
+
+  <!-- Stimulus Controller -->
+  <%= render "docs/stimulus_docs",
+    controller_name: "shadcn--menubar",
+    targets: [
+      { name: "menu", description: "Individual menu containers" },
+      { name: "trigger", description: "Menu trigger buttons" },
+      { name: "content", description: "Menu dropdown content" },
+      { name: "item", description: "Menu items" },
+      { name: "sub", description: "Submenu containers" },
+      { name: "subTrigger", description: "Submenu trigger items" },
+      { name: "subContent", description: "Submenu content" }
+    ],
+    values: [
+      { name: "openIndex", type: "Number", default: "-1", description: "Index of currently open menu" }
+    ],
+    actions: [
+      { name: "toggle", description: "Toggle menu open/close" },
+      { name: "hoverOpen", description: "Open menu on hover when another menu is open" },
+      { name: "selectItem", description: "Select a menu item" },
+      { name: "toggleCheckbox", description: "Toggle checkbox item state" },
+      { name: "selectRadio", description: "Select radio item in group" }
+    ] %>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses <code>role="menubar"</code> on the container</li>
+      <li>Uses <code>role="menu"</code> on dropdown content</li>
+      <li>Uses <code>role="menuitem"</code>, <code>role="menuitemcheckbox"</code>, and <code>role="menuitemradio"</code> appropriately</li>
+      <li><code>aria-expanded</code> indicates menu open/close state</li>
+      <li><code>aria-checked</code> indicates checkbox/radio state</li>
+      <li>Arrow keys navigate between menus and items</li>
+      <li>Enter/Space activates menu items</li>
+      <li>Escape closes the menu</li>
+    </ul>
+  </div>
+</div>

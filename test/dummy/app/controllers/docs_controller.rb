@@ -284,6 +284,13 @@ class DocsController < ApplicationController
       description: "Displays the path to the current resource using a hierarchy of links.",
       has_stimulus: false
     },
+    "menubar" => {
+      name: "Menubar",
+      category: "Navigation",
+      description: "A visually persistent menu common in desktop applications that provides quick access to a consistent set of commands.",
+      has_stimulus: true,
+      controller: "shadcn--menubar"
+    },
     "pagination" => {
       name: "Pagination",
       category: "Navigation",

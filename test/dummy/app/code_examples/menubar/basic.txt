@@ -1,0 +1,17 @@
+<%= render Shadcn::MenubarComponent.new do |menubar| %>
+  <% menubar.with_menu do |menu| %>
+    <% menu.with_trigger { "File" } %>
+    <% menu.with_content do |content| %>
+      <% content.with_item(href: "#") { "New File" } %>
+      <% content.with_item(href: "#") { "Open..." } %>
+      <% content.with_item(href: "#") { "Save" } %>
+    <% end %>
+  <% end %>
+  <% menubar.with_menu do |menu| %>
+    <% menu.with_trigger { "Edit" } %>
+    <% menu.with_content do |content| %>
+      <% content.with_item(href: "#") { "Undo" } %>
+      <% content.with_item(href: "#") { "Redo" } %>
+    <% end %>
+  <% end %>
+<% end %>

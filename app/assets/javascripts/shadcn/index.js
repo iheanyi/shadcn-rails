@@ -23,6 +23,7 @@ import DialogController from "./controllers/dialog_controller"
 import DrawerController from "./controllers/drawer_controller"
 import DropdownController from "./controllers/dropdown_controller"
 import HoverCardController from "./controllers/hover_card_controller"
+import MenubarController from "./controllers/menubar_controller"
 import PopoverController from "./controllers/popover_controller"
 import RadioGroupController from "./controllers/radio_group_controller"
 import ScrollAreaController from "./controllers/scroll_area_controller"
@@ -49,6 +50,7 @@ export {
   DropdownController,
   HoverCardController,
   InputOtpController,
+  MenubarController,
   PopoverController,
   RadioGroupController,
   ScrollAreaController,
@@ -75,6 +77,7 @@ export const controllers = {
   "shadcn--dropdown": DropdownController,
   "shadcn--hover-card": HoverCardController,
   "shadcn--input-otp": InputOtpController,
+  "shadcn--menubar": MenubarController,
   "shadcn--popover": PopoverController,
   "shadcn--radio-group": RadioGroupController,
   "shadcn--scroll-area": ScrollAreaController,
