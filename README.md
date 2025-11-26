@@ -1095,22 +1095,96 @@ end
 
 ## Stimulus Controllers
 
-Interactive components require Stimulus controllers. Register them in your application:
+Interactive components require Stimulus controllers. Setup depends on your JavaScript bundler.
+
+### Importmap-rails (Rails Default)
+
+Add to your `config/importmap.rb`:
+
+```ruby
+pin "shadcn-rails", to: "shadcn/index.js"
+```
+
+Then in `app/javascript/controllers/index.js`:
 
 ```javascript
-// app/javascript/controllers/index.js
-import { application } from "./application"
+import { Application } from "@hotwired/stimulus"
 import { registerShadcnControllers } from "shadcn-rails"
 
+const application = Application.start()
 registerShadcnControllers(application)
 ```
 
-Or register individual controllers:
+### esbuild
+
+Install the npm package:
+
+```bash
+npm install shadcn-rails
+# or
+yarn add shadcn-rails
+```
+
+Then in `app/javascript/controllers/index.js`:
 
 ```javascript
+import { Application } from "@hotwired/stimulus"
+import { registerShadcnControllers } from "shadcn-rails"
+
+const application = Application.start()
+registerShadcnControllers(application)
+```
+
+### Webpack
+
+Install the npm package:
+
+```bash
+npm install shadcn-rails
+# or
+yarn add shadcn-rails
+```
+
+In `app/javascript/controllers/index.js`:
+
+```javascript
+import { Application } from "@hotwired/stimulus"
+import { registerShadcnControllers } from "shadcn-rails"
+
+const application = Application.start()
+registerShadcnControllers(application)
+```
+
+### Vite (vite-ruby)
+
+Install the npm package:
+
+```bash
+npm install shadcn-rails
+# or
+yarn add shadcn-rails
+```
+
+In your entrypoint (e.g., `app/frontend/entrypoints/application.js`):
+
+```javascript
+import { Application } from "@hotwired/stimulus"
+import { registerShadcnControllers } from "shadcn-rails"
+
+const application = Application.start()
+registerShadcnControllers(application)
+```
+
+### Registering Individual Controllers
+
+If you prefer to only load specific controllers (tree-shaking):
+
+```javascript
+import { Application } from "@hotwired/stimulus"
 import DialogController from "shadcn-rails/controllers/dialog_controller"
 import TabsController from "shadcn-rails/controllers/tabs_controller"
 
+const application = Application.start()
 application.register("shadcn--dialog", DialogController)
 application.register("shadcn--tabs", TabsController)
 ```
@@ -1136,6 +1210,27 @@ application.register("shadcn--tabs", TabsController)
 | `shadcn--toggle` | Toggle |
 | `shadcn--toggle-group` | ToggleGroup |
 | `shadcn--tooltip` | Tooltip |
+
+### TypeScript Support
+
+shadcn-rails includes TypeScript type definitions for all Stimulus controllers. If you're using TypeScript, types are automatically available when importing:
+
+```typescript
+import type { DialogController } from "shadcn-rails"
+import type { TabsController } from "shadcn-rails"
+
+// Or import the controller with types
+import DialogController from "shadcn-rails/controllers/dialog_controller"
+```
+
+For TypeScript projects using importmap, you may need to add type declarations. Create a `types/shadcn-rails.d.ts` file:
+
+```typescript
+declare module "shadcn-rails" {
+  import { Application } from "@hotwired/stimulus"
+  export function registerShadcnControllers(application: Application): void
+}
+```
 
 ## Helper Methods
 
@@ -1171,9 +1266,41 @@ rails server
 ```
 
 Visit `http://localhost:3000` to see the demo app with:
+- `/docs` - Full documentation with examples
 - `/showcase` - Full component showcase
 - `/themes` - Theme preview and comparison
 - `/lookbook` - Component previews with Lookbook
+
+### Deploying the Documentation Site
+
+The documentation site in `test/dummy/` can be deployed as a standalone Rails application. Recommended platforms:
+
+**Render (Free tier available)**
+```bash
+# In test/dummy/ directory
+render.yaml # Already configured for deployment
+```
+
+**Railway**
+```bash
+cd test/dummy
+railway init
+railway up
+```
+
+**Fly.io**
+```bash
+cd test/dummy
+fly launch
+fly deploy
+```
+
+**Heroku**
+```bash
+cd test/dummy
+heroku create your-shadcn-rails-docs
+git subtree push --prefix test/dummy heroku main
+```
 
 ## Security Considerations
 
