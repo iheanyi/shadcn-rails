@@ -1,0 +1,325 @@
+<% content_for :page_title, "Settings" %>
+
+<div class="max-w-4xl space-y-6">
+  <div>
+    <h2 class="text-2xl font-bold tracking-tight">Settings</h2>
+    <p class="text-muted-foreground">Manage your account settings and preferences.</p>
+  </div>
+
+  <%= render Shadcn::TabsComponent.new(default_value: "general") do |tabs| %>
+    <% tabs.with_list do |list| %>
+      <% list.with_trigger(value: "general") { "General" } %>
+      <% list.with_trigger(value: "notifications") { "Notifications" } %>
+      <% list.with_trigger(value: "billing") { "Billing" } %>
+      <% list.with_trigger(value: "security") { "Security" } %>
+    <% end %>
+
+    <!-- General Tab -->
+    <% tabs.with_panel(value: "general") do %>
+      <div class="space-y-6 pt-4">
+        <%= render Shadcn::CardComponent.new do |card| %>
+          <% card.with_header do |header| %>
+            <% header.with_title { "Profile Information" } %>
+            <% header.with_description { "Update your personal details here." } %>
+          <% end %>
+          <% card.with_content_slot do %>
+            <form data-remote="true" class="space-y-4">
+              <div class="grid gap-4 md:grid-cols-2">
+                <div class="space-y-2">
+                  <%= render Shadcn::LabelComponent.new(for: "first_name") { "First name" } %>
+                  <%= render Shadcn::InputComponent.new(id: "first_name", value: "John") %>
+                </div>
+                <div class="space-y-2">
+                  <%= render Shadcn::LabelComponent.new(for: "last_name") { "Last name" } %>
+                  <%= render Shadcn::InputComponent.new(id: "last_name", value: "Doe") %>
+                </div>
+              </div>
+              <div class="space-y-2">
+                <%= render Shadcn::LabelComponent.new(for: "email") { "Email" } %>
+                <%= render Shadcn::InputComponent.new(id: "email", type: "email", value: "john@acme.com") %>
+              </div>
+              <div class="space-y-2">
+                <%= render Shadcn::LabelComponent.new(for: "bio") { "Bio" } %>
+                <%= render Shadcn::TextareaComponent.new(id: "bio", placeholder: "Tell us about yourself...", rows: 3) %>
+              </div>
+              <%= render Shadcn::ButtonComponent.new(type: "submit") do %>Save Changes<% end %>
+            </form>
+          <% end %>
+        <% end %>
+
+        <%= render Shadcn::CardComponent.new do |card| %>
+          <% card.with_header do |header| %>
+            <% header.with_title { "Preferences" } %>
+            <% header.with_description { "Customize your experience." } %>
+          <% end %>
+          <% card.with_content_slot do %>
+            <div class="space-y-4">
+              <div class="space-y-2">
+                <%= render Shadcn::LabelComponent.new(for: "language") { "Language" } %>
+                <%= render Shadcn::SelectComponent.new(name: "language", value: "en", placeholder: "Select language") do |select| %>
+                  <% select.with_item(value: "en") { "English" } %>
+                  <% select.with_item(value: "es") { "Spanish" } %>
+                  <% select.with_item(value: "fr") { "French" } %>
+                  <% select.with_item(value: "de") { "German" } %>
+                <% end %>
+              </div>
+
+              <div class="space-y-2">
+                <%= render Shadcn::LabelComponent.new(for: "timezone") { "Timezone" } %>
+                <%= render Shadcn::SelectComponent.new(name: "timezone", value: "utc", placeholder: "Select timezone") do |select| %>
+                  <% select.with_item(value: "utc") { "UTC" } %>
+                  <% select.with_item(value: "est") { "Eastern Time" } %>
+                  <% select.with_item(value: "pst") { "Pacific Time" } %>
+                  <% select.with_item(value: "gmt") { "GMT" } %>
+                <% end %>
+              </div>
+
+              <div class="space-y-2">
+                <%= render Shadcn::LabelComponent.new { "Font Size" } %>
+                <%= render Shadcn::SliderComponent.new(name: "font_size", value: 16, min: 12, max: 24, step: 1) %>
+                <p class="text-xs text-muted-foreground">Adjust the base font size (12-24px)</p>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <!-- Notifications Tab -->
+    <% tabs.with_panel(value: "notifications") do %>
+      <div class="space-y-6 pt-4">
+        <%= render Shadcn::CardComponent.new do |card| %>
+          <% card.with_header do |header| %>
+            <% header.with_title { "Email Notifications" } %>
+            <% header.with_description { "Configure which emails you'd like to receive." } %>
+          <% end %>
+          <% card.with_content_slot do %>
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <div class="space-y-0.5">
+                  <p class="font-medium">Marketing emails</p>
+                  <p class="text-sm text-muted-foreground">Receive emails about new products and features.</p>
+                </div>
+                <%= render Shadcn::SwitchComponent.new(name: "marketing_emails", checked: false) %>
+              </div>
+
+              <%= render Shadcn::SeparatorComponent.new %>
+
+              <div class="flex items-center justify-between">
+                <div class="space-y-0.5">
+                  <p class="font-medium">Security alerts</p>
+                  <p class="text-sm text-muted-foreground">Get notified about unusual account activity.</p>
+                </div>
+                <%= render Shadcn::SwitchComponent.new(name: "security_alerts", checked: true) %>
+              </div>
+
+              <%= render Shadcn::SeparatorComponent.new %>
+
+              <div class="flex items-center justify-between">
+                <div class="space-y-0.5">
+                  <p class="font-medium">Weekly digest</p>
+                  <p class="text-sm text-muted-foreground">A weekly summary of your account activity.</p>
+                </div>
+                <%= render Shadcn::SwitchComponent.new(name: "weekly_digest", checked: true) %>
+              </div>
+
+              <%= render Shadcn::SeparatorComponent.new %>
+
+              <div class="flex items-center justify-between">
+                <div class="space-y-0.5">
+                  <p class="font-medium">Transaction receipts</p>
+                  <p class="text-sm text-muted-foreground">Receive a receipt for each transaction.</p>
+                </div>
+                <%= render Shadcn::SwitchComponent.new(name: "transaction_receipts", checked: true) %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+
+        <%= render Shadcn::CardComponent.new do |card| %>
+          <% card.with_header do |header| %>
+            <% header.with_title { "Push Notifications" } %>
+            <% header.with_description { "Configure mobile push notifications." } %>
+          <% end %>
+          <% card.with_content_slot do %>
+            <div class="space-y-4">
+              <div class="flex items-start gap-4">
+                <%= render Shadcn::CheckboxComponent.new(name: "push_all", checked: true) %>
+                <div class="space-y-1">
+                  <p class="font-medium leading-none">All new messages</p>
+                  <p class="text-sm text-muted-foreground">Get notified for all new messages.</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <%= render Shadcn::CheckboxComponent.new(name: "push_direct", checked: true) %>
+                <div class="space-y-1">
+                  <p class="font-medium leading-none">Direct messages only</p>
+                  <p class="text-sm text-muted-foreground">Only get notified for direct messages.</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <%= render Shadcn::CheckboxComponent.new(name: "push_mentions", checked: false) %>
+                <div class="space-y-1">
+                  <p class="font-medium leading-none">Mentions only</p>
+                  <p class="text-sm text-muted-foreground">Only get notified when someone mentions you.</p>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <!-- Billing Tab -->
+    <% tabs.with_panel(value: "billing") do %>
+      <div class="space-y-6 pt-4">
+        <%= render Shadcn::CardComponent.new do |card| %>
+          <% card.with_header do |header| %>
+            <% header.with_title { "Current Plan" } %>
+            <% header.with_description { "You're currently on the Pro plan." } %>
+          <% end %>
+          <% card.with_content_slot do %>
+            <div class="flex items-center justify-between p-4 border rounded-lg">
+              <div>
+                <p class="font-semibold text-lg">Pro Plan</p>
+                <p class="text-muted-foreground">$29/month</p>
+              </div>
+              <%= render Shadcn::BadgeComponent.new(variant: :secondary) do %>Current<% end %>
+            </div>
+            <div class="mt-4 flex gap-3">
+              <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Change Plan<% end %>
+              <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>View Usage<% end %>
+            </div>
+          <% end %>
+        <% end %>
+
+        <%= render Shadcn::CardComponent.new do |card| %>
+          <% card.with_header do |header| %>
+            <% header.with_title { "Payment Method" } %>
+            <% header.with_description { "Manage your payment methods." } %>
+          <% end %>
+          <% card.with_content_slot do %>
+            <div class="flex items-center justify-between p-4 border rounded-lg">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-6 bg-gradient-to-r from-blue-600 to-blue-400 rounded"></div>
+                <div>
+                  <p class="font-medium">Visa ending in 4242</p>
+                  <p class="text-sm text-muted-foreground">Expires 12/2025</p>
+                </div>
+              </div>
+              <%= render Shadcn::ButtonComponent.new(variant: :ghost, size: :sm) do %>Edit<% end %>
+            </div>
+            <div class="mt-4">
+              <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                Add Payment Method
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
+
+        <%= render Shadcn::CardComponent.new do |card| %>
+          <% card.with_header do |header| %>
+            <% header.with_title { "Billing History" } %>
+            <% header.with_description { "View your past invoices." } %>
+          <% end %>
+          <% card.with_content_slot do %>
+            <%= render Shadcn::TableComponent.new do |table| %>
+              <% table.with_header do |header| %>
+                <% header.with_row do |row| %>
+                  <% row.with_head { "Invoice" } %>
+                  <% row.with_head { "Date" } %>
+                  <% row.with_head { "Amount" } %>
+                  <% row.with_head { "Status" } %>
+                  <% row.with_head %>
+                <% end %>
+              <% end %>
+              <% table.with_body do |body| %>
+                <% [
+                  { id: "INV-001", date: "Nov 1, 2024", amount: "$29.00", status: "Paid" },
+                  { id: "INV-002", date: "Oct 1, 2024", amount: "$29.00", status: "Paid" },
+                  { id: "INV-003", date: "Sep 1, 2024", amount: "$29.00", status: "Paid" }
+                ].each do |invoice| %>
+                  <% body.with_row do |row| %>
+                    <% row.with_cell(class: "font-medium") { invoice[:id] } %>
+                    <% row.with_cell { invoice[:date] } %>
+                    <% row.with_cell { invoice[:amount] } %>
+                    <% row.with_cell do %>
+                      <%= render Shadcn::BadgeComponent.new(variant: :outline) do %><%= invoice[:status] %><% end %>
+                    <% end %>
+                    <% row.with_cell do %>
+                      <%= render Shadcn::ButtonComponent.new(variant: :ghost, size: :sm) do %>Download<% end %>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <!-- Security Tab -->
+    <% tabs.with_panel(value: "security") do %>
+      <div class="space-y-6 pt-4">
+        <%= render Shadcn::CardComponent.new do |card| %>
+          <% card.with_header do |header| %>
+            <% header.with_title { "Change Password" } %>
+            <% header.with_description { "Update your password to keep your account secure." } %>
+          <% end %>
+          <% card.with_content_slot do %>
+            <form data-remote="true" class="space-y-4">
+              <div class="space-y-2">
+                <%= render Shadcn::LabelComponent.new(for: "current_password") do %>Current password<% end %>
+                <%= render Shadcn::InputComponent.new(id: "current_password", type: "password") %>
+              </div>
+              <div class="space-y-2">
+                <%= render Shadcn::LabelComponent.new(for: "new_password") do %>New password<% end %>
+                <%= render Shadcn::InputComponent.new(id: "new_password", type: "password") %>
+              </div>
+              <div class="space-y-2">
+                <%= render Shadcn::LabelComponent.new(for: "confirm_password") do %>Confirm new password<% end %>
+                <%= render Shadcn::InputComponent.new(id: "confirm_password", type: "password") %>
+              </div>
+              <%= render Shadcn::ButtonComponent.new(type: "submit") do %>Update Password<% end %>
+            </form>
+          <% end %>
+        <% end %>
+
+        <%= render Shadcn::CardComponent.new do |card| %>
+          <% card.with_header do |header| %>
+            <% header.with_title { "Two-Factor Authentication" } %>
+            <% header.with_description { "Add an extra layer of security to your account." } %>
+          <% end %>
+          <% card.with_content_slot do %>
+            <div class="flex items-center justify-between">
+              <div class="space-y-0.5">
+                <p class="font-medium">Two-factor authentication</p>
+                <p class="text-sm text-muted-foreground">Secure your account with 2FA.</p>
+              </div>
+              <%= render Shadcn::SwitchComponent.new(name: "two_factor", checked: false) %>
+            </div>
+          <% end %>
+        <% end %>
+
+        <%= render Shadcn::CardComponent.new do |card| %>
+          <% card.with_header do |header| %>
+            <% header.with_title { "Danger Zone" } %>
+            <% header.with_description { "Irreversible actions for your account." } %>
+          <% end %>
+          <% card.with_content_slot do %>
+            <%= render Shadcn::AlertComponent.new(variant: :destructive) do |alert| %>
+              <% alert.with_title { "Warning" } %>
+              <% alert.with_description { "Once you delete your account, there is no going back. Please be certain." } %>
+            <% end %>
+            <div class="mt-4">
+              <%= render Shadcn::ButtonComponent.new(variant: :destructive) do %>Delete Account<% end %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</div>

@@ -501,6 +501,377 @@
         })
       }
     })
+
+    // Drawer Controller (portal-based like Sheet)
+    Stimulus.register("shadcn--drawer", class extends Controller {
+      static targets = ["trigger", "template", "overlay", "content"]
+      static values = { open: { type: Boolean, default: false }, direction: { type: String, default: "bottom" } }
+
+      connect() {
+        this.portal = null
+        this.previousActiveElement = null
+        this.boundHandleKeydown = this.handleKeydown.bind(this)
+      }
+
+      disconnect() { this.close(); if (this.portal) this.portal.remove() }
+
+      open() {
+        if (this.openValue) return
+        this.previousActiveElement = document.activeElement
+        this.openValue = true
+        if (this.hasTemplateTarget && !this.portal) {
+          this.portal = document.createElement("div")
+          this.portal.className = "shadcn-drawer-portal"
+          this.portal.innerHTML = this.templateTarget.innerHTML
+          document.body.appendChild(this.portal)
+          this.portalOverlay = this.portal.querySelector('[data-shadcn--drawer-target="overlay"]')
+          this.portalContent = this.portal.querySelector('[data-shadcn--drawer-target="content"]')
+          const closeButtons = this.portal.querySelectorAll('[data-action*="shadcn--drawer#close"]')
+          closeButtons.forEach(btn => btn.addEventListener("click", () => this.close()))
+          // Add click on overlay to close
+          if (this.portalOverlay) {
+            this.portalOverlay.addEventListener("click", () => this.close())
+          }
+        }
+        requestAnimationFrame(() => {
+          if (this.portalOverlay) { this.portalOverlay.dataset.state = "open"; this.portalOverlay.removeAttribute("hidden") }
+          if (this.portalContent) { this.portalContent.dataset.state = "open"; this.portalContent.removeAttribute("hidden") }
+          document.addEventListener("keydown", this.boundHandleKeydown)
+          document.body.style.overflow = "hidden"
+        })
+      }
+
+      close() {
+        if (!this.openValue) return
+        this.openValue = false
+        if (this.portalOverlay) this.portalOverlay.dataset.state = "closed"
+        if (this.portalContent) this.portalContent.dataset.state = "closed"
+        document.removeEventListener("keydown", this.boundHandleKeydown)
+        document.body.style.overflow = ""
+        if (this.previousActiveElement) this.previousActiveElement.focus()
+        setTimeout(() => { if (this.portal) { this.portal.remove(); this.portal = null } }, 300)
+      }
+
+      handleKeydown(event) { if (event.key === "Escape") this.close() }
+    })
+
+    // Dropdown Menu Controller
+    Stimulus.register("shadcn--dropdown", class extends Controller {
+      static targets = ["trigger", "content"]
+      static values = { open: { type: Boolean, default: false }, align: { type: String, default: "end" }, side: { type: String, default: "bottom" } }
+
+      connect() {
+        this.boundHandleClickOutside = this.handleClickOutside.bind(this)
+        this.boundHandleKeydown = this.handleKeydown.bind(this)
+      }
+
+      disconnect() { this.hide() }
+
+      toggle(event) {
+        event?.preventDefault()
+        event?.stopPropagation()
+        this.openValue ? this.hide() : this.show()
+      }
+
+      show() {
+        if (this.openValue) return
+        this.openValue = true
+        if (this.hasContentTarget) {
+          this.contentTarget.hidden = false
+          this.contentTarget.dataset.state = "open"
+          this.contentTarget.dataset.side = this.sideValue
+          this.positionContent()
+        }
+        setTimeout(() => {
+          document.addEventListener("click", this.boundHandleClickOutside)
+          document.addEventListener("keydown", this.boundHandleKeydown)
+        }, 0)
+      }
+
+      hide() {
+        if (!this.openValue) return
+        this.openValue = false
+        if (this.hasContentTarget) {
+          this.contentTarget.dataset.state = "closed"
+          setTimeout(() => { if (!this.openValue) this.contentTarget.hidden = true }, 150)
+        }
+        document.removeEventListener("click", this.boundHandleClickOutside)
+        document.removeEventListener("keydown", this.boundHandleKeydown)
+      }
+
+      close() { this.hide() }
+
+      selectItem(event) {
+        // Dispatch custom event for item selection
+        this.dispatch("select", { detail: { item: event.currentTarget } })
+        this.hide()
+      }
+
+      handleClickOutside(event) {
+        if (!this.element.contains(event.target)) this.hide()
+      }
+
+      handleKeydown(event) {
+        if (event.key === "Escape") this.hide()
+      }
+
+      positionContent() {
+        if (!this.hasContentTarget || !this.hasTriggerTarget) return
+        const content = this.contentTarget
+        content.style.position = "absolute"
+        content.style.zIndex = "50"
+        const gap = 4
+        if (this.sideValue === "bottom") { content.style.top = "100%"; content.style.marginTop = gap + "px" }
+        if (this.sideValue === "top") { content.style.bottom = "100%"; content.style.marginBottom = gap + "px" }
+        if (this.alignValue === "end") { content.style.right = "0" }
+        if (this.alignValue === "start") { content.style.left = "0" }
+        if (this.alignValue === "center") { content.style.left = "50%"; content.style.transform = "translateX(-50%)" }
+      }
+    })
+
+    // Select Controller
+    Stimulus.register("shadcn--select", class extends Controller {
+      static targets = ["trigger", "content", "input", "display", "item", "checkIcon"]
+      static values = { value: String, open: { type: Boolean, default: false } }
+
+      connect() {
+        this.boundHandleClickOutside = this.handleClickOutside.bind(this)
+        this.boundHandleKeydown = this.handleKeydown.bind(this)
+        // Set initial display value
+        if (this.valueValue && this.hasDisplayTarget) {
+          const selectedItem = this.itemTargets.find(item => item.dataset.value === this.valueValue)
+          if (selectedItem) {
+            this.displayTarget.textContent = selectedItem.textContent.trim()
+            this.updateCheckIcons()
+          }
+        }
+      }
+
+      disconnect() { this.close() }
+
+      toggle(event) {
+        event?.preventDefault()
+        event?.stopPropagation()
+        this.openValue ? this.close() : this.open()
+      }
+
+      open() {
+        if (this.openValue) return
+        this.openValue = true
+        if (this.hasContentTarget) {
+          this.contentTarget.hidden = false
+          this.contentTarget.dataset.state = "open"
+          this.positionContent()
+        }
+        if (this.hasTriggerTarget) {
+          this.triggerTarget.setAttribute("aria-expanded", "true")
+        }
+        setTimeout(() => {
+          document.addEventListener("click", this.boundHandleClickOutside)
+          document.addEventListener("keydown", this.boundHandleKeydown)
+        }, 0)
+      }
+
+      close() {
+        if (!this.openValue) return
+        this.openValue = false
+        if (this.hasContentTarget) {
+          this.contentTarget.dataset.state = "closed"
+          setTimeout(() => { if (!this.openValue) this.contentTarget.hidden = true }, 150)
+        }
+        if (this.hasTriggerTarget) {
+          this.triggerTarget.setAttribute("aria-expanded", "false")
+        }
+        document.removeEventListener("click", this.boundHandleClickOutside)
+        document.removeEventListener("keydown", this.boundHandleKeydown)
+      }
+
+      select(event) {
+        const item = event.currentTarget
+        const value = item.dataset.value
+        const text = item.textContent.trim()
+
+        this.valueValue = value
+        if (this.hasInputTarget) this.inputTarget.value = value
+        if (this.hasDisplayTarget) this.displayTarget.textContent = text
+
+        this.updateCheckIcons()
+        this.close()
+
+        // Dispatch change event
+        this.dispatch("change", { detail: { value, text } })
+      }
+
+      updateCheckIcons() {
+        this.itemTargets.forEach(item => {
+          const isSelected = item.dataset.value === this.valueValue
+          item.setAttribute("aria-selected", isSelected.toString())
+          const checkIcon = item.querySelector('[data-shadcn--select-target="checkIcon"]')
+          if (checkIcon) {
+            checkIcon.classList.toggle("opacity-0", !isSelected)
+            checkIcon.classList.toggle("opacity-100", isSelected)
+          }
+        })
+      }
+
+      handleClickOutside(event) {
+        if (!this.element.contains(event.target)) this.close()
+      }
+
+      handleKeydown(event) {
+        if (event.key === "Escape") this.close()
+      }
+
+      positionContent() {
+        if (!this.hasContentTarget) return
+        const content = this.contentTarget
+        content.style.position = "absolute"
+        content.style.top = "100%"
+        content.style.left = "0"
+        content.style.right = "0"
+        content.style.marginTop = "4px"
+        content.style.zIndex = "50"
+      }
+    })
+
+    // HoverCard Controller
+    Stimulus.register("shadcn--hover-card", class extends Controller {
+      static targets = ["trigger", "content"]
+      static values = { openDelay: { type: Number, default: 700 }, closeDelay: { type: Number, default: 300 } }
+
+      connect() {
+        this.openTimeout = null
+        this.closeTimeout = null
+        // Add event listeners to trigger
+        if (this.hasTriggerTarget) {
+          this.triggerTarget.addEventListener("mouseenter", () => this.scheduleOpen())
+          this.triggerTarget.addEventListener("mouseleave", () => this.scheduleClose())
+        }
+        // Keep open when hovering content
+        if (this.hasContentTarget) {
+          this.contentTarget.addEventListener("mouseenter", () => this.cancelClose())
+          this.contentTarget.addEventListener("mouseleave", () => this.scheduleClose())
+        }
+      }
+
+      disconnect() {
+        this.clearTimeouts()
+        this.hide()
+      }
+
+      scheduleOpen() {
+        this.cancelClose()
+        this.openTimeout = setTimeout(() => this.show(), this.openDelayValue)
+      }
+
+      scheduleClose() {
+        this.cancelOpen()
+        this.closeTimeout = setTimeout(() => this.hide(), this.closeDelayValue)
+      }
+
+      cancelOpen() {
+        if (this.openTimeout) { clearTimeout(this.openTimeout); this.openTimeout = null }
+      }
+
+      cancelClose() {
+        if (this.closeTimeout) { clearTimeout(this.closeTimeout); this.closeTimeout = null }
+      }
+
+      clearTimeouts() {
+        this.cancelOpen()
+        this.cancelClose()
+      }
+
+      show() {
+        if (this.hasContentTarget) {
+          this.contentTarget.style.display = "block"
+          this.contentTarget.dataset.state = "open"
+          this.positionContent()
+        }
+      }
+
+      hide() {
+        if (this.hasContentTarget) {
+          this.contentTarget.dataset.state = "closed"
+          setTimeout(() => {
+            if (this.contentTarget.dataset.state === "closed") {
+              this.contentTarget.style.display = "none"
+            }
+          }, 150)
+        }
+      }
+
+      positionContent() {
+        if (!this.hasContentTarget || !this.hasTriggerTarget) return
+        const content = this.contentTarget
+        const trigger = this.triggerTarget
+        const side = content.dataset.side || "bottom"
+
+        content.style.position = "absolute"
+        content.style.zIndex = "50"
+
+        const gap = 8
+        if (side === "bottom") { content.style.top = "100%"; content.style.marginTop = gap + "px" }
+        if (side === "top") { content.style.bottom = "100%"; content.style.marginBottom = gap + "px" }
+        if (side === "left") { content.style.right = "100%"; content.style.marginRight = gap + "px" }
+        if (side === "right") { content.style.left = "100%"; content.style.marginLeft = gap + "px" }
+
+        // Center alignment by default
+        const align = content.dataset.align || "center"
+        if (align === "center") {
+          if (side === "bottom" || side === "top") {
+            content.style.left = "50%"
+            content.style.transform = "translateX(-50%)"
+          }
+        }
+      }
+    })
+
+    // Collapsible Controller
+    Stimulus.register("shadcn--collapsible", class extends Controller {
+      static targets = ["trigger", "content"]
+      static values = { open: { type: Boolean, default: false }, disabled: { type: Boolean, default: false } }
+
+      connect() {
+        this.updateState()
+      }
+
+      toggle(event) {
+        if (this.disabledValue) return
+        event?.preventDefault()
+        this.openValue = !this.openValue
+        this.updateState()
+      }
+
+      updateState() {
+        const state = this.openValue ? "open" : "closed"
+        this.element.dataset.state = state
+
+        if (this.hasContentTarget) {
+          this.contentTarget.dataset.state = state
+          this.contentTarget.hidden = !this.openValue
+        }
+
+        if (this.hasTriggerTarget) {
+          this.triggerTarget.setAttribute("aria-expanded", this.openValue.toString())
+        }
+      }
+    })
+
+    // Slider Controller - updates CSS custom property for track fill
+    Stimulus.register("shadcn--slider", class extends Controller {
+      connect() {
+        this.updateStyle()
+      }
+
+      updateStyle() {
+        const min = parseFloat(this.element.min) || 0
+        const max = parseFloat(this.element.max) || 100
+        const value = parseFloat(this.element.value) || 0
+        const percentage = ((value - min) / (max - min)) * 100
+        this.element.style.setProperty("--slider-fill", percentage + "%")
+      }
+    })
   </script>
   <style>
     <%= Shadcn::Rails.theme_css %>
@@ -586,7 +957,8 @@
 
     /* Portal overlay and content styles (for dynamically injected elements from templates) */
     .shadcn-dialog-portal [data-shadcn--dialog-target="overlay"],
-    .shadcn-sheet-portal [data-shadcn--sheet-target="overlay"] {
+    .shadcn-sheet-portal [data-shadcn--sheet-target="overlay"],
+    .shadcn-drawer-portal [data-shadcn--drawer-target="overlay"] {
       position: fixed;
       inset: 0;
       z-index: 50;
@@ -690,6 +1062,118 @@
     .shadcn-sheet-portal [data-shadcn--sheet-target="content"][class*="left-0"][data-state="closed"] {
       --tw-exit-translate-x: -100%;
       --tw-exit-opacity: 0;
+    }
+
+    /* Drawer portal styles */
+    .shadcn-drawer-portal [data-shadcn--drawer-target="content"] {
+      background-color: hsl(var(--background));
+    }
+
+    .shadcn-drawer-portal [data-state="open"] {
+      animation: enter 300ms ease-out;
+    }
+
+    .shadcn-drawer-portal [data-state="closed"] {
+      animation: exit 300ms ease-in forwards;
+    }
+
+    .shadcn-drawer-portal [data-shadcn--drawer-target="overlay"][data-state="open"] {
+      --tw-enter-opacity: 0;
+    }
+
+    .shadcn-drawer-portal [data-shadcn--drawer-target="overlay"][data-state="closed"] {
+      --tw-exit-opacity: 0;
+    }
+
+    /* Drawer bottom slide */
+    .shadcn-drawer-portal [data-shadcn--drawer-target="content"][class*="bottom-0"][data-state="open"] {
+      --tw-enter-translate-y: 100%;
+    }
+
+    .shadcn-drawer-portal [data-shadcn--drawer-target="content"][class*="bottom-0"][data-state="closed"] {
+      --tw-exit-translate-y: 100%;
+    }
+
+    /* Slider (native range input) styles */
+    .shadcn-slider {
+      --slider-fill: 0%;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 0.5rem;
+      border-radius: 9999px;
+      background: linear-gradient(
+        to right,
+        hsl(var(--primary)) 0%,
+        hsl(var(--primary)) var(--slider-fill),
+        hsl(var(--primary) / 0.2) var(--slider-fill),
+        hsl(var(--primary) / 0.2) 100%
+      );
+    }
+
+    /* WebKit (Chrome, Safari, Edge) thumb */
+    .shadcn-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 1.25rem;
+      height: 1.25rem;
+      border-radius: 9999px;
+      background: hsl(var(--background));
+      border: 2px solid hsl(var(--primary));
+      cursor: pointer;
+      box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+      transition: all 0.15s ease;
+    }
+
+    .shadcn-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+    }
+
+    .shadcn-slider::-webkit-slider-thumb:active {
+      transform: scale(1.05);
+    }
+
+    .shadcn-slider:focus::-webkit-slider-thumb {
+      box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring));
+    }
+
+    /* Firefox thumb */
+    .shadcn-slider::-moz-range-thumb {
+      width: 1.25rem;
+      height: 1.25rem;
+      border-radius: 9999px;
+      background: hsl(var(--background));
+      border: 2px solid hsl(var(--primary));
+      cursor: pointer;
+      box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+      transition: all 0.15s ease;
+    }
+
+    .shadcn-slider::-moz-range-thumb:hover {
+      transform: scale(1.1);
+    }
+
+    .shadcn-slider:focus::-moz-range-thumb {
+      box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring));
+    }
+
+    /* Firefox track (for proper appearance) */
+    .shadcn-slider::-moz-range-track {
+      background: transparent;
+      height: 0.5rem;
+    }
+
+    /* Disabled state */
+    .shadcn-slider:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .shadcn-slider:disabled::-webkit-slider-thumb {
+      cursor: not-allowed;
+    }
+
+    .shadcn-slider:disabled::-moz-range-thumb {
+      cursor: not-allowed;
     }
   </style>
 </head>

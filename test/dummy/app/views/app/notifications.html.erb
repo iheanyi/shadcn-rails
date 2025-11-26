@@ -1,0 +1,177 @@
+<% content_for :page_title, "Notifications" %>
+
+<div class="max-w-3xl space-y-6">
+  <div class="flex items-center justify-between">
+    <div>
+      <h2 class="text-2xl font-bold tracking-tight">Notifications</h2>
+      <p class="text-muted-foreground">You have 3 unread notifications.</p>
+    </div>
+    <%= render Shadcn::ButtonComponent.new(variant: :outline, size: :sm) do %>Mark all as read<% end %>
+  </div>
+
+  <div class="space-y-4">
+    <!-- Unread notification -->
+    <%= render Shadcn::CardComponent.new(class: "border-l-4 border-l-primary") do |card| %>
+      <% card.with_content_slot(standalone: true) do %>
+        <div class="flex items-start gap-4">
+          <%= render Shadcn::AvatarComponent.new(size: :sm) do |avatar| %>
+            <% avatar.with_fallback { "OM" } %>
+          <% end %>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <p class="font-medium">Olivia Martin commented on your post</p>
+                <p class="text-sm text-muted-foreground mt-1">"Great work on the new feature! The UI looks really polished."</p>
+              </div>
+              <%= render Shadcn::DropdownMenuComponent.new do |menu| %>
+                <% menu.with_trigger do %>
+                  <%= render Shadcn::ButtonComponent.new(variant: :ghost, size: :icon, class: "h-8 w-8") do %>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+                    </svg>
+                  <% end %>
+                <% end %>
+                <% menu.with_menu do |content| %>
+                  <% content.with_item do %>Mark as read<% end %>
+                  <% content.with_item do %>Delete notification<% end %>
+                <% end %>
+              <% end %>
+            </div>
+            <p class="text-xs text-muted-foreground mt-2">2 minutes ago</p>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+
+    <!-- Unread notification -->
+    <%= render Shadcn::CardComponent.new(class: "border-l-4 border-l-primary") do |card| %>
+      <% card.with_content_slot(standalone: true) do %>
+        <div class="flex items-start gap-4">
+          <div class="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <p class="font-medium">Payment received</p>
+                <p class="text-sm text-muted-foreground mt-1">You received a payment of $1,999.00 from Jackson Lee.</p>
+              </div>
+              <%= render Shadcn::DropdownMenuComponent.new do |menu| %>
+                <% menu.with_trigger do %>
+                  <%= render Shadcn::ButtonComponent.new(variant: :ghost, size: :icon, class: "h-8 w-8") do %>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+                    </svg>
+                  <% end %>
+                <% end %>
+                <% menu.with_menu do |content| %>
+                  <% content.with_item do %>View details<% end %>
+                  <% content.with_item do %>Mark as read<% end %>
+                  <% content.with_item do %>Delete notification<% end %>
+                <% end %>
+              <% end %>
+            </div>
+            <p class="text-xs text-muted-foreground mt-2">1 hour ago</p>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+
+    <!-- Unread notification -->
+    <%= render Shadcn::CardComponent.new(class: "border-l-4 border-l-primary") do |card| %>
+      <% card.with_content_slot(standalone: true) do %>
+        <div class="flex items-start gap-4">
+          <div class="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <p class="font-medium">New team member</p>
+                <p class="text-sm text-muted-foreground mt-1">Sofia Davis has joined your team.</p>
+              </div>
+              <%= render Shadcn::DropdownMenuComponent.new do |menu| %>
+                <% menu.with_trigger do %>
+                  <%= render Shadcn::ButtonComponent.new(variant: :ghost, size: :icon, class: "h-8 w-8") do %>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+                    </svg>
+                  <% end %>
+                <% end %>
+                <% menu.with_menu do |content| %>
+                  <% content.with_item do %>View profile<% end %>
+                  <% content.with_item do %>Mark as read<% end %>
+                  <% content.with_item do %>Delete notification<% end %>
+                <% end %>
+              <% end %>
+            </div>
+            <p class="text-xs text-muted-foreground mt-2">3 hours ago</p>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+
+    <%= render Shadcn::SeparatorComponent.new(class: "my-6") %>
+
+    <p class="text-sm text-muted-foreground">Earlier</p>
+
+    <!-- Read notifications -->
+    <%= render Shadcn::CardComponent.new(class: "opacity-70") do |card| %>
+      <% card.with_content_slot(standalone: true) do %>
+        <div class="flex items-start gap-4">
+          <%= render Shadcn::AvatarComponent.new(size: :sm) do |avatar| %>
+            <% avatar.with_fallback { "WK" } %>
+          <% end %>
+          <div class="flex-1 min-w-0">
+            <p class="font-medium">William Kim mentioned you in a comment</p>
+            <p class="text-sm text-muted-foreground mt-1">"@johndoe Can you review this PR when you get a chance?"</p>
+            <p class="text-xs text-muted-foreground mt-2">Yesterday at 2:30 PM</p>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+
+    <%= render Shadcn::CardComponent.new(class: "opacity-70") do |card| %>
+      <% card.with_content_slot(standalone: true) do %>
+        <div class="flex items-start gap-4">
+          <div class="w-9 h-9 rounded-full bg-yellow-100 flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="font-medium">Security alert</p>
+            <p class="text-sm text-muted-foreground mt-1">New sign-in detected from Chrome on macOS.</p>
+            <p class="text-xs text-muted-foreground mt-2">2 days ago</p>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+
+    <%= render Shadcn::CardComponent.new(class: "opacity-70") do |card| %>
+      <% card.with_content_slot(standalone: true) do %>
+        <div class="flex items-start gap-4">
+          <div class="w-9 h-9 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="font-medium">Weekly report ready</p>
+            <p class="text-sm text-muted-foreground mt-1">Your weekly analytics report is ready to view.</p>
+            <p class="text-xs text-muted-foreground mt-2">3 days ago</p>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <!-- Load more -->
+  <div class="text-center">
+    <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Load more notifications<% end %>
+  </div>
+</div>

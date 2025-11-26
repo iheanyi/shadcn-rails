@@ -12,6 +12,13 @@ Rails.application.routes.draw do
   get "cards", to: "pages#cards"
   get "tabs", to: "pages#tabs"
 
+  # UX Test Application
+  get "app", to: "app#dashboard"
+  get "app/dashboard", to: "app#dashboard"
+  get "app/settings", to: "app#settings"
+  get "app/profile", to: "app#profile"
+  get "app/notifications", to: "app#notifications"
+
   # Mount Lookbook if available
   if defined?(Lookbook)
     mount Lookbook::Engine, at: "/lookbook"
