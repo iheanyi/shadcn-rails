@@ -1,0 +1,164 @@
+<% content_for :title, "Input Group" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Input Group</h1>
+    <p class="text-xl text-muted-foreground">Input with prefix and/or suffix addons for icons, text, or other elements.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+        No JavaScript Required
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <div class="max-w-sm">
+      <%= render Shadcn::InputGroupComponent.new do |group| %>
+        <% group.with_prefix { "https://" } %>
+        <% group.with_input(placeholder: "example.com") %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component input_group" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= render "docs/code_example", language: "erb", code: <<~ERB
+<%%= render Shadcn::InputGroupComponent.new do |group| %>
+  <%% group.with_prefix { "https://" } %>
+  <%% group.with_input(placeholder: "example.com") %>
+<%% end %>
+ERB
+    %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- With Suffix -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Suffix</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="max-w-sm">
+          <%= render Shadcn::InputGroupComponent.new do |group| %>
+            <% group.with_input(placeholder: "username") %>
+            <% group.with_suffix { "@example.com" } %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: <<~ERB
+<%%= render Shadcn::InputGroupComponent.new do |group| %>
+  <%% group.with_input(placeholder: "username") %>
+  <%% group.with_suffix { "@example.com" } %>
+<%% end %>
+ERB
+      %>
+    </div>
+
+    <!-- With Both -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Both Prefix and Suffix</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="max-w-sm">
+          <%= render Shadcn::InputGroupComponent.new do |group| %>
+            <% group.with_prefix { "$" } %>
+            <% group.with_input(type: :number, placeholder: "0.00") %>
+            <% group.with_suffix { "USD" } %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: <<~ERB
+<%%= render Shadcn::InputGroupComponent.new do |group| %>
+  <%% group.with_prefix { "$" } %>
+  <%% group.with_input(type: :number, placeholder: "0.00") %>
+  <%% group.with_suffix { "USD" } %>
+<%% end %>
+ERB
+      %>
+    </div>
+
+    <!-- With Icon -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Icon</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="max-w-sm">
+          <%= render Shadcn::InputGroupComponent.new do |group| %>
+            <% group.with_prefix do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+              </svg>
+            <% end %>
+            <% group.with_input(type: :search, placeholder: "Search...") %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: <<~ERB
+<%%= render Shadcn::InputGroupComponent.new do |group| %>
+  <%% group.with_prefix do %>
+    <svg><!-- search icon --></svg>
+  <%% end %>
+  <%% group.with_input(type: :search, placeholder: "Search...") %>
+<%% end %>
+ERB
+      %>
+    </div>
+
+    <!-- Currency Input -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Currency Input</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="max-w-sm">
+          <%= render Shadcn::InputGroupComponent.new do |group| %>
+            <% group.with_prefix { "$" } %>
+            <% group.with_input(type: :number, placeholder: "99.99", step: "0.01") %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+    <%= render "docs/props_table", props: [
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply to the container" }
+    ] %>
+
+    <h3 class="text-lg font-semibold mt-6 mb-2">Slots</h3>
+    <ul class="ml-6 list-disc space-y-2">
+      <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">with_prefix</code> - Content before the input (text, icon, etc.)</li>
+      <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">with_input</code> - Input component (accepts all Input props)</li>
+      <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">with_suffix</code> - Content after the input (text, icon, etc.)</li>
+    </ul>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Focus ring applies to the entire group for clear focus indication</li>
+      <li>Prefix/suffix content is purely decorative and should not contain interactive elements</li>
+      <li>For icons, consider using <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-hidden="true"</code> if they're decorative</li>
+    </ul>
+  </div>
+</div>

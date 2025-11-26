@@ -26,6 +26,12 @@ class DocsController < ApplicationController
       has_stimulus: true,
       controller: "shadcn--toggle-group"
     },
+    "button-group" => {
+      name: "Button Group",
+      category: "Buttons & Actions",
+      description: "Groups related buttons together with connected styling.",
+      has_stimulus: false
+    },
 
     # Form Inputs
     "input" => {
@@ -81,6 +87,31 @@ class DocsController < ApplicationController
       has_stimulus: true,
       controller: "shadcn--radio-group"
     },
+    "field" => {
+      name: "Field",
+      category: "Form Inputs",
+      description: "A form field wrapper with label, input, description, and error message support.",
+      has_stimulus: false
+    },
+    "input-group" => {
+      name: "Input Group",
+      category: "Form Inputs",
+      description: "Input with prefix and/or suffix addons for icons, text, or other elements.",
+      has_stimulus: false
+    },
+    "native-select" => {
+      name: "Native Select",
+      category: "Form Inputs",
+      description: "A styled native HTML select element with optgroup support.",
+      has_stimulus: false
+    },
+    "input-otp" => {
+      name: "Input OTP",
+      category: "Form Inputs",
+      description: "One-time password input with auto-focus and paste support.",
+      has_stimulus: true,
+      controller: "shadcn--input-otp"
+    },
 
     # Data Display
     "badge" => {
@@ -118,6 +149,24 @@ class DocsController < ApplicationController
       name: "Skeleton",
       category: "Data Display",
       description: "Used to show a placeholder while content is loading.",
+      has_stimulus: false
+    },
+    "spinner" => {
+      name: "Spinner",
+      category: "Data Display",
+      description: "A loading spinner animation for indicating loading states.",
+      has_stimulus: false
+    },
+    "kbd" => {
+      name: "Kbd",
+      category: "Data Display",
+      description: "Displays keyboard input or shortcuts.",
+      has_stimulus: false
+    },
+    "typography" => {
+      name: "Typography",
+      category: "Data Display",
+      description: "Styles for headings, paragraphs, lists, and other text elements.",
       has_stimulus: false
     },
     "aspect-ratio" => {

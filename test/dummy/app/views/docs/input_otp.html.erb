@@ -1,0 +1,173 @@
+<% content_for :title, "Input OTP" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Input OTP</h1>
+    <p class="text-xl text-muted-foreground">One-time password input with auto-focus and paste support.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Stimulus Required
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::InputOtpComponent.new(length: 6, name: "otp") %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component input_otp" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= render "docs/code_example", language: "erb", code: '<%%= render Shadcn::InputOtpComponent.new(length: 6, name: "otp") %>' %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- 4-Digit PIN -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">4-Digit PIN</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::InputOtpComponent.new(length: 4, name: "pin") %>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: <<~ERB
+<%%= render Shadcn::InputOtpComponent.new(length: 4, name: "pin") %>
+ERB
+      %>
+    </div>
+
+    <!-- Numeric Only -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Numeric Only</h3>
+      <p class="text-sm text-muted-foreground">Use pattern validation to restrict input to numbers only.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::InputOtpComponent.new(length: 6, name: "otp_numeric", pattern: "^[0-9]*$") %>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: <<~ERB
+<%%= render Shadcn::InputOtpComponent.new(length: 6, name: "otp", pattern: "^[0-9]*$") %>
+ERB
+      %>
+    </div>
+
+    <!-- Disabled -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::InputOtpComponent.new(length: 6, name: "otp_disabled", disabled: true) %>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: <<~ERB
+<%%= render Shadcn::InputOtpComponent.new(length: 6, name: "otp", disabled: true) %>
+ERB
+      %>
+    </div>
+
+    <!-- In Form -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">In Form Field</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="max-w-sm space-y-4">
+          <%= render Shadcn::FieldComponent.new do |field| %>
+            <% field.with_label { "Verification Code" } %>
+            <% field.with_control do %>
+              <%= render Shadcn::InputOtpComponent.new(length: 6, name: "verification_code") %>
+            <% end %>
+            <% field.with_description { "Enter the 6-digit code sent to your email." } %>
+          <% end %>
+
+          <%= render Shadcn::ButtonComponent.new(class_name: "w-full") { "Verify" } %>
+        </div>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: <<~ERB
+<%%= render Shadcn::FieldComponent.new do |field| %>
+  <%% field.with_label { "Verification Code" } %>
+  <%% field.with_control do %>
+    <%%= render Shadcn::InputOtpComponent.new(length: 6, name: "verification_code") %>
+  <%% end %>
+  <%% field.with_description { "Enter the 6-digit code sent to your email." } %>
+<%% end %>
+
+<%%= render Shadcn::ButtonComponent.new(class_name: "w-full") { "Verify" } %>
+ERB
+      %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+    <%= render "docs/props_table", props: [
+      { name: "length", type: "Integer", default: "6", description: "Number of OTP digits" },
+      { name: "name", type: "String", default: "nil", description: "Input name for form submission" },
+      { name: "pattern", type: "String", default: "nil", description: "Regex pattern for validation (e.g., '^[0-9]*$' for numbers only)" },
+      { name: "disabled", type: "Boolean", default: "false", description: "Whether the input is disabled" },
+      { name: "required", type: "Boolean", default: "false", description: "Whether the input is required" },
+      { name: "autocomplete", type: "String", default: "\"one-time-code\"", description: "Autocomplete attribute" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" }
+    ] %>
+  </div>
+
+  <!-- Stimulus Controller -->
+  <div id="stimulus" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Stimulus Controller</h2>
+    <p class="leading-7">
+      The Input OTP component requires the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">shadcn--input-otp</code> Stimulus controller.
+    </p>
+    <%= render "docs/stimulus_docs", controller: "input-otp",
+      targets: ["slot", "input", "hiddenInput", "caret"],
+      values: [
+        { name: "length", type: "Number", default: "6", description: "Number of OTP slots" },
+        { name: "pattern", type: "String", default: '""', description: "Regex pattern for validation" },
+        { name: "disabled", type: "Boolean", default: "false", description: "Disabled state" }
+      ],
+      actions: [
+        { name: "handleInput", description: "Processes input and auto-advances" },
+        { name: "handleKeydown", description: "Handles keyboard navigation" },
+        { name: "handlePaste", description: "Processes pasted OTP codes" },
+        { name: "clear", description: "Clears all inputs" }
+      ]
+    %>
+  </div>
+
+  <!-- Features -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Features</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li><strong>Auto-advance:</strong> Cursor moves to next slot automatically after input</li>
+      <li><strong>Paste support:</strong> Paste a full OTP code and it fills all slots</li>
+      <li><strong>Keyboard navigation:</strong> Use arrow keys to move between slots</li>
+      <li><strong>Backspace handling:</strong> Deletes and moves to previous slot</li>
+      <li><strong>Pattern validation:</strong> Restrict input to specific characters</li>
+      <li><strong>Hidden input:</strong> Full OTP value is stored in a hidden input for form submission</li>
+    </ul>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Each input is individually focusable via keyboard</li>
+      <li>Uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">inputmode="numeric"</code> for mobile numeric keyboard</li>
+      <li>First slot has <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">autocomplete="one-time-code"</code> for autofill</li>
+      <li>Visible focus ring indicates current active slot</li>
+    </ul>
+  </div>
+</div>

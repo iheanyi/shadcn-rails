@@ -1,0 +1,194 @@
+<% content_for :title, "Native Select" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Native Select</h1>
+    <p class="text-xl text-muted-foreground">A styled native HTML select element with optgroup support.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+        No JavaScript Required
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <div class="max-w-sm">
+      <%= render Shadcn::NativeSelectComponent.new(name: "country") do |select| %>
+        <% select.with_option(value: "", disabled: true, selected: true) { "Select a country" } %>
+        <% select.with_option(value: "us") { "United States" } %>
+        <% select.with_option(value: "uk") { "United Kingdom" } %>
+        <% select.with_option(value: "ca") { "Canada" } %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component native_select" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= render "docs/code_example", language: "erb", code: <<~ERB
+<%%= render Shadcn::NativeSelectComponent.new(name: "country") do |select| %>
+  <%% select.with_option(value: "", disabled: true, selected: true) { "Select a country" } %>
+  <%% select.with_option(value: "us") { "United States" } %>
+  <%% select.with_option(value: "uk") { "United Kingdom" } %>
+<%% end %>
+ERB
+    %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- With Optgroups -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Optgroups</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="max-w-sm">
+          <%= render Shadcn::NativeSelectComponent.new(name: "car") do |select| %>
+            <% select.with_optgroup(label: "Swedish Cars") do |group| %>
+              <% group.with_option(value: "volvo") { "Volvo" } %>
+              <% group.with_option(value: "saab") { "Saab" } %>
+            <% end %>
+            <% select.with_optgroup(label: "German Cars") do |group| %>
+              <% group.with_option(value: "mercedes") { "Mercedes" } %>
+              <% group.with_option(value: "audi") { "Audi" } %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: <<~ERB
+<%%= render Shadcn::NativeSelectComponent.new(name: "car") do |select| %>
+  <%% select.with_optgroup(label: "Swedish Cars") do |group| %>
+    <%% group.with_option(value: "volvo") { "Volvo" } %>
+    <%% group.with_option(value: "saab") { "Saab" } %>
+  <%% end %>
+  <%% select.with_optgroup(label: "German Cars") do |group| %>
+    <%% group.with_option(value: "mercedes") { "Mercedes" } %>
+    <%% group.with_option(value: "audi") { "Audi" } %>
+  <%% end %>
+<%% end %>
+ERB
+      %>
+    </div>
+
+    <!-- Disabled -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="max-w-sm">
+          <%= render Shadcn::NativeSelectComponent.new(name: "status", disabled: true) do |select| %>
+            <% select.with_option(value: "active", selected: true) { "Active" } %>
+            <% select.with_option(value: "inactive") { "Inactive" } %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: <<~ERB
+<%%= render Shadcn::NativeSelectComponent.new(name: "status", disabled: true) do |select| %>
+  <%% select.with_option(value: "active", selected: true) { "Active" } %>
+  <%% select.with_option(value: "inactive") { "Inactive" } %>
+<%% end %>
+ERB
+      %>
+    </div>
+
+    <!-- Required -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Required</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="max-w-sm">
+          <%= render Shadcn::NativeSelectComponent.new(name: "priority", required: true) do |select| %>
+            <% select.with_option(value: "", disabled: true, selected: true) { "Select priority" } %>
+            <% select.with_option(value: "low") { "Low" } %>
+            <% select.with_option(value: "medium") { "Medium" } %>
+            <% select.with_option(value: "high") { "High" } %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- In Form Field -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">In Form Field</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="max-w-sm">
+          <%= render Shadcn::FieldComponent.new do |field| %>
+            <% field.with_label { "Country" } %>
+            <% field.with_control do %>
+              <%= render Shadcn::NativeSelectComponent.new(name: "user[country]") do |select| %>
+                <% select.with_option(value: "", disabled: true, selected: true) { "Select your country" } %>
+                <% select.with_option(value: "us") { "United States" } %>
+                <% select.with_option(value: "uk") { "United Kingdom" } %>
+                <% select.with_option(value: "ca") { "Canada" } %>
+              <% end %>
+            <% end %>
+            <% field.with_description { "Select the country where you reside." } %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+    <%= render "docs/props_table", props: [
+      { name: "name", type: "String", default: "nil", description: "Select name attribute for form submission" },
+      { name: "id", type: "String", default: "nil", description: "Select ID attribute" },
+      { name: "disabled", type: "Boolean", default: "false", description: "Whether the select is disabled" },
+      { name: "required", type: "Boolean", default: "false", description: "Whether the select is required" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" }
+    ] %>
+
+    <h3 class="text-lg font-semibold mt-6 mb-2">Slots</h3>
+    <ul class="ml-6 list-disc space-y-2">
+      <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">with_option</code> - Option element (value:, disabled:, selected:)</li>
+      <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">with_optgroup</code> - Option group (label:, disabled:) with nested options</li>
+    </ul>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses native <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">&lt;select&gt;</code> element for full accessibility support</li>
+      <li>Screen readers announce all options and their states correctly</li>
+      <li>Keyboard navigation works natively (arrow keys, type to search)</li>
+      <li>Consider using a placeholder option with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">disabled</code> for initial state</li>
+    </ul>
+  </div>
+
+  <!-- Native vs Custom Select -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Native vs Custom Select</h2>
+    <p class="leading-7">Use Native Select when:</p>
+    <ul class="ml-6 list-disc space-y-2">
+      <li>You need maximum accessibility and mobile support</li>
+      <li>You don't need custom styling for the dropdown</li>
+      <li>You want zero JavaScript overhead</li>
+    </ul>
+    <p class="leading-7 mt-4">Use the custom <a href="/docs/select" class="text-primary underline">Select component</a> when:</p>
+    <ul class="ml-6 list-disc space-y-2">
+      <li>You need full control over dropdown styling</li>
+      <li>You want features like search/filtering</li>
+      <li>You need custom option rendering</li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,190 @@
+<% content_for :title, "Field" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Field</h1>
+    <p class="text-xl text-muted-foreground">A form field wrapper with label, input, description, and error message support.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+        No JavaScript Required
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <div class="max-w-sm">
+      <%= render Shadcn::FieldComponent.new do |field| %>
+        <% field.with_label { "Email" } %>
+        <% field.with_input(type: :email, placeholder: "you@example.com") %>
+        <% field.with_description { "We'll never share your email." } %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component field" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= render "docs/code_example", language: "erb", code: <<~ERB
+<%%= render Shadcn::FieldComponent.new do |field| %>
+  <%% field.with_label { "Email" } %>
+  <%% field.with_input(type: :email, placeholder: "you@example.com") %>
+<%% end %>
+ERB
+    %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- With Description -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Description</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="max-w-sm">
+          <%= render Shadcn::FieldComponent.new do |field| %>
+            <% field.with_label { "Username" } %>
+            <% field.with_input(placeholder: "shadcn") %>
+            <% field.with_description { "This is your public display name." } %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: <<~ERB
+<%%= render Shadcn::FieldComponent.new do |field| %>
+  <%% field.with_label { "Username" } %>
+  <%% field.with_input(placeholder: "shadcn") %>
+  <%% field.with_description { "This is your public display name." } %>
+<%% end %>
+ERB
+      %>
+    </div>
+
+    <!-- With Error -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Error</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="max-w-sm">
+          <%= render Shadcn::FieldComponent.new do |field| %>
+            <% field.with_label { "Password" } %>
+            <% field.with_input(type: :password) %>
+            <% field.with_error { "Password must be at least 8 characters." } %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: <<~ERB
+<%%= render Shadcn::FieldComponent.new do |field| %>
+  <%% field.with_label { "Password" } %>
+  <%% field.with_input(type: :password) %>
+  <%% field.with_error { "Password must be at least 8 characters." } %>
+<%% end %>
+ERB
+      %>
+    </div>
+
+    <!-- Required Field -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Required Field</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="max-w-sm">
+          <%= render Shadcn::FieldComponent.new do |field| %>
+            <% field.with_label(required: true) { "Name" } %>
+            <% field.with_input(required: true, placeholder: "Your full name") %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- With Custom Control -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Custom Control (Textarea)</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="max-w-sm">
+          <%= render Shadcn::FieldComponent.new do |field| %>
+            <% field.with_label { "Bio" } %>
+            <% field.with_control do %>
+              <%= render Shadcn::TextareaComponent.new(placeholder: "Tell us about yourself", rows: 3) %>
+            <% end %>
+            <% field.with_description { "Write a short bio about yourself." } %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: <<~ERB
+<%%= render Shadcn::FieldComponent.new do |field| %>
+  <%% field.with_label { "Bio" } %>
+  <%% field.with_control do %>
+    <%%= render Shadcn::TextareaComponent.new(placeholder: "Tell us about yourself") %>
+  <%% end %>
+  <%% field.with_description { "Write a short bio about yourself." } %>
+<%% end %>
+ERB
+      %>
+    </div>
+
+    <!-- Form Example -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Form Example</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="max-w-sm space-y-4">
+          <%= render Shadcn::FieldComponent.new(name: "user[email]") do |field| %>
+            <% field.with_label { "Email" } %>
+            <% field.with_input(type: :email, placeholder: "you@example.com") %>
+          <% end %>
+
+          <%= render Shadcn::FieldComponent.new(name: "user[password]") do |field| %>
+            <% field.with_label { "Password" } %>
+            <% field.with_input(type: :password) %>
+          <% end %>
+
+          <%= render Shadcn::ButtonComponent.new(class_name: "w-full") { "Submit" } %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+    <%= render "docs/props_table", props: [
+      { name: "name", type: "String", default: "nil", description: "Input name attribute for form submission" },
+      { name: "id", type: "String", default: "auto-generated", description: "Input ID (auto-generated if not provided)" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" }
+    ] %>
+
+    <h3 class="text-lg font-semibold mt-6 mb-2">Slots</h3>
+    <ul class="ml-6 list-disc space-y-2">
+      <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">with_label</code> - Label for the field (accepts <code>required:</code> option)</li>
+      <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">with_input</code> - Input component (accepts all Input props)</li>
+      <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">with_control</code> - Custom control slot (for textarea, select, etc.)</li>
+      <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">with_description</code> - Helper text below the input</li>
+      <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">with_error</code> - Error message (automatically styles input)</li>
+    </ul>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Labels are automatically associated with inputs via the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">for</code> attribute</li>
+      <li>Error messages have <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="alert"</code> for screen reader announcement</li>
+      <li>Input styling changes when errors are present to provide visual feedback</li>
+    </ul>
+  </div>
+</div>
