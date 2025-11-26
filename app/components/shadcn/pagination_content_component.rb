@@ -2,18 +2,9 @@
 
 module Shadcn
   # Pagination Content component - container for items
+  # Uses a single polymorphic slot to maintain ordering between items and ellipses
   class PaginationContentComponent < BaseComponent
     BASE_CLASSES = "flex flex-row items-center gap-1"
-
-    renders_many :items, ->(href: nil, active: false, disabled: false, **options, &block) do
-      PaginationItemComponent.new(
-        href: href,
-        active: active,
-        disabled: disabled,
-        **options,
-        &block
-      )
-    end
 
     renders_one :previous, lambda { |href: nil, disabled: false, **options|
       PaginationPreviousComponent.new(href: href, disabled: disabled, **options)
@@ -23,8 +14,20 @@ module Shadcn
       PaginationNextComponent.new(href: href, disabled: disabled, **options)
     }
 
-    renders_many :ellipses, lambda { |**options|
-      PaginationEllipsisComponent.new(**options)
+    # Single slot for all page elements (items and ellipses) to maintain order
+    renders_many :elements, types: {
+      item: {
+        renders: lambda { |href: nil, active: false, disabled: false, **options|
+          PaginationItemComponent.new(href: href, active: active, disabled: disabled, **options)
+        },
+        as: :item
+      },
+      ellipse: {
+        renders: lambda { |**options|
+          PaginationEllipsisComponent.new(**options)
+        },
+        as: :ellipse
+      }
     }
 
     def call
@@ -36,10 +39,8 @@ module Shadcn
     def list_content
       safe_join([
         previous,
-        items.map(&:to_s),
-        ellipses.map(&:to_s),
-        next_page,
-        content
+        elements,
+        next_page
       ].flatten.compact)
     end
   end
