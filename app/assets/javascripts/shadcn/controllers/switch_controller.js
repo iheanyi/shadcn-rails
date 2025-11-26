@@ -1,47 +1,78 @@
 import { Controller } from "@hotwired/stimulus"
 
 /**
- * Switch controller for toggle switches
+ * Switch Controller
+ *
+ * Handles toggle switch with hidden input sync for form submission
+ *
+ * Targets:
+ * - button: The visual switch button element
+ * - thumb: The sliding thumb element
+ * - input: Hidden checkbox input for form submission
+ *
+ * Values:
+ * - checked: Boolean indicating current state
  */
 export default class extends Controller {
+  static targets = ["button", "thumb", "input"]
   static values = {
-    checked: { type: Boolean, default: false },
-    name: String
+    checked: { type: Boolean, default: false }
   }
 
   connect() {
-    this.updateState()
+    this.updateVisuals()
   }
 
   toggle() {
+    if (this.hasButtonTarget && this.buttonTarget.disabled) return
+
     this.checkedValue = !this.checkedValue
-    this.updateState()
-    this.updateHiddenInput()
-    this.dispatch("change", { detail: { checked: this.checkedValue } })
+    this.updateVisuals()
+    this.syncInput()
+    this.dispatchChange()
   }
 
-  updateState() {
+  handleKeydown(event) {
+    if (event.key === " " || event.key === "Enter") {
+      event.preventDefault()
+      this.toggle()
+    }
+  }
+
+  updateVisuals() {
     const state = this.checkedValue ? "checked" : "unchecked"
-    this.element.dataset.state = state
-    this.element.setAttribute("aria-checked", this.checkedValue.toString())
+
+    // Update button state
+    if (this.hasButtonTarget) {
+      this.buttonTarget.dataset.state = state
+      this.buttonTarget.setAttribute("aria-checked", this.checkedValue.toString())
+    }
 
     // Update thumb position
-    const thumb = this.element.querySelector("span")
-    if (thumb) {
-      thumb.dataset.state = state
+    if (this.hasThumbTarget) {
+      this.thumbTarget.dataset.state = state
+    }
+
+    // Update wrapper element state
+    this.element.dataset.state = state
+  }
+
+  syncInput() {
+    if (this.hasInputTarget) {
+      this.inputTarget.checked = this.checkedValue
+      // Dispatch native change event for form compatibility
+      this.inputTarget.dispatchEvent(new Event("change", { bubbles: true }))
     }
   }
 
-  updateHiddenInput() {
-    if (!this.nameValue) return
-
-    let input = this.element.parentElement.querySelector(`input[name="${this.nameValue}"]`)
-    if (input) {
-      input.value = this.checkedValue ? "1" : "0"
-    }
+  dispatchChange() {
+    this.dispatch("change", {
+      detail: { checked: this.checkedValue }
+    })
   }
 
   checkedValueChanged() {
-    this.updateState()
+    this.updateVisuals()
+    this.syncInput()
   }
 }

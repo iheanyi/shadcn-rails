@@ -712,6 +712,55 @@
         this.dispatch("change", { detail: { value: value, percentage: percentage } })
       }
     })
+
+    // Switch Controller
+    Stimulus.register("shadcn--switch", class extends Controller {
+      static targets = ["button", "thumb", "input"]
+      static values = { checked: { type: Boolean, default: false } }
+
+      connect() { this.updateVisuals() }
+
+      toggle() {
+        if (this.hasButtonTarget && this.buttonTarget.disabled) return
+        this.checkedValue = !this.checkedValue
+        this.updateVisuals()
+        this.syncInput()
+        this.dispatchChange()
+      }
+
+      handleKeydown(event) {
+        if (event.key === " " || event.key === "Enter") {
+          event.preventDefault()
+          this.toggle()
+        }
+      }
+
+      updateVisuals() {
+        const state = this.checkedValue ? "checked" : "unchecked"
+        if (this.hasButtonTarget) {
+          this.buttonTarget.dataset.state = state
+          this.buttonTarget.setAttribute("aria-checked", this.checkedValue.toString())
+        }
+        if (this.hasThumbTarget) this.thumbTarget.dataset.state = state
+        this.element.dataset.state = state
+      }
+
+      syncInput() {
+        if (this.hasInputTarget) {
+          this.inputTarget.checked = this.checkedValue
+          this.inputTarget.dispatchEvent(new Event("change", { bubbles: true }))
+        }
+      }
+
+      dispatchChange() {
+        this.dispatch("change", { detail: { checked: this.checkedValue } })
+      }
+
+      checkedValueChanged() {
+        this.updateVisuals()
+        this.syncInput()
+      }
+    })
   </script>
   <style>
     <%= Shadcn::Rails.theme_css %>
