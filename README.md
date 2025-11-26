@@ -35,6 +35,7 @@ Beautiful, accessible UI components for Rails built with ViewComponents, Stimulu
 - [Stimulus Controllers](#stimulus-controllers)
 - [Testing](#testing)
 - [Development](#development)
+- [Security Considerations](#security-considerations)
 - [Contributing](#contributing)
 
 ## Installation
@@ -1108,6 +1109,64 @@ Visit `http://localhost:3000` to see the demo app with:
 - `/showcase` - Full component showcase
 - `/themes` - Theme preview and comparison
 - `/lookbook` - Component previews with Lookbook
+
+## Security Considerations
+
+shadcn-rails follows Rails security best practices. Here are important security guidelines:
+
+### CSRF Protection
+
+Always use Rails form helpers to automatically include CSRF tokens:
+
+```erb
+<%= form_with url: "/submit" do |f| %>
+  <%= render Shadcn::InputComponent.new(name: "email") %>
+  <%= render Shadcn::ButtonComponent.new(type: "submit") { "Submit" } %>
+<% end %>
+```
+
+### XSS Prevention
+
+ViewComponent auto-escapes all content by default. Never call `html_safe` on user-provided content:
+
+```erb
+<%# SAFE - auto-escaped %>
+<%= render Shadcn::BadgeComponent.new { user.name } %>
+
+<%# DANGEROUS - never do this with user input! %>
+<%= render Shadcn::BadgeComponent.new { user.name.html_safe } %>
+```
+
+### Input Validation
+
+Form components (Input, Textarea, Select) pass through values without validation. Always implement:
+
+- Server-side input validation
+- Strong parameters in controllers
+- Model validations
+
+```ruby
+# In your controller
+def user_params
+  params.require(:user).permit(:name, :email)
+end
+
+# In your model
+validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+```
+
+### Content Security Policy
+
+If using CSP headers, ensure your policy allows inline styles for theming:
+
+```ruby
+# config/initializers/content_security_policy.rb
+Rails.application.configure do
+  config.content_security_policy do |policy|
+    policy.style_src :self, :unsafe_inline  # Required for CSS variables
+  end
+end
+```
 
 ## Contributing
 
