@@ -2,27 +2,35 @@
 
 module Shadcn
   # Radio Group component for selecting one option from a set
-  # Matches shadcn/ui RadioGroup component
+  # Uses native <input type="radio"> elements styled with CSS
+  # Works without JavaScript for progressive enhancement
   #
   # @example Basic usage
   #   <%= render Shadcn::RadioGroupComponent.new(name: "plan", value: "pro") do |group| %>
-  #     <% group.with_item(value: "free", id: "free") %>
-  #     <%= render Shadcn::LabelComponent.new(for: "free") { "Free" } %>
-  #     <% group.with_item(value: "pro", id: "pro") %>
-  #     <%= render Shadcn::LabelComponent.new(for: "pro") { "Pro" } %>
+  #     <% group.with_item(value: "free", id: "free") { "Free" } %>
+  #     <% group.with_item(value: "pro", id: "pro") { "Pro" } %>
+  #   <% end %>
+  #
+  # @example With separate labels
+  #   <%= render Shadcn::RadioGroupComponent.new(name: "plan") do |group| %>
+  #     <div class="flex items-center space-x-2">
+  #       <% group.with_item(value: "free", id: "free") %>
+  #       <%= render Shadcn::LabelComponent.new(for: "free") { "Free" } %>
+  #     </div>
   #   <% end %>
   #
   class RadioGroupComponent < BaseComponent
     BASE_CLASSES = "grid gap-3"
 
-    renders_many :items, ->(value:, id: nil, disabled: false, **options) do
+    renders_many :items, ->(value:, id: nil, disabled: false, **options, &block) do
       RadioGroupItemComponent.new(
         value: value,
         id: id,
         disabled: disabled,
         group_name: @name,
         selected: @value == value,
-        **options
+        **options,
+        &block
       )
     end
 
@@ -63,10 +71,7 @@ module Shadcn
         role: "radiogroup",
         class: cn(BASE_CLASSES, orientation_classes, class_name),
         "aria-required": @required ? "true" : nil,
-        "aria-disabled": @disabled ? "true" : nil,
-        "data-controller": "shadcn--radio-group",
-        "data-shadcn--radio-group-name-value": @name,
-        "data-shadcn--radio-group-value-value": @value
+        "aria-disabled": @disabled ? "true" : nil
       }
       attrs.merge!(html_options)
       attrs.merge!(build_data)

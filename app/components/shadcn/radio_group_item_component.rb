@@ -1,9 +1,29 @@
 # frozen_string_literal: true
 
 module Shadcn
-  # Individual radio button item
+  # Individual radio button item using native <input type="radio">
+  # Styled with CSS to match shadcn/ui design
+  # Works without JavaScript
   class RadioGroupItemComponent < BaseComponent
-    ITEM_CLASSES = "aspect-square h-4 w-4 shrink-0 rounded-full border border-primary text-primary shadow focus:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+    # CSS classes for the native radio input styled as a custom circle
+    ITEM_CLASSES = [
+      # Reset native appearance
+      "appearance-none",
+      # Size and shape
+      "aspect-square h-4 w-4 shrink-0 rounded-full",
+      # Border and colors
+      "border border-primary",
+      # Ring focus style
+      "focus:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1",
+      # Disabled state
+      "disabled:cursor-not-allowed disabled:opacity-50",
+      # Custom checked indicator using CSS
+      "relative",
+      # Checked state - show inner circle
+      "checked:bg-primary",
+      # Transition for smooth state changes
+      "transition-colors"
+    ].join(" ")
 
     def initialize(
       value:,
@@ -16,63 +36,52 @@ module Shadcn
     )
       super(**options, &block)
       @value = value
-      @id = id
+      @id = id || "radio-#{value}"
       @disabled = disabled
       @group_name = group_name
       @selected = selected
     end
 
     def call
-      content_tag(:button, item_attributes) do
-        indicator
+      if content.present?
+        # Render with integrated label if block content provided
+        content_tag(:label, label_wrapper_attributes) do
+          safe_join([
+            radio_input,
+            content_tag(:span, content, class: "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70")
+          ])
+        end
+      else
+        # Render just the radio input (for use with external labels)
+        radio_input
       end
     end
 
     private
 
-    def item_attributes
+    def radio_input
+      tag(:input, input_attributes)
+    end
+
+    def input_attributes
       attrs = {
-        type: "button",
-        role: "radio",
+        type: "radio",
+        name: @group_name,
+        value: @value,
         id: @id,
-        class: merge_classes(ITEM_CLASSES),
+        class: cn(ITEM_CLASSES, "peer", class_name),
         disabled: @disabled || nil,
-        "aria-checked": @selected.to_s,
-        "data-state": @selected ? "checked" : "unchecked",
-        "data-value": @value,
-        "data-shadcn--radio-group-target": "item",
-        "data-action": "click->shadcn--radio-group#select keydown->shadcn--radio-group#handleKeydown"
+        checked: @selected || nil
       }
-      attrs.merge!(html_options)
+      attrs.merge!(html_options.except(:class))
       attrs.compact
     end
 
-    def indicator
-      content_tag(:span, indicator_attributes) do
-        circle_icon
-      end
-    end
-
-    def indicator_attributes
+    def label_wrapper_attributes
       {
-        class: cn(
-          "flex items-center justify-center",
-          @selected ? "" : "opacity-0"
-        ),
-        "data-shadcn--radio-group-target": "indicator"
+        class: "flex items-center space-x-2 cursor-pointer",
+        for: @id
       }
-    end
-
-    def circle_icon
-      content_tag(:svg,
-        content_tag(:circle, nil, cx: "12", cy: "12", r: "6", fill: "currentColor"),
-        xmlns: "http://www.w3.org/2000/svg",
-        width: "10",
-        height: "10",
-        viewBox: "0 0 24 24",
-        fill: "currentColor",
-        class: "h-2.5 w-2.5 fill-primary"
-      )
     end
   end
 end
