@@ -20,15 +20,18 @@ module Dummy
     config.eager_load = false
     config.active_support.deprecation = :stderr
 
-    # ViewComponent configuration (previews only available in development/test)
-    if Rails.env.development? || Rails.env.test?
-      config.view_component.previews.paths = [Rails.root.join("../../test/components/previews")]
-      config.view_component.previews.default_layout = "component_preview"
+    # ViewComponent configuration
+    # In Docker, the gem is at /shadcn-rails, locally it's at ../..
+    preview_path = if File.exist?("/shadcn-rails/test/components/previews")
+      "/shadcn-rails/test/components/previews"
+    else
+      Rails.root.join("../../test/components/previews")
     end
+    
+    config.view_component.preview_paths = [preview_path]
+    config.view_component.default_preview_layout = "component_preview"
 
-    # Lookbook configuration (development only)
-    if defined?(Lookbook)
-      config.lookbook.preview_paths = [Rails.root.join("../../test/components/previews")]
-    end
+    # Lookbook configuration
+    config.lookbook.preview_paths = [preview_path]
   end
 end
