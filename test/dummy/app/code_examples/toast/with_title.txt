@@ -1,0 +1,4 @@
+<%= render Shadcn::ToastComponent.new do |toast| %>
+  <% toast.with_title { "Scheduled: Catch up" } %>
+  <% toast.with_description { "Friday, February 10, 2023 at 5:57 PM" } %>
+<% end %>

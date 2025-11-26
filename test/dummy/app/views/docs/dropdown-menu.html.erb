@@ -1,0 +1,407 @@
+<% content_for :title, "Dropdown Menu" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+    <a href="#stimulus-controller" class="text-muted-foreground hover:text-foreground">Stimulus Controller</a>
+    <a href="#accessibility" class="text-muted-foreground hover:text-foreground">Accessibility</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Dropdown Menu</h1>
+    <p class="text-xl text-muted-foreground">Displays a menu to the user triggered by a button with a list of actions or functions.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Requires JavaScript
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::DropdownMenuComponent.new do |menu| %>
+      <% menu.with_trigger do %>
+        <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Open Menu" } %>
+      <% end %>
+      <% menu.with_menu do |content| %>
+        <% content.with_label { "My Account" } %>
+        <% content.with_separator %>
+        <% content.with_item(href: "#") { "Profile" } %>
+        <% content.with_item(href: "#") { "Settings" } %>
+        <% content.with_separator %>
+        <% content.with_item(variant: :destructive, href: "#") { "Log out" } %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component dropdown_menu" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("dropdown_menu/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Basic -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Basic</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::DropdownMenuComponent.new do |menu| %>
+          <% menu.with_trigger do %>
+            <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Options" } %>
+          <% end %>
+          <% menu.with_menu do |content| %>
+            <% content.with_item(href: "#") { "Edit" } %>
+            <% content.with_item(href: "#") { "Duplicate" } %>
+            <% content.with_item(href: "#") { "Archive" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("dropdown_menu/basic") %>
+    </div>
+
+    <!-- With Icons -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Icons</h3>
+      <p class="text-sm text-muted-foreground">Add icons to menu items for better visual clarity.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::DropdownMenuComponent.new do |menu| %>
+          <% menu.with_trigger do %>
+            <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Actions" } %>
+          <% end %>
+          <% menu.with_menu do |content| %>
+            <% content.with_item(href: "#") do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+              Edit
+            <% end %>
+            <% content.with_item(href: "#") do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              Copy
+            <% end %>
+            <% content.with_item(href: "#") do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
+              Share
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("dropdown_menu/with_icons") %>
+    </div>
+
+    <!-- With Separators and Labels -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Separators and Labels</h3>
+      <p class="text-sm text-muted-foreground">Use separators and labels to organize menu items into logical groups.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::DropdownMenuComponent.new do |menu| %>
+          <% menu.with_trigger do %>
+            <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Settings" } %>
+          <% end %>
+          <% menu.with_menu do |content| %>
+            <% content.with_label { "Account" } %>
+            <% content.with_separator %>
+            <% content.with_item(href: "#") { "Profile" } %>
+            <% content.with_item(href: "#") { "Billing" } %>
+            <% content.with_item(href: "#") { "Notifications" } %>
+            <% content.with_separator %>
+            <% content.with_label { "Danger Zone" } %>
+            <% content.with_separator %>
+            <% content.with_item(variant: :destructive, href: "#") { "Delete Account" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("dropdown_menu/with_separators") %>
+    </div>
+
+    <!-- With Keyboard Shortcuts -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Keyboard Shortcuts</h3>
+      <p class="text-sm text-muted-foreground">Display keyboard shortcuts to help users discover shortcuts.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::DropdownMenuComponent.new do |menu| %>
+          <% menu.with_trigger do %>
+            <%= render Shadcn::ButtonComponent.new(variant: :outline) { "File" } %>
+          <% end %>
+          <% menu.with_menu do |content| %>
+            <% content.with_item(href: "#") do |item| %>
+              New File
+              <% item.with_shortcut { "⌘N" } %>
+            <% end %>
+            <% content.with_item(href: "#") do |item| %>
+              Open
+              <% item.with_shortcut { "⌘O" } %>
+            <% end %>
+            <% content.with_item(href: "#") do |item| %>
+              Save
+              <% item.with_shortcut { "⌘S" } %>
+            <% end %>
+            <% content.with_separator %>
+            <% content.with_item(href: "#") do |item| %>
+              Print
+              <% item.with_shortcut { "⌘P" } %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("dropdown_menu/with_shortcuts") %>
+    </div>
+
+    <!-- Destructive Items -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Destructive Items</h3>
+      <p class="text-sm text-muted-foreground">Use the destructive variant for dangerous actions.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::DropdownMenuComponent.new do |menu| %>
+          <% menu.with_trigger do %>
+            <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Manage" } %>
+          <% end %>
+          <% menu.with_menu do |content| %>
+            <% content.with_item(href: "#") { "View Details" } %>
+            <% content.with_item(href: "#") { "Edit" } %>
+            <% content.with_separator %>
+            <% content.with_item(variant: :destructive, href: "#") { "Delete" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("dropdown_menu/destructive") %>
+    </div>
+
+    <!-- Disabled Items -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled Items</h3>
+      <p class="text-sm text-muted-foreground">Disable menu items when an action is unavailable.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::DropdownMenuComponent.new do |menu| %>
+          <% menu.with_trigger do %>
+            <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Options" } %>
+          <% end %>
+          <% menu.with_menu do |content| %>
+            <% content.with_item(href: "#") { "Edit" } %>
+            <% content.with_item(href: "#", disabled: true) { "Share (Coming Soon)" } %>
+            <% content.with_item(href: "#") { "Duplicate" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("dropdown_menu/disabled") %>
+    </div>
+
+    <!-- Inset Items -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Inset Items</h3>
+      <p class="text-sm text-muted-foreground">Use the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">inset</code> prop to add left padding for better alignment with icons.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::DropdownMenuComponent.new do |menu| %>
+          <% menu.with_trigger do %>
+            <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Menu with Icons" } %>
+          <% end %>
+          <% menu.with_menu do |content| %>
+            <% content.with_label(inset: true) { "Actions" } %>
+            <% content.with_separator %>
+            <% content.with_item(href: "#", inset: true) do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+              Edit
+            <% end %>
+            <% content.with_item(href: "#", inset: true) { "Delete (no icon)" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("dropdown_menu/inset") %>
+    </div>
+
+    <!-- Alignment -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Alignment</h3>
+      <p class="text-sm text-muted-foreground">Control the alignment of the dropdown menu content relative to the trigger.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="flex gap-4 justify-between">
+          <%= render Shadcn::DropdownMenuComponent.new(align: :start) do |menu| %>
+            <% menu.with_trigger do %>
+              <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Align Start" } %>
+            <% end %>
+            <% menu.with_menu do |content| %>
+              <% content.with_item(href: "#") { "Item 1" } %>
+              <% content.with_item(href: "#") { "Item 2" } %>
+            <% end %>
+          <% end %>
+
+          <%= render Shadcn::DropdownMenuComponent.new(align: :center) do |menu| %>
+            <% menu.with_trigger do %>
+              <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Align Center" } %>
+            <% end %>
+            <% menu.with_menu do |content| %>
+              <% content.with_item(href: "#") { "Item 1" } %>
+              <% content.with_item(href: "#") { "Item 2" } %>
+            <% end %>
+          <% end %>
+
+          <%= render Shadcn::DropdownMenuComponent.new(align: :end) do |menu| %>
+            <% menu.with_trigger do %>
+              <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Align End" } %>
+            <% end %>
+            <% menu.with_menu do |content| %>
+              <% content.with_item(href: "#") { "Item 1" } %>
+              <% content.with_item(href: "#") { "Item 2" } %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= erb_example("dropdown_menu/alignment") %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">DropdownMenuComponent</h3>
+    <%= render "docs/props_table", title: nil, props: [
+      { name: "open", type: "Boolean", default: "false", description: "Whether the dropdown starts in open state" },
+      { name: "align", type: "Symbol", default: ":end", description: "Content alignment (:start, :center, :end)" },
+      { name: "side", type: "Symbol", default: ":bottom", description: "Side to show content (:top, :right, :bottom, :left)" }
+    ] %>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">Slots</h3>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Slot</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_trigger</td>
+            <td class="p-4 align-middle text-muted-foreground">The element that opens the dropdown (usually a button)</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_menu</td>
+            <td class="p-4 align-middle text-muted-foreground">The dropdown menu content container (yields DropdownMenuContentComponent)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">DropdownMenuContentComponent Slots</h3>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Slot</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Props</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_item</td>
+            <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">href:</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">variant:</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">disabled:</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">inset:</code></td>
+            <td class="p-4 align-middle text-muted-foreground">Menu item (can be a link or div)</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_label</td>
+            <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">inset:</code></td>
+            <td class="p-4 align-middle text-muted-foreground">Section label for grouping items</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_separator</td>
+            <td class="p-4 align-middle">-</td>
+            <td class="p-4 align-middle text-muted-foreground">Visual separator between menu sections</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_group</td>
+            <td class="p-4 align-middle">-</td>
+            <td class="p-4 align-middle text-muted-foreground">Group of related items</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">DropdownMenuItemComponent</h3>
+    <%= render "docs/props_table", title: nil, props: [
+      { name: "href", type: "String", default: "nil", description: "Link URL (renders as <a> if provided, <div> otherwise)" },
+      { name: "variant", type: "Symbol", default: ":default", description: "Item variant (:default, :destructive)" },
+      { name: "disabled", type: "Boolean", default: "false", description: "Whether the item is disabled" },
+      { name: "inset", type: "Boolean", default: "false", description: "Whether to add left padding for icon alignment" }
+    ] %>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">DropdownMenuItemComponent Slots</h3>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Slot</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_shortcut</td>
+            <td class="p-4 align-middle text-muted-foreground">Keyboard shortcut hint displayed on the right</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Stimulus Controller -->
+  <div id="stimulus-controller">
+    <%= render "docs/stimulus_docs",
+      controller_name: "shadcn--dropdown",
+      description: "Manages dropdown menu open/close state, positioning, keyboard navigation, and item selection.",
+      targets: [
+        { name: "trigger", description: "The element that triggers the dropdown to open" },
+        { name: "content", description: "The dropdown menu content container" },
+        { name: "item", description: "Individual menu items for keyboard navigation" }
+      ],
+      values: [
+        { name: "open", type: "Boolean", default: "false", description: "Current open/closed state" },
+        { name: "align", type: "String", default: "end", description: "Content alignment (start, center, end)" },
+        { name: "side", type: "String", default: "bottom", description: "Side to show content (top, bottom, left, right)" }
+      ],
+      actions: [
+        { name: "toggle", description: "Toggles the dropdown open/closed state" },
+        { name: "show", description: "Opens the dropdown menu" },
+        { name: "hide", description: "Closes the dropdown menu" },
+        { name: "close", description: "Alias for hide" },
+        { name: "selectItem", description: "Handles item selection and closes menu" }
+      ]
+    %>
+  </div>
+
+  <!-- Accessibility -->
+  <div id="accessibility" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="menu"</code> for the dropdown content</li>
+      <li>Sets <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="menuitem"</code> on each item</li>
+      <li>Sets <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-expanded</code> on trigger to indicate open state</li>
+      <li>Supports full keyboard navigation:
+        <ul class="ml-6 list-disc mt-2">
+          <li><kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Escape</kbd> - Closes the menu and returns focus to trigger</li>
+          <li><kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">↓</kbd> / <kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">↑</kbd> - Navigate through menu items</li>
+          <li><kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Home</kbd> / <kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">End</kbd> - Jump to first/last item</li>
+          <li><kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Enter</kbd> / <kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Space</kbd> - Select focused item</li>
+        </ul>
+      </li>
+      <li>Disabled items use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">data-disabled</code> attribute and are skipped in keyboard navigation</li>
+      <li>Automatically closes when clicking outside the dropdown</li>
+      <li>Focus is automatically moved to the first menu item when opened</li>
+    </ul>
+  </div>
+</div>

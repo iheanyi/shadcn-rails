@@ -1,0 +1,333 @@
+<% content_for :title, "Collapsible" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+    <a href="#stimulus" class="text-muted-foreground hover:text-foreground">Stimulus</a>
+    <a href="#accessibility" class="text-muted-foreground hover:text-foreground">Accessibility</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Collapsible</h1>
+    <p class="text-xl text-muted-foreground">An interactive component which expands and collapses a panel.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Stimulus: shadcn--collapsible
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <div class="w-full max-w-md space-y-2">
+      <%= render Shadcn::CollapsibleComponent.new do |collapsible| %>
+        <% collapsible.with_trigger do %>
+          <div class="flex items-center justify-between space-x-4">
+            <h4 class="text-sm font-semibold">@peduarte starred 3 repositories</h4>
+            <%= render Shadcn::ButtonComponent.new(variant: :ghost, size: :sm, class_name: "w-9 p-0") do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+              <span class="sr-only">Toggle</span>
+            <% end %>
+          </div>
+        <% end %>
+        <% collapsible.with_body do %>
+          <div class="rounded-md border px-4 py-3 font-mono text-sm space-y-2">
+            <div>@radix-ui/primitives</div>
+            <div>@radix-ui/colors</div>
+            <div>@stitches/react</div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component collapsible" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("collapsible/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Basic -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Basic</h3>
+      <p class="text-sm text-muted-foreground">A simple collapsible with a trigger button and content area.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-md space-y-2">
+          <%= render Shadcn::CollapsibleComponent.new do |collapsible| %>
+            <% collapsible.with_trigger do %>
+              <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>
+                Toggle
+              <% end %>
+            <% end %>
+            <% collapsible.with_body do %>
+              <div class="rounded-md border px-4 py-3 text-sm">
+                This is the collapsible content. Click the button above to toggle visibility.
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Initially Open -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Initially Open</h3>
+      <p class="text-sm text-muted-foreground">Set <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">open: true</code> to start with content expanded.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-md space-y-2">
+          <%= render Shadcn::CollapsibleComponent.new(open: true) do |collapsible| %>
+            <% collapsible.with_trigger do %>
+              <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>
+                Toggle Details
+              <% end %>
+            <% end %>
+            <% collapsible.with_body do %>
+              <div class="rounded-md border px-4 py-3 text-sm">
+                This content is visible by default because the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">open</code> parameter is set to <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">true</code>.
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= erb_example("collapsible/initially_open") %>
+    </div>
+
+    <!-- Disabled -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled</h3>
+      <p class="text-sm text-muted-foreground">Prevent toggling by setting <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">disabled: true</code>.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-md space-y-2">
+          <%= render Shadcn::CollapsibleComponent.new(disabled: true) do |collapsible| %>
+            <% collapsible.with_trigger do %>
+              <%= render Shadcn::ButtonComponent.new(variant: :ghost, disabled: true) do %>
+                Disabled Collapsible
+              <% end %>
+            <% end %>
+            <% collapsible.with_body do %>
+              <div class="rounded-md border px-4 py-3 text-sm">
+                This content cannot be toggled because the collapsible is disabled.
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= erb_example("collapsible/disabled") %>
+    </div>
+
+    <!-- With Animation -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Smooth Animation</h3>
+      <p class="text-sm text-muted-foreground">The collapsible includes smooth height animations by default, powered by the Stimulus controller.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-md space-y-2">
+          <%= render Shadcn::CollapsibleComponent.new do |collapsible| %>
+            <% collapsible.with_trigger do %>
+              <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3"></path>
+                  <path d="M21 8V5a2 2 0 0 0-2-2h-3"></path>
+                  <path d="M3 16v3a2 2 0 0 0 2 2h3"></path>
+                  <path d="M16 21h3a2 2 0 0 0 2-2v-3"></path>
+                </svg>
+                Show Details
+              <% end %>
+            <% end %>
+            <% collapsible.with_body do %>
+              <div class="rounded-md border px-4 py-3 text-sm space-y-2">
+                <p>The animation automatically adjusts to the content height.</p>
+                <p>This creates a smooth, natural expand/collapse effect.</p>
+                <p>The 200ms transition provides responsive feedback without feeling sluggish.</p>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Settings Panel Example -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Settings Panel</h3>
+      <p class="text-sm text-muted-foreground">A practical example showing a collapsible settings panel.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::CardComponent.new(class_name: "w-full max-w-md") do |card| %>
+          <% card.with_header do |header| %>
+            <% header.with_title { "Account Settings" } %>
+            <% header.with_description { "Manage your account preferences" } %>
+          <% end %>
+          <% card.with_content do %>
+            <div class="space-y-4">
+              <%= render Shadcn::CollapsibleComponent.new do |collapsible| %>
+                <% collapsible.with_trigger do %>
+                  <div class="flex items-center justify-between w-full">
+                    <div class="space-y-0.5">
+                      <div class="text-sm font-medium">Notification Preferences</div>
+                      <div class="text-sm text-muted-foreground">Configure how you receive notifications</div>
+                    </div>
+                    <%= render Shadcn::ButtonComponent.new(variant: :ghost, size: :sm, class_name: "w-9 p-0") do %>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m6 9 6 6 6-6"></path>
+                      </svg>
+                    <% end %>
+                  </div>
+                <% end %>
+                <% collapsible.with_body do %>
+                  <div class="pt-4 space-y-3">
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm">Email notifications</span>
+                      <%= render Shadcn::CheckboxComponent.new(id: "email-notif") %>
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm">Push notifications</span>
+                      <%= render Shadcn::CheckboxComponent.new(id: "push-notif") %>
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm">SMS notifications</span>
+                      <%= render Shadcn::CheckboxComponent.new(id: "sms-notif") %>
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("collapsible/settings_panel") %>
+    </div>
+
+    <!-- Nested Content Example -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Nested Content</h3>
+      <p class="text-sm text-muted-foreground">Collapsible works with complex nested content and other components.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-md space-y-2">
+          <%= render Shadcn::CollapsibleComponent.new do |collapsible| %>
+            <% collapsible.with_trigger do %>
+              <div class="flex items-center justify-between space-x-4">
+                <h4 class="text-sm font-semibold">Project Files</h4>
+                <%= render Shadcn::ButtonComponent.new(variant: :ghost, size: :sm, class_name: "w-9 p-0") do %>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m6 9 6 6 6-6"></path>
+                  </svg>
+                <% end %>
+              </div>
+            <% end %>
+            <% collapsible.with_body do %>
+              <div class="rounded-md border divide-y">
+                <div class="px-4 py-3 text-sm flex items-center justify-between">
+                  <span class="font-mono">src/components/</span>
+                  <%= render Shadcn::BadgeComponent.new(variant: :secondary) { "Directory" } %>
+                </div>
+                <div class="px-4 py-3 text-sm flex items-center justify-between">
+                  <span class="font-mono">README.md</span>
+                  <%= render Shadcn::BadgeComponent.new(variant: :outline) { "File" } %>
+                </div>
+                <div class="px-4 py-3 text-sm flex items-center justify-between">
+                  <span class="font-mono">package.json</span>
+                  <%= render Shadcn::BadgeComponent.new(variant: :outline) { "File" } %>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">CollapsibleComponent</h3>
+    <%= render "docs/props_table", props: [
+      { name: "open", type: "Boolean", default: "false", description: "Whether the collapsible starts in the expanded state" },
+      { name: "disabled", type: "Boolean", default: "false", description: "When true, prevents toggling the collapsible state" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply to the container" }
+    ] %>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">Slots</h3>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Slot</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_trigger</td>
+            <td class="p-4 align-middle text-muted-foreground">The clickable element that toggles the collapsible. Can contain any content (buttons, text, etc.)</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_body</td>
+            <td class="p-4 align-middle text-muted-foreground">The collapsible content that is shown/hidden when toggled</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Stimulus Controller -->
+  <%= render "docs/stimulus_docs",
+    controller: "shadcn--collapsible",
+    description: "Manages the collapsible state and handles smooth expand/collapse animations with automatic height calculation.",
+    values: [
+      { name: "open", type: "Boolean", description: "Current open/closed state of the collapsible" },
+      { name: "disabled", type: "Boolean", description: "Whether the collapsible is disabled" }
+    ],
+    actions: [
+      { name: "toggle", description: "Toggles between open and closed states (respects disabled)" },
+      { name: "open", description: "Opens the collapsible (respects disabled)" },
+      { name: "close", description: "Closes the collapsible" }
+    ],
+    targets: [
+      { name: "trigger", description: "The clickable element that toggles the state" },
+      { name: "content", description: "The content area that expands/collapses" }
+    ],
+    events: [
+      { name: "shadcn--collapsible:opened", description: "Dispatched when the collapsible is opened" },
+      { name: "shadcn--collapsible:closed", description: "Dispatched when the collapsible is closed" }
+    ]
+  %>
+
+  <!-- Accessibility -->
+  <div id="accessibility" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">data-state</code> attributes to track open/closed state</li>
+      <li>Content is properly hidden with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">hidden</code> attribute when collapsed</li>
+      <li>Smooth height animations provide visual feedback during state changes</li>
+      <li>Disabled state prevents interaction and can be communicated to assistive technologies</li>
+      <li>Dispatches custom events (<code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">opened</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">closed</code>) for integration with other functionality</li>
+    </ul>
+    <div class="mt-4 p-4 border rounded-lg bg-muted/50">
+      <p class="text-sm font-medium mb-2">Best Practices:</p>
+      <ul class="ml-6 list-disc space-y-1 text-sm text-muted-foreground">
+        <li>Use semantic trigger elements (buttons) with descriptive labels</li>
+        <li>Consider adding <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">aria-expanded</code> to the trigger for screen readers</li>
+        <li>Provide visual indicators (icons, arrows) that show the current state</li>
+        <li>Ensure sufficient color contrast for all states</li>
+      </ul>
+    </div>
+  </div>
+</div>

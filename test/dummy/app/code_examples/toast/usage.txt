@@ -1,0 +1,6 @@
+<%= render Shadcn::ToastViewportComponent.new do %>
+  <%= render Shadcn::ToastComponent.new do |toast| %>
+    <% toast.with_title { "Scheduled" } %>
+    <% toast.with_description { "Your message has been scheduled." } %>
+  <% end %>
+<% end %>

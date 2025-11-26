@@ -1,0 +1,12 @@
+<%= render Shadcn::SelectComponent.new(name: "timezone", placeholder: "Select a timezone") do |select| %>
+  <% select.with_group(label: "North America") do |group| %>
+    <% group.with_item(value: "est") { "Eastern Time" } %>
+    <% group.with_item(value: "cst") { "Central Time" } %>
+    <% group.with_item(value: "mst") { "Mountain Time" } %>
+    <% group.with_item(value: "pst") { "Pacific Time" } %>
+  <% end %>
+  <% select.with_group(label: "Europe") do |group| %>
+    <% group.with_item(value: "gmt") { "Greenwich Mean Time" } %>
+    <% group.with_item(value: "cet") { "Central European Time" } %>
+  <% end %>
+<% end %>

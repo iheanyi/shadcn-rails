@@ -1,0 +1,215 @@
+<% content_for :title, "Scroll Area" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+    <a href="#accessibility" class="text-muted-foreground hover:text-foreground">Accessibility</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Scroll Area</h1>
+    <p class="text-xl text-muted-foreground">Augments native scroll functionality for custom, cross-browser styling.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Requires JavaScript
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::ScrollAreaComponent.new(class_name: "h-72 w-48 rounded-md border") do %>
+      <div class="p-4">
+        <h4 class="mb-4 text-sm font-medium leading-none">Tags</h4>
+        <% tags = ["React", "Next.js", "Tailwind CSS", "Radix UI", "shadcn/ui", "Ruby on Rails", "ViewComponent", "Stimulus", "Hotwire", "Turbo"] %>
+        <% tags.each_with_index do |tag, index| %>
+          <div class="text-sm">
+            <%= tag %>
+          </div>
+          <%= content_tag(:div, "", class: "my-2 h-px bg-border") unless index == tags.length - 1 %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component scroll_area" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("scroll_area/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Vertical Scroll -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Vertical Scroll</h3>
+      <p class="text-sm text-muted-foreground">The default orientation for scrollable content.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ScrollAreaComponent.new(orientation: :vertical, class_name: "h-72 w-48 rounded-md border") do %>
+          <div class="p-4">
+            <h4 class="mb-4 text-sm font-medium leading-none">Items</h4>
+            <% (1..30).each_with_index do |i, index| %>
+              <div class="text-sm">Item <%= i %></div>
+              <%= content_tag(:div, "", class: "my-2 h-px bg-border") unless index == 29 %>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+      <%= erb_example("scroll_area/vertical") %>
+    </div>
+
+    <!-- Horizontal Scroll -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Horizontal Scroll</h3>
+      <p class="text-sm text-muted-foreground">Use for horizontally scrolling content like image galleries.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ScrollAreaComponent.new(orientation: :horizontal, class_name: "w-96 whitespace-nowrap rounded-md border") do %>
+          <div class="flex w-max space-x-4 p-4">
+            <% image_urls = (1..10).map { |i| "https://picsum.photos/300/200?random=#{i}" } %>
+            <% image_urls.each do |url| %>
+              <%= image_tag url, class: "h-[200px] w-[300px] rounded-md object-cover" %>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+      <%= erb_example("scroll_area/horizontal") %>
+    </div>
+
+    <!-- Tags List -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Tags List</h3>
+      <p class="text-sm text-muted-foreground">Combine with other components like badges for rich content.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ScrollAreaComponent.new(class_name: "h-48 w-full rounded-md border") do %>
+          <div class="p-4">
+            <h4 class="mb-4 text-sm font-medium leading-none">Popular Tags</h4>
+            <div class="flex flex-wrap gap-2">
+              <% tags = ["Ruby", "Rails", "ViewComponent", "Stimulus", "Hotwire", "Turbo", "React", "Next.js", "Vue", "Angular", "Svelte", "TypeScript", "JavaScript", "Python", "Django", "Flask"] %>
+              <% tags.each do |tag| %>
+                <%= render Shadcn::BadgeComponent.new(variant: :secondary) { tag } %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+      <%= erb_example("scroll_area/tags") %>
+    </div>
+
+    <!-- Fixed Height Container -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Fixed Height Container</h3>
+      <p class="text-sm text-muted-foreground">Ideal for containing long content in a fixed-height area with custom scrollbars.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ScrollAreaComponent.new(class_name: "h-96 w-full rounded-md border") do %>
+          <div class="p-4 space-y-4">
+            <h4 class="text-lg font-semibold">Terms and Conditions</h4>
+            <% 5.times do %>
+              <p class="text-sm text-muted-foreground">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+              </p>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+    <%= render "docs/props_table", props: [
+      { name: "orientation", type: "Symbol", default: ":vertical", description: "Scroll orientation (:vertical, :horizontal, :both)" },
+      { name: "type", type: "Symbol", default: ":hover", description: "When to show scrollbar (:auto, :always, :scroll, :hover)" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply to the scroll area container" }
+    ] %>
+
+    <div class="mt-6">
+      <h3 class="text-lg font-semibold mb-3">Orientation Options</h3>
+      <div class="relative w-full overflow-auto">
+        <table class="w-full caption-bottom text-sm">
+          <thead class="[&_tr]:border-b">
+            <tr class="border-b transition-colors">
+              <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Value</th>
+              <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+            </tr>
+          </thead>
+          <tbody class="[&_tr:last-child]:border-0">
+            <tr class="border-b transition-colors hover:bg-muted/50">
+              <td class="p-4 align-middle font-mono text-sm">:vertical</td>
+              <td class="p-4 align-middle text-muted-foreground">Vertical scrolling only (default)</td>
+            </tr>
+            <tr class="border-b transition-colors hover:bg-muted/50">
+              <td class="p-4 align-middle font-mono text-sm">:horizontal</td>
+              <td class="p-4 align-middle text-muted-foreground">Horizontal scrolling only</td>
+            </tr>
+            <tr class="border-b transition-colors hover:bg-muted/50">
+              <td class="p-4 align-middle font-mono text-sm">:both</td>
+              <td class="p-4 align-middle text-muted-foreground">Both vertical and horizontal scrolling</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <h3 class="text-lg font-semibold mb-3">Type Options</h3>
+      <div class="relative w-full overflow-auto">
+        <table class="w-full caption-bottom text-sm">
+          <thead class="[&_tr]:border-b">
+            <tr class="border-b transition-colors">
+              <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Value</th>
+              <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+            </tr>
+          </thead>
+          <tbody class="[&_tr:last-child]:border-0">
+            <tr class="border-b transition-colors hover:bg-muted/50">
+              <td class="p-4 align-middle font-mono text-sm">:hover</td>
+              <td class="p-4 align-middle text-muted-foreground">Show scrollbar on hover (default)</td>
+            </tr>
+            <tr class="border-b transition-colors hover:bg-muted/50">
+              <td class="p-4 align-middle font-mono text-sm">:always</td>
+              <td class="p-4 align-middle text-muted-foreground">Always show scrollbar</td>
+            </tr>
+            <tr class="border-b transition-colors hover:bg-muted/50">
+              <td class="p-4 align-middle font-mono text-sm">:scroll</td>
+              <td class="p-4 align-middle text-muted-foreground">Show scrollbar only when scrolling</td>
+            </tr>
+            <tr class="border-b transition-colors hover:bg-muted/50">
+              <td class="p-4 align-middle font-mono text-sm">:auto</td>
+              <td class="p-4 align-middle text-muted-foreground">Browser default behavior</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accessibility -->
+  <div id="accessibility" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>The scroll area maintains native scrolling behavior for keyboard navigation</li>
+      <li>Supports standard scroll keyboard shortcuts (arrow keys, Page Up/Down, Home/End)</li>
+      <li>Custom scrollbars are purely visual enhancements and don't affect accessibility</li>
+      <li>Screen readers treat the content as a normal scrollable region</li>
+      <li>The component preserves focus management within the scrollable area</li>
+    </ul>
+  </div>
+</div>

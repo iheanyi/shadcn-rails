@@ -1,0 +1,380 @@
+<% content_for :title, "Sheet" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+    <a href="#stimulus-controller" class="text-muted-foreground hover:text-foreground">Stimulus Controller</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Sheet</h1>
+    <p class="text-xl text-muted-foreground">A panel that slides out from the edge of the screen. Extends the Dialog component to display content without covering the entire screen.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Requires JavaScript
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::SheetComponent.new(side: :right) do |sheet| %>
+      <% sheet.with_trigger do %>
+        <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Open Sheet<% end %>
+      <% end %>
+      <% sheet.with_body do |content| %>
+        <% content.with_header do |header| %>
+          <% header.with_title { "Edit Profile" } %>
+          <% header.with_description { "Make changes to your profile here. Click save when you're done." } %>
+        <% end %>
+        <div class="grid gap-4 py-4">
+          <div class="grid grid-cols-4 items-center gap-4">
+            <%= render Shadcn::LabelComponent.new(for: "name", class_name: "text-right") { "Name" } %>
+            <%= render Shadcn::InputComponent.new(id: "name", value: "John Doe", class_name: "col-span-3") %>
+          </div>
+          <div class="grid grid-cols-4 items-center gap-4">
+            <%= render Shadcn::LabelComponent.new(for: "username", class_name: "text-right") { "Username" } %>
+            <%= render Shadcn::InputComponent.new(id: "username", value: "@johndoe", class_name: "col-span-3") %>
+          </div>
+        </div>
+        <% content.with_footer do %>
+          <%= render Shadcn::ButtonComponent.new(type: "submit") { "Save changes" } %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component sheet" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("sheet/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Sides -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Sides</h3>
+      <p class="text-sm text-muted-foreground">
+        Use the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">side</code> property to specify which edge the sheet slides out from. Options: <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">:top</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">:right</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">:bottom</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">:left</code>.
+      </p>
+      <%= render "docs/demo_card" do %>
+        <div class="grid grid-cols-2 gap-4">
+          <%= render Shadcn::SheetComponent.new(side: :top) do |sheet| %>
+            <% sheet.with_trigger do %>
+              <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Top<% end %>
+            <% end %>
+            <% sheet.with_body do |content| %>
+              <% content.with_header do |header| %>
+                <% header.with_title { "Notifications" } %>
+                <% header.with_description { "View your recent notifications." } %>
+              <% end %>
+              <div class="py-4">
+                <p class="text-sm">No new notifications.</p>
+              </div>
+            <% end %>
+          <% end %>
+
+          <%= render Shadcn::SheetComponent.new(side: :right) do |sheet| %>
+            <% sheet.with_trigger do %>
+              <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Right<% end %>
+            <% end %>
+            <% sheet.with_body do |content| %>
+              <% content.with_header do |header| %>
+                <% header.with_title { "Settings" } %>
+                <% header.with_description { "Configure your preferences." } %>
+              <% end %>
+              <div class="py-4">
+                <p class="text-sm">Settings panel content.</p>
+              </div>
+            <% end %>
+          <% end %>
+
+          <%= render Shadcn::SheetComponent.new(side: :bottom) do |sheet| %>
+            <% sheet.with_trigger do %>
+              <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Bottom<% end %>
+            <% end %>
+            <% sheet.with_body do |content| %>
+              <% content.with_header do |header| %>
+                <% header.with_title { "Details" } %>
+                <% header.with_description { "Additional information." } %>
+              <% end %>
+              <div class="py-4">
+                <p class="text-sm">Details panel content.</p>
+              </div>
+            <% end %>
+          <% end %>
+
+          <%= render Shadcn::SheetComponent.new(side: :left) do |sheet| %>
+            <% sheet.with_trigger do %>
+              <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Left<% end %>
+            <% end %>
+            <% sheet.with_body do |content| %>
+              <% content.with_header do |header| %>
+                <% header.with_title { "Navigation" } %>
+                <% header.with_description { "Browse sections." } %>
+              <% end %>
+              <div class="py-4">
+                <nav class="flex flex-col gap-2">
+                  <a href="#" class="text-sm hover:underline">Home</a>
+                  <a href="#" class="text-sm hover:underline">About</a>
+                  <a href="#" class="text-sm hover:underline">Contact</a>
+                </nav>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Top -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Top</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::SheetComponent.new(side: :top) do |sheet| %>
+          <% sheet.with_trigger do %>
+            <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Open Top Sheet<% end %>
+          <% end %>
+          <% sheet.with_body do |content| %>
+            <% content.with_header do |header| %>
+              <% header.with_title { "Notifications" } %>
+              <% header.with_description { "View your recent notifications." } %>
+            <% end %>
+            <div class="py-4">
+              <p class="text-sm">No new notifications.</p>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("sheet/top") %>
+    </div>
+
+    <!-- Right (Default) -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Right (Default)</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::SheetComponent.new(side: :right) do |sheet| %>
+          <% sheet.with_trigger do %>
+            <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Open Right Sheet<% end %>
+          <% end %>
+          <% sheet.with_body do |content| %>
+            <% content.with_header do |header| %>
+              <% header.with_title { "Settings" } %>
+              <% header.with_description { "Configure your preferences." } %>
+            <% end %>
+            <div class="py-4">
+              <p class="text-sm">Settings panel content.</p>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("sheet/right") %>
+    </div>
+
+    <!-- Bottom -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Bottom</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::SheetComponent.new(side: :bottom) do |sheet| %>
+          <% sheet.with_trigger do %>
+            <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Open Bottom Sheet<% end %>
+          <% end %>
+          <% sheet.with_body do |content| %>
+            <% content.with_header do |header| %>
+              <% header.with_title { "Details" } %>
+              <% header.with_description { "Additional information." } %>
+            <% end %>
+            <div class="py-4">
+              <p class="text-sm">Details panel content.</p>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("sheet/bottom") %>
+    </div>
+
+    <!-- Left -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Left</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::SheetComponent.new(side: :left) do |sheet| %>
+          <% sheet.with_trigger do %>
+            <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Open Left Sheet<% end %>
+          <% end %>
+          <% sheet.with_body do |content| %>
+            <% content.with_header do |header| %>
+              <% header.with_title { "Navigation" } %>
+              <% header.with_description { "Browse sections." } %>
+            <% end %>
+            <div class="py-4">
+              <nav class="flex flex-col gap-2">
+                <a href="#" class="text-sm hover:underline">Home</a>
+                <a href="#" class="text-sm hover:underline">About</a>
+                <a href="#" class="text-sm hover:underline">Contact</a>
+              </nav>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("sheet/left") %>
+    </div>
+
+    <!-- With Form -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Form</h3>
+      <p class="text-sm text-muted-foreground">
+        Sheets are ideal for forms and multi-step workflows that don't need to completely interrupt the user.
+      </p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::SheetComponent.new(side: :right) do |sheet| %>
+          <% sheet.with_trigger do %>
+            <%= render Shadcn::ButtonComponent.new do %>Create Account<% end %>
+          <% end %>
+          <% sheet.with_body do |content| %>
+            <% content.with_header do |header| %>
+              <% header.with_title { "Create New Account" } %>
+              <% header.with_description { "Enter the details below to create a new account." } %>
+            <% end %>
+            <div class="grid gap-4 py-4">
+              <div class="space-y-2">
+                <%= render Shadcn::LabelComponent.new(for: "name") { "Full Name" } %>
+                <%= render Shadcn::InputComponent.new(id: "name", placeholder: "John Doe") %>
+              </div>
+              <div class="space-y-2">
+                <%= render Shadcn::LabelComponent.new(for: "email") { "Email" } %>
+                <%= render Shadcn::InputComponent.new(id: "email", type: "email", placeholder: "email@example.com") %>
+              </div>
+              <div class="space-y-2">
+                <%= render Shadcn::LabelComponent.new(for: "role") { "Role" } %>
+                <%= render Shadcn::InputComponent.new(id: "role", placeholder: "Developer") %>
+              </div>
+            </div>
+            <% content.with_footer do %>
+              <div class="flex gap-2">
+                <%= render Shadcn::ButtonComponent.new(variant: :outline, data: { action: "click->shadcn--sheet#close" }) { "Cancel" } %>
+                <%= render Shadcn::ButtonComponent.new(type: "submit") { "Create Account" } %>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("sheet/with_form") %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">SheetComponent</h3>
+    <%= render "docs/props_table", title: nil, props: [
+      { name: "side", type: "Symbol", default: ":right", description: "Side the sheet appears from. Options: :top, :right, :bottom, :left" },
+      { name: "open", type: "Boolean", default: "false", description: "Whether the sheet starts in open state" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" },
+      { name: "data", type: "Hash", default: "{}", description: "Data attributes to add to the element" }
+    ] %>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">Slots</h3>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Slot</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_trigger</td>
+            <td class="p-4 align-middle text-muted-foreground">The element that opens the sheet (usually a button)</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_body</td>
+            <td class="p-4 align-middle text-muted-foreground">The sheet content container (yields SheetContentComponent)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">SheetContentComponent Slots</h3>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Slot</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_header</td>
+            <td class="p-4 align-middle text-muted-foreground">Header section (yields with_title and with_description slots)</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_title</td>
+            <td class="p-4 align-middle text-muted-foreground">Sheet title text</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_description</td>
+            <td class="p-4 align-middle text-muted-foreground">Sheet description text</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_footer</td>
+            <td class="p-4 align-middle text-muted-foreground">Footer section (usually contains action buttons)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Stimulus Controller -->
+  <div id="stimulus-controller">
+    <%= render "docs/stimulus_docs",
+      controller_name: "shadcn--sheet",
+      description: "Manages sheet open/close state, focus trapping, keyboard navigation, and accessibility for slide-out panels.",
+      targets: [
+        { name: "trigger", description: "The element that triggers the sheet to open" },
+        { name: "template", description: "Template containing the sheet content (for portal rendering)" },
+        { name: "overlay", description: "The backdrop overlay element" },
+        { name: "content", description: "The sheet panel container" }
+      ],
+      values: [
+        { name: "open", type: "Boolean", default: "false", description: "Current open/closed state" },
+        { name: "side", type: "String", default: "right", description: "Which side the sheet appears from" }
+      ],
+      actions: [
+        { name: "open", description: "Opens the sheet" },
+        { name: "close", description: "Closes the sheet" }
+      ]
+    %>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="dialog"</code> for proper screen reader announcement</li>
+      <li>Sets <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-modal="true"</code> to indicate modal behavior</li>
+      <li>Traps focus within the sheet when open</li>
+      <li>Pressing <kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Escape</kbd> closes the sheet</li>
+      <li>Returns focus to trigger element when closed</li>
+      <li>Clicking the overlay closes the sheet</li>
+      <li>Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">data-action="click->shadcn--sheet#close"</code> on any element to close the sheet programmatically</li>
+    </ul>
+  </div>
+</div>

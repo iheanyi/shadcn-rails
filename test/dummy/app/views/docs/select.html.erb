@@ -1,0 +1,257 @@
+<% content_for :title, "Select" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+    <a href="#stimulus-controller" class="text-muted-foreground hover:text-foreground">Stimulus Controller</a>
+    <a href="#accessibility" class="text-muted-foreground hover:text-foreground">Accessibility</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Select</h1>
+    <p class="text-xl text-muted-foreground">Displays a list of options for the user to pick from—triggered by a button.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Requires JavaScript
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::SelectComponent.new(name: "fruit", placeholder: "Select a fruit") do |select| %>
+      <% select.with_item(value: "apple") { "Apple" } %>
+      <% select.with_item(value: "banana") { "Banana" } %>
+      <% select.with_item(value: "orange") { "Orange" } %>
+      <% select.with_item(value: "grape") { "Grape" } %>
+      <% select.with_item(value: "pineapple") { "Pineapple" } %>
+    <% end %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component select" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("select/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- With Groups -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Groups</h3>
+      <p class="text-sm text-muted-foreground">Organize options into labeled groups.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::SelectComponent.new(name: "timezone", placeholder: "Select a timezone") do |select| %>
+          <% select.with_group(label: "North America") do |group| %>
+            <% group.with_item(value: "est") { "Eastern Time" } %>
+            <% group.with_item(value: "cst") { "Central Time" } %>
+            <% group.with_item(value: "mst") { "Mountain Time" } %>
+            <% group.with_item(value: "pst") { "Pacific Time" } %>
+          <% end %>
+          <% select.with_group(label: "Europe") do |group| %>
+            <% group.with_item(value: "gmt") { "Greenwich Mean Time" } %>
+            <% group.with_item(value: "cet") { "Central European Time" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("select/groups") %>
+    </div>
+
+    <!-- Preselected Value -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Preselected Value</h3>
+      <p class="text-sm text-muted-foreground">Set an initial value with the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">value</code> parameter.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::SelectComponent.new(
+          name: "fruit",
+          value: "banana",
+          placeholder: "Select a fruit"
+        ) do |select| %>
+          <% select.with_item(value: "apple") { "Apple" } %>
+          <% select.with_item(value: "banana") { "Banana" } %>
+          <% select.with_item(value: "orange") { "Orange" } %>
+        <% end %>
+      <% end %>
+      <%= erb_example("select/preselected") %>
+    </div>
+
+    <!-- Disabled State -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled State</h3>
+      <p class="text-sm text-muted-foreground">Disable the entire select component.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::SelectComponent.new(name: "fruit", placeholder: "Select a fruit", disabled: true) do |select| %>
+          <% select.with_item(value: "apple") { "Apple" } %>
+          <% select.with_item(value: "banana") { "Banana" } %>
+          <% select.with_item(value: "orange") { "Orange" } %>
+        <% end %>
+      <% end %>
+      <%= erb_example("select/disabled") %>
+    </div>
+
+    <!-- Disabled Items -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled Items</h3>
+      <p class="text-sm text-muted-foreground">Disable specific items within the select.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::SelectComponent.new(name: "fruit", placeholder: "Select a fruit") do |select| %>
+          <% select.with_item(value: "apple") { "Apple" } %>
+          <% select.with_item(value: "banana", disabled: true) { "Banana (out of stock)" } %>
+          <% select.with_item(value: "orange") { "Orange" } %>
+          <% select.with_item(value: "grape", disabled: true) { "Grape (out of stock)" } %>
+          <% select.with_item(value: "pineapple") { "Pineapple" } %>
+        <% end %>
+      <% end %>
+      <%= erb_example("select/disabled_items") %>
+    </div>
+
+    <!-- Form Integration -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Form Integration</h3>
+      <p class="text-sm text-muted-foreground">Use Select within forms with proper labels and validation.</p>
+      <%= render "docs/demo_card" do %>
+        <%= form_with url: "#", method: :post, class: "space-y-4" do |f| %>
+          <div class="space-y-2">
+            <%= render Shadcn::LabelComponent.new(for: "country") { "Country" } %>
+            <%= render Shadcn::SelectComponent.new(
+              name: "country",
+              id: "country",
+              placeholder: "Select your country",
+              required: true
+            ) do |select| %>
+              <% select.with_item(value: "us") { "United States" } %>
+              <% select.with_item(value: "uk") { "United Kingdom" } %>
+              <% select.with_item(value: "ca") { "Canada" } %>
+              <% select.with_item(value: "au") { "Australia" } %>
+            <% end %>
+          </div>
+          <%= render Shadcn::ButtonComponent.new(type: :submit) { "Submit" } %>
+        <% end %>
+      <% end %>
+      <%= erb_example("select/form") %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">SelectComponent</h3>
+    <%= render "docs/props_table", title: nil, props: [
+      { name: "name", type: "String", default: "nil", description: "Form field name for the hidden input" },
+      { name: "id", type: "String", default: "nil", description: "Element ID for the hidden input" },
+      { name: "value", type: "String", default: "nil", description: "Currently selected value" },
+      { name: "placeholder", type: "String", default: '"Select..."', description: "Placeholder text shown when no value is selected" },
+      { name: "disabled", type: "Boolean", default: "false", description: "Whether the select is disabled" },
+      { name: "required", type: "Boolean", default: "false", description: "Whether the select is required for form validation" }
+    ] %>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">Slots</h3>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Slot</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Props</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_item</td>
+            <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">value:</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">disabled:</code></td>
+            <td class="p-4 align-middle text-muted-foreground">A selectable option (yields content)</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_group</td>
+            <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">label:</code></td>
+            <td class="p-4 align-middle text-muted-foreground">A group of options with an optional label (yields SelectGroupComponent)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">SelectItemComponent</h3>
+    <%= render "docs/props_table", title: nil, props: [
+      { name: "value", type: "String", default: "required", description: "The value submitted when this option is selected" },
+      { name: "disabled", type: "Boolean", default: "false", description: "Whether this option is disabled" }
+    ] %>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">SelectGroupComponent</h3>
+    <%= render "docs/props_table", title: nil, props: [
+      { name: "label", type: "String", default: "nil", description: "Optional label for the group" }
+    ] %>
+    <p class="text-sm text-muted-foreground mt-2">
+      The SelectGroupComponent also accepts <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">with_item</code> slots for items within the group.
+    </p>
+  </div>
+
+  <!-- Stimulus Controller -->
+  <div id="stimulus-controller">
+    <%= render "docs/stimulus_docs",
+      controller_name: "shadcn--select",
+      description: "Manages select dropdown state, keyboard navigation, value selection, and accessibility.",
+      targets: [
+        { name: "trigger", description: "The button that toggles the dropdown" },
+        { name: "content", description: "The dropdown content container" },
+        { name: "input", description: "The hidden input that stores the selected value" },
+        { name: "item", description: "Each selectable option in the dropdown" },
+        { name: "display", description: "The text display showing the current selection" },
+        { name: "checkIcon", description: "The checkmark icon for selected items" }
+      ],
+      values: [
+        { name: "value", type: "String", default: '""', description: "Currently selected value" }
+      ],
+      actions: [
+        { name: "toggle", description: "Opens or closes the dropdown" },
+        { name: "open", description: "Opens the dropdown" },
+        { name: "close", description: "Closes the dropdown" },
+        { name: "select", description: "Selects an item from the dropdown" },
+        { name: "handleKeydown", description: "Handles keyboard navigation (Arrow keys, Enter, Escape, Home, End)" }
+      ],
+      events: [
+        { name: "shadcn--select:opened", description: "Fired when the dropdown opens" },
+        { name: "shadcn--select:closed", description: "Fired when the dropdown closes" },
+        { name: "shadcn--select:change", description: "Fired when a value is selected (detail: { value })" }
+      ]
+    %>
+  </div>
+
+  <!-- Accessibility -->
+  <div id="accessibility" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="combobox"</code> on the trigger for proper screen reader announcement</li>
+      <li>Uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="listbox"</code> for the dropdown content</li>
+      <li>Uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="option"</code> for each selectable item</li>
+      <li>Sets <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-expanded</code> to indicate dropdown open/closed state</li>
+      <li>Sets <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-selected</code> to indicate selected option</li>
+      <li>Supports full keyboard navigation:
+        <ul class="ml-6 list-disc mt-2">
+          <li><kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Space</kbd> or <kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Enter</kbd> to open/select</li>
+          <li><kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Arrow Down</kbd> / <kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Arrow Up</kbd> to navigate options</li>
+          <li><kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Home</kbd> / <kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">End</kbd> to jump to first/last option</li>
+          <li><kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Escape</kbd> to close dropdown</li>
+        </ul>
+      </li>
+      <li>Disabled items are properly marked and skipped during keyboard navigation</li>
+      <li>Focus returns to trigger after selection or closing</li>
+      <li>Visual checkmark indicator for the selected option</li>
+    </ul>
+  </div>
+</div>

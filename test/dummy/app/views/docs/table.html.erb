@@ -1,0 +1,382 @@
+<% content_for :title, "Table" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+    <a href="#accessibility" class="text-muted-foreground hover:text-foreground">Accessibility</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Table</h1>
+    <p class="text-xl text-muted-foreground">A responsive table component for displaying tabular data.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+        No JavaScript Required
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::TableComponent.new do |table| %>
+      <% table.with_header do |header| %>
+        <% header.with_row do |row| %>
+          <% row.with_head { "Name" } %>
+          <% row.with_head { "Email" } %>
+          <% row.with_head { "Role" } %>
+          <% row.with_head(class: "text-right") { "Status" } %>
+        <% end %>
+      <% end %>
+      <% table.with_body do |body| %>
+        <% body.with_row do |row| %>
+          <% row.with_cell(class: "font-medium") { "John Doe" } %>
+          <% row.with_cell { "john@example.com" } %>
+          <% row.with_cell { "Admin" } %>
+          <% row.with_cell(class: "text-right") { "Active" } %>
+        <% end %>
+        <% body.with_row do |row| %>
+          <% row.with_cell(class: "font-medium") { "Jane Smith" } %>
+          <% row.with_cell { "jane@example.com" } %>
+          <% row.with_cell { "Editor" } %>
+          <% row.with_cell(class: "text-right") { "Active" } %>
+        <% end %>
+        <% body.with_row do |row| %>
+          <% row.with_cell(class: "font-medium") { "Bob Johnson" } %>
+          <% row.with_cell { "bob@example.com" } %>
+          <% row.with_cell { "User" } %>
+          <% row.with_cell(class: "text-right") { "Inactive" } %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component table" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <p class="leading-7">The Table component uses a slot-based API with nested components for header, body, footer, and caption.</p>
+    <%= erb_example("table/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- With Caption -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Caption</h3>
+      <p class="text-sm text-muted-foreground">Add a caption to describe the table contents.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::TableComponent.new do |table| %>
+          <% table.with_caption { "A list of your recent transactions." } %>
+          <% table.with_header do |header| %>
+            <% header.with_row do |row| %>
+              <% row.with_head { "Transaction" } %>
+              <% row.with_head { "Amount" } %>
+              <% row.with_head { "Status" } %>
+            <% end %>
+          <% end %>
+          <% table.with_body do |body| %>
+            <% body.with_row do |row| %>
+              <% row.with_cell { "Payment" } %>
+              <% row.with_cell { "$250.00" } %>
+              <% row.with_cell { "Completed" } %>
+            <% end %>
+            <% body.with_row do |row| %>
+              <% row.with_cell { "Refund" } %>
+              <% row.with_cell { "$150.00" } %>
+              <% row.with_cell { "Processing" } %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("table/with_caption") %>
+    </div>
+
+    <!-- With Footer -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Footer</h3>
+      <p class="text-sm text-muted-foreground">Use a footer row for totals or summary information.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::TableComponent.new do |table| %>
+          <% table.with_header do |header| %>
+            <% header.with_row do |row| %>
+              <% row.with_head { "Item" } %>
+              <% row.with_head { "Quantity" } %>
+              <% row.with_head { "Price" } %>
+            <% end %>
+          <% end %>
+          <% table.with_body do |body| %>
+            <% body.with_row do |row| %>
+              <% row.with_cell { "Product A" } %>
+              <% row.with_cell { "2" } %>
+              <% row.with_cell { "$20.00" } %>
+            <% end %>
+            <% body.with_row do |row| %>
+              <% row.with_cell { "Product B" } %>
+              <% row.with_cell { "1" } %>
+              <% row.with_cell { "$15.00" } %>
+            <% end %>
+          <% end %>
+          <% table.with_footer do |footer| %>
+            <% footer.with_row do |row| %>
+              <% row.with_cell { "Total" } %>
+              <% row.with_cell { "3" } %>
+              <% row.with_cell { "$35.00" } %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("table/with_footer") %>
+    </div>
+
+    <!-- Invoices Example -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Invoices Table</h3>
+      <p class="text-sm text-muted-foreground">A complete example with caption, footer, and custom cell styling.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::TableComponent.new do |table| %>
+          <% table.with_caption { "A list of your recent invoices." } %>
+          <% table.with_header do |header| %>
+            <% header.with_row do |row| %>
+              <% row.with_head { "Invoice" } %>
+              <% row.with_head { "Status" } %>
+              <% row.with_head { "Method" } %>
+              <% row.with_head(class: "text-right") { "Amount" } %>
+            <% end %>
+          <% end %>
+          <% table.with_body do |body| %>
+            <% body.with_row do |row| %>
+              <% row.with_cell(class: "font-medium") { "INV001" } %>
+              <% row.with_cell { "Paid" } %>
+              <% row.with_cell { "Credit Card" } %>
+              <% row.with_cell(class: "text-right") { "$250.00" } %>
+            <% end %>
+            <% body.with_row do |row| %>
+              <% row.with_cell(class: "font-medium") { "INV002" } %>
+              <% row.with_cell { "Pending" } %>
+              <% row.with_cell { "PayPal" } %>
+              <% row.with_cell(class: "text-right") { "$150.00" } %>
+            <% end %>
+            <% body.with_row do |row| %>
+              <% row.with_cell(class: "font-medium") { "INV003" } %>
+              <% row.with_cell { "Unpaid" } %>
+              <% row.with_cell { "Bank Transfer" } %>
+              <% row.with_cell(class: "text-right") { "$350.00" } %>
+            <% end %>
+          <% end %>
+          <% table.with_footer do |footer| %>
+            <% footer.with_row do |row| %>
+              <% row.with_cell(colspan: 3) { "Total" } %>
+              <% row.with_cell(class: "text-right") { "$750.00" } %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("table/invoices") %>
+    </div>
+
+    <!-- Selected Row -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Selected Row</h3>
+      <p class="text-sm text-muted-foreground">Highlight a selected row using the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">selected</code> prop.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::TableComponent.new do |table| %>
+          <% table.with_header do |header| %>
+            <% header.with_row do |row| %>
+              <% row.with_head { "Name" } %>
+              <% row.with_head { "Status" } %>
+            <% end %>
+          <% end %>
+          <% table.with_body do |body| %>
+            <% body.with_row do |row| %>
+              <% row.with_cell { "Item 1" } %>
+              <% row.with_cell { "Active" } %>
+            <% end %>
+            <% body.with_row(selected: true) do |row| %>
+              <% row.with_cell { "Item 2" } %>
+              <% row.with_cell { "Selected" } %>
+            <% end %>
+            <% body.with_row do |row| %>
+              <% row.with_cell { "Item 3" } %>
+              <% row.with_cell { "Active" } %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("table/selected_row") %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">TableComponent</h3>
+    <p class="text-sm text-muted-foreground mb-4">Main table container with automatic overflow scrolling.</p>
+
+    <h4 class="text-base font-semibold mt-4 mb-2">Slots</h4>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Slot</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Type</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_caption</td>
+            <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">TableCaptionComponent</code></td>
+            <td class="p-4 align-middle text-muted-foreground">Optional caption describing the table</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_header</td>
+            <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">TableHeaderComponent</code></td>
+            <td class="p-4 align-middle text-muted-foreground">Table header with column headings</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_body</td>
+            <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">TableBodyComponent</code></td>
+            <td class="p-4 align-middle text-muted-foreground">Table body with data rows</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_footer</td>
+            <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">TableFooterComponent</code></td>
+            <td class="p-4 align-middle text-muted-foreground">Optional footer for totals or summary</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold mt-8 mb-3">TableHeaderComponent</h3>
+    <p class="text-sm text-muted-foreground mb-4">Contains header rows with column headings.</p>
+    <h4 class="text-base font-semibold mt-4 mb-2">Slots</h4>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Slot</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Type</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_row</td>
+            <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">TableRowComponent</code></td>
+            <td class="p-4 align-middle text-muted-foreground">Header row containing heading cells</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold mt-8 mb-3">TableBodyComponent</h3>
+    <p class="text-sm text-muted-foreground mb-4">Contains data rows.</p>
+    <h4 class="text-base font-semibold mt-4 mb-2">Slots</h4>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Slot</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Type</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_row</td>
+            <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">TableRowComponent</code></td>
+            <td class="p-4 align-middle text-muted-foreground">Data row containing cells</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold mt-8 mb-3">TableFooterComponent</h3>
+    <p class="text-sm text-muted-foreground mb-4">Contains footer rows, typically for totals.</p>
+    <h4 class="text-base font-semibold mt-4 mb-2">Slots</h4>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Slot</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Type</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_row</td>
+            <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">TableRowComponent</code></td>
+            <td class="p-4 align-middle text-muted-foreground">Footer row containing cells</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold mt-8 mb-3">TableRowComponent</h3>
+    <%= render "docs/props_table", title: nil, props: [
+      { name: "selected", type: "Boolean", default: "false", description: "Highlights the row with selected state" }
+    ] %>
+    <h4 class="text-base font-semibold mt-4 mb-2">Slots</h4>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Slot</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Type</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_head</td>
+            <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">TableHeadComponent</code></td>
+            <td class="p-4 align-middle text-muted-foreground">Header cell (use in header rows)</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_cell</td>
+            <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">TableCellComponent</code></td>
+            <td class="p-4 align-middle text-muted-foreground">Data cell (use in body/footer rows)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold mt-8 mb-3">TableHeadComponent</h3>
+    <p class="text-sm text-muted-foreground mb-4">Header cell with appropriate styling for column headings. Accepts standard HTML attributes like <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">class</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">colspan</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">rowspan</code>.</p>
+
+    <h3 class="text-lg font-semibold mt-8 mb-3">TableCellComponent</h3>
+    <p class="text-sm text-muted-foreground mb-4">Data cell with appropriate styling. Accepts standard HTML attributes like <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">class</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">colspan</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">rowspan</code>.</p>
+
+    <h3 class="text-lg font-semibold mt-8 mb-3">TableCaptionComponent</h3>
+    <p class="text-sm text-muted-foreground mb-4">Caption text describing the table's purpose or contents.</p>
+  </div>
+
+  <!-- Accessibility -->
+  <div id="accessibility" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses semantic HTML table elements (<code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">&lt;table&gt;</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">&lt;thead&gt;</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">&lt;tbody&gt;</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">&lt;tfoot&gt;</code>)</li>
+      <li>Header cells use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">&lt;th&gt;</code> elements for proper screen reader association</li>
+      <li>Caption provides context for assistive technologies</li>
+      <li>Responsive overflow container with horizontal scrolling on small screens</li>
+      <li>Row hover states provide visual feedback</li>
+      <li>Selected rows use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">data-state="selected"</code> attribute for programmatic access</li>
+    </ul>
+  </div>
+</div>

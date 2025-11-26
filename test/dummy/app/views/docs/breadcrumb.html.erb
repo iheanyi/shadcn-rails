@@ -1,0 +1,158 @@
+<% content_for :title, "Breadcrumb" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+    <a href="#accessibility" class="text-muted-foreground hover:text-foreground">Accessibility</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Breadcrumb</h1>
+    <p class="text-xl text-muted-foreground">Displays the path to the current resource using a hierarchy of links.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+        No JavaScript Required
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::BreadcrumbComponent.new do |breadcrumb| %>
+      <% breadcrumb.with_item(href: "/") { "Home" } %>
+      <% breadcrumb.with_item(href: "/components") { "Components" } %>
+      <% breadcrumb.with_item(current: true) { "Breadcrumb" } %>
+    <% end %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component breadcrumb" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <p class="leading-7">
+      Use the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">with_item</code> method to add breadcrumb items.
+      Set <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">current: true</code> on the last item to mark it as the current page.
+    </p>
+    <%= erb_example("breadcrumb/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Basic Breadcrumb -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Basic</h3>
+      <p class="text-sm text-muted-foreground">A simple breadcrumb navigation with links.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::BreadcrumbComponent.new do |breadcrumb| %>
+          <% breadcrumb.with_item(href: "/") { "Home" } %>
+          <% breadcrumb.with_item(href: "/docs") { "Docs" } %>
+          <% breadcrumb.with_item(href: "/docs/components") { "Components" } %>
+        <% end %>
+      <% end %>
+      <%= erb_example("breadcrumb/basic") %>
+    </div>
+
+    <!-- With Current Page -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Current Page</h3>
+      <p class="text-sm text-muted-foreground">
+        Mark the current page with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">current: true</code>.
+        The current page will be rendered as a <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">&lt;span&gt;</code> instead of a link.
+      </p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::BreadcrumbComponent.new do |breadcrumb| %>
+          <% breadcrumb.with_item(href: "/") { "Home" } %>
+          <% breadcrumb.with_item(href: "/products") { "Products" } %>
+          <% breadcrumb.with_item(current: true) { "Laptop" } %>
+        <% end %>
+      <% end %>
+      <%= erb_example("breadcrumb/current_page") %>
+    </div>
+
+    <!-- Custom Styling -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Custom Styling</h3>
+      <p class="text-sm text-muted-foreground">
+        You can customize individual breadcrumb items with the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">class_name</code> option.
+      </p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::BreadcrumbComponent.new do |breadcrumb| %>
+          <% breadcrumb.with_item(href: "/", class_name: "font-bold") { "Home" } %>
+          <% breadcrumb.with_item(href: "/docs", class_name: "italic") { "Docs" } %>
+          <% breadcrumb.with_item(current: true) { "Breadcrumb" } %>
+        <% end %>
+      <% end %>
+      <%= erb_example("breadcrumb/custom_class") %>
+    </div>
+
+    <!-- Separator Note -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Custom Separator</h3>
+      <p class="text-sm text-muted-foreground">
+        The component uses a chevron right icon (<code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">&gt;</code>) as the default separator.
+        The separator is automatically added between items and hidden from screen readers with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-hidden="true"</code>.
+        To customize the separator, you can override the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">separator</code> method in the component.
+      </p>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference" class="space-y-6">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">API Reference</h2>
+
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">BreadcrumbComponent</h3>
+      <p class="text-sm text-muted-foreground">The main breadcrumb container component.</p>
+      <%= render "docs/props_table", title: nil, props: [
+        { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply to the nav element" },
+        { name: "**options", type: "Hash", default: "{}", description: "Additional HTML attributes to apply to the nav element" }
+      ] %>
+    </div>
+
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">with_item (BreadcrumbItemComponent)</h3>
+      <p class="text-sm text-muted-foreground">
+        Individual breadcrumb item. Use this slot to add items to the breadcrumb navigation.
+      </p>
+      <%= render "docs/props_table", title: nil, props: [
+        { name: "href", type: "String", default: "nil", description: "URL for the breadcrumb link. If not provided, item will be rendered as a span" },
+        { name: "current", type: "Boolean", default: "false", description: "Whether this is the current page. Adds aria-current='page' and renders as span instead of link" },
+        { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply to the item" },
+        { name: "**options", type: "Hash", default: "{}", description: "Additional HTML attributes to apply to the item" }
+      ] %>
+    </div>
+  </div>
+
+  <!-- Accessibility -->
+  <div id="accessibility" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <p class="leading-7">The breadcrumb component follows WAI-ARIA best practices:</p>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">&lt;nav&gt;</code> element as the container with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-label="Breadcrumb"</code> for screen readers</li>
+      <li>Uses an ordered list (<code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">&lt;ol&gt;</code>) to represent the navigation hierarchy</li>
+      <li>Current page is marked with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-current="page"</code> and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-disabled="true"</code></li>
+      <li>Separators have <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-hidden="true"</code> and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="presentation"</code> to hide them from assistive technologies</li>
+      <li>Links have appropriate hover states and color contrast for visibility</li>
+    </ul>
+    <div class="mt-4 p-4 border rounded-lg bg-muted/50">
+      <p class="text-sm text-muted-foreground">
+        <strong>Note:</strong> The breadcrumb navigation should always be placed in a consistent location across your site,
+        typically near the top of the page, to help users understand where they are in your site's hierarchy.
+      </p>
+    </div>
+  </div>
+</div>

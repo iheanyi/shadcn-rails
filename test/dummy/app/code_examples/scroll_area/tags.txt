@@ -1,0 +1,12 @@
+<%= render Shadcn::ScrollAreaComponent.new(class_name: "h-48 w-full rounded-md border") do %>
+  <div class="p-4">
+    <h4 class="mb-4 text-sm font-medium leading-none">Popular Tags</h4>
+    <div class="space-y-1">
+      <% tags = ["Ruby", "Rails", "ViewComponent", "Stimulus", "Hotwire", "Turbo", "React", "Next.js", "Vue", "Angular", "Svelte", "TypeScript", "JavaScript", "Python", "Django", "Flask"] %>
+      <% tags.each_with_index do |tag, index| %>
+        <%= render Shadcn::BadgeComponent.new(variant: :secondary) { tag } %>
+        <%= " " unless index == tags.length - 1 %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

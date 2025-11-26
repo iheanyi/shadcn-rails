@@ -1,0 +1,338 @@
+<% content_for :title, "Toast" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+    <a href="#stimulus" class="text-muted-foreground hover:text-foreground">Stimulus</a>
+    <a href="#accessibility" class="text-muted-foreground hover:text-foreground">Accessibility</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Toast</h1>
+    <p class="text-xl text-muted-foreground">A succinct message that is displayed temporarily.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Stimulus Controller
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <button
+      onclick="showToast()"
+      class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+    >
+      Show Toast
+    </button>
+
+    <%= render Shadcn::ToastViewportComponent.new do %>
+      <div id="toast-container"></div>
+    <% end %>
+
+    <script>
+      function showToast() {
+        const container = document.getElementById('toast-container');
+        const toastHtml = `
+          <li
+            class="group pointer-events-auto relative flex w-full items-center justify-between space-x-2 overflow-hidden rounded-md border p-4 pr-6 shadow-lg transition-all data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-top-full data-[state=open]:sm:slide-in-from-bottom-full border bg-background text-foreground"
+            role="status"
+            aria-live="polite"
+            data-controller="shadcn--toast"
+            data-shadcn--toast-duration-value="5000"
+            data-shadcn--toast-open-value="true"
+            data-state="open"
+          >
+            <div class="grid gap-1">
+              <div class="text-sm font-semibold [&+div]:text-xs">Scheduled: Catch up</div>
+              <div class="text-sm opacity-90">Friday, February 10, 2023 at 5:57 PM</div>
+            </div>
+            <button
+              type="button"
+              class="absolute right-1 top-1 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-1 group-hover:opacity-100"
+              data-action="click->shadcn--toast#close"
+              aria-label="Close"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" class="h-4 w-4">
+                <path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </li>
+        `;
+        container.insertAdjacentHTML('beforeend', toastHtml);
+      }
+    </script>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component toast" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <p class="leading-7">
+      Toasts are typically triggered by user actions and rendered dynamically.
+      The <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">ToastViewportComponent</code>
+      provides a container positioned at the bottom-right of the screen (or top on mobile).
+    </p>
+    <%= erb_example("toast/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Simple -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Simple</h3>
+      <p class="text-sm text-muted-foreground">A minimal toast with just a description.</p>
+      <%= erb_example("toast/simple") %>
+    </div>
+
+    <!-- With Title -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Title</h3>
+      <p class="text-sm text-muted-foreground">Include both a title and description for more context.</p>
+      <%= erb_example("toast/with_title") %>
+    </div>
+
+    <!-- With Action -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Action</h3>
+      <p class="text-sm text-muted-foreground">
+        Add an action button to allow users to respond to the notification.
+        The <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">alt_text</code> parameter
+        is required for accessibility.
+      </p>
+      <%= erb_example("toast/with_action") %>
+    </div>
+
+    <!-- Destructive -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Destructive</h3>
+      <p class="text-sm text-muted-foreground">Use the destructive variant for error messages or critical notifications.</p>
+      <%= erb_example("toast/destructive") %>
+    </div>
+
+    <!-- Custom Duration -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Custom Duration</h3>
+      <p class="text-sm text-muted-foreground">
+        Control how long the toast is displayed before auto-dismissing.
+        Duration is specified in milliseconds.
+      </p>
+      <%= erb_example("toast/custom_duration") %>
+    </div>
+
+    <!-- No Auto-dismiss -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">No Auto-dismiss</h3>
+      <p class="text-sm text-muted-foreground">
+        Set <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">duration: 0</code>
+        to prevent automatic dismissal. The user must manually close the toast.
+      </p>
+      <%= erb_example("toast/no_autodismiss") %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">ToastComponent</h3>
+    <%= render "docs/props_table", title: nil, props: [
+      { name: "variant", type: "Symbol", default: ":default", description: "Toast style variant (:default, :destructive)" },
+      { name: "duration", type: "Integer", default: "5000", description: "Auto-dismiss duration in milliseconds (0 for no auto-dismiss)" },
+      { name: "open", type: "Boolean", default: "true", description: "Whether the toast is visible" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" }
+    ] %>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">ToastComponent Slots</h3>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Slot</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Props</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_title</td>
+            <td class="p-4 align-middle">-</td>
+            <td class="p-4 align-middle text-muted-foreground">Toast title (bold heading)</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_description</td>
+            <td class="p-4 align-middle">-</td>
+            <td class="p-4 align-middle text-muted-foreground">Toast description text</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_action</td>
+            <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">alt_text:</code> (required)</td>
+            <td class="p-4 align-middle text-muted-foreground">Action button (requires alt_text for accessibility)</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_close</td>
+            <td class="p-4 align-middle">-</td>
+            <td class="p-4 align-middle text-muted-foreground">Custom close button (default provided)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">ToastViewportComponent</h3>
+    <p class="text-sm text-muted-foreground mb-3">
+      Container component for toasts, positioned at bottom-right on desktop and top on mobile.
+    </p>
+    <%= render "docs/props_table", title: nil, props: [
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" }
+    ] %>
+  </div>
+
+  <!-- Stimulus Documentation -->
+  <div id="stimulus" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Stimulus Controller</h2>
+    <p class="leading-7">
+      The Toast component uses a Stimulus controller (<code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">shadcn--toast</code>)
+      for auto-dismiss functionality and close button interaction.
+    </p>
+
+    <h3 class="text-lg font-semibold mt-6">Values</h3>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Value</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Type</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Default</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">duration</td>
+            <td class="p-4 align-middle">Number</td>
+            <td class="p-4 align-middle">5000</td>
+            <td class="p-4 align-middle text-muted-foreground">Auto-dismiss time in milliseconds</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">open</td>
+            <td class="p-4 align-middle">Boolean</td>
+            <td class="p-4 align-middle">true</td>
+            <td class="p-4 align-middle text-muted-foreground">Whether toast is visible</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold mt-6">Actions</h3>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Action</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">close</td>
+            <td class="p-4 align-middle text-muted-foreground">Manually close the toast</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">pause</td>
+            <td class="p-4 align-middle text-muted-foreground">Pause auto-dismiss timer (useful on hover)</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">resume</td>
+            <td class="p-4 align-middle text-muted-foreground">Resume auto-dismiss timer</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold mt-6">Events</h3>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Event</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">shadcn--toast:closed</td>
+            <td class="p-4 align-middle text-muted-foreground">Dispatched when toast is closed and removed from DOM</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold mt-6">Integration Example</h3>
+    <p class="text-sm text-muted-foreground mb-3">
+      Here's an example of dynamically adding toasts using Turbo Streams or JavaScript:
+    </p>
+    <%= render "docs/code_example", language: "javascript", code: <<~JS.strip
+      // Add a toast dynamically
+      function addToast(title, description, variant = 'default') {
+        const viewport = document.querySelector('[data-shadcn--toaster-target="viewport"]');
+        const toast = document.createElement('li');
+
+        toast.setAttribute('data-controller', 'shadcn--toast');
+        toast.setAttribute('data-shadcn--toast-duration-value', '5000');
+        toast.setAttribute('data-shadcn--toast-open-value', 'true');
+        toast.setAttribute('data-state', 'open');
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
+
+        const variantClasses = variant === 'destructive'
+          ? 'destructive group border-destructive bg-destructive text-destructive-foreground'
+          : 'border bg-background text-foreground';
+
+        toast.className = `group pointer-events-auto relative flex w-full items-center justify-between space-x-2 overflow-hidden rounded-md border p-4 pr-6 shadow-lg transition-all ${variantClasses}`;
+
+        toast.innerHTML = `
+          <div class="grid gap-1">
+            ${title ? `<div class="text-sm font-semibold [&+div]:text-xs">${title}</div>` : ''}
+            <div class="text-sm opacity-90">${description}</div>
+          </div>
+          <button type="button" class="absolute right-1 top-1 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-1 group-hover:opacity-100" data-action="click->shadcn--toast#close" aria-label="Close">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" class="h-4 w-4">
+              <path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        `;
+
+        viewport.appendChild(toast);
+      }
+    JS
+    %>
+  </div>
+
+  <!-- Accessibility -->
+  <div id="accessibility" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="status"</code> for proper screen reader announcement</li>
+      <li>Has <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-live="polite"</code> to announce changes without interrupting</li>
+      <li>Close button has <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-label="Close"</code> for screen readers</li>
+      <li>Action buttons require <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">alt_text</code> parameter for <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-label</code></li>
+      <li>Auto-dismiss timer can be paused on hover for users who need more time to read</li>
+      <li>All interactive elements are keyboard accessible</li>
+      <li>Color is not the only indicator - text content provides meaning</li>
+    </ul>
+  </div>
+</div>

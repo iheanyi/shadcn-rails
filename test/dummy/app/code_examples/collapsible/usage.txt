@@ -1,0 +1,17 @@
+<%= render Shadcn::CollapsibleComponent.new do |collapsible| %>
+  <% collapsible.with_trigger do %>
+    <%= render Shadcn::ButtonComponent.new(variant: :ghost, size: :sm) do %>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+        <circle cx="12" cy="12" r="1"></circle>
+        <circle cx="19" cy="12" r="1"></circle>
+        <circle cx="5" cy="12" r="1"></circle>
+      </svg>
+      Can I use this in production?
+    <% end %>
+  <% end %>
+  <% collapsible.with_body do %>
+    <div class="rounded-md border px-4 py-3 font-mono text-sm">
+      Yes! This component is production-ready and follows the shadcn/ui design system.
+    </div>
+  <% end %>
+<% end %>
