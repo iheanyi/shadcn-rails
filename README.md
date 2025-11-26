@@ -1251,22 +1251,76 @@ application.register("shadcn--tabs", TabsController)
 
 ### TypeScript Support
 
-shadcn-rails includes TypeScript type definitions for all Stimulus controllers. If you're using TypeScript, types are automatically available when importing:
+shadcn-rails includes comprehensive TypeScript type definitions (`.d.ts` files) for all 20 Stimulus controllers. Types are provided without requiring TypeScript compilation - your JavaScript remains the source of truth.
+
+**Using Types in TypeScript Projects:**
 
 ```typescript
-import type { DialogController } from "shadcn-rails"
-import type { TabsController } from "shadcn-rails"
+import { Application } from "@hotwired/stimulus"
+import { registerShadcnControllers } from "shadcn-rails"
 
-// Or import the controller with types
-import DialogController from "shadcn-rails/controllers/dialog_controller"
+// Full IDE autocomplete and type checking
+const application = Application.start()
+registerShadcnControllers(application)
 ```
 
-For TypeScript projects using importmap, you may need to add type declarations. Create a `types/shadcn-rails.d.ts` file:
+**Importing Individual Controllers with Types:**
+
+```typescript
+import DialogController from "shadcn-rails/controllers/dialog_controller"
+import TabsController from "shadcn-rails/controllers/tabs_controller"
+
+// Full type information available
+const dialog = new DialogController()
+dialog.open()  // ✓ TypeScript knows this method exists
+dialog.openValue  // ✓ Type: boolean
+```
+
+**Available Type Definitions:**
+
+Each controller includes typed definitions for:
+- Static `targets` and `values` declarations
+- Target accessors (`*Target`, `*Targets`, `has*Target`)
+- Value accessors (`*Value`, `has*Value`)
+- All public methods
+- Custom properties and getters
+
+**Example Type Definition (DialogController):**
+
+```typescript
+import { Controller } from "@hotwired/stimulus"
+
+export default class DialogController extends Controller {
+  static targets: ["trigger", "template", "overlay", "content"]
+  static values: {
+    open: { type: "Boolean"; default: false }
+    modal: { type: "Boolean"; default: true }
+  }
+
+  // Target accessors
+  readonly triggerTarget: HTMLElement
+  readonly hasTemplateTarget: boolean
+
+  // Value accessors
+  openValue: boolean
+  modalValue: boolean
+
+  // Methods
+  open(): void
+  close(): void
+  toggle(): void
+}
+```
+
+**For Importmap Users:**
+
+If using TypeScript with importmaps, add a type declaration file at `types/shadcn-rails.d.ts`:
 
 ```typescript
 declare module "shadcn-rails" {
   import { Application } from "@hotwired/stimulus"
   export function registerShadcnControllers(application: Application): void
+  export const controllers: Record<string, typeof import("@hotwired/stimulus").Controller>
 }
 ```
 
