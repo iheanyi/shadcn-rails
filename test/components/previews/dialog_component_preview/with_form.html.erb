@@ -1,0 +1,24 @@
+<%= render Shadcn::DialogComponent.new do |dialog| %>
+  <% dialog.with_trigger do %>
+    <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Edit Profile" } %>
+  <% end %>
+  <% dialog.with_body do |body| %>
+    <% body.with_header do |header| %>
+      <% header.with_title { "Edit profile" } %>
+      <% header.with_description { "Make changes to your profile here. Click save when you're done." } %>
+    <% end %>
+    <div class="grid gap-4 py-4">
+      <div class="grid grid-cols-4 items-center gap-4">
+        <%= render Shadcn::LabelComponent.new(for: "name", class_name: "text-right") { "Name" } %>
+        <%= render Shadcn::InputComponent.new(id: "name", value: "Pedro Duarte", class_name: "col-span-3") %>
+      </div>
+      <div class="grid grid-cols-4 items-center gap-4">
+        <%= render Shadcn::LabelComponent.new(for: "username", class_name: "text-right") { "Username" } %>
+        <%= render Shadcn::InputComponent.new(id: "username", value: "@peduarte", class_name: "col-span-3") %>
+      </div>
+    </div>
+    <% body.with_footer do %>
+      <%= render Shadcn::ButtonComponent.new { "Save changes" } %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,97 @@
+/**
+ * shadcn-rails Stimulus Controllers
+ *
+ * This file exports all Stimulus controllers for the shadcn-rails gem.
+ * Import this file to register all controllers with your Stimulus application.
+ *
+ * Usage with importmaps:
+ *   import { registerShadcnControllers } from "shadcn"
+ *   registerShadcnControllers(application)
+ *
+ * Usage with esbuild/webpack:
+ *   import { registerShadcnControllers } from "shadcn-rails"
+ *   registerShadcnControllers(application)
+ */
+
+// Import all controllers
+import AccordionController from "./controllers/accordion_controller"
+import AvatarController from "./controllers/avatar_controller"
+import CheckboxController from "./controllers/checkbox_controller"
+import CollapsibleController from "./controllers/collapsible_controller"
+import DialogController from "./controllers/dialog_controller"
+import DrawerController from "./controllers/drawer_controller"
+import DropdownController from "./controllers/dropdown_controller"
+import HoverCardController from "./controllers/hover_card_controller"
+import PopoverController from "./controllers/popover_controller"
+import RadioGroupController from "./controllers/radio_group_controller"
+import ScrollAreaController from "./controllers/scroll_area_controller"
+import SelectController from "./controllers/select_controller"
+import SheetController from "./controllers/sheet_controller"
+import SliderController from "./controllers/slider_controller"
+import SwitchController from "./controllers/switch_controller"
+import TabsController from "./controllers/tabs_controller"
+import ToastController from "./controllers/toast_controller"
+import ToggleController from "./controllers/toggle_controller"
+import ToggleGroupController from "./controllers/toggle_group_controller"
+import TooltipController from "./controllers/tooltip_controller"
+
+// Export individual controllers
+export {
+  AccordionController,
+  AvatarController,
+  CheckboxController,
+  CollapsibleController,
+  DialogController,
+  DrawerController,
+  DropdownController,
+  HoverCardController,
+  PopoverController,
+  RadioGroupController,
+  ScrollAreaController,
+  SelectController,
+  SheetController,
+  SliderController,
+  SwitchController,
+  TabsController,
+  ToastController,
+  ToggleController,
+  ToggleGroupController,
+  TooltipController
+}
+
+// Controller definitions for registration
+export const controllers = {
+  "shadcn--accordion": AccordionController,
+  "shadcn--avatar": AvatarController,
+  "shadcn--checkbox": CheckboxController,
+  "shadcn--collapsible": CollapsibleController,
+  "shadcn--dialog": DialogController,
+  "shadcn--drawer": DrawerController,
+  "shadcn--dropdown": DropdownController,
+  "shadcn--hover-card": HoverCardController,
+  "shadcn--popover": PopoverController,
+  "shadcn--radio-group": RadioGroupController,
+  "shadcn--scroll-area": ScrollAreaController,
+  "shadcn--select": SelectController,
+  "shadcn--sheet": SheetController,
+  "shadcn--slider": SliderController,
+  "shadcn--switch": SwitchController,
+  "shadcn--tabs": TabsController,
+  "shadcn--toast": ToastController,
+  "shadcn--toggle": ToggleController,
+  "shadcn--toggle-group": ToggleGroupController,
+  "shadcn--tooltip": TooltipController
+}
+
+/**
+ * Register all shadcn controllers with a Stimulus application
+ * @param {Application} application - The Stimulus application instance
+ */
+export function registerShadcnControllers(application) {
+  for (const [name, controller] of Object.entries(controllers)) {
+    application.register(name, controller)
+  }
+}
+
+// Default export for convenience
+export default { controllers, registerShadcnControllers }

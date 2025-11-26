@@ -1,0 +1,81 @@
+<div class="max-w-4xl mx-auto space-y-12">
+  <div>
+    <h1 class="text-3xl font-bold">Cards</h1>
+    <p class="mt-2 text-muted-foreground">Displays a card with header, content, and footer.</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <section>
+      <h2 class="text-xl font-semibold mb-4">Default Card</h2>
+      <%= render Shadcn::CardComponent.new do |card| %>
+        <% card.with_header do |header| %>
+          <% header.with_title { "Card Title" } %>
+          <% header.with_description { "Card description goes here" } %>
+        <% end %>
+        <% card.with_content_slot do %>
+          <p class="text-sm text-muted-foreground">
+            This is the main content of the card. You can put any content here.
+          </p>
+        <% end %>
+        <% card.with_footer do %>
+          <%= render(Shadcn::ButtonComponent.new) { "Action" } %>
+        <% end %>
+      <% end %>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold mb-4">Simple Card</h2>
+      <%= render Shadcn::CardComponent.new do |card| %>
+        <% card.with_content_slot(standalone: true) do %>
+          <p class="text-sm">
+            A simple card with just content, no header or footer.
+          </p>
+        <% end %>
+      <% end %>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold mb-4">Notification Card</h2>
+      <%= render Shadcn::CardComponent.new do |card| %>
+        <% card.with_header do |header| %>
+          <% header.with_title { "Notifications" } %>
+          <% header.with_description { "You have 3 unread messages." } %>
+        <% end %>
+        <% card.with_content_slot do %>
+          <div class="space-y-4">
+            <div class="flex items-start gap-4">
+              <span class="flex h-2 w-2 translate-y-1.5 rounded-full bg-blue-500"></span>
+              <div class="space-y-1">
+                <p class="text-sm font-medium leading-none">Your call has been confirmed.</p>
+                <p class="text-sm text-muted-foreground">1 hour ago</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="flex h-2 w-2 translate-y-1.5 rounded-full bg-blue-500"></span>
+              <div class="space-y-1">
+                <p class="text-sm font-medium leading-none">You have a new message!</p>
+                <p class="text-sm text-muted-foreground">2 hours ago</p>
+              </div>
+            </div>
+          </div>
+        <% end %>
+        <% card.with_footer do %>
+          <%= render(Shadcn::ButtonComponent.new(class_name: "w-full")) { "Mark all as read" } %>
+        <% end %>
+      <% end %>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-semibold mb-4">Stats Card</h2>
+      <%= render Shadcn::CardComponent.new do |card| %>
+        <% card.with_header do |header| %>
+          <% header.with_title { "Total Revenue" } %>
+          <% header.with_description { "+20.1% from last month" } %>
+        <% end %>
+        <% card.with_content_slot do %>
+          <div class="text-3xl font-bold">$45,231.89</div>
+        <% end %>
+      <% end %>
+    </section>
+  </div>
+</div>

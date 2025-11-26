@@ -1,0 +1,42 @@
+<%= render Shadcn::TabsComponent.new(default_value: "account", class_name: "w-[400px]") do |tabs| %>
+  <% tabs.with_list do |list| %>
+    <% list.with_trigger(value: "account") { "Account" } %>
+    <% list.with_trigger(value: "password") { "Password" } %>
+  <% end %>
+  <% tabs.with_panel(value: "account") do %>
+    <div class="space-y-2">
+      <h3 class="text-lg font-medium">Account</h3>
+      <p class="text-sm text-muted-foreground">
+        Make changes to your account here. Click save when you're done.
+      </p>
+      <div class="space-y-4 pt-4">
+        <div class="space-y-2">
+          <%= render Shadcn::LabelComponent.new(for: "name") { "Name" } %>
+          <%= render Shadcn::InputComponent.new(id: "name", value: "Pedro Duarte") %>
+        </div>
+        <div class="space-y-2">
+          <%= render Shadcn::LabelComponent.new(for: "username") { "Username" } %>
+          <%= render Shadcn::InputComponent.new(id: "username", value: "@peduarte") %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <% tabs.with_panel(value: "password") do %>
+    <div class="space-y-2">
+      <h3 class="text-lg font-medium">Password</h3>
+      <p class="text-sm text-muted-foreground">
+        Change your password here. After saving, you'll be logged out.
+      </p>
+      <div class="space-y-4 pt-4">
+        <div class="space-y-2">
+          <%= render Shadcn::LabelComponent.new(for: "current") { "Current password" } %>
+          <%= render Shadcn::InputComponent.new(id: "current", type: "password") %>
+        </div>
+        <div class="space-y-2">
+          <%= render Shadcn::LabelComponent.new(for: "new") { "New password" } %>
+          <%= render Shadcn::InputComponent.new(id: "new", type: "password") %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>

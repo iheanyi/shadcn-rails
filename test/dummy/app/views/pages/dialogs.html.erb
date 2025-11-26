@@ -1,0 +1,152 @@
+<div class="max-w-4xl mx-auto space-y-12">
+  <div>
+    <h1 class="text-3xl font-bold">Dialogs & Overlays</h1>
+    <p class="mt-2 text-muted-foreground">Modal dialogs, sheets, and other overlay components.</p>
+  </div>
+
+  <section class="space-y-4">
+    <h2 class="text-xl font-semibold">Dialog</h2>
+    <p class="text-sm text-muted-foreground mb-4">A modal dialog that interrupts the user with important content.</p>
+    <%= render Shadcn::DialogComponent.new do |dialog| %>
+      <% dialog.with_trigger do %>
+        <%= render(Shadcn::ButtonComponent.new(variant: :outline)) { "Open Dialog" } %>
+      <% end %>
+      <% dialog.with_body do |content| %>
+        <% content.with_header do |header| %>
+          <% header.with_title { "Edit Profile" } %>
+          <% header.with_description { "Make changes to your profile here. Click save when you're done." } %>
+        <% end %>
+        <div class="grid gap-4 py-4">
+          <div class="grid gap-2">
+            <%= render Shadcn::LabelComponent.new(for: "name").with_content("Name") %>
+            <%= render Shadcn::InputComponent.new(id: "name", value: "Pedro Duarte") %>
+          </div>
+          <div class="grid gap-2">
+            <%= render Shadcn::LabelComponent.new(for: "username").with_content("Username") %>
+            <%= render Shadcn::InputComponent.new(id: "username", value: "@peduarte") %>
+          </div>
+        </div>
+        <% content.with_footer do %>
+          <%= render(Shadcn::ButtonComponent.new) { "Save changes" } %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-xl font-semibold">Alert Dialog</h2>
+    <p class="text-sm text-muted-foreground mb-4">A modal dialog for destructive or important actions.</p>
+    <%= render Shadcn::DialogComponent.new do |dialog| %>
+      <% dialog.with_trigger do %>
+        <%= render(Shadcn::ButtonComponent.new(variant: :destructive)) { "Delete Account" } %>
+      <% end %>
+      <% dialog.with_body do |content| %>
+        <% content.with_header do |header| %>
+          <% header.with_title { "Are you absolutely sure?" } %>
+          <% header.with_description { "This action cannot be undone. This will permanently delete your account and remove your data from our servers." } %>
+        <% end %>
+        <% content.with_footer do %>
+          <%= render(Shadcn::ButtonComponent.new(variant: :outline, class_name: "mr-2")) { "Cancel" } %>
+          <%= render(Shadcn::ButtonComponent.new(variant: :destructive)) { "Yes, delete account" } %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-xl font-semibold">Sheet</h2>
+    <p class="text-sm text-muted-foreground mb-4">A slide-out panel from the edge of the screen.</p>
+    <div class="flex gap-4">
+      <%= render Shadcn::SheetComponent.new(side: :left) do |sheet| %>
+        <% sheet.with_trigger do %>
+          <%= render(Shadcn::ButtonComponent.new(variant: :outline)) { "Open Left Sheet" } %>
+        <% end %>
+        <% sheet.with_body do |content| %>
+          <% content.with_header do |header| %>
+            <% header.with_title { "Navigation" } %>
+            <% header.with_description { "Browse the menu options." } %>
+          <% end %>
+          <nav class="py-4 space-y-2">
+            <a href="#" class="block py-2 text-sm hover:underline">Home</a>
+            <a href="#" class="block py-2 text-sm hover:underline">About</a>
+            <a href="#" class="block py-2 text-sm hover:underline">Services</a>
+            <a href="#" class="block py-2 text-sm hover:underline">Contact</a>
+          </nav>
+        <% end %>
+      <% end %>
+
+      <%= render Shadcn::SheetComponent.new(side: :right) do |sheet| %>
+        <% sheet.with_trigger do %>
+          <%= render(Shadcn::ButtonComponent.new(variant: :outline)) { "Open Right Sheet" } %>
+        <% end %>
+        <% sheet.with_body do |content| %>
+          <% content.with_header do |header| %>
+            <% header.with_title { "Edit Profile" } %>
+            <% header.with_description { "Make changes to your profile." } %>
+          <% end %>
+          <div class="py-4 space-y-4">
+            <div class="grid gap-2">
+              <%= render Shadcn::LabelComponent.new(for: "sheet_name").with_content("Name") %>
+              <%= render Shadcn::InputComponent.new(id: "sheet_name", value: "Pedro Duarte") %>
+            </div>
+            <div class="grid gap-2">
+              <%= render Shadcn::LabelComponent.new(for: "sheet_email").with_content("Email") %>
+              <%= render Shadcn::InputComponent.new(id: "sheet_email", type: "email", value: "pedro@example.com") %>
+            </div>
+          </div>
+          <% content.with_footer do %>
+            <%= render(Shadcn::ButtonComponent.new) { "Save changes" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-xl font-semibold">Popover</h2>
+    <p class="text-sm text-muted-foreground mb-4">Displays rich content in a portal, triggered by a button.</p>
+    <%= render Shadcn::PopoverComponent.new do |popover| %>
+      <% popover.with_trigger do %>
+        <%= render(Shadcn::ButtonComponent.new(variant: :outline)) { "Open Popover" } %>
+      <% end %>
+      <% popover.with_body do %>
+        <div class="grid gap-4">
+          <div class="space-y-2">
+            <h4 class="font-medium leading-none">Dimensions</h4>
+            <p class="text-sm text-muted-foreground">
+              Set the dimensions for the layer.
+            </p>
+          </div>
+          <div class="grid gap-2">
+            <div class="grid grid-cols-3 items-center gap-4">
+              <%= render Shadcn::LabelComponent.new(for: "width").with_content("Width") %>
+              <%= render Shadcn::InputComponent.new(id: "width", value: "100%", class_name: "col-span-2 h-8") %>
+            </div>
+            <div class="grid grid-cols-3 items-center gap-4">
+              <%= render Shadcn::LabelComponent.new(for: "height").with_content("Height") %>
+              <%= render Shadcn::InputComponent.new(id: "height", value: "25px", class_name: "col-span-2 h-8") %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-xl font-semibold">Tooltip</h2>
+    <p class="text-sm text-muted-foreground mb-4">A popup that displays information when hovering.</p>
+    <div class="flex gap-4">
+      <%= render Shadcn::TooltipComponent.new(text: "Add to library", side: :top) do %>
+        <%= render Shadcn::ButtonComponent.new(variant: :outline, size: :icon) do %>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        <% end %>
+      <% end %>
+
+      <%= render Shadcn::TooltipComponent.new(text: "Edit document", side: :bottom) do %>
+        <%= render Shadcn::ButtonComponent.new(variant: :outline, size: :icon) do %>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+        <% end %>
+      <% end %>
+    </div>
+  </section>
+</div>

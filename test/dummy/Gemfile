@@ -1,0 +1,30 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+# Use parent gem
+gem "shadcn-rails", path: "../.."
+
+# Rails essentials
+gem "rails", ">= 7.0"
+gem "sqlite3", "~> 1.4"
+gem "sprockets-rails"
+gem "puma"
+
+# ViewComponent
+gem "view_component", ">= 3.0"
+gem "lookbook", ">= 2.0"
+
+# Hotwire
+gem "turbo-rails"
+gem "stimulus-rails"
+gem "importmap-rails"
+
+# Tailwind
+gem "tailwindcss-rails"
+
+# Live reloading
+gem "hotwire-livereload", group: :development
+
+# Debugging
+gem "debug", platforms: %i[mri mingw x64_mingw]

@@ -1,0 +1,20 @@
+<%= render Shadcn::DialogComponent.new do |dialog| %>
+  <% dialog.with_trigger do %>
+    <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Open Dialog" } %>
+  <% end %>
+  <% dialog.with_body do |body| %>
+    <% body.with_header do |header| %>
+      <% header.with_title { "Dialog Title" } %>
+      <% header.with_description { "This is a description of what this dialog does." } %>
+    <% end %>
+    <div class="py-4">
+      <p class="text-sm text-muted-foreground">
+        Your dialog content goes here. You can put any content inside a dialog.
+      </p>
+    </div>
+    <% body.with_footer do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline, class_name: "mr-2") { "Cancel" } %>
+      <%= render Shadcn::ButtonComponent.new { "Continue" } %>
+    <% end %>
+  <% end %>
+<% end %>

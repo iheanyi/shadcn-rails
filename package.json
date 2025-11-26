@@ -1,0 +1,53 @@
+{
+  "name": "@shadcn/rails-stimulus",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Stimulus controllers for shadcn-rails ViewComponents",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./controllers": {
+      "import": "./dist/controllers/index.esm.js",
+      "require": "./dist/controllers/index.js"
+    },
+    "./controllers/*": {
+      "import": "./app/assets/javascripts/shadcn/controllers/*.js"
+    }
+  },
+  "files": [
+    "dist",
+    "app/assets/javascripts/shadcn"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -c -w",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-org/shadcn-rails.git"
+  },
+  "keywords": [
+    "shadcn",
+    "rails",
+    "stimulus",
+    "viewcomponent",
+    "tailwindcss",
+    "ui"
+  ],
+  "author": "",
+  "license": "MIT",
+  "peerDependencies": {
+    "@hotwired/stimulus": "^3.0.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.0.0",
+    "rollup": "^4.0.0"
+  }
+}

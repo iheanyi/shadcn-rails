@@ -1,0 +1,46 @@
+<%= render Shadcn::TabsComponent.new(default_value: "account", class_name: "w-[400px]") do |tabs| %>
+  <% tabs.with_list do |list| %>
+    <% list.with_trigger(value: "account") { "Account" } %>
+    <% list.with_trigger(value: "password") { "Password" } %>
+  <% end %>
+  <% tabs.with_panel(value: "account") do %>
+    <%= render Shadcn::CardComponent.new do |card| %>
+      <% card.with_header do |header| %>
+        <% header.with_title { "Account" } %>
+        <% header.with_description { "Make changes to your account here." } %>
+      <% end %>
+      <% card.with_content_slot do %>
+        <div class="space-y-2">
+          <%= render Shadcn::LabelComponent.new(for: "name") { "Name" } %>
+          <%= render Shadcn::InputComponent.new(id: "name", value: "Pedro Duarte") %>
+        </div>
+      <% end %>
+      <% card.with_footer do %>
+        <%= render Shadcn::ButtonComponent.new { "Save changes" } %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <% tabs.with_panel(value: "password") do %>
+    <%= render Shadcn::CardComponent.new do |card| %>
+      <% card.with_header do |header| %>
+        <% header.with_title { "Password" } %>
+        <% header.with_description { "Change your password here." } %>
+      <% end %>
+      <% card.with_content_slot do %>
+        <div class="space-y-4">
+          <div class="space-y-2">
+            <%= render Shadcn::LabelComponent.new(for: "current") { "Current password" } %>
+            <%= render Shadcn::InputComponent.new(id: "current", type: "password") %>
+          </div>
+          <div class="space-y-2">
+            <%= render Shadcn::LabelComponent.new(for: "new") { "New password" } %>
+            <%= render Shadcn::InputComponent.new(id: "new", type: "password") %>
+          </div>
+        </div>
+      <% end %>
+      <% card.with_footer do %>
+        <%= render Shadcn::ButtonComponent.new { "Save password" } %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

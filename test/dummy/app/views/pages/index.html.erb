@@ -1,0 +1,70 @@
+<div class="max-w-4xl mx-auto">
+  <div class="text-center py-12">
+    <h1 class="text-4xl font-bold tracking-tight">shadcn-rails</h1>
+    <p class="mt-4 text-xl text-muted-foreground">
+      Beautiful, accessible UI components for Rails
+    </p>
+    <p class="mt-2 text-muted-foreground">
+      Built with ViewComponents, Stimulus, and Tailwind CSS
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+    <%= render Shadcn::CardComponent.new do |card| %>
+      <% card.with_header do |header| %>
+        <% header.with_title { "Buttons" } %>
+        <% header.with_description { "Multiple variants and sizes" } %>
+      <% end %>
+      <% card.with_content_slot do %>
+        <div class="flex flex-wrap gap-2">
+          <%= render(Shadcn::ButtonComponent.new) { "Default" } %>
+          <%= render(Shadcn::ButtonComponent.new(variant: :outline)) { "Outline" } %>
+          <%= render(Shadcn::ButtonComponent.new(variant: :secondary)) { "Secondary" } %>
+        </div>
+      <% end %>
+      <% card.with_footer do %>
+        <%= link_to "View all →", buttons_path, class: "text-sm text-primary hover:underline" %>
+      <% end %>
+    <% end %>
+
+    <%= render Shadcn::CardComponent.new do |card| %>
+      <% card.with_header do |header| %>
+        <% header.with_title { "Form Components" } %>
+        <% header.with_description { "Inputs, labels, and more" } %>
+      <% end %>
+      <% card.with_content_slot do %>
+        <div class="space-y-2">
+          <%= render Shadcn::LabelComponent.new(for: "demo-input") { "Email" } %>
+          <%= render Shadcn::InputComponent.new(id: "demo-input", type: "email", placeholder: "you@example.com") %>
+        </div>
+      <% end %>
+      <% card.with_footer do %>
+        <%= link_to "View all →", forms_path, class: "text-sm text-primary hover:underline" %>
+      <% end %>
+    <% end %>
+
+    <%= render Shadcn::CardComponent.new do |card| %>
+      <% card.with_header do |header| %>
+        <% header.with_title { "Badges" } %>
+        <% header.with_description { "Labels and status indicators" } %>
+      <% end %>
+      <% card.with_content_slot do %>
+        <div class="flex flex-wrap gap-2">
+          <%= render(Shadcn::BadgeComponent.new) { "Default" } %>
+          <%= render(Shadcn::BadgeComponent.new(variant: :secondary)) { "Secondary" } %>
+          <%= render(Shadcn::BadgeComponent.new(variant: :destructive)) { "Error" } %>
+          <%= render(Shadcn::BadgeComponent.new(variant: :outline)) { "v1.0" } %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="mt-12">
+    <%= render Shadcn::AlertComponent.new do |alert| %>
+      <% alert.with_title { "Getting Started" } %>
+      <% alert.with_description do %>
+        Add shadcn-rails to your Gemfile and run <code class="bg-muted px-1 rounded">rails g shadcn:install</code> to get started.
+      <% end %>
+    <% end %>
+  </div>
+</div>

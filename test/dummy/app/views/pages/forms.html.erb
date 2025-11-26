@@ -1,0 +1,94 @@
+<div class="max-w-4xl mx-auto space-y-12">
+  <div>
+    <h1 class="text-3xl font-bold">Form Components</h1>
+    <p class="mt-2 text-muted-foreground">Form inputs, labels, and related components.</p>
+  </div>
+
+  <section class="space-y-6">
+    <h2 class="text-xl font-semibold">Input</h2>
+    <div class="grid gap-6 max-w-md">
+      <div class="space-y-2">
+        <%= render Shadcn::LabelComponent.new(for: "email").with_content("Email") %>
+        <%= render Shadcn::InputComponent.new(id: "email", type: "email", placeholder: "you@example.com") %>
+      </div>
+
+      <div class="space-y-2">
+        <%= render Shadcn::LabelComponent.new(for: "password").with_content("Password") %>
+        <%= render Shadcn::InputComponent.new(id: "password", type: "password", placeholder: "Enter password") %>
+      </div>
+
+      <div class="space-y-2">
+        <%= render Shadcn::LabelComponent.new(for: "disabled").with_content("Disabled") %>
+        <%= render Shadcn::InputComponent.new(id: "disabled", disabled: true, value: "Can't edit this") %>
+      </div>
+
+      <div class="space-y-2">
+        <%= render Shadcn::LabelComponent.new(for: "file").with_content("File Upload") %>
+        <%= render Shadcn::InputComponent.new(id: "file", type: "file") %>
+      </div>
+    </div>
+  </section>
+
+  <section class="space-y-6">
+    <h2 class="text-xl font-semibold">Textarea</h2>
+    <div class="max-w-md space-y-2">
+      <%= render Shadcn::LabelComponent.new(for: "bio").with_content("Bio") %>
+      <%= render Shadcn::TextareaComponent.new(id: "bio", placeholder: "Tell us about yourself", rows: 4) %>
+    </div>
+  </section>
+
+  <section class="space-y-6">
+    <h2 class="text-xl font-semibold">Checkbox</h2>
+    <div class="flex items-center space-x-2">
+      <%= render Shadcn::CheckboxComponent.new(id: "terms", name: "terms") %>
+      <%= render Shadcn::LabelComponent.new(for: "terms").with_content("Accept terms and conditions") %>
+    </div>
+  </section>
+
+  <section class="space-y-6">
+    <h2 class="text-xl font-semibold">Switch</h2>
+    <div class="flex items-center space-x-2">
+      <%= render Shadcn::SwitchComponent.new(id: "airplane", name: "airplane_mode") %>
+      <%= render Shadcn::LabelComponent.new(for: "airplane").with_content("Airplane Mode") %>
+    </div>
+  </section>
+
+  <section class="space-y-6">
+    <h2 class="text-xl font-semibold">Complete Form Example</h2>
+    <%= render Shadcn::CardComponent.new(class_name: "max-w-md") do |card| %>
+      <% card.with_header do |header| %>
+        <% header.with_title { "Create Account" } %>
+        <% header.with_description { "Enter your information to create an account." } %>
+      <% end %>
+      <% card.with_content_slot do %>
+        <form class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-2">
+              <%= render Shadcn::LabelComponent.new(for: "first_name").with_content("First name") %>
+              <%= render Shadcn::InputComponent.new(id: "first_name", placeholder: "John") %>
+            </div>
+            <div class="space-y-2">
+              <%= render Shadcn::LabelComponent.new(for: "last_name").with_content("Last name") %>
+              <%= render Shadcn::InputComponent.new(id: "last_name", placeholder: "Doe") %>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <%= render Shadcn::LabelComponent.new(for: "signup_email").with_content("Email") %>
+            <%= render Shadcn::InputComponent.new(id: "signup_email", type: "email", placeholder: "john@example.com") %>
+          </div>
+          <div class="space-y-2">
+            <%= render Shadcn::LabelComponent.new(for: "signup_password").with_content("Password") %>
+            <%= render Shadcn::InputComponent.new(id: "signup_password", type: "password") %>
+          </div>
+          <div class="flex items-center space-x-2">
+            <%= render Shadcn::CheckboxComponent.new(id: "signup_terms", name: "signup_terms") %>
+            <%= render Shadcn::LabelComponent.new(for: "signup_terms").with_content("I agree to the terms of service") %>
+          </div>
+        </form>
+      <% end %>
+      <% card.with_footer do %>
+        <%= render Shadcn::ButtonComponent.new(class_name: "w-full").with_content("Create account") %>
+      <% end %>
+    <% end %>
+  </section>
+</div>

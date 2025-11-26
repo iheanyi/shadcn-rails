@@ -1,0 +1,35 @@
+# shadcn-rails configuration file
+# This file mirrors the components.json structure from shadcn/ui
+
+# Style preset (currently only "default" is supported)
+style: "default"
+
+# Tailwind CSS configuration
+tailwind:
+  # Path to your CSS file (for Tailwind CSS v4, leave config blank)
+  css: "app/assets/stylesheets/application.tailwind.css"
+
+  # Base color theme: neutral, stone, zinc, gray, slate
+  base_color: "<%= options[:theme] %>"
+
+  # Use CSS variables for theming
+  css_variables: <%= options[:css_variables] %>
+
+  # Prefix for Tailwind utility classes (e.g., "tw-")
+  prefix: ""
+
+# Dark mode configuration
+dark_mode: "<%= options[:dark_mode] %>"
+
+# Component aliases for path mapping
+aliases:
+  components: "app/components"
+  ui: "app/components/shadcn"
+  lib: "lib"
+  hooks: "app/javascript/hooks"
+
+# Custom themes (optional)
+# themes:
+#   corporate:
+#     primary: "210 100% 50%"
+#     primary_foreground: "0 0% 100%"

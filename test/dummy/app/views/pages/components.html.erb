@@ -1,0 +1,142 @@
+<div class="max-w-4xl mx-auto space-y-12">
+  <div>
+    <h1 class="text-3xl font-bold">All Components</h1>
+    <p class="mt-2 text-muted-foreground">Overview of all available shadcn-rails components.</p>
+  </div>
+
+  <section class="space-y-4">
+    <h2 class="text-xl font-semibold">Alert</h2>
+    <%= render Shadcn::AlertComponent.new do |alert| %>
+      <% alert.with_title { "Heads up!" } %>
+      <% alert.with_description { "You can add components to your app using the cli." } %>
+    <% end %>
+
+    <%= render Shadcn::AlertComponent.new(variant: :destructive, class_name: "mt-4") do |alert| %>
+      <% alert.with_title { "Error" } %>
+      <% alert.with_description { "Something went wrong. Please try again." } %>
+    <% end %>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-xl font-semibold">Avatar</h2>
+    <div class="flex gap-4 items-center">
+      <%= render Shadcn::AvatarComponent.new(
+        src: "https://github.com/shadcn.png",
+        alt: "shadcn",
+        fallback: "CN"
+      ) %>
+      <%= render Shadcn::AvatarComponent.new(alt: "John Doe", size: :lg) %>
+      <%= render Shadcn::AvatarComponent.new(alt: "Jane Smith", size: :sm) %>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-xl font-semibold">Progress</h2>
+    <div class="space-y-4 max-w-md">
+      <%= render Shadcn::ProgressComponent.new(value: 33) %>
+      <%= render Shadcn::ProgressComponent.new(value: 66) %>
+      <%= render Shadcn::ProgressComponent.new(value: 100) %>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-xl font-semibold">Skeleton</h2>
+    <div class="flex items-center space-x-4">
+      <%= render Shadcn::SkeletonComponent.new(class_name: "h-12 w-12 rounded-full") %>
+      <div class="space-y-2">
+        <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-[250px]") %>
+        <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-[200px]") %>
+      </div>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-xl font-semibold">Separator</h2>
+    <div class="space-y-4">
+      <div>
+        <p class="text-sm">Content above</p>
+        <%= render Shadcn::SeparatorComponent.new(class_name: "my-4") %>
+        <p class="text-sm">Content below</p>
+      </div>
+      <div class="flex h-5 items-center space-x-4 text-sm">
+        <span>Blog</span>
+        <%= render Shadcn::SeparatorComponent.new(orientation: :vertical) %>
+        <span>Docs</span>
+        <%= render Shadcn::SeparatorComponent.new(orientation: :vertical) %>
+        <span>Source</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-xl font-semibold">Accordion</h2>
+    <%= render Shadcn::AccordionComponent.new(type: :single, collapsible: true) do |accordion| %>
+      <% accordion.with_item(value: "item-1") do |item| %>
+        <% item.with_trigger { "Is it accessible?" } %>
+        <% item.with_body { "Yes. It adheres to the WAI-ARIA design pattern." } %>
+      <% end %>
+      <% accordion.with_item(value: "item-2") do |item| %>
+        <% item.with_trigger { "Is it styled?" } %>
+        <% item.with_body { "Yes. It comes with default styles that matches the other components." } %>
+      <% end %>
+      <% accordion.with_item(value: "item-3") do |item| %>
+        <% item.with_trigger { "Is it animated?" } %>
+        <% item.with_body { "Yes. It's animated by default, but you can disable it if you prefer." } %>
+      <% end %>
+    <% end %>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-xl font-semibold">Tabs</h2>
+    <%= render Shadcn::TabsComponent.new(default_value: "overview", class_name: "max-w-md") do |tabs| %>
+      <% tabs.with_list do |list| %>
+        <% list.with_trigger(value: "overview") { "Overview" } %>
+        <% list.with_trigger(value: "analytics") { "Analytics" } %>
+        <% list.with_trigger(value: "reports") { "Reports" } %>
+      <% end %>
+      <% tabs.with_panel(value: "overview") do %>
+        <p class="text-sm text-muted-foreground">Overview content goes here.</p>
+      <% end %>
+      <% tabs.with_panel(value: "analytics") do %>
+        <p class="text-sm text-muted-foreground">Analytics content goes here.</p>
+      <% end %>
+      <% tabs.with_panel(value: "reports") do %>
+        <p class="text-sm text-muted-foreground">Reports content goes here.</p>
+      <% end %>
+    <% end %>
+  </section>
+
+  <section class="space-y-4">
+    <h2 class="text-xl font-semibold">Table</h2>
+    <%= render Shadcn::TableComponent.new do |table| %>
+      <% table.with_header do |header| %>
+        <% header.with_row do |row| %>
+          <% row.with_head { "Invoice" } %>
+          <% row.with_head { "Status" } %>
+          <% row.with_head { "Method" } %>
+          <% row.with_head(class_name: "text-right") { "Amount" } %>
+        <% end %>
+      <% end %>
+      <% table.with_body do |body| %>
+        <% body.with_row do |row| %>
+          <% row.with_cell { "INV001" } %>
+          <% row.with_cell { "Paid" } %>
+          <% row.with_cell { "Credit Card" } %>
+          <% row.with_cell(class_name: "text-right") { "$250.00" } %>
+        <% end %>
+        <% body.with_row do |row| %>
+          <% row.with_cell { "INV002" } %>
+          <% row.with_cell { "Pending" } %>
+          <% row.with_cell { "PayPal" } %>
+          <% row.with_cell(class_name: "text-right") { "$150.00" } %>
+        <% end %>
+        <% body.with_row do |row| %>
+          <% row.with_cell { "INV003" } %>
+          <% row.with_cell { "Unpaid" } %>
+          <% row.with_cell { "Bank Transfer" } %>
+          <% row.with_cell(class_name: "text-right") { "$350.00" } %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </section>
+</div>

@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>shadcn-rails Demo</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag rescue nil %>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            border: "hsl(var(--border))",
+            input: "hsl(var(--input))",
+            ring: "hsl(var(--ring))",
+            background: "hsl(var(--background))",
+            foreground: "hsl(var(--foreground))",
+            primary: {
+              DEFAULT: "hsl(var(--primary))",
+              foreground: "hsl(var(--primary-foreground))",
+            },
+            secondary: {
+              DEFAULT: "hsl(var(--secondary))",
+              foreground: "hsl(var(--secondary-foreground))",
+            },
+            destructive: {
+              DEFAULT: "hsl(var(--destructive))",
+              foreground: "hsl(var(--destructive-foreground))",
+            },
+            muted: {
+              DEFAULT: "hsl(var(--muted))",
+              foreground: "hsl(var(--muted-foreground))",
+            },
+            accent: {
+              DEFAULT: "hsl(var(--accent))",
+              foreground: "hsl(var(--accent-foreground))",
+            },
+            popover: {
+              DEFAULT: "hsl(var(--popover))",
+              foreground: "hsl(var(--popover-foreground))",
+            },
+            card: {
+              DEFAULT: "hsl(var(--card))",
+              foreground: "hsl(var(--card-foreground))",
+            },
+          },
+          borderRadius: {
+            lg: "var(--radius)",
+            md: "calc(var(--radius) - 2px)",
+            sm: "calc(var(--radius) - 4px)",
+          },
+          keyframes: {
+            "accordion-down": {
+              from: { height: "0" },
+              to: { height: "var(--radix-accordion-content-height)" },
+            },
+            "accordion-up": {
+              from: { height: "var(--radix-accordion-content-height)" },
+              to: { height: "0" },
+            },
+            "fade-in": {
+              from: { opacity: "0" },
+              to: { opacity: "1" },
+            },
+            "fade-out": {
+              from: { opacity: "1" },
+              to: { opacity: "0" },
+            },
+            "zoom-in": {
+              from: { opacity: "0", transform: "scale(0.95)" },
+              to: { opacity: "1", transform: "scale(1)" },
+            },
+            "zoom-out": {
+              from: { opacity: "1", transform: "scale(1)" },
+              to: { opacity: "0", transform: "scale(0.95)" },
+            },
+            "slide-in-from-top": {
+              from: { transform: "translateY(-100%)" },
+              to: { transform: "translateY(0)" },
+            },
+            "slide-in-from-bottom": {
+              from: { transform: "translateY(100%)" },
+              to: { transform: "translateY(0)" },
+            },
+            "slide-in-from-left": {
+              from: { transform: "translateX(-100%)" },
+              to: { transform: "translateX(0)" },
+            },
+            "slide-in-from-right": {
+              from: { transform: "translateX(100%)" },
+              to: { transform: "translateX(0)" },
+            },
+            "slide-out-to-top": {
+              from: { transform: "translateY(0)" },
+              to: { transform: "translateY(-100%)" },
+            },
+            "slide-out-to-bottom": {
+              from: { transform: "translateY(0)" },
+              to: { transform: "translateY(100%)" },
+            },
+            "slide-out-to-left": {
+              from: { transform: "translateX(0)" },
+              to: { transform: "translateX(-100%)" },
+            },
+            "slide-out-to-right": {
+              from: { transform: "translateX(0)" },
+              to: { transform: "translateX(100%)" },
+            },
+          },
+          animation: {
+            "accordion-down": "accordion-down 0.2s ease-out",
+            "accordion-up": "accordion-up 0.2s ease-out",
+            "fade-in": "fade-in 0.2s ease-out",
+            "fade-out": "fade-out 0.2s ease-out",
+            "zoom-in": "zoom-in 0.2s ease-out",
+            "zoom-out": "zoom-out 0.2s ease-out",
+            "slide-in-from-top": "slide-in-from-top 0.3s ease-out",
+            "slide-in-from-bottom": "slide-in-from-bottom 0.3s ease-out",
+            "slide-in-from-left": "slide-in-from-left 0.3s ease-out",
+            "slide-in-from-right": "slide-in-from-right 0.3s ease-out",
+            "slide-out-to-top": "slide-out-to-top 0.3s ease-out",
+            "slide-out-to-bottom": "slide-out-to-bottom 0.3s ease-out",
+            "slide-out-to-left": "slide-out-to-left 0.3s ease-out",
+            "slide-out-to-right": "slide-out-to-right 0.3s ease-out",
+          },
+        },
+      },
+    }
+  </script>
+  <script type="module">
+    import { Application, Controller } from "https://unpkg.com/@hotwired/stimulus/dist/stimulus.js"
+    const Stimulus = Application.start()
+
+    // Dialog Controller
+    Stimulus.register("shadcn--dialog", class extends Controller {
+      static targets = ["trigger", "template", "overlay", "content"]
+      static values = { open: { type: Boolean, default: false }, modal: { type: Boolean, default: true } }
+
+      connect() {
+        this.portal = null
+        this.previousActiveElement = null
+        this.boundHandleKeydown = this.handleKeydown.bind(this)
+      }
+
+      disconnect() { this.close(); if (this.portal) this.portal.remove() }
+
+      open() {
+        if (this.openValue) return
+        this.previousActiveElement = document.activeElement
+        this.openValue = true
+        if (this.hasTemplateTarget && !this.portal) {
+          this.portal = document.createElement("div")
+          this.portal.className = "shadcn-dialog-portal"
+          this.portal.innerHTML = this.templateTarget.innerHTML
+          document.body.appendChild(this.portal)
+          this.portalOverlay = this.portal.querySelector('[data-shadcn--dialog-target="overlay"]')
+          this.portalContent = this.portal.querySelector('[data-shadcn--dialog-target="content"]')
+          const closeButtons = this.portal.querySelectorAll('[data-action*="shadcn--dialog#close"]')
+          closeButtons.forEach(btn => btn.addEventListener("click", () => this.close()))
+        }
+        requestAnimationFrame(() => {
+          if (this.portalOverlay) { this.portalOverlay.dataset.state = "open"; this.portalOverlay.removeAttribute("hidden") }
+          if (this.portalContent) { this.portalContent.dataset.state = "open"; this.portalContent.removeAttribute("hidden") }
+          document.addEventListener("keydown", this.boundHandleKeydown)
+          document.body.style.overflow = "hidden"
+        })
+      }
+
+      close() {
+        if (!this.openValue) return
+        this.openValue = false
+        if (this.portalOverlay) this.portalOverlay.dataset.state = "closed"
+        if (this.portalContent) this.portalContent.dataset.state = "closed"
+        document.removeEventListener("keydown", this.boundHandleKeydown)
+        document.body.style.overflow = ""
+        if (this.previousActiveElement) this.previousActiveElement.focus()
+        setTimeout(() => { if (this.portal) { this.portal.remove(); this.portal = null } }, 200)
+      }
+
+      handleKeydown(event) { if (event.key === "Escape") this.close() }
+    })
+
+    // Sheet Controller
+    Stimulus.register("shadcn--sheet", class extends Controller {
+      static targets = ["trigger", "template", "overlay", "content"]
+      static values = { open: { type: Boolean, default: false }, side: { type: String, default: "right" } }
+
+      connect() {
+        this.portal = null
+        this.previousActiveElement = null
+        this.boundHandleKeydown = this.handleKeydown.bind(this)
+      }
+
+      disconnect() { this.close(); if (this.portal) this.portal.remove() }
+
+      open() {
+        if (this.openValue) return
+        this.previousActiveElement = document.activeElement
+        this.openValue = true
+        if (this.hasTemplateTarget && !this.portal) {
+          this.portal = document.createElement("div")
+          this.portal.className = "shadcn-sheet-portal"
+          this.portal.innerHTML = this.templateTarget.innerHTML
+          document.body.appendChild(this.portal)
+          this.portalOverlay = this.portal.querySelector('[data-shadcn--sheet-target="overlay"]')
+          this.portalContent = this.portal.querySelector('[data-shadcn--sheet-target="content"]')
+          const closeButtons = this.portal.querySelectorAll('[data-action*="shadcn--sheet#close"]')
+          closeButtons.forEach(btn => btn.addEventListener("click", () => this.close()))
+        }
+        requestAnimationFrame(() => {
+          if (this.portalOverlay) { this.portalOverlay.dataset.state = "open"; this.portalOverlay.removeAttribute("hidden") }
+          if (this.portalContent) { this.portalContent.dataset.state = "open"; this.portalContent.removeAttribute("hidden") }
+          document.addEventListener("keydown", this.boundHandleKeydown)
+          document.body.style.overflow = "hidden"
+        })
+      }
+
+      close() {
+        if (!this.openValue) return
+        this.openValue = false
+        if (this.portalOverlay) this.portalOverlay.dataset.state = "closed"
+        if (this.portalContent) this.portalContent.dataset.state = "closed"
+        document.removeEventListener("keydown", this.boundHandleKeydown)
+        document.body.style.overflow = ""
+        if (this.previousActiveElement) this.previousActiveElement.focus()
+        setTimeout(() => { if (this.portal) { this.portal.remove(); this.portal = null } }, 300)
+      }
+
+      handleKeydown(event) { if (event.key === "Escape") this.close() }
+    })
+
+    // Popover Controller
+    Stimulus.register("shadcn--popover", class extends Controller {
+      static targets = ["trigger", "content"]
+      static values = { open: { type: Boolean, default: false }, side: { type: String, default: "bottom" }, align: { type: String, default: "center" } }
+
+      connect() { this.boundHandleClickOutside = this.handleClickOutside.bind(this) }
+      disconnect() { this.hide() }
+
+      toggle(event) {
+        event?.preventDefault()
+        this.openValue ? this.hide() : this.show()
+      }
+
+      show() {
+        if (this.openValue) return
+        this.openValue = true
+        if (this.hasContentTarget) {
+          this.contentTarget.hidden = false
+          this.contentTarget.dataset.state = "open"
+          this.contentTarget.dataset.side = this.sideValue
+          this.positionContent()
+        }
+        document.addEventListener("click", this.boundHandleClickOutside)
+      }
+
+      hide() {
+        if (!this.openValue) return
+        this.openValue = false
+        if (this.hasContentTarget) {
+          this.contentTarget.dataset.state = "closed"
+          setTimeout(() => { if (!this.openValue) this.contentTarget.hidden = true }, 150)
+        }
+        document.removeEventListener("click", this.boundHandleClickOutside)
+      }
+
+      close() { this.hide() }
+      handleClickOutside(event) { if (!this.element.contains(event.target)) this.hide() }
+
+      positionContent() {
+        if (!this.hasContentTarget || !this.hasTriggerTarget) return
+        const content = this.contentTarget
+        content.style.position = "absolute"
+        const gap = 8
+        if (this.sideValue === "bottom") { content.style.top = "100%"; content.style.marginTop = gap + "px" }
+        if (this.alignValue === "center") { content.style.left = "50%"; content.style.transform = "translateX(-50%)" }
+      }
+    })
+
+    // Tooltip Controller
+    Stimulus.register("shadcn--tooltip", class extends Controller {
+      static targets = ["trigger", "content"]
+      static values = { side: { type: String, default: "top" }, align: { type: String, default: "center" }, delay: { type: Number, default: 200 } }
+
+      connect() { this.showTimeout = null; this.hideTimeout = null; this.animationTimeout = null }
+      disconnect() { this.clearTimeouts() }
+
+      show() {
+        this.clearTimeouts()
+        this.showTimeout = setTimeout(() => {
+          if (this.hasContentTarget) {
+            this.contentTarget.hidden = false
+            this.contentTarget.dataset.state = "open"
+            this.positionTooltip()
+          }
+        }, this.delayValue)
+      }
+
+      hide() {
+        this.clearTimeouts()
+        this.hideTimeout = setTimeout(() => {
+          if (this.hasContentTarget) {
+            this.contentTarget.dataset.state = "closed"
+            this.animationTimeout = setTimeout(() => { this.contentTarget.hidden = true }, 100)
+          }
+        }, 0)
+      }
+
+      clearTimeouts() {
+        if (this.showTimeout) { clearTimeout(this.showTimeout); this.showTimeout = null }
+        if (this.hideTimeout) { clearTimeout(this.hideTimeout); this.hideTimeout = null }
+        if (this.animationTimeout) { clearTimeout(this.animationTimeout); this.animationTimeout = null }
+      }
+
+      positionTooltip() {
+        if (!this.hasContentTarget || !this.hasTriggerTarget) return
+        const tooltip = this.contentTarget
+        tooltip.style.position = "absolute"
+        const gap = 8
+        if (this.sideValue === "top") { tooltip.style.bottom = "100%"; tooltip.style.marginBottom = gap + "px" }
+        if (this.sideValue === "bottom") { tooltip.style.top = "100%"; tooltip.style.marginTop = gap + "px" }
+        if (this.alignValue === "center") { tooltip.style.left = "50%"; tooltip.style.transform = "translateX(-50%)" }
+        tooltip.dataset.side = this.sideValue
+      }
+    })
+
+    // Checkbox Controller
+    Stimulus.register("shadcn--checkbox", class extends Controller {
+      static values = { checked: { type: Boolean, default: false }, name: String }
+
+      connect() {
+        this.updateState()
+      }
+
+      toggle() {
+        this.checkedValue = !this.checkedValue
+        this.updateState()
+        this.updateHiddenInput()
+      }
+
+      updateState() {
+        const state = this.checkedValue ? "checked" : "unchecked"
+        this.element.dataset.state = state
+        this.element.setAttribute("aria-checked", this.checkedValue.toString())
+        // Show/hide checkmark
+        const icon = this.element.querySelector("svg")
+        if (icon) {
+          icon.classList.toggle("opacity-0", !this.checkedValue)
+        }
+      }
+
+      updateHiddenInput() {
+        if (this.nameValue) {
+          const input = this.element.previousElementSibling
+          if (input && input.type === "hidden") {
+            input.value = this.checkedValue ? "1" : "0"
+          }
+        }
+      }
+    })
+
+    // Switch Controller
+    Stimulus.register("shadcn--switch", class extends Controller {
+      static values = { checked: { type: Boolean, default: false }, name: String }
+
+      connect() {
+        this.updateState()
+      }
+
+      toggle() {
+        this.checkedValue = !this.checkedValue
+        this.updateState()
+        this.updateHiddenInput()
+      }
+
+      updateState() {
+        const state = this.checkedValue ? "checked" : "unchecked"
+        this.element.dataset.state = state
+        this.element.setAttribute("aria-checked", this.checkedValue.toString())
+        // Update thumb position
+        const thumb = this.element.querySelector("span")
+        if (thumb) {
+          thumb.dataset.state = state
+        }
+      }
+
+      updateHiddenInput() {
+        if (this.nameValue) {
+          const input = this.element.previousElementSibling
+          if (input && input.type === "hidden") {
+            input.value = this.checkedValue ? "1" : "0"
+          }
+        }
+      }
+    })
+
+    // Accordion Controller
+    Stimulus.register("shadcn--accordion", class extends Controller {
+      static targets = ["item", "trigger", "content"]
+      static values = { type: { type: String, default: "single" }, collapsible: { type: Boolean, default: false }, default: String }
+
+      connect() {
+        if (this.defaultValue) {
+          const values = this.defaultValue.split(",")
+          values.forEach(value => {
+            const item = this.itemTargets.find(i => i.dataset.value === value)
+            if (item) this.expandItem(item)
+          })
+        }
+      }
+
+      toggle(event) {
+        const trigger = event.currentTarget
+        const item = trigger.closest('[data-shadcn--accordion-target="item"]')
+        const isOpen = item.dataset.state === "open"
+
+        if (this.typeValue === "single") {
+          // Close all other items first
+          this.itemTargets.forEach(i => {
+            if (i !== item) this.collapseItem(i)
+          })
+        }
+
+        if (isOpen) {
+          if (this.collapsibleValue || this.typeValue === "multiple") {
+            this.collapseItem(item)
+          }
+        } else {
+          this.expandItem(item)
+        }
+      }
+
+      expandItem(item) {
+        item.dataset.state = "open"
+        const trigger = item.querySelector('[data-shadcn--accordion-target="trigger"]')
+        const content = item.querySelector('[data-shadcn--accordion-target="content"]')
+        if (trigger) {
+          trigger.dataset.state = "open"
+          trigger.setAttribute("aria-expanded", "true")
+        }
+        if (content) {
+          content.dataset.state = "open"
+          content.hidden = false
+        }
+      }
+
+      collapseItem(item) {
+        item.dataset.state = "closed"
+        const trigger = item.querySelector('[data-shadcn--accordion-target="trigger"]')
+        const content = item.querySelector('[data-shadcn--accordion-target="content"]')
+        if (trigger) {
+          trigger.dataset.state = "closed"
+          trigger.setAttribute("aria-expanded", "false")
+        }
+        if (content) {
+          content.dataset.state = "closed"
+          content.hidden = true
+        }
+      }
+    })
+
+    // Tabs Controller
+    Stimulus.register("shadcn--tabs", class extends Controller {
+      static targets = ["trigger", "content"]
+      static values = { default: String }
+
+      connect() {
+        if (this.defaultValue) {
+          this.showTab(this.defaultValue)
+        } else if (this.triggerTargets.length > 0) {
+          const firstValue = this.triggerTargets[0].dataset.value
+          this.showTab(firstValue)
+        }
+      }
+
+      select(event) {
+        const value = event.currentTarget.dataset.value
+        this.showTab(value)
+      }
+
+      selectTab(event) {
+        const value = event.currentTarget.dataset.value
+        this.showTab(value)
+      }
+
+      showTab(value) {
+        // Update triggers
+        this.triggerTargets.forEach(trigger => {
+          const isActive = trigger.dataset.value === value
+          trigger.dataset.state = isActive ? "active" : "inactive"
+          trigger.setAttribute("aria-selected", isActive.toString())
+        })
+
+        // Update content
+        this.contentTargets.forEach(content => {
+          const isActive = content.dataset.value === value
+          content.hidden = !isActive
+          content.dataset.state = isActive ? "active" : "inactive"
+        })
+      }
+    })
+  </script>
+  <style>
+    <%= Shadcn::Rails.theme_css %>
+
+    /* tailwindcss-animate utilities */
+    @keyframes enter {
+      from {
+        opacity: var(--tw-enter-opacity, 1);
+        transform: translate3d(var(--tw-enter-translate-x, 0), var(--tw-enter-translate-y, 0), 0) scale3d(var(--tw-enter-scale, 1), var(--tw-enter-scale, 1), var(--tw-enter-scale, 1));
+      }
+    }
+    @keyframes exit {
+      to {
+        opacity: var(--tw-exit-opacity, 1);
+        transform: translate3d(var(--tw-exit-translate-x, 0), var(--tw-exit-translate-y, 0), 0) scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1));
+      }
+    }
+
+    .animate-in {
+      animation-name: enter;
+      animation-duration: 150ms;
+      --tw-enter-opacity: initial;
+      --tw-enter-scale: initial;
+      --tw-enter-translate-x: initial;
+      --tw-enter-translate-y: initial;
+    }
+    .animate-out {
+      animation-name: exit;
+      animation-duration: 150ms;
+      --tw-exit-opacity: initial;
+      --tw-exit-scale: initial;
+      --tw-exit-translate-x: initial;
+      --tw-exit-translate-y: initial;
+    }
+
+    /* Fade animations */
+    .fade-in-0 { --tw-enter-opacity: 0; }
+    .fade-out-0 { --tw-exit-opacity: 0; }
+
+    /* Zoom animations */
+    .zoom-in-95 { --tw-enter-scale: .95; }
+    .zoom-out-95 { --tw-exit-scale: .95; }
+
+    /* Slide animations */
+    .slide-in-from-top { --tw-enter-translate-y: -100%; }
+    .slide-in-from-bottom { --tw-enter-translate-y: 100%; }
+    .slide-in-from-left { --tw-enter-translate-x: -100%; }
+    .slide-in-from-right { --tw-enter-translate-x: 100%; }
+    .slide-in-from-top-\[48\%\] { --tw-enter-translate-y: -48%; }
+    .slide-in-from-left-1\/2 { --tw-enter-translate-x: -50%; }
+
+    .slide-out-to-top { --tw-exit-translate-y: -100%; }
+    .slide-out-to-bottom { --tw-exit-translate-y: 100%; }
+    .slide-out-to-left { --tw-exit-translate-x: -100%; }
+    .slide-out-to-right { --tw-exit-translate-x: 100%; }
+    .slide-out-to-top-\[48\%\] { --tw-exit-translate-y: -48%; }
+    .slide-out-to-left-1\/2 { --tw-exit-translate-x: -50%; }
+
+    /* Duration utilities */
+    .duration-200 { animation-duration: 200ms; }
+    .duration-300 { animation-duration: 300ms; }
+    .duration-500 { animation-duration: 500ms; }
+
+    /* Data state selectors for animations */
+    [data-state="open"].animate-in,
+    [data-state="open"] .animate-in { animation-name: enter; }
+    [data-state="closed"].animate-out,
+    [data-state="closed"] .animate-out { animation-name: exit; }
+
+    /* Conditional animations based on data-state */
+    [data-state="open"][class*="fade-in"] { --tw-enter-opacity: 0; }
+    [data-state="closed"][class*="fade-out"] { --tw-exit-opacity: 0; }
+    [data-state="open"][class*="zoom-in-95"] { --tw-enter-scale: .95; }
+    [data-state="closed"][class*="zoom-out-95"] { --tw-exit-scale: .95; }
+    [data-state="open"][class*="slide-in-from-right"] { --tw-enter-translate-x: 100%; }
+    [data-state="closed"][class*="slide-out-to-right"] { --tw-exit-translate-x: 100%; }
+    [data-state="open"][class*="slide-in-from-left"] { --tw-enter-translate-x: -100%; }
+    [data-state="closed"][class*="slide-out-to-left"] { --tw-exit-translate-x: -100%; }
+    [data-state="open"][class*="slide-in-from-top"] { --tw-enter-translate-y: -100%; }
+    [data-state="closed"][class*="slide-out-to-top"] { --tw-exit-translate-y: -100%; }
+    [data-state="open"][class*="slide-in-from-bottom"] { --tw-enter-translate-y: 100%; }
+    [data-state="closed"][class*="slide-out-to-bottom"] { --tw-exit-translate-y: 100%; }
+
+    /* Portal overlay and content styles (for dynamically injected elements from templates) */
+    .shadcn-dialog-portal [data-shadcn--dialog-target="overlay"],
+    .shadcn-sheet-portal [data-shadcn--sheet-target="overlay"] {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background-color: rgb(0 0 0 / 0.8);
+    }
+
+    .shadcn-dialog-portal [data-shadcn--dialog-target="content"] {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      z-index: 50;
+      display: grid;
+      width: 100%;
+      max-width: 32rem;
+      transform: translate(-50%, -50%);
+      gap: 1rem;
+      border: 1px solid hsl(var(--border));
+      background-color: hsl(var(--background));
+      padding: 1.5rem;
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      border-radius: 0.5rem;
+    }
+
+    .shadcn-sheet-portal [data-shadcn--sheet-target="content"] {
+      position: fixed;
+      z-index: 50;
+      gap: 1rem;
+      background-color: hsl(var(--background));
+      padding: 1.5rem;
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    /* Sheet sides */
+    .shadcn-sheet-portal [data-shadcn--sheet-target="content"][class*="inset-y-0"][class*="right-0"] {
+      top: 0;
+      bottom: 0;
+      right: 0;
+      height: 100%;
+      width: 75%;
+      max-width: 24rem;
+      border-left: 1px solid hsl(var(--border));
+    }
+
+    .shadcn-sheet-portal [data-shadcn--sheet-target="content"][class*="inset-y-0"][class*="left-0"] {
+      top: 0;
+      bottom: 0;
+      left: 0;
+      height: 100%;
+      width: 75%;
+      max-width: 24rem;
+      border-right: 1px solid hsl(var(--border));
+    }
+
+    /* Sheet/Dialog animations */
+    .shadcn-dialog-portal [data-state="open"],
+    .shadcn-sheet-portal [data-state="open"] {
+      animation: enter 200ms ease-out;
+    }
+
+    .shadcn-dialog-portal [data-state="closed"],
+    .shadcn-sheet-portal [data-state="closed"] {
+      animation: exit 300ms ease-in forwards;
+    }
+
+    /* Overlay specific animations */
+    .shadcn-dialog-portal [data-shadcn--dialog-target="overlay"][data-state="open"],
+    .shadcn-sheet-portal [data-shadcn--sheet-target="overlay"][data-state="open"] {
+      --tw-enter-opacity: 0;
+    }
+
+    .shadcn-dialog-portal [data-shadcn--dialog-target="overlay"][data-state="closed"],
+    .shadcn-sheet-portal [data-shadcn--sheet-target="overlay"][data-state="closed"] {
+      --tw-exit-opacity: 0;
+    }
+
+    /* Dialog content animations (zoom + fade) */
+    .shadcn-dialog-portal [data-shadcn--dialog-target="content"][data-state="open"] {
+      --tw-enter-opacity: 0;
+      --tw-enter-scale: 0.95;
+    }
+
+    .shadcn-dialog-portal [data-shadcn--dialog-target="content"][data-state="closed"] {
+      --tw-exit-opacity: 0;
+      --tw-exit-scale: 0.95;
+    }
+
+    /* Sheet content slide animations */
+    .shadcn-sheet-portal [data-shadcn--sheet-target="content"][class*="right-0"][data-state="open"] {
+      --tw-enter-translate-x: 100%;
+    }
+
+    .shadcn-sheet-portal [data-shadcn--sheet-target="content"][class*="right-0"][data-state="closed"] {
+      --tw-exit-translate-x: 100%;
+      --tw-exit-opacity: 0;
+    }
+
+    .shadcn-sheet-portal [data-shadcn--sheet-target="content"][class*="left-0"][data-state="open"] {
+      --tw-enter-translate-x: -100%;
+    }
+
+    .shadcn-sheet-portal [data-shadcn--sheet-target="content"][class*="left-0"][data-state="closed"] {
+      --tw-exit-translate-x: -100%;
+      --tw-exit-opacity: 0;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-background text-foreground antialiased">
+  <header class="border-b">
+    <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-xl font-bold">shadcn-rails</h1>
+      <nav class="flex gap-4">
+        <%= link_to "Home", root_path, class: "text-sm font-medium hover:underline" %>
+        <%= link_to "Components", components_path, class: "text-sm font-medium hover:underline" %>
+        <%= link_to "Buttons", buttons_path, class: "text-sm font-medium hover:underline" %>
+        <%= link_to "Forms", forms_path, class: "text-sm font-medium hover:underline" %>
+        <%= link_to "Cards", cards_path, class: "text-sm font-medium hover:underline" %>
+        <%= link_to "Dialogs", dialogs_path, class: "text-sm font-medium hover:underline" %>
+        <%= link_to "Tabs", tabs_path, class: "text-sm font-medium hover:underline" %>
+      </nav>
+    </div>
+  </header>
+  <main class="container mx-auto px-4 py-8">
+    <%= yield %>
+  </main>
+</body>
+</html>
