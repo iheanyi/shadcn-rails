@@ -34,14 +34,14 @@ module Shadcn
 
         if File.exist?("app/assets/stylesheets/application.tailwind.css")
           inject_into_file "app/assets/stylesheets/application.tailwind.css", before: "@tailwind base;" do
-            "@import \"shadcn/base\";\n"
+            "/* shadcn-rails styles */\n@import \"shadcn/base\";\n@import \"shadcn/components\";\n\n"
           end
         elsif File.exist?("app/assets/stylesheets/application.css")
           append_to_file "app/assets/stylesheets/application.css" do
-            "\n/*\n *= require shadcn/base\n */\n"
+            "\n/*\n *= require shadcn/base\n *= require shadcn/components\n */\n"
           end
         else
-          say "Could not find application stylesheet. Please manually import shadcn/base.css", :yellow
+          say "Could not find application stylesheet. Please manually import shadcn/base.css and shadcn/components.css", :yellow
         end
       end
 

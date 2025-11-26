@@ -1,0 +1,438 @@
+/**
+ * shadcn-rails Component Styles
+ *
+ * This file contains component-specific styles that work with Stimulus controllers.
+ * These styles handle data-state attributes and other dynamic styling needs.
+ *
+ * Import this file in your application's stylesheet:
+ *   @import "shadcn/components";
+ *
+ * Or with asset pipeline:
+ *   *= require shadcn/components
+ */
+
+/* ============================================
+   Switch Component
+   ============================================ */
+
+/* Button-based Switch with data-state */
+button[role="switch"] {
+  background-color: hsl(var(--input));
+  transition: background-color 0.2s ease-in-out;
+}
+
+button[role="switch"][data-state="checked"] {
+  background-color: hsl(var(--primary));
+}
+
+button[role="switch"][data-state="unchecked"] {
+  background-color: hsl(var(--input));
+}
+
+/* Switch thumb positioning */
+button[role="switch"] > span[data-state="checked"] {
+  transform: translateX(1rem);
+}
+
+button[role="switch"] > span[data-state="unchecked"] {
+  transform: translateX(0);
+}
+
+/* Disabled switch */
+button[role="switch"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   Slider Component
+   ============================================ */
+
+/* Custom slider styling with CSS custom property for fill */
+input[type="range"].shadcn-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Track styling */
+input[type="range"].shadcn-slider::-webkit-slider-runnable-track {
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: linear-gradient(
+    to right,
+    hsl(var(--primary)) 0%,
+    hsl(var(--primary)) var(--slider-fill, 0%),
+    hsl(var(--secondary)) var(--slider-fill, 0%),
+    hsl(var(--secondary)) 100%
+  );
+}
+
+input[type="range"].shadcn-slider::-moz-range-track {
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: hsl(var(--secondary));
+}
+
+input[type="range"].shadcn-slider::-moz-range-progress {
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: hsl(var(--primary));
+}
+
+/* Thumb styling */
+input[type="range"].shadcn-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  background: hsl(var(--background));
+  border: 2px solid hsl(var(--primary));
+  margin-top: -0.375rem;
+  transition: transform 0.1s ease-in-out;
+}
+
+input[type="range"].shadcn-slider::-moz-range-thumb {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  background: hsl(var(--background));
+  border: 2px solid hsl(var(--primary));
+  transition: transform 0.1s ease-in-out;
+}
+
+/* Hover/focus states for thumb */
+input[type="range"].shadcn-slider:hover::-webkit-slider-thumb {
+  transform: scale(1.1);
+}
+
+input[type="range"].shadcn-slider:hover::-moz-range-thumb {
+  transform: scale(1.1);
+}
+
+input[type="range"].shadcn-slider:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring));
+}
+
+input[type="range"].shadcn-slider:focus::-moz-range-thumb {
+  box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring));
+}
+
+/* Disabled slider */
+input[type="range"].shadcn-slider:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+input[type="range"].shadcn-slider:disabled::-webkit-slider-thumb {
+  cursor: not-allowed;
+}
+
+input[type="range"].shadcn-slider:disabled::-moz-range-thumb {
+  cursor: not-allowed;
+}
+
+/* ============================================
+   Checkbox Component
+   ============================================ */
+
+/* Native checkbox styling */
+input[type="checkbox"].shadcn-checkbox {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid hsl(var(--primary));
+  border-radius: calc(var(--radius) - 4px);
+  background-color: transparent;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+input[type="checkbox"].shadcn-checkbox:checked {
+  background-color: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+}
+
+/* Checkmark */
+input[type="checkbox"].shadcn-checkbox:checked::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  width: 4px;
+  height: 8px;
+  border: solid hsl(var(--primary-foreground));
+  border-width: 0 2px 2px 0;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+/* Focus state */
+input[type="checkbox"].shadcn-checkbox:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring));
+}
+
+/* Disabled state */
+input[type="checkbox"].shadcn-checkbox:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   Radio Group Component
+   ============================================ */
+
+/* Native radio styling */
+input[type="radio"].shadcn-radio {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid hsl(var(--primary));
+  border-radius: 9999px;
+  background-color: transparent;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.15s ease-in-out;
+}
+
+input[type="radio"].shadcn-radio:checked {
+  border-color: hsl(var(--primary));
+}
+
+/* Radio dot */
+input[type="radio"].shadcn-radio:checked::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background-color: hsl(var(--primary));
+  transform: translate(-50%, -50%);
+}
+
+/* Focus state */
+input[type="radio"].shadcn-radio:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring));
+}
+
+/* Disabled state */
+input[type="radio"].shadcn-radio:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   Toggle Component
+   ============================================ */
+
+/* Toggle button with data-state */
+button[data-state="on"].shadcn-toggle {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+button[data-state="off"].shadcn-toggle {
+  background-color: transparent;
+}
+
+/* ============================================
+   Accordion Component
+   ============================================ */
+
+/* Accordion content animation */
+[data-state="open"] > .accordion-content {
+  animation: accordion-down 0.2s ease-out;
+}
+
+[data-state="closed"] > .accordion-content {
+  animation: accordion-up 0.2s ease-out;
+}
+
+/* Accordion chevron rotation */
+[data-state="open"] .accordion-chevron {
+  transform: rotate(180deg);
+}
+
+[data-state="closed"] .accordion-chevron {
+  transform: rotate(0deg);
+}
+
+.accordion-chevron {
+  transition: transform 0.2s ease-in-out;
+}
+
+/* ============================================
+   Collapsible Component
+   ============================================ */
+
+/* Collapsible content animation */
+[data-state="open"] > .collapsible-content {
+  animation: collapsible-down 0.2s ease-out;
+}
+
+[data-state="closed"] > .collapsible-content {
+  animation: collapsible-up 0.2s ease-out;
+}
+
+/* ============================================
+   Dialog & Sheet Components
+   ============================================ */
+
+/* Overlay styles */
+.shadcn-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 50;
+}
+
+.shadcn-overlay[data-state="open"] {
+  animation: fade-in 150ms ease-out;
+}
+
+.shadcn-overlay[data-state="closed"] {
+  animation: fade-out 150ms ease-in;
+}
+
+/* Dialog content */
+.shadcn-dialog-content[data-state="open"] {
+  animation: fade-in 150ms ease-out, zoom-in 150ms ease-out;
+}
+
+.shadcn-dialog-content[data-state="closed"] {
+  animation: fade-out 150ms ease-in, zoom-out 150ms ease-in;
+}
+
+/* Sheet content - slides from different directions */
+.shadcn-sheet-content[data-side="top"][data-state="open"] {
+  animation: slide-in-from-top 300ms ease-out;
+}
+
+.shadcn-sheet-content[data-side="bottom"][data-state="open"] {
+  animation: slide-in-from-bottom 300ms ease-out;
+}
+
+.shadcn-sheet-content[data-side="left"][data-state="open"] {
+  animation: slide-in-from-left 300ms ease-out;
+}
+
+.shadcn-sheet-content[data-side="right"][data-state="open"] {
+  animation: slide-in-from-right 300ms ease-out;
+}
+
+/* ============================================
+   Popover & Tooltip Components
+   ============================================ */
+
+.shadcn-popover[data-state="open"],
+.shadcn-tooltip[data-state="open"] {
+  animation: fade-in 150ms ease-out, zoom-in 150ms ease-out;
+}
+
+.shadcn-popover[data-state="closed"],
+.shadcn-tooltip[data-state="closed"] {
+  animation: fade-out 150ms ease-in, zoom-out 150ms ease-in;
+}
+
+/* ============================================
+   Dropdown Menu Component
+   ============================================ */
+
+.shadcn-dropdown[data-state="open"] {
+  animation: fade-in 150ms ease-out, zoom-in 150ms ease-out;
+}
+
+.shadcn-dropdown[data-state="closed"] {
+  animation: fade-out 150ms ease-in, zoom-out 150ms ease-in;
+}
+
+/* ============================================
+   Select Component
+   ============================================ */
+
+.shadcn-select-content[data-state="open"] {
+  animation: fade-in 150ms ease-out, zoom-in 150ms ease-out;
+}
+
+.shadcn-select-content[data-state="closed"] {
+  animation: fade-out 150ms ease-in, zoom-out 150ms ease-in;
+}
+
+/* Select trigger chevron */
+.shadcn-select-trigger[data-state="open"] .select-chevron {
+  transform: rotate(180deg);
+}
+
+.select-chevron {
+  transition: transform 0.2s ease-in-out;
+}
+
+/* ============================================
+   Tabs Component
+   ============================================ */
+
+/* Active tab indicator */
+[role="tab"][data-state="active"] {
+  color: hsl(var(--foreground));
+}
+
+[role="tab"][data-state="inactive"] {
+  color: hsl(var(--muted-foreground));
+}
+
+/* Tab content visibility */
+[role="tabpanel"][data-state="active"] {
+  display: block;
+}
+
+[role="tabpanel"][data-state="inactive"] {
+  display: none;
+}
+
+/* ============================================
+   Toast Component
+   ============================================ */
+
+.shadcn-toast[data-state="open"] {
+  animation: slide-in-from-right 300ms ease-out;
+}
+
+.shadcn-toast[data-state="closed"] {
+  animation: fade-out 150ms ease-in, slide-out-to-right 300ms ease-in;
+}
+
+/* Toast variants */
+.shadcn-toast[data-variant="destructive"] {
+  border-color: hsl(var(--destructive));
+  background-color: hsl(var(--destructive));
+  color: hsl(var(--destructive-foreground));
+}
+
+/* ============================================
+   Progress Component
+   ============================================ */
+
+.shadcn-progress-indeterminate .shadcn-progress-indicator {
+  animation: progress-indeterminate 1.5s ease-in-out infinite;
+}
+
+/* ============================================
+   Hover Card Component
+   ============================================ */
+
+.shadcn-hover-card[data-state="open"] {
+  animation: fade-in 150ms ease-out, zoom-in 150ms ease-out;
+}
+
+.shadcn-hover-card[data-state="closed"] {
+  animation: fade-out 150ms ease-in, zoom-out 150ms ease-in;
+}
