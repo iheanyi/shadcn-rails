@@ -13,7 +13,7 @@ gem "puma"
 
 # ViewComponent
 gem "view_component", ">= 3.0"
-gem "lookbook", ">= 2.0", group: :development
+gem "lookbook", ">= 2.0"
 
 # Hotwire
 gem "turbo-rails"
