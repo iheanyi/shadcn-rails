@@ -81,22 +81,75 @@ Theme presets are in `lib/shadcn/rails/configuration.rb` with full HSL values fo
 - `lib/shadcn/rails/class_merger.rb` - Tailwind class conflict resolution
 
 ### Components (app/components/shadcn/)
+
+The library includes 43 components organized by category:
+
+**Buttons & Actions**
 | File | Description |
 |------|-------------|
-| `base_component.rb` | Base class all components inherit from |
-| `alert_component.rb` | Callout/notification with variants (default, destructive) |
-| `alert_dialog_component.rb` | Confirmation dialog with cancel/confirm actions |
-| `aspect_ratio_component.rb` | Maintains aspect ratio for media content |
-| `badge_component.rb` | Labels with variants (default, secondary, destructive, outline) |
-| `button_component.rb` | 6 variants, 6 sizes |
-| `card_component.rb` | Header, content, footer slots |
-| `dialog_component.rb` | Modal with portal, focus trap |
-| `drawer_component.rb` | Slide-out panel from any direction (top, right, bottom, left) |
-| `hover_card_component.rb` | Card that appears on hover |
-| `input_component.rb` | Text input with various types |
-| `pagination_component.rb` | Page navigation with prev/next and page numbers |
-| `tabs_component.rb` | Tabbed interface |
+| `button_component.rb` | 6 variants (default, secondary, destructive, outline, ghost, link), 6 sizes |
+| `toggle_component.rb` | Two-state button with pressed/unpressed states |
 | `toggle_group_component.rb` | Group of toggle buttons (single/multiple selection) |
+| `button_group_component.rb` | Group of related buttons |
+
+**Form Inputs**
+| File | Description |
+|------|-------------|
+| `input_component.rb` | Text input with various types |
+| `textarea_component.rb` | Multi-line text input |
+| `label_component.rb` | Form label element |
+| `checkbox_component.rb` | Checkbox with indeterminate state support |
+| `switch_component.rb` | Toggle switch control |
+| `slider_component.rb` | Range slider input |
+| `select_component.rb` | Custom styled select dropdown |
+| `native_select_component.rb` | Native HTML select with styling |
+| `radio_group_component.rb` | Radio button group |
+| `field_component.rb` | Form field wrapper with label/error slots |
+| `input_group_component.rb` | Input with prefix/suffix addons |
+| `input_otp_component.rb` | One-time password input |
+
+**Data Display**
+| File | Description |
+|------|-------------|
+| `badge_component.rb` | Labels with variants (default, secondary, destructive, outline) |
+| `avatar_component.rb` | User avatar with image/fallback |
+| `card_component.rb` | Header, content, footer slots |
+| `table_component.rb` | Styled table with header/body/footer |
+| `progress_component.rb` | Progress bar indicator |
+| `skeleton_component.rb` | Loading placeholder |
+| `spinner_component.rb` | Loading spinner animation |
+| `kbd_component.rb` | Keyboard key display |
+| `typography_component.rb` | Text styling utilities |
+| `aspect_ratio_component.rb` | Maintains aspect ratio for media content |
+| `scroll_area_component.rb` | Custom scrollbar container |
+
+**Feedback**
+| File | Description |
+|------|-------------|
+| `alert_component.rb` | Callout/notification with variants (default, destructive) |
+| `tooltip_component.rb` | Hover tooltip popup |
+| `toast_component.rb` | Temporary notification messages |
+
+**Overlays**
+| File | Description |
+|------|-------------|
+| `dialog_component.rb` | Modal with portal, focus trap |
+| `alert_dialog_component.rb` | Confirmation dialog with cancel/confirm actions |
+| `sheet_component.rb` | Slide-out panel from any edge |
+| `drawer_component.rb` | Bottom sheet drawer |
+| `popover_component.rb` | Floating content panel |
+| `hover_card_component.rb` | Card that appears on hover |
+| `dropdown_menu_component.rb` | Dropdown menu with items, separators, keyboard shortcuts |
+
+**Navigation**
+| File | Description |
+|------|-------------|
+| `tabs_component.rb` | Tabbed interface with URL sync support |
+| `accordion_component.rb` | Collapsible sections (single/multiple mode) |
+| `breadcrumb_component.rb` | Navigation breadcrumb trail |
+| `pagination_component.rb` | Page navigation with Kaminari/Pagy/WillPaginate support |
+| `collapsible_component.rb` | Show/hide content section |
+| `separator_component.rb` | Visual divider line |
 
 ### Generators (lib/generators/shadcn/)
 - `install/` - Initial setup generator
@@ -282,7 +335,20 @@ end
 
 ### Tailwind Class Conflicts
 
-The `ClassMerger` utility handles conflicts like `p-2 p-4` (p-4 wins). If you encounter unresolved conflicts, add the pattern to `CLASS_GROUPS` in `lib/shadcn/rails/class_merger.rb`.
+The `ClassMerger` utility handles conflicts like `p-2 p-4` (p-4 wins). If you encounter unresolved conflicts, add the pattern to `CLASS_GROUPS` or `CONFLICT_PATTERNS` in `lib/shadcn/rails/class_merger.rb`.
+
+**Pattern Ordering Issue**: When adding regex patterns to `CONFLICT_PATTERNS`, be careful of pattern matching order. The `find_conflict_group` method returns on the first match, so patterns must use negative lookaheads to exclude overlapping cases.
+
+Example fix for border classes:
+```ruby
+# PROBLEM: border-0 was matching border_color before border_width
+/^border-(?!solid|dashed|dotted|double|none)/ => :border_color,
+
+# SOLUTION: Add [0-9] to the negative lookahead to exclude border widths
+/^border-(?!solid|dashed|dotted|double|none|[0-9])/ => :border_color,
+```
+
+This ensures `border-0`, `border-2`, etc. are categorized as `:border_width` (not `:border_color`) so they properly conflict with and override `border`.
 
 ### Stimulus Controller Not Loading
 
@@ -323,16 +389,63 @@ Check:
 2. `.dark` class is on `<html>` element (not `<body>`)
 3. Tailwind dark mode is configured as `class` strategy
 
+## Documentation Site
+
+The `test/dummy` app serves as both a testing environment and documentation site. It includes:
+- Full documentation for all 43 components at `/docs`
+- Live interactive examples that demonstrate each component
+- Code examples stored in `app/code_examples/{component}/` as `.txt` files
+- `erb_example` helper to display code examples with syntax highlighting
+- Showcase page at `/showcase`
+
+### Documentation Structure
+
+```
+test/dummy/
+├── app/
+│   ├── views/docs/           # Component documentation pages
+│   │   ├── button.html.erb
+│   │   ├── dialog.html.erb
+│   │   └── ...
+│   ├── code_examples/        # Code examples displayed in docs
+│   │   ├── button/
+│   │   │   └── default.txt
+│   │   └── pagination/
+│   │       ├── kaminari_view.txt
+│   │       └── pagy_view.txt
+│   └── helpers/
+│       └── docs_helper.rb    # erb_example helper method
+```
+
 ## Future Improvements
 
-- [ ] Add more complex components: Command, Combobox, Date Picker
-- [ ] Form builder integration
-- [ ] Hotwire/Turbo integration helpers
-- [ ] Animation system (CSS transitions)
+**Missing Components** (from shadcn/ui):
+- [ ] Command palette
+- [ ] Combobox
+- [ ] Date Picker
+- [ ] Calendar
+- [ ] Context Menu
+- [ ] Menubar
+- [ ] Navigation Menu
+- [ ] Resizable panels
+- [ ] Sonner (toast alternative)
+- [ ] Carousel
+- [ ] Chart
+
+**Enhancements**:
+- [ ] Form builder integration (Rails form helpers)
+- [ ] Hotwire/Turbo Stream integration helpers
 - [ ] RTL support
-- [ ] TypeScript definitions for Stimulus controllers
 - [ ] Visual regression tests with Percy or similar
-- [ ] Storybook-like documentation site
+- [ ] Dropdown Menu submenus and checkbox/radio items
+- [ ] Drawer gesture support (touch drag to dismiss)
+
+**Completed**:
+- [x] 43 core components implemented
+- [x] Full documentation site with live examples
+- [x] Stimulus controllers for all interactive components
+- [x] Pagination with Kaminari/Pagy/WillPaginate adapters
+- [x] CSS animations for dialogs, sheets, toasts, accordions
 
 ## Resources
 
