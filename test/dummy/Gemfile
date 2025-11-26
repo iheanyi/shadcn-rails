@@ -7,7 +7,7 @@ gem "shadcn-rails", path: "../.."
 
 # Rails essentials
 gem "rails", ">= 7.0"
-gem "sqlite3", "~> 1.4"
+gem "sqlite3", "~> 1.4", group: [:development, :test]
 gem "sprockets-rails"
 gem "puma"
 

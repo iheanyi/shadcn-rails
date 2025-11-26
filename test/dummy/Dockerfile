@@ -34,6 +34,7 @@ ENV RAILS_ENV="production" \
 
 # Update Gemfile to use the gem path in container and reinstall
 RUN sed -i 's|path: "../.."|path: "/shadcn-rails"|' Gemfile && \
+    rm -f Gemfile.lock && \
     bundle config set frozen false && \
     bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git

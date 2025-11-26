@@ -112,7 +112,12 @@
       The Input OTP component requires the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">shadcn--input-otp</code> Stimulus controller.
     </p>
     <%= render "docs/stimulus_docs", controller: "input-otp",
-      targets: ["slot", "input", "hiddenInput", "caret"],
+      targets: [
+        { name: "slot", description: "Container for each OTP digit slot" },
+        { name: "input", description: "Individual input elements for each digit" },
+        { name: "hiddenInput", description: "Hidden input storing the full OTP value" },
+        { name: "caret", description: "Blinking caret indicator for empty focused slots" }
+      ],
       values: [
         { name: "length", type: "Number", default: "6", description: "Number of OTP slots" },
         { name: "pattern", type: "String", default: "", description: "Regex pattern for validation" },
