@@ -1,0 +1,159 @@
+<% content_for :title, "Progress" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Progress</h1>
+    <p class="text-xl text-muted-foreground">Displays an indicator showing the completion progress of a task.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+        No JavaScript Required
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::ProgressComponent.new(value: 60, class_name: "w-[60%]") %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component progress" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("progress/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Different Values -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Different Values</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="space-y-4 w-full max-w-md">
+          <div class="space-y-2">
+            <div class="flex justify-between text-sm">
+              <span>0%</span>
+            </div>
+            <%= render Shadcn::ProgressComponent.new(value: 0) %>
+          </div>
+          <div class="space-y-2">
+            <div class="flex justify-between text-sm">
+              <span>25%</span>
+            </div>
+            <%= render Shadcn::ProgressComponent.new(value: 25) %>
+          </div>
+          <div class="space-y-2">
+            <div class="flex justify-between text-sm">
+              <span>50%</span>
+            </div>
+            <%= render Shadcn::ProgressComponent.new(value: 50) %>
+          </div>
+          <div class="space-y-2">
+            <div class="flex justify-between text-sm">
+              <span>75%</span>
+            </div>
+            <%= render Shadcn::ProgressComponent.new(value: 75) %>
+          </div>
+          <div class="space-y-2">
+            <div class="flex justify-between text-sm">
+              <span>100%</span>
+            </div>
+            <%= render Shadcn::ProgressComponent.new(value: 100) %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Custom Max -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Custom Max Value</h3>
+      <p class="text-sm text-muted-foreground">Use the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">max</code> prop to set a custom maximum value.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="space-y-4 w-full max-w-md">
+          <div class="space-y-2">
+            <div class="flex justify-between text-sm">
+              <span>30 of 50 items</span>
+              <span>60%</span>
+            </div>
+            <%= render Shadcn::ProgressComponent.new(value: 30, max: 50) %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- With Label -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Label</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="space-y-4 w-full max-w-md">
+          <div class="space-y-2">
+            <div class="flex justify-between text-sm font-medium">
+              <span>Upload Progress</span>
+              <span>73%</span>
+            </div>
+            <%= render Shadcn::ProgressComponent.new(value: 73) %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- In a Card -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">In a Card</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::CardComponent.new(class_name: "w-full max-w-md") do |card| %>
+          <% card.with_header do |header| %>
+            <% header.with_title { "Storage Usage" } %>
+            <% header.with_description { "You're using 7.2 GB of 10 GB" } %>
+          <% end %>
+          <% card.with_content do %>
+            <%= render Shadcn::ProgressComponent.new(value: 72) %>
+          <% end %>
+          <% card.with_footer do %>
+            <p class="text-sm text-muted-foreground">2.8 GB available</p>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+    <%= render "docs/props_table", props: [
+      { name: "value", type: "Integer/Float", default: "nil", description: "Current progress value" },
+      { name: "max", type: "Integer/Float", default: "100", description: "Maximum progress value" },
+      { name: "indeterminate", type: "Boolean", default: "false", description: "Whether to show indeterminate (loading) state" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" }
+    ] %>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="progressbar"</code> for proper accessibility</li>
+      <li>Has <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-valuemin</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-valuemax</code>, and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-valuenow</code> attributes</li>
+      <li>For indeterminate state, <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-valuenow</code> is omitted</li>
+      <li>Consider adding a visible label or <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-label</code> to describe what the progress represents</li>
+    </ul>
+  </div>
+</div>

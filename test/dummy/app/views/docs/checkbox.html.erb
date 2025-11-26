@@ -1,0 +1,177 @@
+<% content_for :title, "Checkbox" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Checkbox</h1>
+    <p class="text-xl text-muted-foreground">A control that allows the user to toggle between checked and not checked.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Stimulus: shadcn--checkbox
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <div class="flex items-center space-x-2">
+      <%= render Shadcn::CheckboxComponent.new(id: "terms-preview") %>
+      <%= render Shadcn::LabelComponent.new(for: "terms-preview") { "Accept terms and conditions" } %>
+    </div>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component checkbox" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("checkbox/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Default -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Default</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="flex items-center space-x-2">
+          <%= render Shadcn::CheckboxComponent.new(id: "default-check") %>
+          <%= render Shadcn::LabelComponent.new(for: "default-check") { "Default checkbox" } %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Checked -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Checked</h3>
+      <p class="text-sm text-muted-foreground">Set <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">checked: true</code> to render in the checked state.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="flex items-center space-x-2">
+          <%= render Shadcn::CheckboxComponent.new(id: "checked-check", checked: true) %>
+          <%= render Shadcn::LabelComponent.new(for: "checked-check") { "Checked by default" } %>
+        </div>
+      <% end %>
+      <%= erb_example("checkbox/checked") %>
+    </div>
+
+    <!-- Disabled -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="flex flex-col gap-4">
+          <div class="flex items-center space-x-2">
+            <%= render Shadcn::CheckboxComponent.new(id: "disabled-unchecked", disabled: true) %>
+            <%= render Shadcn::LabelComponent.new(for: "disabled-unchecked") { "Disabled unchecked" } %>
+          </div>
+          <div class="flex items-center space-x-2">
+            <%= render Shadcn::CheckboxComponent.new(id: "disabled-checked", disabled: true, checked: true) %>
+            <%= render Shadcn::LabelComponent.new(for: "disabled-checked") { "Disabled checked" } %>
+          </div>
+        </div>
+      <% end %>
+      <%= erb_example("checkbox/disabled") %>
+    </div>
+
+    <!-- Indeterminate -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Indeterminate</h3>
+      <p class="text-sm text-muted-foreground">Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">indeterminate: true</code> for a partial selection state.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="flex items-center space-x-2">
+          <%= render Shadcn::CheckboxComponent.new(id: "indeterminate-check", indeterminate: true) %>
+          <%= render Shadcn::LabelComponent.new(for: "indeterminate-check") { "Select all (partial)" } %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- With Description -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Description</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="items-top flex space-x-2">
+          <%= render Shadcn::CheckboxComponent.new(id: "terms-desc") %>
+          <div class="grid gap-1.5 leading-none">
+            <%= render Shadcn::LabelComponent.new(for: "terms-desc") { "Accept terms and conditions" } %>
+            <p class="text-sm text-muted-foreground">You agree to our Terms of Service and Privacy Policy.</p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Form Example -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">In a Form</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="space-y-4 max-w-md">
+          <div class="flex items-center space-x-2">
+            <%= render Shadcn::CheckboxComponent.new(id: "marketing", name: "preferences[marketing]") %>
+            <%= render Shadcn::LabelComponent.new(for: "marketing") { "Receive marketing emails" } %>
+          </div>
+          <div class="flex items-center space-x-2">
+            <%= render Shadcn::CheckboxComponent.new(id: "updates", name: "preferences[updates]", checked: true) %>
+            <%= render Shadcn::LabelComponent.new(for: "updates") { "Receive product updates" } %>
+          </div>
+          <div class="flex items-center space-x-2">
+            <%= render Shadcn::CheckboxComponent.new(id: "security", name: "preferences[security]", checked: true) %>
+            <%= render Shadcn::LabelComponent.new(for: "security") { "Receive security alerts" } %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+    <%= render "docs/props_table", props: [
+      { name: "name", type: "String", default: "nil", description: "Input name attribute" },
+      { name: "id", type: "String", default: "nil", description: "Input id attribute" },
+      { name: "value", type: "String", default: '"1"', description: "Value when checked" },
+      { name: "checked", type: "Boolean", default: "false", description: "Whether the checkbox is checked" },
+      { name: "disabled", type: "Boolean", default: "false", description: "Whether the checkbox is disabled" },
+      { name: "required", type: "Boolean", default: "false", description: "Whether the checkbox is required" },
+      { name: "indeterminate", type: "Boolean", default: "false", description: "Whether to show indeterminate (partial) state" }
+    ] %>
+  </div>
+
+  <!-- Stimulus Controller -->
+  <%= render "docs/stimulus_docs",
+    controller: "shadcn--checkbox",
+    description: "Handles checkbox toggle state and updates form values.",
+    values: [
+      { name: "checked", type: "Boolean", description: "Current checked state" },
+      { name: "name", type: "String", description: "Form input name for submission" }
+    ],
+    actions: [
+      { name: "toggle", description: "Toggles the checked state" }
+    ]
+  %>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="checkbox"</code> for proper accessibility</li>
+      <li>Has <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-checked</code> attribute that reflects current state</li>
+      <li>Supports <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-checked="mixed"</code> for indeterminate state</li>
+      <li>Always pair with a <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">LabelComponent</code> for accessibility</li>
+      <li>Disabled state is properly announced to screen readers</li>
+    </ul>
+  </div>
+</div>

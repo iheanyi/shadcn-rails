@@ -1,0 +1,154 @@
+<% content_for :title, "Separator" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Separator</h1>
+    <p class="text-xl text-muted-foreground">Visually or semantically separates content.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+        No JavaScript Required
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <div class="space-y-4 w-full max-w-md">
+      <div>
+        <h4 class="text-sm font-medium leading-none">Shadcn Rails</h4>
+        <p class="text-sm text-muted-foreground">Beautiful UI components for Rails.</p>
+      </div>
+      <%= render Shadcn::SeparatorComponent.new %>
+      <div class="flex h-5 items-center space-x-4 text-sm">
+        <div>Blog</div>
+        <%= render Shadcn::SeparatorComponent.new(orientation: :vertical) %>
+        <div>Docs</div>
+        <%= render Shadcn::SeparatorComponent.new(orientation: :vertical) %>
+        <div>Source</div>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component separator" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("separator/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Horizontal -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Horizontal</h3>
+      <p class="text-sm text-muted-foreground">The default orientation. Useful for dividing sections of content.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="space-y-4 w-full max-w-md">
+          <div class="text-sm">Content above</div>
+          <%= render Shadcn::SeparatorComponent.new %>
+          <div class="text-sm">Content below</div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Vertical -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Vertical</h3>
+      <p class="text-sm text-muted-foreground">Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">orientation: :vertical</code> to divide inline items.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="flex h-5 items-center space-x-4 text-sm">
+          <div>Home</div>
+          <%= render Shadcn::SeparatorComponent.new(orientation: :vertical) %>
+          <div>Products</div>
+          <%= render Shadcn::SeparatorComponent.new(orientation: :vertical) %>
+          <div>About</div>
+          <%= render Shadcn::SeparatorComponent.new(orientation: :vertical) %>
+          <div>Contact</div>
+        </div>
+      <% end %>
+      <%= erb_example("separator/vertical") %>
+    </div>
+
+    <!-- Decorative -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Decorative</h3>
+      <p class="text-sm text-muted-foreground">Set <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">decorative: true</code> when the separator is purely visual and has no semantic meaning.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="space-y-4 w-full max-w-md">
+          <p class="text-sm">This separator is decorative and won't be announced by screen readers.</p>
+          <%= render Shadcn::SeparatorComponent.new(decorative: true) %>
+          <p class="text-sm">Content continues...</p>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- In a Card -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">In a Card</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::CardComponent.new(class_name: "w-full max-w-md") do |card| %>
+          <% card.with_header do |header| %>
+            <% header.with_title { "Account Settings" } %>
+            <% header.with_description { "Manage your account preferences" } %>
+          <% end %>
+          <% card.with_content do %>
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <span class="text-sm">Email notifications</span>
+                <%= render Shadcn::SwitchComponent.new %>
+              </div>
+              <%= render Shadcn::SeparatorComponent.new %>
+              <div class="flex items-center justify-between">
+                <span class="text-sm">SMS notifications</span>
+                <%= render Shadcn::SwitchComponent.new %>
+              </div>
+              <%= render Shadcn::SeparatorComponent.new %>
+              <div class="flex items-center justify-between">
+                <span class="text-sm">Push notifications</span>
+                <%= render Shadcn::SwitchComponent.new %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+    <%= render "docs/props_table", props: [
+      { name: "orientation", type: "Symbol", default: ":horizontal", description: "Separator orientation (:horizontal, :vertical)" },
+      { name: "decorative", type: "Boolean", default: "false", description: "Whether the separator is purely decorative (no semantic meaning)" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" }
+    ] %>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>By default, uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="separator"</code> and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-orientation</code></li>
+      <li>When <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">decorative: true</code>, uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="none"</code> to hide from assistive technologies</li>
+      <li>Use decorative separators for purely visual dividers that don't represent a semantic boundary</li>
+    </ul>
+  </div>
+</div>

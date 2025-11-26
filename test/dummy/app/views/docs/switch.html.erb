@@ -1,0 +1,169 @@
+<% content_for :title, "Switch" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Switch</h1>
+    <p class="text-xl text-muted-foreground">A control that allows the user to toggle between on and off.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Stimulus: shadcn--switch
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <div class="flex items-center space-x-2">
+      <%= render Shadcn::SwitchComponent.new(id: "airplane-mode-preview") %>
+      <%= render Shadcn::LabelComponent.new(for: "airplane-mode-preview") { "Airplane Mode" } %>
+    </div>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component switch" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("switch/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Default -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Default</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="flex items-center space-x-2">
+          <%= render Shadcn::SwitchComponent.new(id: "default-switch") %>
+          <%= render Shadcn::LabelComponent.new(for: "default-switch") { "Enable notifications" } %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Checked -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Checked</h3>
+      <p class="text-sm text-muted-foreground">Set <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">checked: true</code> to render in the on state.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="flex items-center space-x-2">
+          <%= render Shadcn::SwitchComponent.new(id: "checked-switch-demo", checked: true) %>
+          <%= render Shadcn::LabelComponent.new(for: "checked-switch-demo") { "Enabled by default" } %>
+        </div>
+      <% end %>
+      <%= erb_example("switch/checked") %>
+    </div>
+
+    <!-- Disabled -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="flex flex-col gap-4">
+          <div class="flex items-center space-x-2">
+            <%= render Shadcn::SwitchComponent.new(id: "disabled-off", disabled: true) %>
+            <%= render Shadcn::LabelComponent.new(for: "disabled-off") { "Disabled (off)" } %>
+          </div>
+          <div class="flex items-center space-x-2">
+            <%= render Shadcn::SwitchComponent.new(id: "disabled-on", disabled: true, checked: true) %>
+            <%= render Shadcn::LabelComponent.new(for: "disabled-on") { "Disabled (on)" } %>
+          </div>
+        </div>
+      <% end %>
+      <%= erb_example("switch/disabled") %>
+    </div>
+
+    <!-- Form Example -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">In a Form</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::CardComponent.new(class_name: "w-full max-w-md") do |card| %>
+          <% card.with_header do |header| %>
+            <% header.with_title { "Notifications" } %>
+            <% header.with_description { "Configure how you receive notifications." } %>
+          <% end %>
+          <% card.with_content do %>
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <div class="space-y-0.5">
+                  <%= render Shadcn::LabelComponent.new(for: "email-notif") { "Email" } %>
+                  <p class="text-sm text-muted-foreground">Receive notifications via email.</p>
+                </div>
+                <%= render Shadcn::SwitchComponent.new(id: "email-notif", name: "notifications[email]", checked: true) %>
+              </div>
+              <%= render Shadcn::SeparatorComponent.new %>
+              <div class="flex items-center justify-between">
+                <div class="space-y-0.5">
+                  <%= render Shadcn::LabelComponent.new(for: "push-notif") { "Push" } %>
+                  <p class="text-sm text-muted-foreground">Receive push notifications.</p>
+                </div>
+                <%= render Shadcn::SwitchComponent.new(id: "push-notif", name: "notifications[push]") %>
+              </div>
+              <%= render Shadcn::SeparatorComponent.new %>
+              <div class="flex items-center justify-between">
+                <div class="space-y-0.5">
+                  <%= render Shadcn::LabelComponent.new(for: "sms-notif") { "SMS" } %>
+                  <p class="text-sm text-muted-foreground">Receive notifications via SMS.</p>
+                </div>
+                <%= render Shadcn::SwitchComponent.new(id: "sms-notif", name: "notifications[sms]") %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+    <%= render "docs/props_table", props: [
+      { name: "name", type: "String", default: "nil", description: "Input name attribute" },
+      { name: "id", type: "String", default: "nil", description: "Input id attribute" },
+      { name: "value", type: "String", default: '"1"', description: "Value when checked" },
+      { name: "checked", type: "Boolean", default: "false", description: "Whether the switch is on" },
+      { name: "disabled", type: "Boolean", default: "false", description: "Whether the switch is disabled" },
+      { name: "required", type: "Boolean", default: "false", description: "Whether the switch is required" }
+    ] %>
+  </div>
+
+  <!-- Stimulus Controller -->
+  <%= render "docs/stimulus_docs",
+    controller: "shadcn--switch",
+    description: "Handles switch toggle state and updates form values.",
+    values: [
+      { name: "checked", type: "Boolean", description: "Current checked state" },
+      { name: "name", type: "String", description: "Form input name for submission" }
+    ],
+    actions: [
+      { name: "toggle", description: "Toggles the switch state" }
+    ]
+  %>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="switch"</code> for proper accessibility</li>
+      <li>Has <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-checked</code> attribute that reflects current state</li>
+      <li>Always pair with a <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">LabelComponent</code> for accessibility</li>
+      <li>Disabled state is properly announced to screen readers</li>
+      <li>Keyboard navigable - can be toggled with Space key</li>
+    </ul>
+  </div>
+</div>

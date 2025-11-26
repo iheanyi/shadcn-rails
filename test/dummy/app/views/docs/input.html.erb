@@ -1,0 +1,156 @@
+<% content_for :title, "Input" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Input</h1>
+    <p class="text-xl text-muted-foreground">Displays a form input field or a component that looks like an input field.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+        No JavaScript Required
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::InputComponent.new(type: "email", placeholder: "Email") %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component input" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("input/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Default -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Default</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::InputComponent.new(placeholder: "Enter text...") %>
+      <% end %>
+    </div>
+
+    <!-- With Label -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Label</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="grid w-full max-w-sm items-center gap-1.5">
+          <%= render Shadcn::LabelComponent.new(for: "email-demo") { "Email" } %>
+          <%= render Shadcn::InputComponent.new(type: "email", id: "email-demo", placeholder: "Email") %>
+        </div>
+      <% end %>
+      <%= erb_example("input/with_label") %>
+    </div>
+
+    <!-- Input Types -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Input Types</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="grid gap-4 max-w-sm">
+          <div class="grid gap-1.5">
+            <%= render Shadcn::LabelComponent.new(for: "text-demo") { "Text" } %>
+            <%= render Shadcn::InputComponent.new(type: "text", id: "text-demo", placeholder: "Enter text") %>
+          </div>
+          <div class="grid gap-1.5">
+            <%= render Shadcn::LabelComponent.new(for: "password-demo") { "Password" } %>
+            <%= render Shadcn::InputComponent.new(type: "password", id: "password-demo", placeholder: "Enter password") %>
+          </div>
+          <div class="grid gap-1.5">
+            <%= render Shadcn::LabelComponent.new(for: "number-demo") { "Number" } %>
+            <%= render Shadcn::InputComponent.new(type: "number", id: "number-demo", placeholder: "0") %>
+          </div>
+          <div class="grid gap-1.5">
+            <%= render Shadcn::LabelComponent.new(for: "date-demo") { "Date" } %>
+            <%= render Shadcn::InputComponent.new(type: "date", id: "date-demo") %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- File Input -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">File</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="grid w-full max-w-sm items-center gap-1.5">
+          <%= render Shadcn::LabelComponent.new(for: "picture-demo") { "Picture" } %>
+          <%= render Shadcn::InputComponent.new(id: "picture-demo", type: "file") %>
+        </div>
+      <% end %>
+      <%= erb_example("input/file") %>
+    </div>
+
+    <!-- Disabled -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::InputComponent.new(disabled: true, placeholder: "Disabled") %>
+      <% end %>
+      <%= erb_example("input/disabled") %>
+    </div>
+
+    <!-- With Button -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Button</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="flex w-full max-w-sm items-center space-x-2">
+          <%= render Shadcn::InputComponent.new(type: "email", placeholder: "Email") %>
+          <%= render Shadcn::ButtonComponent.new do %>Subscribe<% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+    <%= render "docs/props_table", props: [
+      { name: "type", type: "String", default: '"text"', description: "Input type (text, email, password, number, date, file, etc.)" },
+      { name: "name", type: "String", default: "nil", description: "Input name attribute" },
+      { name: "id", type: "String", default: "nil", description: "Input id attribute" },
+      { name: "value", type: "String", default: "nil", description: "Input value" },
+      { name: "placeholder", type: "String", default: "nil", description: "Placeholder text" },
+      { name: "disabled", type: "Boolean", default: "false", description: "Whether the input is disabled" },
+      { name: "required", type: "Boolean", default: "false", description: "Whether the input is required" },
+      { name: "readonly", type: "Boolean", default: "false", description: "Whether the input is readonly" },
+      { name: "autofocus", type: "Boolean", default: "false", description: "Whether to autofocus the input" },
+      { name: "autocomplete", type: "String", default: "nil", description: "Autocomplete attribute value" },
+      { name: "min", type: "String/Integer", default: "nil", description: "Minimum value (for number/date inputs)" },
+      { name: "max", type: "String/Integer", default: "nil", description: "Maximum value (for number/date inputs)" },
+      { name: "minlength", type: "Integer", default: "nil", description: "Minimum character length" },
+      { name: "maxlength", type: "Integer", default: "nil", description: "Maximum character length" }
+    ] %>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses native <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">&lt;input&gt;</code> element for proper keyboard and screen reader support</li>
+      <li>Always pair inputs with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">LabelComponent</code> for accessibility</li>
+      <li>Use the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">for</code> attribute on labels to associate them with inputs</li>
+      <li>Disabled state uses native <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">disabled</code> attribute</li>
+      <li>Required fields should use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">required: true</code> for validation</li>
+    </ul>
+  </div>
+</div>

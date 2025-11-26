@@ -1,0 +1,246 @@
+<% content_for :title, "Avatar" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Avatar</h1>
+    <p class="text-xl text-muted-foreground">An image element with a fallback for representing the user.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Stimulus: shadcn--avatar
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::AvatarComponent.new(
+      src: "https://github.com/shadcn.png",
+      alt: "Shadcn",
+      fallback: "CN"
+    ) %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component avatar" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("avatar/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- With Image -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Image</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::AvatarComponent.new(
+          src: "https://github.com/shadcn.png",
+          alt: "Shadcn"
+        ) %>
+      <% end %>
+    </div>
+
+    <!-- Fallback -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Fallback</h3>
+      <p class="text-sm text-muted-foreground">When no image is provided or the image fails to load, a fallback is shown.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="flex items-center gap-4">
+          <%= render Shadcn::AvatarComponent.new(alt: "John Doe", fallback: "JD") %>
+          <%= render Shadcn::AvatarComponent.new(alt: "Jane Smith") %>
+          <%= render Shadcn::AvatarComponent.new(fallback: "AB") %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Sizes -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Sizes</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="flex items-center gap-4">
+          <%= render Shadcn::AvatarComponent.new(
+            src: "https://github.com/shadcn.png",
+            alt: "Small",
+            size: :sm
+          ) %>
+          <%= render Shadcn::AvatarComponent.new(
+            src: "https://github.com/shadcn.png",
+            alt: "Default",
+            size: :default
+          ) %>
+          <%= render Shadcn::AvatarComponent.new(
+            src: "https://github.com/shadcn.png",
+            alt: "Large",
+            size: :lg
+          ) %>
+          <%= render Shadcn::AvatarComponent.new(
+            src: "https://github.com/shadcn.png",
+            alt: "Extra Large",
+            size: :xl
+          ) %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Fallback Sizes -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Fallback Sizes</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="flex items-center gap-4">
+          <%= render Shadcn::AvatarComponent.new(fallback: "SM", size: :sm) %>
+          <%= render Shadcn::AvatarComponent.new(fallback: "DF", size: :default) %>
+          <%= render Shadcn::AvatarComponent.new(fallback: "LG", size: :lg) %>
+          <%= render Shadcn::AvatarComponent.new(fallback: "XL", size: :xl) %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- User List -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">User List</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="space-y-4 w-full max-w-md">
+          <div class="flex items-center gap-4">
+            <%= render Shadcn::AvatarComponent.new(src: "https://github.com/shadcn.png", alt: "Shadcn") %>
+            <div>
+              <p class="text-sm font-medium leading-none">Shadcn</p>
+              <p class="text-sm text-muted-foreground">shadcn@example.com</p>
+            </div>
+          </div>
+          <%= render Shadcn::SeparatorComponent.new %>
+          <div class="flex items-center gap-4">
+            <%= render Shadcn::AvatarComponent.new(alt: "John Doe", fallback: "JD") %>
+            <div>
+              <p class="text-sm font-medium leading-none">John Doe</p>
+              <p class="text-sm text-muted-foreground">john@example.com</p>
+            </div>
+          </div>
+          <%= render Shadcn::SeparatorComponent.new %>
+          <div class="flex items-center gap-4">
+            <%= render Shadcn::AvatarComponent.new(alt: "Jane Smith") %>
+            <div>
+              <p class="text-sm font-medium leading-none">Jane Smith</p>
+              <p class="text-sm text-muted-foreground">jane@example.com</p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Avatar Group -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Avatar Group</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="flex -space-x-4">
+          <%= render Shadcn::AvatarComponent.new(
+            src: "https://github.com/shadcn.png",
+            alt: "User 1",
+            class_name: "border-2 border-background"
+          ) %>
+          <%= render Shadcn::AvatarComponent.new(
+            fallback: "JD",
+            class_name: "border-2 border-background"
+          ) %>
+          <%= render Shadcn::AvatarComponent.new(
+            fallback: "AB",
+            class_name: "border-2 border-background"
+          ) %>
+          <%= render Shadcn::AvatarComponent.new(
+            fallback: "+3",
+            class_name: "border-2 border-background"
+          ) %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+    <%= render "docs/props_table", props: [
+      { name: "src", type: "String", default: "nil", description: "Image URL for the avatar" },
+      { name: "alt", type: "String", default: '""', description: "Alt text for the image" },
+      { name: "fallback", type: "String", default: "nil", description: "Fallback text when image is unavailable (auto-generated from alt if not provided)" },
+      { name: "size", type: "Symbol", default: ":default", description: "Avatar size (:sm, :default, :lg, :xl)" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" }
+    ] %>
+
+    <div class="mt-6 space-y-4">
+      <h3 class="text-lg font-semibold">Size Reference</h3>
+      <div class="rounded-lg border">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b bg-muted/50">
+              <th class="text-left p-3 text-sm font-medium">Size</th>
+              <th class="text-left p-3 text-sm font-medium">Dimensions</th>
+              <th class="text-left p-3 text-sm font-medium">Font Size</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">:sm</td>
+              <td class="p-3 text-sm">32x32px (h-8 w-8)</td>
+              <td class="p-3 text-sm">text-xs</td>
+            </tr>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">:default</td>
+              <td class="p-3 text-sm">40x40px (h-10 w-10)</td>
+              <td class="p-3 text-sm">text-sm</td>
+            </tr>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">:lg</td>
+              <td class="p-3 text-sm">48x48px (h-12 w-12)</td>
+              <td class="p-3 text-sm">text-base</td>
+            </tr>
+            <tr>
+              <td class="p-3 text-sm font-mono">:xl</td>
+              <td class="p-3 text-sm">64x64px (h-16 w-16)</td>
+              <td class="p-3 text-sm">text-lg</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stimulus Controller -->
+  <%= render "docs/stimulus_docs",
+    controller: "shadcn--avatar",
+    description: "Handles image loading errors and shows fallback when image fails to load.",
+    targets: [
+      { name: "image", description: "The avatar image element" },
+      { name: "fallback", description: "The fallback element shown when image fails" }
+    ],
+    actions: [
+      { name: "handleError", description: "Called when image fails to load, shows fallback" }
+    ]
+  %>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Always provide meaningful <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">alt</code> text for the avatar</li>
+      <li>The fallback text is visible to screen readers when shown</li>
+      <li>If the avatar is decorative (e.g., displayed alongside a name), you can use an empty alt: <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">alt: ""</code></li>
+    </ul>
+  </div>
+</div>

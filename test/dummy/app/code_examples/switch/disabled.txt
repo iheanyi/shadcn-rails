@@ -1,0 +1,4 @@
+<div class="flex items-center space-x-2">
+  <%= render Shadcn::SwitchComponent.new(id: "disabled-switch", disabled: true) %>
+  <%= render Shadcn::LabelComponent.new(for: "disabled-switch") { "Disabled switch" } %>
+</div>

@@ -1,0 +1,114 @@
+<% content_for :title, "Label" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Label</h1>
+    <p class="text-xl text-muted-foreground">Renders an accessible label associated with form controls.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+        No JavaScript Required
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::LabelComponent.new(for: "preview-email") { "Your email address" } %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component label" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("label/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- With Input -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Input</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="grid w-full max-w-sm items-center gap-1.5">
+          <%= render Shadcn::LabelComponent.new(for: "email-example") { "Email" } %>
+          <%= render Shadcn::InputComponent.new(type: "email", id: "email-example", placeholder: "Email") %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Required -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Required</h3>
+      <p class="text-sm text-muted-foreground">Set <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">required: true</code> to show a required indicator.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="grid w-full max-w-sm items-center gap-1.5">
+          <%= render Shadcn::LabelComponent.new(for: "name-required", required: true) { "Full Name" } %>
+          <%= render Shadcn::InputComponent.new(id: "name-required", required: true, placeholder: "Enter your name") %>
+        </div>
+      <% end %>
+      <%= erb_example("label/required") %>
+    </div>
+
+    <!-- With Checkbox -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Checkbox</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="flex items-center space-x-2">
+          <%= render Shadcn::CheckboxComponent.new(id: "terms-checkbox") %>
+          <%= render Shadcn::LabelComponent.new(for: "terms-checkbox") { "Accept terms and conditions" } %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Disabled State -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled State</h3>
+      <p class="text-sm text-muted-foreground">When the associated input is disabled, the label automatically adjusts its styling via the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">peer-disabled</code> CSS classes.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="grid w-full max-w-sm items-center gap-1.5">
+          <%= render Shadcn::LabelComponent.new(for: "disabled-input") { "Disabled Field" } %>
+          <%= render Shadcn::InputComponent.new(id: "disabled-input", disabled: true, value: "Cannot edit", class_name: "peer") %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+    <%= render "docs/props_table", props: [
+      { name: "for", type: "String", default: "nil", description: "The ID of the input element this label is for" },
+      { name: "required", type: "Boolean", default: "false", description: "Whether to show a required indicator (*)" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" }
+    ] %>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses native <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">&lt;label&gt;</code> element for proper accessibility</li>
+      <li>Always use the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">for</code> attribute to associate labels with their inputs</li>
+      <li>The required indicator uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-hidden="true"</code> since the input's <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">required</code> attribute provides the semantic information</li>
+      <li>Labels respond to disabled state via CSS peer selectors</li>
+    </ul>
+  </div>
+</div>

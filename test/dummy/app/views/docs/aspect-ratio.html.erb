@@ -1,0 +1,217 @@
+<% content_for :title, "Aspect Ratio" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Aspect Ratio</h1>
+    <p class="text-xl text-muted-foreground">Displays content within a desired ratio.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+        No JavaScript Required
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <div class="w-[450px]">
+      <%= render Shadcn::AspectRatioComponent.new(ratio: 16.0/9.0, class_name: "bg-muted") do %>
+        <img src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80" alt="Photo by Drew Beamer" class="h-full w-full rounded-md object-cover" />
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component aspect_ratio" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("aspect_ratio/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- 16:9 -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">16:9 (Widescreen)</h3>
+      <p class="text-sm text-muted-foreground">Common for video content and landscape images.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-[300px]">
+          <%= render Shadcn::AspectRatioComponent.new(ratio: 16.0/9.0, class_name: "bg-muted rounded-md") do %>
+            <div class="flex h-full w-full items-center justify-center text-muted-foreground">16:9</div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- 4:3 -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">4:3 (Standard)</h3>
+      <p class="text-sm text-muted-foreground">Traditional TV and monitor ratio.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-[300px]">
+          <%= render Shadcn::AspectRatioComponent.new(ratio: 4.0/3.0, class_name: "bg-muted rounded-md") do %>
+            <div class="flex h-full w-full items-center justify-center text-muted-foreground">4:3</div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- 1:1 (Square) -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">1:1 (Square)</h3>
+      <p class="text-sm text-muted-foreground">Perfect for profile pictures and thumbnails.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-[200px]">
+          <%= render Shadcn::AspectRatioComponent.new(ratio: 1, class_name: "bg-muted rounded-md") do %>
+            <div class="flex h-full w-full items-center justify-center text-muted-foreground">1:1</div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Portrait -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">2:3 (Portrait)</h3>
+      <p class="text-sm text-muted-foreground">Common for portrait photos and movie posters.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-[200px]">
+          <%= render Shadcn::AspectRatioComponent.new(ratio: 2.0/3.0, class_name: "bg-muted rounded-md") do %>
+            <div class="flex h-full w-full items-center justify-center text-muted-foreground">2:3</div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- With Image -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Image</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="grid gap-4 grid-cols-2 max-w-xl">
+          <div>
+            <%= render Shadcn::AspectRatioComponent.new(ratio: 1, class_name: "overflow-hidden rounded-md") do %>
+              <img src="https://images.unsplash.com/photo-1535025183041-0991a977e25b?w=300&dpr=2&q=80" alt="Landscape" class="h-full w-full object-cover" />
+            <% end %>
+          </div>
+          <div>
+            <%= render Shadcn::AspectRatioComponent.new(ratio: 1, class_name: "overflow-hidden rounded-md") do %>
+              <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=300&dpr=2&q=80" alt="Dogs" class="h-full w-full object-cover" />
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Video Embed -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Video Embed Placeholder</h3>
+      <p class="text-sm text-muted-foreground">Use with iframes for responsive video embeds.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-lg">
+          <%= render Shadcn::AspectRatioComponent.new(ratio: 16.0/9.0, class_name: "bg-muted rounded-md") do %>
+            <div class="flex h-full w-full items-center justify-center">
+              <div class="text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-muted-foreground"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <p class="text-sm text-muted-foreground mt-2">Video Player</p>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Map Placeholder -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Map Placeholder</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-lg">
+          <%= render Shadcn::AspectRatioComponent.new(ratio: 2, class_name: "bg-muted rounded-md") do %>
+            <div class="flex h-full w-full items-center justify-center">
+              <div class="text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-muted-foreground"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" x2="9" y1="3" y2="18"/><line x1="15" x2="15" y1="6" y2="21"/></svg>
+                <p class="text-sm text-muted-foreground mt-2">Map Embed</p>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+    <%= render "docs/props_table", props: [
+      { name: "ratio", type: "Float", default: "1", description: "Aspect ratio (width/height). e.g., 16.0/9.0 for widescreen" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" }
+    ] %>
+
+    <div class="mt-6 space-y-4">
+      <h3 class="text-lg font-semibold">Common Ratios</h3>
+      <div class="rounded-lg border">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b bg-muted/50">
+              <th class="text-left p-3 text-sm font-medium">Name</th>
+              <th class="text-left p-3 text-sm font-medium">Ratio Value</th>
+              <th class="text-left p-3 text-sm font-medium">Use Case</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b">
+              <td class="p-3 text-sm">Square</td>
+              <td class="p-3 text-sm font-mono">1</td>
+              <td class="p-3 text-sm">Profile pictures, thumbnails</td>
+            </tr>
+            <tr class="border-b">
+              <td class="p-3 text-sm">4:3</td>
+              <td class="p-3 text-sm font-mono">4.0/3.0</td>
+              <td class="p-3 text-sm">Standard photos</td>
+            </tr>
+            <tr class="border-b">
+              <td class="p-3 text-sm">16:9</td>
+              <td class="p-3 text-sm font-mono">16.0/9.0</td>
+              <td class="p-3 text-sm">Video, widescreen</td>
+            </tr>
+            <tr class="border-b">
+              <td class="p-3 text-sm">21:9</td>
+              <td class="p-3 text-sm font-mono">21.0/9.0</td>
+              <td class="p-3 text-sm">Ultrawide, cinematic</td>
+            </tr>
+            <tr>
+              <td class="p-3 text-sm">2:3</td>
+              <td class="p-3 text-sm font-mono">2.0/3.0</td>
+              <td class="p-3 text-sm">Portrait, movie posters</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>AspectRatio is a layout container and has no semantic meaning</li>
+      <li>Ensure content inside (images, videos) has appropriate alt text or labels</li>
+      <li>Uses CSS padding technique for consistent aspect ratios across browsers</li>
+    </ul>
+  </div>
+</div>

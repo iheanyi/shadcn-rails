@@ -1,0 +1,138 @@
+<% content_for :title, "Textarea" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Textarea</h1>
+    <p class="text-xl text-muted-foreground">Displays a form textarea or a component that looks like a textarea.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+        No JavaScript Required
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::TextareaComponent.new(placeholder: "Type your message here.") %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component textarea" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("textarea/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Default -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Default</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::TextareaComponent.new(placeholder: "Enter your text...") %>
+      <% end %>
+    </div>
+
+    <!-- With Label -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Label</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="grid w-full gap-1.5">
+          <%= render Shadcn::LabelComponent.new(for: "message-demo") { "Your message" } %>
+          <%= render Shadcn::TextareaComponent.new(id: "message-demo", placeholder: "Type your message here.") %>
+        </div>
+      <% end %>
+      <%= erb_example("textarea/with_label") %>
+    </div>
+
+    <!-- With Text -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Helper Text</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="grid w-full gap-1.5">
+          <%= render Shadcn::LabelComponent.new(for: "bio-demo") { "Your bio" } %>
+          <%= render Shadcn::TextareaComponent.new(id: "bio-demo", placeholder: "Tell us a little bit about yourself") %>
+          <p class="text-sm text-muted-foreground">You can @mention other users and organizations.</p>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Different Rows -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Custom Rows</h3>
+      <p class="text-sm text-muted-foreground">Use the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">rows</code> prop to set the number of visible rows.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="grid gap-4 w-full max-w-md">
+          <%= render Shadcn::TextareaComponent.new(rows: 2, placeholder: "2 rows") %>
+          <%= render Shadcn::TextareaComponent.new(rows: 6, placeholder: "6 rows") %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Disabled -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::TextareaComponent.new(disabled: true, placeholder: "Disabled textarea") %>
+      <% end %>
+      <%= erb_example("textarea/disabled") %>
+    </div>
+
+    <!-- With Button -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Button</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="grid w-full gap-2">
+          <%= render Shadcn::TextareaComponent.new(placeholder: "Type your message here.") %>
+          <%= render Shadcn::ButtonComponent.new do %>Send message<% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+    <%= render "docs/props_table", props: [
+      { name: "name", type: "String", default: "nil", description: "Textarea name attribute" },
+      { name: "id", type: "String", default: "nil", description: "Textarea id attribute" },
+      { name: "value", type: "String", default: "nil", description: "Initial value" },
+      { name: "placeholder", type: "String", default: "nil", description: "Placeholder text" },
+      { name: "rows", type: "Integer", default: "3", description: "Number of visible rows" },
+      { name: "cols", type: "Integer", default: "nil", description: "Number of visible columns" },
+      { name: "disabled", type: "Boolean", default: "false", description: "Whether the textarea is disabled" },
+      { name: "required", type: "Boolean", default: "false", description: "Whether the textarea is required" },
+      { name: "readonly", type: "Boolean", default: "false", description: "Whether the textarea is readonly" },
+      { name: "minlength", type: "Integer", default: "nil", description: "Minimum character length" },
+      { name: "maxlength", type: "Integer", default: "nil", description: "Maximum character length" }
+    ] %>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses native <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">&lt;textarea&gt;</code> element for proper accessibility</li>
+      <li>Always pair textareas with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">LabelComponent</code> for accessibility</li>
+      <li>Disabled state uses native <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">disabled</code> attribute</li>
+    </ul>
+  </div>
+</div>

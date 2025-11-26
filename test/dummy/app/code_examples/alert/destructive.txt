@@ -1,0 +1,4 @@
+<%= render Shadcn::AlertComponent.new(variant: :destructive) do |alert| %>
+  <% alert.with_title { "Error" } %>
+  <% alert.with_description { "Your session has expired. Please log in again." } %>
+<% end %>
