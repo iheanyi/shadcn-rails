@@ -1,0 +1,171 @@
+<% content_for :title, "Alert" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Alert</h1>
+    <p class="text-xl text-muted-foreground">Displays a callout for user attention.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+        No JavaScript Required
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::AlertComponent.new do |alert| %>
+      <% alert.with_title { "Heads up!" } %>
+      <% alert.with_description { "You can add components to your app using the cli." } %>
+    <% end %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component alert" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("alert/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Default -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Default</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::AlertComponent.new do |alert| %>
+          <% alert.with_title { "Note" } %>
+          <% alert.with_description { "This is a default alert for general information." } %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Destructive -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Destructive</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::AlertComponent.new(variant: :destructive) do |alert| %>
+          <% alert.with_title { "Error" } %>
+          <% alert.with_description { "Your session has expired. Please log in again." } %>
+        <% end %>
+      <% end %>
+      <%= erb_example("alert/destructive") %>
+    </div>
+
+    <!-- With Icon -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Icon</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::AlertComponent.new do |alert| %>
+          <% alert.with_icon do %>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <% end %>
+          <% alert.with_title { "Warning" } %>
+          <% alert.with_description { "Your free trial ends in 3 days. Upgrade to continue using all features." } %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Destructive with Icon -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Destructive with Icon</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::AlertComponent.new(variant: :destructive) do |alert| %>
+          <% alert.with_icon do %>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <% end %>
+          <% alert.with_title { "Error" } %>
+          <% alert.with_description { "Something went wrong. Please try again later." } %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Multiple Alerts -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Multiple Alerts</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="space-y-4 w-full">
+          <%= render Shadcn::AlertComponent.new do |alert| %>
+            <% alert.with_icon do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <% end %>
+            <% alert.with_title { "Information" } %>
+            <% alert.with_description { "Your account has been updated successfully." } %>
+          <% end %>
+
+          <%= render Shadcn::AlertComponent.new(variant: :destructive) do |alert| %>
+            <% alert.with_icon do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            <% end %>
+            <% alert.with_title { "Connection Failed" } %>
+            <% alert.with_description { "Unable to connect to the server. Check your internet connection." } %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+    <%= render "docs/props_table", props: [
+      { name: "variant", type: "Symbol", default: ":default", description: "Alert style variant (:default, :destructive)" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" }
+    ] %>
+
+    <div class="mt-6 space-y-4">
+      <h3 class="text-lg font-semibold">Slots</h3>
+      <div class="rounded-lg border">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b bg-muted/50">
+              <th class="text-left p-3 text-sm font-medium">Slot</th>
+              <th class="text-left p-3 text-sm font-medium">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">with_icon</td>
+              <td class="p-3 text-sm">Optional icon displayed on the left</td>
+            </tr>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">with_title</td>
+              <td class="p-3 text-sm">Alert title (bold heading)</td>
+            </tr>
+            <tr>
+              <td class="p-3 text-sm font-mono">with_description</td>
+              <td class="p-3 text-sm">Alert description text</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="alert"</code> for proper screen reader announcement</li>
+      <li>Icons are decorative and should not require alt text</li>
+      <li>Color is not the only indicator - icons and text provide context</li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,195 @@
+<% content_for :title, "Slider" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Slider</h1>
+    <p class="text-xl text-muted-foreground">An input where the user selects a value from within a given range.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Stimulus: shadcn--slider
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::SliderComponent.new(value: 50, max: 100, class_name: "w-[60%]") %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component slider" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("slider/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Default -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Default</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::SliderComponent.new(value: 33, class_name: "w-[60%]") %>
+      <% end %>
+    </div>
+
+    <!-- With Label -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Label</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="space-y-4 w-full max-w-md">
+          <div class="flex justify-between">
+            <%= render Shadcn::LabelComponent.new { "Volume" } %>
+            <span class="text-sm text-muted-foreground">75%</span>
+          </div>
+          <%= render Shadcn::SliderComponent.new(value: 75, max: 100) %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Custom Range -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Custom Range</h3>
+      <p class="text-sm text-muted-foreground">Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">min</code> and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">max</code> to set a custom range.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="space-y-4 w-full max-w-md">
+          <div class="flex justify-between">
+            <%= render Shadcn::LabelComponent.new { "Temperature" } %>
+            <span class="text-sm text-muted-foreground">20°C</span>
+          </div>
+          <%= render Shadcn::SliderComponent.new(value: 20, min: 10, max: 30) %>
+          <div class="flex justify-between text-xs text-muted-foreground">
+            <span>10°C</span>
+            <span>30°C</span>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- With Steps -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Steps</h3>
+      <p class="text-sm text-muted-foreground">Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">step</code> to set discrete intervals.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="space-y-4 w-full max-w-md">
+          <div class="flex justify-between">
+            <%= render Shadcn::LabelComponent.new { "Rating" } %>
+            <span class="text-sm text-muted-foreground">3 stars</span>
+          </div>
+          <%= render Shadcn::SliderComponent.new(value: 3, min: 1, max: 5, step: 1) %>
+          <div class="flex justify-between text-xs text-muted-foreground">
+            <span>1</span>
+            <span>2</span>
+            <span>3</span>
+            <span>4</span>
+            <span>5</span>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Disabled -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="space-y-4 w-full max-w-md">
+          <%= render Shadcn::LabelComponent.new { "Disabled Slider" } %>
+          <%= render Shadcn::SliderComponent.new(value: 50, disabled: true) %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- In a Form -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">In a Form</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::CardComponent.new(class_name: "w-full max-w-md") do |card| %>
+          <% card.with_header do |header| %>
+            <% header.with_title { "Audio Settings" } %>
+            <% header.with_description { "Adjust your audio preferences." } %>
+          <% end %>
+          <% card.with_content do %>
+            <div class="space-y-6">
+              <div class="space-y-2">
+                <div class="flex justify-between">
+                  <%= render Shadcn::LabelComponent.new { "Master Volume" } %>
+                  <span class="text-sm text-muted-foreground">80%</span>
+                </div>
+                <%= render Shadcn::SliderComponent.new(name: "master_volume", value: 80) %>
+              </div>
+              <div class="space-y-2">
+                <div class="flex justify-between">
+                  <%= render Shadcn::LabelComponent.new { "Music" } %>
+                  <span class="text-sm text-muted-foreground">60%</span>
+                </div>
+                <%= render Shadcn::SliderComponent.new(name: "music_volume", value: 60) %>
+              </div>
+              <div class="space-y-2">
+                <div class="flex justify-between">
+                  <%= render Shadcn::LabelComponent.new { "Sound Effects" } %>
+                  <span class="text-sm text-muted-foreground">90%</span>
+                </div>
+                <%= render Shadcn::SliderComponent.new(name: "sfx_volume", value: 90) %>
+              </div>
+            </div>
+          <% end %>
+          <% card.with_footer do %>
+            <%= render Shadcn::ButtonComponent.new { "Save Settings" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+    <%= render "docs/props_table", props: [
+      { name: "name", type: "String", default: "nil", description: "Input name for form submission" },
+      { name: "value", type: "Numeric", default: "0", description: "Current slider value" },
+      { name: "min", type: "Numeric", default: "0", description: "Minimum value" },
+      { name: "max", type: "Numeric", default: "100", description: "Maximum value" },
+      { name: "step", type: "Numeric", default: "1", description: "Step increment" },
+      { name: "disabled", type: "Boolean", default: "false", description: "Whether the slider is disabled" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" }
+    ] %>
+  </div>
+
+  <!-- Stimulus Controller -->
+  <%= render "docs/stimulus_docs",
+    controller: "shadcn--slider",
+    description: "Updates the slider's visual fill as the value changes.",
+    actions: [
+      { name: "updateStyle", description: "Updates the CSS custom property for fill percentage" }
+    ]
+  %>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses native <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">&lt;input type="range"&gt;</code> for built-in accessibility</li>
+      <li>Keyboard navigation: Arrow keys to adjust value</li>
+      <li>Always pair with a visible label or <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-label</code></li>
+      <li>Consider showing the current value for screen readers</li>
+    </ul>
+  </div>
+</div>

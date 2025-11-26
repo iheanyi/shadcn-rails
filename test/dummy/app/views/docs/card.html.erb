@@ -1,0 +1,229 @@
+<% content_for :title, "Card" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Card</h1>
+    <p class="text-xl text-muted-foreground">Displays a card with header, content, and footer.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+        No JavaScript Required
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::CardComponent.new(class_name: "w-[350px]") do |card| %>
+      <% card.with_header do |header| %>
+        <% header.with_title { "Create project" } %>
+        <% header.with_description { "Deploy your new project in one-click." } %>
+      <% end %>
+      <% card.with_content do %>
+        <div class="grid w-full items-center gap-4">
+          <div class="flex flex-col space-y-1.5">
+            <%= render Shadcn::LabelComponent.new(for: "name") { "Name" } %>
+            <%= render Shadcn::InputComponent.new(id: "name", placeholder: "Name of your project") %>
+          </div>
+        </div>
+      <% end %>
+      <% card.with_footer do %>
+        <div class="flex justify-between w-full">
+          <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Cancel" } %>
+          <%= render Shadcn::ButtonComponent.new { "Deploy" } %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component card" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("card/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Simple Card -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Simple Card</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::CardComponent.new(class_name: "w-[350px]") do |card| %>
+          <% card.with_header do |header| %>
+            <% header.with_title { "Card Title" } %>
+            <% header.with_description { "Card Description" } %>
+          <% end %>
+          <% card.with_content do %>
+            <p>Card content goes here.</p>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- With Footer -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Footer</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::CardComponent.new(class_name: "w-[350px]") do |card| %>
+          <% card.with_header do |header| %>
+            <% header.with_title { "Notifications" } %>
+            <% header.with_description { "You have 3 unread messages." } %>
+          <% end %>
+          <% card.with_content do %>
+            <div class="space-y-4">
+              <div class="flex items-center gap-4">
+                <span class="flex h-2 w-2 rounded-full bg-sky-500"></span>
+                <div class="flex-1 space-y-1">
+                  <p class="text-sm font-medium">Push Notifications</p>
+                  <p class="text-sm text-muted-foreground">Send notifications to device.</p>
+                </div>
+                <%= render Shadcn::SwitchComponent.new(checked: true) %>
+              </div>
+            </div>
+          <% end %>
+          <% card.with_footer do %>
+            <%= render Shadcn::ButtonComponent.new(class_name: "w-full") { "Mark all as read" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Stat Cards</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="grid gap-4 md:grid-cols-3">
+          <%= render Shadcn::CardComponent.new do |card| %>
+            <% card.with_header do |header| %>
+              <% header.with_description { "Total Revenue" } %>
+              <% header.with_title { "$45,231.89" } %>
+            <% end %>
+            <% card.with_content do %>
+              <p class="text-xs text-muted-foreground">+20.1% from last month</p>
+            <% end %>
+          <% end %>
+
+          <%= render Shadcn::CardComponent.new do |card| %>
+            <% card.with_header do |header| %>
+              <% header.with_description { "Subscriptions" } %>
+              <% header.with_title { "+2350" } %>
+            <% end %>
+            <% card.with_content do %>
+              <p class="text-xs text-muted-foreground">+180.1% from last month</p>
+            <% end %>
+          <% end %>
+
+          <%= render Shadcn::CardComponent.new do |card| %>
+            <% card.with_header do |header| %>
+              <% header.with_description { "Active Now" } %>
+              <% header.with_title { "+573" } %>
+            <% end %>
+            <% card.with_content do %>
+              <p class="text-xs text-muted-foreground">+201 since last hour</p>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Profile Card -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Profile Card</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::CardComponent.new(class_name: "w-[350px]") do |card| %>
+          <% card.with_header do |header| %>
+            <div class="flex items-center gap-4">
+              <%= render Shadcn::AvatarComponent.new(
+                src: "https://github.com/shadcn.png",
+                alt: "Shadcn",
+                size: :lg
+              ) %>
+              <div>
+                <% header.with_title { "Shadcn" } %>
+                <% header.with_description { "@shadcn" } %>
+              </div>
+            </div>
+          <% end %>
+          <% card.with_content do %>
+            <p class="text-sm">Creator of shadcn/ui. Building in public at @shadcn.</p>
+          <% end %>
+          <% card.with_footer do %>
+            <%= render Shadcn::ButtonComponent.new(variant: :outline, class_name: "w-full") { "Follow" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+    <%= render "docs/props_table", props: [
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" }
+    ] %>
+
+    <div class="mt-6 space-y-4">
+      <h3 class="text-lg font-semibold">Slots</h3>
+      <div class="rounded-lg border">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b bg-muted/50">
+              <th class="text-left p-3 text-sm font-medium">Slot</th>
+              <th class="text-left p-3 text-sm font-medium">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">with_header</td>
+              <td class="p-3 text-sm">Card header section (contains title and description slots)</td>
+            </tr>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">with_title</td>
+              <td class="p-3 text-sm">Card title (inside header or standalone)</td>
+            </tr>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">with_description</td>
+              <td class="p-3 text-sm">Card description text</td>
+            </tr>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">with_content</td>
+              <td class="p-3 text-sm">Main card content area</td>
+            </tr>
+            <tr>
+              <td class="p-3 text-sm font-mono">with_footer</td>
+              <td class="p-3 text-sm">Card footer section</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Card is a visual container and has no inherent semantic meaning</li>
+      <li>Use appropriate heading levels for card titles based on page context</li>
+      <li>Ensure interactive elements within cards are keyboard accessible</li>
+    </ul>
+  </div>
+</div>

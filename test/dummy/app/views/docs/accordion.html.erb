@@ -1,0 +1,218 @@
+<% content_for :title, "Accordion" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Accordion</h1>
+    <p class="text-xl text-muted-foreground">A vertically stacked set of interactive headings that each reveal an associated section of content.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Stimulus: shadcn--accordion
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <div class="w-full max-w-md">
+      <%= render Shadcn::AccordionComponent.new(type: :single, collapsible: true) do |accordion| %>
+        <% accordion.with_item(value: "item-1") do |item| %>
+          <% item.with_trigger { "Is it accessible?" } %>
+          <% item.with_body { "Yes. It adheres to the WAI-ARIA design pattern." } %>
+        <% end %>
+        <% accordion.with_item(value: "item-2") do |item| %>
+          <% item.with_trigger { "Is it styled?" } %>
+          <% item.with_body { "Yes. It comes with default styles that match the other components' aesthetic." } %>
+        <% end %>
+        <% accordion.with_item(value: "item-3") do |item| %>
+          <% item.with_trigger { "Is it animated?" } %>
+          <% item.with_body { "Yes. It's animated by default, but you can disable it if you prefer." } %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component accordion" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("accordion/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Single -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Single (Collapsible)</h3>
+      <p class="text-sm text-muted-foreground">Only one item can be open at a time. Can be fully collapsed.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-md">
+          <%= render Shadcn::AccordionComponent.new(type: :single, collapsible: true) do |accordion| %>
+            <% accordion.with_item(value: "faq-1") do |item| %>
+              <% item.with_trigger { "What is ViewComponent?" } %>
+              <% item.with_body { "ViewComponent is a framework for building reusable, testable & encapsulated view components in Ruby on Rails." } %>
+            <% end %>
+            <% accordion.with_item(value: "faq-2") do |item| %>
+              <% item.with_trigger { "Why use shadcn-rails?" } %>
+              <% item.with_body { "shadcn-rails brings the beautiful shadcn/ui components to Rails applications, with full support for ViewComponent and Stimulus." } %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Multiple -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Multiple</h3>
+      <p class="text-sm text-muted-foreground">Multiple items can be open at the same time.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-md">
+          <%= render Shadcn::AccordionComponent.new(type: :multiple) do |accordion| %>
+            <% accordion.with_item(value: "multi-1") do |item| %>
+              <% item.with_trigger { "First Section" } %>
+              <% item.with_body { "Content for the first section. You can open multiple sections at once." } %>
+            <% end %>
+            <% accordion.with_item(value: "multi-2") do |item| %>
+              <% item.with_trigger { "Second Section" } %>
+              <% item.with_body { "Content for the second section. Try opening this while the first is open." } %>
+            <% end %>
+            <% accordion.with_item(value: "multi-3") do |item| %>
+              <% item.with_trigger { "Third Section" } %>
+              <% item.with_body { "Content for the third section. All can be open simultaneously." } %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Default Open -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Default Open</h3>
+      <p class="text-sm text-muted-foreground">Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">default_value</code> to set initially expanded items.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-md">
+          <%= render Shadcn::AccordionComponent.new(type: :single, collapsible: true, default_value: "default-2") do |accordion| %>
+            <% accordion.with_item(value: "default-1") do |item| %>
+              <% item.with_trigger { "First Item" } %>
+              <% item.with_body { "This item starts collapsed." } %>
+            <% end %>
+            <% accordion.with_item(value: "default-2") do |item| %>
+              <% item.with_trigger { "Second Item (Default Open)" } %>
+              <% item.with_body { "This item starts expanded because it's set as the default value." } %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- FAQ Example -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">FAQ Example</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::CardComponent.new(class_name: "w-full max-w-lg") do |card| %>
+          <% card.with_header do |header| %>
+            <% header.with_title { "Frequently Asked Questions" } %>
+            <% header.with_description { "Find answers to common questions below." } %>
+          <% end %>
+          <% card.with_content do %>
+            <%= render Shadcn::AccordionComponent.new(type: :single, collapsible: true) do |accordion| %>
+              <% accordion.with_item(value: "q1") do |item| %>
+                <% item.with_trigger { "How do I get started?" } %>
+                <% item.with_body { "Install the gem, run the install generator, and start using components in your views." } %>
+              <% end %>
+              <% accordion.with_item(value: "q2") do |item| %>
+                <% item.with_trigger { "Can I customize the styles?" } %>
+                <% item.with_body { "Yes! All components use Tailwind CSS classes that can be overridden or extended." } %>
+              <% end %>
+              <% accordion.with_item(value: "q3") do |item| %>
+                <% item.with_trigger { "Is it production ready?" } %>
+                <% item.with_body { "The components are designed for production use with proper accessibility and test coverage." } %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+    <%= render "docs/props_table", props: [
+      { name: "type", type: "Symbol", default: ":single", description: "Accordion type (:single, :multiple)" },
+      { name: "collapsible", type: "Boolean", default: "false", description: "For single type, whether all items can be collapsed" },
+      { name: "default_value", type: "String/Array", default: "nil", description: "Initially expanded item value(s)" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" }
+    ] %>
+
+    <div class="mt-6 space-y-4">
+      <h3 class="text-lg font-semibold">Item Slots</h3>
+      <div class="rounded-lg border">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b bg-muted/50">
+              <th class="text-left p-3 text-sm font-medium">Slot</th>
+              <th class="text-left p-3 text-sm font-medium">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">with_item(value:)</td>
+              <td class="p-3 text-sm">Accordion item container (requires unique value)</td>
+            </tr>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">item.with_trigger</td>
+              <td class="p-3 text-sm">Clickable header that toggles the content</td>
+            </tr>
+            <tr>
+              <td class="p-3 text-sm font-mono">item.with_body</td>
+              <td class="p-3 text-sm">Collapsible content area</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stimulus Controller -->
+  <%= render "docs/stimulus_docs",
+    controller: "shadcn--accordion",
+    description: "Manages accordion state and handles expand/collapse animations.",
+    values: [
+      { name: "type", type: "String", description: "Accordion type (single or multiple)" },
+      { name: "collapsible", type: "Boolean", description: "Whether single accordion can be fully collapsed" },
+      { name: "default", type: "String", description: "Comma-separated list of default open item values" }
+    ],
+    actions: [
+      { name: "toggle", description: "Toggles an accordion item's expanded state" }
+    ]
+  %>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Follows WAI-ARIA Accordion design pattern</li>
+      <li>Triggers have <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-expanded</code> and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-controls</code></li>
+      <li>Content regions have <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="region"</code> and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-labelledby</code></li>
+      <li>Full keyboard navigation support (Enter, Space to toggle)</li>
+    </ul>
+  </div>
+</div>
