@@ -5,7 +5,6 @@ module Shadcn
     class Engine < ::Rails::Engine
       isolate_namespace Shadcn::Rails
 
-      config.eager_load_namespaces << Shadcn::Rails
 
       # Configure autoloading for components
       initializer "shadcn-rails.autoloading", before: :set_autoload_paths do |app|
