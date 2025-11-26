@@ -516,6 +516,108 @@
       }
     })
 
+    // Context Menu Controller
+    Stimulus.register("shadcn--context-menu", class extends Controller {
+      static targets = ["trigger", "content", "item"]
+      static values = { open: { type: Boolean, default: false } }
+
+      connect() {
+        this.focusedIndex = -1
+        this.mouseX = 0
+        this.mouseY = 0
+        this.boundHandleClickOutside = this.handleClickOutside.bind(this)
+        this.boundHandleKeydown = this.handleKeydown.bind(this)
+      }
+
+      disconnect() { this.hide() }
+
+      show(event) {
+        event?.preventDefault()
+        this.mouseX = event?.clientX || 0
+        this.mouseY = event?.clientY || 0
+        this.openValue = true
+        if (this.hasContentTarget) {
+          this.contentTarget.hidden = false
+          this.contentTarget.dataset.state = "open"
+          this.positionContent()
+        }
+        document.addEventListener("click", this.boundHandleClickOutside)
+        document.addEventListener("contextmenu", this.boundHandleClickOutside)
+        document.addEventListener("keydown", this.boundHandleKeydown)
+        this.focusedIndex = -1
+        this.focusNextItem()
+      }
+
+      hide() {
+        if (!this.openValue) return
+        this.openValue = false
+        if (this.hasContentTarget) {
+          this.contentTarget.dataset.state = "closed"
+          setTimeout(() => { if (!this.openValue) this.contentTarget.hidden = true }, 150)
+        }
+        document.removeEventListener("click", this.boundHandleClickOutside)
+        document.removeEventListener("contextmenu", this.boundHandleClickOutside)
+        document.removeEventListener("keydown", this.boundHandleKeydown)
+        this.focusedIndex = -1
+      }
+
+      close() { this.hide() }
+      selectItem(event) { if (event.currentTarget.dataset.disabled === undefined) this.hide() }
+
+      handleClickOutside(event) {
+        if (this.hasContentTarget && this.contentTarget.contains(event.target)) return
+        this.hide()
+      }
+
+      handleKeydown(event) {
+        switch (event.key) {
+          case "Escape": this.hide(); break
+          case "ArrowDown": event.preventDefault(); this.focusNextItem(); break
+          case "ArrowUp": event.preventDefault(); this.focusPreviousItem(); break
+          case "Enter": case " ": event.preventDefault(); this.selectFocusedItem(); break
+        }
+      }
+
+      focusNextItem() {
+        const items = this.enabledItems
+        if (items.length === 0) return
+        this.focusedIndex = (this.focusedIndex + 1) % items.length
+        items[this.focusedIndex].focus()
+      }
+
+      focusPreviousItem() {
+        const items = this.enabledItems
+        if (items.length === 0) return
+        this.focusedIndex = this.focusedIndex <= 0 ? items.length - 1 : this.focusedIndex - 1
+        items[this.focusedIndex].focus()
+      }
+
+      selectFocusedItem() {
+        const items = this.enabledItems
+        if (this.focusedIndex >= 0 && this.focusedIndex < items.length) items[this.focusedIndex].click()
+      }
+
+      get enabledItems() { return this.itemTargets.filter(item => item.dataset.disabled === undefined) }
+
+      positionContent() {
+        if (!this.hasContentTarget) return
+        const content = this.contentTarget
+        const viewportWidth = window.innerWidth
+        const viewportHeight = window.innerHeight
+        content.style.left = "0"
+        content.style.top = "0"
+        const contentRect = content.getBoundingClientRect()
+        let x = this.mouseX
+        let y = this.mouseY
+        if (x + contentRect.width > viewportWidth) x = viewportWidth - contentRect.width - 8
+        if (y + contentRect.height > viewportHeight) y = viewportHeight - contentRect.height - 8
+        x = Math.max(8, x)
+        y = Math.max(8, y)
+        content.style.left = `${x}px`
+        content.style.top = `${y}px`
+      }
+    })
+
     // Select Controller
     Stimulus.register("shadcn--select", class extends Controller {
       static targets = ["trigger", "content", "item", "value", "hiddenInput"]
