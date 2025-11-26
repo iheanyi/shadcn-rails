@@ -11,6 +11,13 @@ module Shadcn
       initializer "shadcn-rails.autoloading", before: :set_autoload_paths do |app|
         components_path = root.join("app/components")
         app.config.autoload_paths << components_path
+
+        # Enable reloading of engine components in development
+        if ::Rails.env.development?
+          app.reloaders << app.config.file_watcher.new([], { components_path.to_s => ["rb"] }) do
+            # Trigger reload when component files change
+          end
+        end
       end
 
       initializer "shadcn-rails.view_component" do
