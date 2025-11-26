@@ -1,7 +1,7 @@
 # fly.toml - Fly.io configuration for shadcn-rails documentation site
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 
-app = 'shadcn-rails-docs'
+app = 'shadcn-rails'
 primary_region = 'iad'
 
 [build]
