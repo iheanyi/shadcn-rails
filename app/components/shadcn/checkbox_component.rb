@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 module Shadcn
-  # Checkbox component for boolean inputs
-  # Matches shadcn/ui Checkbox component
+  # Checkbox component using native <input type="checkbox">
+  # Styled with CSS to match shadcn/ui design
+  # Works without JavaScript
   #
   # @example Basic checkbox
   #   <%= render Shadcn::CheckboxComponent.new(name: "terms", id: "terms") %>
@@ -14,8 +15,17 @@ module Shadcn
   # @example Disabled
   #   <%= render Shadcn::CheckboxComponent.new(name: "locked", disabled: true) %>
   #
+  # @example With integrated label
+  #   <%= render Shadcn::CheckboxComponent.new(name: "terms", id: "terms") { "Accept terms and conditions" } %>
+  #
   class CheckboxComponent < BaseComponent
-    BASE_CLASSES = "peer h-4 w-4 shrink-0 rounded-sm border border-primary shadow focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+    BASE_CLASSES = [
+      "shadcn-checkbox",
+      "peer h-4 w-4 shrink-0 rounded-sm border border-primary",
+      "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1",
+      "disabled:cursor-not-allowed disabled:opacity-50",
+      "cursor-pointer"
+    ].join(" ")
 
     # @param name [String, nil] Input name attribute
     # @param id [String, nil] Input id attribute
@@ -23,7 +33,6 @@ module Shadcn
     # @param checked [Boolean] Whether checkbox is checked
     # @param disabled [Boolean] Whether checkbox is disabled
     # @param required [Boolean] Whether checkbox is required
-    # @param indeterminate [Boolean] Whether checkbox shows indeterminate state
     def initialize(
       name: nil,
       id: nil,
@@ -31,94 +40,63 @@ module Shadcn
       checked: false,
       disabled: false,
       required: false,
-      indeterminate: false,
       **options
     )
       super(**options)
       @name = name
-      @id = id
+      @id = id || (name ? "checkbox-#{name}" : nil)
       @value = value
       @checked = checked
       @disabled = disabled
       @required = required
-      @indeterminate = indeterminate
     end
 
     def call
-      # Custom checkbox using button with hidden input
-      content_tag(:span, class: "inline-flex items-center") do
-        safe_join([
-          hidden_input,
-          checkbox_button
-        ])
+      if content.present?
+        # Render with integrated label
+        content_tag(:label, class: "flex items-center space-x-2 cursor-pointer") do
+          safe_join([
+            hidden_input,
+            checkbox_input,
+            content_tag(:span, content, class: "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70")
+          ])
+        end
+      else
+        # Render just the checkbox (for use with external labels)
+        safe_join([hidden_input, checkbox_input].compact)
       end
     end
 
     private
 
     def hidden_input
+      # Include hidden input with "0" value for unchecked state (Rails convention)
+      return unless @name
+
       tag(:input,
         type: "hidden",
         name: @name,
-        value: "0"
-      ) if @name
-    end
-
-    def checkbox_button
-      content_tag(:button,
-        checkbox_indicator,
-        checkbox_attributes
+        value: "0",
+        autocomplete: "off"
       )
     end
 
-    def checkbox_indicator
-      # Checkmark icon (rendered when checked)
-      content_tag(:span, class: "flex items-center justify-center text-current") do
-        if @indeterminate
-          # Minus icon for indeterminate
-          content_tag(:svg,
-            content_tag(:path, nil, d: "M5 12h14", stroke: "currentColor", "stroke-width": "2", "stroke-linecap": "round"),
-            xmlns: "http://www.w3.org/2000/svg",
-            width: "12",
-            height: "12",
-            viewBox: "0 0 24 24",
-            fill: "none",
-            class: "h-3 w-3"
-          )
-        else
-          # Checkmark icon
-          content_tag(:svg,
-            content_tag(:path, nil, d: "M20 6 9 17l-5-5", stroke: "currentColor", "stroke-width": "2", "stroke-linecap": "round", "stroke-linejoin": "round"),
-            xmlns: "http://www.w3.org/2000/svg",
-            width: "12",
-            height: "12",
-            viewBox: "0 0 24 24",
-            fill: "none",
-            class: cn("h-3 w-3", @checked ? "" : "opacity-0")
-          )
-        end
-      end
+    def checkbox_input
+      tag(:input, input_attributes)
     end
 
-    def checkbox_attributes
+    def input_attributes
       attrs = {
-        type: "button",
-        role: "checkbox",
+        type: "checkbox",
+        name: @name,
         id: @id,
-        name: @name ? nil : @name, # Name goes on hidden input
         value: @value,
-        class: merge_classes(BASE_CLASSES),
+        class: cn(BASE_CLASSES, class_name),
         disabled: @disabled || nil,
-        "aria-checked": @indeterminate ? "mixed" : @checked.to_s,
-        "aria-required": @required ? "true" : nil,
-        "data-state": @indeterminate ? "indeterminate" : (@checked ? "checked" : "unchecked"),
-        "data-controller": "shadcn--checkbox",
-        "data-action": "click->shadcn--checkbox#toggle",
-        "data-shadcn--checkbox-checked-value": @checked.to_s,
-        "data-shadcn--checkbox-name-value": @name
+        checked: @checked || nil,
+        required: @required || nil
       }
-      attrs.merge!(html_options.except(:name))
-      attrs.merge!(build_data)
+      attrs.merge!(html_options.except(:class))
       attrs.compact
     end
   end
