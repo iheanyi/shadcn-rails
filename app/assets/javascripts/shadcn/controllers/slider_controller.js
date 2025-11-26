@@ -10,6 +10,7 @@ import { Controller } from "@hotwired/stimulus"
  * - range: The filled range portion
  * - thumb: The draggable thumb
  * - input: Hidden input for form submission
+ * - output: Optional element to display the current value (auto-synced)
  *
  * Values:
  * - min: Minimum value
@@ -18,16 +19,18 @@ import { Controller } from "@hotwired/stimulus"
  * - value: Current value
  * - name: Input name
  * - disabled: Whether slider is disabled
+ * - outputFormat: Format string for output (use {value} for value, {percent} for percentage)
  */
 export default class extends Controller {
-  static targets = ["track", "range", "thumb", "input"]
+  static targets = ["track", "range", "thumb", "input", "output"]
   static values = {
     min: { type: Number, default: 0 },
     max: { type: Number, default: 100 },
     step: { type: Number, default: 1 },
     value: { type: Number, default: 0 },
     name: String,
-    disabled: { type: Boolean, default: false }
+    disabled: { type: Boolean, default: false },
+    outputFormat: { type: String, default: "{value}" }
   }
 
   connect() {
@@ -147,6 +150,19 @@ export default class extends Controller {
     if (this.hasInputTarget) {
       this.inputTarget.value = this.valueValue
     }
+
+    // Update output element if present (for syncing value labels)
+    if (this.hasOutputTarget) {
+      this.updateOutput()
+    }
+  }
+
+  updateOutput() {
+    const formattedValue = this.outputFormatValue
+      .replace("{value}", this.valueValue)
+      .replace("{percent}", Math.round(this.percentage))
+
+    this.outputTarget.textContent = formattedValue
   }
 
   dispatchChange() {
@@ -167,5 +183,34 @@ export default class extends Controller {
 
   valueValueChanged() {
     this.updateVisuals()
+  }
+
+  /**
+   * Update style for native input range element
+   * Called on input event from native <input type="range">
+   * Updates CSS custom property for fill and syncs output element
+   */
+  updateStyle(event) {
+    const input = event.target
+    const value = parseFloat(input.value)
+    const min = parseFloat(input.min) || 0
+    const max = parseFloat(input.max) || 100
+
+    // Calculate percentage and update CSS custom property
+    const percentage = ((value - min) / (max - min)) * 100
+    input.style.setProperty("--slider-fill", `${percentage}%`)
+
+    // Update value for output sync
+    this.valueValue = value
+
+    // Update output if present
+    if (this.hasOutputTarget) {
+      this.updateOutput()
+    }
+
+    // Dispatch change event
+    this.dispatch("change", {
+      detail: { value: value, percentage: percentage }
+    })
   }
 }
