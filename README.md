@@ -58,6 +58,44 @@ This will:
 2. Add the required CSS imports to your application
 3. Configure your Stimulus controllers
 
+### Stylesheets
+
+shadcn-rails includes two CSS files:
+
+| File | Purpose |
+|------|---------|
+| `shadcn/base.css` | CSS variables for theming (colors, border radius), animations, and focus styles |
+| `shadcn/components.css` | Component-specific styles for interactive elements (`data-state` attributes, custom inputs) |
+
+**For Tailwind CSS** (application.tailwind.css):
+
+```css
+@import "shadcn/base";
+@import "shadcn/components";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+**For Sprockets** (application.css):
+
+```css
+/*
+ *= require shadcn/base
+ *= require shadcn/components
+ *= require_self
+ */
+```
+
+The `components.css` file includes essential styles for:
+- **Switch** - `data-state` based checked/unchecked styling
+- **Slider** - Custom range input with fill indicator
+- **Checkbox/Radio** - Native inputs with custom styling
+- **Accordion/Collapsible** - Content animations
+- **Dialog/Sheet/Popover** - Open/close animations and overlays
+- **Tabs** - Active/inactive state styling
+
 ### Requirements
 
 - Ruby >= 3.1
