@@ -1,0 +1,9 @@
+<%= render Shadcn::FieldComponent.new do |field| %>
+  <% field.with_label { "Verification Code" } %>
+  <% field.with_control do %>
+    <%= render Shadcn::InputOtpComponent.new(length: 6, name: "verification_code") %>
+  <% end %>
+  <% field.with_description { "Enter the 6-digit code sent to your email." } %>
+<% end %>
+
+<%= render Shadcn::ButtonComponent.new(class_name: "w-full") { "Verify" } %>

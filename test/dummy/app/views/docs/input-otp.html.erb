@@ -36,7 +36,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= render "docs/code_example", language: "erb", code: '<%%= render Shadcn::InputOtpComponent.new(length: 6, name: "otp") %>' %>
+    <%= erb_example("input_otp/default") %>
   </div>
 
   <!-- Examples -->
@@ -49,10 +49,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::InputOtpComponent.new(length: 4, name: "pin") %>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: <<~ERB
-<%%= render Shadcn::InputOtpComponent.new(length: 4, name: "pin") %>
-ERB
-      %>
+      <%= erb_example("input_otp/pin") %>
     </div>
 
     <!-- Numeric Only -->
@@ -62,10 +59,7 @@ ERB
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::InputOtpComponent.new(length: 6, name: "otp_numeric", pattern: "^[0-9]*$") %>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: <<~ERB
-<%%= render Shadcn::InputOtpComponent.new(length: 6, name: "otp", pattern: "^[0-9]*$") %>
-ERB
-      %>
+      <%= erb_example("input_otp/numeric") %>
     </div>
 
     <!-- Disabled -->
@@ -74,10 +68,7 @@ ERB
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::InputOtpComponent.new(length: 6, name: "otp_disabled", disabled: true) %>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: <<~ERB
-<%%= render Shadcn::InputOtpComponent.new(length: 6, name: "otp", disabled: true) %>
-ERB
-      %>
+      <%= erb_example("input_otp/disabled") %>
     </div>
 
     <!-- In Form -->
@@ -96,18 +87,7 @@ ERB
           <%= render Shadcn::ButtonComponent.new(class_name: "w-full") { "Verify" } %>
         </div>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: <<~ERB
-<%%= render Shadcn::FieldComponent.new do |field| %>
-  <%% field.with_label { "Verification Code" } %>
-  <%% field.with_control do %>
-    <%%= render Shadcn::InputOtpComponent.new(length: 6, name: "verification_code") %>
-  <%% end %>
-  <%% field.with_description { "Enter the 6-digit code sent to your email." } %>
-<%% end %>
-
-<%%= render Shadcn::ButtonComponent.new(class_name: "w-full") { "Verify" } %>
-ERB
-      %>
+      <%= erb_example("input_otp/form_field") %>
     </div>
   </div>
 
@@ -117,10 +97,10 @@ ERB
     <%= render "docs/props_table", props: [
       { name: "length", type: "Integer", default: "6", description: "Number of OTP digits" },
       { name: "name", type: "String", default: "nil", description: "Input name for form submission" },
-      { name: "pattern", type: "String", default: "nil", description: "Regex pattern for validation (e.g., '^[0-9]*$' for numbers only)" },
+      { name: "pattern", type: "String", default: "nil", description: "Regex pattern for validation" },
       { name: "disabled", type: "Boolean", default: "false", description: "Whether the input is disabled" },
       { name: "required", type: "Boolean", default: "false", description: "Whether the input is required" },
-      { name: "autocomplete", type: "String", default: "\"one-time-code\"", description: "Autocomplete attribute" },
+      { name: "autocomplete", type: "String", default: "one-time-code", description: "Autocomplete attribute" },
       { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" }
     ] %>
   </div>
@@ -135,7 +115,7 @@ ERB
       targets: ["slot", "input", "hiddenInput", "caret"],
       values: [
         { name: "length", type: "Number", default: "6", description: "Number of OTP slots" },
-        { name: "pattern", type: "String", default: '""', description: "Regex pattern for validation" },
+        { name: "pattern", type: "String", default: "", description: "Regex pattern for validation" },
         { name: "disabled", type: "Boolean", default: "false", description: "Disabled state" }
       ],
       actions: [

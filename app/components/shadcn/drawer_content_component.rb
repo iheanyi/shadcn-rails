@@ -53,6 +53,7 @@ module Shadcn
         "aria-modal": "true",
         "data-shadcn--drawer-target": "content",
         "data-state": "closed",
+        "data-direction": @direction.to_s,
         tabindex: "-1"
       })
     end

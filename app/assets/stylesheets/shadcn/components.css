@@ -436,3 +436,78 @@ button[data-state="off"].shadcn-toggle {
 .shadcn-hover-card[data-state="closed"] {
   animation: fade-out 150ms ease-in, zoom-out 150ms ease-in;
 }
+
+/* ============================================
+   Drawer Component
+   ============================================ */
+
+/* Drawer overlay */
+[data-shadcn--drawer-target="overlay"] {
+  transition: opacity 200ms ease-out;
+  opacity: 0;
+}
+
+[data-shadcn--drawer-target="overlay"][data-state="open"] {
+  opacity: 1;
+}
+
+[data-shadcn--drawer-target="overlay"][data-state="closed"] {
+  opacity: 0;
+}
+
+/* Drawer content base styles */
+[data-shadcn--drawer-target="content"] {
+  transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Bottom drawer animations */
+[data-shadcn--drawer-target="content"][data-direction="bottom"] {
+  transform: translateY(100%);
+}
+
+[data-shadcn--drawer-target="content"][data-direction="bottom"][data-state="open"] {
+  transform: translateY(0);
+}
+
+[data-shadcn--drawer-target="content"][data-direction="bottom"][data-state="closed"] {
+  transform: translateY(100%);
+}
+
+/* Top drawer animations */
+[data-shadcn--drawer-target="content"][data-direction="top"] {
+  transform: translateY(-100%);
+}
+
+[data-shadcn--drawer-target="content"][data-direction="top"][data-state="open"] {
+  transform: translateY(0);
+}
+
+[data-shadcn--drawer-target="content"][data-direction="top"][data-state="closed"] {
+  transform: translateY(-100%);
+}
+
+/* Left drawer animations */
+[data-shadcn--drawer-target="content"][data-direction="left"] {
+  transform: translateX(-100%);
+}
+
+[data-shadcn--drawer-target="content"][data-direction="left"][data-state="open"] {
+  transform: translateX(0);
+}
+
+[data-shadcn--drawer-target="content"][data-direction="left"][data-state="closed"] {
+  transform: translateX(-100%);
+}
+
+/* Right drawer animations */
+[data-shadcn--drawer-target="content"][data-direction="right"] {
+  transform: translateX(100%);
+}
+
+[data-shadcn--drawer-target="content"][data-direction="right"][data-state="open"] {
+  transform: translateX(0);
+}
+
+[data-shadcn--drawer-target="content"][data-direction="right"][data-state="closed"] {
+  transform: translateX(100%);
+}
