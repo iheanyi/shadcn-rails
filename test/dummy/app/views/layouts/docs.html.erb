@@ -704,9 +704,21 @@
         const percentage = ((value - min) / (max - min)) * 100
         input.style.setProperty("--slider-fill", `${percentage}%`)
 
+        // Check for output target within controller scope
         if (this.hasOutputTarget) {
           const formattedValue = this.outputFormatValue.replace("{value}", value).replace("{percent}", Math.round(percentage))
           this.outputTarget.textContent = formattedValue
+        }
+
+        // Also check for external output target via data attribute on input
+        const outputTargetId = input.dataset.outputTarget
+        if (outputTargetId) {
+          const outputEl = document.getElementById(outputTargetId)
+          if (outputEl) {
+            const format = input.dataset.outputFormat || "{value}"
+            const formattedValue = format.replace("{value}", value).replace("{percent}", Math.round(percentage))
+            outputEl.textContent = formattedValue
+          }
         }
 
         this.dispatch("change", { detail: { value: value, percentage: percentage } })

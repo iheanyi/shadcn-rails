@@ -23,7 +23,13 @@
 
   <!-- Preview -->
   <%= render "docs/demo_card" do %>
-    <%= render Shadcn::SliderComponent.new(value: 50, max: 100, class_name: "w-[60%]") %>
+    <div class="w-[60%] space-y-2">
+      <div class="flex justify-between">
+        <span class="text-sm font-medium">Preview</span>
+        <span id="preview-slider-value" class="text-sm text-muted-foreground">50%</span>
+      </div>
+      <%= render Shadcn::SliderComponent.new(value: 50, max: 100, data: { "output-target": "preview-slider-value", "output-format": "{value}%" }) %>
+    </div>
   <% end %>
 
   <!-- Installation -->
@@ -47,14 +53,20 @@
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Default</h3>
       <%= render "docs/demo_card" do %>
-        <%= render Shadcn::SliderComponent.new(value: 33, class_name: "w-[60%]") %>
+        <div class="w-[60%] space-y-2">
+          <div class="flex justify-between">
+            <span class="text-sm font-medium">Value</span>
+            <span id="default-slider-value" class="text-sm text-muted-foreground">33</span>
+          </div>
+          <%= render Shadcn::SliderComponent.new(value: 33, data: { "output-target": "default-slider-value", "output-format": "{value}" }) %>
+        </div>
       <% end %>
     </div>
 
     <!-- With Synced Label -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">With Synced Label</h3>
-      <p class="text-sm text-muted-foreground">Listen to the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">shadcn--slider:change</code> event to sync value labels.</p>
+      <p class="text-sm text-muted-foreground">Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">data-output-target</code> and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">data-output-format</code> to sync value labels.</p>
       <%= render "docs/demo_card" do %>
         <div class="space-y-4 w-full max-w-md">
           <div class="flex justify-between">
@@ -64,15 +76,9 @@
           <%= render Shadcn::SliderComponent.new(
             value: 75,
             max: 100,
-            data: { action: "shadcn--slider:change->global#updateLabel" }
+            data: { "output-target": "volume-label", "output-format": "{value}%" }
           ) %>
         </div>
-        <script>
-          document.addEventListener('shadcn--slider:change', (e) => {
-            const label = e.target.closest('.space-y-4')?.querySelector('#volume-label');
-            if (label) label.textContent = Math.round(e.detail.value) + '%';
-          });
-        </script>
       <% end %>
       <%= erb_example("slider/synced_label") %>
     </div>
@@ -85,9 +91,9 @@
         <div class="space-y-4 w-full max-w-md">
           <div class="flex justify-between">
             <%= render Shadcn::LabelComponent.new { "Temperature" } %>
-            <span class="text-sm text-muted-foreground">20°C</span>
+            <span id="temp-label" class="text-sm text-muted-foreground">20°C</span>
           </div>
-          <%= render Shadcn::SliderComponent.new(value: 20, min: 10, max: 30) %>
+          <%= render Shadcn::SliderComponent.new(value: 20, min: 10, max: 30, data: { "output-target": "temp-label", "output-format": "{value}°C" }) %>
           <div class="flex justify-between text-xs text-muted-foreground">
             <span>10°C</span>
             <span>30°C</span>
@@ -104,9 +110,9 @@
         <div class="space-y-4 w-full max-w-md">
           <div class="flex justify-between">
             <%= render Shadcn::LabelComponent.new { "Rating" } %>
-            <span class="text-sm text-muted-foreground">3 stars</span>
+            <span id="rating-label" class="text-sm text-muted-foreground">3 stars</span>
           </div>
-          <%= render Shadcn::SliderComponent.new(value: 3, min: 1, max: 5, step: 1) %>
+          <%= render Shadcn::SliderComponent.new(value: 3, min: 1, max: 5, step: 1, data: { "output-target": "rating-label", "output-format": "{value} stars" }) %>
           <div class="flex justify-between text-xs text-muted-foreground">
             <span>1</span>
             <span>2</span>
@@ -143,23 +149,23 @@
               <div class="space-y-2">
                 <div class="flex justify-between">
                   <%= render Shadcn::LabelComponent.new { "Master Volume" } %>
-                  <span class="text-sm text-muted-foreground">80%</span>
+                  <span id="master-vol-label" class="text-sm text-muted-foreground">80%</span>
                 </div>
-                <%= render Shadcn::SliderComponent.new(name: "master_volume", value: 80) %>
+                <%= render Shadcn::SliderComponent.new(name: "master_volume", value: 80, data: { "output-target": "master-vol-label", "output-format": "{value}%" }) %>
               </div>
               <div class="space-y-2">
                 <div class="flex justify-between">
                   <%= render Shadcn::LabelComponent.new { "Music" } %>
-                  <span class="text-sm text-muted-foreground">60%</span>
+                  <span id="music-vol-label" class="text-sm text-muted-foreground">60%</span>
                 </div>
-                <%= render Shadcn::SliderComponent.new(name: "music_volume", value: 60) %>
+                <%= render Shadcn::SliderComponent.new(name: "music_volume", value: 60, data: { "output-target": "music-vol-label", "output-format": "{value}%" }) %>
               </div>
               <div class="space-y-2">
                 <div class="flex justify-between">
                   <%= render Shadcn::LabelComponent.new { "Sound Effects" } %>
-                  <span class="text-sm text-muted-foreground">90%</span>
+                  <span id="sfx-vol-label" class="text-sm text-muted-foreground">90%</span>
                 </div>
-                <%= render Shadcn::SliderComponent.new(name: "sfx_volume", value: 90) %>
+                <%= render Shadcn::SliderComponent.new(name: "sfx_volume", value: 90, data: { "output-target": "sfx-vol-label", "output-format": "{value}%" }) %>
               </div>
             </div>
           <% end %>
