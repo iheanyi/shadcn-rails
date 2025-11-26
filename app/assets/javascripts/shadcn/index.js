@@ -34,6 +34,7 @@ import ToastController from "./controllers/toast_controller"
 import ToggleController from "./controllers/toggle_controller"
 import ToggleGroupController from "./controllers/toggle_group_controller"
 import TooltipController from "./controllers/tooltip_controller"
+import InputOtpController from "./controllers/input_otp_controller"
 
 // Export individual controllers
 export {
@@ -45,6 +46,7 @@ export {
   DrawerController,
   DropdownController,
   HoverCardController,
+  InputOtpController,
   PopoverController,
   RadioGroupController,
   ScrollAreaController,
@@ -69,6 +71,7 @@ export const controllers = {
   "shadcn--drawer": DrawerController,
   "shadcn--dropdown": DropdownController,
   "shadcn--hover-card": HoverCardController,
+  "shadcn--input-otp": InputOtpController,
   "shadcn--popover": PopoverController,
   "shadcn--radio-group": RadioGroupController,
   "shadcn--scroll-area": ScrollAreaController,

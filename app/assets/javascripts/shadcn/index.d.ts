@@ -16,6 +16,7 @@ export { default as DialogController } from "./controllers/dialog_controller";
 export { default as DrawerController } from "./controllers/drawer_controller";
 export { default as DropdownController } from "./controllers/dropdown_controller";
 export { default as HoverCardController } from "./controllers/hover_card_controller";
+export { default as InputOtpController } from "./controllers/input_otp_controller";
 export { default as PopoverController } from "./controllers/popover_controller";
 export { default as RadioGroupController } from "./controllers/radio_group_controller";
 export { default as ScrollAreaController } from "./controllers/scroll_area_controller";
@@ -41,6 +42,7 @@ export const controllers: {
   "shadcn--drawer": typeof DrawerController;
   "shadcn--dropdown": typeof DropdownController;
   "shadcn--hover-card": typeof HoverCardController;
+  "shadcn--input-otp": typeof InputOtpController;
   "shadcn--popover": typeof PopoverController;
   "shadcn--radio-group": typeof RadioGroupController;
   "shadcn--scroll-area": typeof ScrollAreaController;
