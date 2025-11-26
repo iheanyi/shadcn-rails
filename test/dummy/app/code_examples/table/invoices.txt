@@ -1,0 +1,37 @@
+<%= render Shadcn::TableComponent.new do |table| %>
+  <% table.with_caption { "A list of your recent invoices." } %>
+  <% table.with_header do |header| %>
+    <% header.with_row do |row| %>
+      <% row.with_head { "Invoice" } %>
+      <% row.with_head { "Status" } %>
+      <% row.with_head { "Method" } %>
+      <% row.with_head(class: "text-right") { "Amount" } %>
+    <% end %>
+  <% end %>
+  <% table.with_body do |body| %>
+    <% body.with_row do |row| %>
+      <% row.with_cell(class: "font-medium") { "INV001" } %>
+      <% row.with_cell { "Paid" } %>
+      <% row.with_cell { "Credit Card" } %>
+      <% row.with_cell(class: "text-right") { "$250.00" } %>
+    <% end %>
+    <% body.with_row do |row| %>
+      <% row.with_cell(class: "font-medium") { "INV002" } %>
+      <% row.with_cell { "Pending" } %>
+      <% row.with_cell { "PayPal" } %>
+      <% row.with_cell(class: "text-right") { "$150.00" } %>
+    <% end %>
+    <% body.with_row do |row| %>
+      <% row.with_cell(class: "font-medium") { "INV003" } %>
+      <% row.with_cell { "Unpaid" } %>
+      <% row.with_cell { "Bank Transfer" } %>
+      <% row.with_cell(class: "text-right") { "$350.00" } %>
+    <% end %>
+  <% end %>
+  <% table.with_footer do |footer| %>
+    <% footer.with_row do |row| %>
+      <% row.with_cell(colspan: 3) { "Total" } %>
+      <% row.with_cell(class: "text-right") { "$750.00" } %>
+    <% end %>
+  <% end %>
+<% end %>

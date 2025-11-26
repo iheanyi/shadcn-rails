@@ -1,0 +1,308 @@
+<% content_for :title, "Popover" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Popover</h1>
+    <p class="text-xl text-muted-foreground">Displays rich content in a portal, triggered by a button.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Stimulus: shadcn--popover
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::PopoverComponent.new do |popover| %>
+      <% popover.with_trigger do %>
+        <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Open popover" } %>
+      <% end %>
+      <% popover.with_body do %>
+        <div class="grid gap-4">
+          <div class="space-y-2">
+            <h4 class="font-medium leading-none">Dimensions</h4>
+            <p class="text-sm text-muted-foreground">
+              Set the dimensions for the layer.
+            </p>
+          </div>
+          <div class="grid gap-2">
+            <div class="grid grid-cols-3 items-center gap-4">
+              <label for="width" class="text-sm">Width</label>
+              <input id="width" value="100%" class="col-span-2 h-8 rounded-md border px-3" />
+            </div>
+            <div class="grid grid-cols-3 items-center gap-4">
+              <label for="height" class="text-sm">Height</label>
+              <input id="height" value="25px" class="col-span-2 h-8 rounded-md border px-3" />
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component popover" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("popover/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Basic -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Basic</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::PopoverComponent.new do |popover| %>
+          <% popover.with_trigger do %>
+            <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Click me" } %>
+          <% end %>
+          <% popover.with_body do %>
+            <div class="grid gap-4">
+              <h4 class="font-medium leading-none">Basic Popover</h4>
+              <p class="text-sm text-muted-foreground">
+                This is a simple popover with some text content.
+              </p>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Positions -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Positions</h3>
+      <p class="text-sm text-muted-foreground">Use the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">side</code> prop to control the popover position.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="flex flex-wrap items-center justify-center gap-4">
+          <%= render Shadcn::PopoverComponent.new(side: :top) do |popover| %>
+            <% popover.with_trigger do %>
+              <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Top" } %>
+            <% end %>
+            <% popover.with_body do %>
+              <p class="text-sm">Top positioned popover</p>
+            <% end %>
+          <% end %>
+
+          <%= render Shadcn::PopoverComponent.new(side: :right) do |popover| %>
+            <% popover.with_trigger do %>
+              <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Right" } %>
+            <% end %>
+            <% popover.with_body do %>
+              <p class="text-sm">Right positioned popover</p>
+            <% end %>
+          <% end %>
+
+          <%= render Shadcn::PopoverComponent.new(side: :bottom) do |popover| %>
+            <% popover.with_trigger do %>
+              <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Bottom" } %>
+            <% end %>
+            <% popover.with_body do %>
+              <p class="text-sm">Bottom positioned popover</p>
+            <% end %>
+          <% end %>
+
+          <%= render Shadcn::PopoverComponent.new(side: :left) do |popover| %>
+            <% popover.with_trigger do %>
+              <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Left" } %>
+            <% end %>
+            <% popover.with_body do %>
+              <p class="text-sm">Left positioned popover</p>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Alignment -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Alignment</h3>
+      <p class="text-sm text-muted-foreground">Use the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">align</code> prop to control the alignment relative to the trigger.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="flex flex-wrap items-center gap-4">
+          <%= render Shadcn::PopoverComponent.new(side: :bottom, align: :start) do |popover| %>
+            <% popover.with_trigger do %>
+              <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Align Start" } %>
+            <% end %>
+            <% popover.with_body do %>
+              <p class="text-sm">Aligned to the start of trigger</p>
+            <% end %>
+          <% end %>
+
+          <%= render Shadcn::PopoverComponent.new(side: :bottom, align: :center) do |popover| %>
+            <% popover.with_trigger do %>
+              <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Align Center" } %>
+            <% end %>
+            <% popover.with_body do %>
+              <p class="text-sm">Centered on trigger</p>
+            <% end %>
+          <% end %>
+
+          <%= render Shadcn::PopoverComponent.new(side: :bottom, align: :end) do |popover| %>
+            <% popover.with_trigger do %>
+              <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Align End" } %>
+            <% end %>
+            <% popover.with_body do %>
+              <p class="text-sm">Aligned to the end of trigger</p>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- With Form Content -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Form Content</h3>
+      <p class="text-sm text-muted-foreground">Popovers can contain interactive form elements.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::PopoverComponent.new do |popover| %>
+          <% popover.with_trigger do %>
+            <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Settings" } %>
+          <% end %>
+          <% popover.with_body do %>
+            <div class="grid gap-4">
+              <div class="space-y-2">
+                <h4 class="font-medium leading-none">Settings</h4>
+                <p class="text-sm text-muted-foreground">
+                  Configure your preferences.
+                </p>
+              </div>
+              <div class="grid gap-3">
+                <div class="grid gap-2">
+                  <%= render Shadcn::LabelComponent.new(for: "name") { "Name" } %>
+                  <%= render Shadcn::InputComponent.new(id: "name", placeholder: "Enter your name") %>
+                </div>
+                <div class="grid gap-2">
+                  <%= render Shadcn::LabelComponent.new(for: "email") { "Email" } %>
+                  <%= render Shadcn::InputComponent.new(id: "email", type: "email", placeholder: "Enter your email") %>
+                </div>
+                <div class="flex items-center gap-2">
+                  <%= render Shadcn::CheckboxComponent.new(id: "notifications") %>
+                  <%= render Shadcn::LabelComponent.new(for: "notifications") { "Enable notifications" } %>
+                </div>
+                <%= render Shadcn::ButtonComponent.new(size: :sm, class: "mt-2") { "Save changes" } %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Modal Mode -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Modal Mode</h3>
+      <p class="text-sm text-muted-foreground">When <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">modal</code> is true, interaction with the rest of the page is blocked.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::PopoverComponent.new(modal: true) do |popover| %>
+          <% popover.with_trigger do %>
+            <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Open modal popover" } %>
+          <% end %>
+          <% popover.with_body do %>
+            <div class="grid gap-4">
+              <h4 class="font-medium leading-none">Modal Popover</h4>
+              <p class="text-sm text-muted-foreground">
+                This popover blocks interaction with the rest of the page until closed.
+              </p>
+              <p class="text-sm text-muted-foreground">
+                Press ESC or click outside to close.
+              </p>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Initially Open -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Initially Open</h3>
+      <p class="text-sm text-muted-foreground">Set <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">open: true</code> to show the popover by default.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::PopoverComponent.new(open: true) do |popover| %>
+          <% popover.with_trigger do %>
+            <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Already open" } %>
+          <% end %>
+          <% popover.with_body do %>
+            <p class="text-sm">This popover is open by default</p>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+
+    <h3 class="text-lg font-semibold mt-6 mb-4">PopoverComponent</h3>
+    <%= render "docs/props_table", props: [
+      { name: "open", type: "Boolean", default: "false", description: "Whether the popover is open by default" },
+      { name: "side", type: "Symbol", default: ":bottom", description: "Side to position the popover (:top, :right, :bottom, :left)" },
+      { name: "align", type: "Symbol", default: ":center", description: "Alignment relative to trigger (:start, :center, :end)" },
+      { name: "modal", type: "Boolean", default: "false", description: "Whether to trap focus and block interaction with the rest of the page" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply to the popover wrapper" }
+    ] %>
+
+    <h3 class="text-lg font-semibold mt-8 mb-4">Slots</h3>
+    <%= render "docs/props_table", props: [
+      { name: "trigger", type: "Block", default: "nil", description: "The button or element that triggers the popover" },
+      { name: "body", type: "Block", default: "nil", description: "The content to display in the popover" }
+    ] %>
+  </div>
+
+  <!-- Stimulus Controller -->
+  <%= render "docs/stimulus_docs",
+    controller: "shadcn--popover",
+    description: "Handles popover open/close state, positioning, and click-outside behavior.",
+    values: [
+      { name: "open", type: "Boolean", description: "Whether the popover is currently open" },
+      { name: "side", type: "String", description: "Side to position the popover (top/right/bottom/left)" },
+      { name: "align", type: "String", description: "Alignment relative to trigger (start/center/end)" },
+      { name: "modal", type: "Boolean", description: "Whether to block interaction with the rest of the page" }
+    ],
+    targets: [
+      { name: "trigger", description: "The element that triggers the popover" },
+      { name: "content", description: "The popover content element" }
+    ],
+    actions: [
+      { name: "toggle", description: "Toggles the popover open/closed" },
+      { name: "show", description: "Opens the popover" },
+      { name: "hide", description: "Closes the popover" },
+      { name: "close", description: "Alias for hide" }
+    ],
+    events: [
+      { name: "opened", description: "Dispatched when the popover opens" },
+      { name: "closed", description: "Dispatched when the popover closes" }
+    ]
+  %>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Press <kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">Escape</kbd> to close the popover</li>
+      <li>Click outside the popover to close it</li>
+      <li>When <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">modal: true</code>, focus is trapped within the popover</li>
+      <li>Ensure trigger elements are keyboard accessible (buttons, not divs)</li>
+      <li>Keep popover content concise and focused</li>
+      <li>Avoid nesting popovers within popovers</li>
+    </ul>
+  </div>
+</div>

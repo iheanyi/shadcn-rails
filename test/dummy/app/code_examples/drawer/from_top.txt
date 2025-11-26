@@ -1,0 +1,14 @@
+<%= render Shadcn::DrawerComponent.new(direction: :top) do |drawer| %>
+  <% drawer.with_trigger do %>
+    <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Open from Top<% end %>
+  <% end %>
+  <% drawer.with_body(direction: :top) do |content| %>
+    <% content.with_header do |header| %>
+      <% header.with_title { "Top Drawer" } %>
+      <% header.with_description { "Content slides in from the top." } %>
+    <% end %>
+    <div class="p-4">
+      <p>Drawer content here.</p>
+    </div>
+  <% end %>
+<% end %>

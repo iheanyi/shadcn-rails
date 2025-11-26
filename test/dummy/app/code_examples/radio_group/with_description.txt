@@ -1,0 +1,29 @@
+<%= render Shadcn::RadioGroupComponent.new(name: "plan", value: "pro") do |group| %>
+  <div class="flex items-start space-x-3">
+    <% group.with_item(value: "free", id: "free") %>
+    <div class="grid gap-1.5 leading-none">
+      <%= render Shadcn::LabelComponent.new(for: "free") { "Free" } %>
+      <p class="text-sm text-muted-foreground">
+        Basic features for personal use
+      </p>
+    </div>
+  </div>
+  <div class="flex items-start space-x-3">
+    <% group.with_item(value: "pro", id: "pro") %>
+    <div class="grid gap-1.5 leading-none">
+      <%= render Shadcn::LabelComponent.new(for: "pro") { "Pro" } %>
+      <p class="text-sm text-muted-foreground">
+        Advanced features for professionals
+      </p>
+    </div>
+  </div>
+  <div class="flex items-start space-x-3">
+    <% group.with_item(value: "enterprise", id: "enterprise") %>
+    <div class="grid gap-1.5 leading-none">
+      <%= render Shadcn::LabelComponent.new(for: "enterprise") { "Enterprise" } %>
+      <p class="text-sm text-muted-foreground">
+        Full features for teams and organizations
+      </p>
+    </div>
+  </div>
+<% end %>

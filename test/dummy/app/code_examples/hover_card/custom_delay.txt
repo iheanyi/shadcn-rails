@@ -1,0 +1,8 @@
+<%= render Shadcn::HoverCardComponent.new(open_delay: 200, close_delay: 100) do |card| %>
+  <% card.with_trigger do %>
+    <span class="underline cursor-pointer">Quick hover</span>
+  <% end %>
+  <% card.with_card_content do %>
+    <p class="text-sm">This card appears faster (200ms) and closes quicker (100ms).</p>
+  <% end %>
+<% end %>

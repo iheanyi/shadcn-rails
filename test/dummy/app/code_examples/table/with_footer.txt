@@ -1,0 +1,28 @@
+<%= render Shadcn::TableComponent.new do |table| %>
+  <% table.with_header do |header| %>
+    <% header.with_row do |row| %>
+      <% row.with_head { "Item" } %>
+      <% row.with_head { "Quantity" } %>
+      <% row.with_head { "Price" } %>
+    <% end %>
+  <% end %>
+  <% table.with_body do |body| %>
+    <% body.with_row do |row| %>
+      <% row.with_cell { "Product A" } %>
+      <% row.with_cell { "2" } %>
+      <% row.with_cell { "$20.00" } %>
+    <% end %>
+    <% body.with_row do |row| %>
+      <% row.with_cell { "Product B" } %>
+      <% row.with_cell { "1" } %>
+      <% row.with_cell { "$15.00" } %>
+    <% end %>
+  <% end %>
+  <% table.with_footer do |footer| %>
+    <% footer.with_row do |row| %>
+      <% row.with_cell { "Total" } %>
+      <% row.with_cell { "3" } %>
+      <% row.with_cell { "$35.00" } %>
+    <% end %>
+  <% end %>
+<% end %>

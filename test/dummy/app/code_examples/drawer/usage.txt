@@ -1,0 +1,17 @@
+<%= render Shadcn::DrawerComponent.new do |drawer| %>
+  <% drawer.with_trigger do %>
+    <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Open Drawer<% end %>
+  <% end %>
+  <% drawer.with_body do |content| %>
+    <% content.with_header do |header| %>
+      <% header.with_title { "Drawer Title" } %>
+      <% header.with_description { "Drawer description here." } %>
+    <% end %>
+    <div class="p-4">
+      <p>Drawer body content goes here.</p>
+    </div>
+    <% content.with_footer do %>
+      <%= render Shadcn::ButtonComponent.new { "Save" } %>
+    <% end %>
+  <% end %>
+<% end %>
