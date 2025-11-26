@@ -1,0 +1,2 @@
+<% content.with_previous(disabled: true) %>
+<% content.with_next_page(disabled: true) %>

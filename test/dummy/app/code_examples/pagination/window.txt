@@ -1,0 +1,13 @@
+<%# Show 1 page on each side of current (default is 2) %>
+<%= render Shadcn::PaginationComponent.new(
+  collection: @posts,
+  window: 1,
+  url_builder: ->(page) { posts_path(page: page) }
+) %>
+
+<%# Show 3 pages on each side of current %>
+<%= render Shadcn::PaginationComponent.new(
+  collection: @posts,
+  window: 3,
+  url_builder: ->(page) { posts_path(page: page) }
+) %>

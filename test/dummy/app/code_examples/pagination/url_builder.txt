@@ -1,0 +1,17 @@
+<%# With additional query params %>
+<%= render Shadcn::PaginationComponent.new(
+  collection: @posts,
+  url_builder: ->(page) { posts_path(page: page, sort: params[:sort], filter: params[:filter]) }
+) %>
+
+<%# With URL helpers %>
+<%= render Shadcn::PaginationComponent.new(
+  collection: @posts,
+  url_builder: ->(page) { url_for(page: page) }
+) %>
+
+<%# With namespaced routes %>
+<%= render Shadcn::PaginationComponent.new(
+  collection: @posts,
+  url_builder: ->(page) { admin_posts_path(page: page) }
+) %>

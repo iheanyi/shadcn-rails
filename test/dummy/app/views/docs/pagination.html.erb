@@ -50,30 +50,13 @@
     <p class="leading-7">There are three ways to use the Pagination component:</p>
 
     <h3 class="text-lg font-semibold mt-4">1. Slot-based API (Full Control)</h3>
-    <% slot_code = '<' + '%=' + ' render Shadcn::PaginationComponent.new do |pagination| ' + '%' + ">\n" +
-      '  <' + '%' + ' pagination.with_pagination_content do |content| ' + '%' + ">\n" +
-      '    <' + '%' + ' content.with_previous(href: "/page/1") ' + '%' + ">\n" +
-      '    <' + '%' + ' content.with_item(href: "/page/1") { "1" } ' + '%' + ">\n" +
-      '    <' + '%' + ' content.with_item(href: "/page/2", active: true) { "2" } ' + '%' + ">\n" +
-      '    <' + '%' + ' content.with_item(href: "/page/3") { "3" } ' + '%' + ">\n" +
-      '    <' + '%' + ' content.with_ellipse ' + '%' + ">\n" +
-      '    <' + '%' + ' content.with_item(href: "/page/10") { "10" } ' + '%' + ">\n" +
-      '    <' + '%' + ' content.with_next_page(href: "/page/3") ' + '%' + ">\n" +
-      '  <' + '%' + ' end ' + '%' + ">\n" +
-      '<' + '%' + ' end ' + '%' + '>' %>
-    <%= render "docs/code_example", language: "erb", code: slot_code %>
+    <%= erb_example("pagination/usage_slot") %>
 
     <h3 class="text-lg font-semibold mt-6">2. Collection-based API (Kaminari/will_paginate)</h3>
-    <%= render "docs/code_example", language: "erb", code: <<~CODE
-<%%= render Shadcn::PaginationComponent.new(collection: @posts) %>
-CODE
-    %>
+    <%= erb_example("pagination/usage_collection") %>
 
     <h3 class="text-lg font-semibold mt-6">3. Pagy-based API</h3>
-    <%= render "docs/code_example", language: "erb", code: <<~CODE
-<%%= render Shadcn::PaginationComponent.new(pagy: @pagy) %>
-CODE
-    %>
+    <%= erb_example("pagination/usage_pagy") %>
   </div>
 
   <!-- Examples -->
@@ -114,10 +97,7 @@ CODE
           <% end %>
         <% end %>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: <<~CODE
-<%% content.with_ellipse %>
-CODE
-      %>
+      <%= erb_example("pagination/ellipse") %>
     </div>
 
     <!-- Disabled Navigation -->
@@ -135,11 +115,7 @@ CODE
           <% end %>
         <% end %>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: <<~CODE
-<%% content.with_previous(disabled: true) %>
-<%% content.with_next_page(disabled: true) %>
-CODE
-      %>
+      <%= erb_example("pagination/disabled") %>
     </div>
   </div>
 
@@ -158,21 +134,8 @@ CODE
         <a href="https://github.com/kaminari/kaminari" target="_blank" class="underline hover:text-foreground">Kaminari</a>
         is the most popular pagination gem for Rails.
       </p>
-      <%= render "docs/code_example", language: "ruby", title: "Controller", code: <<~CODE
-class PostsController < ApplicationController
-  def index
-    @posts = Post.page(params[:page]).per(10)
-  end
-end
-CODE
-      %>
-      <%= render "docs/code_example", language: "erb", title: "View", code: <<~CODE
-<%%= render Shadcn::PaginationComponent.new(
-  collection: @posts,
-  url_builder: ->(page) { posts_path(page: page) }
-) %>
-CODE
-      %>
+      <%= ruby_example("pagination/kaminari_controller", title: "Controller") %>
+      <%= erb_example("pagination/kaminari_view", title: "View") %>
     </div>
 
     <!-- will_paginate -->
@@ -182,21 +145,8 @@ CODE
         <a href="https://github.com/mislav/will_paginate" target="_blank" class="underline hover:text-foreground">will_paginate</a>
         is a classic pagination library.
       </p>
-      <%= render "docs/code_example", language: "ruby", title: "Controller", code: <<~CODE
-class PostsController < ApplicationController
-  def index
-    @posts = Post.paginate(page: params[:page], per_page: 10)
-  end
-end
-CODE
-      %>
-      <%= render "docs/code_example", language: "erb", title: "View", code: <<~CODE
-<%%= render Shadcn::PaginationComponent.new(
-  collection: @posts,
-  url_builder: ->(page) { posts_path(page: page) }
-) %>
-CODE
-      %>
+      <%= ruby_example("pagination/will_paginate_controller", title: "Controller") %>
+      <%= erb_example("pagination/will_paginate_view", title: "View") %>
     </div>
 
     <!-- Pagy -->
@@ -206,23 +156,8 @@ CODE
         <a href="https://github.com/ddnexus/pagy" target="_blank" class="underline hover:text-foreground">Pagy</a>
         is the fastest pagination gem with the smallest memory footprint.
       </p>
-      <%= render "docs/code_example", language: "ruby", title: "Controller", code: <<~CODE
-class PostsController < ApplicationController
-  include Pagy::Backend
-
-  def index
-    @pagy, @posts = pagy(Post.all, items: 10)
-  end
-end
-CODE
-      %>
-      <%= render "docs/code_example", language: "erb", title: "View", code: <<~CODE
-<%%= render Shadcn::PaginationComponent.new(
-  pagy: @pagy,
-  url_builder: ->(page) { posts_path(page: page) }
-) %>
-CODE
-      %>
+      <%= ruby_example("pagination/pagy_controller", title: "Controller") %>
+      <%= erb_example("pagination/pagy_view", title: "View") %>
     </div>
 
     <!-- Custom URL Builder -->
@@ -232,26 +167,7 @@ CODE
         The <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">url_builder</code> lambda receives the page number
         and should return the URL for that page. This gives you full control over URL generation.
       </p>
-      <%= render "docs/code_example", language: "erb", code: <<~CODE
-<%# With additional query params %>
-<%%= render Shadcn::PaginationComponent.new(
-  collection: @posts,
-  url_builder: ->(page) { posts_path(page: page, sort: params[:sort], filter: params[:filter]) }
-) %>
-
-<%# With URL helpers %>
-<%%= render Shadcn::PaginationComponent.new(
-  collection: @posts,
-  url_builder: ->(page) { url_for(page: page) }
-) %>
-
-<%# With namespaced routes %>
-<%%= render Shadcn::PaginationComponent.new(
-  collection: @posts,
-  url_builder: ->(page) { admin_posts_path(page: page) }
-) %>
-CODE
-      %>
+      <%= erb_example("pagination/url_builder") %>
     </div>
 
     <!-- Window Size -->
@@ -260,22 +176,7 @@ CODE
       <p class="text-sm text-muted-foreground">
         Control how many pages are shown around the current page with the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">window</code> option.
       </p>
-      <%= render "docs/code_example", language: "erb", code: <<~CODE
-<%# Show 1 page on each side of current (default is 2) %>
-<%%= render Shadcn::PaginationComponent.new(
-  collection: @posts,
-  window: 1,
-  url_builder: ->(page) { posts_path(page: page) }
-) %>
-
-<%# Show 3 pages on each side of current %>
-<%%= render Shadcn::PaginationComponent.new(
-  collection: @posts,
-  window: 3,
-  url_builder: ->(page) { posts_path(page: page) }
-) %>
-CODE
-      %>
+      <%= erb_example("pagination/window") %>
     </div>
   </div>
 
@@ -287,7 +188,7 @@ CODE
     <%= render "docs/props_table", title: nil, props: [
       { name: "collection", type: "Object", default: "nil", description: "Kaminari or will_paginate collection" },
       { name: "pagy", type: "Pagy", default: "nil", description: "Pagy pagination object" },
-      { name: "url_builder", type: "Proc", default: '->(page) { "?page=\#{page}" }', description: "Lambda to generate page URLs, receives page number" },
+      { name: "url_builder", type: "Proc", default: '->(page) { "?page=#{page}" }', description: "Lambda to generate page URLs, receives page number" },
       { name: "window", type: "Integer", default: "2", description: "Number of pages to show around current page" }
     ] %>
 

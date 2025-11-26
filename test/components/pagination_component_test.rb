@@ -91,6 +91,101 @@ class PaginationComponentTest < ViewComponent::TestCase
   end
 
   # ============================================
+  # CRITICAL: Item Ordering Tests
+  # These tests ensure items and ellipses render in the correct order
+  # ============================================
+
+  def test_items_and_ellipses_render_in_correct_order
+    # This test verifies that items and ellipses appear in the exact order they are called
+    # Regression test for: ellipses were being rendered AFTER all items instead of inline
+    render_inline(Shadcn::PaginationComponent.new) do |pagination|
+      pagination.with_pagination_content do |content|
+        content.with_previous(href: "#")
+        content.with_item(href: "#") { "1" }
+        content.with_item(href: "#") { "2" }
+        content.with_item(href: "#") { "3" }
+        content.with_ellipse
+        content.with_item(href: "#") { "10" }
+        content.with_next_page(href: "#")
+      end
+    end
+
+    # Get all list items in order
+    list_items = page.all("ul > li")
+
+    # Verify the order: Previous, 1, 2, 3, ellipsis, 10, Next
+    assert_equal 7, list_items.count, "Expected 7 list items (prev, 1, 2, 3, ellipsis, 10, next)"
+
+    # Check that Previous is first
+    assert list_items[0].has_text?("Previous"), "First item should be Previous"
+
+    # Check page numbers are in correct positions
+    assert list_items[1].has_text?("1"), "Second item should be page 1"
+    assert list_items[2].has_text?("2"), "Third item should be page 2"
+    assert list_items[3].has_text?("3"), "Fourth item should be page 3"
+
+    # CRITICAL: Ellipsis should be BEFORE page 10, not after
+    assert list_items[4].has_css?("span[aria-hidden='true']"), "Fifth item should be ellipsis"
+    assert list_items[4].has_css?(".sr-only", text: "More pages"), "Fifth item should contain 'More pages' sr-only text"
+
+    # Page 10 should come AFTER the ellipsis
+    assert list_items[5].has_text?("10"), "Sixth item should be page 10"
+
+    # Next should be last
+    assert list_items[6].has_text?("Next"), "Seventh item should be Next"
+  end
+
+  def test_multiple_ellipses_render_in_correct_positions
+    # Test with ellipses on both sides of the current page range
+    render_inline(Shadcn::PaginationComponent.new) do |pagination|
+      pagination.with_pagination_content do |content|
+        content.with_previous(href: "#")
+        content.with_item(href: "#") { "1" }
+        content.with_ellipse
+        content.with_item(href: "#") { "5" }
+        content.with_item(href: "#", active: true) { "6" }
+        content.with_item(href: "#") { "7" }
+        content.with_ellipse
+        content.with_item(href: "#") { "20" }
+        content.with_next_page(href: "#")
+      end
+    end
+
+    list_items = page.all("ul > li")
+
+    # Expected order: Previous, 1, ellipsis, 5, 6, 7, ellipsis, 20, Next
+    assert_equal 9, list_items.count, "Expected 9 list items"
+
+    assert list_items[0].has_text?("Previous"), "First should be Previous"
+    assert list_items[1].has_text?("1"), "Second should be page 1"
+    assert list_items[2].has_css?("span[aria-hidden='true']"), "Third should be first ellipsis"
+    assert list_items[3].has_text?("5"), "Fourth should be page 5"
+    assert list_items[4].has_text?("6"), "Fifth should be page 6 (active)"
+    assert list_items[5].has_text?("7"), "Sixth should be page 7"
+    assert list_items[6].has_css?("span[aria-hidden='true']"), "Seventh should be second ellipsis"
+    assert list_items[7].has_text?("20"), "Eighth should be page 20"
+    assert list_items[8].has_text?("Next"), "Ninth should be Next"
+  end
+
+  def test_ellipsis_between_consecutive_items
+    # Edge case: ellipsis between two page items
+    render_inline(Shadcn::PaginationComponent.new) do |pagination|
+      pagination.with_pagination_content do |content|
+        content.with_item(href: "#") { "1" }
+        content.with_ellipse
+        content.with_item(href: "#") { "5" }
+      end
+    end
+
+    list_items = page.all("ul > li")
+    assert_equal 3, list_items.count
+
+    assert list_items[0].has_text?("1"), "First should be page 1"
+    assert list_items[1].has_css?("span[aria-hidden='true']"), "Second should be ellipsis"
+    assert list_items[2].has_text?("5"), "Third should be page 5"
+  end
+
+  # ============================================
   # Tests for Pagination Gem Integration
   # ============================================
 
