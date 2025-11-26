@@ -500,6 +500,39 @@
         }
       }
     })
+
+    // Slider Controller - handles native input range with output sync
+    Stimulus.register("shadcn--slider", class extends Controller {
+      static targets = ["output"]
+      static values = {
+        outputFormat: { type: String, default: "{value}" }
+      }
+
+      // Called on input event from native range input
+      updateStyle(event) {
+        const input = event.target
+        const value = parseFloat(input.value)
+        const min = parseFloat(input.min) || 0
+        const max = parseFloat(input.max) || 100
+
+        // Calculate percentage and update CSS custom property for fill
+        const percentage = ((value - min) / (max - min)) * 100
+        input.style.setProperty("--slider-fill", `${percentage}%`)
+
+        // Update output element if present
+        if (this.hasOutputTarget) {
+          const formattedValue = this.outputFormatValue
+            .replace("{value}", value)
+            .replace("{percent}", Math.round(percentage))
+          this.outputTarget.textContent = formattedValue
+        }
+
+        // Dispatch change event
+        this.dispatch("change", {
+          detail: { value: value, percentage: percentage }
+        })
+      }
+    })
   </script>
   <style>
     <%= Shadcn::Rails.theme_css %>

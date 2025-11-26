@@ -51,16 +51,42 @@
       <% end %>
     </div>
 
-    <!-- With Label -->
+    <!-- With Synced Label -->
     <div class="space-y-4">
-      <h3 class="text-lg font-semibold">With Label</h3>
+      <h3 class="text-lg font-semibold">With Synced Label</h3>
+      <p class="text-sm text-muted-foreground">Add <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">data-shadcn--slider-target="output"</code> to sync the value label automatically.</p>
       <%= render "docs/demo_card" do %>
-        <div class="space-y-4 w-full max-w-md">
+        <div class="space-y-4 w-full max-w-md" data-controller="shadcn--slider">
           <div class="flex justify-between">
             <%= render Shadcn::LabelComponent.new { "Volume" } %>
-            <span class="text-sm text-muted-foreground">75%</span>
+            <span class="text-sm text-muted-foreground" data-shadcn--slider-target="output">75</span>%
           </div>
           <%= render Shadcn::SliderComponent.new(value: 75, max: 100) %>
+        </div>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: <<~ERB
+<div data-controller="shadcn--slider">
+  <div class="flex justify-between">
+    <label>Volume</label>
+    <span data-shadcn--slider-target="output">75</span>%
+  </div>
+  <%%= render Shadcn::SliderComponent.new(value: 75, max: 100) %>
+</div>
+      ERB
+      %>
+    </div>
+
+    <!-- With Formatted Output -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Formatted Output</h3>
+      <p class="text-sm text-muted-foreground">Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">data-shadcn--slider-output-format-value</code> for custom formatting with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">{value}</code> and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">{percent}</code> placeholders.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="space-y-4 w-full max-w-md" data-controller="shadcn--slider" data-shadcn--slider-output-format-value="{value}%">
+          <div class="flex justify-between">
+            <%= render Shadcn::LabelComponent.new { "Brightness" } %>
+            <span class="text-sm text-muted-foreground" data-shadcn--slider-target="output">50%</span>
+          </div>
+          <%= render Shadcn::SliderComponent.new(value: 50, max: 100) %>
         </div>
       <% end %>
     </div>
@@ -176,9 +202,15 @@
   <!-- Stimulus Controller -->
   <%= render "docs/stimulus_docs",
     controller: "shadcn--slider",
-    description: "Updates the slider's visual fill as the value changes.",
+    description: "Updates the slider's visual fill and optionally syncs a value label.",
+    values: [
+      { name: "outputFormat", type: "String", description: "Format string for output ({value} and {percent} placeholders)" }
+    ],
+    targets: [
+      { name: "output", description: "Element to display the current value (auto-synced on change)" }
+    ],
     actions: [
-      { name: "updateStyle", description: "Updates the CSS custom property for fill percentage" }
+      { name: "updateStyle", description: "Updates CSS fill and syncs output target on input" }
     ]
   %>
 
