@@ -89,7 +89,7 @@ module Shadcn
         # Colors
         /^bg-/ => :background,
         /^text-(?!left|center|right|justify|xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl)/ => :text_color,
-        /^border-(?!solid|dashed|dotted|double|none)/ => :border_color,
+        /^border-(?!solid|dashed|dotted|double|none|[0-9])/ => :border_color,
         /^ring-(?!offset)/ => :ring_color,
         /^ring-offset-(?!\d)/ => :ring_offset_color,
 
