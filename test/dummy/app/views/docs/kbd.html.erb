@@ -63,13 +63,7 @@
           <%= render Shadcn::KbdComponent.new { "S" } %>
         </div>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: <<~ERB
-<div class="flex items-center gap-1">
-  <%%= render Shadcn::KbdComponent.new { "⌘" } %>
-  <%%= render Shadcn::KbdComponent.new { "S" } %>
-</div>
-ERB
-      %>
+      <%= erb_example("kbd/combination") %>
     </div>
 
     <!-- Common Shortcuts -->
@@ -131,5 +125,15 @@ ERB
       <li>Screen readers will announce the content appropriately as keyboard-related</li>
       <li>Use with descriptive text for context (e.g., "Press ⌘K to search")</li>
     </ul>
+  </div>
+
+  <!-- Note about Command Palette -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Note</h2>
+    <p class="leading-7">
+      The Kbd component is for <strong>displaying</strong> keyboard shortcuts visually.
+      If you need a command palette that opens when pressing ⌘K, you'll want to use the
+      <a href="/docs/components/command" class="text-primary underline">Command</a> component instead.
+    </p>
   </div>
 </div>

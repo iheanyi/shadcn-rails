@@ -41,9 +41,9 @@ module Shadcn
 
     # Input slot
     renders_one :input, lambda { |**options|
-      # Remove border and ring from input since the group handles it
+      # Remove border, ring, rounded corners and shadow from input since the group handles it
       options[:class_name] = cn(
-        "border-0 focus-visible:ring-0 focus-visible:ring-offset-0",
+        "border-0 rounded-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-0 focus:outline-none",
         options[:class_name]
       )
       Shadcn::InputComponent.new(**options)

@@ -24,6 +24,9 @@ module Dummy
     if Rails.env.development? || Rails.env.test?
       config.view_component.previews.paths = [Rails.root.join("../../test/components/previews")]
       config.view_component.previews.default_layout = "component_preview"
+    else
+      # In production, ignore the component previews controller since it depends on ViewComponent::PreviewsController
+      Rails.autoloaders.main.ignore(Rails.root.join("app/controllers/component_previews_controller.rb"))
     end
 
     # Lookbook configuration (development only)
