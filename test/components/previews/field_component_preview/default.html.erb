@@ -1,0 +1,4 @@
+<%= render(Shadcn::FieldComponent.new) do |field| %>
+  <% field.with_label { "Username" } %>
+  <% field.with_input(placeholder: "Enter your username") %>
+<% end %>

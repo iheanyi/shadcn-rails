@@ -1,0 +1,15 @@
+<%= render(Shadcn::NativeSelectComponent.new(name: "car")) do |select| %>
+  <% select.with_optgroup(label: "Swedish Cars") do |group| %>
+    <% group.with_option(value: "volvo") { "Volvo" } %>
+    <% group.with_option(value: "saab") { "Saab" } %>
+  <% end %>
+  <% select.with_optgroup(label: "German Cars") do |group| %>
+    <% group.with_option(value: "mercedes") { "Mercedes" } %>
+    <% group.with_option(value: "audi") { "Audi" } %>
+    <% group.with_option(value: "bmw") { "BMW" } %>
+  <% end %>
+  <% select.with_optgroup(label: "Japanese Cars") do |group| %>
+    <% group.with_option(value: "toyota") { "Toyota" } %>
+    <% group.with_option(value: "honda") { "Honda" } %>
+  <% end %>
+<% end %>

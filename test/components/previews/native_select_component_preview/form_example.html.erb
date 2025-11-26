@@ -1,0 +1,14 @@
+<div class="space-y-4 max-w-sm">
+  <%= render(Shadcn::FieldComponent.new) do |field| %>
+    <% field.with_label { "Country" } %>
+    <% field.with_control do %>
+      <%= render(Shadcn::NativeSelectComponent.new(name: "user[country]")) do |select| %>
+        <% select.with_option(value: "", disabled: true, selected: true) { "Select your country" } %>
+        <% select.with_option(value: "us") { "United States" } %>
+        <% select.with_option(value: "uk") { "United Kingdom" } %>
+        <% select.with_option(value: "ca") { "Canada" } %>
+      <% end %>
+    <% end %>
+    <% field.with_description { "Select the country where you reside." } %>
+  <% end %>
+</div>

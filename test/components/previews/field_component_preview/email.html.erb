@@ -1,0 +1,5 @@
+<%= render(Shadcn::FieldComponent.new) do |field| %>
+  <% field.with_label { "Email" } %>
+  <% field.with_input(type: :email, placeholder: "you@example.com") %>
+  <% field.with_description { "We'll never share your email." } %>
+<% end %>

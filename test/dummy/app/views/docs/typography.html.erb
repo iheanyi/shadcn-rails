@@ -1,0 +1,151 @@
+<% content_for :title, "Typography" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Typography</h1>
+    <p class="text-xl text-muted-foreground">Styles for headings, paragraphs, lists, and other text elements.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+        No JavaScript Required
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <div class="space-y-4">
+      <%= render Shadcn::TypographyComponent.new(variant: :h1) { "The Joke Tax Chronicles" } %>
+      <%= render Shadcn::TypographyComponent.new(variant: :lead) { "A modal dialog that interrupts the user with important content and expects a response." } %>
+    </div>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component typography" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= render "docs/code_example", language: "erb", code: '<%= render Shadcn::TypographyComponent.new(variant: :h1) { "Heading" } %>' %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Headings -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Headings</h3>
+      <%= render "docs/demo_card" do %>
+        <div class="space-y-4">
+          <%= render Shadcn::TypographyComponent.new(variant: :h1) { "Heading 1" } %>
+          <%= render Shadcn::TypographyComponent.new(variant: :h2) { "Heading 2" } %>
+          <%= render Shadcn::TypographyComponent.new(variant: :h3) { "Heading 3" } %>
+          <%= render Shadcn::TypographyComponent.new(variant: :h4) { "Heading 4" } %>
+        </div>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: <<~ERB
+<%%= render Shadcn::TypographyComponent.new(variant: :h1) { "Heading 1" } %>
+<%%= render Shadcn::TypographyComponent.new(variant: :h2) { "Heading 2" } %>
+<%%= render Shadcn::TypographyComponent.new(variant: :h3) { "Heading 3" } %>
+<%%= render Shadcn::TypographyComponent.new(variant: :h4) { "Heading 4" } %>
+ERB
+      %>
+    </div>
+
+    <!-- Paragraph -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Paragraph</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::TypographyComponent.new(variant: :p) do %>
+          The king, seeing how much happier his subjects were, realized the error of his ways and repealed the joke tax.
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Lead -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Lead</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::TypographyComponent.new(variant: :lead) do %>
+          A modal dialog that interrupts the user with important content and expects a response.
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Large -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Large</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::TypographyComponent.new(variant: :large) { "Are you absolutely sure?" } %>
+      <% end %>
+    </div>
+
+    <!-- Small -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Small</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::TypographyComponent.new(variant: :small) { "Email address" } %>
+      <% end %>
+    </div>
+
+    <!-- Muted -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Muted</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::TypographyComponent.new(variant: :muted) { "Enter your email address." } %>
+      <% end %>
+    </div>
+
+    <!-- Blockquote -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Blockquote</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::TypographyComponent.new(variant: :blockquote) do %>
+          "After all, everyone enjoys a good laugh, and the people of the kingdom were no exception."
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Inline Code -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Inline Code</h3>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::TypographyComponent.new(variant: :code) { "@radix-ui/react-alert-dialog" } %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+    <%= render "docs/props_table", props: [
+      { name: "variant", type: "Symbol", default: ":p", description: "Typography variant (:h1, :h2, :h3, :h4, :p, :lead, :large, :small, :muted, :blockquote, :code, :list)" },
+      { name: "tag", type: "Symbol", default: "nil", description: "Override the default HTML tag" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" }
+    ] %>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses semantic HTML elements (h1-h4, p, blockquote, code) for proper document structure</li>
+      <li>Heading hierarchy should be followed for screen reader navigation</li>
+      <li>Use the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">tag</code> prop to override elements when needed for semantic correctness</li>
+    </ul>
+  </div>
+</div>

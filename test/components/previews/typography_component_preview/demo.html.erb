@@ -1,0 +1,31 @@
+<div class="space-y-6 max-w-2xl">
+  <%= render(Shadcn::TypographyComponent.new(variant: :h1)) { "The Joke Tax Chronicles" } %>
+
+  <%= render(Shadcn::TypographyComponent.new(variant: :p)) do %>
+    Once upon a time, in a far-off land, there was a very lazy king who spent all day lounging on his throne. One day, his advisors came to him with a problem: the kingdom was running out of money.
+  <% end %>
+
+  <%= render(Shadcn::TypographyComponent.new(variant: :h2)) { "The King's Plan" } %>
+
+  <%= render(Shadcn::TypographyComponent.new(variant: :p)) do %>
+    The king thought long and hard, and finally came up with <%= render(Shadcn::TypographyComponent.new(variant: :code, tag: :span)) { "a brilliant plan" } %>: he would tax the jokes in the kingdom.
+  <% end %>
+
+  <%= render(Shadcn::TypographyComponent.new(variant: :blockquote)) do %>
+    "After all," he said, "everyone enjoys a good joke, so it's only fair that they should pay for the privilege."
+  <% end %>
+
+  <%= render(Shadcn::TypographyComponent.new(variant: :h3)) { "The Joke Tax" } %>
+
+  <%= render(Shadcn::TypographyComponent.new(variant: :p)) do %>
+    The king's subjects were not amused. They grumbled and complained, but the king was firm:
+  <% end %>
+
+  <%= render(Shadcn::TypographyComponent.new(variant: :lead)) do %>
+    "No more jokes until the tax is paid!"
+  <% end %>
+
+  <%= render(Shadcn::TypographyComponent.new(variant: :muted)) do %>
+    And so began the great joke drought of the kingdom.
+  <% end %>
+</div>
