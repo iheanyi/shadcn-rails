@@ -54,41 +54,27 @@
     <!-- With Synced Label -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">With Synced Label</h3>
-      <p class="text-sm text-muted-foreground">Add <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">data-shadcn--slider-target="output"</code> to sync the value label automatically.</p>
+      <p class="text-sm text-muted-foreground">Listen to the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">shadcn--slider:change</code> event to sync value labels.</p>
       <%= render "docs/demo_card" do %>
-        <div class="space-y-4 w-full max-w-md" data-controller="shadcn--slider">
+        <div class="space-y-4 w-full max-w-md">
           <div class="flex justify-between">
             <%= render Shadcn::LabelComponent.new { "Volume" } %>
-            <span class="text-sm text-muted-foreground" data-shadcn--slider-target="output">75</span>%
+            <span id="volume-label" class="text-sm text-muted-foreground">75%</span>
           </div>
-          <%= render Shadcn::SliderComponent.new(value: 75, max: 100) %>
+          <%= render Shadcn::SliderComponent.new(
+            value: 75,
+            max: 100,
+            data: { action: "shadcn--slider:change->global#updateLabel" }
+          ) %>
         </div>
+        <script>
+          document.addEventListener('shadcn--slider:change', (e) => {
+            const label = e.target.closest('.space-y-4')?.querySelector('#volume-label');
+            if (label) label.textContent = Math.round(e.detail.value) + '%';
+          });
+        </script>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: <<~ERB
-<div data-controller="shadcn--slider">
-  <div class="flex justify-between">
-    <label>Volume</label>
-    <span data-shadcn--slider-target="output">75</span>%
-  </div>
-  <%%= render Shadcn::SliderComponent.new(value: 75, max: 100) %>
-</div>
-      ERB
-      %>
-    </div>
-
-    <!-- With Formatted Output -->
-    <div class="space-y-4">
-      <h3 class="text-lg font-semibold">With Formatted Output</h3>
-      <p class="text-sm text-muted-foreground">Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">data-shadcn--slider-output-format-value</code> for custom formatting with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">{value}</code> and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">{percent}</code> placeholders.</p>
-      <%= render "docs/demo_card" do %>
-        <div class="space-y-4 w-full max-w-md" data-controller="shadcn--slider" data-shadcn--slider-output-format-value="{value}%">
-          <div class="flex justify-between">
-            <%= render Shadcn::LabelComponent.new { "Brightness" } %>
-            <span class="text-sm text-muted-foreground" data-shadcn--slider-target="output">50%</span>
-          </div>
-          <%= render Shadcn::SliderComponent.new(value: 50, max: 100) %>
-        </div>
-      <% end %>
+      <%= erb_example("slider/synced_label") %>
     </div>
 
     <!-- Custom Range -->

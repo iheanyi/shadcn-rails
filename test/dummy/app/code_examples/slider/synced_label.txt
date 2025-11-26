@@ -1,0 +1,15 @@
+<div class="space-y-4">
+  <div class="flex justify-between">
+    <label>Volume</label>
+    <span id="volume-label">75%</span>
+  </div>
+  <%%= render Shadcn::SliderComponent.new(value: 75, max: 100) %>
+</div>
+
+<script>
+  // Listen to the slider's change event
+  document.addEventListener('shadcn--slider:change', (e) => {
+    const label = document.getElementById('volume-label');
+    if (label) label.textContent = Math.round(e.detail.value) + '%';
+  });
+</script>
