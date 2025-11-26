@@ -2,29 +2,69 @@ import { Controller } from "@hotwired/stimulus"
 
 /**
  * Tabs controller for tabbed interfaces
- * Handles tab selection, keyboard navigation, and content switching
+ * Handles tab selection, keyboard navigation, content switching, and URL sync
  */
 export default class extends Controller {
   static targets = ["list", "trigger", "content"]
   static values = {
-    defaultValue: String
+    defaultValue: String,
+    urlParam: String // Query parameter name for URL sync (e.g., "tab")
   }
 
   connect() {
-    // Set initial tab
-    const initialValue = this.defaultValueValue || this.triggerTargets[0]?.dataset.value
+    // Determine initial tab value
+    let initialValue = this.getValueFromUrl() || this.defaultValueValue || this.triggerTargets[0]?.dataset.value
+
     if (initialValue) {
-      this.selectTabByValue(initialValue)
+      // Validate that the value exists in our triggers
+      const validValues = this.triggerTargets.map(t => t.dataset.value)
+      if (!validValues.includes(initialValue)) {
+        initialValue = this.defaultValueValue || this.triggerTargets[0]?.dataset.value
+      }
+      this.selectTabByValue(initialValue, false) // Don't update URL on initial load
     }
+
+    // Listen for browser back/forward navigation
+    if (this.hasUrlParamValue) {
+      window.addEventListener("popstate", this.handlePopState.bind(this))
+    }
+  }
+
+  disconnect() {
+    if (this.hasUrlParamValue) {
+      window.removeEventListener("popstate", this.handlePopState.bind(this))
+    }
+  }
+
+  handlePopState() {
+    const value = this.getValueFromUrl()
+    if (value) {
+      this.selectTabByValue(value, false)
+    }
+  }
+
+  getValueFromUrl() {
+    if (!this.hasUrlParamValue) return null
+
+    const url = new URL(window.location.href)
+    return url.searchParams.get(this.urlParamValue)
+  }
+
+  updateUrl(value) {
+    if (!this.hasUrlParamValue) return
+
+    const url = new URL(window.location.href)
+    url.searchParams.set(this.urlParamValue, value)
+    window.history.replaceState({}, "", url.toString())
   }
 
   selectTab(event) {
     const trigger = event.currentTarget
     const value = trigger.dataset.value
-    this.selectTabByValue(value)
+    this.selectTabByValue(value, true)
   }
 
-  selectTabByValue(value) {
+  selectTabByValue(value, updateUrl = true) {
     // Update triggers
     this.triggerTargets.forEach(trigger => {
       const isSelected = trigger.dataset.value === value
@@ -39,6 +79,11 @@ export default class extends Controller {
       content.dataset.state = isSelected ? "active" : "inactive"
       content.hidden = !isSelected
     })
+
+    // Update URL if enabled
+    if (updateUrl) {
+      this.updateUrl(value)
+    }
 
     this.dispatch("change", { detail: { value } })
   }

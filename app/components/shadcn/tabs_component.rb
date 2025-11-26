@@ -19,6 +19,21 @@ module Shadcn
   #     <% end %>
   #   <% end %>
   #
+  # @example Tabs with URL sync
+  #   <%= render Shadcn::TabsComponent.new(default_value: "account", url_param: "tab") do |tabs| %>
+  #     <% tabs.with_list do |list| %>
+  #       <% list.with_trigger(value: "account") { "Account" } %>
+  #       <% list.with_trigger(value: "password") { "Password" } %>
+  #     <% end %>
+  #     <% tabs.with_panel(value: "account") do %>
+  #       Account settings content
+  #     <% end %>
+  #     <% tabs.with_panel(value: "password") do %>
+  #       Password settings content
+  #     <% end %>
+  #   <% end %>
+  #   # URL will update to ?tab=account or ?tab=password when tabs are clicked
+  #
   class TabsComponent < BaseComponent
     renders_one :list, lambda { |**options|
       TabsListComponent.new(**options)
@@ -29,10 +44,12 @@ module Shadcn
 
     # @param default_value [String] The value of the initially active tab
     # @param orientation [Symbol] Orientation (:horizontal, :vertical)
-    def initialize(default_value: nil, orientation: :horizontal, **options)
+    # @param url_param [String, nil] Query parameter name to sync active tab with URL (e.g., "tab")
+    def initialize(default_value: nil, orientation: :horizontal, url_param: nil, **options)
       super(**options)
       @default_value = default_value
       @orientation = orientation
+      @url_param = url_param
     end
 
     def call
@@ -50,6 +67,7 @@ module Shadcn
         class: class_name,
         "data-controller": "shadcn--tabs",
         "data-shadcn--tabs-default-value": @default_value,
+        "data-shadcn--tabs-url-param-value": @url_param,
         "data-orientation": @orientation.to_s
       }
       attrs.merge!(html_options)
