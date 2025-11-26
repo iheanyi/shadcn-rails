@@ -28,15 +28,13 @@ COPY test/dummy/ .
 
 # Set production environment
 ENV RAILS_ENV="production" \
-    BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development:test"
 
-# Update Gemfile to use the gem path in container
-RUN sed -i 's|path: "../.."|path: "/shadcn-rails"|' Gemfile
-
-# Install gems
-RUN bundle install && \
+# Update Gemfile to use the gem path in container and reinstall
+RUN sed -i 's|path: "../.."|path: "/shadcn-rails"|' Gemfile && \
+    bundle config set frozen false && \
+    bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
 
 # Precompile assets
