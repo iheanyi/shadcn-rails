@@ -35,9 +35,13 @@ module Shadcn
     }
 
     # Card content slot
+    # Note: Named content_slot because 'content' is a reserved ViewComponent method
     renders_one :content_slot, lambda { |**options, &block|
       CardContentComponent.new(**options, &block)
     }
+
+    # Alias for more intuitive API: card.with_content instead of card.with_content_slot
+    alias_method :with_content, :with_content_slot
 
     # Card footer slot
     renders_one :footer, lambda { |**options, &block|
