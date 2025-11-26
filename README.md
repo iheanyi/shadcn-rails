@@ -535,6 +535,69 @@ A modal dialog window.
 <% end %>
 ```
 
+##### Dialog with ID (for Turbo Stream targeting)
+
+```erb
+<%= render Shadcn::DialogComponent.new(id: "edit-profile-dialog") do |dialog| %>
+  <%# ... %>
+<% end %>
+```
+
+##### Closing Dialog Programmatically
+
+Use Stimulus actions to close dialogs from buttons:
+
+```erb
+<%# Cancel button closes immediately %>
+<%= render Shadcn::ButtonComponent.new(
+  variant: :outline,
+  type: "button",
+  data: { action: "click->shadcn--dialog#close" }
+) { "Cancel" } %>
+
+<%# Or close from any element %>
+<button data-action="click->shadcn--dialog#close">Close</button>
+```
+
+##### Forms Inside Dialogs
+
+For forms that should close the dialog only on successful submission:
+
+```erb
+<%= render Shadcn::DialogComponent.new do |dialog| %>
+  <% dialog.with_trigger do %>
+    <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Edit Profile" } %>
+  <% end %>
+  <% dialog.with_body do |body| %>
+    <% body.with_header do |header| %>
+      <% header.with_title { "Edit Profile" } %>
+      <% header.with_description { "Make changes to your profile here." } %>
+    <% end %>
+    <%= form_with model: @user, data: { remote: "true" } do |f| %>
+      <div class="space-y-4">
+        <%= render Shadcn::LabelComponent.new(for: "name") { "Name" } %>
+        <%= render Shadcn::InputComponent.new(id: "name", name: "user[name]", value: @user.name) %>
+      </div>
+      <div class="flex justify-end gap-3 mt-4">
+        <%= render Shadcn::ButtonComponent.new(
+          variant: :outline,
+          type: "button",
+          data: { action: "click->shadcn--dialog#close" }
+        ) { "Cancel" } %>
+        <%= render Shadcn::ButtonComponent.new(type: "submit") { "Save Changes" } %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>
+```
+
+**Props:**
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `id` | String | `nil` | Unique identifier for Turbo Stream targeting |
+| `open` | Boolean | `false` | Whether dialog starts open |
+| `modal` | Boolean | `true` | Whether dialog traps focus and blocks interaction |
+
 #### Alert Dialog
 
 A modal dialog for destructive or important actions.
@@ -687,6 +750,41 @@ A set of layered sections of content that are displayed one at a time.
   <% end %>
 <% end %>
 ```
+
+##### URL Synchronization
+
+Sync the active tab state with the URL query parameter for shareable links and browser history support:
+
+```erb
+<%# Tab state syncs to URL: /settings?tab=billing %>
+<%= render Shadcn::TabsComponent.new(default_value: "general", url_param: "tab") do |tabs| %>
+  <% tabs.with_list do |list| %>
+    <% list.with_trigger(value: "general") { "General" } %>
+    <% list.with_trigger(value: "billing") { "Billing" } %>
+    <% list.with_trigger(value: "security") { "Security" } %>
+  <% end %>
+  <% tabs.with_panel(value: "general") do %>
+    <p>General settings</p>
+  <% end %>
+  <% tabs.with_panel(value: "billing") do %>
+    <p>Billing settings</p>
+  <% end %>
+  <% tabs.with_panel(value: "security") do %>
+    <p>Security settings</p>
+  <% end %>
+<% end %>
+```
+
+When `url_param` is set:
+- The URL updates when tabs are clicked (e.g., `?tab=billing`)
+- Direct navigation to URLs with the parameter selects the correct tab
+- Browser back/forward navigation works as expected
+
+**Props:**
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `default_value` | String | `nil` | Initially active tab value |
+| `url_param` | String | `nil` | URL query parameter name for state sync |
 
 #### Accordion
 
