@@ -30,7 +30,14 @@ module Shadcn
   #   <% end %>
   #
   class NativeSelectComponent < BaseComponent
-    BASE_CLASSES = "flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1"
+    # Select wrapper classes for positioning the chevron icon
+    WRAPPER_CLASSES = "relative"
+
+    # Native select element classes
+    SELECT_CLASSES = "h-9 w-full cursor-pointer appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+
+    # Chevron icon classes (positioned absolutely)
+    CHEVRON_CLASSES = "pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
 
     # Option slot
     renders_many :options, "OptionComponent"
@@ -51,12 +58,34 @@ module Shadcn
     end
 
     def call
-      tag.select(**select_attributes) do
-        if optgroups.any?
-          safe_join(optgroups)
-        else
-          safe_join(options)
-        end
+      tag.div(class: WRAPPER_CLASSES) do
+        safe_join([
+          tag.select(**select_attributes) do
+            if optgroups.any?
+              safe_join(optgroups)
+            else
+              safe_join(options)
+            end
+          end,
+          chevron_icon
+        ])
+      end
+    end
+
+    def chevron_icon
+      tag.svg(
+        xmlns: "http://www.w3.org/2000/svg",
+        width: "16",
+        height: "16",
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        stroke_width: "2",
+        stroke_linecap: "round",
+        stroke_linejoin: "round",
+        class: CHEVRON_CLASSES
+      ) do
+        tag.path(d: "m6 9 6 6 6-6")
       end
     end
 
@@ -68,7 +97,7 @@ module Shadcn
         id: @id,
         disabled: @disabled || nil,
         required: @required || nil,
-        class: merge_classes(BASE_CLASSES)
+        class: merge_classes(SELECT_CLASSES)
       }.merge(html_options).merge(build_data).compact
     end
 
