@@ -27,18 +27,9 @@
   <%= render "docs/demo_card" do %>
     <div class="flex justify-center">
       <%= render Shadcn::RadioGroupComponent.new(name: "preview", value: "comfortable") do |group| %>
-        <div class="flex items-center space-x-2">
-          <%= group.with_item(value: "default", id: "preview-default") %>
-          <%= render Shadcn::LabelComponent.new(for: "preview-default") { "Default" } %>
-        </div>
-        <div class="flex items-center space-x-2">
-          <%= group.with_item(value: "comfortable", id: "preview-comfortable") %>
-          <%= render Shadcn::LabelComponent.new(for: "preview-comfortable") { "Comfortable" } %>
-        </div>
-        <div class="flex items-center space-x-2">
-          <%= group.with_item(value: "compact", id: "preview-compact") %>
-          <%= render Shadcn::LabelComponent.new(for: "preview-compact") { "Compact" } %>
-        </div>
+        <% group.with_item(value: "default", label: "Default") %>
+        <% group.with_item(value: "comfortable", label: "Comfortable") %>
+        <% group.with_item(value: "compact", label: "Compact") %>
       <% end %>
     </div>
   <% end %>
@@ -76,18 +67,9 @@
             value: "grid",
             orientation: :horizontal
           ) do |group| %>
-            <div class="flex items-center space-x-2">
-              <%= group.with_item(value: "list", id: "layout-list") %>
-              <%= render Shadcn::LabelComponent.new(for: "layout-list") { "List" } %>
-            </div>
-            <div class="flex items-center space-x-2">
-              <%= group.with_item(value: "grid", id: "layout-grid") %>
-              <%= render Shadcn::LabelComponent.new(for: "layout-grid") { "Grid" } %>
-            </div>
-            <div class="flex items-center space-x-2">
-              <%= group.with_item(value: "table", id: "layout-table") %>
-              <%= render Shadcn::LabelComponent.new(for: "layout-table") { "Table" } %>
-            </div>
+            <% group.with_item(value: "list", label: "List") %>
+            <% group.with_item(value: "grid", label: "Grid") %>
+            <% group.with_item(value: "table", label: "Table") %>
           <% end %>
         </div>
       <% end %>
@@ -102,33 +84,9 @@
         <div class="flex justify-center">
           <div class="max-w-md w-full">
             <%= render Shadcn::RadioGroupComponent.new(name: "plan", value: "pro") do |group| %>
-              <div class="flex items-start space-x-3">
-                <%= group.with_item(value: "free", id: "plan-free") %>
-                <div class="grid gap-1.5 leading-none">
-                  <%= render Shadcn::LabelComponent.new(for: "plan-free") { "Free" } %>
-                  <p class="text-sm text-muted-foreground">
-                    Basic features for personal use
-                  </p>
-                </div>
-              </div>
-              <div class="flex items-start space-x-3">
-                <%= group.with_item(value: "pro", id: "plan-pro") %>
-                <div class="grid gap-1.5 leading-none">
-                  <%= render Shadcn::LabelComponent.new(for: "plan-pro") { "Pro" } %>
-                  <p class="text-sm text-muted-foreground">
-                    Advanced features for professionals
-                  </p>
-                </div>
-              </div>
-              <div class="flex items-start space-x-3">
-                <%= group.with_item(value: "enterprise", id: "plan-enterprise") %>
-                <div class="grid gap-1.5 leading-none">
-                  <%= render Shadcn::LabelComponent.new(for: "plan-enterprise") { "Enterprise" } %>
-                  <p class="text-sm text-muted-foreground">
-                    Full features for teams and organizations
-                  </p>
-                </div>
-              </div>
+              <% group.with_item(value: "free", label: "Free") %>
+              <% group.with_item(value: "pro", label: "Pro") %>
+              <% group.with_item(value: "enterprise", label: "Enterprise") %>
             <% end %>
           </div>
         </div>
@@ -143,14 +101,8 @@
       <%= render "docs/demo_card" do %>
         <div class="flex justify-center">
           <%= render Shadcn::RadioGroupComponent.new(name: "disabled-example", value: "comfortable") do |group| %>
-            <div class="flex items-center space-x-2">
-              <%= group.with_item(value: "comfortable", id: "disabled-comfortable") %>
-              <%= render Shadcn::LabelComponent.new(for: "disabled-comfortable") { "Comfortable" } %>
-            </div>
-            <div class="flex items-center space-x-2">
-              <%= group.with_item(value: "compact", id: "disabled-compact", disabled: true) %>
-              <%= render Shadcn::LabelComponent.new(for: "disabled-compact") { "Compact (Disabled)" } %>
-            </div>
+            <% group.with_item(value: "comfortable", label: "Comfortable") %>
+            <% group.with_item(value: "compact", label: "Compact (Disabled)", disabled: true) %>
           <% end %>
         </div>
       <% end %>
