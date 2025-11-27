@@ -50,6 +50,9 @@
   "bugs": {
     "url": "https://github.com/iheanyi/shadcn-rails/issues"
   },
+  "dependencies": {
+    "stimulus-use": "^0.52.3"
+  },
   "peerDependencies": {
     "@hotwired/stimulus": "^3.0.0"
   },
