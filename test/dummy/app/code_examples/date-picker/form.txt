@@ -1,0 +1,5 @@
+<%= render Shadcn::DatePickerComponent.new(
+  name: "event[date]",
+  selected: Date.today,
+  placeholder: "Select event date"
+) %>

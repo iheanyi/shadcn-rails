@@ -1545,6 +1545,256 @@
         this.focusInput(0)
       }
     })
+
+    // Command controller
+    application.register("shadcn--command", class extends Controller {
+      static targets = ["input", "list", "empty", "group", "item"]
+      static values = {
+        selectedIndex: { type: Number, default: -1 }
+      }
+
+      connect() {
+        this.updateSelection()
+      }
+
+      filter() {
+        const query = this.hasInputTarget ? this.inputTarget.value.toLowerCase().trim() : ""
+        let visibleCount = 0
+
+        this.itemTargets.forEach((item) => {
+          const value = item.dataset.value?.toLowerCase() || item.textContent.toLowerCase()
+          const matches = query === "" || value.includes(query)
+          item.hidden = !matches
+          if (matches) visibleCount++
+        })
+
+        this.groupTargets.forEach((group) => {
+          const visibleItems = group.querySelectorAll('[data-shadcn--command-target="item"]:not([hidden])')
+          group.hidden = visibleItems.length === 0
+        })
+
+        if (this.hasEmptyTarget) {
+          this.emptyTarget.hidden = visibleCount > 0
+        }
+
+        this.selectedIndexValue = -1
+        this.updateSelection()
+      }
+
+      handleKeydown(event) {
+        const visibleItems = this.getVisibleItems()
+
+        switch (event.key) {
+          case "ArrowDown":
+            event.preventDefault()
+            this.selectedIndexValue = Math.min(this.selectedIndexValue + 1, visibleItems.length - 1)
+            this.updateSelection()
+            break
+          case "ArrowUp":
+            event.preventDefault()
+            this.selectedIndexValue = Math.max(this.selectedIndexValue - 1, 0)
+            this.updateSelection()
+            break
+          case "Enter":
+            event.preventDefault()
+            if (this.selectedIndexValue >= 0 && visibleItems[this.selectedIndexValue]) {
+              this.selectItem(visibleItems[this.selectedIndexValue])
+            }
+            break
+          case "Escape":
+            if (this.hasInputTarget && this.inputTarget.value) {
+              event.preventDefault()
+              this.inputTarget.value = ""
+              this.filter()
+            }
+            break
+        }
+      }
+
+      select(event) {
+        const item = event.currentTarget
+        if (item.dataset.disabled === "true") return
+        this.selectItem(item)
+      }
+
+      selectItem(item) {
+        if (!item || item.dataset.disabled === "true") return
+
+        const value = item.dataset.value || item.textContent.trim()
+
+        this.dispatch("select", {
+          detail: { value, item }
+        })
+
+        if (item.dataset.onSelect) {
+          new Function(item.dataset.onSelect)()
+        }
+      }
+
+      updateSelection() {
+        const visibleItems = this.getVisibleItems()
+
+        visibleItems.forEach((item, index) => {
+          const isSelected = index === this.selectedIndexValue
+          item.dataset.selected = isSelected
+          if (isSelected) {
+            item.scrollIntoView({ block: "nearest" })
+          }
+        })
+      }
+
+      getVisibleItems() {
+        return this.itemTargets.filter(
+          (item) => !item.hidden && item.dataset.disabled !== "true"
+        )
+      }
+
+      focusInput() {
+        if (this.hasInputTarget) {
+          this.inputTarget.focus()
+        }
+      }
+    })
+
+    // Command Dialog controller
+    application.register("shadcn--command-dialog", class extends Controller {
+      static targets = ["trigger", "template", "overlay", "content"]
+      static values = {
+        open: { type: Boolean, default: false },
+        shortcut: { type: String, default: "" }
+      }
+
+      connect() {
+        this.portal = null
+        this.previousActiveElement = null
+        this.boundHandleKeydown = this.handleKeydown.bind(this)
+        this.boundHandleShortcut = this.handleShortcut.bind(this)
+
+        if (this.shortcutValue) {
+          document.addEventListener("keydown", this.boundHandleShortcut)
+        }
+
+        if (this.openValue) {
+          this.open()
+        }
+      }
+
+      disconnect() {
+        this.close()
+        if (this.portal) {
+          this.portal.remove()
+        }
+        document.removeEventListener("keydown", this.boundHandleShortcut)
+      }
+
+      handleShortcut(event) {
+        if (!this.shortcutValue) return
+
+        const key = this.shortcutValue.toLowerCase()
+        if (event.key.toLowerCase() === key && (event.metaKey || event.ctrlKey)) {
+          event.preventDefault()
+          this.toggle()
+        }
+      }
+
+      open() {
+        if (this.openValue) return
+
+        this.previousActiveElement = document.activeElement
+        this.openValue = true
+
+        if (this.hasTemplateTarget && !this.portal) {
+          this.portal = document.createElement("div")
+          this.portal.className = "shadcn-command-dialog-portal"
+          this.portal.innerHTML = this.templateTarget.innerHTML
+          document.body.appendChild(this.portal)
+
+          this.portalOverlay = this.portal.querySelector('[data-shadcn--command-dialog-target="overlay"]')
+          this.portalContent = this.portal.querySelector('[data-shadcn--command-dialog-target="content"]')
+
+          if (this.portalOverlay) {
+            this.portalOverlay.addEventListener("click", () => this.close())
+          }
+        }
+
+        requestAnimationFrame(() => {
+          if (this.portalOverlay) {
+            this.portalOverlay.dataset.state = "open"
+            this.portalOverlay.removeAttribute("hidden")
+          }
+          if (this.portalContent) {
+            this.portalContent.dataset.state = "open"
+            this.portalContent.removeAttribute("hidden")
+          }
+
+          document.addEventListener("keydown", this.boundHandleKeydown)
+          this.focusInput()
+          document.body.style.overflow = "hidden"
+        })
+
+        this.dispatch("opened")
+      }
+
+      close() {
+        if (!this.openValue) return
+
+        this.openValue = false
+
+        if (this.portalOverlay) {
+          this.portalOverlay.dataset.state = "closed"
+        }
+        if (this.portalContent) {
+          this.portalContent.dataset.state = "closed"
+        }
+
+        document.removeEventListener("keydown", this.boundHandleKeydown)
+        document.body.style.overflow = ""
+
+        if (this.previousActiveElement) {
+          this.previousActiveElement.focus()
+        }
+
+        setTimeout(() => {
+          if (this.portal) {
+            this.portal.remove()
+            this.portal = null
+          }
+        }, 200)
+
+        this.dispatch("closed")
+      }
+
+      toggle() {
+        if (this.openValue) {
+          this.close()
+        } else {
+          this.open()
+        }
+      }
+
+      handleKeydown(event) {
+        if (event.key === "Escape") {
+          this.close()
+        }
+      }
+
+      focusInput() {
+        if (!this.portalContent) return
+
+        const input = this.portalContent.querySelector('input[data-shadcn--command-target="input"]')
+        if (input) {
+          setTimeout(() => input.focus(), 50)
+        }
+      }
+
+      openValueChanged() {
+        if (this.openValue) {
+          this.open()
+        } else {
+          this.close()
+        }
+      }
+    })
   </script>
   <style>
     <%= Shadcn::Rails.theme_css %>

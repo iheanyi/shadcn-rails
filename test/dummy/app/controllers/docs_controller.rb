@@ -208,6 +208,13 @@ class DocsController < ApplicationController
       has_stimulus: true,
       controller: "shadcn--calendar"
     },
+    "date-picker" => {
+      name: "Date Picker",
+      category: "Form Inputs",
+      description: "A date picker input with a button trigger that opens a calendar popover.",
+      has_stimulus: true,
+      controller: "shadcn--date-picker"
+    },
     "scroll-area" => {
       name: "Scroll Area",
       category: "Data Display",
