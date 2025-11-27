@@ -205,6 +205,9 @@ module Shadcn
         # Copy Ruby component
         copy_ruby_component(name, files[:component])
 
+        # Copy ERB template if it exists
+        copy_erb_template(name, files[:component])
+
         # Copy Stimulus controller if requested and exists
         if include_controllers? && files[:controller]
           copy_stimulus_controller(name, files[:controller])
@@ -220,6 +223,23 @@ module Shadcn
         else
           copy_file source_path, destination_path
           say "  create  #{filename}", :green
+        end
+      end
+
+      def copy_erb_template(name, ruby_filename)
+        erb_filename = ruby_filename.sub(/\.rb$/, ".html.erb")
+        source_path = gem_component_path(erb_filename)
+
+        # Only copy if the template exists
+        return unless File.exist?(source_path)
+
+        destination_path = File.join(options[:path], "shadcn", erb_filename)
+
+        if File.exist?(destination_path) && !options[:force]
+          say "  skip  #{erb_filename} (already exists, use --force to overwrite)", :yellow
+        else
+          copy_file source_path, destination_path
+          say "  create  #{erb_filename}", :green
         end
       end
 
