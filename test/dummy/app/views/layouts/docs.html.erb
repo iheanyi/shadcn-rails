@@ -1798,7 +1798,7 @@
 
     // Calendar controller
     Stimulus.register("shadcn--calendar", class extends Controller {
-      static targets = ["grid", "monthYear", "day", "hiddenInput"]
+      static targets = ["grid", "monthYear", "monthSelect", "yearSelect", "day", "hiddenInput"]
       static values = {
         month: String,
         selected: String
@@ -1820,6 +1820,18 @@
 
       nextMonth() {
         this.currentMonth.setMonth(this.currentMonth.getMonth() + 1)
+        this.render()
+      }
+
+      selectMonth(event) {
+        const month = parseInt(event.target.value, 10)
+        this.currentMonth.setMonth(month)
+        this.render()
+      }
+
+      selectYear(event) {
+        const year = parseInt(event.target.value, 10)
+        this.currentMonth.setFullYear(year)
         this.render()
       }
 
@@ -1849,6 +1861,14 @@
           const monthName = this.constructor.MONTHS[this.currentMonth.getMonth()]
           const year = this.currentMonth.getFullYear()
           this.monthYearTarget.textContent = `${monthName} ${year}`
+        }
+
+        if (this.hasMonthSelectTarget) {
+          this.monthSelectTarget.value = this.currentMonth.getMonth()
+        }
+
+        if (this.hasYearSelectTarget) {
+          this.yearSelectTarget.value = this.currentMonth.getFullYear()
         }
 
         if (this.hasGridTarget) {
@@ -2082,6 +2102,177 @@
       selectedValueChanged() {
         if (this.selectedValue) {
           this.selectedDate = new Date(this.selectedValue)
+        }
+      }
+    })
+
+    // Combobox controller
+    Stimulus.register("shadcn--combobox", class extends Controller {
+      static targets = ["trigger", "content", "input", "list", "item", "empty", "displayValue", "hiddenInput"]
+      static values = {
+        open: { type: Boolean, default: false },
+        value: { type: String, default: "" },
+        selectedIndex: { type: Number, default: -1 }
+      }
+
+      connect() {
+        this.boundHandleKeydown = this.handleKeydown.bind(this)
+      }
+
+      disconnect() {
+        document.removeEventListener("keydown", this.boundHandleKeydown)
+      }
+
+      toggle() {
+        if (this.openValue) {
+          this.close()
+        } else {
+          this.open()
+        }
+      }
+
+      open() {
+        if (this.openValue) return
+
+        this.openValue = true
+        this.contentTarget.hidden = false
+        this.contentTarget.dataset.state = "open"
+        this.triggerTarget.setAttribute("aria-expanded", "true")
+
+        requestAnimationFrame(() => {
+          if (this.hasInputTarget) {
+            this.inputTarget.focus()
+          }
+        })
+
+        document.addEventListener("keydown", this.boundHandleKeydown)
+        this.selectedIndexValue = -1
+        this.updateSelection()
+      }
+
+      close() {
+        if (!this.openValue) return
+
+        this.openValue = false
+        this.contentTarget.dataset.state = "closed"
+        this.triggerTarget.setAttribute("aria-expanded", "false")
+
+        if (this.hasInputTarget) {
+          this.inputTarget.value = ""
+          this.filter()
+        }
+
+        setTimeout(() => {
+          this.contentTarget.hidden = true
+        }, 150)
+
+        document.removeEventListener("keydown", this.boundHandleKeydown)
+      }
+
+      filter() {
+        const query = this.hasInputTarget ? this.inputTarget.value.toLowerCase().trim() : ""
+        let visibleCount = 0
+
+        this.itemTargets.forEach((item) => {
+          const label = item.dataset.label?.toLowerCase() || item.textContent.toLowerCase()
+          const value = item.dataset.value?.toLowerCase() || ""
+          const matches = query === "" || label.includes(query) || value.includes(query)
+          item.hidden = !matches
+          if (matches) visibleCount++
+        })
+
+        // Show/hide empty state - only show when there's a query AND no results
+        if (this.hasEmptyTarget) {
+          this.emptyTarget.hidden = query === "" || visibleCount > 0
+        }
+
+        this.selectedIndexValue = -1
+        this.updateSelection()
+      }
+
+      select(event) {
+        const item = event.currentTarget
+        const value = item.dataset.value
+        const label = item.dataset.label
+
+        this.valueValue = value
+
+        if (this.hasHiddenInputTarget) {
+          this.hiddenInputTarget.value = value
+        }
+
+        if (this.hasDisplayValueTarget) {
+          this.displayValueTarget.textContent = label
+          this.displayValueTarget.classList.remove("text-muted-foreground")
+        }
+
+        this.itemTargets.forEach((i) => {
+          const isSelected = i.dataset.value === value
+          i.dataset.selected = isSelected
+          const checkIcon = i.querySelector("svg")
+          if (checkIcon) {
+            if (isSelected) {
+              checkIcon.classList.remove("opacity-0")
+              checkIcon.classList.add("opacity-100")
+            } else {
+              checkIcon.classList.remove("opacity-100")
+              checkIcon.classList.add("opacity-0")
+            }
+          }
+        })
+
+        this.dispatch("change", { detail: { value, label } })
+        this.close()
+      }
+
+      handleKeydown(event) {
+        const visibleItems = this.getVisibleItems()
+
+        switch (event.key) {
+          case "ArrowDown":
+            event.preventDefault()
+            this.selectedIndexValue = Math.min(this.selectedIndexValue + 1, visibleItems.length - 1)
+            this.updateSelection()
+            break
+          case "ArrowUp":
+            event.preventDefault()
+            this.selectedIndexValue = Math.max(this.selectedIndexValue - 1, 0)
+            this.updateSelection()
+            break
+          case "Enter":
+            event.preventDefault()
+            if (this.selectedIndexValue >= 0 && visibleItems[this.selectedIndexValue]) {
+              visibleItems[this.selectedIndexValue].click()
+            }
+            break
+          case "Escape":
+            event.preventDefault()
+            this.close()
+            break
+        }
+      }
+
+      updateSelection() {
+        const visibleItems = this.getVisibleItems()
+
+        visibleItems.forEach((item, index) => {
+          if (index === this.selectedIndexValue) {
+            item.classList.add("bg-accent", "text-accent-foreground")
+            item.scrollIntoView({ block: "nearest" })
+          } else {
+            item.classList.remove("bg-accent", "text-accent-foreground")
+          }
+        })
+      }
+
+      getVisibleItems() {
+        return this.itemTargets.filter((item) => !item.hidden)
+      }
+
+      handleClickOutside(event) {
+        if (!this.openValue) return
+        if (!this.element.contains(event.target)) {
+          this.close()
         }
       }
     })

@@ -222,9 +222,10 @@ module Shadcn
     end
 
     def empty_state
+      # Always start hidden - will show only when user types and no results match
       content_tag(:div, @empty_text,
         class: "py-6 text-center text-sm text-muted-foreground",
-        hidden: @items.any?,
+        hidden: true,
         data: { "shadcn--combobox-target": "empty" }
       )
     end

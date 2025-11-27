@@ -5,7 +5,7 @@ import { Controller } from "@hotwired/stimulus"
  * Handles month navigation, date selection, and rendering
  */
 export default class extends Controller {
-  static targets = ["grid", "monthYear", "day", "hiddenInput"]
+  static targets = ["grid", "monthYear", "monthSelect", "yearSelect", "day", "hiddenInput"]
   static values = {
     month: String,
     selected: String
@@ -29,6 +29,18 @@ export default class extends Controller {
 
   nextMonth() {
     this.currentMonth.setMonth(this.currentMonth.getMonth() + 1)
+    this.render()
+  }
+
+  selectMonth(event) {
+    const month = parseInt(event.target.value, 10)
+    this.currentMonth.setMonth(month)
+    this.render()
+  }
+
+  selectYear(event) {
+    const year = parseInt(event.target.value, 10)
+    this.currentMonth.setFullYear(year)
     this.render()
   }
 
@@ -57,11 +69,21 @@ export default class extends Controller {
   }
 
   render() {
-    // Update month/year label
+    // Update month/year label (for backwards compatibility)
     if (this.hasMonthYearTarget) {
       const monthName = this.constructor.MONTHS[this.currentMonth.getMonth()]
       const year = this.currentMonth.getFullYear()
       this.monthYearTarget.textContent = `${monthName} ${year}`
+    }
+
+    // Update month select
+    if (this.hasMonthSelectTarget) {
+      this.monthSelectTarget.value = this.currentMonth.getMonth()
+    }
+
+    // Update year select
+    if (this.hasYearSelectTarget) {
+      this.yearSelectTarget.value = this.currentMonth.getFullYear()
     }
 
     // Render days grid

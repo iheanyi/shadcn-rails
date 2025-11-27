@@ -88,9 +88,9 @@ export default class extends Controller {
       if (matches) visibleCount++
     })
 
-    // Show/hide empty state
+    // Show/hide empty state - only show when there's a query AND no results
     if (this.hasEmptyTarget) {
-      this.emptyTarget.hidden = visibleCount > 0
+      this.emptyTarget.hidden = query === "" || visibleCount > 0
     }
 
     // Reset selection

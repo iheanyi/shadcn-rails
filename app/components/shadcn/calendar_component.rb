@@ -85,7 +85,7 @@ module Shadcn
       content_tag(:div, class: HEADER_CLASSES) do
         safe_join([
           prev_button,
-          month_year_label,
+          month_year_selectors,
           next_button
         ])
       end
@@ -111,12 +111,53 @@ module Shadcn
       )
     end
 
-    def month_year_label
-      content_tag(:div,
-        "#{MONTHS[@month.month - 1]} #{@month.year}",
-        class: MONTH_YEAR_CLASSES,
-        data: { "shadcn--calendar-target": "monthYear" }
-      )
+    def month_year_selectors
+      content_tag(:div, class: "flex items-center gap-1") do
+        safe_join([
+          month_select,
+          year_select
+        ])
+      end
+    end
+
+    def month_select
+      content_tag(:select,
+        class: cn(
+          "appearance-none bg-transparent text-sm font-medium cursor-pointer",
+          "hover:bg-accent hover:text-accent-foreground rounded px-2 py-1",
+          "focus:outline-none focus:ring-1 focus:ring-ring"
+        ),
+        data: {
+          "shadcn--calendar-target": "monthSelect",
+          action: "change->shadcn--calendar#selectMonth"
+        }
+      ) do
+        safe_join(MONTHS.each_with_index.map { |month, index|
+          content_tag(:option, month, value: index, selected: index == @month.month - 1)
+        })
+      end
+    end
+
+    def year_select
+      # Generate year range: current year -10 to +10
+      current_year = @month.year
+      year_range = (current_year - 10)..(current_year + 10)
+
+      content_tag(:select,
+        class: cn(
+          "appearance-none bg-transparent text-sm font-medium cursor-pointer",
+          "hover:bg-accent hover:text-accent-foreground rounded px-2 py-1",
+          "focus:outline-none focus:ring-1 focus:ring-ring"
+        ),
+        data: {
+          "shadcn--calendar-target": "yearSelect",
+          action: "change->shadcn--calendar#selectYear"
+        }
+      ) do
+        safe_join(year_range.map { |year|
+          content_tag(:option, year, value: year, selected: year == current_year)
+        })
+      end
     end
 
     def weekday_header
