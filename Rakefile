@@ -71,13 +71,7 @@ namespace :release do
 
   desc "Run all tests (Ruby and JavaScript)"
   task :test do
-    puts "Running Ruby tests..."
-    Rake::Task["test"].invoke
-
-    puts "\nRunning JavaScript tests..."
-    system("npm test") || abort("JavaScript tests failed")
-
-    puts "\n✓ All tests passed"
+    system("bin/test") || abort("Tests failed")
   end
 
   desc "Prepare for release (check versions, run tests, build packages)"

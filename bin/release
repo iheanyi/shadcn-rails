@@ -74,15 +74,8 @@ class Release
   def run_tests
     step "Running tests"
 
-    puts "  Running Ruby tests..."
-    _, success = run_command("bundle exec rake test", stream: true)
-    error "Ruby tests failed" unless success
-
-    puts "  Running JavaScript tests..."
-    _, success = run_command("npm test", stream: true)
-    error "JavaScript tests failed" unless success
-
-    success "All tests passed"
+    _, success = run_command("bin/test", stream: true)
+    error "Tests failed" unless success
   end
 
   def build_packages
