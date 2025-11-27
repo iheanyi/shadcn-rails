@@ -28,13 +28,19 @@ module Shadcn
     WEEKDAYS = %w[Su Mo Tu We Th Fr Sa].freeze
     MONTHS = %w[January February March April May June July August September October November December].freeze
 
-    # @param selected [Date, nil] Currently selected date
+    MODES = %i[single multiple range].freeze
+
+    # @param selected [Date, Array<Date>, nil] Currently selected date(s)
     # @param month [Date, nil] Month to display (defaults to current month)
     # @param min_date [Date, nil] Minimum selectable date
     # @param max_date [Date, nil] Maximum selectable date
     # @param name [String, nil] Form field name for hidden input
     # @param disabled_dates [Array<Date>] Specific dates that cannot be selected
+    # @param disabled_days_of_week [Array<Integer>] Days of week to disable (0=Sun, 6=Sat)
     # @param show_outside_days [Boolean] Whether to show days outside current month
+    # @param mode [Symbol] Selection mode: :single, :multiple, or :range
+    # @param required [Boolean] Whether a selection is required (prevents deselection)
+    # @param week_starts_on [Integer] First day of week (0=Sunday, 1=Monday, etc.)
     def initialize(
       selected: nil,
       month: nil,
@@ -42,17 +48,25 @@ module Shadcn
       max_date: nil,
       name: nil,
       disabled_dates: [],
+      disabled_days_of_week: [],
       show_outside_days: true,
+      mode: :single,
+      required: false,
+      week_starts_on: 0,
       **options
     )
       super(**options)
       @selected = selected
-      @month = month || selected || Date.today
+      @month = month || (selected.is_a?(Array) ? selected.first : selected) || Date.today
       @min_date = min_date
       @max_date = max_date
       @name = name
       @disabled_dates = disabled_dates
+      @disabled_days_of_week = disabled_days_of_week
       @show_outside_days = show_outside_days
+      @mode = mode.to_sym
+      @required = required
+      @week_starts_on = week_starts_on
     end
 
     def call
@@ -222,6 +236,7 @@ module Shadcn
       return true if @min_date && date < @min_date
       return true if @max_date && date > @max_date
       return true if @disabled_dates.include?(date)
+      return true if @disabled_days_of_week.include?(date.wday)
 
       false
     end
@@ -263,12 +278,42 @@ module Shadcn
         class: cn(CONTAINER_CLASSES, class_name),
         role: "grid",
         "aria-label": "Calendar",
-        data: {
-          controller: "shadcn--calendar",
-          "shadcn--calendar-month-value": @month.iso8601,
-          "shadcn--calendar-selected-value": @selected&.iso8601
-        }
+        data: stimulus_data
       }.merge(html_options).merge(build_data)
+    end
+
+    def stimulus_data
+      data = {
+        controller: "shadcn--calendar",
+        "shadcn--calendar-month-value": @month.iso8601,
+        "shadcn--calendar-selected-value": format_selected_value,
+        "shadcn--calendar-mode-value": @mode.to_s,
+        "shadcn--calendar-required-value": @required.to_s,
+        "shadcn--calendar-week-starts-on-value": @week_starts_on.to_s
+      }
+
+      # Add optional values only if present
+      data["shadcn--calendar-min-date-value"] = @min_date.iso8601 if @min_date
+      data["shadcn--calendar-max-date-value"] = @max_date.iso8601 if @max_date
+      data["shadcn--calendar-disabled-dates-value"] = format_disabled_dates if @disabled_dates.any?
+      data["shadcn--calendar-disabled-days-of-week-value"] = @disabled_days_of_week.join(",") if @disabled_days_of_week.any?
+
+      data
+    end
+
+    def format_selected_value
+      return nil unless @selected
+
+      case @selected
+      when Array
+        @selected.map(&:iso8601).join(",")
+      else
+        @selected.iso8601
+      end
+    end
+
+    def format_disabled_dates
+      @disabled_dates.map(&:iso8601).join(",")
     end
   end
 end
