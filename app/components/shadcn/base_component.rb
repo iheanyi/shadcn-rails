@@ -10,11 +10,15 @@ module Shadcn
     # Common attributes shared by all components
     attr_reader :class_name, :data, :html_options
 
-    # @param class_name [String, nil] Additional CSS classes
+    # @param class_name [String, nil] Additional CSS classes (preferred)
+    # @param class [String, nil] Alias for class_name (for Rails-like API)
     # @param data [Hash] Data attributes (will be prefixed with data-)
     # @param html_options [Hash] Additional HTML attributes
     def initialize(class_name: nil, data: {}, **html_options, &block)
-      @class_name = class_name
+      # Support both class: and class_name: for better Rails compatibility
+      # class_name takes precedence if both are provided
+      html_class = html_options.delete(:class)
+      @class_name = class_name || html_class
       @data = data
       @html_options = html_options
       @constructor_block = block
