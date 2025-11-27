@@ -37,7 +37,9 @@ class ContextMenuComponentTest < ViewComponent::TestCase
   def test_renders_with_menu_slot
     render_inline(Shadcn::ContextMenuComponent.new) do |menu|
       menu.with_trigger { "Trigger" }
-      menu.with_menu { "Menu content" }
+      menu.with_menu do |content|
+        content.with_item { "Menu content" }
+      end
     end
 
     # Menu content is rendered (may be hidden)
@@ -62,10 +64,12 @@ class ContextMenuComponentTest < ViewComponent::TestCase
   def test_renders_both_trigger_and_menu
     render_inline(Shadcn::ContextMenuComponent.new) do |menu|
       menu.with_trigger { "Right click area" }
-      menu.with_menu { "Content" }
+      menu.with_menu do |content|
+        content.with_item { "Menu Item" }
+      end
     end
 
     assert_selector "[data-shadcn--context-menu-target='trigger']"
-    assert_text "Content"
+    assert_text "Menu Item"
   end
 end
