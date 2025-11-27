@@ -3,11 +3,11 @@
 module Shadcn
   # Context Menu Item component
   class ContextMenuItemComponent < BaseComponent
-    BASE_CLASSES = "relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0"
+    BASE_CLASSES = "relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0"
 
     VARIANTS = {
       default: "",
-      destructive: "text-destructive focus:bg-destructive focus:text-destructive-foreground"
+      destructive: "text-destructive hover:bg-destructive hover:text-destructive-foreground focus:bg-destructive focus:text-destructive-foreground"
     }.freeze
 
     renders_one :shortcut, lambda { |**options|
@@ -53,6 +53,7 @@ module Shadcn
         tabindex: @disabled ? nil : "-1",
         href: @href,
         "data-disabled": @disabled ? "" : nil,
+        "data-shadcn--context-menu-target": "item",
         "data-action": "click->shadcn--context-menu#selectItem"
       }
       attrs.merge!(html_options)
