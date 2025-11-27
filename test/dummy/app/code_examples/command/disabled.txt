@@ -1,0 +1,10 @@
+<%= render Shadcn::CommandComponent.new do |command| %>
+  <% command.with_input(placeholder: "Type a command...") %>
+  <% command.with_list do |list| %>
+    <% list.with_group(heading: "Actions") do |group| %>
+      <% group.with_item(value: "new") { "New File" } %>
+      <% group.with_item(value: "copy") { "Copy" } %>
+      <% group.with_item(value: "delete", disabled: true) { "Delete (Disabled)" } %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,16 @@
+<%= render Shadcn::CommandComponent.new do |command| %>
+  <% command.with_input(placeholder: "Search...") %>
+  <% command.with_list do |list| %>
+    <% list.with_empty { "No results found." } %>
+    <% list.with_group(heading: "Applications") do |group| %>
+      <% group.with_item(value: "calendar") { "Calendar" } %>
+      <% group.with_item(value: "music") { "Music" } %>
+    <% end %>
+    <% list.with_separator %>
+    <% list.with_group(heading: "Settings") do |group| %>
+      <% group.with_item(value: "profile") { "Profile" } %>
+      <% group.with_item(value: "billing") { "Billing" } %>
+      <% group.with_item(value: "settings") { "Settings" } %>
+    <% end %>
+  <% end %>
+<% end %>

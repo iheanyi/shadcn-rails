@@ -6,7 +6,7 @@
 
 Reference: https://ui.shadcn.com/docs/components
 
-### ✅ Implemented Components (43/59)
+### ✅ Implemented Components (46/59)
 
 | Component | shadcn/ui Docs | Status |
 |-----------|----------------|--------|
@@ -20,6 +20,7 @@ Reference: https://ui.shadcn.com/docs/components
 | Button | [docs](https://ui.shadcn.com/docs/components/button) | ✅ Complete |
 | Button Group | N/A | ✅ Complete |
 | Card | [docs](https://ui.shadcn.com/docs/components/card) | ✅ Complete |
+| Command | [docs](https://ui.shadcn.com/docs/components/command) | ✅ Complete |
 | Checkbox | [docs](https://ui.shadcn.com/docs/components/checkbox) | ✅ Complete |
 | Collapsible | [docs](https://ui.shadcn.com/docs/components/collapsible) | ✅ Complete |
 | Dialog | [docs](https://ui.shadcn.com/docs/components/dialog) | ✅ Complete |
@@ -54,14 +55,13 @@ Reference: https://ui.shadcn.com/docs/components
 | Tooltip | [docs](https://ui.shadcn.com/docs/components/tooltip) | ✅ Complete |
 | Typography | N/A | ✅ Complete |
 
-### ❌ Missing Components (16/59)
+### ❌ Missing Components (13/59)
 
 | Component | shadcn/ui Docs | Priority | Complexity | Notes |
 |-----------|----------------|----------|------------|-------|
 | **High Priority** |
 | Calendar | [docs](https://ui.shadcn.com/docs/components/calendar) | High | High | Date selection, requires date library integration |
 | Combobox | [docs](https://ui.shadcn.com/docs/components/combobox) | High | High | Autocomplete select with search/filtering |
-| Command | [docs](https://ui.shadcn.com/docs/components/command) | High | High | Command palette (cmdk pattern) |
 | Data Table | [docs](https://ui.shadcn.com/docs/components/data-table) | High | High | Sortable, filterable data grid |
 | Date Picker | [docs](https://ui.shadcn.com/docs/components/date-picker) | High | High | Calendar + Popover composition |
 | Form | [docs](https://ui.shadcn.com/docs/components/form) | High | Medium | Form builder integration with Rails |
@@ -75,8 +75,13 @@ Reference: https://ui.shadcn.com/docs/components
 | Sonner | [docs](https://ui.shadcn.com/docs/components/sonner) | Medium | Low | Toast alternative (we have Toast) |
 | **Low Priority** |
 | Chart | [docs](https://ui.shadcn.com/docs/components/chart) | Low | High | Requires charting library |
-| Empty | [docs](https://ui.shadcn.com/docs/components/empty) | Low | Low | Empty state placeholder |
-| Item | [docs](https://ui.shadcn.com/docs/components/item) | Low | Low | Generic list item |
+
+### ✅ Recently Implemented
+| Component | Status | Notes |
+|-----------|--------|-------|
+| Empty | ✅ Complete | Empty state placeholder with media, title, description, and content slots |
+| Item | ✅ Complete | Flexible flex container with variants and subcomponents |
+| Command | ✅ Complete | Command palette with search, keyboard navigation, dialog variant |
 
 ### Priority Roadmap
 

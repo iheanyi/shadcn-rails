@@ -1,0 +1,11 @@
+<%= render Shadcn::CommandComponent.new do |command| %>
+  <% command.with_input(placeholder: "Type a command or search...") %>
+  <% command.with_list do |list| %>
+    <% list.with_empty { "No results found." } %>
+    <% list.with_group(heading: "Suggestions") do |group| %>
+      <% group.with_item(value: "calendar") { "Calendar" } %>
+      <% group.with_item(value: "search") { "Search Emoji" } %>
+      <% group.with_item(value: "calculator") { "Calculator" } %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -187,6 +187,13 @@ class DocsController < ApplicationController
       description: "A flexible flex container for displaying titles, descriptions, and actions.",
       has_stimulus: false
     },
+    "command" => {
+      name: "Command",
+      category: "Data Display",
+      description: "A command menu with search input, keyboard navigation, and item selection.",
+      has_stimulus: true,
+      controller: "shadcn--command"
+    },
     "scroll-area" => {
       name: "Scroll Area",
       category: "Data Display",

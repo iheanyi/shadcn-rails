@@ -25,9 +25,9 @@ module Shadcn
     CONTENT_CLASSES = "fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] shadow-lg"
     COMMAND_CLASSES = "[&_[data-shadcn--command-target='input']]:h-12"
 
-    # Trigger slot
-    renders_one :trigger, lambda { |**options|
-      content_tag(:div, content, data: { "shadcn--command-dialog-target": "trigger", action: "click->shadcn--command-dialog#open" }, **options)
+    # Trigger slot - simple wrapper that renders content
+    renders_one :trigger, lambda { |**options, &block|
+      content_tag(:div, data: { "shadcn--command-dialog-target": "trigger", action: "click->shadcn--command-dialog#open" }, **options, &block)
     }
 
     # Command slot

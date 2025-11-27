@@ -183,7 +183,8 @@ class CommandDialogComponentTest < ViewComponent::TestCase
       end
     end
 
-    assert_selector "template[data-shadcn--command-dialog-target='template']"
+    # Template elements are not visible in Capybara, check the raw HTML
+    assert_includes rendered_content, "data-shadcn--command-dialog-target=\"template\""
   end
 end
 
