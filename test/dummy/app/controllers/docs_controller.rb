@@ -398,6 +398,12 @@ class DocsController < ApplicationController
     @components_by_category = COMPONENTS.group_by { |_slug, meta| meta[:category] }
   end
 
+  def components
+    @components = COMPONENTS
+    @categories = CATEGORIES
+    @components_by_category = COMPONENTS.group_by { |_slug, meta| meta[:category] }
+  end
+
   def show
     @slug = params[:slug]
     @component = COMPONENTS[@slug]
