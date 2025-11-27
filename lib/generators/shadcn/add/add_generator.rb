@@ -8,7 +8,7 @@ module Shadcn
     # Generator for adding shadcn components to your application
     # Usage: rails generate shadcn:add button
     #        rails generate shadcn:add button card dialog
-    #        rails generate shadcn:add button --with-controllers
+    #        rails generate shadcn:add button --exclude-controllers
     class AddGenerator < ::Rails::Generators::Base
       source_root File.expand_path("templates", __dir__)
 
@@ -18,8 +18,10 @@ module Shadcn
         desc: "Add all available components"
       class_option :list, type: :boolean, default: false,
         desc: "List all available components"
-      class_option :with_controllers, type: :boolean, default: true,
-        desc: "Also copy the Stimulus controllers (default: true)"
+      class_option :include_controllers, type: :boolean, default: true,
+        desc: "Include Stimulus controllers (default: true)"
+      class_option :exclude_controllers, type: :boolean, default: false,
+        desc: "Exclude Stimulus controllers"
       class_option :force, type: :boolean, default: false,
         desc: "Overwrite existing files"
       class_option :path, type: :string, default: "app/components",
@@ -102,7 +104,7 @@ module Shadcn
         say ""
         say "Adding #{@components_to_add.length} component(s):", :green
         @components_to_add.each { |c| say "  - #{c}" }
-        if options[:with_controllers]
+        if include_controllers?
           controllers = @components_to_add.count { |c| COMPONENT_FILES[c][:controller] }
           say ""
           say "Including #{controllers} Stimulus controller(s)", :cyan if controllers > 0
@@ -124,14 +126,14 @@ module Shadcn
         say ""
         say "Components are now in your application:", :yellow
         say "  - Ruby components: #{options[:path]}/shadcn/"
-        if options[:with_controllers]
+        if include_controllers?
           say "  - Stimulus controllers: app/javascript/controllers/shadcn/"
         end
         say ""
         say "These local files will take precedence over the gem's components."
         say "You can now customize them as needed."
         say ""
-        if options[:with_controllers]
+        if include_controllers?
           say "Note: Register the controllers in your Stimulus application:", :cyan
           say ""
           say "  // In app/javascript/controllers/index.js"
@@ -204,7 +206,7 @@ module Shadcn
         copy_ruby_component(name, files[:component])
 
         # Copy Stimulus controller if requested and exists
-        if options[:with_controllers] && files[:controller]
+        if include_controllers? && files[:controller]
           copy_stimulus_controller(name, files[:controller])
         end
       end
@@ -247,6 +249,10 @@ module Shadcn
 
       def gem_root
         @gem_root ||= File.expand_path("../../../../..", __FILE__)
+      end
+
+      def include_controllers?
+        options[:include_controllers] && !options[:exclude_controllers]
       end
     end
   end

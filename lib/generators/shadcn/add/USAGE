@@ -7,7 +7,7 @@ Description:
 Examples:
     rails generate shadcn:add button
     rails generate shadcn:add button card dialog
-    rails generate shadcn:add dialog --no-with-controllers
+    rails generate shadcn:add dialog --exclude-controllers
     rails generate shadcn:add --all
     rails generate shadcn:add --list
 
@@ -16,9 +16,9 @@ Examples:
         app/javascript/controllers/shadcn/dialog_controller.js (if applicable)
 
 Options:
-    --list              List all available components
-    --all               Add all available components
-    --with-controllers  Include Stimulus controllers (default: true)
-    --no-with-controllers  Skip Stimulus controllers
-    --force             Overwrite existing files
-    --path=PATH         Path for components (default: app/components)
+    --list                  List all available components
+    --all                   Add all available components
+    --include-controllers   Include Stimulus controllers (default: true)
+    --exclude-controllers   Exclude Stimulus controllers
+    --force                 Overwrite existing files
+    --path=PATH             Path for components (default: app/components)
