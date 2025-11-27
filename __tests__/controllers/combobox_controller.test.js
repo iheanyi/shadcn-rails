@@ -26,6 +26,7 @@ describe("ComboboxController", () => {
       open = false,
       value = "",
       selectedIndex = -1,
+      debounceWait = 0, // Default to 0 for tests (no debounce delay)
       items = [
         { value: "react", label: "React" },
         { value: "vue", label: "Vue" },
@@ -57,6 +58,7 @@ describe("ComboboxController", () => {
         data-shadcn--combobox-open-value="${open}"
         data-shadcn--combobox-value-value="${value}"
         data-shadcn--combobox-selected-index-value="${selectedIndex}"
+        data-shadcn--combobox-debounce-wait-value="${debounceWait}"
       >
         <button
           data-shadcn--combobox-target="trigger"
@@ -293,9 +295,15 @@ describe("ComboboxController", () => {
       controller = setup.controller
     })
 
-    it("filters items based on input value", () => {
-      controller.inputTarget.value = "react"
+    // Helper to run filter and wait for debounce (debounceWait=0 still uses setTimeout)
+    async function filterAndWait() {
       controller.filter()
+      await new Promise(resolve => setTimeout(resolve, 0))
+    }
+
+    it("filters items based on input value", async () => {
+      controller.inputTarget.value = "react"
+      await filterAndWait()
 
       expect(controller.itemTargets[0].style.display).toBe("") // React - visible
       expect(controller.itemTargets[1].style.display).toBe("none") // Vue - hidden
@@ -303,16 +311,16 @@ describe("ComboboxController", () => {
       expect(controller.itemTargets[3].style.display).toBe("none") // Svelte - hidden
     })
 
-    it("is case insensitive when filtering", () => {
+    it("is case insensitive when filtering", async () => {
       controller.inputTarget.value = "REACT"
-      controller.filter()
+      await filterAndWait()
 
       expect(controller.itemTargets[0].style.display).toBe("") // React matches
     })
 
-    it("filters by label attribute", () => {
+    it("filters by label attribute", async () => {
       controller.inputTarget.value = "Vue"
-      controller.filter()
+      await filterAndWait()
 
       expect(controller.itemTargets[0].style.display).toBe("none")
       expect(controller.itemTargets[1].style.display).toBe("") // Vue visible
@@ -320,9 +328,9 @@ describe("ComboboxController", () => {
       expect(controller.itemTargets[3].style.display).toBe("none")
     })
 
-    it("filters by value attribute", () => {
+    it("filters by value attribute", async () => {
       controller.inputTarget.value = "angular"
-      controller.filter()
+      await filterAndWait()
 
       expect(controller.itemTargets[0].style.display).toBe("none")
       expect(controller.itemTargets[1].style.display).toBe("none")
@@ -330,63 +338,63 @@ describe("ComboboxController", () => {
       expect(controller.itemTargets[3].style.display).toBe("none")
     })
 
-    it("shows all items when input is empty", () => {
+    it("shows all items when input is empty", async () => {
       controller.inputTarget.value = "react"
-      controller.filter()
+      await filterAndWait()
 
       controller.inputTarget.value = ""
-      controller.filter()
+      await filterAndWait()
 
       controller.itemTargets.forEach(item => {
         expect(item.style.display).toBe("")
       })
     })
 
-    it("shows empty state when no results match query", () => {
+    it("shows empty state when no results match query", async () => {
       controller.inputTarget.value = "nonexistent"
-      controller.filter()
+      await filterAndWait()
 
       expect(controller.emptyTarget.hidden).toBe(false)
     })
 
-    it("hides empty state when results exist", () => {
+    it("hides empty state when results exist", async () => {
       controller.emptyTarget.hidden = false
 
       controller.inputTarget.value = "react"
-      controller.filter()
+      await filterAndWait()
 
       expect(controller.emptyTarget.hidden).toBe(true)
     })
 
-    it("hides empty state when query is empty", () => {
+    it("hides empty state when query is empty", async () => {
       controller.emptyTarget.hidden = false
 
       controller.inputTarget.value = ""
-      controller.filter()
+      await filterAndWait()
 
       expect(controller.emptyTarget.hidden).toBe(true)
     })
 
-    it("resets selected index after filtering", () => {
+    it("resets selected index after filtering", async () => {
       controller.selectedIndexValue = 2
 
       controller.inputTarget.value = "react"
-      controller.filter()
+      await filterAndWait()
 
       expect(controller.selectedIndexValue).toBe(-1)
     })
 
-    it("handles partial matches", () => {
+    it("handles partial matches", async () => {
       controller.inputTarget.value = "vue"
-      controller.filter()
+      await filterAndWait()
 
       expect(controller.itemTargets[1].style.display).toBe("") // Vue
       expect(controller.itemTargets[3].style.display).toBe("none") // Svelte (contains 'v' but not 'vue')
     })
 
-    it("trims whitespace from query", () => {
+    it("trims whitespace from query", async () => {
       controller.inputTarget.value = "  react  "
-      controller.filter()
+      await filterAndWait()
 
       expect(controller.itemTargets[0].style.display).toBe("") // React visible
     })
@@ -520,11 +528,12 @@ describe("ComboboxController", () => {
       controller = setup.controller
     })
 
-    it("maintains selected value after filtering", () => {
+    it("maintains selected value after filtering", async () => {
       click(controller.itemTargets[0]) // Select React
 
       controller.inputTarget.value = "vue"
       controller.filter()
+      await new Promise(resolve => setTimeout(resolve, 0)) // Allow debounce to execute
 
       expect(controller.valueValue).toBe("react")
     })
@@ -680,9 +689,10 @@ describe("ComboboxController", () => {
       spy.mockRestore()
     })
 
-    it("navigates only through visible items after filtering", () => {
+    it("navigates only through visible items after filtering", async () => {
       controller.inputTarget.value = "react"
       controller.filter()
+      await new Promise(resolve => setTimeout(resolve, 0)) // Allow debounce to execute
 
       keydown(document, "ArrowDown")
 
@@ -861,8 +871,9 @@ describe("ComboboxController", () => {
 
       controller.inputTarget.value = "nonexistent"
 
-      // Should not throw error
+      // Should not throw error (filter is debounced, but should still not throw)
       expect(() => controller.filter()).not.toThrow()
+      await new Promise(resolve => setTimeout(resolve, 0)) // Allow debounce to execute
     })
 
     it("handles combobox without display value target", async () => {
@@ -925,15 +936,16 @@ describe("ComboboxController", () => {
 
       expect(controller.itemTargets.length).toBe(0)
 
-      // Should not throw errors
+      // Should not throw errors (filter is debounced)
       expect(() => controller.filter()).not.toThrow()
+      await new Promise(resolve => setTimeout(resolve, 0)) // Allow debounce to execute
       expect(() => keydown(document, "ArrowDown")).not.toThrow()
       expect(() => controller.updateSelection()).not.toThrow()
     })
 
-    it("handles item without label attribute falling back to textContent", () => {
+    it("handles item without label attribute falling back to textContent", async () => {
       const html = `
-        <div data-controller="shadcn--combobox">
+        <div data-controller="shadcn--combobox" data-shadcn--combobox-debounce-wait-value="0">
           <button data-shadcn--combobox-target="trigger"></button>
           <div data-shadcn--combobox-target="content" hidden>
             <input data-shadcn--combobox-target="input" type="text" data-action="input->shadcn--combobox#filter">
@@ -944,16 +956,16 @@ describe("ComboboxController", () => {
         </div>
       `
 
-      return setupController(ComboboxController, html, "shadcn--combobox").then(setup => {
-        application = setup.application
-        element = setup.element
-        controller = setup.controller
+      const setup = await setupController(ComboboxController, html, "shadcn--combobox")
+      application = setup.application
+      element = setup.element
+      controller = setup.controller
 
-        controller.inputTarget.value = "text"
-        controller.filter()
+      controller.inputTarget.value = "text"
+      controller.filter()
+      await new Promise(resolve => setTimeout(resolve, 0)) // Allow debounce to execute
 
-        expect(controller.itemTargets[0].style.display).toBe("")
-      })
+      expect(controller.itemTargets[0].style.display).toBe("")
     })
   })
 })
