@@ -6,7 +6,7 @@
 
 Reference: https://ui.shadcn.com/docs/components
 
-### ✅ Implemented Components (47/59)
+### ✅ Implemented Components (57/59)
 
 | Component | shadcn/ui Docs | Status |
 |-----------|----------------|--------|
@@ -19,29 +19,40 @@ Reference: https://ui.shadcn.com/docs/components
 | Breadcrumb | [docs](https://ui.shadcn.com/docs/components/breadcrumb) | ✅ Complete |
 | Button | [docs](https://ui.shadcn.com/docs/components/button) | ✅ Complete |
 | Button Group | N/A | ✅ Complete |
+| Calendar | [docs](https://ui.shadcn.com/docs/components/calendar) | ✅ Complete |
 | Card | [docs](https://ui.shadcn.com/docs/components/card) | ✅ Complete |
-| Command | [docs](https://ui.shadcn.com/docs/components/command) | ✅ Complete |
+| Carousel | [docs](https://ui.shadcn.com/docs/components/carousel) | ✅ Complete (needs docs page) |
 | Checkbox | [docs](https://ui.shadcn.com/docs/components/checkbox) | ✅ Complete |
 | Collapsible | [docs](https://ui.shadcn.com/docs/components/collapsible) | ✅ Complete |
+| Combobox | [docs](https://ui.shadcn.com/docs/components/combobox) | ✅ Complete |
+| Command | [docs](https://ui.shadcn.com/docs/components/command) | ✅ Complete |
+| Context Menu | [docs](https://ui.shadcn.com/docs/components/context-menu) | ✅ Complete |
+| Date Picker | [docs](https://ui.shadcn.com/docs/components/date-picker) | ✅ Complete |
 | Dialog | [docs](https://ui.shadcn.com/docs/components/dialog) | ✅ Complete |
 | Drawer | [docs](https://ui.shadcn.com/docs/components/drawer) | ✅ Complete (animations added) |
 | Dropdown Menu | [docs](https://ui.shadcn.com/docs/components/dropdown-menu) | ✅ Complete |
+| Empty | N/A | ✅ Complete |
 | Field | N/A | ✅ Complete |
 | Hover Card | [docs](https://ui.shadcn.com/docs/components/hover-card) | ✅ Complete |
 | Input | [docs](https://ui.shadcn.com/docs/components/input) | ✅ Complete |
 | Input Group | N/A | ✅ Complete |
 | Input OTP | [docs](https://ui.shadcn.com/docs/components/input-otp) | ✅ Complete |
+| Item | N/A | ✅ Complete |
 | Kbd | N/A | ✅ Complete |
 | Label | [docs](https://ui.shadcn.com/docs/components/label) | ✅ Complete |
+| Menubar | [docs](https://ui.shadcn.com/docs/components/menubar) | ✅ Complete |
 | Native Select | N/A | ✅ Complete |
+| Navigation Menu | [docs](https://ui.shadcn.com/docs/components/navigation-menu) | ✅ Complete |
 | Pagination | [docs](https://ui.shadcn.com/docs/components/pagination) | ✅ Complete |
 | Popover | [docs](https://ui.shadcn.com/docs/components/popover) | ✅ Complete |
 | Progress | [docs](https://ui.shadcn.com/docs/components/progress) | ✅ Complete |
 | Radio Group | [docs](https://ui.shadcn.com/docs/components/radio-group) | ✅ Complete |
+| Resizable | [docs](https://ui.shadcn.com/docs/components/resizable) | ✅ Complete |
 | Scroll Area | [docs](https://ui.shadcn.com/docs/components/scroll-area) | ✅ Complete |
 | Select | [docs](https://ui.shadcn.com/docs/components/select) | ✅ Complete |
 | Separator | [docs](https://ui.shadcn.com/docs/components/separator) | ✅ Complete |
 | Sheet | [docs](https://ui.shadcn.com/docs/components/sheet) | ✅ Complete |
+| Sidebar | [docs](https://ui.shadcn.com/docs/components/sidebar) | ✅ Complete (needs docs page) |
 | Skeleton | [docs](https://ui.shadcn.com/docs/components/skeleton) | ✅ Complete |
 | Slider | [docs](https://ui.shadcn.com/docs/components/slider) | ✅ Complete |
 | Spinner | N/A | ✅ Complete |
@@ -55,33 +66,32 @@ Reference: https://ui.shadcn.com/docs/components
 | Tooltip | [docs](https://ui.shadcn.com/docs/components/tooltip) | ✅ Complete |
 | Typography | N/A | ✅ Complete |
 
-### ❌ Missing Components (12/59)
+### ❌ Missing Components (2/59)
 
 | Component | shadcn/ui Docs | Priority | Complexity | Notes |
 |-----------|----------------|----------|------------|-------|
-| **High Priority** |
-| Calendar | [docs](https://ui.shadcn.com/docs/components/calendar) | High | High | Date selection, requires date library integration |
-| Data Table | [docs](https://ui.shadcn.com/docs/components/data-table) | High | High | Sortable, filterable data grid |
-| Date Picker | [docs](https://ui.shadcn.com/docs/components/date-picker) | High | High | Calendar + Popover composition |
-| Form | [docs](https://ui.shadcn.com/docs/components/form) | High | Medium | Form builder integration with Rails |
-| Navigation Menu | [docs](https://ui.shadcn.com/docs/components/navigation-menu) | High | Medium | Site navigation with dropdowns |
-| Sidebar | [docs](https://ui.shadcn.com/docs/components/sidebar) | High | Medium | App sidebar layout pattern |
-| **Medium Priority** |
-| Carousel | [docs](https://ui.shadcn.com/docs/components/carousel) | Medium | Medium | Image/content slider |
-| Context Menu | [docs](https://ui.shadcn.com/docs/components/context-menu) | Medium | Medium | Right-click menu |
-| Menubar | [docs](https://ui.shadcn.com/docs/components/menubar) | Medium | Medium | Desktop menu bar |
-| Resizable | [docs](https://ui.shadcn.com/docs/components/resizable) | Medium | Medium | Resizable panels |
-| Sonner | [docs](https://ui.shadcn.com/docs/components/sonner) | Medium | Low | Toast alternative (we have Toast) |
-| **Low Priority** |
+| Data Table | [docs](https://ui.shadcn.com/docs/components/data-table) | Medium | High | Sortable, filterable data grid |
 | Chart | [docs](https://ui.shadcn.com/docs/components/chart) | Low | High | Requires charting library |
+
+**Skipped Components:**
+- **Sonner** - We have Toast component which serves the same purpose
+- **Form** - Rails has excellent form helpers; using Field component pattern instead
 
 ### ✅ Recently Implemented
 | Component | Status | Notes |
 |-----------|--------|-------|
-| Empty | ✅ Complete | Empty state placeholder with media, title, description, and content slots |
-| Item | ✅ Complete | Flexible flex container with variants and subcomponents |
+| Calendar | ✅ Complete | Date selection grid with full keyboard navigation |
+| Date Picker | ✅ Complete | Calendar + Popover composition |
+| Carousel | ✅ Complete | Image/content slider with navigation |
+| Context Menu | ✅ Complete | Right-click menu |
+| Menubar | ✅ Complete | Desktop menu bar with submenus |
+| Navigation Menu | ✅ Complete | Site navigation with dropdowns |
+| Resizable | ✅ Complete | Draggable resizable panels |
+| Sidebar | ✅ Complete | App sidebar layout with 20+ subcomponents |
 | Command | ✅ Complete | Command palette with search, keyboard navigation, dialog variant |
-| Combobox | ✅ Complete | Autocomplete input with searchable dropdown, form integration, keyboard navigation |
+| Combobox | ✅ Complete | Autocomplete input with searchable dropdown, form integration |
+| Empty | ✅ Complete | Empty state placeholder with media, title, description slots |
+| Item | ✅ Complete | Flexible flex container with variants and subcomponents |
 
 ### Priority Roadmap
 
