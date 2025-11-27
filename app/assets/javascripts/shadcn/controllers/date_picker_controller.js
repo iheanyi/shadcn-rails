@@ -102,7 +102,8 @@ export default class extends Controller {
       case "long":
         return date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })
       case "iso":
-        return date.toISOString().split('T')[0]
+        // Use local date components to avoid timezone issues
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
       case "medium":
       default:
         return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
@@ -151,7 +152,8 @@ export default class extends Controller {
       const isSelected = this.selectedDate &&
         currentDate.toDateString() === this.selectedDate.toDateString()
 
-      const dateStr = currentDate.toISOString().split("T")[0]
+      // Use local date components to avoid timezone issues with toISOString()
+      const dateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`
 
       let classes = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center rounded-md cursor-pointer hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-1 focus:ring-ring"
 

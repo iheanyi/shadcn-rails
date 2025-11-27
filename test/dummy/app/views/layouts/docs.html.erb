@@ -1901,7 +1901,8 @@
           const isSelected = this.selectedDate &&
             currentDate.toDateString() === this.selectedDate.toDateString()
 
-          const dateStr = currentDate.toISOString().split("T")[0]
+          // Use local date components to avoid timezone issues with toISOString()
+          const dateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`
 
           let classes = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center rounded-md cursor-pointer hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-1 focus:ring-ring"
 
@@ -2027,7 +2028,8 @@
           case "long":
             return date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })
           case "iso":
-            return date.toISOString().split('T')[0]
+            // Use local date components to avoid timezone issues
+            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
           case "medium":
           default:
             return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
@@ -2071,7 +2073,8 @@
           const isSelected = this.selectedDate &&
             currentDate.toDateString() === this.selectedDate.toDateString()
 
-          const dateStr = currentDate.toISOString().split("T")[0]
+          // Use local date components to avoid timezone issues with toISOString()
+          const dateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`
 
           let classes = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center rounded-md cursor-pointer hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-1 focus:ring-ring"
 
@@ -2157,8 +2160,8 @@
         this.contentTarget.dataset.state = "closed"
         this.triggerTarget.setAttribute("aria-expanded", "false")
 
-        // Hide after animation, then reset filter state
-        setTimeout(() => {
+        // Hide after animation completes, then reset filter state
+        const hideAndReset = () => {
           this.contentTarget.hidden = true
           // Reset search and filter state after hiding to avoid flash
           if (this.hasInputTarget) {
@@ -2170,10 +2173,26 @@
           })
           // Hide empty state
           if (this.hasEmptyTarget) {
-            this.emptyTarget.style.display = "none"
+            this.emptyTarget.hidden = true
           }
-        }, 150)
+        }
 
+        // Listen for animation end, with fallback timeout
+        const onAnimationEnd = () => {
+          this.contentTarget.removeEventListener("animationend", onAnimationEnd)
+          hideAndReset()
+        }
+        this.contentTarget.addEventListener("animationend", onAnimationEnd)
+
+        // Fallback in case animation doesn't fire (e.g., no animation defined)
+        setTimeout(() => {
+          this.contentTarget.removeEventListener("animationend", onAnimationEnd)
+          if (!this.contentTarget.hidden) {
+            hideAndReset()
+          }
+        }, 200)
+
+        // Remove keyboard listener
         document.removeEventListener("keydown", this.boundHandleKeydown)
       }
 
@@ -2192,7 +2211,8 @@
 
         // Show/hide empty state - only show when there's a query AND no results
         if (this.hasEmptyTarget) {
-          this.emptyTarget.style.display = (query === "" || visibleCount > 0) ? "none" : ""
+          const shouldHide = query === "" || visibleCount > 0
+          this.emptyTarget.hidden = shouldHide
         }
 
         this.selectedIndexValue = -1

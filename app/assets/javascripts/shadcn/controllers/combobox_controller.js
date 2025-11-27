@@ -58,8 +58,8 @@ export default class extends Controller {
     this.contentTarget.dataset.state = "closed"
     this.triggerTarget.setAttribute("aria-expanded", "false")
 
-    // Hide after animation, then reset filter state
-    setTimeout(() => {
+    // Hide after animation completes, then reset filter state
+    const hideAndReset = () => {
       this.contentTarget.hidden = true
       // Reset search and filter state after hiding to avoid flash
       if (this.hasInputTarget) {
@@ -71,9 +71,24 @@ export default class extends Controller {
       })
       // Hide empty state
       if (this.hasEmptyTarget) {
-        this.emptyTarget.style.display = "none"
+        this.emptyTarget.hidden = true
       }
-    }, 150)
+    }
+
+    // Listen for animation end, with fallback timeout
+    const onAnimationEnd = () => {
+      this.contentTarget.removeEventListener("animationend", onAnimationEnd)
+      hideAndReset()
+    }
+    this.contentTarget.addEventListener("animationend", onAnimationEnd)
+
+    // Fallback in case animation doesn't fire (e.g., no animation defined)
+    setTimeout(() => {
+      this.contentTarget.removeEventListener("animationend", onAnimationEnd)
+      if (!this.contentTarget.hidden) {
+        hideAndReset()
+      }
+    }, 200)
 
     // Remove keyboard listener
     document.removeEventListener("keydown", this.boundHandleKeydown)
@@ -97,7 +112,8 @@ export default class extends Controller {
 
     // Show/hide empty state - only show when there's a query AND no results
     if (this.hasEmptyTarget) {
-      this.emptyTarget.style.display = (query === "" || visibleCount > 0) ? "none" : ""
+      const shouldHide = query === "" || visibleCount > 0
+      this.emptyTarget.hidden = shouldHide
     }
 
     // Reset selection
