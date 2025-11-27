@@ -39,6 +39,14 @@ RUN sed -i 's|path: "../.."|path: "/shadcn-rails"|' Gemfile && \
     bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
 
+# Install npm dependencies and build JavaScript with esbuild
+# Note: The esbuild alias in package.json uses relative path ../../app/assets/javascripts/shadcn/index.js
+# which works locally but in Docker we need to use the absolute gem path
+RUN npm ci && \
+    npx esbuild app/javascript/application.js --bundle --sourcemap \
+    --outdir=app/assets/builds --public-path=/assets --loader:.js=jsx \
+    --alias:shadcn-rails=/shadcn-rails/app/assets/javascripts/shadcn/index.js
+
 # Precompile assets
 RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
 
