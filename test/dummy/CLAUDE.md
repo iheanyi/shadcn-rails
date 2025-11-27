@@ -83,7 +83,7 @@ app/
      <!-- Installation -->
      <div id="installation" class="space-y-4">
        <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
-       <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component component_name" %>
+       <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:add component_name" %>
      </div>
 
      <!-- Usage -->
@@ -155,7 +155,7 @@ Wraps a live component demo in a styled card:
 Displays inline code with syntax highlighting:
 
 ```erb
-<%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component button" %>
+<%= render "docs/code_example", language: "bash", code: "rails generate shadcn:add button" %>
 ```
 
 ### `render "docs/props_table"`

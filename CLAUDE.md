@@ -170,7 +170,7 @@ rails generate shadcn:add button card dialog
 rails generate shadcn:add --all
 
 # Add without Stimulus controllers
-rails generate shadcn:add dialog --no-with-controllers
+rails generate shadcn:add dialog --exclude-controllers
 ```
 
 ### Tests
