@@ -228,6 +228,58 @@
       <% end %>
       <%= erb_example("context_menu/disabled") %>
     </div>
+
+    <!-- With Checkbox Items -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Checkbox Items</h3>
+      <p class="text-sm text-muted-foreground">Use checkbox items for toggleable options within the context menu.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ContextMenuComponent.new do |menu| %>
+          <% menu.with_trigger do %>
+            <div class="flex h-[100px] w-[200px] items-center justify-center rounded-md border border-dashed text-sm">
+              Right click
+            </div>
+          <% end %>
+          <% menu.with_menu do |content| %>
+            <% content.with_label { "View Options" } %>
+            <% content.with_separator %>
+            <% content.with_checkbox_item(checked: true) do |item| %>
+              Show Toolbar
+              <% item.with_shortcut { "⌘T" } %>
+            <% end %>
+            <% content.with_checkbox_item(checked: true) { "Show Sidebar" } %>
+            <% content.with_checkbox_item(checked: false) { "Show Status Bar" } %>
+            <% content.with_separator %>
+            <% content.with_checkbox_item(checked: false) { "Full Screen" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("context_menu/checkbox_items") %>
+    </div>
+
+    <!-- With Radio Items -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Radio Items</h3>
+      <p class="text-sm text-muted-foreground">Use radio groups for mutually exclusive options.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ContextMenuComponent.new do |menu| %>
+          <% menu.with_trigger do %>
+            <div class="flex h-[100px] w-[200px] items-center justify-center rounded-md border border-dashed text-sm">
+              Right click
+            </div>
+          <% end %>
+          <% menu.with_menu do |content| %>
+            <% content.with_label { "People" } %>
+            <% content.with_separator %>
+            <% content.with_radio_group(value: "pedro") do |group| %>
+              <% group.with_item(value: "pedro", checked: true) { "Pedro Duarte" } %>
+              <% group.with_item(value: "colm") { "Colm Tuite" } %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("context_menu/radio_items") %>
+    </div>
   </div>
 
   <!-- API Reference -->
@@ -274,6 +326,16 @@
             <td class="p-4 align-middle font-mono text-sm">with_item</td>
             <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">href:</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">variant:</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">disabled:</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">inset:</code></td>
             <td class="p-4 align-middle text-muted-foreground">Menu item (can be a link or div)</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_checkbox_item</td>
+            <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">checked:</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">disabled:</code></td>
+            <td class="p-4 align-middle text-muted-foreground">Toggleable checkbox menu item</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_radio_group</td>
+            <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">value:</code></td>
+            <td class="p-4 align-middle text-muted-foreground">Group of mutually exclusive radio items</td>
           </tr>
           <tr class="border-b transition-colors hover:bg-muted/50">
             <td class="p-4 align-middle font-mono text-sm">with_label</td>
