@@ -40,18 +40,10 @@ module Shadcn
       TableFooterComponent.new(**options)
     }
 
-    def call
-      content_tag(:div, table_element, class: "relative w-full overflow-auto")
-    end
-
     private
 
-    def table_element
-      content_tag(:table, table_content, class: merge_classes(BASE_CLASSES))
-    end
-
-    def table_content
-      safe_join([caption, header, body, footer, content].compact)
+    def table_classes
+      merge_classes(BASE_CLASSES)
     end
   end
 end

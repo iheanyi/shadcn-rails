@@ -27,14 +27,10 @@ module Shadcn
       @indeterminate = indeterminate
     end
 
-    def call
-      content_tag(:div, progress_indicator, progress_attributes)
-    end
-
     private
 
-    def progress_indicator
-      content_tag(:div, "", indicator_attributes)
+    def progress_classes
+      merge_classes(BASE_CLASSES)
     end
 
     def progress_percentage
@@ -50,28 +46,12 @@ module Shadcn
       end
     end
 
-    def progress_attributes
-      attrs = {
-        class: merge_classes(BASE_CLASSES),
-        role: "progressbar",
-        "aria-valuemin": 0,
-        "aria-valuemax": @max,
-        "aria-valuenow": @indeterminate ? nil : @value,
-        "data-state": @indeterminate ? "indeterminate" : "determinate",
-        "data-value": @value,
-        "data-max": @max
-      }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
+    def indicator_classes
+      cn(INDICATOR_CLASSES, @indeterminate ? "animate-progress-indeterminate" : "")
     end
 
-    def indicator_attributes
-      {
-        class: cn(INDICATOR_CLASSES, @indeterminate ? "animate-progress-indeterminate" : ""),
-        style: indicator_style,
-        "data-state": @indeterminate ? "indeterminate" : "determinate"
-      }
+    def data_state
+      @indeterminate ? "indeterminate" : "determinate"
     end
   end
 end

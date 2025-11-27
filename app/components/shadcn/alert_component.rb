@@ -48,28 +48,10 @@ module Shadcn
       @variant = variant.to_sym
     end
 
-    def call
-      content_tag(:div, alert_content, alert_attributes)
-    end
-
     private
-
-    def alert_content
-      safe_join([icon, title, description, content].compact)
-    end
 
     def alert_classes
       cn(BASE_CLASSES, VARIANTS[@variant], class_name)
-    end
-
-    def alert_attributes
-      attrs = {
-        class: alert_classes,
-        role: "alert"
-      }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
     end
   end
 end

@@ -55,30 +55,14 @@ module Shadcn
       @maxlength = maxlength
     end
 
-    def call
-      content_tag(:textarea, @value || content, textarea_attributes)
-    end
-
     private
 
-    def textarea_attributes
-      attrs = {
-        name: @name,
-        id: @id,
-        placeholder: @placeholder,
-        rows: @rows,
-        cols: @cols,
-        disabled: @disabled || nil,
-        required: @required || nil,
-        readonly: @readonly || nil,
-        autofocus: @autofocus || nil,
-        minlength: @minlength,
-        maxlength: @maxlength,
-        class: merge_classes(BASE_CLASSES)
-      }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
+    def textarea_classes
+      merge_classes(BASE_CLASSES)
+    end
+
+    def textarea_content
+      @value || content
     end
   end
 end

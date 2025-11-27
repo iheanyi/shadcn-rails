@@ -1,0 +1,8 @@
+<div role="radiogroup"
+     class="<%= group_classes %>"
+     <%= "aria-required=true" if @required %>
+     <%= "aria-disabled=true" if @disabled %>
+     <%= tag_attributes %>>
+  <%= render_data_items %>
+  <%= render_slot_items %>
+</div>

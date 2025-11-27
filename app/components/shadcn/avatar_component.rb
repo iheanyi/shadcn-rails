@@ -46,50 +46,22 @@ module Shadcn
       @size = size.to_sym
     end
 
-    def call
-      content_tag(:span, avatar_content, avatar_attributes)
-    end
-
     private
-
-    def avatar_content
-      if @src.present?
-        image_with_fallback
-      elsif fallback?
-        fallback
-      else
-        fallback_element
-      end
-    end
-
-    def image_with_fallback
-      # Use Stimulus controller to handle image loading errors
-      content_tag(:span, class: "contents", data: stimulus_data(controller: "shadcn--avatar")) do
-        safe_join([
-          tag(:img,
-            src: @src,
-            alt: @alt,
-            class: IMAGE_CLASSES,
-            data: { "shadcn--avatar-target": "image", action: "error->shadcn--avatar#handleError" }
-          ),
-          content_tag(:span, @fallback, class: "#{FALLBACK_CLASSES} hidden", data: { "shadcn--avatar-target": "fallback" })
-        ])
-      end
-    end
-
-    def fallback_element
-      content_tag(:span, @fallback, class: FALLBACK_CLASSES)
-    end
 
     def avatar_classes
       cn(BASE_CLASSES, SIZES[@size], class_name)
     end
 
-    def avatar_attributes
-      attrs = { class: avatar_classes }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
+    def fallback_text
+      @fallback
+    end
+
+    def has_image?
+      @src.present?
+    end
+
+    def has_fallback_slot?
+      fallback?
     end
 
     def generate_fallback(alt)

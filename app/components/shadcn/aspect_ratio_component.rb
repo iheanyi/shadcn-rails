@@ -21,29 +21,14 @@ module Shadcn
       @ratio = ratio.to_f
     end
 
-    def call
-      content_tag(:div, wrapper_attributes) do
-        content_tag(:div, content, inner_attributes)
-      end
-    end
-
     private
 
-    def wrapper_attributes
-      attrs = {
-        class: cn("relative w-full", class_name),
-        style: "padding-bottom: #{(1.0 / @ratio) * 100}%;"
-      }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
+    def wrapper_classes
+      cn("relative w-full", class_name)
     end
 
-    def inner_attributes
-      {
-        class: "absolute inset-0",
-        style: "position: absolute; top: 0; right: 0; bottom: 0; left: 0;"
-      }
+    def wrapper_style
+      "padding-bottom: #{(1.0 / @ratio) * 100}%;"
     end
   end
 end

@@ -50,14 +50,10 @@ module Shadcn
 
     BASE_CLASSES = "rounded-xl border bg-card text-card-foreground shadow"
 
-    def call
-      content_tag(:div, card_content, class: merge_classes(BASE_CLASSES), **html_options.merge(build_data))
-    end
-
     private
 
-    def card_content
-      safe_join([header, title, description, content_slot, content, footer].compact)
+    def card_classes
+      merge_classes(BASE_CLASSES)
     end
   end
 end

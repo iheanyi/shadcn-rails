@@ -75,23 +75,7 @@ module Shadcn
       @loading = loading
     end
 
-    def call
-      if @href
-        link_tag
-      else
-        button_tag
-      end
-    end
-
     private
-
-    def button_tag
-      content_tag(:button, button_content, button_attributes)
-    end
-
-    def link_tag
-      content_tag(:a, button_content, link_attributes)
-    end
 
     def button_content
       if @loading
@@ -102,7 +86,7 @@ module Shadcn
     end
 
     def loading_spinner
-      content_tag(:span, "", class: "animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full", "aria-hidden": true)
+      tag.span("", class: "animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full", "aria-hidden": true)
     end
 
     def button_classes
@@ -112,30 +96,6 @@ module Shadcn
         SIZES[@size],
         class_name
       )
-    end
-
-    def button_attributes
-      attrs = html_options.merge(
-        type: @type,
-        class: button_classes,
-        disabled: @disabled || @loading || nil,
-        "aria-disabled": (@disabled || @loading) ? "true" : nil,
-        "aria-busy": @loading ? "true" : nil
-      )
-      attrs.merge!(build_data)
-      attrs.compact
-    end
-
-    def link_attributes
-      attrs = html_options.merge(
-        href: @href,
-        class: button_classes,
-        role: "button",
-        "aria-disabled": @disabled ? "true" : nil,
-        tabindex: @disabled ? "-1" : nil
-      )
-      attrs.merge!(build_data)
-      attrs.compact
     end
   end
 end

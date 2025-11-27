@@ -52,27 +52,14 @@ module Shadcn
       @url_param = url_param
     end
 
-    def call
-      content_tag(:div, tabs_content, tabs_attributes)
-    end
-
     private
+
+    def tabs_classes
+      class_name
+    end
 
     def tabs_content
       safe_join([list, panels, content].compact.flatten)
-    end
-
-    def tabs_attributes
-      attrs = {
-        class: class_name,
-        "data-controller": "shadcn--tabs",
-        "data-shadcn--tabs-default-value": @default_value,
-        "data-shadcn--tabs-url-param-value": @url_param,
-        "data-orientation": @orientation.to_s
-      }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
     end
   end
 end

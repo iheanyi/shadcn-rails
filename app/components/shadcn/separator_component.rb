@@ -29,26 +29,18 @@ module Shadcn
       @decorative = decorative
     end
 
-    def call
-      tag.div(**separator_attributes)
-    end
-
     private
 
     def separator_classes
       cn(BASE_CLASSES, ORIENTATIONS[@orientation], class_name)
     end
 
-    def separator_attributes
-      attrs = {
-        class: separator_classes,
-        role: @decorative ? "none" : "separator",
-        "aria-orientation": @decorative ? nil : @orientation.to_s,
-        "data-orientation": @orientation.to_s
-      }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
+    def separator_role
+      @decorative ? "none" : "separator"
+    end
+
+    def aria_orientation
+      @decorative ? nil : @orientation.to_s
     end
   end
 end

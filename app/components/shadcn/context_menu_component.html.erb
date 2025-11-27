@@ -1,0 +1,11 @@
+<div class="<%= context_menu_classes %>"
+     data-controller="<%= context_menu_data_attrs[:controller] %>"
+     data-action="<%= context_menu_data_attrs[:action] %>"
+     <%= tag_attributes %>>
+  <% if trigger? %>
+    <div data-shadcn--context-menu-target="trigger" data-action="contextmenu->shadcn--context-menu#show:prevent">
+      <%= trigger %>
+    </div>
+  <% end %>
+  <%= menu if menu? %>
+</div>

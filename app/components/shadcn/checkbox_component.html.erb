@@ -1,0 +1,32 @@
+<% if has_label? %>
+  <label class="flex items-center space-x-2 cursor-pointer">
+    <% if @name %>
+      <input type="hidden" name="<%= ERB::Util.html_escape_once(@name) %>" value="0" autocomplete="off">
+    <% end %>
+    <input type="checkbox"
+           class="<%= checkbox_classes %>"<% if @name %>
+           name="<%= ERB::Util.html_escape_once(@name) %>"<% end %><% if @id %>
+           id="<%= ERB::Util.html_escape_once(@id) %>"<% end %><% if @value %>
+           value="<%= ERB::Util.html_escape_once(@value) %>"<% end %><% if @checked %>
+           checked<% end %><% if @disabled %>
+           disabled<% end %><% if @required %>
+           required<% end %>
+           <%= tag_attributes %>>
+    <span class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+      <%= content %>
+    </span>
+  </label>
+<% else %>
+  <% if @name %>
+    <input type="hidden" name="<%= ERB::Util.html_escape_once(@name) %>" value="0" autocomplete="off">
+  <% end %>
+  <input type="checkbox"
+         class="<%= checkbox_classes %>"<% if @name %>
+         name="<%= ERB::Util.html_escape_once(@name) %>"<% end %><% if @id %>
+         id="<%= ERB::Util.html_escape_once(@id) %>"<% end %><% if @value %>
+         value="<%= ERB::Util.html_escape_once(@value) %>"<% end %><% if @checked %>
+         checked<% end %><% if @disabled %>
+         disabled<% end %><% if @required %>
+         required<% end %>
+         <%= tag_attributes %>>
+<% end %>

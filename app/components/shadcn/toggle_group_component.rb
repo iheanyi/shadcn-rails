@@ -56,41 +56,18 @@ module Shadcn
       @name = name
     end
 
-    def call
-      content_tag(:div, group_content, group_attributes)
-    end
-
     private
 
-    def group_content
-      safe_join([
-        hidden_input,
-        items.map(&:to_s)
-      ].flatten.compact)
+    def group_classes
+      merge_classes(BASE_CLASSES)
     end
 
-    def hidden_input
-      return unless @name
-
-      tag(:input,
-        type: "hidden",
-        name: @name,
-        value: Array(@value).join(","),
-        "data-shadcn--toggle-group-target": "input"
-      )
+    def has_name?
+      @name.present?
     end
 
-    def group_attributes
-      attrs = {
-        role: "group",
-        class: merge_classes(BASE_CLASSES),
-        "data-controller": "shadcn--toggle-group",
-        "data-shadcn--toggle-group-type-value": @type.to_s,
-        "data-shadcn--toggle-group-value-value": Array(@value).join(",")
-      }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
+    def value_string
+      Array(@value).join(",")
     end
   end
 end

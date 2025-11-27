@@ -36,40 +36,20 @@ module Shadcn
       @side = side
     end
 
-    def call
-      content_tag(:div, dropdown_content, dropdown_attributes)
-    end
-
     private
 
-    def dropdown_content
-      safe_join([
-        trigger_wrapper,
-        menu
-      ].compact)
+    def dropdown_classes
+      cn("relative inline-block", class_name)
     end
 
-    def trigger_wrapper
-      return unless trigger
-
-      content_tag(:div, trigger, {
-        "data-shadcn--dropdown-target": "trigger",
-        "data-action": "click->shadcn--dropdown#toggle"
-      })
-    end
-
-    def dropdown_attributes
-      attrs = {
-        class: cn("relative inline-block", class_name),
-        "data-controller": "shadcn--dropdown",
-        "data-shadcn--dropdown-open-value": @open.to_s,
-        "data-shadcn--dropdown-align-value": @align.to_s,
-        "data-shadcn--dropdown-side-value": @side.to_s,
-        "data-action": "keydown.escape->shadcn--dropdown#close clickOutside->shadcn--dropdown#close"
+    def dropdown_data_attrs
+      {
+        controller: "shadcn--dropdown",
+        "shadcn--dropdown-open-value": @open.to_s,
+        "shadcn--dropdown-align-value": @align.to_s,
+        "shadcn--dropdown-side-value": @side.to_s,
+        action: "keydown.escape->shadcn--dropdown#close clickOutside->shadcn--dropdown#close"
       }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
     end
   end
 end

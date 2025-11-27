@@ -70,13 +70,20 @@ module Shadcn
       @orientation = orientation
     end
 
-    def call
-      content_tag(:div, group_attributes) do
-        safe_join([render_data_items, render_slot_items].compact)
-      end
+    private
+
+    def group_classes
+      cn(BASE_CLASSES, orientation_classes, class_name)
     end
 
-    private
+    def orientation_classes
+      case @orientation
+      when :horizontal
+        "flex flex-row gap-4"
+      else
+        "grid gap-3"
+      end
+    end
 
     # Render items from the items: data array
     def render_data_items
@@ -103,27 +110,6 @@ module Shadcn
 
     def generate_item_id(value)
       "#{@name}-#{value}".parameterize
-    end
-
-    def group_attributes
-      attrs = {
-        role: "radiogroup",
-        class: cn(BASE_CLASSES, orientation_classes, class_name),
-        "aria-required": @required ? "true" : nil,
-        "aria-disabled": @disabled ? "true" : nil
-      }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
-    end
-
-    def orientation_classes
-      case @orientation
-      when :horizontal
-        "flex flex-row gap-4"
-      else
-        "grid gap-3"
-      end
     end
   end
 end

@@ -1,0 +1,20 @@
+<span class="<%= avatar_classes %>" <%= tag_attributes %>>
+  <% if has_image? %>
+    <span class="contents" data-controller="shadcn--avatar">
+      <img src="<%= @src %>"
+           alt="<%= @alt %>"
+           class="<%= IMAGE_CLASSES %>"
+           data-shadcn--avatar-target="image"
+           data-action="error->shadcn--avatar#handleError" />
+      <span class="<%= FALLBACK_CLASSES %> hidden" data-shadcn--avatar-target="fallback">
+        <%= fallback_text %>
+      </span>
+    </span>
+  <% elsif has_fallback_slot? %>
+    <%= fallback %>
+  <% else %>
+    <span class="<%= FALLBACK_CLASSES %>">
+      <%= fallback_text %>
+    </span>
+  <% end %>
+</span>

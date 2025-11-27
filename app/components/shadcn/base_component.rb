@@ -96,5 +96,14 @@ module Shadcn
 
       classes.split.map { |c| "#{config.tailwind_prefix}#{c}" }.join(" ")
     end
+
+    # Build HTML attributes string for use in templates
+    # Combines html_options and data attributes
+    # Uses html_escape_once to avoid double-escaping already-escaped content
+    # @return [String] HTML-safe attribute string
+    def tag_attributes
+      attrs = html_options.merge(build_data)
+      attrs.map { |k, v| "#{k}=\"#{ERB::Util.html_escape_once(v)}\"" if v }.compact.join(" ").html_safe
+    end
   end
 end

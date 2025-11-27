@@ -31,11 +31,11 @@ module Shadcn
       NavigationMenuListComponent.new(**options)
     }
 
-    def call
-      content_tag(:nav, navigation_content, navigation_attributes)
-    end
-
     private
+
+    def navigation_classes
+      cn(BASE_CLASSES, class_name)
+    end
 
     def navigation_content
       safe_join([list, viewport].compact)
@@ -60,17 +60,6 @@ module Shadcn
         "data-state": "closed",
         hidden: true
       }
-    end
-
-    def navigation_attributes
-      attrs = {
-        class: cn(BASE_CLASSES, class_name),
-        "data-controller": "shadcn--navigation-menu",
-        "aria-label": "Main"
-      }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
     end
   end
 end

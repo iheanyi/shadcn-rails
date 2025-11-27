@@ -1,0 +1,20 @@
+<span class="<%= tooltip_classes %>"
+      data-controller="<%= tooltip_data_attrs[:controller] %>"
+      data-shadcn--tooltip-side-value="<%= tooltip_data_attrs[:"shadcn--tooltip-side-value"] %>"
+      data-shadcn--tooltip-align-value="<%= tooltip_data_attrs[:"shadcn--tooltip-align-value"] %>"
+      data-shadcn--tooltip-delay-value="<%= tooltip_data_attrs[:"shadcn--tooltip-delay-value"] %>"
+      data-shadcn--tooltip-skip-delay-value="<%= tooltip_data_attrs[:"shadcn--tooltip-skip-delay-value"] %>"
+      <%= tag_attributes %>>
+  <span data-shadcn--tooltip-target="trigger"
+        data-action="mouseenter->shadcn--tooltip#show mouseleave->shadcn--tooltip#hide focus->shadcn--tooltip#show blur->shadcn--tooltip#hide">
+    <%= content %>
+  </span>
+  <div class="<%= tooltip_content_classes %>"
+       role="tooltip"
+       data-shadcn--tooltip-target="content"
+       data-side="<%= @side %>"
+       data-state="closed"
+       hidden>
+    <%= ERB::Util.html_escape_once(@tooltip_content) %>
+  </div>
+</span>

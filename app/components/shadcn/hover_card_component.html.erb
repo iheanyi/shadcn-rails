@@ -1,0 +1,12 @@
+<div class="<%= hover_card_classes %>"
+     data-controller="<%= hover_card_data_attrs[:controller] %>"
+     data-shadcn--hover-card-open-delay-value="<%= hover_card_data_attrs[:"shadcn--hover-card-open-delay-value"] %>"
+     data-shadcn--hover-card-close-delay-value="<%= hover_card_data_attrs[:"shadcn--hover-card-close-delay-value"] %>"
+     <%= tag_attributes %>>
+  <% if trigger? %>
+    <div data-shadcn--hover-card-target="trigger">
+      <%= trigger %>
+    </div>
+  <% end %>
+  <%= card_content if card_content? %>
+</div>

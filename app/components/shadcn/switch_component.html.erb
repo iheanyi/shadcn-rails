@@ -1,0 +1,72 @@
+<% if has_label? %>
+  <label class="flex items-center gap-3 cursor-pointer">
+    <span class="inline-flex items-center"
+          data-controller="shadcn--switch"
+          data-shadcn--switch-checked-value="<%= @checked %>">
+      <% if @name %>
+        <input type="hidden" name="<%= ERB::Util.html_escape_once(@name) %>" value="0" autocomplete="off">
+        <input type="checkbox"
+               class="sr-only"
+               name="<%= ERB::Util.html_escape_once(@name) %>"<% if @id %>
+               id="<%= ERB::Util.html_escape_once(@id) %>"<% end %>
+               value="<%= ERB::Util.html_escape_once(@value) %>"<% if @checked %>
+               checked<% end %><% if @disabled %>
+               disabled<% end %><% if @required %>
+               required<% end %>
+               data-shadcn--switch-target="input"
+               tabindex="-1">
+      <% end %>
+      <button type="button"
+              role="switch"
+              class="<%= switch_classes %>"<% if @disabled %>
+              disabled<% end %>
+              aria-checked="<%= @checked %>"<% if @required %>
+              aria-required="true"<% end %>
+              data-state="<%= state %>"
+              data-shadcn--switch-target="button"
+              data-action="click->shadcn--switch#toggle keydown->shadcn--switch#handleKeydown"
+              tabindex="0"
+              <%= tag_attributes %>>
+        <span class="<%= THUMB_CLASSES %>"
+              data-state="<%= state %>"
+              data-shadcn--switch-target="thumb"></span>
+      </button>
+    </span>
+    <span class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+      <%= content %>
+    </span>
+  </label>
+<% else %>
+  <span class="inline-flex items-center"
+        data-controller="shadcn--switch"
+        data-shadcn--switch-checked-value="<%= @checked %>">
+    <% if @name %>
+      <input type="hidden" name="<%= ERB::Util.html_escape_once(@name) %>" value="0" autocomplete="off">
+      <input type="checkbox"
+             class="sr-only"
+             name="<%= ERB::Util.html_escape_once(@name) %>"<% if @id %>
+             id="<%= ERB::Util.html_escape_once(@id) %>"<% end %>
+             value="<%= ERB::Util.html_escape_once(@value) %>"<% if @checked %>
+             checked<% end %><% if @disabled %>
+             disabled<% end %><% if @required %>
+             required<% end %>
+             data-shadcn--switch-target="input"
+             tabindex="-1">
+    <% end %>
+    <button type="button"
+            role="switch"
+            class="<%= switch_classes %>"<% if @disabled %>
+            disabled<% end %>
+            aria-checked="<%= @checked %>"<% if @required %>
+            aria-required="true"<% end %>
+            data-state="<%= state %>"
+            data-shadcn--switch-target="button"
+            data-action="click->shadcn--switch#toggle keydown->shadcn--switch#handleKeydown"
+            tabindex="0"
+            <%= tag_attributes %>>
+      <span class="<%= THUMB_CLASSES %>"
+            data-state="<%= state %>"
+            data-shadcn--switch-target="thumb"></span>
+    </button>
+  </span>
+<% end %>

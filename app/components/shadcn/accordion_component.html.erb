@@ -1,0 +1,8 @@
+<div class="<%= accordion_classes %>"
+     data-controller="shadcn--accordion"
+     data-shadcn--accordion-type-value="<%= @type %>"
+     data-shadcn--accordion-collapsible-value="<%= @collapsible %>"
+     <% if @default_value %>data-shadcn--accordion-default-value="<%= default_value_string %>"<% end %>
+     <%= tag_attributes %>>
+  <%= accordion_content %>
+</div>

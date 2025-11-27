@@ -51,53 +51,14 @@ module Shadcn
       @required = required
     end
 
-    def call
-      if content.present?
-        # Render with integrated label
-        content_tag(:label, class: "flex items-center space-x-2 cursor-pointer") do
-          safe_join([
-            hidden_input,
-            checkbox_input,
-            content_tag(:span, content, class: "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70")
-          ])
-        end
-      else
-        # Render just the checkbox (for use with external labels)
-        safe_join([hidden_input, checkbox_input].compact)
-      end
-    end
-
     private
 
-    def hidden_input
-      # Include hidden input with "0" value for unchecked state (Rails convention)
-      return unless @name
-
-      tag(:input,
-        type: "hidden",
-        name: @name,
-        value: "0",
-        autocomplete: "off"
-      )
+    def checkbox_classes
+      cn(BASE_CLASSES, class_name)
     end
 
-    def checkbox_input
-      tag(:input, input_attributes)
-    end
-
-    def input_attributes
-      attrs = {
-        type: "checkbox",
-        name: @name,
-        id: @id,
-        value: @value,
-        class: cn(BASE_CLASSES, class_name),
-        disabled: @disabled || nil,
-        checked: @checked || nil,
-        required: @required || nil
-      }
-      attrs.merge!(html_options.except(:class))
-      attrs.compact
+    def has_label?
+      content.present?
     end
   end
 end

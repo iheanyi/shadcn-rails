@@ -1,0 +1,13 @@
+<div class="<%= progress_classes %>"
+     role="progressbar"
+     aria-valuemin="0"
+     aria-valuemax="<%= @max %>"<% unless @indeterminate %>
+     aria-valuenow="<%= @value %>"<% end %>
+     data-state="<%= data_state %>"<% if @value %>
+     data-value="<%= @value %>"<% end %>
+     data-max="<%= @max %>"
+     <%= tag_attributes %>>
+  <div class="<%= indicator_classes %>"<% if indicator_style %>
+       style="<%= indicator_style %>"<% end %>
+       data-state="<%= data_state %>"></div>
+</div>

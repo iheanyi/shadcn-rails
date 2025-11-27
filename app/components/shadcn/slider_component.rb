@@ -38,29 +38,10 @@ module Shadcn
       @disabled = disabled
     end
 
-    def call
-      tag(:input, input_attributes)
-    end
-
     private
 
-    def input_attributes
-      attrs = {
-        type: "range",
-        name: @name,
-        value: @value,
-        min: @min,
-        max: @max,
-        step: @step,
-        disabled: @disabled ? true : nil,
-        class: merge_classes(BASE_CLASSES),
-        style: slider_style,
-        "data-controller": "shadcn--slider",
-        "data-action": "input->shadcn--slider#updateStyle"
-      }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
+    def slider_classes
+      merge_classes(BASE_CLASSES)
     end
 
     def slider_style

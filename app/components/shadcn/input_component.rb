@@ -74,35 +74,10 @@ module Shadcn
       @maxlength = maxlength
     end
 
-    def call
-      tag(:input, input_attributes)
-    end
-
     private
 
-    def input_attributes
-      attrs = {
-        type: @type,
-        name: @name,
-        id: @id,
-        value: @value,
-        placeholder: @placeholder,
-        disabled: @disabled || nil,
-        required: @required || nil,
-        readonly: @readonly || nil,
-        autofocus: @autofocus || nil,
-        autocomplete: @autocomplete,
-        pattern: @pattern,
-        min: @min,
-        max: @max,
-        step: @step,
-        minlength: @minlength,
-        maxlength: @maxlength,
-        class: merge_classes(BASE_CLASSES)
-      }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
+    def input_classes
+      merge_classes(BASE_CLASSES)
     end
   end
 end

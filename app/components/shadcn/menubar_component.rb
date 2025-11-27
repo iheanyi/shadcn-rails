@@ -32,25 +32,14 @@ module Shadcn
       MenubarMenuComponent.new(**options)
     }
 
-    def call
-      content_tag(:div, menubar_content, menubar_attributes)
-    end
-
     private
+
+    def menubar_classes
+      cn(BASE_CLASSES, class_name)
+    end
 
     def menubar_content
       safe_join(menus)
-    end
-
-    def menubar_attributes
-      attrs = {
-        class: cn(BASE_CLASSES, class_name),
-        role: "menubar",
-        "data-controller": "shadcn--menubar"
-      }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
     end
   end
 end

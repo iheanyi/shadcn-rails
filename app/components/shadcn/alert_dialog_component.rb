@@ -34,38 +34,18 @@ module Shadcn
       @open = open
     end
 
-    def call
-      content_tag(:div, dialog_content, dialog_attributes)
-    end
-
     private
 
-    def dialog_content
-      safe_join([
-        trigger_wrapper,
-        body
-      ].compact)
+    def alert_dialog_classes
+      class_name
     end
 
-    def trigger_wrapper
-      return unless trigger
-
-      content_tag(:div, trigger, {
-        "data-shadcn--dialog-target": "trigger",
-        "data-action": "click->shadcn--dialog#open"
-      })
-    end
-
-    def dialog_attributes
-      attrs = {
-        class: class_name,
-        "data-controller": "shadcn--dialog",
-        "data-shadcn--dialog-open-value": @open.to_s,
-        "data-shadcn--dialog-modal-value": "true"
+    def alert_dialog_data_attrs
+      {
+        controller: "shadcn--dialog",
+        "shadcn--dialog-open-value": @open.to_s,
+        "shadcn--dialog-modal-value": "true"
       }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
     end
   end
 end

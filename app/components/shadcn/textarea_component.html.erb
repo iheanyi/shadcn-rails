@@ -1,0 +1,13 @@
+<textarea class="<%= textarea_classes %>"<% if @name %>
+          name="<%= ERB::Util.html_escape_once(@name) %>"<% end %><% if @id %>
+          id="<%= ERB::Util.html_escape_once(@id) %>"<% end %><% if @placeholder %>
+          placeholder="<%= ERB::Util.html_escape_once(@placeholder) %>"<% end %><% if @rows %>
+          rows="<%= @rows %>"<% end %><% if @cols %>
+          cols="<%= @cols %>"<% end %><% if @disabled %>
+          disabled<% end %><% if @required %>
+          required<% end %><% if @readonly %>
+          readonly<% end %><% if @autofocus %>
+          autofocus<% end %><% if @minlength %>
+          minlength="<%= @minlength %>"<% end %><% if @maxlength %>
+          maxlength="<%= @maxlength %>"<% end %>
+          <%= tag_attributes %>><%= textarea_content %></textarea>

@@ -28,37 +28,18 @@ module Shadcn
       @close_delay = close_delay
     end
 
-    def call
-      content_tag(:div, build_card_content, card_attributes)
-    end
-
     private
 
-    def build_card_content
-      safe_join([
-        trigger_wrapper,
-        card_content
-      ].compact)
+    def hover_card_classes
+      cn("relative inline-block", class_name)
     end
 
-    def trigger_wrapper
-      return unless trigger
-
-      content_tag(:div, trigger, {
-        "data-shadcn--hover-card-target": "trigger"
-      })
-    end
-
-    def card_attributes
-      attrs = {
-        class: cn("relative inline-block", class_name),
-        "data-controller": "shadcn--hover-card",
-        "data-shadcn--hover-card-open-delay-value": @open_delay,
-        "data-shadcn--hover-card-close-delay-value": @close_delay
+    def hover_card_data_attrs
+      {
+        controller: "shadcn--hover-card",
+        "shadcn--hover-card-open-delay-value": @open_delay,
+        "shadcn--hover-card-close-delay-value": @close_delay
       }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
     end
   end
 end

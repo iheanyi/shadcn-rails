@@ -1,0 +1,14 @@
+<div class="<%= dropdown_classes %>"
+     data-controller="<%= dropdown_data_attrs[:controller] %>"
+     data-shadcn--dropdown-open-value="<%= dropdown_data_attrs[:"shadcn--dropdown-open-value"] %>"
+     data-shadcn--dropdown-align-value="<%= dropdown_data_attrs[:"shadcn--dropdown-align-value"] %>"
+     data-shadcn--dropdown-side-value="<%= dropdown_data_attrs[:"shadcn--dropdown-side-value"] %>"
+     data-action="<%= dropdown_data_attrs[:action] %>"
+     <%= tag_attributes %>>
+  <% if trigger? %>
+    <div data-shadcn--dropdown-target="trigger" data-action="click->shadcn--dropdown#toggle">
+      <%= trigger %>
+    </div>
+  <% end %>
+  <%= menu if menu? %>
+</div>

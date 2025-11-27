@@ -1,0 +1,15 @@
+<div class="<%= popover_classes %>"
+     data-controller="<%= popover_data_attrs[:controller] %>"
+     data-shadcn--popover-open-value="<%= popover_data_attrs[:"shadcn--popover-open-value"] %>"
+     data-shadcn--popover-side-value="<%= popover_data_attrs[:"shadcn--popover-side-value"] %>"
+     data-shadcn--popover-align-value="<%= popover_data_attrs[:"shadcn--popover-align-value"] %>"
+     data-shadcn--popover-modal-value="<%= popover_data_attrs[:"shadcn--popover-modal-value"] %>"
+     data-action="<%= popover_data_attrs[:action] %>"
+     <%= tag_attributes %>>
+  <% if trigger? %>
+    <div data-shadcn--popover-target="trigger" data-action="click->shadcn--popover#toggle">
+      <%= trigger %>
+    </div>
+  <% end %>
+  <%= body if body? %>
+</div>
