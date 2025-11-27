@@ -1,8 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
+import { useClickOutside } from "stimulus-use"
 
 /**
  * Menubar controller
  * Handles menu opening/closing, keyboard navigation, hover behavior
+ * Uses stimulus-use for click outside detection
  */
 export default class extends Controller {
   static targets = ["menu", "trigger", "content", "item", "sub", "subTrigger", "subContent"]
@@ -13,14 +15,15 @@ export default class extends Controller {
   connect() {
     this.focusedIndex = -1
     this.isMenuOpen = false
-    this.boundHandleClickOutside = this.handleClickOutside.bind(this)
     this.boundHandleKeydown = this.handleKeydown.bind(this)
     this.closeSubTimer = null
+
+    // Use stimulus-use for click outside detection
+    useClickOutside(this)
   }
 
   disconnect() {
     this.closeAll()
-    document.removeEventListener("click", this.boundHandleClickOutside)
     document.removeEventListener("keydown", this.boundHandleKeydown)
   }
 
@@ -72,8 +75,7 @@ export default class extends Controller {
     this.isMenuOpen = true
     this.focusedIndex = -1
 
-    // Add event listeners
-    document.addEventListener("click", this.boundHandleClickOutside)
+    // Add keydown event listener (click outside is handled by stimulus-use)
     document.addEventListener("keydown", this.boundHandleKeydown)
 
     // Focus first item
@@ -100,7 +102,7 @@ export default class extends Controller {
     this.isMenuOpen = false
     this.focusedIndex = -1
 
-    document.removeEventListener("click", this.boundHandleClickOutside)
+    // Remove keydown listener (click outside is handled by stimulus-use)
     document.removeEventListener("keydown", this.boundHandleKeydown)
   }
 
@@ -198,8 +200,9 @@ export default class extends Controller {
     })
   }
 
-  handleClickOutside(event) {
-    if (!this.element.contains(event.target)) {
+  // Called by stimulus-use when clicking outside the element
+  clickOutside(event) {
+    if (this.isMenuOpen) {
       this.closeAll()
     }
   }

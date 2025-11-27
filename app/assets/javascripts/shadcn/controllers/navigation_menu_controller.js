@@ -1,8 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
+import { useClickOutside } from "stimulus-use"
 
 /**
  * Navigation Menu Controller
  * Handles navigation menu interactions with dropdown content areas
+ * Uses stimulus-use for click outside detection
  */
 export default class extends Controller {
   static targets = ["list", "item", "trigger", "content", "viewport"]
@@ -19,8 +21,10 @@ export default class extends Controller {
     this.closeTimer = null
     this.wasClickOpened = false
 
-    this.boundHandleClickOutside = this.handleClickOutside.bind(this)
     this.boundHandleKeydown = this.handleKeydown.bind(this)
+
+    // Use stimulus-use for click outside detection
+    useClickOutside(this)
   }
 
   disconnect() {
@@ -125,8 +129,7 @@ export default class extends Controller {
 
     this.isOpen = true
 
-    // Add event listeners
-    document.addEventListener("click", this.boundHandleClickOutside)
+    // Add keydown event listener (click outside is handled by stimulus-use)
     document.addEventListener("keydown", this.boundHandleKeydown)
   }
 
@@ -183,12 +186,13 @@ export default class extends Controller {
     this.isOpen = false
     this.wasClickOpened = false
 
-    document.removeEventListener("click", this.boundHandleClickOutside)
+    // Remove keydown listener (click outside is handled by stimulus-use)
     document.removeEventListener("keydown", this.boundHandleKeydown)
   }
 
-  handleClickOutside(event) {
-    if (!this.element.contains(event.target)) {
+  // Called by stimulus-use when clicking outside the element
+  clickOutside(event) {
+    if (this.isOpen) {
       this.closeAll()
     }
   }

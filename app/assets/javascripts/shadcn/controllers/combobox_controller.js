@@ -1,8 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
+import { useClickOutside } from "stimulus-use"
 
 /**
  * Combobox controller for searchable select dropdown
  * Handles open/close, filtering, keyboard navigation, and item selection
+ * Uses stimulus-use for click outside detection
  */
 export default class extends Controller {
   static targets = ["trigger", "content", "input", "list", "item", "empty", "displayValue", "hiddenInput"]
@@ -14,6 +16,9 @@ export default class extends Controller {
 
   connect() {
     this.boundHandleKeydown = this.handleKeydown.bind(this)
+
+    // Use stimulus-use for click outside detection
+    useClickOutside(this)
   }
 
   disconnect() {
@@ -221,13 +226,9 @@ export default class extends Controller {
     return this.itemTargets.filter((item) => item.style.display !== "none")
   }
 
-  /**
-   * Handle click outside to close
-   */
-  handleClickOutside(event) {
-    if (!this.openValue) return
-
-    if (!this.element.contains(event.target)) {
+  // Called by stimulus-use when clicking outside the element
+  clickOutside(event) {
+    if (this.openValue) {
       this.close()
     }
   }
