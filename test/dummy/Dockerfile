@@ -41,9 +41,10 @@ RUN sed -i 's|path: "../.."|path: "/shadcn-rails"|' Gemfile && \
 
 # Install npm dependencies and build JavaScript with esbuild
 # Note: The esbuild alias in package.json uses relative path ../../app/assets/javascripts/shadcn/index.js
-# which works locally but in Docker we need to use the absolute gem path
+# which works locally but in Docker we need to use the absolute gem path.
+# NODE_PATH helps esbuild find @hotwired/stimulus when bundling files from /shadcn-rails/
 RUN npm ci && \
-    npx esbuild app/javascript/application.js --bundle --sourcemap \
+    NODE_PATH=/rails/node_modules npx esbuild app/javascript/application.js --bundle --sourcemap \
     --outdir=app/assets/builds --public-path=/assets --loader:.js=jsx \
     --alias:shadcn-rails=/shadcn-rails/app/assets/javascripts/shadcn/index.js
 
