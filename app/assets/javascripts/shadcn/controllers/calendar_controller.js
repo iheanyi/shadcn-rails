@@ -523,11 +523,19 @@ export default class extends Controller {
 
       const ariaAttrs = []
       if (isSelected) ariaAttrs.push('aria-selected="true"')
-      if (isDisabled) ariaAttrs.push('aria-disabled="true"')
+      if (isDisabled) {
+        ariaAttrs.push('aria-disabled="true"')
+        ariaAttrs.push('disabled')
+      }
       if (isFocused) ariaAttrs.push('tabindex="0"')
       else ariaAttrs.push('tabindex="-1"')
 
-      html += `<button type="button" class="${classes}" data-date="${dateStr}" data-shadcn--calendar-target="day" data-action="click->shadcn--calendar#selectDay focus->shadcn--calendar#enableKeyboard blur->shadcn--calendar#disableKeyboard" ${ariaAttrs.join(" ")}>${currentDate.getDate()}</button>`
+      // Only add click action for non-disabled days
+      const dataAction = isDisabled
+        ? 'data-action="focus->shadcn--calendar#enableKeyboard blur->shadcn--calendar#disableKeyboard"'
+        : 'data-action="click->shadcn--calendar#selectDay focus->shadcn--calendar#enableKeyboard blur->shadcn--calendar#disableKeyboard"'
+
+      html += `<button type="button" class="${classes}" data-date="${dateStr}" data-shadcn--calendar-target="day" ${dataAction} ${ariaAttrs.join(" ")}>${currentDate.getDate()}</button>`
 
       currentDate.setDate(currentDate.getDate() + 1)
     }
