@@ -10,19 +10,26 @@ module Shadcn
       CommandEmptyComponent.new(**options)
     }
 
-    # Groups of items
-    renders_many :groups, lambda { |heading: nil, **options|
-      CommandGroupComponent.new(heading: heading, **options)
-    }
-
-    # Direct items (without group)
-    renders_many :items, lambda { |value: nil, disabled: false, **options|
-      CommandItemComponent.new(value: value, disabled: disabled, **options)
-    }
-
-    # Separators
-    renders_many :separators, lambda { |**options|
-      CommandSeparatorComponent.new(**options)
+    # Use polymorphic slots to preserve the order of groups, items, and separators
+    renders_many :list_items, types: {
+      group: {
+        renders: lambda { |heading: nil, **options, &block|
+          CommandGroupComponent.new(heading: heading, **options, &block)
+        },
+        as: :group
+      },
+      item: {
+        renders: lambda { |value: nil, disabled: false, **options, &block|
+          CommandItemComponent.new(value: value, disabled: disabled, **options, &block)
+        },
+        as: :item
+      },
+      separator: {
+        renders: lambda { |**options|
+          CommandSeparatorComponent.new(**options)
+        },
+        as: :separator
+      }
     }
 
     def call
@@ -32,7 +39,15 @@ module Shadcn
     private
 
     def list_content
-      safe_join([empty, groups, items, separators, content].flatten.compact)
+      # Trigger slot evaluation first by accessing content
+      raw_content = content
+      # If polymorphic slots were used, render them in order with empty at the start
+      if list_items.any?
+        safe_join([empty, list_items].flatten.compact)
+      else
+        # Otherwise render the raw block content (for backwards compatibility)
+        safe_join([empty, raw_content].flatten.compact)
+      end
     end
   end
 end

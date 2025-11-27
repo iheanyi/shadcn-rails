@@ -6,23 +6,44 @@ module Shadcn
   class MenubarContentComponent < BaseComponent
     BASE_CLASSES = "z-50 min-w-[12rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95"
 
-    renders_many :items, lambda { |**options, &block|
-      MenubarItemComponent.new(**options, &block)
-    }
-    renders_many :labels, lambda { |**options, &block|
-      MenubarLabelComponent.new(**options, &block)
-    }
-    renders_many :separators, lambda { |**options|
-      MenubarSeparatorComponent.new(**options)
-    }
-    renders_many :checkbox_items, lambda { |**options, &block|
-      MenubarCheckboxItemComponent.new(**options, &block)
-    }
-    renders_many :radio_groups, lambda { |**options, &block|
-      MenubarRadioGroupComponent.new(**options, &block)
-    }
-    renders_many :sub_menus, lambda { |**options, &block|
-      MenubarSubComponent.new(**options, &block)
+    # Use polymorphic slots to preserve the order of items, labels, separators, etc.
+    renders_many :menu_items, types: {
+      item: {
+        renders: lambda { |**options, &block|
+          MenubarItemComponent.new(**options, &block)
+        },
+        as: :item
+      },
+      label: {
+        renders: lambda { |**options, &block|
+          MenubarLabelComponent.new(**options, &block)
+        },
+        as: :label
+      },
+      separator: {
+        renders: lambda { |**options|
+          MenubarSeparatorComponent.new(**options)
+        },
+        as: :separator
+      },
+      checkbox_item: {
+        renders: lambda { |**options, &block|
+          MenubarCheckboxItemComponent.new(**options, &block)
+        },
+        as: :checkbox_item
+      },
+      radio_group: {
+        renders: lambda { |**options, &block|
+          MenubarRadioGroupComponent.new(**options, &block)
+        },
+        as: :radio_group
+      },
+      sub_menu: {
+        renders: lambda { |**options, &block|
+          MenubarSubComponent.new(**options, &block)
+        },
+        as: :sub_menu
+      }
     }
 
     # @param align [Symbol] Content alignment (:start, :center, :end)
@@ -40,10 +61,14 @@ module Shadcn
     private
 
     def menu_content
-      if items.any? || labels.any? || separators.any? || checkbox_items.any? || radio_groups.any? || sub_menus.any?
-        safe_join([labels, items, separators, checkbox_items, radio_groups, sub_menus, content].flatten.compact)
+      # Trigger slot evaluation first by accessing content
+      raw_content = content
+      # If polymorphic slots were used, render them in order
+      if menu_items.any?
+        safe_join(menu_items)
       else
-        content
+        # Otherwise render the raw block content (for backwards compatibility)
+        raw_content
       end
     end
 

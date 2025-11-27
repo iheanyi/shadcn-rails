@@ -25,11 +25,20 @@ module Shadcn
     CONTENT_CLASSES = "absolute left-0 top-full z-50 mt-1 max-h-96 min-w-[var(--radix-select-trigger-width)] w-max overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95"
     VIEWPORT_CLASSES = "p-1"
 
-    renders_many :items, lambda { |value:, **options, &block|
-      SelectItemComponent.new(value: value, **options, &block)
-    }
-    renders_many :groups, lambda { |label: nil, **options, &block|
-      SelectGroupComponent.new(label: label, **options, &block)
+    # Use polymorphic slots to preserve the order of items and groups
+    renders_many :select_items, types: {
+      item: {
+        renders: lambda { |value:, **options, &block|
+          SelectItemComponent.new(value: value, **options, &block)
+        },
+        as: :item
+      },
+      group: {
+        renders: lambda { |label: nil, **options, &block|
+          SelectGroupComponent.new(label: label, **options, &block)
+        },
+        as: :group
+      }
     }
 
     # @param name [String, nil] Form field name
@@ -133,7 +142,15 @@ module Shadcn
     end
 
     def items_content
-      safe_join([items, groups, content].compact.flatten)
+      # Trigger slot evaluation first by accessing content
+      raw_content = content
+      # If polymorphic slots were used, render them in order
+      if select_items.any?
+        safe_join(select_items)
+      else
+        # Otherwise render the raw block content (for backwards compatibility)
+        raw_content
+      end
     end
 
     def select_attributes
