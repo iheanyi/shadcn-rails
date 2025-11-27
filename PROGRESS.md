@@ -21,7 +21,7 @@ Reference: https://ui.shadcn.com/docs/components
 | Button Group | N/A | ✅ Complete |
 | Calendar | [docs](https://ui.shadcn.com/docs/components/calendar) | ✅ Complete |
 | Card | [docs](https://ui.shadcn.com/docs/components/card) | ✅ Complete |
-| Carousel | [docs](https://ui.shadcn.com/docs/components/carousel) | ✅ Complete (needs docs page) |
+| Carousel | [docs](https://ui.shadcn.com/docs/components/carousel) | ✅ Complete |
 | Checkbox | [docs](https://ui.shadcn.com/docs/components/checkbox) | ✅ Complete |
 | Collapsible | [docs](https://ui.shadcn.com/docs/components/collapsible) | ✅ Complete |
 | Combobox | [docs](https://ui.shadcn.com/docs/components/combobox) | ✅ Complete |
@@ -52,7 +52,7 @@ Reference: https://ui.shadcn.com/docs/components
 | Select | [docs](https://ui.shadcn.com/docs/components/select) | ✅ Complete |
 | Separator | [docs](https://ui.shadcn.com/docs/components/separator) | ✅ Complete |
 | Sheet | [docs](https://ui.shadcn.com/docs/components/sheet) | ✅ Complete |
-| Sidebar | [docs](https://ui.shadcn.com/docs/components/sidebar) | ✅ Complete (needs docs page) |
+| Sidebar | [docs](https://ui.shadcn.com/docs/components/sidebar) | ✅ Complete |
 | Skeleton | [docs](https://ui.shadcn.com/docs/components/skeleton) | ✅ Complete |
 | Slider | [docs](https://ui.shadcn.com/docs/components/slider) | ✅ Complete |
 | Spinner | N/A | ✅ Complete |

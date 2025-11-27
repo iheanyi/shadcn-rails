@@ -365,6 +365,20 @@ class DocsController < ApplicationController
       description: "Accessible resizable panel groups and layouts with keyboard support.",
       has_stimulus: true,
       controller: "shadcn--resizable"
+    },
+    "carousel" => {
+      name: "Carousel",
+      category: "Layout",
+      description: "A carousel with motion and swipe built using Stimulus.",
+      has_stimulus: true,
+      controller: "shadcn--carousel"
+    },
+    "sidebar" => {
+      name: "Sidebar",
+      category: "Layout",
+      description: "A composable, themeable and customizable sidebar component.",
+      has_stimulus: true,
+      controller: "shadcn--sidebar"
     }
   }.freeze
 
