@@ -286,6 +286,53 @@ npm test -- context_menu_controller.test.js
 npm test -- --coverage
 ```
 
+## Test-First Development
+
+**IMPORTANT**: Always run tests for files you modify to ensure they still pass.
+
+### Testing Guidelines
+
+1. **Before making changes**: Run relevant tests to understand current behavior
+2. **After making changes**: Run all affected tests to ensure nothing breaks
+3. **When fixing bugs**: Write a failing test first, then fix the bug
+4. **When adding features**: Write tests alongside the new code
+
+### Running Tests
+
+```bash
+# Run all Ruby tests
+bundle exec rake test
+
+# Run specific component test
+bundle exec ruby -Ilib:test test/components/context_menu_component_test.rb
+
+# Run all Jest tests
+npm test
+
+# Run specific Jest test file
+npm test -- context_menu_controller.test.js
+
+# Run tests with coverage
+npm test -- --coverage
+```
+
+### Test Coverage Expectations
+
+- **Ruby Components**: Each component should have tests for:
+  - Default rendering
+  - All variants and sizes
+  - Slot rendering
+  - Accessibility attributes (ARIA)
+  - Custom class names and HTML options
+
+- **JavaScript Controllers**: Each Stimulus controller should have tests for:
+  - Initialization and connect
+  - Value changes
+  - Target interactions
+  - Event handling (click, keyboard, etc.)
+  - Edge cases and error handling
+  - Cleanup on disconnect
+
 ## Patterns to Follow
 
 ### 1. Component Variants
