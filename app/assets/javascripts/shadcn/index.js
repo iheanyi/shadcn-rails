@@ -18,6 +18,8 @@ import AccordionController from "./controllers/accordion_controller"
 import AvatarController from "./controllers/avatar_controller"
 import CheckboxController from "./controllers/checkbox_controller"
 import CollapsibleController from "./controllers/collapsible_controller"
+import CommandController from "./controllers/command_controller"
+import CommandDialogController from "./controllers/command_dialog_controller"
 import ContextMenuController from "./controllers/context_menu_controller"
 import DialogController from "./controllers/dialog_controller"
 import DrawerController from "./controllers/drawer_controller"
@@ -46,6 +48,8 @@ export {
   AvatarController,
   CheckboxController,
   CollapsibleController,
+  CommandController,
+  CommandDialogController,
   ContextMenuController,
   DialogController,
   DrawerController,
@@ -75,6 +79,8 @@ export const controllers = {
   "shadcn--avatar": AvatarController,
   "shadcn--checkbox": CheckboxController,
   "shadcn--collapsible": CollapsibleController,
+  "shadcn--command": CommandController,
+  "shadcn--command-dialog": CommandDialogController,
   "shadcn--context-menu": ContextMenuController,
   "shadcn--dialog": DialogController,
   "shadcn--drawer": DrawerController,
