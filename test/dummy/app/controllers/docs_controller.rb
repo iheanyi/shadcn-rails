@@ -201,6 +201,13 @@ class DocsController < ApplicationController
       has_stimulus: true,
       controller: "shadcn--combobox"
     },
+    "calendar" => {
+      name: "Calendar",
+      category: "Form Inputs",
+      description: "A date picker calendar component with month navigation and date selection.",
+      has_stimulus: true,
+      controller: "shadcn--calendar"
+    },
     "scroll-area" => {
       name: "Scroll Area",
       category: "Data Display",

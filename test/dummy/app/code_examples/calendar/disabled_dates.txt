@@ -1,0 +1,10 @@
+<%
+  # Disable weekends in current month
+  month_start = Date.today.beginning_of_month
+  month_end = Date.today.end_of_month
+  weekends = (month_start..month_end).select { |d| d.saturday? || d.sunday? }
+%>
+
+<%= render Shadcn::CalendarComponent.new(
+  disabled_dates: weekends
+) %>

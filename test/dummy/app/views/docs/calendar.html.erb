@@ -1,0 +1,178 @@
+<% content_for :title, "Calendar" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<%
+  # Disable weekends for the disabled dates example
+  month_start = Date.today.beginning_of_month
+  month_end = Date.today.end_of_month
+  weekends = (month_start..month_end).select { |d| d.saturday? || d.sunday? }
+%>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Calendar</h1>
+    <p class="text-xl text-muted-foreground">A date picker calendar component with month navigation and date selection.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Requires JavaScript
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::CalendarComponent.new %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component calendar" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("calendar/default") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Selected Date -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Selected Date</h3>
+      <p class="text-sm text-muted-foreground">Use the <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">selected</code> prop to set a pre-selected date.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::CalendarComponent.new(selected: Date.today) %>
+      <% end %>
+      <%= erb_example("calendar/selected") %>
+    </div>
+
+    <!-- Form Integration -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Form Integration</h3>
+      <p class="text-sm text-muted-foreground">Use the <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">name</code> prop to enable form submission with a hidden input.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="space-y-4">
+          <%= render Shadcn::LabelComponent.new { "Event Date" } %>
+          <%= render Shadcn::CalendarComponent.new(
+            name: "event[date]",
+            selected: Date.today
+          ) %>
+        </div>
+      <% end %>
+      <%= erb_example("calendar/form") %>
+    </div>
+
+    <!-- Min/Max Dates -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Date Range Constraints</h3>
+      <p class="text-sm text-muted-foreground">Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">min_date</code> and <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">max_date</code> to constrain selectable dates.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::CalendarComponent.new(
+          min_date: Date.today,
+          max_date: Date.today + 30.days
+        ) %>
+      <% end %>
+      <%= erb_example("calendar/min_max") %>
+    </div>
+
+    <!-- Disabled Dates -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled Dates</h3>
+      <p class="text-sm text-muted-foreground">Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">disabled_dates</code> to disable specific dates (e.g., weekends).</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::CalendarComponent.new(disabled_dates: weekends) %>
+      <% end %>
+      <%= erb_example("calendar/disabled_dates") %>
+    </div>
+
+    <!-- Hide Outside Days -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Hide Outside Days</h3>
+      <p class="text-sm text-muted-foreground">Set <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">show_outside_days: false</code> to hide days from adjacent months.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::CalendarComponent.new(show_outside_days: false) %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">CalendarComponent</h3>
+    <%= render "docs/props_table", props: [
+      { name: "selected", type: "Date", default: "nil", description: "Currently selected date" },
+      { name: "month", type: "Date", default: "Date.today", description: "Month to display (defaults to selected date's month or current month)" },
+      { name: "min_date", type: "Date", default: "nil", description: "Minimum selectable date" },
+      { name: "max_date", type: "Date", default: "nil", description: "Maximum selectable date" },
+      { name: "name", type: "String", default: "nil", description: "Form field name for hidden input" },
+      { name: "disabled_dates", type: "Array<Date>", default: "[]", description: "Specific dates that cannot be selected" },
+      { name: "show_outside_days", type: "Boolean", default: "true", description: "Whether to show days outside the current month" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes" }
+    ] %>
+  </div>
+
+  <!-- Keyboard Navigation -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Keyboard Navigation</h2>
+    <div class="rounded-lg border">
+      <table class="w-full">
+        <thead>
+          <tr class="border-b bg-muted/50">
+            <th class="text-left p-3 text-sm font-medium">Key</th>
+            <th class="text-left p-3 text-sm font-medium">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b">
+            <td class="p-3 text-sm"><kbd class="px-2 py-1 text-xs rounded bg-muted border">Tab</kbd></td>
+            <td class="p-3 text-sm">Navigate between navigation buttons and days</td>
+          </tr>
+          <tr class="border-b">
+            <td class="p-3 text-sm"><kbd class="px-2 py-1 text-xs rounded bg-muted border">Enter</kbd> / <kbd class="px-2 py-1 text-xs rounded bg-muted border">Space</kbd></td>
+            <td class="p-3 text-sm">Select the focused date</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Events -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Events</h2>
+    <p class="leading-7">The Calendar dispatches a <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">shadcn--calendar:select</code> event when a date is selected.</p>
+    <%= render "docs/code_example", language: "javascript", code: <<~CODE
+element.addEventListener("shadcn--calendar:select", (event) => {
+  console.log(event.detail.date)        // JavaScript Date object
+  console.log(event.detail.dateString)  // ISO date string (YYYY-MM-DD)
+})
+CODE
+    %>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">role="grid"</code> on the calendar container</li>
+      <li>Navigation buttons have <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">aria-label</code> for screen readers</li>
+      <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">aria-selected</code> indicates the currently selected date</li>
+      <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">aria-disabled</code> indicates disabled dates</li>
+      <li>Disabled dates have <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">tabindex="-1"</code> to skip in keyboard navigation</li>
+    </ul>
+  </div>
+</div>
