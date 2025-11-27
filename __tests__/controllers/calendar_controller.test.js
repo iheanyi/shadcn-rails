@@ -729,6 +729,169 @@ describe("CalendarController", () => {
     })
   })
 
+  describe("disabled dates persist after interaction (regression tests)", () => {
+    test("disabledDaysOfWeek remains enforced after selecting a date", () => {
+      controller.disabledDaysOfWeekValue = "0,6" // Sunday and Saturday
+      controller.render()
+
+      // Get weekend buttons before interaction
+      const saturdayBefore = element.querySelector('[data-date="2024-11-16"]') // Saturday
+      const sundayBefore = element.querySelector('[data-date="2024-11-17"]') // Sunday
+
+      // Verify initially disabled
+      expect(saturdayBefore.classList.contains("cursor-not-allowed")).toBe(true)
+      expect(saturdayBefore.hasAttribute("disabled")).toBe(true)
+      expect(sundayBefore.classList.contains("cursor-not-allowed")).toBe(true)
+      expect(sundayBefore.hasAttribute("disabled")).toBe(true)
+
+      // Select a weekday date (triggers re-render)
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-18" } } }) // Monday
+
+      // Check weekends are STILL disabled after re-render
+      const saturdayAfter = element.querySelector('[data-date="2024-11-16"]')
+      const sundayAfter = element.querySelector('[data-date="2024-11-17"]')
+
+      expect(saturdayAfter.classList.contains("cursor-not-allowed")).toBe(true)
+      expect(saturdayAfter.hasAttribute("disabled")).toBe(true)
+      expect(saturdayAfter.getAttribute("aria-disabled")).toBe("true")
+      expect(sundayAfter.classList.contains("cursor-not-allowed")).toBe(true)
+      expect(sundayAfter.hasAttribute("disabled")).toBe(true)
+      expect(sundayAfter.getAttribute("aria-disabled")).toBe("true")
+    })
+
+    test("disabledDates remains enforced after selecting a date", () => {
+      controller.disabledDatesValue = "2024-11-15,2024-11-20"
+      controller.render()
+
+      // Verify initially disabled
+      const disabled15Before = element.querySelector('[data-date="2024-11-15"]')
+      const disabled20Before = element.querySelector('[data-date="2024-11-20"]')
+
+      expect(disabled15Before.hasAttribute("disabled")).toBe(true)
+      expect(disabled20Before.hasAttribute("disabled")).toBe(true)
+
+      // Select a different date (triggers re-render)
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-18" } } })
+
+      // Check disabled dates are STILL disabled after re-render
+      const disabled15After = element.querySelector('[data-date="2024-11-15"]')
+      const disabled20After = element.querySelector('[data-date="2024-11-20"]')
+
+      expect(disabled15After.hasAttribute("disabled")).toBe(true)
+      expect(disabled15After.getAttribute("aria-disabled")).toBe("true")
+      expect(disabled15After.classList.contains("cursor-not-allowed")).toBe(true)
+      expect(disabled20After.hasAttribute("disabled")).toBe(true)
+      expect(disabled20After.getAttribute("aria-disabled")).toBe("true")
+      expect(disabled20After.classList.contains("cursor-not-allowed")).toBe(true)
+    })
+
+    test("minDate remains enforced after selecting a date", () => {
+      controller.minDateValue = "2024-11-10"
+      controller.render()
+
+      // Verify initially disabled
+      const disabled5Before = element.querySelector('[data-date="2024-11-05"]')
+      expect(disabled5Before.hasAttribute("disabled")).toBe(true)
+
+      // Select a valid date (triggers re-render)
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-15" } } })
+
+      // Check dates before minDate are STILL disabled
+      const disabled5After = element.querySelector('[data-date="2024-11-05"]')
+      expect(disabled5After.hasAttribute("disabled")).toBe(true)
+      expect(disabled5After.getAttribute("aria-disabled")).toBe("true")
+      expect(disabled5After.classList.contains("cursor-not-allowed")).toBe(true)
+    })
+
+    test("maxDate remains enforced after selecting a date", () => {
+      controller.maxDateValue = "2024-11-20"
+      controller.render()
+
+      // Verify initially disabled
+      const disabled25Before = element.querySelector('[data-date="2024-11-25"]')
+      expect(disabled25Before.hasAttribute("disabled")).toBe(true)
+
+      // Select a valid date (triggers re-render)
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-15" } } })
+
+      // Check dates after maxDate are STILL disabled
+      const disabled25After = element.querySelector('[data-date="2024-11-25"]')
+      expect(disabled25After.hasAttribute("disabled")).toBe(true)
+      expect(disabled25After.getAttribute("aria-disabled")).toBe("true")
+      expect(disabled25After.classList.contains("cursor-not-allowed")).toBe(true)
+    })
+
+    test("disabled buttons do not have click action for date selection", () => {
+      controller.disabledDaysOfWeekValue = "0,6" // Weekends
+      controller.render()
+
+      // Disabled buttons should not have the click->selectDay action
+      const saturdayButton = element.querySelector('[data-date="2024-11-16"]')
+      const dataAction = saturdayButton.getAttribute("data-action")
+
+      expect(dataAction).not.toContain("click->")
+      // But should still have focus/blur handlers for keyboard
+      expect(dataAction).toContain("focus->")
+      expect(dataAction).toContain("blur->")
+    })
+
+    test("enabled buttons have click action for date selection", () => {
+      controller.disabledDaysOfWeekValue = "0,6" // Weekends
+      controller.render()
+
+      // Monday should have click action
+      const mondayButton = element.querySelector('[data-date="2024-11-18"]')
+      const dataAction = mondayButton.getAttribute("data-action")
+
+      expect(dataAction).toContain("click->")
+    })
+
+    test("clicking a disabled date does not select it", () => {
+      controller.disabledDaysOfWeekValue = "0,6"
+      controller.render()
+
+      // Try to select a Saturday
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-16" } } })
+
+      expect(controller.selectedDate).toBeNull()
+      expect(controller.selectedValue).toBe("")
+    })
+
+    test("multiple interactions preserve disabled state", () => {
+      controller.disabledDaysOfWeekValue = "0,6" // Weekends
+      controller.render()
+
+      // Select multiple weekday dates in sequence
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-18" } } }) // Monday
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-19" } } }) // Tuesday
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-20" } } }) // Wednesday
+
+      // Weekend should still be disabled after all interactions
+      const saturdayButton = element.querySelector('[data-date="2024-11-16"]')
+      const sundayButton = element.querySelector('[data-date="2024-11-17"]')
+
+      expect(saturdayButton.hasAttribute("disabled")).toBe(true)
+      expect(sundayButton.hasAttribute("disabled")).toBe(true)
+    })
+
+    test("navigation preserves disabled state", () => {
+      controller.disabledDaysOfWeekValue = "0,6" // Weekends
+      controller.render()
+
+      // Navigate to next month
+      controller.nextMonth()
+
+      // December 2024 - check a Saturday (Dec 7) and Sunday (Dec 8)
+      const saturday = element.querySelector('[data-date="2024-12-07"]')
+      const sunday = element.querySelector('[data-date="2024-12-08"]')
+
+      expect(saturday.hasAttribute("disabled")).toBe(true)
+      expect(saturday.classList.contains("cursor-not-allowed")).toBe(true)
+      expect(sunday.hasAttribute("disabled")).toBe(true)
+      expect(sunday.classList.contains("cursor-not-allowed")).toBe(true)
+    })
+  })
+
   describe("range mode CSS rendering", () => {
     beforeEach(async () => {
       application.stop()
