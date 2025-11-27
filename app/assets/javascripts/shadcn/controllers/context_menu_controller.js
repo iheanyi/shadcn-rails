@@ -15,6 +15,7 @@ export default class extends Controller {
     this.boundHandleClickOutside = this.handleClickOutside.bind(this)
     this.boundHandleKeydown = this.handleKeydown.bind(this)
     this.originalOverflow = null
+    this.hideTimeoutId = null
   }
 
   disconnect() {
@@ -24,15 +25,23 @@ export default class extends Controller {
   show(event) {
     event?.preventDefault()
 
+    // Cancel any pending hide timeout from a previous close
+    if (this.hideTimeoutId) {
+      clearTimeout(this.hideTimeoutId)
+      this.hideTimeoutId = null
+    }
+
     // Store mouse position for positioning
     this.mouseX = event?.clientX || 0
     this.mouseY = event?.clientY || 0
 
     this.openValue = true
 
-    // Lock scroll
-    this.originalOverflow = document.body.style.overflow
-    document.body.style.overflow = "hidden"
+    // Lock scroll (only if not already locked)
+    if (document.body.style.overflow !== "hidden") {
+      this.originalOverflow = document.body.style.overflow
+      document.body.style.overflow = "hidden"
+    }
 
     if (this.hasContentTarget) {
       this.contentTarget.hidden = false
@@ -71,12 +80,13 @@ export default class extends Controller {
       this.contentTarget.dataset.state = "closed"
       // Wait for animation to complete before hiding and restoring scroll
       // Animation duration is 100ms, add buffer for smooth transition
-      setTimeout(() => {
+      this.hideTimeoutId = setTimeout(() => {
         if (!this.openValue) {
           this.contentTarget.hidden = true
           // Restore scroll only after menu is fully hidden
           document.body.style.overflow = this.originalOverflow || ""
         }
+        this.hideTimeoutId = null
       }, 100)
     } else {
       // No content target, restore scroll immediately
