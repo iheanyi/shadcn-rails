@@ -4,12 +4,12 @@
           data-controller="shadcn--switch"
           data-shadcn--switch-checked-value="<%= @checked %>">
       <% if @name %>
-        <input type="hidden" name="<%= ERB::Util.html_escape(@name) %>" value="0" autocomplete="off">
+        <input type="hidden" name="<%= ERB::Util.html_escape_once(@name) %>" value="0" autocomplete="off">
         <input type="checkbox"
                class="sr-only"
-               name="<%= ERB::Util.html_escape(@name) %>"<% if @id %>
-               id="<%= ERB::Util.html_escape(@id) %>"<% end %>
-               value="<%= ERB::Util.html_escape(@value) %>"<% if @checked %>
+               name="<%= ERB::Util.html_escape_once(@name) %>"<% if @id %>
+               id="<%= ERB::Util.html_escape_once(@id) %>"<% end %>
+               value="<%= ERB::Util.html_escape_once(@value) %>"<% if @checked %>
                checked<% end %><% if @disabled %>
                disabled<% end %><% if @required %>
                required<% end %>
@@ -41,12 +41,12 @@
         data-controller="shadcn--switch"
         data-shadcn--switch-checked-value="<%= @checked %>">
     <% if @name %>
-      <input type="hidden" name="<%= ERB::Util.html_escape(@name) %>" value="0" autocomplete="off">
+      <input type="hidden" name="<%= ERB::Util.html_escape_once(@name) %>" value="0" autocomplete="off">
       <input type="checkbox"
              class="sr-only"
-             name="<%= ERB::Util.html_escape(@name) %>"<% if @id %>
-             id="<%= ERB::Util.html_escape(@id) %>"<% end %>
-             value="<%= ERB::Util.html_escape(@value) %>"<% if @checked %>
+             name="<%= ERB::Util.html_escape_once(@name) %>"<% if @id %>
+             id="<%= ERB::Util.html_escape_once(@id) %>"<% end %>
+             value="<%= ERB::Util.html_escape_once(@value) %>"<% if @checked %>
              checked<% end %><% if @disabled %>
              disabled<% end %><% if @required %>
              required<% end %>
