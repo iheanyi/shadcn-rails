@@ -32,6 +32,8 @@ class Release
     create_github_release unless @dry_run
 
     puts "\n✅ Release complete!"
+  ensure
+    cleanup
   end
 
   private
@@ -64,7 +66,7 @@ class Release
     nv = npm_version
 
     if rv != nv
-      error "Versions are out of sync!\n  Ruby: #{rv}\n  npm: #{nv}\n\nRun: bin/bump-version #{rv}"
+      error "Versions are out of sync!\n  Ruby: #{rv}\n  npm: #{nv}\n\nRun: bin/bump #{rv}"
     end
 
     @version = rv
@@ -116,10 +118,12 @@ class Release
       puts "  ⚠️  Failed to publish to npm (may need: npm login)"
     end
 
-    # Clean up gem file
-    File.delete(@gem_file) if File.exist?(@gem_file)
-
     success "Packages published"
+  end
+
+  def cleanup
+    # Clean up gem file
+    File.delete(@gem_file) if @gem_file && File.exist?(@gem_file)
   end
 
   def create_github_release
@@ -147,7 +151,13 @@ class Release
     puts "  Creating GitHub release..."
     changelog_section = extract_changelog_section
 
-    run_command(%(gh release create #{tag} --title "v#{@version}" --notes "#{changelog_section}" #{@gem_file}))
+    # Use --notes-file with a temp file to avoid shell escaping issues
+    require "tempfile"
+    Tempfile.create("release-notes") do |f|
+      f.write(changelog_section)
+      f.flush
+      run_command(%(gh release create #{tag} --title "v#{@version}" --notes-file "#{f.path}"))
+    end
 
     success "GitHub release created"
   end
