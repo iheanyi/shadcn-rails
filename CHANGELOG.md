@@ -12,16 +12,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Clipboard controller** for documentation site - Copy buttons now work with "Copied!" feedback
+- **Jest tests for ClipboardController** - Comprehensive test suite for copy functionality
+- **Sidecar templates** for all 47 components - Each component now has its own `.html.erb` template file
+- **Components page** in documentation - New `/docs/components` listing page
+- **Flexible class name support** - Components now accept both `class` and `class_name` attributes
+
+### Changed
+
+- **Floating UI migration started** - Begun work on migrating popover/dropdown positioning to Floating UI
+- **Tooltip animation polish** - Smoother entrance/exit animations
+- **Generator improvements** - Updated component generators with better defaults
+- **Field component updates** - Improved form field wrapper component
 
 ### Fixed
 
 - **Copy button styling** - Fixed code block padding to prevent text overlap with Copy button
 - **Select dropdown clipping** - Fixed overflow issue causing white line through dropdown borders
+- **Sidebar component** - Fixed layout issues in sidebar navigation
+- **OTPSeparatorComponent** - Fixed rendering issues with OTP input separators
+- **Tooltip component styling** - Fixed visual styling issues
+- **Dashboard layout** - Fixed layout issues in example dashboard
+- **HTML escaping** - Use `escape_once` instead of `escape` to prevent double-escaping
 
 ### Documentation
 
 - Added consistent widths to Select component examples
 - Fixed Form Integration example spacing between label and select
+- Updated links throughout docs to point to correct demo app URLs
+- Simplified homepage navigation structure
+- README updates with improved installation instructions
 
 ## [0.2.0] - 2025-11-27
 
