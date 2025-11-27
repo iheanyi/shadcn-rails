@@ -1808,7 +1808,8 @@
         disabledDates: String,
         disabledDaysOfWeek: String,
         required: { type: Boolean, default: false },
-        weekStartsOn: { type: Number, default: 0 }
+        weekStartsOn: { type: Number, default: 0 },
+        showOutsideDays: { type: Boolean, default: true }
       }
       static MONTHS = [
         "January", "February", "March", "April", "May", "June",
@@ -2182,6 +2183,13 @@
           const isFocused = this.focusedDate && currentDate.toDateString() === this.focusedDate.toDateString()
 
           const dateStr = this.formatDateString(currentDate)
+
+          // Skip outside days if showOutsideDays is false
+          if (isOutside && !this.showOutsideDaysValue) {
+            html += '<div class="h-8 w-8"></div>'
+            currentDate.setDate(currentDate.getDate() + 1)
+            continue
+          }
 
           let classes = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center focus:outline-none focus:ring-1 focus:ring-ring"
 
