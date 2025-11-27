@@ -1,5 +1,5 @@
 {
-  "name": "@shadcn/rails-stimulus",
+  "name": "shadcn-rails-stimulus",
   "version": "0.1.0",
   "type": "module",
   "description": "Stimulus controllers for shadcn-rails ViewComponents",
@@ -34,7 +34,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-org/shadcn-rails.git"
+    "url": "git+https://github.com/iheanyi/shadcn-rails.git"
   },
   "keywords": [
     "shadcn",
@@ -44,8 +44,12 @@
     "tailwindcss",
     "ui"
   ],
-  "author": "",
+  "author": "Iheanyi Ekechukwu",
   "license": "MIT",
+  "homepage": "https://github.com/iheanyi/shadcn-rails#readme",
+  "bugs": {
+    "url": "https://github.com/iheanyi/shadcn-rails/issues"
+  },
   "peerDependencies": {
     "@hotwired/stimulus": "^3.0.0"
   },
