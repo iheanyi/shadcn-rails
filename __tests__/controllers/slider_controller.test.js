@@ -938,4 +938,99 @@ describe("SliderController", () => {
       expect(outputDisplay.textContent).toBe("30%")
     })
   })
+
+  describe("two-way binding when controller IS the input element (regression test)", () => {
+    // This tests the case where data-controller is on the <input type="range"> itself,
+    // not on a wrapper element. This is how SliderComponent actually renders.
+    let linkedInput
+
+    beforeEach(async () => {
+      // Simulate how SliderComponent renders: controller on the input element itself
+      const directInputHTML = `
+        <input type="range"
+               data-controller="shadcn--slider"
+               id="direct-slider"
+               min="0"
+               max="100"
+               step="1"
+               value="50"
+               data-input-target="direct-linked-input"
+               data-action="input->shadcn--slider#updateStyle">
+      `
+
+      const setup = await setupController(SliderController, directInputHTML, 'shadcn--slider')
+      application = setup.application
+      element = setup.element
+      controller = setup.controller
+
+      // Create linked input element AFTER setupController
+      linkedInput = document.createElement('input')
+      linkedInput.type = "number"
+      linkedInput.id = "direct-linked-input"
+      linkedInput.value = "50"
+      linkedInput.min = "0"
+      linkedInput.max = "100"
+      document.body.appendChild(linkedInput)
+
+      // Re-run setup to bind the new input
+      controller.setupTwoWayBindings()
+    })
+
+    afterEach(() => {
+      if (linkedInput && linkedInput.parentNode) {
+        linkedInput.parentNode.removeChild(linkedInput)
+      }
+    })
+
+    test("detects that controller element itself is a range input with data-input-target", () => {
+      // The element should match the selector for range inputs with data-input-target
+      expect(element.matches('input[type="range"][data-input-target]')).toBe(true)
+    })
+
+    test("sets up binding when controller element is the range input", () => {
+      // Should have one binding
+      expect(controller.inputBindings.length).toBe(1)
+      expect(controller.inputBindings[0].rangeInput).toBe(element)
+      expect(controller.inputBindings[0].linkedInput).toBe(linkedInput)
+    })
+
+    test("syncs slider value to linked input (slider → input)", () => {
+      element.value = "75"
+      controller.updateStyle({ target: element })
+
+      expect(linkedInput.value).toBe("75")
+    })
+
+    test("syncs linked input value to slider (input → slider)", () => {
+      linkedInput.value = "25"
+      linkedInput.dispatchEvent(new Event('input', { bubbles: true }))
+
+      expect(element.value).toBe("25")
+    })
+
+    test("updates CSS fill when linked input changes", () => {
+      const setPropertySpy = jest.spyOn(element.style, 'setProperty')
+
+      linkedInput.value = "60"
+      linkedInput.dispatchEvent(new Event('input', { bubbles: true }))
+
+      expect(setPropertySpy).toHaveBeenCalledWith("--slider-fill", "60%")
+    })
+
+    test("clamps value when linked input exceeds max", () => {
+      linkedInput.value = "150"
+      linkedInput.dispatchEvent(new Event('input', { bubbles: true }))
+
+      expect(element.value).toBe("100")
+      expect(linkedInput.value).toBe("100")
+    })
+
+    test("clamps value when linked input is below min", () => {
+      linkedInput.value = "-10"
+      linkedInput.dispatchEvent(new Event('input', { bubbles: true }))
+
+      expect(element.value).toBe("0")
+      expect(linkedInput.value).toBe("0")
+    })
+  })
 })

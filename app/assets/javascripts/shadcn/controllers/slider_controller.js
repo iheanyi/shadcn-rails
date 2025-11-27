@@ -54,29 +54,44 @@ export default class extends Controller {
   setupTwoWayBindings() {
     this.inputBindings = []
 
-    // Find all native range inputs with data-input-target attribute
+    // Check if the controller element itself is a range input with data-input-target
+    // (This is the case when data-controller is on the input element directly)
+    if (this.element.matches &&
+        this.element.matches('input[type="range"][data-input-target]')) {
+      this.setupBindingForInput(this.element)
+      return
+    }
+
+    // Otherwise, find all native range inputs with data-input-target attribute within the element
     const rangeInputs = this.element.querySelectorAll('input[type="range"][data-input-target]')
-
     rangeInputs.forEach(rangeInput => {
-      const inputTargetId = rangeInput.dataset.inputTarget
-      const linkedInput = document.getElementById(inputTargetId)
-
-      if (linkedInput) {
-        // Create bound handler for this specific pair
-        const handler = this.handleLinkedInputChange.bind(this, rangeInput)
-
-        // Store binding info for cleanup
-        this.inputBindings.push({
-          rangeInput,
-          linkedInput,
-          handler
-        })
-
-        // Listen for changes on the linked input
-        linkedInput.addEventListener('input', handler)
-        linkedInput.addEventListener('change', handler)
-      }
+      this.setupBindingForInput(rangeInput)
     })
+  }
+
+  /**
+   * Set up two-way binding for a single range input
+   * @param {HTMLInputElement} rangeInput - The range input element
+   */
+  setupBindingForInput(rangeInput) {
+    const inputTargetId = rangeInput.dataset.inputTarget
+    const linkedInput = document.getElementById(inputTargetId)
+
+    if (linkedInput) {
+      // Create bound handler for this specific pair
+      const handler = this.handleLinkedInputChange.bind(this, rangeInput)
+
+      // Store binding info for cleanup
+      this.inputBindings.push({
+        rangeInput,
+        linkedInput,
+        handler
+      })
+
+      // Listen for changes on the linked input
+      linkedInput.addEventListener('input', handler)
+      linkedInput.addEventListener('change', handler)
+    }
   }
 
   /**
