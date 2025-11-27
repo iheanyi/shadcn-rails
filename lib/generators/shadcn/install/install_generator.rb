@@ -7,7 +7,7 @@ module Shadcn
   module Generators
     # Generator for installing shadcn-rails in a Rails application
     # Usage: rails generate shadcn:install
-    class InstallGenerator < Rails::Generators::Base
+    class InstallGenerator < ::Rails::Generators::Base
       source_root File.expand_path("templates", __dir__)
 
       class_option :theme, type: :string, default: "neutral",
@@ -15,7 +15,7 @@ module Shadcn
       class_option :css_variables, type: :boolean, default: true,
         desc: "Use CSS variables for theming"
       class_option :dark_mode, type: :string, default: "class",
-        desc: "Dark mode strategy (class, media, selector)"
+        desc: "Dark mode strategy (class, media, both)"
       class_option :skip_tailwind, type: :boolean, default: false,
         desc: "Skip Tailwind CSS configuration"
 
@@ -41,7 +41,7 @@ module Shadcn
             "\n/*\n *= require shadcn/base\n *= require shadcn/components\n */\n"
           end
         else
-          say "Could not find application stylesheet. Please manually import shadcn/base.css and shadcn/components.css", :yellow
+          say "Could not find application stylesheet. Please manually import shadcn styles.", :yellow
         end
       end
 
@@ -80,6 +80,11 @@ module Shadcn
         say "     <%= render Shadcn::ButtonComponent.new(variant: :primary) do %>"
         say "       Click me"
         say "     <% end %>"
+        say ""
+        say "To add individual components to your app for customization:"
+        say ""
+        say "  rails generate shadcn:add button"
+        say "  rails generate shadcn:add --list"
         say ""
         say "For more information, visit: https://github.com/iheanyi/shadcn-rails"
         say ""

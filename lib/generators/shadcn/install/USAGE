@@ -1,0 +1,22 @@
+Description:
+    Installs and configures shadcn-rails in your Rails application.
+
+Example:
+    rails generate shadcn:install
+
+    This will create:
+        config/initializers/shadcn.rb
+        config/shadcn.yml
+
+    And configure:
+        Tailwind CSS (if present)
+        Stimulus controllers
+
+Options:
+    --theme=NAME        Base color theme (default: neutral)
+                        Available: neutral, slate, stone, zinc, gray
+
+    --dark-mode=MODE    Dark mode strategy (default: class)
+                        Available: class, media, both
+
+    --skip-tailwind     Skip Tailwind CSS configuration

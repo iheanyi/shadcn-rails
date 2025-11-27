@@ -1,0 +1,24 @@
+Description:
+    Adds shadcn components to your Rails application for customization.
+
+    This copies the component source code into your app so you can modify it.
+    Local components take precedence over the gem's built-in components.
+
+Examples:
+    rails generate shadcn:add button
+    rails generate shadcn:add button card dialog
+    rails generate shadcn:add dialog --no-with-controllers
+    rails generate shadcn:add --all
+    rails generate shadcn:add --list
+
+    This will create:
+        app/components/shadcn/button_component.rb
+        app/javascript/controllers/shadcn/dialog_controller.js (if applicable)
+
+Options:
+    --list              List all available components
+    --all               Add all available components
+    --with-controllers  Include Stimulus controllers (default: true)
+    --no-with-controllers  Skip Stimulus controllers
+    --force             Overwrite existing files
+    --path=PATH         Path for components (default: app/components)
