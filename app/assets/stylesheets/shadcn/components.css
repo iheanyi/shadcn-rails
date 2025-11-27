@@ -438,6 +438,18 @@ button[data-state="off"].shadcn-toggle {
 }
 
 /* ============================================
+   Context Menu Component
+   ============================================ */
+
+.shadcn-context-menu[data-state="open"] {
+  animation: fade-in 100ms ease-out, zoom-in 100ms ease-out;
+}
+
+.shadcn-context-menu[data-state="closed"] {
+  animation: fade-out 100ms ease-in, zoom-out 100ms ease-in;
+}
+
+/* ============================================
    Drawer Component
    ============================================ */
 
