@@ -338,6 +338,59 @@
     %>
   </div>
 
+  <!-- Implementing Keyboard Shortcuts -->
+  <div id="keyboard-shortcuts" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Implementing Keyboard Shortcuts</h2>
+    <div class="rounded-md bg-muted/50 p-4">
+      <p class="text-sm text-muted-foreground">
+        <strong>Note:</strong> The keyboard shortcuts displayed in context menu items (via <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">with_shortcut</code>) are <strong>visual hints only</strong>.
+        They do not automatically execute when the keys are pressed. This matches the behavior of shadcn/ui's Context Menu.
+      </p>
+    </div>
+    <p class="leading-7">
+      To implement actual keyboard shortcuts, you'll need to add a global keydown listener. Here's an example using a Stimulus controller:
+    </p>
+    <%= render "docs/code_example", language: "javascript", code: %{// app/javascript/controllers/keyboard_shortcuts_controller.js
+import { Controller } from "@hotwired/stimulus"
+
+export default class extends Controller {
+  connect() {
+    this.boundHandleKeydown = this.handleKeydown.bind(this)
+    document.addEventListener("keydown", this.boundHandleKeydown)
+  }
+
+  disconnect() {
+    document.removeEventListener("keydown", this.boundHandleKeydown)
+  }
+
+  handleKeydown(event) {
+    // Check for Cmd (Mac) or Ctrl (Windows/Linux)
+    const modifier = event.metaKey || event.ctrlKey
+
+    if (modifier && event.key === "z") {
+      event.preventDefault()
+      this.undo()
+    } else if (modifier && event.key === "c") {
+      event.preventDefault()
+      this.copy()
+    } else if (modifier && event.key === "v") {
+      event.preventDefault()
+      this.paste()
+    }
+  }
+
+  undo() { /* implement undo logic */ }
+  copy() { /* implement copy logic */ }
+  paste() { /* implement paste logic */ }
+}} %>
+    <p class="text-sm text-muted-foreground mt-4">
+      Then apply the controller to your page or application layout:
+    </p>
+    <%= render "docs/code_example", language: "erb", code: %{<body data-controller="keyboard-shortcuts">
+  <!-- Your page content -->
+</body>} %>
+  </div>
+
   <!-- Accessibility -->
   <div id="accessibility" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
