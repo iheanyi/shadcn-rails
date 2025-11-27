@@ -155,9 +155,23 @@ The library includes 47 components organized by category:
 | `navigation_menu_component.rb` | Navigation with dropdown content |
 | `resizable_component.rb` | Resizable panel groups |
 
-### Generators (lib/generators/shadcn_rails/)
-- `install/` - Initial setup generator (`rails g shadcn_rails:install`)
-- `eject/` - Copy components into your app for customization (`rails g shadcn_rails:eject button --controllers`)
+### Generators (lib/generators/shadcn/)
+- `install/` - Initial setup generator (`rails g shadcn:install`)
+- `add/` - Add components to your app for customization (`rails g shadcn:add button dialog`)
+
+```bash
+# List all available components
+rails generate shadcn:add --list
+
+# Add specific components
+rails generate shadcn:add button card dialog
+
+# Add all components
+rails generate shadcn:add --all
+
+# Add without Stimulus controllers
+rails generate shadcn:add dialog --no-with-controllers
+```
 
 ### Tests
 - `test/components/` - Component unit tests
@@ -602,7 +616,7 @@ test/dummy/
 - [x] Resizable panels component
 - [x] Input OTP with group separators
 - [x] Floating UI integration for smart dropdown/popover positioning
-- [x] Component eject generator for customization (`rails g shadcn_rails:eject`)
+- [x] Component add generator for customization (`rails g shadcn:add button`)
 
 **Optional Dependencies**:
 - [tw-animate-css](https://github.com/Wombosvideo/tw-animate-css) - Alternative TailwindCSS v4.0 animations
