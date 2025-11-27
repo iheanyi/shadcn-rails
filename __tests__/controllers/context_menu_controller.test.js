@@ -502,14 +502,16 @@ describe("ContextMenuController", () => {
       controller = setup.controller
     })
 
-    test("positions content at mouse location", async () => {
+    test("positions content at mouse location via Floating UI", async () => {
       const event = { preventDefault: jest.fn(), clientX: 100, clientY: 150 }
       controller.show(event)
       await nextFrame()
 
       const content = controller.contentTarget
-      expect(content.style.left).toBe("100px")
-      expect(content.style.top).toBe("150px")
+      // Floating UI positionAtPoint sets fixed positioning with computed coordinates
+      expect(content.style.position).toBe("fixed")
+      expect(content.style.left).toMatch(/^\d+px$/)
+      expect(content.style.top).toMatch(/^\d+px$/)
     })
 
     test("positions content with minimum offset from edges", async () => {

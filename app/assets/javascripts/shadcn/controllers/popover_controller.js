@@ -1,9 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
 import { useClickOutside } from "stimulus-use"
+import { positionFloating } from "../utils/floating"
 
 /**
  * Popover controller for rich content overlays
- * Uses stimulus-use for click outside detection
+ * Uses Floating UI for smart positioning and stimulus-use for click outside detection
  */
 export default class extends Controller {
   static targets = ["trigger", "content"]
@@ -15,6 +16,8 @@ export default class extends Controller {
   }
 
   connect() {
+    this.cleanupFloating = null
+
     // Use stimulus-use for click outside detection
     useClickOutside(this)
 
@@ -25,6 +28,20 @@ export default class extends Controller {
 
   disconnect() {
     this.hide()
+    this.cleanupPositioning()
+  }
+
+  cleanupPositioning() {
+    if (this.cleanupFloating) {
+      this.cleanupFloating()
+      this.cleanupFloating = null
+    }
+  }
+
+  get placement() {
+    // Convert side/align to Floating UI placement
+    const align = this.alignValue === "center" ? "" : `-${this.alignValue}`
+    return `${this.sideValue}${align}`
   }
 
   toggle(event) {
@@ -44,8 +61,14 @@ export default class extends Controller {
     if (this.hasContentTarget) {
       this.contentTarget.hidden = false
       this.contentTarget.dataset.state = "open"
-      this.contentTarget.dataset.side = this.sideValue
-      this.positionContent()
+
+      // Use Floating UI for smart positioning
+      if (this.hasTriggerTarget) {
+        this.cleanupFloating = positionFloating(this.triggerTarget, this.contentTarget, {
+          placement: this.placement,
+          offset: 8
+        })
+      }
     }
 
     if (this.modalValue) {
@@ -60,6 +83,9 @@ export default class extends Controller {
     if (!this.openValue) return
 
     this.openValue = false
+
+    // Cleanup Floating UI auto-update
+    this.cleanupPositioning()
 
     if (this.hasContentTarget) {
       this.contentTarget.dataset.state = "closed"
@@ -85,57 +111,6 @@ export default class extends Controller {
   clickOutside(event) {
     if (this.openValue) {
       this.hide()
-    }
-  }
-
-  positionContent() {
-    if (!this.hasContentTarget || !this.hasTriggerTarget) return
-
-    const trigger = this.triggerTarget.getBoundingClientRect()
-    const content = this.contentTarget
-
-    content.style.position = "absolute"
-
-    const gap = 8
-
-    switch (this.sideValue) {
-      case "top":
-        content.style.bottom = "100%"
-        content.style.top = "auto"
-        content.style.marginBottom = `${gap}px`
-        break
-      case "bottom":
-        content.style.top = "100%"
-        content.style.bottom = "auto"
-        content.style.marginTop = `${gap}px`
-        break
-      case "left":
-        content.style.right = "100%"
-        content.style.left = "auto"
-        content.style.marginRight = `${gap}px`
-        break
-      case "right":
-        content.style.left = "100%"
-        content.style.right = "auto"
-        content.style.marginLeft = `${gap}px`
-        break
-    }
-
-    switch (this.alignValue) {
-      case "start":
-        content.style.left = "0"
-        content.style.right = "auto"
-        break
-      case "center":
-        if (this.sideValue === "top" || this.sideValue === "bottom") {
-          content.style.left = "50%"
-          content.style.transform = "translateX(-50%)"
-        }
-        break
-      case "end":
-        content.style.right = "0"
-        content.style.left = "auto"
-        break
     }
   }
 }

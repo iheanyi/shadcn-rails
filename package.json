@@ -51,6 +51,7 @@
     "url": "https://github.com/iheanyi/shadcn-rails/issues"
   },
   "dependencies": {
+    "@floating-ui/dom": "^1.6.0",
     "stimulus-use": "^0.52.3"
   },
   "peerDependencies": {

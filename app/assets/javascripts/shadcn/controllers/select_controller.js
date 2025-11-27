@@ -1,19 +1,23 @@
 import { Controller } from "@hotwired/stimulus"
 import { useClickOutside } from "stimulus-use"
+import { positionFloating } from "../utils/floating"
 
 /**
  * Select controller for custom select dropdowns
- * Uses stimulus-use for click outside detection
+ * Uses Floating UI for smart positioning and stimulus-use for click outside detection
  */
 export default class extends Controller {
   static targets = ["trigger", "content", "input", "item", "display", "checkIcon"]
   static values = {
-    value: String
+    value: String,
+    placement: { type: String, default: "bottom-start" },
+    sameWidth: { type: Boolean, default: true }
   }
 
   connect() {
     this.isOpen = false
     this.focusedIndex = -1
+    this.cleanupFloating = null
 
     // Use stimulus-use for click outside detection
     useClickOutside(this)
@@ -26,6 +30,14 @@ export default class extends Controller {
 
   disconnect() {
     this.close()
+    this.cleanupPositioning()
+  }
+
+  cleanupPositioning() {
+    if (this.cleanupFloating) {
+      this.cleanupFloating()
+      this.cleanupFloating = null
+    }
   }
 
   toggle(event) {
@@ -42,15 +54,18 @@ export default class extends Controller {
 
     this.isOpen = true
 
-    // Set trigger width as CSS variable for dropdown sizing
-    if (this.hasTriggerTarget && this.hasContentTarget) {
-      const triggerWidth = this.triggerTarget.offsetWidth
-      this.contentTarget.style.setProperty('--radix-select-trigger-width', `${triggerWidth}px`)
-    }
-
     if (this.hasContentTarget) {
       this.contentTarget.hidden = false
       this.contentTarget.dataset.state = "open"
+
+      // Use Floating UI for smart positioning
+      if (this.hasTriggerTarget) {
+        this.cleanupFloating = positionFloating(this.triggerTarget, this.contentTarget, {
+          placement: this.placementValue,
+          sameWidth: this.sameWidthValue,
+          maxHeight: 384 // max-h-96
+        })
+      }
     }
 
     if (this.hasTriggerTarget) {
@@ -74,6 +89,9 @@ export default class extends Controller {
     if (!this.isOpen) return
 
     this.isOpen = false
+
+    // Cleanup Floating UI auto-update
+    this.cleanupPositioning()
 
     if (this.hasContentTarget) {
       this.contentTarget.dataset.state = "closed"

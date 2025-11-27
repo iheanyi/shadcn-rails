@@ -2,34 +2,14 @@
 
 # shadcn-rails configuration
 Shadcn::Rails.configure do |config|
-  # Style preset (currently only "default" is supported)
-  config.style = "default"
-
-  # Base color theme: neutral, stone, zinc, gray, slate
+  # Base color theme
+  # Available themes: neutral, slate, stone, zinc, gray
   config.base_color = "<%= options[:theme] %>"
 
-  # Whether to use CSS variables for theming
-  config.css_variables = <%= options[:css_variables] %>
-
-  # Prefix for Tailwind classes (e.g., "tw-")
-  # config.tailwind_prefix = ""
-
-  # Default border radius for components
-  config.radius = "0.5rem"
-
-  # Dark mode strategy: :class, :media, or :selector
+  # Dark mode strategy
+  # Available strategies: :class, :media, :both
+  # - :class - Uses .dark class on <html> for manual toggling
+  # - :media - Uses @media (prefers-color-scheme: dark) for system preference
+  # - :both - Includes both for maximum flexibility
   config.dark_mode = :<%= options[:dark_mode] %>
-
-  # Icon library to use: :lucide (default)
-  # config.icon_library = :lucide
-
-  # Register custom component aliases
-  # config.alias_component :my_button, MyCustomButtonComponent
-
-  # Register custom themes
-  # config.register_theme :corporate, {
-  #   primary: "210 100% 50%",
-  #   primary_foreground: "0 0% 100%",
-  #   ...
-  # }
 end

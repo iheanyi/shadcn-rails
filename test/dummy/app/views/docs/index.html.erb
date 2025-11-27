@@ -85,8 +85,12 @@
 
   <div class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Adding Components</h2>
-    <p class="leading-7">Add individual components as needed:</p>
-    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component button\nrails generate shadcn:component dialog\nrails generate shadcn:component tabs" %>
+    <p class="leading-7">Add individual components to your app for customization:</p>
+    <%= render "docs/code_example", language: "bash", code: "# Add specific components\nrails generate shadcn:add button dialog tabs\n\n# List all available components\nrails generate shadcn:add --list\n\n# Add all components\nrails generate shadcn:add --all\n\n# Add without Stimulus controllers\nrails generate shadcn:add dialog --exclude-controllers" %>
+    <p class="leading-7 text-sm text-muted-foreground">
+      Components are copied to <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">app/components/shadcn/</code> and Stimulus controllers to <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">app/javascript/controllers/shadcn/</code>.
+      These local files take precedence over the gem's built-in components.
+    </p>
   </div>
 
   <div class="space-y-4">

@@ -1,7 +1,9 @@
 import { Controller } from "@hotwired/stimulus"
+import { positionFloating } from "../utils/floating"
 
 /**
  * Tooltip controller for contextual information
+ * Uses Floating UI for smart positioning
  */
 export default class extends Controller {
   static targets = ["trigger", "content"]
@@ -15,10 +17,25 @@ export default class extends Controller {
   connect() {
     this.showTimeout = null
     this.hideTimeout = null
+    this.cleanupFloating = null
   }
 
   disconnect() {
     this.clearTimeouts()
+    this.cleanupPositioning()
+  }
+
+  cleanupPositioning() {
+    if (this.cleanupFloating) {
+      this.cleanupFloating()
+      this.cleanupFloating = null
+    }
+  }
+
+  get placement() {
+    // Convert side/align to Floating UI placement
+    const align = this.alignValue === "center" ? "" : `-${this.alignValue}`
+    return `${this.sideValue}${align}`
   }
 
   show() {
@@ -28,13 +45,23 @@ export default class extends Controller {
       if (this.hasContentTarget) {
         this.contentTarget.hidden = false
         this.contentTarget.dataset.state = "open"
-        this.positionTooltip()
+
+        // Use Floating UI for smart positioning
+        if (this.hasTriggerTarget) {
+          this.cleanupFloating = positionFloating(this.triggerTarget, this.contentTarget, {
+            placement: this.placement,
+            offset: 8
+          })
+        }
       }
     }, this.delayValue)
   }
 
   hide() {
     this.clearTimeouts()
+
+    // Cleanup Floating UI
+    this.cleanupPositioning()
 
     this.hideTimeout = setTimeout(() => {
       if (this.hasContentTarget) {
@@ -55,63 +82,5 @@ export default class extends Controller {
       clearTimeout(this.hideTimeout)
       this.hideTimeout = null
     }
-  }
-
-  positionTooltip() {
-    if (!this.hasContentTarget || !this.hasTriggerTarget) return
-
-    const trigger = this.triggerTarget.getBoundingClientRect()
-    const tooltip = this.contentTarget
-    const tooltipRect = tooltip.getBoundingClientRect()
-
-    // Reset positioning
-    tooltip.style.position = "absolute"
-    tooltip.style.top = ""
-    tooltip.style.bottom = ""
-    tooltip.style.left = ""
-    tooltip.style.right = ""
-    tooltip.style.transform = ""
-
-    const gap = 8
-
-    switch (this.sideValue) {
-      case "top":
-        tooltip.style.bottom = "100%"
-        tooltip.style.marginBottom = `${gap}px`
-        break
-      case "bottom":
-        tooltip.style.top = "100%"
-        tooltip.style.marginTop = `${gap}px`
-        break
-      case "left":
-        tooltip.style.right = "100%"
-        tooltip.style.marginRight = `${gap}px`
-        tooltip.style.top = "50%"
-        tooltip.style.transform = "translateY(-50%)"
-        break
-      case "right":
-        tooltip.style.left = "100%"
-        tooltip.style.marginLeft = `${gap}px`
-        tooltip.style.top = "50%"
-        tooltip.style.transform = "translateY(-50%)"
-        break
-    }
-
-    if (this.sideValue === "top" || this.sideValue === "bottom") {
-      switch (this.alignValue) {
-        case "start":
-          tooltip.style.left = "0"
-          break
-        case "center":
-          tooltip.style.left = "50%"
-          tooltip.style.transform = "translateX(-50%)"
-          break
-        case "end":
-          tooltip.style.right = "0"
-          break
-      }
-    }
-
-    tooltip.dataset.side = this.sideValue
   }
 }

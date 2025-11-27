@@ -1,10 +1,11 @@
 import { Controller } from "@hotwired/stimulus"
 import { useClickOutside, useDebounce } from "stimulus-use"
+import { positionFloating } from "../utils/floating"
 
 /**
  * Combobox controller for searchable select dropdown
  * Handles open/close, filtering, keyboard navigation, and item selection
- * Uses stimulus-use for click outside detection and debounced filtering
+ * Uses Floating UI for smart positioning and stimulus-use for utilities
  */
 export default class extends Controller {
   static targets = ["trigger", "content", "input", "list", "item", "empty", "displayValue", "hiddenInput"]
@@ -12,12 +13,14 @@ export default class extends Controller {
     open: { type: Boolean, default: false },
     value: { type: String, default: "" },
     selectedIndex: { type: Number, default: -1 },
-    debounceWait: { type: Number, default: 150 }
+    debounceWait: { type: Number, default: 150 },
+    placement: { type: String, default: "bottom-start" }
   }
   static debounces = ["filter"]
 
   connect() {
     this.boundHandleKeydown = this.handleKeydown.bind(this)
+    this.cleanupFloating = null
 
     // Use stimulus-use for click outside detection
     useClickOutside(this)
@@ -27,6 +30,14 @@ export default class extends Controller {
 
   disconnect() {
     document.removeEventListener("keydown", this.boundHandleKeydown)
+    this.cleanupPositioning()
+  }
+
+  cleanupPositioning() {
+    if (this.cleanupFloating) {
+      this.cleanupFloating()
+      this.cleanupFloating = null
+    }
   }
 
   toggle() {
@@ -44,6 +55,13 @@ export default class extends Controller {
     this.contentTarget.hidden = false
     this.contentTarget.dataset.state = "open"
     this.triggerTarget.setAttribute("aria-expanded", "true")
+
+    // Use Floating UI for smart positioning
+    this.cleanupFloating = positionFloating(this.triggerTarget, this.contentTarget, {
+      placement: this.placementValue,
+      sameWidth: true,
+      maxHeight: 384 // max-h-96
+    })
 
     // Focus the input
     requestAnimationFrame(() => {
@@ -66,6 +84,9 @@ export default class extends Controller {
     this.openValue = false
     this.contentTarget.dataset.state = "closed"
     this.triggerTarget.setAttribute("aria-expanded", "false")
+
+    // Cleanup Floating UI
+    this.cleanupPositioning()
 
     // Hide after animation completes, then reset filter state
     const hideAndReset = () => {

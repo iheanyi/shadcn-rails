@@ -1,8 +1,9 @@
 import BaseMenuController from "./base_menu_controller"
+import { positionFloating } from "../utils/floating"
 
 /**
  * Dropdown controller for dropdown menus
- * Extends BaseMenuController with dropdown-specific positioning
+ * Extends BaseMenuController with Floating UI positioning
  */
 export default class extends BaseMenuController {
   static targets = [...BaseMenuController.targets]
@@ -12,53 +13,43 @@ export default class extends BaseMenuController {
     side: { type: String, default: "bottom" }
   }
 
-  show(event) {
-    // Store side value for positioning before showing
-    if (this.hasContentTarget) {
-      this.contentTarget.dataset.side = this.sideValue
+  connect() {
+    this.cleanupFloating = null
+    super.connect()
+  }
+
+  disconnect() {
+    this.cleanupPositioning()
+    super.disconnect()
+  }
+
+  cleanupPositioning() {
+    if (this.cleanupFloating) {
+      this.cleanupFloating()
+      this.cleanupFloating = null
     }
-    super.show(event)
+  }
+
+  get placement() {
+    // Convert side/align to Floating UI placement
+    const align = this.alignValue === "center" ? "" : `-${this.alignValue}`
+    return `${this.sideValue}${align}`
   }
 
   positionContent() {
     if (!this.hasContentTarget || !this.hasTriggerTarget) return
 
-    const trigger = this.triggerTarget.getBoundingClientRect()
-    const content = this.contentTarget
+    // Use Floating UI for smart positioning
+    this.cleanupFloating = positionFloating(this.triggerTarget, this.contentTarget, {
+      placement: this.placement,
+      offset: 4,
+      sameWidth: false
+    })
+  }
 
-    // Position based on side and align
-    content.style.position = "absolute"
-    content.style.minWidth = `${trigger.width}px`
-
-    switch (this.sideValue) {
-      case "top":
-        content.style.bottom = "100%"
-        content.style.top = "auto"
-        content.style.marginBottom = "4px"
-        break
-      case "bottom":
-      default:
-        content.style.top = "100%"
-        content.style.bottom = "auto"
-        content.style.marginTop = "4px"
-        break
-    }
-
-    switch (this.alignValue) {
-      case "start":
-        content.style.left = "0"
-        content.style.right = "auto"
-        break
-      case "center":
-        content.style.left = "50%"
-        content.style.transform = "translateX(-50%)"
-        break
-      case "end":
-      default:
-        content.style.right = "0"
-        content.style.left = "auto"
-        break
-    }
+  hideMenu() {
+    this.cleanupPositioning()
+    super.hideMenu()
   }
 
   toggleCheckbox(event) {

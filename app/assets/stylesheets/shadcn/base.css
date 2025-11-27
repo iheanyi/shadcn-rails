@@ -302,6 +302,29 @@ body {
   }
 }
 
+/* Tooltip animations - subtle pop effect */
+@keyframes tooltip-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes tooltip-out {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.96) translateY(2px);
+  }
+}
+
 /* ============================================
    Animation Utility Classes
    ============================================ */
@@ -384,6 +407,15 @@ body {
 
 .slide-out-to-right {
   animation-name: slide-out-to-right;
+}
+
+/* Tooltip animation classes */
+.animate-tooltip-in {
+  animation: tooltip-in 150ms ease-out both;
+}
+
+.animate-tooltip-out {
+  animation: tooltip-out 100ms ease-in both;
 }
 
 .animate-spin {

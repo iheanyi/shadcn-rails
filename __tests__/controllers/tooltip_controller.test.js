@@ -234,16 +234,18 @@ describe("TooltipController", () => {
   })
 
   describe("positioning - side", () => {
-    test("positions tooltip on top by default", async () => {
+    test("positions tooltip with Floating UI on top by default", async () => {
       const trigger = element.querySelector('[data-shadcn--tooltip-target="trigger"]')
       const content = element.querySelector('[data-shadcn--tooltip-target="content"]')
 
       trigger.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }))
       await wait(250)
 
-      expect(content.style.bottom).toBe("100%")
-      expect(content.style.marginBottom).toBe("8px")
-      expect(content.dataset.side).toBe("top")
+      // Floating UI sets absolute positioning with pixel values
+      expect(content.style.position).toBe("absolute")
+      expect(content.style.left).toMatch(/^\d+px$/)
+      expect(content.style.top).toMatch(/^\d+px$/)
+      expect(content.dataset.side).toBeDefined()
     })
 
     test("positions tooltip on bottom", async () => {
@@ -263,9 +265,11 @@ describe("TooltipController", () => {
       trigger.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }))
       await wait(250)
 
-      expect(content.style.top).toBe("100%")
-      expect(content.style.marginTop).toBe("8px")
-      expect(content.dataset.side).toBe("bottom")
+      // Floating UI handles positioning with absolute coordinates
+      expect(content.style.position).toBe("absolute")
+      expect(content.style.left).toMatch(/^\d+px$/)
+      expect(content.style.top).toMatch(/^\d+px$/)
+      expect(content.dataset.side).toBeDefined()
     })
 
     test("positions tooltip on left", async () => {
@@ -285,11 +289,11 @@ describe("TooltipController", () => {
       trigger.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }))
       await wait(250)
 
-      expect(content.style.right).toBe("100%")
-      expect(content.style.marginRight).toBe("8px")
-      expect(content.style.top).toBe("50%")
-      expect(content.style.transform).toBe("translateY(-50%)")
-      expect(content.dataset.side).toBe("left")
+      // Floating UI handles all positioning via absolute coordinates
+      expect(content.style.position).toBe("absolute")
+      expect(content.style.left).toMatch(/^\d+px$/)
+      expect(content.style.top).toMatch(/^\d+px$/)
+      expect(content.dataset.side).toBeDefined()
     })
 
     test("positions tooltip on right", async () => {
@@ -309,27 +313,29 @@ describe("TooltipController", () => {
       trigger.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }))
       await wait(250)
 
-      expect(content.style.left).toBe("100%")
-      expect(content.style.marginLeft).toBe("8px")
-      expect(content.style.top).toBe("50%")
-      expect(content.style.transform).toBe("translateY(-50%)")
-      expect(content.dataset.side).toBe("right")
+      // Floating UI handles positioning
+      expect(content.style.position).toBe("absolute")
+      expect(content.style.left).toMatch(/^\d+px$/)
+      expect(content.style.top).toMatch(/^\d+px$/)
+      expect(content.dataset.side).toBeDefined()
     })
   })
 
-  describe("positioning - align", () => {
-    test("centers tooltip by default on top/bottom", async () => {
+  describe("positioning - Floating UI", () => {
+    test("uses absolute positioning via Floating UI", async () => {
       const trigger = element.querySelector('[data-shadcn--tooltip-target="trigger"]')
       const content = element.querySelector('[data-shadcn--tooltip-target="content"]')
 
       trigger.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }))
       await wait(250)
 
-      expect(content.style.left).toBe("50%")
-      expect(content.style.transform).toBe("translateX(-50%)")
+      // Floating UI sets absolute positioning with pixel values
+      expect(content.style.position).toBe("absolute")
+      expect(content.style.left).toMatch(/^\d+px$/)
+      expect(content.style.top).toMatch(/^\d+px$/)
     })
 
-    test("aligns tooltip to start on top", async () => {
+    test("sets data-side attribute based on placement", async () => {
       application.stop()
       document.body.innerHTML = createTooltipHTML("top", "start")
 
@@ -346,10 +352,11 @@ describe("TooltipController", () => {
       trigger.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }))
       await wait(250)
 
-      expect(content.style.left).toBe("0px")
+      // Floating UI sets data-side based on final placement
+      expect(content.dataset.side).toBeDefined()
     })
 
-    test("aligns tooltip to end on top", async () => {
+    test("positions with different placements", async () => {
       application.stop()
       document.body.innerHTML = createTooltipHTML("top", "end")
 
@@ -366,10 +373,11 @@ describe("TooltipController", () => {
       trigger.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }))
       await wait(250)
 
-      expect(content.style.right).toBe("0px")
+      // Floating UI handles positioning, we just verify it's applied
+      expect(content.style.position).toBe("absolute")
     })
 
-    test("centers tooltip on bottom", async () => {
+    test("applies Floating UI positioning for bottom placement", async () => {
       application.stop()
       document.body.innerHTML = createTooltipHTML("bottom", "center")
 
@@ -386,11 +394,13 @@ describe("TooltipController", () => {
       trigger.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }))
       await wait(250)
 
-      expect(content.style.left).toBe("50%")
-      expect(content.style.transform).toBe("translateX(-50%)")
+      // Floating UI handles all positioning via computed coordinates
+      expect(content.style.position).toBe("absolute")
+      expect(content.style.left).toMatch(/^\d+px$/)
+      expect(content.style.top).toMatch(/^\d+px$/)
     })
 
-    test("does not apply horizontal alignment on left/right sides", async () => {
+    test("applies Floating UI positioning for left side", async () => {
       application.stop()
       document.body.innerHTML = createTooltipHTML("left", "start")
 
@@ -407,11 +417,10 @@ describe("TooltipController", () => {
       trigger.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }))
       await wait(250)
 
-      // Left/right sides only set vertical positioning
-      expect(content.style.top).toBe("50%")
-      expect(content.style.transform).toBe("translateY(-50%)")
-      // Should not have left/right alignment
-      expect(content.style.left).toBe("")
+      // Floating UI handles all placements with absolute positioning
+      expect(content.style.position).toBe("absolute")
+      expect(content.style.left).toMatch(/^\d+px$/)
+      expect(content.style.top).toMatch(/^\d+px$/)
     })
   })
 

@@ -1,20 +1,25 @@
 import { Controller } from "@hotwired/stimulus"
+import { positionFloating } from "../utils/floating"
 
 /**
  * Hover Card Controller
  * Handles showing/hiding content on hover with delays
+ * Uses Floating UI for smart positioning
  */
 export default class extends Controller {
   static targets = ["trigger", "content"]
   static values = {
     openDelay: { type: Number, default: 700 },
-    closeDelay: { type: Number, default: 300 }
+    closeDelay: { type: Number, default: 300 },
+    side: { type: String, default: "bottom" },
+    align: { type: String, default: "center" }
   }
 
   connect() {
     this.openTimeout = null
     this.closeTimeout = null
     this.isOpen = false
+    this.cleanupFloating = null
 
     this.triggerTarget.addEventListener("mouseenter", this.scheduleOpen.bind(this))
     this.triggerTarget.addEventListener("mouseleave", this.scheduleClose.bind(this))
@@ -27,6 +32,20 @@ export default class extends Controller {
 
   disconnect() {
     this.clearTimeouts()
+    this.cleanupPositioning()
+  }
+
+  cleanupPositioning() {
+    if (this.cleanupFloating) {
+      this.cleanupFloating()
+      this.cleanupFloating = null
+    }
+  }
+
+  get placement() {
+    // Convert side/align to Floating UI placement
+    const align = this.alignValue === "center" ? "" : `-${this.alignValue}`
+    return `${this.sideValue}${align}`
   }
 
   scheduleOpen() {
@@ -67,7 +86,12 @@ export default class extends Controller {
     this.isOpen = true
     this.contentTarget.style.display = "block"
     this.contentTarget.setAttribute("data-state", "open")
-    this.positionContent()
+
+    // Use Floating UI for smart positioning
+    this.cleanupFloating = positionFloating(this.triggerTarget, this.contentTarget, {
+      placement: this.placement,
+      offset: 8
+    })
 
     this.dispatch("open")
   }
@@ -78,6 +102,9 @@ export default class extends Controller {
     this.isOpen = false
     this.contentTarget.setAttribute("data-state", "closed")
 
+    // Cleanup Floating UI
+    this.cleanupPositioning()
+
     // Wait for animation to complete
     setTimeout(() => {
       if (!this.isOpen) {
@@ -86,58 +113,5 @@ export default class extends Controller {
     }, 150)
 
     this.dispatch("close")
-  }
-
-  positionContent() {
-    const trigger = this.triggerTarget.getBoundingClientRect()
-    const content = this.contentTarget
-    const side = content.dataset.side || "bottom"
-    const align = content.dataset.align || "center"
-
-    // Reset position
-    content.style.top = ""
-    content.style.left = ""
-    content.style.right = ""
-    content.style.bottom = ""
-
-    const gap = 8 // Gap between trigger and content
-
-    switch (side) {
-      case "top":
-        content.style.bottom = "100%"
-        content.style.marginBottom = `${gap}px`
-        break
-      case "bottom":
-        content.style.top = "100%"
-        content.style.marginTop = `${gap}px`
-        break
-      case "left":
-        content.style.right = "100%"
-        content.style.marginRight = `${gap}px`
-        content.style.top = "0"
-        break
-      case "right":
-        content.style.left = "100%"
-        content.style.marginLeft = `${gap}px`
-        content.style.top = "0"
-        break
-    }
-
-    // Handle alignment for top/bottom
-    if (side === "top" || side === "bottom") {
-      switch (align) {
-        case "start":
-          content.style.left = "0"
-          break
-        case "end":
-          content.style.right = "0"
-          break
-        case "center":
-        default:
-          content.style.left = "50%"
-          content.style.transform = "translateX(-50%)"
-          break
-      }
-    }
   }
 }
