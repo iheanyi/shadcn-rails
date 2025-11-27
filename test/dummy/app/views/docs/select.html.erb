@@ -56,7 +56,7 @@
       <h3 class="text-lg font-semibold">With Groups</h3>
       <p class="text-sm text-muted-foreground">Organize options into labeled groups.</p>
       <%= render "docs/demo_card" do %>
-        <%= render Shadcn::SelectComponent.new(name: "timezone", placeholder: "Select a timezone") do |select| %>
+        <%= render Shadcn::SelectComponent.new(name: "timezone", placeholder: "Select a timezone", class_name: "w-[200px]") do |select| %>
           <% select.with_group(label: "North America") do |group| %>
             <% group.with_item(value: "est") { "Eastern Time" } %>
             <% group.with_item(value: "cst") { "Central Time" } %>
@@ -80,7 +80,8 @@
         <%= render Shadcn::SelectComponent.new(
           name: "fruit",
           value: "banana",
-          placeholder: "Select a fruit"
+          placeholder: "Select a fruit",
+          class_name: "w-[180px]"
         ) do |select| %>
           <% select.with_item(value: "apple") { "Apple" } %>
           <% select.with_item(value: "banana") { "Banana" } %>
@@ -95,7 +96,7 @@
       <h3 class="text-lg font-semibold">Disabled State</h3>
       <p class="text-sm text-muted-foreground">Disable the entire select component.</p>
       <%= render "docs/demo_card" do %>
-        <%= render Shadcn::SelectComponent.new(name: "fruit", placeholder: "Select a fruit", disabled: true) do |select| %>
+        <%= render Shadcn::SelectComponent.new(name: "fruit", placeholder: "Select a fruit", disabled: true, class_name: "w-[180px]") do |select| %>
           <% select.with_item(value: "apple") { "Apple" } %>
           <% select.with_item(value: "banana") { "Banana" } %>
           <% select.with_item(value: "orange") { "Orange" } %>
@@ -109,7 +110,7 @@
       <h3 class="text-lg font-semibold">Disabled Items</h3>
       <p class="text-sm text-muted-foreground">Disable specific items within the select.</p>
       <%= render "docs/demo_card" do %>
-        <%= render Shadcn::SelectComponent.new(name: "fruit", placeholder: "Select a fruit") do |select| %>
+        <%= render Shadcn::SelectComponent.new(name: "fruit", placeholder: "Select a fruit", class_name: "w-[180px]") do |select| %>
           <% select.with_item(value: "apple") { "Apple" } %>
           <% select.with_item(value: "banana", disabled: true) { "Banana (out of stock)" } %>
           <% select.with_item(value: "orange") { "Orange" } %>
@@ -132,7 +133,8 @@
               name: "country",
               id: "country",
               placeholder: "Select your country",
-              required: true
+              required: true,
+              class_name: "w-[200px]"
             ) do |select| %>
               <% select.with_item(value: "us") { "United States" } %>
               <% select.with_item(value: "uk") { "United Kingdom" } %>
