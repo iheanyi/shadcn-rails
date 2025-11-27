@@ -62,23 +62,26 @@ export default class extends Controller {
 
     this.openValue = false
 
-    // Restore scroll
-    document.body.style.overflow = this.originalOverflow || ""
-
-    if (this.hasContentTarget) {
-      this.contentTarget.dataset.state = "closed"
-      // Hide after animation
-      setTimeout(() => {
-        if (!this.openValue) {
-          this.contentTarget.hidden = true
-        }
-      }, 150)
-    }
-
-    // Remove event listeners
+    // Remove event listeners immediately to prevent double-triggering
     document.removeEventListener("click", this.boundHandleClickOutside)
     document.removeEventListener("contextmenu", this.boundHandleClickOutside)
     document.removeEventListener("keydown", this.boundHandleKeydown)
+
+    if (this.hasContentTarget) {
+      this.contentTarget.dataset.state = "closed"
+      // Wait for animation to complete before hiding and restoring scroll
+      // Animation duration is 100ms, add buffer for smooth transition
+      setTimeout(() => {
+        if (!this.openValue) {
+          this.contentTarget.hidden = true
+          // Restore scroll only after menu is fully hidden
+          document.body.style.overflow = this.originalOverflow || ""
+        }
+      }, 100)
+    } else {
+      // No content target, restore scroll immediately
+      document.body.style.overflow = this.originalOverflow || ""
+    }
 
     // Reset focus index
     this.focusedIndex = -1
