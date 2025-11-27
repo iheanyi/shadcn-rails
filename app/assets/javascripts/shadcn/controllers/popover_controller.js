@@ -1,7 +1,9 @@
 import { Controller } from "@hotwired/stimulus"
+import { useClickOutside } from "stimulus-use"
 
 /**
  * Popover controller for rich content overlays
+ * Uses stimulus-use for click outside detection
  */
 export default class extends Controller {
   static targets = ["trigger", "content"]
@@ -13,7 +15,8 @@ export default class extends Controller {
   }
 
   connect() {
-    this.boundHandleClickOutside = this.handleClickOutside.bind(this)
+    // Use stimulus-use for click outside detection
+    useClickOutside(this)
 
     if (this.openValue) {
       this.show()
@@ -45,8 +48,6 @@ export default class extends Controller {
       this.positionContent()
     }
 
-    document.addEventListener("click", this.boundHandleClickOutside)
-
     if (this.modalValue) {
       document.body.style.pointerEvents = "none"
       this.contentTarget.style.pointerEvents = "auto"
@@ -69,8 +70,6 @@ export default class extends Controller {
       }, 150)
     }
 
-    document.removeEventListener("click", this.boundHandleClickOutside)
-
     if (this.modalValue) {
       document.body.style.pointerEvents = ""
     }
@@ -82,8 +81,9 @@ export default class extends Controller {
     this.hide()
   }
 
-  handleClickOutside(event) {
-    if (!this.element.contains(event.target)) {
+  // Called by stimulus-use when clicking outside the element
+  clickOutside(event) {
+    if (this.openValue) {
       this.hide()
     }
   }

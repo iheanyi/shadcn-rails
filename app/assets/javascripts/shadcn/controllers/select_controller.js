@@ -1,7 +1,9 @@
 import { Controller } from "@hotwired/stimulus"
+import { useClickOutside } from "stimulus-use"
 
 /**
  * Select controller for custom select dropdowns
+ * Uses stimulus-use for click outside detection
  */
 export default class extends Controller {
   static targets = ["trigger", "content", "input", "item", "display", "checkIcon"]
@@ -12,7 +14,9 @@ export default class extends Controller {
   connect() {
     this.isOpen = false
     this.focusedIndex = -1
-    this.boundHandleClickOutside = this.handleClickOutside.bind(this)
+
+    // Use stimulus-use for click outside detection
+    useClickOutside(this)
 
     // Set initial value display
     if (this.valueValue) {
@@ -53,8 +57,6 @@ export default class extends Controller {
       this.triggerTarget.setAttribute("aria-expanded", "true")
     }
 
-    document.addEventListener("click", this.boundHandleClickOutside)
-
     // Focus current value or first item
     this.focusedIndex = -1
     const currentItem = this.itemTargets.find(item => item.dataset.value === this.valueValue)
@@ -86,10 +88,16 @@ export default class extends Controller {
       this.triggerTarget.setAttribute("aria-expanded", "false")
     }
 
-    document.removeEventListener("click", this.boundHandleClickOutside)
     this.focusedIndex = -1
 
     this.dispatch("closed")
+  }
+
+  // Called by stimulus-use when clicking outside the element
+  clickOutside(event) {
+    if (this.isOpen) {
+      this.close()
+    }
   }
 
   select(event) {
@@ -129,12 +137,6 @@ export default class extends Controller {
 
     if (dispatch) {
       this.dispatch("change", { detail: { value } })
-    }
-  }
-
-  handleClickOutside(event) {
-    if (!this.element.contains(event.target)) {
-      this.close()
     }
   }
 

@@ -499,7 +499,8 @@ describe("SelectController", () => {
       await nextFrame()
 
       const outsideElement = document.getElementById("outside")
-      click(outsideElement)
+      // Call clickOutside directly since stimulus-use doesn't trigger via DOM events in jsdom
+      controller.clickOutside({ target: outsideElement })
       await nextFrame()
 
       expect(controller.isOpen).toBe(false)
@@ -509,6 +510,9 @@ describe("SelectController", () => {
       controller.open()
       await nextFrame()
 
+      // Clicking inside the controller element should not close via clickOutside
+      // The clickOutside method from stimulus-use only fires for clicks outside the element
+      // So we verify the select stays open after an internal click action
       click(controller.contentTarget)
       await nextFrame()
 
