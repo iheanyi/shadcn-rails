@@ -7,7 +7,7 @@ export default {
     '^.+\\.js$': 'babel-jest'
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!@hotwired/stimulus)'
+    '/node_modules/(?!@hotwired/stimulus|stimulus-use)'
   ],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   collectCoverageFrom: [

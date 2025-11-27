@@ -462,7 +462,7 @@ describe("ContextMenuController", () => {
       // Simulate click outside
       const outsideElement = document.createElement("div")
       document.body.appendChild(outsideElement)
-      controller.handleClickOutside({ target: outsideElement })
+      controller.clickOutside({ target: outsideElement })
       await nextFrame()
 
       expect(controller.openValue).toBe(false)
@@ -476,7 +476,7 @@ describe("ContextMenuController", () => {
       await nextFrame()
 
       // Simulate click inside content
-      controller.handleClickOutside({ target: controller.contentTarget })
+      controller.clickOutside({ target: controller.contentTarget })
       await nextFrame()
 
       expect(controller.openValue).toBe(true)
@@ -763,7 +763,7 @@ describe("ContextMenuController", () => {
       expect(controller.openValue).toBe(true)
     })
 
-    test("handleClickOutside SHOULD close menu when regular click triggers on trigger element", async () => {
+    test("clickOutside SHOULD close menu when regular click triggers on trigger element", async () => {
       // Open the menu first
       const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
       controller.show(event)
@@ -773,7 +773,7 @@ describe("ContextMenuController", () => {
       expect(controller.openValue).toBe(true)
 
       // Simulate a regular click event on the trigger element
-      controller.handleClickOutside({ type: "click", target: controller.triggerTarget })
+      controller.clickOutside({ type: "click", target: controller.triggerTarget })
       await nextFrame()
 
       // Menu should close because it was a regular click (not a contextmenu event)

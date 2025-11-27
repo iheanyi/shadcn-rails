@@ -17,6 +17,14 @@ export default class extends BaseMenuController {
     this.originalOverflow = null
     this.mouseX = 0
     this.mouseY = 0
+    this._ignoreClickOutside = false
+  }
+
+  // Override clickOutside to handle the deferred close behavior
+  // Context menus need to ignore clicks in the same frame as the right-click
+  clickOutside(event) {
+    if (this._ignoreClickOutside) return
+    super.clickOutside(event)
   }
 
   show(event) {
@@ -43,11 +51,12 @@ export default class extends BaseMenuController {
       this.positionContent()
     }
 
-    // Defer adding click listener to prevent immediate close from right-click
+    // Defer click outside detection to prevent immediate close from right-click
     // The contextmenu event can sometimes trigger a click in the same event cycle
+    this._ignoreClickOutside = true
     requestAnimationFrame(() => {
+      this._ignoreClickOutside = false
       if (this.openValue) {
-        document.addEventListener("click", this.boundHandleClickOutside)
         document.addEventListener("contextmenu", this.boundHandleContextMenu)
       }
     })
@@ -66,7 +75,6 @@ export default class extends BaseMenuController {
     this.openValue = false
 
     // Remove event listeners immediately to prevent double-triggering
-    document.removeEventListener("click", this.boundHandleClickOutside)
     document.removeEventListener("contextmenu", this.boundHandleContextMenu)
     document.removeEventListener("keydown", this.boundHandleKeydown)
 

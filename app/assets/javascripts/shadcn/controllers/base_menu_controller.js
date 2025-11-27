@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { useClickOutside } from "stimulus-use"
 
 /**
  * Base Menu Controller
@@ -8,7 +9,7 @@ import { Controller } from "@hotwired/stimulus"
  * - Opening/closing menus
  * - Keyboard navigation (arrow keys, home, end, enter, space, escape)
  * - Focus management
- * - Click outside to close
+ * - Click outside to close (using stimulus-use)
  * - Item selection
  *
  * Subclasses can override specific methods to customize behavior:
@@ -28,8 +29,10 @@ export default class extends Controller {
   connect() {
     this.focusedIndex = -1
     this.hideTimeoutId = null
-    this.boundHandleClickOutside = this.handleClickOutside.bind(this)
     this.boundHandleKeydown = this.handleKeydown.bind(this)
+
+    // Use stimulus-use for click outside detection
+    useClickOutside(this)
 
     if (this.openValue) {
       this.show()
@@ -126,9 +129,10 @@ export default class extends Controller {
     this.hide()
   }
 
-  // Event handling
-  handleClickOutside(event) {
-    if (this.shouldCloseOnClickOutside(event)) {
+  // Event handling - clickOutside is called by stimulus-use
+  clickOutside(event) {
+    // Only close if menu is open and shouldCloseOnClickOutside returns true
+    if (this.openValue && this.shouldCloseOnClickOutside(event)) {
       this.hide()
     }
   }
@@ -244,13 +248,12 @@ export default class extends Controller {
   }
 
   // Private helpers
+  // Note: click outside is handled by stimulus-use's useClickOutside
   addEventListeners() {
-    document.addEventListener("click", this.boundHandleClickOutside)
     document.addEventListener("keydown", this.boundHandleKeydown)
   }
 
   removeEventListeners() {
-    document.removeEventListener("click", this.boundHandleClickOutside)
     document.removeEventListener("keydown", this.boundHandleKeydown)
   }
 
