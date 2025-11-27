@@ -83,6 +83,38 @@
       <%= erb_example("slider/synced_label") %>
     </div>
 
+    <!-- Two-Way Input Binding -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Two-Way Input Binding</h3>
+      <p class="text-sm text-muted-foreground">Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">data-input-target</code> to bind a slider to a number input for two-way sync. Changes to either element update the other.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="space-y-4 w-full max-w-md">
+          <div class="flex items-center justify-between gap-4">
+            <%= render Shadcn::LabelComponent.new(for: "brightness-input") { "Brightness" } %>
+            <%= render Shadcn::InputComponent.new(
+              id: "brightness-input",
+              type: "number",
+              value: 75,
+              min: 0,
+              max: 100,
+              class_name: "w-20 text-center"
+            ) %>
+          </div>
+          <%= render Shadcn::SliderComponent.new(
+            value: 75,
+            max: 100,
+            data: {
+              "input-target": "brightness-input"
+            }
+          ) %>
+          <p class="text-xs text-muted-foreground">
+            Change the slider or type a value in the input - both stay in sync.
+          </p>
+        </div>
+      <% end %>
+      <%= erb_example("slider/two_way_binding") %>
+    </div>
+
     <!-- Custom Range -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Custom Range</h3>
@@ -215,7 +247,7 @@
   <!-- Stimulus Controller -->
   <%= render "docs/stimulus_docs",
     controller: "shadcn--slider",
-    description: "Updates the slider's visual fill and optionally syncs a value label.",
+    description: "Updates the slider's visual fill and supports one-way output sync and two-way input binding.",
     values: [
       { name: "outputFormat", type: "String", description: "Format string for output ({value} and {percent} placeholders)" }
     ],
@@ -223,9 +255,20 @@
       { name: "output", description: "Element to display the current value (auto-synced on change)" }
     ],
     actions: [
-      { name: "updateStyle", description: "Updates CSS fill and syncs output target on input" }
+      { name: "updateStyle", description: "Updates CSS fill, syncs output target, and updates linked input on change" }
     ]
   %>
+
+  <!-- Data Attributes -->
+  <div class="space-y-4 mt-8">
+    <h3 class="text-lg font-semibold">Data Attributes</h3>
+    <p class="text-sm text-muted-foreground">These attributes can be added to the slider's native <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">&lt;input type="range"&gt;</code> element:</p>
+    <%= render "docs/props_table", props: [
+      { name: "data-output-target", type: "String", default: "nil", description: "ID of element to display value (one-way: slider → output)" },
+      { name: "data-output-format", type: "String", default: "{value}", description: "Format string with {value} and {percent} placeholders" },
+      { name: "data-input-target", type: "String", default: "nil", description: "ID of input element for two-way binding (slider ↔ input)" }
+    ] %>
+  </div>
 
   <!-- Accessibility -->
   <div class="space-y-4">
