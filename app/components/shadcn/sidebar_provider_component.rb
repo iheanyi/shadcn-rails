@@ -5,16 +5,19 @@ module Shadcn
   class SidebarProviderComponent < BaseComponent
     BASE_CLASSES = "group/sidebar-wrapper flex min-h-svh w-full has-[[data-variant=inset]]:bg-sidebar"
 
-    option :default_open, default: -> { true }
-    option :open, default: -> { nil }
-    option :keyboard_shortcut, default: -> { "b" }
-
     renders_one :sidebar, lambda { |**options|
       SidebarComponent.new(**options)
     }
     renders_one :inset, lambda { |**options|
       SidebarInsetComponent.new(**options)
     }
+
+    def initialize(default_open: true, open: nil, keyboard_shortcut: "b", **options)
+      super(**options)
+      @default_open = default_open
+      @open = open
+      @keyboard_shortcut = keyboard_shortcut
+    end
 
     def call
       content_tag(:div, provider_content, provider_attributes)
@@ -32,7 +35,7 @@ module Shadcn
         style: sidebar_style,
         "data-controller": "shadcn--sidebar",
         "data-shadcn--sidebar-open-value": initial_open_state,
-        "data-shadcn--sidebar-keyboard-shortcut-value": keyboard_shortcut
+        "data-shadcn--sidebar-keyboard-shortcut-value": @keyboard_shortcut
       }
       attrs.merge!(html_options)
       attrs.merge!(build_data)
@@ -48,7 +51,7 @@ module Shadcn
 
     def initial_open_state
       # Use explicit open prop if provided, otherwise use default_open
-      open.nil? ? default_open : open
+      @open.nil? ? @default_open : @open
     end
   end
 end

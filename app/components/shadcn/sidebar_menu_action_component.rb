@@ -7,7 +7,10 @@ module Shadcn
     COLLAPSED_CLASSES = "group-data-[collapsible=icon]:hidden"
     SHOW_ON_HOVER_CLASSES = "after:absolute after:-inset-2 after:md:hidden group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground md:opacity-0"
 
-    option :show_on_hover, default: -> { false }
+    def initialize(show_on_hover: false, **options)
+      super(**options)
+      @show_on_hover = show_on_hover
+    end
 
     def call
       content_tag(:button, content, action_attributes)
@@ -21,7 +24,7 @@ module Shadcn
         class: cn(
           BASE_CLASSES,
           COLLAPSED_CLASSES,
-          show_on_hover ? SHOW_ON_HOVER_CLASSES : nil,
+          @show_on_hover ? SHOW_ON_HOVER_CLASSES : nil,
           class_name
         ),
         "data-sidebar": "menu-action"

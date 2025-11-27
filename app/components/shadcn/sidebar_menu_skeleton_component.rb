@@ -5,7 +5,10 @@ module Shadcn
   class SidebarMenuSkeletonComponent < BaseComponent
     BASE_CLASSES = "rounded-md h-8 flex gap-2 px-2 items-center"
 
-    option :show_icon, default: -> { false }
+    def initialize(show_icon: false, **options)
+      super(**options)
+      @show_icon = show_icon
+    end
 
     def call
       content_tag(:div, skeleton_content, skeleton_attributes)
@@ -15,7 +18,7 @@ module Shadcn
 
     def skeleton_content
       safe_join([
-        show_icon ? icon_skeleton : nil,
+        @show_icon ? icon_skeleton : nil,
         text_skeleton
       ].compact)
     end
