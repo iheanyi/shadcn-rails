@@ -613,6 +613,90 @@ describe("SliderController", () => {
     })
   })
 
+  describe("ID-based output targeting (data-output-target)", () => {
+    let outputDisplay
+
+    beforeEach(async () => {
+      const idOutputHTML = `
+        <div data-controller="shadcn--slider"
+             data-shadcn--slider-value-value="50">
+          <input type="range"
+                 min="0"
+                 max="100"
+                 value="50"
+                 data-output-target="slider-value-display"
+                 data-output-format="{value}%"
+                 data-action="input->shadcn--slider#updateStyle">
+        </div>
+      `
+
+      const setup = await setupController(SliderController, idOutputHTML, 'shadcn--slider')
+      application = setup.application
+      element = setup.element
+      controller = setup.controller
+
+      // Create output element AFTER setupController (which clears body.innerHTML)
+      outputDisplay = document.createElement('span')
+      outputDisplay.id = "slider-value-display"
+      outputDisplay.textContent = "50"
+      document.body.appendChild(outputDisplay)
+    })
+
+    afterEach(() => {
+      if (outputDisplay && outputDisplay.parentNode) {
+        outputDisplay.parentNode.removeChild(outputDisplay)
+      }
+    })
+
+    test("updates external element by ID on input", () => {
+      const input = element.querySelector('input[type="range"]')
+
+      input.value = "75"
+      controller.updateStyle({ target: input })
+
+      expect(outputDisplay.textContent).toBe("75%")
+    })
+
+    test("uses format string with {value} placeholder", () => {
+      const input = element.querySelector('input[type="range"]')
+
+      input.value = "30"
+      controller.updateStyle({ target: input })
+
+      expect(outputDisplay.textContent).toBe("30%")
+    })
+
+    test("supports {percent} placeholder in format string", () => {
+      const input = element.querySelector('input[type="range"]')
+      input.dataset.outputFormat = "{percent}% complete"
+
+      input.value = "50"
+      controller.updateStyle({ target: input })
+
+      expect(outputDisplay.textContent).toBe("50% complete")
+    })
+
+    test("handles missing output element gracefully", () => {
+      const input = element.querySelector('input[type="range"]')
+      input.dataset.outputTarget = "non-existent-id"
+
+      expect(() => {
+        input.value = "75"
+        controller.updateStyle({ target: input })
+      }).not.toThrow()
+    })
+
+    test("defaults to {value} format when not specified", () => {
+      const input = element.querySelector('input[type="range"]')
+      delete input.dataset.outputFormat
+
+      input.value = "42"
+      controller.updateStyle({ target: input })
+
+      expect(outputDisplay.textContent).toBe("42")
+    })
+  })
+
   describe("valueValueChanged callback", () => {
     const callbackHTML = `
       <div data-controller="shadcn--slider"

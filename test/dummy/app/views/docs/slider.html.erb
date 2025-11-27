@@ -124,6 +124,27 @@
       <% end %>
     </div>
 
+    <!-- Decimal Steps -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Decimal Steps</h3>
+      <p class="text-sm text-muted-foreground">Use decimal values for <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">step</code> for fine-grained control.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="space-y-4 w-full max-w-md">
+          <div class="flex justify-between">
+            <%= render Shadcn::LabelComponent.new { "Opacity" } %>
+            <span id="opacity-label" class="text-sm text-muted-foreground">0.5</span>
+          </div>
+          <%= render Shadcn::SliderComponent.new(value: 0.5, min: 0, max: 1, step: 0.1, data: { "output-target": "opacity-label", "output-format": "{value}" }) %>
+          <div class="flex justify-between text-xs text-muted-foreground">
+            <span>0</span>
+            <span>0.5</span>
+            <span>1</span>
+          </div>
+        </div>
+      <% end %>
+      <%= erb_example("slider/decimal") %>
+    </div>
+
     <!-- Disabled -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Disabled</h3>

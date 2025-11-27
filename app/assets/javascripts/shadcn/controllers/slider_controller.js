@@ -203,9 +203,22 @@ export default class extends Controller {
     // Update value for output sync
     this.valueValue = value
 
-    // Update output if present
+    // Update output if present (Stimulus target)
     if (this.hasOutputTarget) {
       this.updateOutput()
+    }
+
+    // Also check for data-output-target attribute (ID-based targeting)
+    const outputTargetId = input.dataset.outputTarget
+    if (outputTargetId) {
+      const outputElement = document.getElementById(outputTargetId)
+      if (outputElement) {
+        const format = input.dataset.outputFormat || "{value}"
+        const formattedValue = format
+          .replace("{value}", value)
+          .replace("{percent}", Math.round(percentage))
+        outputElement.textContent = formattedValue
+      }
     }
 
     // Dispatch change event
