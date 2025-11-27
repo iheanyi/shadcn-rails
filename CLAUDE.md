@@ -260,6 +260,32 @@ mcp__playwright__browser_run_code({
 mcp__playwright__browser_press_key({ key: "Escape" })
 ```
 
+### Bug-Fixing Workflow
+
+**IMPORTANT**: When fixing reported bugs, follow this workflow:
+
+1. **Reproduce via Playwright** - Use MCP Playwright tools to confirm the bug exists
+2. **Write a failing Jest test** - Create a test in `__tests__/controllers/` that captures the bug
+3. **Fix the bug** - Update the controller/component code
+4. **Verify Jest test passes** - Run `npm test` to confirm the fix
+5. **Verify via Playwright** - Use MCP Playwright again to confirm the bug is fixed
+
+This ensures:
+- Bugs are properly understood before fixing
+- Regression tests prevent the bug from returning
+- Fixes are verified both in isolation (Jest) and integration (Playwright)
+
+```bash
+# Run Jest tests
+npm test
+
+# Run specific test file
+npm test -- context_menu_controller.test.js
+
+# Run tests with coverage
+npm test -- --coverage
+```
+
 ## Patterns to Follow
 
 ### 1. Component Variants
