@@ -18,10 +18,16 @@ Rails.application.configure do
   config.view_component.show_previews = true
   config.view_component.preview_route = "/rails/view_components"
 
-  # Hotwire Livereload - watch parent gem's components directory and docs
+  # Hotwire Livereload - watch parent gem's components directory, docs, and JS
   if defined?(Hotwire::Livereload)
     config.hotwire_livereload.listen_paths << Rails.root.join("../../app/components")
+    config.hotwire_livereload.listen_paths << Rails.root.join("../../app/assets/javascripts")
     config.hotwire_livereload.listen_paths << Rails.root.join("app/views/docs")
     config.hotwire_livereload.listen_paths << Rails.root.join("app/code_examples")
+    config.hotwire_livereload.listen_paths << Rails.root.join("app/assets/builds")
   end
+
+  # Disable asset caching in development to prevent stale JS
+  config.assets.digest = true
+  config.assets.debug = true
 end

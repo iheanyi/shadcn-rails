@@ -1,9 +1,10 @@
 {
   "name": "shadcn-rails-docs",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --public-path=/assets --loader:.js=jsx --alias:shadcn-rails=../../app/assets/javascripts/shadcn/index.js",
-    "build:watch": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --public-path=/assets --loader:.js=jsx --alias:shadcn-rails=../../app/assets/javascripts/shadcn/index.js --watch"
+    "build:watch": "node esbuild.config.mjs"
   },
   "devDependencies": {
     "esbuild": "^0.24.0"
