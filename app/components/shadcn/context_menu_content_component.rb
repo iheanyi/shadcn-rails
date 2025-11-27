@@ -13,6 +13,18 @@ module Shadcn
         },
         as: :item
       },
+      checkbox_item: {
+        renders: lambda { |**options, &block|
+          ContextMenuCheckboxItemComponent.new(**options, &block)
+        },
+        as: :checkbox_item
+      },
+      radio_group: {
+        renders: lambda { |**options, &block|
+          ContextMenuRadioGroupComponent.new(**options, &block)
+        },
+        as: :radio_group
+      },
       label: {
         renders: lambda { |**options, &block|
           ContextMenuLabelComponent.new(**options, &block)
