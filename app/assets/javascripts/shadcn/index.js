@@ -48,6 +48,9 @@ import TooltipController from "./controllers/tooltip_controller"
 import InputOtpController from "./controllers/input_otp_controller"
 import SidebarController from "./controllers/sidebar_controller"
 
+// Import floating utility
+import { positionFloating, positionAtPoint } from "./utils/floating"
+
 // Export individual controllers
 export {
   BaseMenuController,
@@ -82,7 +85,10 @@ export {
   ToggleController,
   ToggleGroupController,
   TooltipController,
-  SidebarController
+  SidebarController,
+  // Utilities
+  positionFloating,
+  positionAtPoint
 }
 
 // Controller definitions for registration

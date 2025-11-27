@@ -1,8 +1,9 @@
 import BaseMenuController from "./base_menu_controller"
+import { positionAtPoint } from "../utils/floating"
 
 /**
  * Context Menu controller for right-click menus
- * Extends BaseMenuController with context menu-specific positioning and event handling
+ * Extends BaseMenuController with Floating UI positioning at cursor location
  */
 export default class extends BaseMenuController {
   static targets = [...BaseMenuController.targets]
@@ -124,35 +125,7 @@ export default class extends BaseMenuController {
   positionContent() {
     if (!this.hasContentTarget) return
 
-    const content = this.contentTarget
-    const viewportWidth = window.innerWidth
-    const viewportHeight = window.innerHeight
-
-    // Reset position to measure actual size
-    content.style.left = "0"
-    content.style.top = "0"
-
-    const contentRect = content.getBoundingClientRect()
-
-    // Calculate position, keeping menu within viewport
-    let x = this.mouseX
-    let y = this.mouseY
-
-    // Adjust if menu would overflow right edge
-    if (x + contentRect.width > viewportWidth) {
-      x = viewportWidth - contentRect.width - 8
-    }
-
-    // Adjust if menu would overflow bottom edge
-    if (y + contentRect.height > viewportHeight) {
-      y = viewportHeight - contentRect.height - 8
-    }
-
-    // Ensure menu doesn't go off left or top edge
-    x = Math.max(8, x)
-    y = Math.max(8, y)
-
-    content.style.left = `${x}px`
-    content.style.top = `${y}px`
+    // Use Floating UI for smart positioning at cursor location
+    positionAtPoint(this.contentTarget, this.mouseX, this.mouseY)
   }
 }
