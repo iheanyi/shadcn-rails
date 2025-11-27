@@ -1,0 +1,189 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 0.2.0)'
+        required: true
+        type: string
+
+jobs:
+  verify:
+    name: Verify Release
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Verify Ruby version matches
+        run: |
+          RUBY_VERSION=$(ruby -e "load 'lib/shadcn/rails/version.rb'; puts Shadcn::Rails::VERSION")
+          if [ "$RUBY_VERSION" != "${{ steps.version.outputs.version }}" ]; then
+            echo "Ruby version ($RUBY_VERSION) does not match tag (${{ steps.version.outputs.version }})"
+            exit 1
+          fi
+
+      - name: Verify npm version matches
+        run: |
+          NPM_VERSION=$(node -e "console.log(require('./package.json').version)")
+          if [ "$NPM_VERSION" != "${{ steps.version.outputs.version }}" ]; then
+            echo "npm version ($NPM_VERSION) does not match tag (${{ steps.version.outputs.version }})"
+            exit 1
+          fi
+
+      - name: Run Ruby tests
+        run: bundle exec rake test
+
+      - name: Run JavaScript tests
+        run: npm test
+
+  release-gem:
+    name: Release Ruby Gem
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+
+      - name: Build gem
+        run: gem build shadcn-rails.gemspec
+
+      - name: Publish to RubyGems
+        if: github.event_name == 'push'
+        run: |
+          mkdir -p $HOME/.gem
+          echo "---" > $HOME/.gem/credentials
+          echo ":rubygems_api_key: ${{ secrets.RUBYGEMS_API_KEY }}" >> $HOME/.gem/credentials
+          chmod 0600 $HOME/.gem/credentials
+          gem push shadcn-rails-${{ needs.verify.outputs.version }}.gem
+
+  release-npm:
+    name: Release npm Package
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build package
+        run: npm run build
+
+      - name: Publish to npm
+        if: github.event_name == 'push'
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  create-github-release:
+    name: Create GitHub Release
+    needs: [verify, release-gem, release-npm]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+
+      - name: Build gem for release assets
+        run: gem build shadcn-rails.gemspec
+
+      - name: Extract changelog
+        id: changelog
+        run: |
+          VERSION=${{ needs.verify.outputs.version }}
+          # Extract changelog section for this version
+          CHANGELOG=$(awk "/## \[$VERSION\]/{flag=1; next} /## \[/{flag=0} flag" CHANGELOG.md | head -100)
+          if [ -z "$CHANGELOG" ]; then
+            CHANGELOG="Release v$VERSION"
+          fi
+          echo "content<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: v${{ needs.verify.outputs.version }}
+          body: |
+            ## Installation
+
+            **Ruby Gem:**
+            ```ruby
+            gem 'shadcn-rails', '~> ${{ needs.verify.outputs.version }}'
+            ```
+
+            **npm Package:**
+            ```bash
+            npm install shadcn-rails-stimulus@${{ needs.verify.outputs.version }}
+            ```
+
+            ## Changes
+
+            ${{ steps.changelog.outputs.content }}
+
+            ---
+
+            **Full Changelog:** https://github.com/${{ github.repository }}/compare/v${{ needs.verify.outputs.version }}...HEAD
+
+          files: |
+            shadcn-rails-${{ needs.verify.outputs.version }}.gem
+          draft: false
+          prerelease: false

@@ -1,0 +1,212 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Release script for shadcn-rails
+# Publishes both Ruby gem and npm package
+#
+# Usage:
+#   bin/release           # Release current version
+#   bin/release --dry-run # Show what would be released without publishing
+
+require "json"
+require "open3"
+
+VERSION_FILE = File.expand_path("../lib/shadcn/rails/version.rb", __dir__)
+PACKAGE_JSON = File.expand_path("../package.json", __dir__)
+GEMSPEC_FILE = File.expand_path("../shadcn-rails.gemspec", __dir__)
+
+class Release
+  def initialize(dry_run: false)
+    @dry_run = dry_run
+  end
+
+  def run
+    puts "\n🚀 shadcn-rails Release\n"
+    puts "=" * 50
+
+    check_clean_working_directory
+    check_versions_in_sync
+    run_tests
+    build_packages
+    publish_packages unless @dry_run
+    create_github_release unless @dry_run
+
+    puts "\n✅ Release complete!"
+  end
+
+  private
+
+  def ruby_version
+    content = File.read(VERSION_FILE)
+    content.match(/VERSION = "(.+?)"/)[1]
+  end
+
+  def npm_version
+    package = JSON.parse(File.read(PACKAGE_JSON))
+    package["version"]
+  end
+
+  def check_clean_working_directory
+    step "Checking working directory"
+
+    status, = run_command("git status --porcelain")
+    unless status.empty?
+      error "Working directory is not clean. Please commit or stash changes."
+    end
+
+    success "Working directory is clean"
+  end
+
+  def check_versions_in_sync
+    step "Checking version sync"
+
+    rv = ruby_version
+    nv = npm_version
+
+    if rv != nv
+      error "Versions are out of sync!\n  Ruby: #{rv}\n  npm: #{nv}\n\nRun: bin/bump-version #{rv}"
+    end
+
+    @version = rv
+    success "Versions in sync: #{@version}"
+  end
+
+  def run_tests
+    step "Running tests"
+
+    puts "  Running Ruby tests..."
+    _, success = run_command("bundle exec rake test", stream: true)
+    error "Ruby tests failed" unless success
+
+    puts "  Running JavaScript tests..."
+    _, success = run_command("npm test", stream: true)
+    error "JavaScript tests failed" unless success
+
+    success "All tests passed"
+  end
+
+  def build_packages
+    step "Building packages"
+
+    # Build npm package
+    puts "  Building npm package..."
+    _, success = run_command("npm run build")
+    error "npm build failed" unless success
+
+    # Build gem
+    puts "  Building gem..."
+    _, success = run_command("gem build #{GEMSPEC_FILE}")
+    error "gem build failed" unless success
+
+    @gem_file = "shadcn-rails-#{@version}.gem"
+    unless File.exist?(@gem_file)
+      error "Gem file not found: #{@gem_file}"
+    end
+
+    success "Packages built successfully"
+  end
+
+  def publish_packages
+    step "Publishing packages"
+
+    # Publish to RubyGems
+    puts "  Publishing to RubyGems..."
+    _, success = run_command("gem push #{@gem_file}")
+    unless success
+      puts "  ⚠️  Failed to publish gem (may need: gem signin)"
+    end
+
+    # Publish to npm
+    puts "  Publishing to npm..."
+    _, success = run_command("npm publish")
+    unless success
+      puts "  ⚠️  Failed to publish to npm (may need: npm login)"
+    end
+
+    # Clean up gem file
+    File.delete(@gem_file) if File.exist?(@gem_file)
+
+    success "Packages published"
+  end
+
+  def create_github_release
+    step "Creating GitHub release"
+
+    # Check if gh CLI is available
+    _, success = run_command("which gh")
+    unless success
+      puts "  ⚠️  GitHub CLI not found. Skipping GitHub release."
+      puts "  Install with: brew install gh"
+      return
+    end
+
+    # Create tag if it doesn't exist
+    tag = "v#{@version}"
+    _, tag_exists = run_command("git rev-parse #{tag}")
+
+    unless tag_exists
+      puts "  Creating tag #{tag}..."
+      run_command("git tag #{tag}")
+      run_command("git push origin #{tag}")
+    end
+
+    # Create GitHub release
+    puts "  Creating GitHub release..."
+    changelog_section = extract_changelog_section
+
+    run_command(%(gh release create #{tag} --title "v#{@version}" --notes "#{changelog_section}" #{@gem_file}))
+
+    success "GitHub release created"
+  end
+
+  def extract_changelog_section
+    return "Release v#{@version}" unless File.exist?("CHANGELOG.md")
+
+    content = File.read("CHANGELOG.md")
+    # Extract section for current version
+    match = content.match(/## \[#{Regexp.escape(@version)}\].*?\n(.*?)(?=\n## \[|$)/m)
+    match ? match[1].strip : "Release v#{@version}"
+  end
+
+  def step(message)
+    puts "\n📦 #{message}..."
+  end
+
+  def success(message)
+    puts "  ✓ #{message}"
+  end
+
+  def error(message)
+    puts "\n❌ Error: #{message}"
+    exit 1
+  end
+
+  def run_command(cmd, stream: false)
+    if @dry_run && cmd.match?(/gem push|npm publish|gh release|git tag|git push/)
+      puts "  [DRY RUN] Would run: #{cmd}"
+      return ["", true]
+    end
+
+    if stream
+      success = system(cmd)
+      ["", success]
+    else
+      output, status = Open3.capture2e(cmd)
+      [output.strip, status.success?]
+    end
+  end
+end
+
+# Parse arguments
+dry_run = ARGV.include?("--dry-run")
+
+if ARGV.include?("--help") || ARGV.include?("-h")
+  puts "Usage: bin/release [options]"
+  puts ""
+  puts "Options:"
+  puts "  --dry-run  Show what would be released without publishing"
+  puts "  --help     Show this help message"
+  exit 0
+end
+
+Release.new(dry_run: dry_run).run

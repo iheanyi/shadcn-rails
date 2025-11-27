@@ -1,0 +1,124 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Version bump script for shadcn-rails
+# Updates version in both Ruby gem and npm package
+#
+# Usage:
+#   bin/bump-version patch   # 0.1.0 -> 0.1.1
+#   bin/bump-version minor   # 0.1.0 -> 0.2.0
+#   bin/bump-version major   # 0.1.0 -> 1.0.0
+#   bin/bump-version 0.2.0   # Set specific version
+
+require "json"
+require "fileutils"
+
+VERSION_FILE = File.expand_path("../lib/shadcn/rails/version.rb", __dir__)
+PACKAGE_JSON = File.expand_path("../package.json", __dir__)
+CHANGELOG_FILE = File.expand_path("../CHANGELOG.md", __dir__)
+
+def current_version
+  content = File.read(VERSION_FILE)
+  content.match(/VERSION = "(.+?)"/)[1]
+end
+
+def parse_version(version_string)
+  version_string.split(".").map(&:to_i)
+end
+
+def bump_version(current, type)
+  major, minor, patch = parse_version(current)
+
+  case type
+  when "major"
+    [major + 1, 0, 0]
+  when "minor"
+    [major, minor + 1, 0]
+  when "patch"
+    [major, minor, patch + 1]
+  else
+    # Assume it's a specific version
+    parse_version(type)
+  end.join(".")
+end
+
+def update_ruby_version(new_version)
+  content = File.read(VERSION_FILE)
+  new_content = content.gsub(/VERSION = ".+?"/, %(VERSION = "#{new_version}"))
+  File.write(VERSION_FILE, new_content)
+  puts "  Updated #{VERSION_FILE}"
+end
+
+def update_npm_version(new_version)
+  package = JSON.parse(File.read(PACKAGE_JSON))
+  package["version"] = new_version
+  File.write(PACKAGE_JSON, JSON.pretty_generate(package) + "\n")
+  puts "  Updated #{PACKAGE_JSON}"
+end
+
+def update_changelog(new_version)
+  return unless File.exist?(CHANGELOG_FILE)
+
+  content = File.read(CHANGELOG_FILE)
+  today = Time.now.strftime("%Y-%m-%d")
+
+  # Replace [Unreleased] with new version
+  new_content = content.gsub(
+    /## \[Unreleased\]/,
+    "## [Unreleased]\n\n## [#{new_version}] - #{today}"
+  )
+
+  # Update comparison links at bottom
+  new_content = new_content.gsub(
+    /\[Unreleased\]: (.+)\/compare\/v(.+?)\.\.\.HEAD/,
+    "[Unreleased]: \\1/compare/v#{new_version}...HEAD\n[#{new_version}]: \\1/compare/v\\2...v#{new_version}"
+  )
+
+  File.write(CHANGELOG_FILE, new_content)
+  puts "  Updated #{CHANGELOG_FILE}"
+end
+
+def verify_versions_in_sync
+  ruby_version = current_version
+  package = JSON.parse(File.read(PACKAGE_JSON))
+  npm_version = package["version"]
+
+  if ruby_version != npm_version
+    puts "\n⚠️  Warning: Versions are out of sync!"
+    puts "   Ruby gem: #{ruby_version}"
+    puts "   npm package: #{npm_version}"
+    puts ""
+  end
+
+  ruby_version
+end
+
+# Main execution
+if ARGV.empty?
+  puts "Usage: bin/bump-version <patch|minor|major|X.Y.Z>"
+  puts ""
+  puts "Current version: #{current_version}"
+  exit 1
+end
+
+bump_type = ARGV[0]
+old_version = verify_versions_in_sync
+new_version = bump_version(old_version, bump_type)
+
+puts ""
+puts "Bumping version: #{old_version} -> #{new_version}"
+puts ""
+
+update_ruby_version(new_version)
+update_npm_version(new_version)
+update_changelog(new_version)
+
+puts ""
+puts "✓ Version bumped to #{new_version}"
+puts ""
+puts "Next steps:"
+puts "  1. Review changes: git diff"
+puts "  2. Commit: git commit -am 'Bump version to #{new_version}'"
+puts "  3. Tag: git tag v#{new_version}"
+puts "  4. Push: git push && git push --tags"
+puts "  5. Release: bin/release"
