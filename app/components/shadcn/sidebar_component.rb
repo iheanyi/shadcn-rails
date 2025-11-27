@@ -86,12 +86,12 @@ module Shadcn
     end
 
     def call
-      content_tag(:aside, sidebar_content, sidebar_attributes)
+      content_tag(:aside, sidebar_wrapper, sidebar_attributes)
     end
 
     private
 
-    def sidebar_content
+    def sidebar_wrapper
       safe_join([
         sidebar_inner
       ].compact)

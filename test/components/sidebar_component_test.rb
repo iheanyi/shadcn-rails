@@ -2,18 +2,83 @@
 
 require "test_helper"
 
-# NOTE: The SidebarComponent has a known bug where the private method `sidebar_content`
-# conflicts with the slot of the same name, causing infinite recursion (SystemStackError).
-# These tests are temporarily simplified to avoid triggering the bug.
-# TODO: Fix the SidebarComponent naming conflict before expanding these tests.
 class SidebarComponentTest < ViewComponent::TestCase
-  # The component cannot be rendered due to a naming conflict bug.
-  # Skip these tests until the bug is fixed.
+  def test_renders_basic_sidebar
+    render_inline(Shadcn::SidebarComponent.new) do |sidebar|
+      sidebar.with_header { "Header" }
+      sidebar.with_sidebar_content { "Content" }
+      sidebar.with_footer { "Footer" }
+    end
 
-  def test_placeholder_for_sidebar_component
-    # Sidebar component has a method naming conflict that causes SystemStackError.
-    # The private method `sidebar_content` shadows the ViewComponent slot of the same name.
-    # This test is a placeholder to document the issue.
-    skip "SidebarComponent has a naming conflict bug - private method 'sidebar_content' conflicts with slot"
+    assert_selector "aside[data-controller='shadcn--sidebar']"
+    assert_text "Header"
+    assert_text "Content"
+    assert_text "Footer"
+  end
+
+  def test_renders_with_default_attributes
+    render_inline(Shadcn::SidebarComponent.new)
+
+    assert_selector "aside[data-side='left']"
+    assert_selector "aside[data-variant='sidebar']"
+    assert_selector "aside[data-collapsible='offcanvas']"
+    assert_selector "aside[data-state='expanded']"
+  end
+
+  def test_renders_collapsed_by_default
+    render_inline(Shadcn::SidebarComponent.new(default_open: false))
+
+    assert_selector "aside[data-state='collapsed']"
+  end
+
+  def test_renders_with_right_side
+    render_inline(Shadcn::SidebarComponent.new(side: :right))
+
+    assert_selector "aside[data-side='right']"
+  end
+
+  def test_renders_with_floating_variant
+    render_inline(Shadcn::SidebarComponent.new(variant: :floating))
+
+    assert_selector "aside[data-variant='floating']"
+  end
+
+  def test_renders_with_inset_variant
+    render_inline(Shadcn::SidebarComponent.new(variant: :inset))
+
+    assert_selector "aside[data-variant='inset']"
+  end
+
+  def test_renders_with_icon_collapsible
+    render_inline(Shadcn::SidebarComponent.new(collapsible: :icon))
+
+    assert_selector "aside[data-collapsible='icon']"
+  end
+
+  def test_renders_with_none_collapsible
+    render_inline(Shadcn::SidebarComponent.new(collapsible: :none))
+
+    assert_selector "aside[data-collapsible='none']"
+  end
+
+  def test_renders_with_custom_class
+    render_inline(Shadcn::SidebarComponent.new(class_name: "custom-sidebar"))
+
+    assert_selector "aside.custom-sidebar"
+  end
+
+  def test_renders_rail_slot
+    render_inline(Shadcn::SidebarComponent.new) do |sidebar|
+      sidebar.with_rail
+    end
+
+    assert_selector "aside"
+  end
+
+  def test_renders_keyboard_shortcut_actions
+    render_inline(Shadcn::SidebarComponent.new)
+
+    assert_selector "aside[data-action*='keydown.ctrl+b@window->shadcn--sidebar#toggle']"
+    assert_selector "aside[data-action*='keydown.meta+b@window->shadcn--sidebar#toggle']"
   end
 end
