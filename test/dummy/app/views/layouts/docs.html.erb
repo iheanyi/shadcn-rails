@@ -1809,8 +1809,15 @@
       ]
 
       connect() {
-        this.currentMonth = this.monthValue ? new Date(this.monthValue) : new Date()
-        this.selectedDate = this.selectedValue ? new Date(this.selectedValue) : null
+        this.currentMonth = this.monthValue ? this.parseLocalDate(this.monthValue) : new Date()
+        this.selectedDate = this.selectedValue ? this.parseLocalDate(this.selectedValue) : null
+      }
+
+      // Parse a date string (YYYY-MM-DD) as local date, not UTC
+      parseLocalDate(dateStr) {
+        if (!dateStr) return null
+        const [year, month, day] = dateStr.split('-').map(Number)
+        return new Date(year, month - 1, day)
       }
 
       previousMonth() {
@@ -1839,7 +1846,7 @@
         const dateStr = event.currentTarget.dataset.date
         if (!dateStr) return
 
-        this.selectedDate = new Date(dateStr)
+        this.selectedDate = this.parseLocalDate(dateStr)
         this.selectedValue = dateStr
 
         if (this.hasHiddenInputTarget) {

@@ -3,6 +3,8 @@ import { Controller } from "@hotwired/stimulus"
 /**
  * Date Picker controller
  * Handles opening/closing the calendar popover and date selection
+ *
+ * API inspired by React DayPicker (https://daypicker.dev/)
  */
 export default class extends Controller {
   static targets = ["trigger", "content", "grid", "monthYear", "day", "displayValue", "hiddenInput"]
@@ -20,8 +22,26 @@ export default class extends Controller {
   ]
 
   connect() {
-    this.currentMonth = this.monthValue ? new Date(this.monthValue) : new Date()
-    this.selectedDate = this.selectedValue ? new Date(this.selectedValue) : null
+    this.currentMonth = this.monthValue ? this.parseLocalDate(this.monthValue) : new Date()
+    this.selectedDate = this.selectedValue ? this.parseLocalDate(this.selectedValue) : null
+  }
+
+  /**
+   * Parse a date string (YYYY-MM-DD) as local date, not UTC
+   * This prevents timezone issues where "2024-11-26" becomes Nov 25 in western timezones
+   */
+  parseLocalDate(dateStr) {
+    if (!dateStr) return null
+    const [year, month, day] = dateStr.split('-').map(Number)
+    return new Date(year, month - 1, day)
+  }
+
+  /**
+   * Format a date as YYYY-MM-DD using local date components
+   */
+  formatDateString(date) {
+    if (!date) return ''
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
   }
 
   toggle() {
@@ -66,7 +86,7 @@ export default class extends Controller {
     const dateStr = event.currentTarget.dataset.date
     if (!dateStr) return
 
-    this.selectedDate = new Date(dateStr)
+    this.selectedDate = this.parseLocalDate(dateStr)
     this.selectedValue = dateStr
 
     // Update hidden input
@@ -177,13 +197,13 @@ export default class extends Controller {
 
   monthValueChanged() {
     if (this.monthValue) {
-      this.currentMonth = new Date(this.monthValue)
+      this.currentMonth = this.parseLocalDate(this.monthValue)
     }
   }
 
   selectedValueChanged() {
     if (this.selectedValue) {
-      this.selectedDate = new Date(this.selectedValue)
+      this.selectedDate = this.parseLocalDate(this.selectedValue)
     }
   }
 }
