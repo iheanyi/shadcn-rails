@@ -41,6 +41,26 @@ const application = Application.start()
 registerShadcnControllers(application)
 ```
 
+## Adding Components
+
+Copy components into your app for customization:
+
+```bash
+# List all available components
+rails generate shadcn:add --list
+
+# Add specific components
+rails generate shadcn:add button dialog tabs
+
+# Add all components
+rails generate shadcn:add --all
+
+# Add without Stimulus controllers
+rails generate shadcn:add dialog --exclude-controllers
+```
+
+Components are copied to `app/components/shadcn/` and controllers to `app/javascript/controllers/shadcn/`. Local files take precedence over the gem's built-in components.
+
 ## Quick Start
 
 ```erb
@@ -91,15 +111,8 @@ Configure colors in your initializer:
 # config/initializers/shadcn.rb
 Shadcn::Rails.configure do |config|
   config.base_color = "slate"  # neutral, slate, stone, gray, zinc
-  config.dark_mode = :class    # :class, :media
-  config.radius = "0.5rem"
+  config.dark_mode = :class    # :class, :media, :both
 end
-```
-
-Or use the generator:
-
-```bash
-rails generate shadcn:theme slate
 ```
 
 ## Stimulus Controllers
