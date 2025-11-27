@@ -7,9 +7,9 @@ module Shadcn
   #
   # @example Basic carousel
   #   <%= render Shadcn::CarouselComponent.new do |carousel| %>
-  #     <% carousel.with_content do |content| %>
+  #     <% carousel.with_slides do |slides| %>
   #       <% 5.times do |i| %>
-  #         <% content.with_item do %>
+  #         <% slides.with_item do %>
   #           <div class="p-6 text-center">Slide <%= i + 1 %></div>
   #         <% end %>
   #       <% end %>
@@ -20,9 +20,9 @@ module Shadcn
   #
   # @example Vertical carousel
   #   <%= render Shadcn::CarouselComponent.new(orientation: :vertical) do |carousel| %>
-  #     <% carousel.with_content do |content| %>
+  #     <% carousel.with_slides do |slides| %>
   #       <% 5.times do |i| %>
-  #         <% content.with_item do %>
+  #         <% slides.with_item do %>
   #           <div class="p-6 text-center">Slide <%= i + 1 %></div>
   #         <% end %>
   #       <% end %>
@@ -30,7 +30,7 @@ module Shadcn
   #   <% end %>
   #
   class CarouselComponent < BaseComponent
-    renders_one :content, lambda { |**options|
+    renders_one :slides, lambda { |**options|
       CarouselContentComponent.new(orientation: @orientation, **options)
     }
     renders_one :previous, lambda { |**options, &block|
@@ -66,7 +66,7 @@ module Shadcn
     private
 
     def carousel_content
-      safe_join([content, previous, self.next].compact)
+      safe_join([slides, previous, self.next].compact)
     end
 
     def carousel_attributes
