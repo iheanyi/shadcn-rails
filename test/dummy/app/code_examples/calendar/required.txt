@@ -1,0 +1,4 @@
+<%= render Shadcn::CalendarComponent.new(
+  selected: Date.today,
+  required: true
+) %>

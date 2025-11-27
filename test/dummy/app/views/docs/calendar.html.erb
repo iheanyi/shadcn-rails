@@ -107,6 +107,56 @@
         <%= render Shadcn::CalendarComponent.new(show_outside_days: false) %>
       <% end %>
     </div>
+
+    <!-- Disabled Days of Week -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled Days of Week</h3>
+      <p class="text-sm text-muted-foreground">Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">disabled_days_of_week</code> to disable specific days (0=Sunday, 6=Saturday).</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::CalendarComponent.new(disabled_days_of_week: [0, 6]) %>
+      <% end %>
+      <%= erb_example("calendar/disabled_days_of_week") %>
+    </div>
+
+    <!-- Multiple Selection -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Multiple Selection</h3>
+      <p class="text-sm text-muted-foreground">Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">mode: :multiple</code> to allow selecting multiple dates.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::CalendarComponent.new(mode: :multiple) %>
+      <% end %>
+      <%= erb_example("calendar/multiple") %>
+    </div>
+
+    <!-- Range Selection -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Range Selection</h3>
+      <p class="text-sm text-muted-foreground">Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">mode: :range</code> to select a date range.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::CalendarComponent.new(mode: :range) %>
+      <% end %>
+      <%= erb_example("calendar/range") %>
+    </div>
+
+    <!-- Required Selection -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Required Selection</h3>
+      <p class="text-sm text-muted-foreground">Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">required: true</code> to prevent deselection of the current value.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::CalendarComponent.new(selected: Date.today, required: true) %>
+      <% end %>
+      <%= erb_example("calendar/required") %>
+    </div>
+
+    <!-- Week Starts On -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Week Starts On Monday</h3>
+      <p class="text-sm text-muted-foreground">Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">week_starts_on: 1</code> to start weeks on Monday instead of Sunday.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::CalendarComponent.new(week_starts_on: 1) %>
+      <% end %>
+      <%= erb_example("calendar/week_starts_on") %>
+    </div>
   </div>
 
   <!-- API Reference -->
@@ -115,13 +165,17 @@
 
     <h3 class="text-lg font-semibold mt-6 mb-3">CalendarComponent</h3>
     <%= render "docs/props_table", props: [
-      { name: "selected", type: "Date", default: "nil", description: "Currently selected date" },
+      { name: "selected", type: "Date, Array<Date>", default: "nil", description: "Currently selected date(s). Array for multiple/range modes." },
       { name: "month", type: "Date", default: "Date.today", description: "Month to display (defaults to selected date's month or current month)" },
       { name: "min_date", type: "Date", default: "nil", description: "Minimum selectable date" },
       { name: "max_date", type: "Date", default: "nil", description: "Maximum selectable date" },
       { name: "name", type: "String", default: "nil", description: "Form field name for hidden input" },
       { name: "disabled_dates", type: "Array<Date>", default: "[]", description: "Specific dates that cannot be selected" },
+      { name: "disabled_days_of_week", type: "Array<Integer>", default: "[]", description: "Days of week to disable (0=Sunday, 6=Saturday)" },
       { name: "show_outside_days", type: "Boolean", default: "true", description: "Whether to show days outside the current month" },
+      { name: "mode", type: "Symbol", default: ":single", description: "Selection mode: :single, :multiple, or :range" },
+      { name: "required", type: "Boolean", default: "false", description: "Whether a selection is required (prevents deselection)" },
+      { name: "week_starts_on", type: "Integer", default: "0", description: "First day of week (0=Sunday, 1=Monday, etc.)" },
       { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes" }
     ] %>
   </div>
