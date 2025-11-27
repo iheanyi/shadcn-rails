@@ -8,3 +8,4 @@
 /tmp/
 /.playwright-mcp/
 /.claude/
+/test/dummy/**/*/builds

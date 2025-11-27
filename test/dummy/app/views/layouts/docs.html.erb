@@ -109,7 +109,7 @@
       },
     }
   </script>
-  <%= javascript_importmap_tags %>
+  <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
   <style>
     <%= Shadcn::Rails.theme_css %>
 
