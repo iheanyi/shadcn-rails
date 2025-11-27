@@ -118,7 +118,8 @@ export default class extends Controller {
     }
     // Don't close if right-clicking on the trigger element
     // This allows show() to be called again to reposition the menu
-    if (this.hasTriggerTarget && this.triggerTarget.contains(event.target)) {
+    // Regular left-clicks on trigger should still close the menu
+    if (event.type === "contextmenu" && this.hasTriggerTarget && this.triggerTarget.contains(event.target)) {
       return
     }
     this.hide()

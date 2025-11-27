@@ -755,11 +755,28 @@ describe("ContextMenuController", () => {
 
       // Simulate a contextmenu event on the trigger element
       // This is what happens when the user right-clicks again on the trigger
-      controller.handleClickOutside({ target: controller.triggerTarget })
+      controller.handleClickOutside({ type: "contextmenu", target: controller.triggerTarget })
       await nextFrame()
 
-      // Menu should still be open because the click was on the trigger
+      // Menu should still be open because it was a contextmenu event on the trigger
       expect(controller.openValue).toBe(true)
+    })
+
+    test("handleClickOutside SHOULD close menu when regular click triggers on trigger element", async () => {
+      // Open the menu first
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+      await nextFrame() // Extra frame to ensure event listeners are attached
+
+      expect(controller.openValue).toBe(true)
+
+      // Simulate a regular click event on the trigger element
+      controller.handleClickOutside({ type: "click", target: controller.triggerTarget })
+      await nextFrame()
+
+      // Menu should close because it was a regular click (not a contextmenu event)
+      expect(controller.openValue).toBe(false)
     })
 
     test("cancels pending hide timeout when showing again", async () => {
