@@ -1,0 +1,627 @@
+import { Application } from "@hotwired/stimulus"
+import ContextMenuController from "../../app/assets/javascripts/shadcn/controllers/context_menu_controller.js"
+import { setupController, cleanupController, click, nextFrame, wait } from '../helpers/stimulus-test-helper.js'
+
+describe("ContextMenuController", () => {
+  let application
+  let element
+  let controller
+
+  afterEach(() => {
+    cleanupController(application)
+  })
+
+  describe("basic rendering and initialization", () => {
+    const basicHTML = `
+      <div data-controller="shadcn--context-menu"
+           data-shadcn--context-menu-open-value="false">
+        <div data-shadcn--context-menu-target="trigger"
+             data-action="contextmenu->shadcn--context-menu#show">
+          Right click here
+        </div>
+        <div data-shadcn--context-menu-target="content" hidden>
+          <button data-shadcn--context-menu-target="item"
+                  data-action="click->shadcn--context-menu#selectItem">Item 1</button>
+          <button data-shadcn--context-menu-target="item"
+                  data-action="click->shadcn--context-menu#selectItem">Item 2</button>
+        </div>
+      </div>
+    `
+
+    beforeEach(async () => {
+      const setup = await setupController(ContextMenuController, basicHTML, 'shadcn--context-menu')
+      application = setup.application
+      element = setup.element
+      controller = setup.controller
+    })
+
+    test("initializes with closed state", () => {
+      expect(controller.openValue).toBe(false)
+    })
+
+    test("initializes focusedIndex to -1", () => {
+      expect(controller.focusedIndex).toBe(-1)
+    })
+
+    test("content is hidden initially", () => {
+      expect(controller.contentTarget.hidden).toBe(true)
+    })
+
+    test("has trigger target", () => {
+      expect(controller.hasTriggerTarget).toBe(true)
+    })
+
+    test("has content target", () => {
+      expect(controller.hasContentTarget).toBe(true)
+    })
+
+    test("has item targets", () => {
+      expect(controller.itemTargets.length).toBe(2)
+    })
+  })
+
+  describe("show functionality", () => {
+    const showHTML = `
+      <div data-controller="shadcn--context-menu"
+           data-shadcn--context-menu-open-value="false">
+        <div data-shadcn--context-menu-target="trigger"
+             data-action="contextmenu->shadcn--context-menu#show">
+          Right click here
+        </div>
+        <div data-shadcn--context-menu-target="content" hidden style="position: fixed;">
+          <button data-shadcn--context-menu-target="item"
+                  data-action="click->shadcn--context-menu#selectItem">Item 1</button>
+          <button data-shadcn--context-menu-target="item"
+                  data-action="click->shadcn--context-menu#selectItem">Item 2</button>
+        </div>
+      </div>
+    `
+
+    beforeEach(async () => {
+      const setup = await setupController(ContextMenuController, showHTML, 'shadcn--context-menu')
+      application = setup.application
+      element = setup.element
+      controller = setup.controller
+    })
+
+    test("sets openValue to true", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      expect(controller.openValue).toBe(true)
+    })
+
+    test("prevents default on event", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+
+      expect(event.preventDefault).toHaveBeenCalled()
+    })
+
+    test("stores mouse position", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 150, clientY: 200 }
+      controller.show(event)
+
+      expect(controller.mouseX).toBe(150)
+      expect(controller.mouseY).toBe(200)
+    })
+
+    test("shows content", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      expect(controller.contentTarget.hidden).toBe(false)
+    })
+
+    test("sets content data-state to open", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      expect(controller.contentTarget.dataset.state).toBe("open")
+    })
+
+    test("dispatches opened event", async () => {
+      let eventFired = false
+      element.addEventListener("shadcn--context-menu:opened", () => {
+        eventFired = true
+      })
+
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      expect(eventFired).toBe(true)
+    })
+
+    test("focuses first item on show", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      expect(controller.focusedIndex).toBe(0)
+    })
+  })
+
+  describe("hide functionality", () => {
+    const hideHTML = `
+      <div data-controller="shadcn--context-menu"
+           data-shadcn--context-menu-open-value="false">
+        <div data-shadcn--context-menu-target="trigger">Trigger</div>
+        <div data-shadcn--context-menu-target="content" hidden style="position: fixed;">
+          <button data-shadcn--context-menu-target="item">Item 1</button>
+        </div>
+      </div>
+    `
+
+    beforeEach(async () => {
+      const setup = await setupController(ContextMenuController, hideHTML, 'shadcn--context-menu')
+      application = setup.application
+      element = setup.element
+      controller = setup.controller
+    })
+
+    test("sets openValue to false", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      controller.hide()
+      await nextFrame()
+
+      expect(controller.openValue).toBe(false)
+    })
+
+    test("sets content data-state to closed", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      controller.hide()
+      await nextFrame()
+
+      expect(controller.contentTarget.dataset.state).toBe("closed")
+    })
+
+    test("dispatches closed event", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      let eventFired = false
+      element.addEventListener("shadcn--context-menu:closed", () => {
+        eventFired = true
+      })
+
+      controller.hide()
+      await nextFrame()
+
+      expect(eventFired).toBe(true)
+    })
+
+    test("resets focusedIndex to -1", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      controller.hide()
+      await nextFrame()
+
+      expect(controller.focusedIndex).toBe(-1)
+    })
+
+    test("does nothing if already closed", async () => {
+      let eventFired = false
+      element.addEventListener("shadcn--context-menu:closed", () => {
+        eventFired = true
+      })
+
+      controller.hide()
+      await nextFrame()
+
+      expect(eventFired).toBe(false)
+    })
+
+    test("close() is an alias for hide()", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      controller.close()
+      await nextFrame()
+
+      expect(controller.openValue).toBe(false)
+    })
+  })
+
+  describe("item selection", () => {
+    const selectHTML = `
+      <div data-controller="shadcn--context-menu"
+           data-shadcn--context-menu-open-value="false">
+        <div data-shadcn--context-menu-target="trigger">Trigger</div>
+        <div data-shadcn--context-menu-target="content" hidden style="position: fixed;">
+          <button data-shadcn--context-menu-target="item"
+                  data-action="click->shadcn--context-menu#selectItem">Item 1</button>
+          <button data-shadcn--context-menu-target="item"
+                  data-action="click->shadcn--context-menu#selectItem"
+                  data-disabled>Disabled Item</button>
+          <button data-shadcn--context-menu-target="item"
+                  data-action="click->shadcn--context-menu#selectItem">Item 3</button>
+        </div>
+      </div>
+    `
+
+    beforeEach(async () => {
+      const setup = await setupController(ContextMenuController, selectHTML, 'shadcn--context-menu')
+      application = setup.application
+      element = setup.element
+      controller = setup.controller
+    })
+
+    test("dispatches select event with item", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      let selectedItem = null
+      element.addEventListener("shadcn--context-menu:select", (e) => {
+        selectedItem = e.detail.item
+      })
+
+      const item = controller.itemTargets[0]
+      controller.selectItem({ currentTarget: item })
+      await nextFrame()
+
+      expect(selectedItem).toBe(item)
+    })
+
+    test("closes menu after selection", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      const item = controller.itemTargets[0]
+      controller.selectItem({ currentTarget: item })
+      await nextFrame()
+
+      expect(controller.openValue).toBe(false)
+    })
+
+    test("does not select disabled items", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      let selectFired = false
+      element.addEventListener("shadcn--context-menu:select", () => {
+        selectFired = true
+      })
+
+      const disabledItem = controller.itemTargets[1]
+      controller.selectItem({ currentTarget: disabledItem })
+      await nextFrame()
+
+      expect(selectFired).toBe(false)
+    })
+
+    test("enabled items getter filters disabled items", () => {
+      const enabledItems = controller.enabledItems
+      expect(enabledItems.length).toBe(2)
+    })
+  })
+
+  describe("keyboard navigation", () => {
+    const keyboardHTML = `
+      <div data-controller="shadcn--context-menu"
+           data-shadcn--context-menu-open-value="false">
+        <div data-shadcn--context-menu-target="trigger">Trigger</div>
+        <div data-shadcn--context-menu-target="content" hidden style="position: fixed;">
+          <button data-shadcn--context-menu-target="item">Item 1</button>
+          <button data-shadcn--context-menu-target="item" data-disabled>Disabled</button>
+          <button data-shadcn--context-menu-target="item">Item 3</button>
+          <button data-shadcn--context-menu-target="item">Item 4</button>
+        </div>
+      </div>
+    `
+
+    beforeEach(async () => {
+      const setup = await setupController(ContextMenuController, keyboardHTML, 'shadcn--context-menu')
+      application = setup.application
+      element = setup.element
+      controller = setup.controller
+
+      // Open the menu first
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+    })
+
+    test("ArrowDown moves to next item", async () => {
+      // Already at first item (index 0) from show()
+      controller.handleKeydown({ key: "ArrowDown", preventDefault: jest.fn() })
+      await nextFrame()
+
+      expect(controller.focusedIndex).toBe(1)
+    })
+
+    test("ArrowDown wraps to first item", async () => {
+      // Move to last enabled item
+      controller.focusedIndex = 2 // Last enabled item (index 2 in enabledItems)
+      controller.handleKeydown({ key: "ArrowDown", preventDefault: jest.fn() })
+      await nextFrame()
+
+      expect(controller.focusedIndex).toBe(0)
+    })
+
+    test("ArrowUp moves to previous item", async () => {
+      controller.focusedIndex = 1
+      controller.handleKeydown({ key: "ArrowUp", preventDefault: jest.fn() })
+      await nextFrame()
+
+      expect(controller.focusedIndex).toBe(0)
+    })
+
+    test("ArrowUp wraps to last item from first", async () => {
+      controller.focusedIndex = 0
+      controller.handleKeydown({ key: "ArrowUp", preventDefault: jest.fn() })
+      await nextFrame()
+
+      expect(controller.focusedIndex).toBe(2) // Last enabled item
+    })
+
+    test("Home moves to first item", async () => {
+      controller.focusedIndex = 2
+      controller.handleKeydown({ key: "Home", preventDefault: jest.fn() })
+      await nextFrame()
+
+      expect(controller.focusedIndex).toBe(0)
+    })
+
+    test("End moves to last item", async () => {
+      controller.focusedIndex = 0
+      controller.handleKeydown({ key: "End", preventDefault: jest.fn() })
+      await nextFrame()
+
+      expect(controller.focusedIndex).toBe(2) // Last enabled item
+    })
+
+    test("Escape closes the menu", async () => {
+      controller.handleKeydown({ key: "Escape", preventDefault: jest.fn() })
+      await nextFrame()
+
+      expect(controller.openValue).toBe(false)
+    })
+
+    test("Enter triggers click on focused item", async () => {
+      const enabledItems = controller.enabledItems
+      const clickSpy = jest.spyOn(enabledItems[0], 'click')
+
+      controller.focusedIndex = 0
+      controller.handleKeydown({ key: "Enter", preventDefault: jest.fn() })
+      await nextFrame()
+
+      expect(clickSpy).toHaveBeenCalled()
+    })
+
+    test("Space triggers click on focused item", async () => {
+      const enabledItems = controller.enabledItems
+      const clickSpy = jest.spyOn(enabledItems[0], 'click')
+
+      controller.focusedIndex = 0
+      controller.handleKeydown({ key: " ", preventDefault: jest.fn() })
+      await nextFrame()
+
+      expect(clickSpy).toHaveBeenCalled()
+    })
+
+    test("prevents default on navigation keys", () => {
+      const preventDefault = jest.fn()
+
+      controller.handleKeydown({ key: "ArrowDown", preventDefault })
+      expect(preventDefault).toHaveBeenCalled()
+
+      preventDefault.mockClear()
+      controller.handleKeydown({ key: "ArrowUp", preventDefault })
+      expect(preventDefault).toHaveBeenCalled()
+
+      preventDefault.mockClear()
+      controller.handleKeydown({ key: "Home", preventDefault })
+      expect(preventDefault).toHaveBeenCalled()
+
+      preventDefault.mockClear()
+      controller.handleKeydown({ key: "End", preventDefault })
+      expect(preventDefault).toHaveBeenCalled()
+    })
+  })
+
+  describe("click outside handling", () => {
+    const clickOutsideHTML = `
+      <div data-controller="shadcn--context-menu"
+           data-shadcn--context-menu-open-value="false">
+        <div data-shadcn--context-menu-target="trigger">Trigger</div>
+        <div data-shadcn--context-menu-target="content" hidden style="position: fixed;">
+          <button data-shadcn--context-menu-target="item">Item 1</button>
+        </div>
+      </div>
+    `
+
+    beforeEach(async () => {
+      const setup = await setupController(ContextMenuController, clickOutsideHTML, 'shadcn--context-menu')
+      application = setup.application
+      element = setup.element
+      controller = setup.controller
+    })
+
+    test("closes on click outside", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      // Simulate click outside
+      const outsideElement = document.createElement("div")
+      document.body.appendChild(outsideElement)
+      controller.handleClickOutside({ target: outsideElement })
+      await nextFrame()
+
+      expect(controller.openValue).toBe(false)
+
+      document.body.removeChild(outsideElement)
+    })
+
+    test("does not close on click inside content", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      // Simulate click inside content
+      controller.handleClickOutside({ target: controller.contentTarget })
+      await nextFrame()
+
+      expect(controller.openValue).toBe(true)
+    })
+  })
+
+  describe("positioning", () => {
+    const positionHTML = `
+      <div data-controller="shadcn--context-menu"
+           data-shadcn--context-menu-open-value="false">
+        <div data-shadcn--context-menu-target="trigger">Trigger</div>
+        <div data-shadcn--context-menu-target="content" hidden
+             style="position: fixed; width: 200px; height: 150px;">
+          <button data-shadcn--context-menu-target="item">Item 1</button>
+        </div>
+      </div>
+    `
+
+    beforeEach(async () => {
+      const setup = await setupController(ContextMenuController, positionHTML, 'shadcn--context-menu')
+      application = setup.application
+      element = setup.element
+      controller = setup.controller
+    })
+
+    test("positions content at mouse location", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 150 }
+      controller.show(event)
+      await nextFrame()
+
+      const content = controller.contentTarget
+      expect(content.style.left).toBe("100px")
+      expect(content.style.top).toBe("150px")
+    })
+
+    test("positions content with minimum offset from edges", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 5, clientY: 5 }
+      controller.show(event)
+      await nextFrame()
+
+      const content = controller.contentTarget
+      // Should be at least 8px from edge
+      expect(parseInt(content.style.left)).toBeGreaterThanOrEqual(8)
+      expect(parseInt(content.style.top)).toBeGreaterThanOrEqual(8)
+    })
+  })
+
+  describe("disconnect cleanup", () => {
+    const disconnectHTML = `
+      <div data-controller="shadcn--context-menu"
+           data-shadcn--context-menu-open-value="false">
+        <div data-shadcn--context-menu-target="trigger">Trigger</div>
+        <div data-shadcn--context-menu-target="content" hidden style="position: fixed;">
+          <button data-shadcn--context-menu-target="item">Item 1</button>
+        </div>
+      </div>
+    `
+
+    beforeEach(async () => {
+      const setup = await setupController(ContextMenuController, disconnectHTML, 'shadcn--context-menu')
+      application = setup.application
+      element = setup.element
+      controller = setup.controller
+    })
+
+    test("hides menu on disconnect", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      controller.disconnect()
+      await nextFrame()
+
+      expect(controller.openValue).toBe(false)
+    })
+  })
+
+  describe("without items", () => {
+    const noItemsHTML = `
+      <div data-controller="shadcn--context-menu"
+           data-shadcn--context-menu-open-value="false">
+        <div data-shadcn--context-menu-target="trigger">Trigger</div>
+        <div data-shadcn--context-menu-target="content" hidden style="position: fixed;">
+          <p>No items here</p>
+        </div>
+      </div>
+    `
+
+    beforeEach(async () => {
+      const setup = await setupController(ContextMenuController, noItemsHTML, 'shadcn--context-menu')
+      application = setup.application
+      element = setup.element
+      controller = setup.controller
+    })
+
+    test("handles empty items gracefully", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+
+      expect(() => {
+        controller.show(event)
+      }).not.toThrow()
+
+      expect(controller.openValue).toBe(true)
+    })
+
+    test("navigation does nothing with no items", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      expect(() => {
+        controller.focusNextItem()
+        controller.focusPreviousItem()
+        controller.focusFirstItem()
+        controller.focusLastItem()
+      }).not.toThrow()
+    })
+  })
+
+  describe("show without event", () => {
+    const noEventHTML = `
+      <div data-controller="shadcn--context-menu"
+           data-shadcn--context-menu-open-value="false">
+        <div data-shadcn--context-menu-target="trigger">Trigger</div>
+        <div data-shadcn--context-menu-target="content" hidden style="position: fixed;">
+          <button data-shadcn--context-menu-target="item">Item 1</button>
+        </div>
+      </div>
+    `
+
+    beforeEach(async () => {
+      const setup = await setupController(ContextMenuController, noEventHTML, 'shadcn--context-menu')
+      application = setup.application
+      element = setup.element
+      controller = setup.controller
+    })
+
+    test("handles show called without event", async () => {
+      expect(() => {
+        controller.show()
+      }).not.toThrow()
+
+      expect(controller.openValue).toBe(true)
+      expect(controller.mouseX).toBe(0)
+      expect(controller.mouseY).toBe(0)
+    })
+  })
+})
