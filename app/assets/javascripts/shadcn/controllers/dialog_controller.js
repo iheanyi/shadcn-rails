@@ -45,6 +45,19 @@ export default class extends Controller {
       // Re-query targets from portal
       this.portalOverlay = this.portal.querySelector('[data-shadcn--dialog-target="overlay"]')
       this.portalContent = this.portal.querySelector('[data-shadcn--dialog-target="content"]')
+
+      // Wire up close actions on portal elements (since they're outside controller scope)
+      this.portal.querySelectorAll('[data-action*="shadcn--dialog#close"]').forEach(el => {
+        el.addEventListener("click", (e) => {
+          e.preventDefault()
+          this.close()
+        })
+      })
+
+      // Also handle overlay click
+      if (this.portalOverlay) {
+        this.portalOverlay.addEventListener("click", () => this.close())
+      }
     }
 
     // Show overlay and content
