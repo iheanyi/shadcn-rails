@@ -1,0 +1,18 @@
+<input type="<%= @type %>"
+       class="<%= input_classes %>"<% if @name %>
+       name="<%= ERB::Util.html_escape(@name) %>"<% end %><% if @id %>
+       id="<%= ERB::Util.html_escape(@id) %>"<% end %><% if @value %>
+       value="<%= ERB::Util.html_escape(@value) %>"<% end %><% if @placeholder %>
+       placeholder="<%= ERB::Util.html_escape(@placeholder) %>"<% end %><% if @disabled %>
+       disabled<% end %><% if @required %>
+       required<% end %><% if @readonly %>
+       readonly<% end %><% if @autofocus %>
+       autofocus<% end %><% if @autocomplete %>
+       autocomplete="<%= ERB::Util.html_escape(@autocomplete) %>"<% end %><% if @pattern %>
+       pattern="<%= ERB::Util.html_escape(@pattern) %>"<% end %><% if @min %>
+       min="<%= ERB::Util.html_escape(@min) %>"<% end %><% if @max %>
+       max="<%= ERB::Util.html_escape(@max) %>"<% end %><% if @step %>
+       step="<%= ERB::Util.html_escape(@step) %>"<% end %><% if @minlength %>
+       minlength="<%= @minlength %>"<% end %><% if @maxlength %>
+       maxlength="<%= @maxlength %>"<% end %>
+       <%= tag_attributes %>>

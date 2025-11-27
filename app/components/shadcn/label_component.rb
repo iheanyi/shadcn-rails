@@ -24,26 +24,15 @@ module Shadcn
       @required = required
     end
 
-    def call
-      label_text = content
-      label_text = safe_join([label_text, required_indicator]) if @required
-      tag.label(label_text, **label_attributes)
-    end
-
     private
 
-    def required_indicator
-      content_tag(:span, " *", class: "text-destructive", "aria-hidden": "true")
+    def label_classes
+      cn(BASE_CLASSES, class_name)
     end
 
-    def label_attributes
-      attrs = {
-        for: @for,
-        class: merge_classes(BASE_CLASSES)
-      }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
+    def tag_attributes
+      attrs = html_options.merge(build_data)
+      attrs.map { |k, v| "#{k}=\"#{ERB::Util.html_escape(v)}\"" if v }.compact.join(" ").html_safe
     end
   end
 end

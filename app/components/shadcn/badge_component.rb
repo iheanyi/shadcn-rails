@@ -29,21 +29,15 @@ module Shadcn
       @variant = variant.to_sym
     end
 
-    def call
-      content_tag(:span, content, badge_attributes)
-    end
-
     private
 
     def badge_classes
       cn(BASE_CLASSES, VARIANTS[@variant], class_name)
     end
 
-    def badge_attributes
-      attrs = { class: badge_classes }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
+    def tag_attributes
+      attrs = html_options.merge(build_data)
+      attrs.map { |k, v| "#{k}=\"#{ERB::Util.html_escape(v)}\"" if v }.compact.join(" ").html_safe
     end
   end
 end

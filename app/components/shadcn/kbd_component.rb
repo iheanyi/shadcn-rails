@@ -18,7 +18,7 @@ module Shadcn
   #   </span>
   #
   class KbdComponent < BaseComponent
-    BASE_CLASSES = "pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100"
+    BASE_CLASSES = 'pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100'
 
     def call
       tag.kbd(content, **kbd_attributes)

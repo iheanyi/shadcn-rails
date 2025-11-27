@@ -1,0 +1,18 @@
+<% if @href %>
+  <a href="<%= @href %>"
+     class="<%= button_classes %>"
+     role="button"
+     <%= "aria-disabled=true tabindex=-1" if @disabled %>
+     <%= tag_attributes %>>
+    <%= button_content %>
+  </a>
+<% else %>
+  <button type="<%= @type %>"
+          class="<%= button_classes %>"
+          <%= "disabled" if @disabled || @loading %>
+          <%= "aria-disabled=true" if @disabled || @loading %>
+          <%= "aria-busy=true" if @loading %>
+          <%= tag_attributes %>>
+    <%= button_content %>
+  </button>
+<% end %>
