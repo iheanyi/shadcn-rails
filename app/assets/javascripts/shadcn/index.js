@@ -24,6 +24,7 @@ import DrawerController from "./controllers/drawer_controller"
 import DropdownController from "./controllers/dropdown_controller"
 import HoverCardController from "./controllers/hover_card_controller"
 import MenubarController from "./controllers/menubar_controller"
+import NavigationMenuController from "./controllers/navigation_menu_controller"
 import PopoverController from "./controllers/popover_controller"
 import ResizableController from "./controllers/resizable_controller"
 import RadioGroupController from "./controllers/radio_group_controller"
@@ -52,6 +53,7 @@ export {
   HoverCardController,
   InputOtpController,
   MenubarController,
+  NavigationMenuController,
   PopoverController,
   RadioGroupController,
   ResizableController,
