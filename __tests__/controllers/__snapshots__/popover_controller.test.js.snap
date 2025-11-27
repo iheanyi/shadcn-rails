@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`PopoverController snapshots renders closed popover correctly 1`] = `
+"
+        
+      <button data-shadcn--popover-target="trigger" data-action="click->shadcn--popover#toggle">
+        Open
+      </button>
+    
+        
+      <div data-shadcn--popover-target="content" hidden="">
+        Popover content
+      </div>
+    
+      "
+`;
+
+exports[`PopoverController snapshots renders modal popover correctly 1`] = `
+"
+        
+      <button data-shadcn--popover-target="trigger" data-action="click->shadcn--popover#toggle">
+        Open
+      </button>
+    
+        
+      <div data-shadcn--popover-target="content" hidden="">
+        Popover content
+      </div>
+    
+      "
+`;
+
+exports[`PopoverController snapshots renders open popover correctly 1`] = `
+"
+        
+      <button data-shadcn--popover-target="trigger" data-action="click->shadcn--popover#toggle">
+        Open
+      </button>
+    
+        
+      <div data-shadcn--popover-target="content" data-state="open" data-side="bottom" style="position: absolute; top: 100%; bottom: auto; margin-top: 8px; left: 50%; transform: translateX(-50%);">
+        Popover content
+      </div>
+    
+      "
+`;

@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`TabsController snapshots renders default tabs correctly 1`] = `
+"
+        <div data-shadcn--tabs-target="list" role="tablist">
+          <button data-shadcn--tabs-target="trigger" data-value="tab1" role="tab" data-action="click->shadcn--tabs#selectTab keydown->shadcn--tabs#handleKeydown" data-state="active" aria-selected="true" tabindex="0">Tab 1</button>
+<button data-shadcn--tabs-target="trigger" data-value="tab2" role="tab" data-action="click->shadcn--tabs#selectTab keydown->shadcn--tabs#handleKeydown" data-state="inactive" aria-selected="false" tabindex="-1">Tab 2</button>
+<button data-shadcn--tabs-target="trigger" data-value="tab3" role="tab" data-action="click->shadcn--tabs#selectTab keydown->shadcn--tabs#handleKeydown" data-state="inactive" aria-selected="false" tabindex="-1">Tab 3</button>
+        </div>
+        <div data-shadcn--tabs-target="content" data-value="tab1" role="tabpanel" data-state="active">Content 1</div>
+<div data-shadcn--tabs-target="content" data-value="tab2" role="tabpanel" hidden="" data-state="inactive">Content 2</div>
+<div data-shadcn--tabs-target="content" data-value="tab3" role="tabpanel" hidden="" data-state="inactive">Content 3</div>
+      "
+`;
+
+exports[`TabsController snapshots renders tabs with tab2 active 1`] = `
+"
+        <div data-shadcn--tabs-target="list" role="tablist">
+          <button data-shadcn--tabs-target="trigger" data-value="tab1" role="tab" data-action="click->shadcn--tabs#selectTab keydown->shadcn--tabs#handleKeydown" data-state="inactive" aria-selected="false" tabindex="-1">Tab 1</button>
+<button data-shadcn--tabs-target="trigger" data-value="tab2" role="tab" data-action="click->shadcn--tabs#selectTab keydown->shadcn--tabs#handleKeydown" data-state="active" aria-selected="true" tabindex="0">Tab 2</button>
+<button data-shadcn--tabs-target="trigger" data-value="tab3" role="tab" data-action="click->shadcn--tabs#selectTab keydown->shadcn--tabs#handleKeydown" data-state="inactive" aria-selected="false" tabindex="-1">Tab 3</button>
+        </div>
+        <div data-shadcn--tabs-target="content" data-value="tab1" role="tabpanel" data-state="inactive" hidden="">Content 1</div>
+<div data-shadcn--tabs-target="content" data-value="tab2" role="tabpanel" data-state="active">Content 2</div>
+<div data-shadcn--tabs-target="content" data-value="tab3" role="tabpanel" hidden="" data-state="inactive">Content 3</div>
+      "
+`;

@@ -1,0 +1,111 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`SheetController snapshots renders closed sheet correctly 1`] = `
+"
+        <button data-shadcn--sheet-target="trigger" data-action="click->shadcn--sheet#toggle">
+          Open Sheet
+        </button>
+
+        <template data-shadcn--sheet-target="template">
+          <div data-shadcn--sheet-target="overlay" data-state="closed" hidden="" data-action="click->shadcn--sheet#close" class="fixed inset-0 z-50 bg-black/80">
+          </div>
+          <div data-shadcn--sheet-target="content" data-state="closed" hidden="" data-side="right" class="fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out">
+            <button data-action="click->shadcn--sheet#close" class="close-button">
+              Close
+            </button>
+            <input type="text" class="first-input" placeholder="First input">
+            <button class="action-button">Action</button>
+            <a href="#" class="link">Link</a>
+            <input type="text" class="last-input" placeholder="Last input">
+          </div>
+        </template>
+      "
+`;
+
+exports[`SheetController snapshots renders with different sides: side-bottom 1`] = `
+"
+        <button data-shadcn--sheet-target="trigger" data-action="click->shadcn--sheet#toggle">
+          Open Sheet
+        </button>
+
+        <template data-shadcn--sheet-target="template">
+          <div data-shadcn--sheet-target="overlay" data-state="closed" hidden="" data-action="click->shadcn--sheet#close" class="fixed inset-0 z-50 bg-black/80">
+          </div>
+          <div data-shadcn--sheet-target="content" data-state="closed" hidden="" data-side="bottom" class="fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out">
+            <button data-action="click->shadcn--sheet#close" class="close-button">
+              Close
+            </button>
+            <input type="text" class="first-input" placeholder="First input">
+            <button class="action-button">Action</button>
+            <a href="#" class="link">Link</a>
+            <input type="text" class="last-input" placeholder="Last input">
+          </div>
+        </template>
+      "
+`;
+
+exports[`SheetController snapshots renders with different sides: side-left 1`] = `
+"
+        <button data-shadcn--sheet-target="trigger" data-action="click->shadcn--sheet#toggle">
+          Open Sheet
+        </button>
+
+        <template data-shadcn--sheet-target="template">
+          <div data-shadcn--sheet-target="overlay" data-state="closed" hidden="" data-action="click->shadcn--sheet#close" class="fixed inset-0 z-50 bg-black/80">
+          </div>
+          <div data-shadcn--sheet-target="content" data-state="closed" hidden="" data-side="left" class="fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out">
+            <button data-action="click->shadcn--sheet#close" class="close-button">
+              Close
+            </button>
+            <input type="text" class="first-input" placeholder="First input">
+            <button class="action-button">Action</button>
+            <a href="#" class="link">Link</a>
+            <input type="text" class="last-input" placeholder="Last input">
+          </div>
+        </template>
+      "
+`;
+
+exports[`SheetController snapshots renders with different sides: side-right 1`] = `
+"
+        <button data-shadcn--sheet-target="trigger" data-action="click->shadcn--sheet#toggle">
+          Open Sheet
+        </button>
+
+        <template data-shadcn--sheet-target="template">
+          <div data-shadcn--sheet-target="overlay" data-state="closed" hidden="" data-action="click->shadcn--sheet#close" class="fixed inset-0 z-50 bg-black/80">
+          </div>
+          <div data-shadcn--sheet-target="content" data-state="closed" hidden="" data-side="right" class="fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out">
+            <button data-action="click->shadcn--sheet#close" class="close-button">
+              Close
+            </button>
+            <input type="text" class="first-input" placeholder="First input">
+            <button class="action-button">Action</button>
+            <a href="#" class="link">Link</a>
+            <input type="text" class="last-input" placeholder="Last input">
+          </div>
+        </template>
+      "
+`;
+
+exports[`SheetController snapshots renders with different sides: side-top 1`] = `
+"
+        <button data-shadcn--sheet-target="trigger" data-action="click->shadcn--sheet#toggle">
+          Open Sheet
+        </button>
+
+        <template data-shadcn--sheet-target="template">
+          <div data-shadcn--sheet-target="overlay" data-state="closed" hidden="" data-action="click->shadcn--sheet#close" class="fixed inset-0 z-50 bg-black/80">
+          </div>
+          <div data-shadcn--sheet-target="content" data-state="closed" hidden="" data-side="top" class="fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out">
+            <button data-action="click->shadcn--sheet#close" class="close-button">
+              Close
+            </button>
+            <input type="text" class="first-input" placeholder="First input">
+            <button class="action-button">Action</button>
+            <a href="#" class="link">Link</a>
+            <input type="text" class="last-input" placeholder="Last input">
+          </div>
+        </template>
+      "
+`;

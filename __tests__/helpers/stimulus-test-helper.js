@@ -103,21 +103,30 @@ export async function waitForPortal(selector, shouldExist = true, timeout = 1000
 
 /**
  * Mock window.location for URL-related tests
+ * Uses jsdom's internal reconfigure or modifies location properties
  * @param {string} url - The URL to mock
  * @returns {Function} Cleanup function to restore original location
  */
 export function mockLocation(url) {
-  const originalLocation = window.location
-  delete window.location
-  window.location = new URL(url)
+  // Store original href
+  const originalHref = window.location.href
 
-  // Add commonly needed properties
-  window.location.assign = jest.fn()
-  window.location.replace = jest.fn()
-  window.location.reload = jest.fn()
+  // Use jsdom's reconfigure if available (available in newer jsdom)
+  if (typeof window._virtualConsole !== 'undefined' && window.location._setHref) {
+    window.location._setHref(url)
+    return () => {
+      if (window.location._setHref) {
+        window.location._setHref(originalHref)
+      }
+    }
+  }
+
+  // Fallback: Use history API to change URL without navigation
+  const urlObj = new URL(url, window.location.origin)
+  window.history.replaceState({}, '', urlObj.href)
 
   return () => {
-    window.location = originalLocation
+    window.history.replaceState({}, '', originalHref)
   }
 }
 
@@ -133,13 +142,13 @@ export function mockHistory() {
     replaceState: []
   }
 
-  window.history.pushState = jest.fn((state, title, url) => {
+  window.history.pushState = (state, title, url) => {
     calls.pushState.push({ state, title, url })
-  })
+  }
 
-  window.history.replaceState = jest.fn((state, title, url) => {
+  window.history.replaceState = (state, title, url) => {
     calls.replaceState.push({ state, title, url })
-  })
+  }
 
   return {
     calls,
