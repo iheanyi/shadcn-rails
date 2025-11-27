@@ -590,4 +590,204 @@ describe("CalendarController", () => {
       expect(controller.selectedDate).toBeNull()
     })
   })
+
+  describe("disabled days CSS rendering", () => {
+    test("disabled dates have correct CSS classes", () => {
+      controller.disabledDatesValue = "2024-11-15"
+      controller.render()
+
+      const disabledButton = element.querySelector('[data-date="2024-11-15"]')
+      expect(disabledButton).not.toBeNull()
+      expect(disabledButton.classList.contains("text-muted-foreground")).toBe(true)
+      expect(disabledButton.classList.contains("opacity-50")).toBe(true)
+      expect(disabledButton.classList.contains("cursor-not-allowed")).toBe(true)
+    })
+
+    test("disabled dates have aria-disabled attribute", () => {
+      controller.disabledDatesValue = "2024-11-15"
+      controller.render()
+
+      const disabledButton = element.querySelector('[data-date="2024-11-15"]')
+      expect(disabledButton.getAttribute("aria-disabled")).toBe("true")
+    })
+
+    test("enabled dates do not have disabled CSS classes", () => {
+      controller.disabledDatesValue = "2024-11-15"
+      controller.render()
+
+      const enabledButton = element.querySelector('[data-date="2024-11-20"]')
+      expect(enabledButton).not.toBeNull()
+      expect(enabledButton.classList.contains("cursor-not-allowed")).toBe(false)
+      expect(enabledButton.getAttribute("aria-disabled")).toBeNull()
+    })
+
+    test("minDate disables earlier dates with correct CSS", () => {
+      controller.minDateValue = "2024-11-10"
+      controller.render()
+
+      const disabledButton = element.querySelector('[data-date="2024-11-05"]')
+      expect(disabledButton).not.toBeNull()
+      expect(disabledButton.classList.contains("text-muted-foreground")).toBe(true)
+      expect(disabledButton.classList.contains("cursor-not-allowed")).toBe(true)
+      expect(disabledButton.getAttribute("aria-disabled")).toBe("true")
+
+      const enabledButton = element.querySelector('[data-date="2024-11-15"]')
+      expect(enabledButton.classList.contains("cursor-not-allowed")).toBe(false)
+    })
+
+    test("maxDate disables later dates with correct CSS", () => {
+      controller.maxDateValue = "2024-11-20"
+      controller.render()
+
+      const disabledButton = element.querySelector('[data-date="2024-11-25"]')
+      expect(disabledButton).not.toBeNull()
+      expect(disabledButton.classList.contains("text-muted-foreground")).toBe(true)
+      expect(disabledButton.classList.contains("cursor-not-allowed")).toBe(true)
+      expect(disabledButton.getAttribute("aria-disabled")).toBe("true")
+
+      const enabledButton = element.querySelector('[data-date="2024-11-15"]')
+      expect(enabledButton.classList.contains("cursor-not-allowed")).toBe(false)
+    })
+
+    test("disabledDaysOfWeek disables weekends with correct CSS", () => {
+      controller.disabledDaysOfWeekValue = "0,6" // Sunday and Saturday
+      controller.render()
+
+      // November 16, 2024 is a Saturday
+      const saturdayButton = element.querySelector('[data-date="2024-11-16"]')
+      expect(saturdayButton).not.toBeNull()
+      expect(saturdayButton.classList.contains("text-muted-foreground")).toBe(true)
+      expect(saturdayButton.classList.contains("cursor-not-allowed")).toBe(true)
+      expect(saturdayButton.getAttribute("aria-disabled")).toBe("true")
+
+      // November 17, 2024 is a Sunday
+      const sundayButton = element.querySelector('[data-date="2024-11-17"]')
+      expect(sundayButton.classList.contains("cursor-not-allowed")).toBe(true)
+
+      // November 18, 2024 is a Monday - should be enabled
+      const mondayButton = element.querySelector('[data-date="2024-11-18"]')
+      expect(mondayButton.classList.contains("cursor-not-allowed")).toBe(false)
+    })
+
+    test("multiple disabled dates have correct CSS", () => {
+      controller.disabledDatesValue = "2024-11-10,2024-11-15,2024-11-20"
+      controller.render()
+
+      const disabledDates = ["2024-11-10", "2024-11-15", "2024-11-20"]
+      disabledDates.forEach(dateStr => {
+        const button = element.querySelector(`[data-date="${dateStr}"]`)
+        expect(button.classList.contains("cursor-not-allowed")).toBe(true)
+        expect(button.getAttribute("aria-disabled")).toBe("true")
+      })
+
+      // Check an enabled date between them
+      const enabledButton = element.querySelector('[data-date="2024-11-12"]')
+      expect(enabledButton.classList.contains("cursor-not-allowed")).toBe(false)
+    })
+  })
+
+  describe("snapshots", () => {
+    test("renders default calendar grid correctly", () => {
+      controller.render()
+
+      const grid = element.querySelector('[data-calendar-target="grid"]')
+      expect(grid.innerHTML).toMatchSnapshot()
+    })
+
+    test("renders calendar with selected date correctly", () => {
+      controller.selectedDate = new Date(2024, 10, 15)
+      controller.selectedValue = "2024-11-15"
+      controller.render()
+
+      const grid = element.querySelector('[data-calendar-target="grid"]')
+      expect(grid.innerHTML).toMatchSnapshot()
+    })
+
+    test("renders calendar with disabled dates correctly", () => {
+      controller.disabledDatesValue = "2024-11-10,2024-11-15,2024-11-20"
+      controller.render()
+
+      const grid = element.querySelector('[data-calendar-target="grid"]')
+      expect(grid.innerHTML).toMatchSnapshot()
+    })
+
+    test("renders calendar with min and max dates correctly", () => {
+      controller.minDateValue = "2024-11-05"
+      controller.maxDateValue = "2024-11-25"
+      controller.render()
+
+      const grid = element.querySelector('[data-calendar-target="grid"]')
+      expect(grid.innerHTML).toMatchSnapshot()
+    })
+
+    test("renders calendar with disabled weekends correctly", () => {
+      controller.disabledDaysOfWeekValue = "0,6"
+      controller.render()
+
+      const grid = element.querySelector('[data-calendar-target="grid"]')
+      expect(grid.innerHTML).toMatchSnapshot()
+    })
+  })
+
+  describe("range mode CSS rendering", () => {
+    beforeEach(async () => {
+      application.stop()
+      document.body.innerHTML = ""
+
+      document.body.innerHTML = `
+        <div data-controller="calendar"
+             data-calendar-month-value="2024-11-01"
+             data-calendar-mode-value="range"
+             data-calendar-selected-value="">
+          <div data-calendar-target="grid"></div>
+          <input type="hidden" data-calendar-target="hiddenInput">
+        </div>
+      `
+
+      application = Application.start()
+      application.register("calendar", CalendarController)
+
+      await new Promise(resolve => requestAnimationFrame(resolve))
+
+      element = document.querySelector('[data-controller="calendar"]')
+      controller = application.getControllerForElementAndIdentifier(element, "calendar")
+    })
+
+    test("range start has rounded-l-md class", () => {
+      controller.rangeStart = new Date(2024, 10, 10)
+      controller.rangeEnd = new Date(2024, 10, 15)
+      controller.render()
+
+      const startButton = element.querySelector('[data-date="2024-11-10"]')
+      expect(startButton.classList.contains("rounded-l-md")).toBe(true)
+    })
+
+    test("range end has rounded-r-md class", () => {
+      controller.rangeStart = new Date(2024, 10, 10)
+      controller.rangeEnd = new Date(2024, 10, 15)
+      controller.render()
+
+      const endButton = element.querySelector('[data-date="2024-11-15"]')
+      expect(endButton.classList.contains("rounded-r-md")).toBe(true)
+    })
+
+    test("dates in range have accent background", () => {
+      controller.rangeStart = new Date(2024, 10, 10)
+      controller.rangeEnd = new Date(2024, 10, 15)
+      controller.render()
+
+      // Nov 12 is in the middle of the range
+      const middleButton = element.querySelector('[data-date="2024-11-12"]')
+      expect(middleButton.classList.contains("bg-accent/50")).toBe(true)
+    })
+
+    test("range mode snapshot", () => {
+      controller.rangeStart = new Date(2024, 10, 10)
+      controller.rangeEnd = new Date(2024, 10, 15)
+      controller.render()
+
+      const grid = element.querySelector('[data-calendar-target="grid"]')
+      expect(grid.innerHTML).toMatchSnapshot()
+    })
+  })
 })
