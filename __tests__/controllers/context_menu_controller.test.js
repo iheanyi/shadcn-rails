@@ -624,4 +624,222 @@ describe("ContextMenuController", () => {
       expect(controller.mouseY).toBe(0)
     })
   })
+
+  describe("scroll lock behavior", () => {
+    const scrollLockHTML = `
+      <div data-controller="shadcn--context-menu"
+           data-shadcn--context-menu-open-value="false">
+        <div data-shadcn--context-menu-target="trigger">Trigger</div>
+        <div data-shadcn--context-menu-target="content" hidden style="position: fixed;">
+          <button data-shadcn--context-menu-target="item">Item 1</button>
+        </div>
+      </div>
+    `
+
+    beforeEach(async () => {
+      const setup = await setupController(ContextMenuController, scrollLockHTML, 'shadcn--context-menu')
+      application = setup.application
+      element = setup.element
+      controller = setup.controller
+      // Reset body overflow before each test
+      document.body.style.overflow = ""
+    })
+
+    afterEach(() => {
+      // Clean up body overflow after each test
+      document.body.style.overflow = ""
+    })
+
+    test("locks body scroll when menu opens", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      expect(document.body.style.overflow).toBe("hidden")
+    })
+
+    test("stores original overflow value", async () => {
+      document.body.style.overflow = "auto"
+
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      expect(controller.originalOverflow).toBe("auto")
+    })
+
+    test("restores original overflow after hide animation", async () => {
+      document.body.style.overflow = "auto"
+
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      controller.hide()
+      // Wait for animation timeout (100ms + buffer)
+      await wait(150)
+
+      expect(document.body.style.overflow).toBe("auto")
+    })
+
+    test("does not lock scroll if already locked", async () => {
+      document.body.style.overflow = "hidden"
+
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      // originalOverflow should be null because it was already hidden
+      expect(controller.originalOverflow).toBe(null)
+    })
+  })
+
+  describe("double right-click handling", () => {
+    const doubleClickHTML = `
+      <div data-controller="shadcn--context-menu"
+           data-shadcn--context-menu-open-value="false">
+        <div data-shadcn--context-menu-target="trigger">Trigger</div>
+        <div data-shadcn--context-menu-target="content" hidden style="position: fixed;">
+          <button data-shadcn--context-menu-target="item">Item 1</button>
+        </div>
+      </div>
+    `
+
+    beforeEach(async () => {
+      const setup = await setupController(ContextMenuController, doubleClickHTML, 'shadcn--context-menu')
+      application = setup.application
+      element = setup.element
+      controller = setup.controller
+      document.body.style.overflow = ""
+    })
+
+    afterEach(() => {
+      document.body.style.overflow = ""
+      if (controller.hideTimeoutId) {
+        clearTimeout(controller.hideTimeoutId)
+      }
+    })
+
+    test("cancels pending hide timeout when showing again", async () => {
+      const event1 = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event1)
+      await nextFrame()
+
+      // Start hiding (this sets hideTimeoutId)
+      controller.hide()
+      await nextFrame()
+
+      expect(controller.hideTimeoutId).not.toBe(null)
+
+      // Immediately show again (should cancel the pending hide)
+      const event2 = { preventDefault: jest.fn(), clientX: 200, clientY: 200 }
+      controller.show(event2)
+      await nextFrame()
+
+      // The menu should be open at the new position
+      expect(controller.openValue).toBe(true)
+      expect(controller.mouseX).toBe(200)
+      expect(controller.mouseY).toBe(200)
+      expect(controller.contentTarget.hidden).toBe(false)
+    })
+
+    test("menu stays open after rapid open/close/open", async () => {
+      // First open
+      const event1 = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event1)
+      await nextFrame()
+
+      // Quickly close
+      controller.hide()
+      await nextFrame()
+
+      // Immediately open again
+      const event2 = { preventDefault: jest.fn(), clientX: 150, clientY: 150 }
+      controller.show(event2)
+      await nextFrame()
+
+      // Wait longer than the animation timeout
+      await wait(150)
+
+      // Menu should still be open
+      expect(controller.openValue).toBe(true)
+      expect(controller.contentTarget.hidden).toBe(false)
+    })
+
+    test("hideTimeoutId is cleared after timeout completes", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      controller.hide()
+
+      // Wait for timeout to complete
+      await wait(150)
+
+      expect(controller.hideTimeoutId).toBe(null)
+    })
+  })
+
+  describe("animation delay on close", () => {
+    const animationHTML = `
+      <div data-controller="shadcn--context-menu"
+           data-shadcn--context-menu-open-value="false">
+        <div data-shadcn--context-menu-target="trigger">Trigger</div>
+        <div data-shadcn--context-menu-target="content" hidden style="position: fixed;">
+          <button data-shadcn--context-menu-target="item">Item 1</button>
+        </div>
+      </div>
+    `
+
+    beforeEach(async () => {
+      const setup = await setupController(ContextMenuController, animationHTML, 'shadcn--context-menu')
+      application = setup.application
+      element = setup.element
+      controller = setup.controller
+    })
+
+    afterEach(() => {
+      if (controller.hideTimeoutId) {
+        clearTimeout(controller.hideTimeoutId)
+      }
+    })
+
+    test("sets data-state to closed immediately", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      controller.hide()
+      await nextFrame()
+
+      // data-state should be set to closed immediately for CSS animation
+      expect(controller.contentTarget.dataset.state).toBe("closed")
+    })
+
+    test("content remains visible during animation", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      controller.hide()
+      await nextFrame()
+
+      // Content should still be visible immediately after hide() is called
+      // (hidden is set after the 100ms timeout)
+      expect(controller.contentTarget.hidden).toBe(false)
+    })
+
+    test("content is hidden after animation completes", async () => {
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+
+      controller.hide()
+
+      // Wait for animation to complete (100ms + buffer)
+      await wait(150)
+
+      expect(controller.contentTarget.hidden).toBe(true)
+    })
+  })
 })
