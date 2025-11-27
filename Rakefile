@@ -46,10 +46,16 @@ namespace :release do
     end
   end
 
-  desc "Bump version (usage: rake release:bump[patch|minor|major|X.Y.Z])"
+  desc "Bump version (usage: rake 'release:bump[patch]' or rake 'release:bump[1.0.0]')"
   task :bump, [:type] do |_, args|
     type = args[:type] || "patch"
-    system("bin/bump-version #{type}")
+    system("bin/bump #{type}")
+  end
+
+  desc "Bump version without committing (usage: rake 'release:bump_only[patch]')"
+  task :bump_only, [:type] do |_, args|
+    type = args[:type] || "patch"
+    system("bin/bump #{type} --no-commit")
   end
 
   desc "Build both gem and npm package"

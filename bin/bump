@@ -1,0 +1,321 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Version bump script for shadcn-rails
+# Updates version in both Ruby gem and npm package, commits, and tags
+#
+# Usage:
+#   bin/bump patch                # Bump patch version, commit, and tag
+#   bin/bump minor                # Bump minor version, commit, and tag
+#   bin/bump major                # Bump major version, commit, and tag
+#   bin/bump 1.0.0                # Set specific version, commit, and tag
+#
+# Options:
+#   --no-commit    Only update files, don't commit or tag
+#   --push         Push commits and tags to remote after bumping
+#   --release      Push and publish to RubyGems and npm
+#   --dry-run      Show what would happen without making changes
+
+require "json"
+require "fileutils"
+require "optparse"
+
+VERSION_FILE = File.expand_path("../lib/shadcn/rails/version.rb", __dir__)
+PACKAGE_JSON = File.expand_path("../package.json", __dir__)
+CHANGELOG_FILE = File.expand_path("../CHANGELOG.md", __dir__)
+
+class VersionBumper
+  def initialize(bump_type:, commit: true, push: false, release: false, dry_run: false)
+    @bump_type = bump_type
+    @commit = commit
+    @push = push
+    @release = release
+    @dry_run = dry_run
+  end
+
+  def run
+    validate_environment
+
+    @old_version = current_version
+    @new_version = calculate_new_version
+
+    puts "\n📦 Bumping version: #{@old_version} → #{@new_version}\n\n"
+
+    update_files
+    commit_and_tag if @commit
+    push_to_remote if @push || @release
+    publish_packages if @release
+
+    print_summary
+  end
+
+  private
+
+  def validate_environment
+    # Check versions are in sync
+    ruby_ver = current_version
+    npm_ver = JSON.parse(File.read(PACKAGE_JSON))["version"]
+
+    if ruby_ver != npm_ver
+      error "Versions are out of sync!\n  Ruby: #{ruby_ver}\n  npm: #{npm_ver}"
+    end
+
+    # Check for clean working directory if we're going to commit
+    if @commit && !@dry_run
+      status = `git status --porcelain`.strip
+      unless status.empty?
+        error "Working directory is not clean. Commit or stash changes first.\n\n#{status}"
+      end
+    end
+
+    # Check we're on a reasonable branch for releasing
+    if @release && !@dry_run
+      branch = `git branch --show-current`.strip
+      unless %w[main master].include?(branch)
+        puts "⚠️  Warning: You're on branch '#{branch}', not main/master"
+        print "Continue anyway? [y/N] "
+        response = $stdin.gets&.strip&.downcase
+        exit 1 unless response == "y"
+      end
+    end
+  end
+
+  def current_version
+    content = File.read(VERSION_FILE)
+    content.match(/VERSION = "(.+?)"/)[1]
+  end
+
+  def calculate_new_version
+    major, minor, patch = @old_version.split(".").map(&:to_i)
+
+    case @bump_type
+    when "major"
+      "#{major + 1}.0.0"
+    when "minor"
+      "#{major}.#{minor + 1}.0"
+    when "patch"
+      "#{major}.#{minor}.#{patch + 1}"
+    when /^\d+\.\d+\.\d+$/
+      @bump_type
+    else
+      error "Invalid version type: #{@bump_type}\nUse: patch, minor, major, or X.Y.Z"
+    end
+  end
+
+  def update_files
+    step "Updating version files"
+
+    # Update Ruby version
+    if @dry_run
+      puts "  [dry-run] Would update #{VERSION_FILE}"
+    else
+      content = File.read(VERSION_FILE)
+      new_content = content.gsub(/VERSION = ".+?"/, %(VERSION = "#{@new_version}"))
+      File.write(VERSION_FILE, new_content)
+      puts "  ✓ Updated #{File.basename(VERSION_FILE)}"
+    end
+
+    # Update npm version
+    if @dry_run
+      puts "  [dry-run] Would update #{PACKAGE_JSON}"
+    else
+      package = JSON.parse(File.read(PACKAGE_JSON))
+      package["version"] = @new_version
+      File.write(PACKAGE_JSON, JSON.pretty_generate(package) + "\n")
+      puts "  ✓ Updated #{File.basename(PACKAGE_JSON)}"
+    end
+
+    # Update changelog
+    if File.exist?(CHANGELOG_FILE)
+      if @dry_run
+        puts "  [dry-run] Would update #{CHANGELOG_FILE}"
+      else
+        update_changelog
+        puts "  ✓ Updated #{File.basename(CHANGELOG_FILE)}"
+      end
+    end
+  end
+
+  def update_changelog
+    content = File.read(CHANGELOG_FILE)
+    today = Time.now.strftime("%Y-%m-%d")
+
+    # Replace [Unreleased] with new version
+    new_content = content.gsub(
+      /## \[Unreleased\]/,
+      "## [Unreleased]\n\n## [#{@new_version}] - #{today}"
+    )
+
+    # Update comparison links at bottom
+    new_content = new_content.gsub(
+      /\[Unreleased\]: (.+)\/compare\/v(.+?)\.\.\.HEAD/,
+      "[Unreleased]: \\1/compare/v#{@new_version}...HEAD\n[#{@new_version}]: \\1/compare/v\\2...v#{@new_version}"
+    )
+
+    File.write(CHANGELOG_FILE, new_content)
+  end
+
+  def commit_and_tag
+    step "Committing and tagging"
+
+    tag = "v#{@new_version}"
+    commit_message = "Bump version to #{@new_version}"
+
+    if @dry_run
+      puts "  [dry-run] Would run: git add -A"
+      puts "  [dry-run] Would run: git commit -m '#{commit_message}'"
+      puts "  [dry-run] Would run: git tag #{tag}"
+    else
+      system("git add -A")
+      system("git commit -m '#{commit_message}'")
+      system("git tag #{tag}")
+      puts "  ✓ Created commit and tag #{tag}"
+    end
+  end
+
+  def push_to_remote
+    step "Pushing to remote"
+
+    if @dry_run
+      puts "  [dry-run] Would run: git push"
+      puts "  [dry-run] Would run: git push --tags"
+    else
+      success = system("git push && git push --tags")
+      if success
+        puts "  ✓ Pushed commits and tags"
+      else
+        error "Failed to push to remote"
+      end
+    end
+  end
+
+  def publish_packages
+    step "Publishing packages"
+
+    if @dry_run
+      puts "  [dry-run] Would run: bin/release"
+      return
+    end
+
+    # Build first
+    puts "  Building packages..."
+    system("npm run build") || error("npm build failed")
+    system("gem build shadcn-rails.gemspec") || error("gem build failed")
+
+    gem_file = "shadcn-rails-#{@new_version}.gem"
+
+    # Publish to RubyGems
+    puts "  Publishing to RubyGems..."
+    unless system("gem push #{gem_file}")
+      puts "  ⚠️  Failed to publish gem (may need: gem signin)"
+    end
+
+    # Publish to npm
+    puts "  Publishing to npm..."
+    unless system("npm publish")
+      puts "  ⚠️  Failed to publish to npm (may need: npm login)"
+    end
+
+    # Clean up
+    File.delete(gem_file) if File.exist?(gem_file)
+
+    puts "  ✓ Published packages"
+  end
+
+  def print_summary
+    puts "\n" + "=" * 50
+    puts "✅ Version bumped to #{@new_version}"
+    puts "=" * 50
+
+    unless @commit
+      puts "\nFiles updated. Next steps:"
+      puts "  git add -A"
+      puts "  git commit -m 'Bump version to #{@new_version}'"
+      puts "  git tag v#{@new_version}"
+    end
+
+    if @commit && !@push && !@release
+      puts "\nCommitted and tagged. To publish:"
+      puts "  git push && git push --tags"
+      puts "  bin/release"
+    end
+
+    if @push && !@release
+      puts "\nPushed to remote. To publish packages:"
+      puts "  bin/release"
+    end
+
+    if @release
+      puts "\nRelease complete! 🎉"
+    end
+  end
+
+  def step(message)
+    puts "→ #{message}"
+  end
+
+  def error(message)
+    puts "\n❌ Error: #{message}"
+    exit 1
+  end
+end
+
+# Parse command line options
+options = {
+  commit: true,
+  push: false,
+  release: false,
+  dry_run: false
+}
+
+parser = OptionParser.new do |opts|
+  opts.banner = "Usage: bin/bump <patch|minor|major|X.Y.Z> [options]"
+
+  opts.on("--no-commit", "Only update files, don't commit or tag") do
+    options[:commit] = false
+  end
+
+  opts.on("--push", "Push commits and tags to remote") do
+    options[:push] = true
+  end
+
+  opts.on("--release", "Push and publish to RubyGems and npm") do
+    options[:release] = true
+  end
+
+  opts.on("--dry-run", "Show what would happen without making changes") do
+    options[:dry_run] = true
+  end
+
+  opts.on("-h", "--help", "Show this help message") do
+    puts opts
+    puts "\nExamples:"
+    puts "  bin/bump patch              # Bump 0.1.0 → 0.1.1, commit, tag"
+    puts "  bin/bump minor --push       # Bump 0.1.0 → 0.2.0, commit, tag, push"
+    puts "  bin/bump major --release    # Bump 0.1.0 → 1.0.0, commit, tag, push, publish"
+    puts "  bin/bump 1.0.0 --no-commit  # Set to 1.0.0, only update files"
+    puts "  bin/bump patch --dry-run    # Preview what would happen"
+    exit 0
+  end
+end
+
+parser.parse!
+
+if ARGV.empty?
+  # Show current version and help
+  ruby_version = File.read(VERSION_FILE).match(/VERSION = "(.+?)"/)[1]
+  puts "Current version: #{ruby_version}"
+  puts ""
+  puts parser
+  exit 1
+end
+
+bump_type = ARGV[0]
+
+VersionBumper.new(
+  bump_type: bump_type,
+  commit: options[:commit],
+  push: options[:push],
+  release: options[:release],
+  dry_run: options[:dry_run]
+).run
