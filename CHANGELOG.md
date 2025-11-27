@@ -9,7 +9,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.2.0] - 2025-11-27
 
-## [0.1.0] - 2024-11-27
+### Added
+
+- **Context Menu component** - Right-click context menus with full keyboard navigation
+- **stimulus-use integration** - Added `useClickOutside` for better click-outside detection across menu components
+- **BaseMenuController** - Shared base controller for menu components (DropdownMenu, ContextMenu, Menubar)
+- **Polymorphic menu items** - Menu items can render as buttons, links, or custom elements
+- **Two-way slider binding** - Sliders can now sync bidirectionally with input fields via `data-input-target`
+
+### Changed
+
+- Refactored menu controllers to use shared `BaseMenuController`
+- Improved click-outside handling using stimulus-use library
+- Better keyboard navigation across all menu components
+
+### Fixed
+
+- Combobox debouncing now works correctly
+- Context menu positioning and click handling
+- Radio group label click behavior
+- Interleaved content rendering in menus
+
+### Developer Experience
+
+- New `bin/bump` script for unified version bumping (replaces `bin/bump-version`)
+- New `bin/test` script to run both Ruby and JavaScript tests
+- Improved gemspec to exclude development files from published gem
+- Added comprehensive Jest test suite for Stimulus controllers
+
+## [0.1.0] - 2025-11-27
 
 ### Added
 
