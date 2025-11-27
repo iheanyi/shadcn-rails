@@ -9,3 +9,4 @@
 /.playwright-mcp/
 /.claude/
 /test/dummy/**/*/builds
+*.gem
