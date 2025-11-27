@@ -291,6 +291,13 @@ class DocsController < ApplicationController
       has_stimulus: true,
       controller: "shadcn--menubar"
     },
+    "navigation-menu" => {
+      name: "Navigation Menu",
+      category: "Navigation",
+      description: "A collection of links for navigating websites.",
+      has_stimulus: true,
+      controller: "shadcn--navigation-menu"
+    },
     "pagination" => {
       name: "Pagination",
       category: "Navigation",

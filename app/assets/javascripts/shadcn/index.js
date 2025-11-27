@@ -82,6 +82,7 @@ export const controllers = {
   "shadcn--hover-card": HoverCardController,
   "shadcn--input-otp": InputOtpController,
   "shadcn--menubar": MenubarController,
+  "shadcn--navigation-menu": NavigationMenuController,
   "shadcn--popover": PopoverController,
   "shadcn--radio-group": RadioGroupController,
   "shadcn--resizable": ResizableController,

@@ -7,7 +7,7 @@ module Shadcn
       NavigationMenuTriggerComponent.new(**options, &block)
     }
 
-    renders_one :content, lambda { |**options, &block|
+    renders_one :dropdown, lambda { |**options, &block|
       NavigationMenuContentComponent.new(**options, &block)
     }
 
@@ -25,7 +25,7 @@ module Shadcn
       if link
         link
       else
-        safe_join([trigger, content].compact)
+        safe_join([trigger, dropdown].compact)
       end
     end
 

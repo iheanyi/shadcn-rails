@@ -1219,6 +1219,135 @@
       get isHorizontal() { return this.directionValue === 'horizontal' }
     })
 
+    // Navigation Menu Controller
+    Stimulus.register("shadcn--navigation-menu", class extends Controller {
+      static targets = ["list", "item", "trigger", "content", "viewport"]
+      static values = { openIndex: { type: Number, default: -1 }, delayDuration: { type: Number, default: 200 }, skipDelayDuration: { type: Number, default: 300 } }
+
+      connect() {
+        this.isOpen = false
+        this.previousIndex = -1
+        this.openTimer = null
+        this.closeTimer = null
+        this.wasClickOpened = false
+        this.boundHandleClickOutside = this.handleClickOutside.bind(this)
+        this.boundHandleKeydown = this.handleKeydown.bind(this)
+      }
+
+      disconnect() { this.closeAll(); this.clearTimers() }
+
+      toggle(event) {
+        event?.preventDefault()
+        const trigger = event.currentTarget
+        const item = trigger.closest("[data-shadcn--navigation-menu-target='item']")
+        const index = this.itemTargets.indexOf(item)
+        this.clearTimers()
+        if (this.openIndexValue === index) { this.closeAll() }
+        else { this.wasClickOpened = true; this.openItem(index) }
+      }
+
+      hoverOpen(event) {
+        if (this.wasClickOpened && this.isOpen) return
+        const trigger = event.currentTarget
+        const item = trigger.closest("[data-shadcn--navigation-menu-target='item']")
+        const index = this.itemTargets.indexOf(item)
+        this.clearTimers()
+        if (this.isOpen) {
+          if (this.openIndexValue !== index) this.openItem(index)
+        } else {
+          this.openTimer = setTimeout(() => this.openItem(index), this.delayDurationValue)
+        }
+      }
+
+      hoverClose(event) {
+        if (this.wasClickOpened) return
+        this.clearTimers()
+        this.closeTimer = setTimeout(() => this.closeAll(), this.skipDelayDurationValue)
+      }
+
+      contentHover() { this.clearTimers() }
+
+      openItem(index) {
+        if (index < 0 || index >= this.itemTargets.length) return
+        if (this.openIndexValue !== -1 && this.openIndexValue !== index) this.closeItem(this.openIndexValue)
+        const item = this.itemTargets[index]
+        const trigger = item.querySelector("[data-shadcn--navigation-menu-target='trigger']")
+        const content = item.querySelector("[data-shadcn--navigation-menu-target='content']")
+        if (!trigger || !content) return
+        this.previousIndex = this.openIndexValue
+        this.openIndexValue = index
+        trigger.setAttribute("aria-expanded", "true")
+        trigger.dataset.state = "open"
+        content.hidden = false
+        content.dataset.state = "open"
+        if (this.previousIndex !== -1 && this.previousIndex !== index) {
+          content.dataset.motion = this.previousIndex < index ? "from-end" : "from-start"
+        } else { content.dataset.motion = "from-start" }
+        if (this.hasViewportTarget) {
+          this.viewportTarget.hidden = false
+          this.viewportTarget.dataset.state = "open"
+          this.viewportTarget.innerHTML = content.innerHTML
+        }
+        this.isOpen = true
+        document.addEventListener("click", this.boundHandleClickOutside)
+        document.addEventListener("keydown", this.boundHandleKeydown)
+      }
+
+      closeItem(index) {
+        if (index < 0 || index >= this.itemTargets.length) return
+        const item = this.itemTargets[index]
+        const trigger = item.querySelector("[data-shadcn--navigation-menu-target='trigger']")
+        const content = item.querySelector("[data-shadcn--navigation-menu-target='content']")
+        if (trigger) { trigger.setAttribute("aria-expanded", "false"); trigger.dataset.state = "closed" }
+        if (content) {
+          content.dataset.state = "closed"
+          content.dataset.motion = this.previousIndex < index ? "to-end" : "to-start"
+          setTimeout(() => { if (content.dataset.state === "closed") content.hidden = true }, 150)
+        }
+      }
+
+      closeAll() {
+        this.triggerTargets.forEach(trigger => { trigger.setAttribute("aria-expanded", "false"); trigger.dataset.state = "closed" })
+        this.contentTargets.forEach(content => { content.dataset.state = "closed"; setTimeout(() => { if (content.dataset.state === "closed") content.hidden = true }, 150) })
+        if (this.hasViewportTarget) {
+          this.viewportTarget.dataset.state = "closed"
+          setTimeout(() => { if (this.viewportTarget.dataset.state === "closed") { this.viewportTarget.hidden = true; this.viewportTarget.innerHTML = "" } }, 150)
+        }
+        this.openIndexValue = -1
+        this.previousIndex = -1
+        this.isOpen = false
+        this.wasClickOpened = false
+        document.removeEventListener("click", this.boundHandleClickOutside)
+        document.removeEventListener("keydown", this.boundHandleKeydown)
+      }
+
+      handleClickOutside(event) { if (!this.element.contains(event.target)) this.closeAll() }
+      handleKeydown(event) {
+        switch (event.key) {
+          case "Escape": this.closeAll(); if (this.openIndexValue >= 0) this.triggerTargets[this.openIndexValue]?.focus(); break
+          case "ArrowRight": event.preventDefault(); this.navigateToNextItem(); break
+          case "ArrowLeft": event.preventDefault(); this.navigateToPreviousItem(); break
+        }
+      }
+
+      navigateToNextItem() {
+        const nextIndex = (this.openIndexValue + 1) % this.itemTargets.length
+        this.openItem(nextIndex)
+        this.itemTargets[nextIndex].querySelector("[data-shadcn--navigation-menu-target='trigger']")?.focus()
+      }
+
+      navigateToPreviousItem() {
+        const prevIndex = this.openIndexValue <= 0 ? this.itemTargets.length - 1 : this.openIndexValue - 1
+        this.openItem(prevIndex)
+        this.itemTargets[prevIndex].querySelector("[data-shadcn--navigation-menu-target='trigger']")?.focus()
+      }
+
+      clearTimers() {
+        if (this.openTimer) { clearTimeout(this.openTimer); this.openTimer = null }
+        if (this.closeTimer) { clearTimeout(this.closeTimer); this.closeTimer = null }
+      }
+    })
+
     // Input OTP Controller
     Stimulus.register("shadcn--input-otp", class extends Controller {
       static targets = ["slot", "input", "hiddenInput", "caret"]

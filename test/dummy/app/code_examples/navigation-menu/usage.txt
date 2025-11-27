@@ -1,0 +1,26 @@
+<%= render Shadcn::NavigationMenuComponent.new do |nav| %>
+  <% nav.with_list do |list| %>
+    <% list.with_item do |item| %>
+      <% item.with_trigger { "Getting Started" } %>
+      <% item.with_dropdown do %>
+        <ul class="grid gap-3 p-4 md:w-[400px]">
+          <li>
+            <a href="#" class="block p-3 rounded-md hover:bg-accent">
+              <div class="text-sm font-medium">Introduction</div>
+              <p class="text-sm text-muted-foreground">Learn about the library.</p>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="block p-3 rounded-md hover:bg-accent">
+              <div class="text-sm font-medium">Installation</div>
+              <p class="text-sm text-muted-foreground">How to set up your project.</p>
+            </a>
+          </li>
+        </ul>
+      <% end %>
+    <% end %>
+    <% list.with_item do |item| %>
+      <% item.with_link(href: "/docs") { "Documentation" } %>
+    <% end %>
+  <% end %>
+<% end %>

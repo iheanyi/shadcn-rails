@@ -1,0 +1,279 @@
+<% content_for :title, "Navigation Menu" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+    <a href="#stimulus-controller" class="text-muted-foreground hover:text-foreground">Stimulus Controller</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Navigation Menu</h1>
+    <p class="text-xl text-muted-foreground">A collection of links for navigating websites.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Requires JavaScript
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::NavigationMenuComponent.new do |nav| %>
+      <% nav.with_list do |list| %>
+        <% list.with_item do |item| %>
+          <% item.with_trigger { "Getting Started" } %>
+          <% item.with_dropdown do %>
+            <ul class="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+              <li class="row-span-3">
+                <a class="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md" href="#">
+                  <div class="mb-2 mt-4 text-lg font-medium">shadcn-rails</div>
+                  <p class="text-sm leading-tight text-muted-foreground">
+                    Beautiful UI components for Rails applications built with Tailwind CSS.
+                  </p>
+                </a>
+              </li>
+              <li>
+                <a class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground" href="#">
+                  <div class="text-sm font-medium leading-none">Introduction</div>
+                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                    Learn about the shadcn-rails component library.
+                  </p>
+                </a>
+              </li>
+              <li>
+                <a class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground" href="#">
+                  <div class="text-sm font-medium leading-none">Installation</div>
+                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                    How to install dependencies and set up your project.
+                  </p>
+                </a>
+              </li>
+              <li>
+                <a class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground" href="#">
+                  <div class="text-sm font-medium leading-none">Typography</div>
+                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                    Styles for headings, paragraphs, lists, and more.
+                  </p>
+                </a>
+              </li>
+            </ul>
+          <% end %>
+        <% end %>
+        <% list.with_item do |item| %>
+          <% item.with_trigger { "Components" } %>
+          <% item.with_dropdown do %>
+            <ul class="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+              <li>
+                <a class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground" href="#">
+                  <div class="text-sm font-medium leading-none">Alert Dialog</div>
+                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                    A modal dialog that interrupts the user with important content.
+                  </p>
+                </a>
+              </li>
+              <li>
+                <a class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground" href="#">
+                  <div class="text-sm font-medium leading-none">Hover Card</div>
+                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                    For sighted users to preview content available behind a link.
+                  </p>
+                </a>
+              </li>
+              <li>
+                <a class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground" href="#">
+                  <div class="text-sm font-medium leading-none">Progress</div>
+                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                    Displays an indicator showing the completion progress of a task.
+                  </p>
+                </a>
+              </li>
+              <li>
+                <a class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground" href="#">
+                  <div class="text-sm font-medium leading-none">Tabs</div>
+                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                    A set of layered sections of content.
+                  </p>
+                </a>
+              </li>
+            </ul>
+          <% end %>
+        <% end %>
+        <% list.with_item do |item| %>
+          <% item.with_link(href: "/docs") { "Documentation" } %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component navigation_menu" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("navigation-menu/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Simple Links -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Simple Links</h3>
+      <p class="text-sm text-muted-foreground">
+        Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">with_link</code> for items that navigate directly without a dropdown.
+      </p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::NavigationMenuComponent.new do |nav| %>
+          <% nav.with_list do |list| %>
+            <% list.with_item do |item| %>
+              <% item.with_link(href: "/docs") { "Documentation" } %>
+            <% end %>
+            <% list.with_item do |item| %>
+              <% item.with_link(href: "/components") { "Components" } %>
+            <% end %>
+            <% list.with_item do |item| %>
+              <% item.with_link(href: "/examples", active: true) { "Examples" } %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("navigation-menu/simple_links") %>
+    </div>
+
+    <!-- With Content -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Dropdown Content</h3>
+      <p class="text-sm text-muted-foreground">
+        Add dropdown content with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">with_trigger</code> and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">with_dropdown</code>.
+      </p>
+      <%= erb_example("navigation-menu/with_content") %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">NavigationMenuComponent</h3>
+    <p class="text-sm text-muted-foreground mb-4">The root container for the navigation menu.</p>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">Slots</h3>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Slot</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_list</td>
+            <td class="p-4 align-middle text-muted-foreground">Container for navigation items (yields NavigationMenuListComponent)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">NavigationMenuListComponent Slots</h3>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Slot</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_item</td>
+            <td class="p-4 align-middle text-muted-foreground">Individual navigation item (yields NavigationMenuItemComponent)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">NavigationMenuItemComponent Slots</h3>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Slot</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Props</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_trigger</td>
+            <td class="p-4 align-middle">-</td>
+            <td class="p-4 align-middle text-muted-foreground">Button that opens dropdown content</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_dropdown</td>
+            <td class="p-4 align-middle">-</td>
+            <td class="p-4 align-middle text-muted-foreground">Dropdown content area</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_link</td>
+            <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">href:</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">active:</code></td>
+            <td class="p-4 align-middle text-muted-foreground">Direct link (no dropdown)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Stimulus Controller -->
+  <div id="stimulus-controller">
+    <%= render "docs/stimulus_docs",
+      controller_name: "shadcn--navigation-menu",
+      description: "Handles navigation menu interactions with dropdown content areas.",
+      targets: [
+        { name: "list", description: "Navigation list container" },
+        { name: "item", description: "Individual menu items" },
+        { name: "trigger", description: "Dropdown trigger buttons" },
+        { name: "content", description: "Dropdown content areas" },
+        { name: "viewport", description: "Content viewport" }
+      ],
+      values: [
+        { name: "openIndex", type: "Number", default: "-1", description: "Currently open item index" },
+        { name: "delayDuration", type: "Number", default: "200", description: "Hover delay before opening (ms)" },
+        { name: "skipDelayDuration", type: "Number", default: "300", description: "Delay before closing (ms)" }
+      ],
+      actions: [
+        { name: "toggle", description: "Toggle dropdown open/closed" },
+        { name: "hoverOpen", description: "Open on hover (with delay)" },
+        { name: "hoverClose", description: "Close on hover leave (with delay)" }
+      ]
+    %>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="navigation"</code> via semantic <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">&lt;nav&gt;</code> element</li>
+      <li>Triggers have proper <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-expanded</code> state</li>
+      <li>Keyboard navigation:
+        <ul class="ml-4 list-disc mt-2">
+          <li><kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Arrow Left</kbd>/<kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Arrow Right</kbd> to navigate between items</li>
+          <li><kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Escape</kbd> to close dropdown</li>
+        </ul>
+      </li>
+      <li>Click outside to close dropdown</li>
+    </ul>
+  </div>
+</div>
