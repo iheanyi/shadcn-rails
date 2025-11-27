@@ -1,0 +1,11 @@
+<%= render Shadcn::ComboboxComponent.new(
+  items: [
+    { value: "next", label: "Next.js" },
+    { value: "remix", label: "Remix" },
+    { value: "rails", label: "Ruby on Rails" },
+    { value: "nuxt", label: "Nuxt.js" },
+    { value: "svelte", label: "SvelteKit" }
+  ],
+  value: "rails",
+  placeholder: "Select framework..."
+) %>

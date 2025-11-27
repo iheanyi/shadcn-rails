@@ -1,0 +1,207 @@
+<% content_for :title, "Combobox" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<%
+  frameworks = [
+    { value: "next", label: "Next.js" },
+    { value: "remix", label: "Remix" },
+    { value: "rails", label: "Ruby on Rails" },
+    { value: "nuxt", label: "Nuxt.js" },
+    { value: "svelte", label: "SvelteKit" }
+  ]
+
+  timezones = [
+    { value: "est", label: "Eastern Standard Time (EST)" },
+    { value: "pst", label: "Pacific Standard Time (PST)" },
+    { value: "utc", label: "Coordinated Universal Time (UTC)" },
+    { value: "gmt", label: "Greenwich Mean Time (GMT)" }
+  ]
+%>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Combobox</h1>
+    <p class="text-xl text-muted-foreground">An autocomplete input with searchable dropdown for selecting from a list of options.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Requires JavaScript
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::ComboboxComponent.new(
+      items: frameworks,
+      placeholder: "Select framework...",
+      search_placeholder: "Search framework..."
+    ) %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component combobox" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("combobox/default") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Preselected Value -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Preselected Value</h3>
+      <p class="text-sm text-muted-foreground">Use the <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">value</code> prop to set an initial selection.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ComboboxComponent.new(
+          items: frameworks,
+          value: "rails",
+          placeholder: "Select framework..."
+        ) %>
+      <% end %>
+      <%= erb_example("combobox/preselected") %>
+    </div>
+
+    <!-- Form Integration -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Form Integration</h3>
+      <p class="text-sm text-muted-foreground">Use the <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">name</code> prop to enable form submission.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="space-y-4">
+          <%= render Shadcn::LabelComponent.new { "Framework" } %>
+          <%= render Shadcn::ComboboxComponent.new(
+            items: frameworks,
+            name: "project[framework]",
+            placeholder: "Select framework..."
+          ) %>
+        </div>
+      <% end %>
+      <%= erb_example("combobox/form") %>
+    </div>
+
+    <!-- Custom Width -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Custom Width</h3>
+      <p class="text-sm text-muted-foreground">Use the <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">width</code> prop to set a custom width.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ComboboxComponent.new(
+          items: timezones,
+          placeholder: "Select timezone...",
+          width: "w-[300px]"
+        ) %>
+      <% end %>
+      <%= erb_example("combobox/custom_width") %>
+    </div>
+
+    <!-- Disabled State -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled</h3>
+      <p class="text-sm text-muted-foreground">The combobox can be disabled.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ComboboxComponent.new(
+          items: frameworks,
+          placeholder: "Select framework...",
+          disabled: true
+        ) %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">ComboboxComponent</h3>
+    <%= render "docs/props_table", props: [
+      { name: "items", type: "Array<Hash>", default: "[]", description: "Array of items with :value and :label keys" },
+      { name: "value", type: "String", default: "nil", description: "Currently selected value" },
+      { name: "placeholder", type: "String", default: '"Select option..."', description: "Placeholder text when no value selected" },
+      { name: "search_placeholder", type: "String", default: '"Search..."', description: "Placeholder text for search input" },
+      { name: "empty_text", type: "String", default: '"No results found."', description: "Text shown when no results match" },
+      { name: "name", type: "String", default: "nil", description: "Form field name for hidden input" },
+      { name: "disabled", type: "Boolean", default: "false", description: "Whether the combobox is disabled" },
+      { name: "width", type: "String", default: '"w-[200px]"', description: "Width class for the component" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes" }
+    ] %>
+
+    <div class="mt-6 space-y-4">
+      <h3 class="text-lg font-semibold">Item Structure</h3>
+      <p class="text-sm text-muted-foreground">Each item in the <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">items</code> array should have the following structure:</p>
+      <%= render "docs/code_example", language: "ruby", code: <<~CODE
+{ value: "unique-id", label: "Display Text" }
+CODE
+      %>
+    </div>
+  </div>
+
+  <!-- Keyboard Navigation -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Keyboard Navigation</h2>
+    <div class="rounded-lg border">
+      <table class="w-full">
+        <thead>
+          <tr class="border-b bg-muted/50">
+            <th class="text-left p-3 text-sm font-medium">Key</th>
+            <th class="text-left p-3 text-sm font-medium">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b">
+            <td class="p-3 text-sm"><kbd class="px-2 py-1 text-xs rounded bg-muted border">↑</kbd> / <kbd class="px-2 py-1 text-xs rounded bg-muted border">↓</kbd></td>
+            <td class="p-3 text-sm">Navigate through items</td>
+          </tr>
+          <tr class="border-b">
+            <td class="p-3 text-sm"><kbd class="px-2 py-1 text-xs rounded bg-muted border">Enter</kbd></td>
+            <td class="p-3 text-sm">Select the highlighted item</td>
+          </tr>
+          <tr>
+            <td class="p-3 text-sm"><kbd class="px-2 py-1 text-xs rounded bg-muted border">Escape</kbd></td>
+            <td class="p-3 text-sm">Close the dropdown</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Events -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Events</h2>
+    <p class="leading-7">The Combobox dispatches a <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">shadcn--combobox:change</code> event when a value is selected.</p>
+    <%= render "docs/code_example", language: "javascript", code: <<~CODE
+element.addEventListener("shadcn--combobox:change", (event) => {
+  console.log(event.detail.value)  // Selected value
+  console.log(event.detail.label)  // Selected label
+})
+CODE
+    %>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">role="combobox"</code> on trigger button</li>
+      <li>Uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">role="option"</code> for items</li>
+      <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">aria-expanded</code> reflects open state</li>
+      <li>Full keyboard navigation support (Arrow keys, Enter, Escape)</li>
+      <li>Focus is managed within the dropdown when open</li>
+      <li>Clicking outside closes the dropdown</li>
+    </ul>
+  </div>
+</div>

@@ -194,6 +194,13 @@ class DocsController < ApplicationController
       has_stimulus: true,
       controller: "shadcn--command"
     },
+    "combobox" => {
+      name: "Combobox",
+      category: "Form Inputs",
+      description: "An autocomplete input with searchable dropdown for selecting from a list of options.",
+      has_stimulus: true,
+      controller: "shadcn--combobox"
+    },
     "scroll-area" => {
       name: "Scroll Area",
       category: "Data Display",

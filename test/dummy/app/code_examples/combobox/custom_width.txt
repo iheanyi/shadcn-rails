@@ -1,0 +1,10 @@
+<%= render Shadcn::ComboboxComponent.new(
+  items: [
+    { value: "est", label: "Eastern Standard Time (EST)" },
+    { value: "pst", label: "Pacific Standard Time (PST)" },
+    { value: "utc", label: "Coordinated Universal Time (UTC)" },
+    { value: "gmt", label: "Greenwich Mean Time (GMT)" }
+  ],
+  placeholder: "Select timezone...",
+  width: "w-[300px]"
+) %>

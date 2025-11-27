@@ -1,0 +1,15 @@
+<%= form_with url: "/projects", method: :post do |f| %>
+  <div class="space-y-4">
+    <%= render Shadcn::LabelComponent.new(for: "framework") { "Framework" } %>
+    <%= render Shadcn::ComboboxComponent.new(
+      items: [
+        { value: "next", label: "Next.js" },
+        { value: "remix", label: "Remix" },
+        { value: "rails", label: "Ruby on Rails" }
+      ],
+      name: "project[framework]",
+      placeholder: "Select framework..."
+    ) %>
+    <%= render Shadcn::ButtonComponent.new(type: :submit) { "Create Project" } %>
+  </div>
+<% end %>
