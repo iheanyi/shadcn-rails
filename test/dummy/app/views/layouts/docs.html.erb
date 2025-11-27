@@ -1796,28 +1796,121 @@
       }
     })
 
-    // Calendar controller
+    // Calendar controller - full implementation with all features
     Stimulus.register("shadcn--calendar", class extends Controller {
       static targets = ["grid", "monthYear", "monthSelect", "yearSelect", "day", "hiddenInput"]
       static values = {
         month: String,
-        selected: String
+        selected: String,
+        mode: { type: String, default: "single" },
+        minDate: String,
+        maxDate: String,
+        disabledDates: String,
+        disabledDaysOfWeek: String,
+        required: { type: Boolean, default: false },
+        weekStartsOn: { type: Number, default: 0 }
       }
       static MONTHS = [
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
       ]
+      static WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
 
       connect() {
         this.currentMonth = this.monthValue ? this.parseLocalDate(this.monthValue) : new Date()
-        this.selectedDate = this.selectedValue ? this.parseLocalDate(this.selectedValue) : null
+        this.initializeSelection()
+        this.focusedDate = null
+        this.boundHandleKeydown = this.handleKeydown.bind(this)
       }
 
-      // Parse a date string (YYYY-MM-DD) as local date, not UTC
+      disconnect() {
+        document.removeEventListener("keydown", this.boundHandleKeydown)
+      }
+
+      initializeSelection() {
+        if (!this.selectedValue) {
+          this.selectedDate = this.modeValue === "multiple" ? [] : null
+          this.rangeStart = null
+          this.rangeEnd = null
+          return
+        }
+
+        switch (this.modeValue) {
+          case "multiple":
+            this.selectedDate = this.selectedValue.split(",").map(d => this.parseLocalDate(d.trim())).filter(Boolean)
+            break
+          case "range":
+            const [start, end] = this.selectedValue.split(",").map(d => this.parseLocalDate(d.trim()))
+            this.rangeStart = start || null
+            this.rangeEnd = end || null
+            this.selectedDate = null
+            break
+          default:
+            this.selectedDate = this.parseLocalDate(this.selectedValue)
+        }
+      }
+
       parseLocalDate(dateStr) {
         if (!dateStr) return null
         const [year, month, day] = dateStr.split('-').map(Number)
         return new Date(year, month - 1, day)
+      }
+
+      formatDateString(date) {
+        if (!date) return ''
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+      }
+
+      isDateDisabled(date) {
+        const dateStr = this.formatDateString(date)
+
+        if (this.minDateValue) {
+          const minDate = this.parseLocalDate(this.minDateValue)
+          if (date < minDate) return true
+        }
+        if (this.maxDateValue) {
+          const maxDate = this.parseLocalDate(this.maxDateValue)
+          if (date > maxDate) return true
+        }
+
+        if (this.disabledDatesValue) {
+          const disabledDates = this.disabledDatesValue.split(",").map(d => d.trim())
+          if (disabledDates.includes(dateStr)) return true
+        }
+
+        if (this.disabledDaysOfWeekValue) {
+          const disabledDays = this.disabledDaysOfWeekValue.split(",").map(d => parseInt(d.trim(), 10))
+          if (disabledDays.includes(date.getDay())) return true
+        }
+
+        return false
+      }
+
+      isDateSelected(date) {
+        if (this.modeValue === "multiple" && Array.isArray(this.selectedDate)) {
+          return this.selectedDate.some(d => d.toDateString() === date.toDateString())
+        }
+        if (this.modeValue === "range") {
+          if (this.rangeStart && date.toDateString() === this.rangeStart.toDateString()) return true
+          if (this.rangeEnd && date.toDateString() === this.rangeEnd.toDateString()) return true
+          return false
+        }
+        return this.selectedDate && date.toDateString() === this.selectedDate.toDateString()
+      }
+
+      isDateInRange(date) {
+        if (this.modeValue !== "range" || !this.rangeStart || !this.rangeEnd) return false
+        return date > this.rangeStart && date < this.rangeEnd
+      }
+
+      isRangeStart(date) {
+        if (this.modeValue !== "range" || !this.rangeStart) return false
+        return date.toDateString() === this.rangeStart.toDateString()
+      }
+
+      isRangeEnd(date) {
+        if (this.modeValue !== "range" || !this.rangeEnd) return false
+        return date.toDateString() === this.rangeEnd.toDateString()
       }
 
       previousMonth() {
@@ -1846,21 +1939,195 @@
         const dateStr = event.currentTarget.dataset.date
         if (!dateStr) return
 
-        this.selectedDate = this.parseLocalDate(dateStr)
+        const date = this.parseLocalDate(dateStr)
+        if (this.isDateDisabled(date)) return
+
+        switch (this.modeValue) {
+          case "multiple":
+            this.handleMultipleSelection(date, dateStr)
+            break
+          case "range":
+            this.handleRangeSelection(date, dateStr)
+            break
+          default:
+            this.handleSingleSelection(date, dateStr)
+        }
+
+        this.render()
+      }
+
+      handleSingleSelection(date, dateStr) {
+        if (this.requiredValue && this.selectedDate && date.toDateString() === this.selectedDate.toDateString()) {
+          return
+        }
+
+        if (this.selectedDate && date.toDateString() === this.selectedDate.toDateString()) {
+          this.selectedDate = null
+          this.selectedValue = ""
+          if (this.hasHiddenInputTarget) {
+            this.hiddenInputTarget.value = ""
+          }
+          this.dispatchSelectEvent(null, "")
+          return
+        }
+
+        this.selectedDate = date
         this.selectedValue = dateStr
 
         if (this.hasHiddenInputTarget) {
           this.hiddenInputTarget.value = dateStr
         }
 
-        this.render()
+        this.dispatchSelectEvent(date, dateStr)
+      }
+
+      handleMultipleSelection(date, dateStr) {
+        const index = this.selectedDate.findIndex(d => d.toDateString() === date.toDateString())
+
+        if (index >= 0) {
+          if (!this.requiredValue || this.selectedDate.length > 1) {
+            this.selectedDate.splice(index, 1)
+          }
+        } else {
+          this.selectedDate.push(date)
+        }
+
+        const dateStrings = this.selectedDate.map(d => this.formatDateString(d))
+        this.selectedValue = dateStrings.join(",")
+
+        if (this.hasHiddenInputTarget) {
+          this.hiddenInputTarget.value = this.selectedValue
+        }
 
         this.dispatch("select", {
           detail: {
-            date: this.selectedDate,
+            dates: this.selectedDate,
+            dateStrings: dateStrings
+          }
+        })
+      }
+
+      handleRangeSelection(date, dateStr) {
+        if (!this.rangeStart) {
+          this.rangeStart = date
+          this.rangeEnd = null
+          this.selectedValue = dateStr
+        } else if (!this.rangeEnd) {
+          if (date < this.rangeStart) {
+            this.rangeEnd = this.rangeStart
+            this.rangeStart = date
+          } else if (date.toDateString() === this.rangeStart.toDateString()) {
+            this.rangeStart = null
+            this.selectedValue = ""
+          } else {
+            this.rangeEnd = date
+          }
+          this.selectedValue = this.rangeStart
+            ? `${this.formatDateString(this.rangeStart)}${this.rangeEnd ? `,${this.formatDateString(this.rangeEnd)}` : ""}`
+            : ""
+        } else {
+          this.rangeStart = date
+          this.rangeEnd = null
+          this.selectedValue = dateStr
+        }
+
+        if (this.hasHiddenInputTarget) {
+          this.hiddenInputTarget.value = this.selectedValue
+        }
+
+        this.dispatch("select", {
+          detail: {
+            rangeStart: this.rangeStart,
+            rangeEnd: this.rangeEnd,
+            dateString: this.selectedValue
+          }
+        })
+      }
+
+      dispatchSelectEvent(date, dateStr) {
+        this.dispatch("select", {
+          detail: {
+            date: date,
             dateString: dateStr
           }
         })
+      }
+
+      handleKeydown(event) {
+        if (!this.focusedDate) {
+          this.focusedDate = this.selectedDate || new Date()
+        }
+
+        let newDate = new Date(this.focusedDate)
+        let handled = false
+
+        switch (event.key) {
+          case "ArrowLeft":
+            newDate.setDate(newDate.getDate() - 1)
+            handled = true
+            break
+          case "ArrowRight":
+            newDate.setDate(newDate.getDate() + 1)
+            handled = true
+            break
+          case "ArrowUp":
+            newDate.setDate(newDate.getDate() - 7)
+            handled = true
+            break
+          case "ArrowDown":
+            newDate.setDate(newDate.getDate() + 7)
+            handled = true
+            break
+          case "Enter":
+          case " ":
+            if (!this.isDateDisabled(this.focusedDate)) {
+              this.selectDay({
+                currentTarget: {
+                  dataset: { date: this.formatDateString(this.focusedDate) }
+                }
+              })
+            }
+            handled = true
+            break
+        }
+
+        if (handled) {
+          event.preventDefault()
+
+          while (this.isDateDisabled(newDate)) {
+            const direction = event.key.includes("Left") || event.key.includes("Up") ? -1 : 1
+            newDate.setDate(newDate.getDate() + direction)
+          }
+
+          this.focusedDate = newDate
+
+          if (newDate.getMonth() !== this.currentMonth.getMonth() ||
+              newDate.getFullYear() !== this.currentMonth.getFullYear()) {
+            this.currentMonth = new Date(newDate.getFullYear(), newDate.getMonth(), 1)
+          }
+
+          this.render()
+          this.focusDay(newDate)
+        }
+      }
+
+      focusDay(date) {
+        const dateStr = this.formatDateString(date)
+        const dayButton = this.element.querySelector(`[data-date="${dateStr}"]`)
+        if (dayButton) {
+          dayButton.focus()
+        }
+      }
+
+      enableKeyboard() {
+        document.addEventListener("keydown", this.boundHandleKeydown)
+        if (!this.focusedDate) {
+          this.focusedDate = this.selectedDate || new Date()
+        }
+      }
+
+      disableKeyboard() {
+        document.removeEventListener("keydown", this.boundHandleKeydown)
       }
 
       render() {
@@ -1891,10 +2158,12 @@
         const lastDay = new Date(year, month + 1, 0)
 
         const startDate = new Date(firstDay)
-        startDate.setDate(firstDay.getDate() - firstDay.getDay())
+        const dayOffset = (firstDay.getDay() - this.weekStartsOnValue + 7) % 7
+        startDate.setDate(firstDay.getDate() - dayOffset)
 
         const endDate = new Date(lastDay)
-        endDate.setDate(lastDay.getDate() + (6 - lastDay.getDay()))
+        const endDayOffset = (6 - lastDay.getDay() + this.weekStartsOnValue) % 7
+        endDate.setDate(lastDay.getDate() + endDayOffset)
 
         const today = new Date()
         today.setHours(0, 0, 0, 0)
@@ -1905,30 +2174,72 @@
         while (currentDate <= endDate) {
           const isOutside = currentDate.getMonth() !== month
           const isToday = currentDate.getTime() === today.getTime()
-          const isSelected = this.selectedDate &&
-            currentDate.toDateString() === this.selectedDate.toDateString()
+          const isSelected = this.isDateSelected(currentDate)
+          const isInRange = this.isDateInRange(currentDate)
+          const isRangeStart = this.isRangeStart(currentDate)
+          const isRangeEnd = this.isRangeEnd(currentDate)
+          const isDisabled = this.isDateDisabled(currentDate)
+          const isFocused = this.focusedDate && currentDate.toDateString() === this.focusedDate.toDateString()
 
-          // Use local date components to avoid timezone issues with toISOString()
-          const dateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`
+          const dateStr = this.formatDateString(currentDate)
 
-          let classes = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center rounded-md cursor-pointer hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+          let classes = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center focus:outline-none focus:ring-1 focus:ring-ring"
 
-          if (isSelected) {
-            classes += " bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground"
-          } else if (isToday) {
-            classes += " bg-accent text-accent-foreground"
+          if (isInRange) {
+            classes += " bg-accent/50"
+          }
+          if (isRangeStart) {
+            classes += " rounded-l-md"
+          }
+          if (isRangeEnd) {
+            classes += " rounded-r-md"
+          }
+          if (!isRangeStart && !isRangeEnd && !isInRange) {
+            classes += " rounded-md"
           }
 
-          if (isOutside) {
+          if (isDisabled) {
+            classes += " text-muted-foreground opacity-50 cursor-not-allowed"
+          } else if (isSelected) {
+            classes += " bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground cursor-pointer"
+          } else if (isToday && !isInRange) {
+            classes += " bg-accent text-accent-foreground cursor-pointer hover:bg-accent hover:text-accent-foreground"
+          } else if (!isInRange) {
+            classes += " cursor-pointer hover:bg-accent hover:text-accent-foreground"
+          } else {
+            classes += " cursor-pointer hover:bg-accent hover:text-accent-foreground"
+          }
+
+          if (isOutside && !isDisabled) {
             classes += " text-muted-foreground opacity-50"
           }
 
-          html += `<button type="button" class="${classes}" data-date="${dateStr}" data-shadcn--calendar-target="day" data-action="click->shadcn--calendar#selectDay"${isSelected ? ' aria-selected="true"' : ""}>${currentDate.getDate()}</button>`
+          const ariaAttrs = []
+          if (isSelected) ariaAttrs.push('aria-selected="true"')
+          if (isDisabled) {
+            ariaAttrs.push('aria-disabled="true"')
+            ariaAttrs.push('disabled')
+          }
+          if (isFocused) ariaAttrs.push('tabindex="0"')
+          else ariaAttrs.push('tabindex="-1"')
+
+          const dataAction = isDisabled
+            ? 'data-action="focus->shadcn--calendar#enableKeyboard blur->shadcn--calendar#disableKeyboard"'
+            : 'data-action="click->shadcn--calendar#selectDay focus->shadcn--calendar#enableKeyboard blur->shadcn--calendar#disableKeyboard"'
+
+          html += `<button type="button" class="${classes}" data-date="${dateStr}" data-shadcn--calendar-target="day" ${dataAction} ${ariaAttrs.join(" ")}>${currentDate.getDate()}</button>`
 
           currentDate.setDate(currentDate.getDate() + 1)
         }
 
         return html
+      }
+
+      goToToday() {
+        const today = new Date()
+        this.currentMonth = new Date(today.getFullYear(), today.getMonth(), 1)
+        this.focusedDate = today
+        this.render()
       }
 
       monthValueChanged() {
@@ -1938,9 +2249,7 @@
       }
 
       selectedValueChanged() {
-        if (this.selectedValue) {
-          this.selectedDate = this.parseLocalDate(this.selectedValue)
-        }
+        this.initializeSelection()
       }
     })
 
