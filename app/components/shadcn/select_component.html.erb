@@ -1,0 +1,46 @@
+<div class="<%= wrapper_classes %>"
+     data-controller="shadcn--select"
+     data-shadcn--select-value-value="<%= @value %>"
+     data-action="keydown.escape->shadcn--select#close"
+     <%= tag_attributes %>>
+  <input type="hidden"
+         <%= "name=\"#{ERB::Util.html_escape_once(@name)}\"".html_safe if @name %>
+         <%= "id=\"#{ERB::Util.html_escape_once(@id)}\"".html_safe if @id %>
+         <%= "value=\"#{ERB::Util.html_escape_once(@value)}\"".html_safe if @value %>
+         <%= "required" if @required %>
+         data-shadcn--select-target="input" />
+
+  <button type="button"
+          class="<%= trigger_classes %>"
+          role="combobox"
+          <%= "disabled" if @disabled %>
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          data-shadcn--select-target="trigger"
+          data-action="click->shadcn--select#toggle keydown->shadcn--select#handleKeydown"
+          data-placeholder="<%= @placeholder %>">
+    <span data-shadcn--select-target="display"><%= display_text %></span>
+    <svg xmlns="http://www.w3.org/2000/svg"
+         width="16"
+         height="16"
+         viewBox="0 0 24 24"
+         fill="none"
+         class="h-4 w-4 opacity-50">
+      <path d="m6 9 6 6 6-6"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round" />
+    </svg>
+  </button>
+
+  <div class="<%= CONTENT_CLASSES %>"
+       role="listbox"
+       data-shadcn--select-target="content"
+       data-state="closed"
+       hidden>
+    <div class="<%= VIEWPORT_CLASSES %>">
+      <%= items_content %>
+    </div>
+  </div>
+</div>

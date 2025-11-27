@@ -22,8 +22,10 @@ module Shadcn
   class SkeletonComponent < BaseComponent
     BASE_CLASSES = "animate-pulse rounded-md bg-primary/10"
 
-    def call
-      content_tag(:div, content, class: merge_classes(BASE_CLASSES), **html_options.merge(build_data))
+    private
+
+    def skeleton_classes
+      merge_classes(BASE_CLASSES)
     end
   end
 end

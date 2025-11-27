@@ -52,96 +52,18 @@ module Shadcn
       @required = required
     end
 
-    def call
-      if content.present?
-        # Render with integrated label
-        content_tag(:label, class: "flex items-center gap-3 cursor-pointer") do
-          safe_join([
-            switch_wrapper,
-            content_tag(:span, content, class: "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70")
-          ])
-        end
-      else
-        switch_wrapper
-      end
-    end
-
     private
 
-    def switch_wrapper
-      content_tag(:span, wrapper_attributes) do
-        safe_join([
-          hidden_unchecked_input,
-          hidden_input,
-          switch_button
-        ].compact)
-      end
-    end
-
-    def wrapper_attributes
-      {
-        class: "inline-flex items-center",
-        "data-controller": "shadcn--switch",
-        "data-shadcn--switch-checked-value": @checked.to_s
-      }
-    end
-
-    def hidden_unchecked_input
-      # Rails convention: hidden input with "0" for unchecked state
-      return unless @name
-
-      tag(:input,
-        type: "hidden",
-        name: @name,
-        value: "0",
-        autocomplete: "off"
-      )
-    end
-
-    def hidden_input
-      return unless @name
-
-      tag(:input,
-        type: "checkbox",
-        name: @name,
-        id: @id,
-        value: @value,
-        checked: @checked || nil,
-        disabled: @disabled || nil,
-        required: @required || nil,
-        class: "sr-only",
-        "data-shadcn--switch-target": "input",
-        tabindex: "-1"
-      )
-    end
-
-    def switch_button
-      content_tag(:button, switch_thumb, switch_button_attributes)
-    end
-
-    def switch_thumb
-      content_tag(:span, "", class: THUMB_CLASSES, "data-state": state, "data-shadcn--switch-target": "thumb")
+    def has_label?
+      content.present?
     end
 
     def state
       @checked ? "checked" : "unchecked"
     end
 
-    def switch_button_attributes
-      attrs = {
-        type: "button",
-        role: "switch",
-        class: cn(BASE_CLASSES, class_name),
-        disabled: @disabled || nil,
-        "aria-checked": @checked.to_s,
-        "aria-required": @required ? "true" : nil,
-        "data-state": state,
-        "data-shadcn--switch-target": "button",
-        "data-action": "click->shadcn--switch#toggle keydown->shadcn--switch#handleKeydown",
-        tabindex: "0"
-      }
-      attrs.merge!(html_options.except(:class))
-      attrs.compact
+    def switch_classes
+      cn(BASE_CLASSES, class_name)
     end
   end
 end

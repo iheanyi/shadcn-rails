@@ -57,48 +57,18 @@ module Shadcn
       @required = required
     end
 
-    def call
-      tag.div(class: WRAPPER_CLASSES) do
-        safe_join([
-          tag.select(**select_attributes) do
-            if optgroups.any?
-              safe_join(optgroups)
-            else
-              safe_join(options)
-            end
-          end,
-          chevron_icon
-        ])
-      end
-    end
-
-    def chevron_icon
-      tag.svg(
-        xmlns: "http://www.w3.org/2000/svg",
-        width: "16",
-        height: "16",
-        viewBox: "0 0 24 24",
-        fill: "none",
-        stroke: "currentColor",
-        stroke_width: "2",
-        stroke_linecap: "round",
-        stroke_linejoin: "round",
-        class: CHEVRON_CLASSES
-      ) do
-        tag.path(d: "m6 9 6 6 6-6")
-      end
-    end
-
     private
 
-    def select_attributes
-      {
-        name: @name,
-        id: @id,
-        disabled: @disabled || nil,
-        required: @required || nil,
-        class: merge_classes(SELECT_CLASSES)
-      }.merge(html_options).merge(build_data).compact
+    def select_classes
+      merge_classes(SELECT_CLASSES)
+    end
+
+    def select_content
+      if optgroups.any?
+        safe_join(optgroups)
+      else
+        safe_join(options)
+      end
     end
 
     # Option subcomponent

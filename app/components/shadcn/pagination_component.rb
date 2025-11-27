@@ -43,13 +43,12 @@ module Shadcn
       @window = window
     end
 
-    def call
+    def before_render
+      # Pre-compute auto-generated content if needed
       if auto_generate?
-        return "" if total_pages <= 1
-
-        content_tag(:nav, auto_generated_content, pagination_attributes)
+        @should_render = total_pages > 1
       else
-        content_tag(:nav, build_pagination_content, pagination_attributes)
+        @should_render = true
       end
     end
 
@@ -178,18 +177,15 @@ module Shadcn
     end
 
     def build_pagination_content
-      pagination_content || ""
+      if auto_generate?
+        auto_generated_content
+      else
+        pagination_content || ""
+      end
     end
 
-    def pagination_attributes
-      attrs = {
-        role: "navigation",
-        "aria-label": "pagination",
-        class: merge_classes(BASE_CLASSES)
-      }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
+    def pagination_classes
+      merge_classes(BASE_CLASSES)
     end
   end
 end

@@ -97,10 +97,5 @@ module Shadcn
         class_name
       )
     end
-
-    def tag_attributes
-      attrs = html_options.merge(build_data)
-      attrs.map { |k, v| "#{k}=\"#{ERB::Util.html_escape(v)}\"" if v }.compact.join(" ").html_safe
-    end
   end
 end

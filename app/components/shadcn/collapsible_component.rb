@@ -31,11 +31,11 @@ module Shadcn
       @disabled = disabled
     end
 
-    def call
-      content_tag(:div, collapsible_content, collapsible_attributes)
-    end
-
     private
+
+    def collapsible_classes
+      class_name
+    end
 
     def collapsible_content
       safe_join([trigger_wrapper, body].compact)
@@ -50,17 +50,8 @@ module Shadcn
       })
     end
 
-    def collapsible_attributes
-      attrs = {
-        class: class_name,
-        "data-controller": "shadcn--collapsible",
-        "data-shadcn--collapsible-open-value": @open.to_s,
-        "data-shadcn--collapsible-disabled-value": @disabled.to_s,
-        "data-state": @open ? "open" : "closed"
-      }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
+    def state
+      @open ? "open" : "closed"
     end
   end
 end

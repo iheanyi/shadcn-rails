@@ -45,38 +45,18 @@ module Shadcn
       @open = open
     end
 
-    def call
-      content_tag(:div, sheet_structure, sheet_attributes)
-    end
-
     private
 
-    def sheet_structure
-      safe_join([
-        trigger_wrapper,
-        body
-      ].compact)
+    def sheet_classes
+      class_name
     end
 
-    def trigger_wrapper
-      return unless trigger
-
-      content_tag(:div, trigger, {
-        "data-shadcn--sheet-target": "trigger",
-        "data-action": "click->shadcn--sheet#open"
-      })
-    end
-
-    def sheet_attributes
-      attrs = {
-        class: class_name,
-        "data-controller": "shadcn--sheet",
-        "data-shadcn--sheet-open-value": @open.to_s,
-        "data-shadcn--sheet-side-value": @side.to_s
+    def sheet_data_attrs
+      {
+        controller: "shadcn--sheet",
+        "shadcn--sheet-open-value": @open.to_s,
+        "shadcn--sheet-side-value": @side.to_s
       }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
     end
   end
 end

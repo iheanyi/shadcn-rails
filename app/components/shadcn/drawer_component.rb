@@ -35,38 +35,18 @@ module Shadcn
       @direction = direction
     end
 
-    def call
-      content_tag(:div, drawer_content, drawer_attributes)
-    end
-
     private
 
-    def drawer_content
-      safe_join([
-        trigger_wrapper,
-        body
-      ].compact)
+    def drawer_classes
+      class_name
     end
 
-    def trigger_wrapper
-      return unless trigger
-
-      content_tag(:div, trigger, {
-        "data-shadcn--drawer-target": "trigger",
-        "data-action": "click->shadcn--drawer#open"
-      })
-    end
-
-    def drawer_attributes
-      attrs = {
-        class: class_name,
-        "data-controller": "shadcn--drawer",
-        "data-shadcn--drawer-open-value": @open.to_s,
-        "data-shadcn--drawer-direction-value": @direction.to_s
+    def drawer_data_attrs
+      {
+        controller: "shadcn--drawer",
+        "shadcn--drawer-open-value": @open.to_s,
+        "shadcn--drawer-direction-value": @direction.to_s
       }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
     end
   end
 end

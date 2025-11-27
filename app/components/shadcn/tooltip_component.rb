@@ -41,49 +41,24 @@ module Shadcn
       super(**options)
     end
 
-    def call
-      content_tag(:span, tooltip_structure, tooltip_attributes)
-    end
-
     private
 
-    def tooltip_structure
-      safe_join([
-        trigger_wrapper,
-        tooltip_content_element
-      ])
+    def tooltip_classes
+      cn("relative inline-block", class_name)
     end
 
-    def trigger_wrapper
-      content_tag(:span, content, {
-        "data-shadcn--tooltip-target": "trigger",
-        "data-action": "mouseenter->shadcn--tooltip#show mouseleave->shadcn--tooltip#hide focus->shadcn--tooltip#show blur->shadcn--tooltip#hide"
-      })
-    end
-
-    def tooltip_content_element
-      content_tag(:div, @tooltip_content, {
-        class: CONTENT_CLASSES,
-        role: "tooltip",
-        "data-shadcn--tooltip-target": "content",
-        "data-side": @side.to_s,
-        "data-state": "closed",
-        hidden: true
-      })
-    end
-
-    def tooltip_attributes
-      attrs = {
-        class: cn("relative inline-block", class_name),
-        "data-controller": "shadcn--tooltip",
-        "data-shadcn--tooltip-side-value": @side.to_s,
-        "data-shadcn--tooltip-align-value": @align.to_s,
-        "data-shadcn--tooltip-delay-value": @delay_duration,
-        "data-shadcn--tooltip-skip-delay-value": @skip_delay_duration
+    def tooltip_data_attrs
+      {
+        controller: "shadcn--tooltip",
+        "shadcn--tooltip-side-value": @side.to_s,
+        "shadcn--tooltip-align-value": @align.to_s,
+        "shadcn--tooltip-delay-value": @delay_duration,
+        "shadcn--tooltip-skip-delay-value": @skip_delay_duration
       }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
+    end
+
+    def tooltip_content_classes
+      CONTENT_CLASSES
     end
   end
 end

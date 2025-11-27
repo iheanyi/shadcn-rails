@@ -1,0 +1,8 @@
+<div class="<%= tabs_classes %>"
+     data-controller="shadcn--tabs"
+     <% if @default_value %>data-shadcn--tabs-default-value="<%= @default_value %>"<% end %>
+     <% if @url_param %>data-shadcn--tabs-url-param-value="<%= @url_param %>"<% end %>
+     data-orientation="<%= @orientation %>"
+     <%= tag_attributes %>>
+  <%= tabs_content %>
+</div>

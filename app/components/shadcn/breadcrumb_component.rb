@@ -21,24 +21,14 @@ module Shadcn
       )
     end
 
-    def call
-      content_tag(:nav, breadcrumb_attributes) do
-        content_tag(:ol, class: "flex flex-wrap items-center gap-1.5 break-words text-sm text-muted-foreground sm:gap-2.5") do
-          safe_join(items_with_separators)
-        end
-      end
-    end
-
     private
 
-    def breadcrumb_attributes
-      attrs = {
-        "aria-label": "Breadcrumb",
-        class: merge_classes("")
-      }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
+    def breadcrumb_classes
+      merge_classes("")
+    end
+
+    def breadcrumb_list_content
+      safe_join(items_with_separators)
     end
 
     def items_with_separators

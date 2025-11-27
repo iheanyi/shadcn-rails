@@ -65,80 +65,18 @@ module Shadcn
       @required = required
     end
 
-    def call
-      content_tag(:div, select_structure, select_attributes)
-    end
-
     private
 
-    def select_structure
-      safe_join([
-        hidden_input,
-        trigger,
-        content_wrapper
-      ])
+    def wrapper_classes
+      cn("relative inline-block", class_name)
     end
 
-    def hidden_input
-      tag(:input,
-        type: "hidden",
-        name: @name,
-        id: @id,
-        value: @value,
-        required: @required || nil,
-        "data-shadcn--select-target": "input"
-      )
+    def trigger_classes
+      cn(TRIGGER_CLASSES, class_name)
     end
 
-    def trigger
-      content_tag(:button, trigger_content, trigger_attributes)
-    end
-
-    def trigger_content
-      safe_join([
-        content_tag(:span, @value.presence || @placeholder, "data-shadcn--select-target": "display"),
-        chevron_icon
-      ])
-    end
-
-    def chevron_icon
-      content_tag(:svg,
-        content_tag(:path, nil, d: "m6 9 6 6 6-6", stroke: "currentColor", "stroke-width": "2", "stroke-linecap": "round", "stroke-linejoin": "round"),
-        xmlns: "http://www.w3.org/2000/svg",
-        width: "16",
-        height: "16",
-        viewBox: "0 0 24 24",
-        fill: "none",
-        class: "h-4 w-4 opacity-50"
-      )
-    end
-
-    def trigger_attributes
-      {
-        type: "button",
-        class: cn(TRIGGER_CLASSES, class_name),
-        role: "combobox",
-        disabled: @disabled || nil,
-        "aria-expanded": "false",
-        "aria-haspopup": "listbox",
-        "data-shadcn--select-target": "trigger",
-        "data-action": "click->shadcn--select#toggle keydown->shadcn--select#handleKeydown",
-        "data-placeholder": @placeholder
-      }
-    end
-
-    def content_wrapper
-      content_tag(:div, viewport, {
-        class: CONTENT_CLASSES,
-        role: "listbox",
-        "data-shadcn--select-target": "content",
-        "data-state": "closed",
-        hidden: true
-      })
-    end
-
-    def viewport
-      content_tag(:div, items_content, class: VIEWPORT_CLASSES)
+    def display_text
+      @value.presence || @placeholder
     end
 
     def items_content
@@ -151,18 +89,6 @@ module Shadcn
         # Otherwise render the raw block content (for backwards compatibility)
         raw_content
       end
-    end
-
-    def select_attributes
-      attrs = {
-        class: cn("relative inline-block", class_name),
-        "data-controller": "shadcn--select",
-        "data-shadcn--select-value-value": @value,
-        "data-action": "keydown.escape->shadcn--select#close"
-      }
-      attrs.merge!(html_options.except(:class))
-      attrs.merge!(build_data)
-      attrs.compact
     end
   end
 end

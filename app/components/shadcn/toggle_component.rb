@@ -49,29 +49,14 @@ module Shadcn
       @aria_label = aria_label
     end
 
-    def call
-      content_tag(:button, toggle_attributes) do
-        content
-      end
-    end
-
     private
 
-    def toggle_attributes
-      attrs = {
-        type: "button",
-        class: cn(BASE_CLASSES, VARIANTS[@variant], SIZES[@size], class_name),
-        disabled: @disabled || nil,
-        "aria-pressed": @pressed.to_s,
-        "aria-label": @aria_label,
-        "data-state": @pressed ? "on" : "off",
-        "data-controller": "shadcn--toggle",
-        "data-action": "click->shadcn--toggle#toggle",
-        "data-shadcn--toggle-pressed-value": @pressed.to_s
-      }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
+    def toggle_classes
+      cn(BASE_CLASSES, VARIANTS[@variant], SIZES[@size], class_name)
+    end
+
+    def data_state
+      @pressed ? "on" : "off"
     end
   end
 end

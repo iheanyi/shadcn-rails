@@ -28,37 +28,17 @@ module Shadcn
       ContextMenuContentComponent.new(**options)
     }
 
-    def call
-      content_tag(:div, context_menu_content, context_menu_attributes)
-    end
-
     private
 
-    def context_menu_content
-      safe_join([
-        trigger_wrapper,
-        menu
-      ].compact)
+    def context_menu_classes
+      cn("relative inline-block", class_name)
     end
 
-    def trigger_wrapper
-      return unless trigger
-
-      content_tag(:div, trigger, {
-        "data-shadcn--context-menu-target": "trigger",
-        "data-action": "contextmenu->shadcn--context-menu#show:prevent"
-      })
-    end
-
-    def context_menu_attributes
-      attrs = {
-        class: cn("relative inline-block", class_name),
-        "data-controller": "shadcn--context-menu",
-        "data-action": "keydown.escape->shadcn--context-menu#close"
+    def context_menu_data_attrs
+      {
+        controller: "shadcn--context-menu",
+        action: "keydown.escape->shadcn--context-menu#close"
       }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
     end
   end
 end

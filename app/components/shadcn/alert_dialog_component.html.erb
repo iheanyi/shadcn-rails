@@ -1,0 +1,12 @@
+<div class="<%= alert_dialog_classes %>"
+     data-controller="<%= alert_dialog_data_attrs[:controller] %>"
+     data-shadcn--dialog-open-value="<%= alert_dialog_data_attrs[:"shadcn--dialog-open-value"] %>"
+     data-shadcn--dialog-modal-value="<%= alert_dialog_data_attrs[:"shadcn--dialog-modal-value"] %>"
+     <%= tag_attributes %>>
+  <% if trigger? %>
+    <div data-shadcn--dialog-target="trigger" data-action="click->shadcn--dialog#open">
+      <%= trigger %>
+    </div>
+  <% end %>
+  <%= body if body? %>
+</div>

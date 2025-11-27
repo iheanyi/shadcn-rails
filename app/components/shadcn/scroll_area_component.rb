@@ -33,11 +33,11 @@ module Shadcn
       @type = type.to_sym
     end
 
-    def call
-      content_tag(:div, scroll_structure, scroll_attributes)
-    end
-
     private
+
+    def scroll_classes
+      merge_classes(BASE_CLASSES)
+    end
 
     def scroll_structure
       safe_join([
@@ -93,18 +93,6 @@ module Shadcn
       return unless @orientation == :both
 
       content_tag(:div, "", class: "absolute right-0 bottom-0 h-2.5 w-2.5 bg-transparent")
-    end
-
-    def scroll_attributes
-      attrs = {
-        class: merge_classes(BASE_CLASSES),
-        "data-controller": "shadcn--scroll-area",
-        "data-shadcn--scroll-area-orientation-value": @orientation.to_s,
-        "data-shadcn--scroll-area-type-value": @type.to_s
-      }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
     end
   end
 end

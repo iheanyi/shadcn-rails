@@ -36,41 +36,21 @@ module Shadcn
       @modal = modal
     end
 
-    def call
-      content_tag(:div, popover_structure, popover_attributes)
-    end
-
     private
 
-    def popover_structure
-      safe_join([
-        trigger_wrapper,
-        body
-      ].compact)
+    def popover_classes
+      cn("relative inline-block", class_name)
     end
 
-    def trigger_wrapper
-      return unless trigger
-
-      content_tag(:div, trigger, {
-        "data-shadcn--popover-target": "trigger",
-        "data-action": "click->shadcn--popover#toggle"
-      })
-    end
-
-    def popover_attributes
-      attrs = {
-        class: cn("relative inline-block", class_name),
-        "data-controller": "shadcn--popover",
-        "data-shadcn--popover-open-value": @open.to_s,
-        "data-shadcn--popover-side-value": @side.to_s,
-        "data-shadcn--popover-align-value": @align.to_s,
-        "data-shadcn--popover-modal-value": @modal.to_s,
-        "data-action": "keydown.escape->shadcn--popover#close"
+    def popover_data_attrs
+      {
+        controller: "shadcn--popover",
+        "shadcn--popover-open-value": @open.to_s,
+        "shadcn--popover-side-value": @side.to_s,
+        "shadcn--popover-align-value": @align.to_s,
+        "shadcn--popover-modal-value": @modal.to_s,
+        action: "keydown.escape->shadcn--popover#close"
       }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
     end
   end
 end

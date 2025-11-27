@@ -49,66 +49,18 @@ module Shadcn
       @open = open
     end
 
-    def call
-      content_tag(:li, toast_content, toast_attributes)
-    end
-
     private
-
-    def toast_content
-      safe_join([
-        content_wrapper,
-        action,
-        close_button
-      ].compact)
-    end
-
-    def content_wrapper
-      content_tag(:div, safe_join([title, description, content].compact), class: "grid gap-1")
-    end
-
-    def close_button
-      close || default_close_button
-    end
-
-    def default_close_button
-      content_tag(:button, close_icon, {
-        type: "button",
-        class: "absolute right-1 top-1 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-1 group-hover:opacity-100 group-[.destructive]:text-red-300 group-[.destructive]:hover:text-red-50 group-[.destructive]:focus:ring-red-400 group-[.destructive]:focus:ring-offset-red-600",
-        "data-action": "click->shadcn--toast#close",
-        "aria-label": "Close"
-      })
-    end
-
-    def close_icon
-      content_tag(:svg,
-        content_tag(:path, nil, d: "M18 6 6 18M6 6l12 12", stroke: "currentColor", "stroke-width": "2", "stroke-linecap": "round", "stroke-linejoin": "round"),
-        xmlns: "http://www.w3.org/2000/svg",
-        width: "16",
-        height: "16",
-        viewBox: "0 0 24 24",
-        fill: "none",
-        class: "h-4 w-4"
-      )
-    end
 
     def toast_classes
       cn(BASE_CLASSES, VARIANTS[@variant], class_name)
     end
 
-    def toast_attributes
-      attrs = {
-        class: toast_classes,
-        role: "status",
-        "aria-live": "polite",
-        "data-controller": "shadcn--toast",
-        "data-shadcn--toast-duration-value": @duration,
-        "data-shadcn--toast-open-value": @open.to_s,
-        "data-state": @open ? "open" : "closed"
-      }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
+    def has_custom_close?
+      close?
+    end
+
+    def data_state
+      @open ? "open" : "closed"
     end
   end
 end

@@ -37,27 +37,18 @@ module Shadcn
       @default_value = default_value
     end
 
-    def call
-      content_tag(:div, accordion_content, accordion_attributes)
-    end
-
     private
+
+    def accordion_classes
+      class_name
+    end
 
     def accordion_content
       safe_join([items, content].compact.flatten)
     end
 
-    def accordion_attributes
-      attrs = {
-        class: class_name,
-        "data-controller": "shadcn--accordion",
-        "data-shadcn--accordion-type-value": @type.to_s,
-        "data-shadcn--accordion-collapsible-value": @collapsible.to_s,
-        "data-shadcn--accordion-default-value": Array(@default_value).join(",")
-      }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
+    def default_value_string
+      Array(@default_value).join(",")
     end
   end
 end
