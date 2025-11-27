@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+# Check if foreman is installed
+if ! command -v foreman &> /dev/null; then
+  echo "Installing foreman..."
+  gem install foreman
+fi
+
+# Install npm dependencies if needed
+if [ ! -d "node_modules" ]; then
+  echo "Installing npm dependencies..."
+  npm install
+fi
+
+# Build JS once before starting (in case it's stale)
+echo "Building JavaScript..."
+npm run build
+
+# Start all processes
+exec foreman start -f Procfile.dev "$@"
