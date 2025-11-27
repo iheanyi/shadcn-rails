@@ -177,11 +177,87 @@ bundle exec rake test
 # Run component tests only
 bundle exec rake test_components
 
-# Start dummy app
-cd test/dummy && rails server
+# Build JavaScript (from project root)
+npm run build
+
+# Start dummy app for local development (RECOMMENDED)
+cd test/dummy && bin/dev
 
 # Start Lookbook previews
 cd test/dummy && rails lookbook:preview
+```
+
+## Local Testing with bin/dev
+
+**IMPORTANT**: Always use `bin/dev` instead of `rails server` when testing locally. This ensures:
+1. JavaScript is automatically rebuilt when files change (via esbuild watch mode)
+2. CSS is automatically rebuilt when Tailwind classes change
+3. Changes to Stimulus controllers are immediately available
+
+```bash
+# Start the development server (from test/dummy)
+cd test/dummy && bin/dev
+
+# If port 3000 is in use, kill existing processes first:
+lsof -ti:3000 | xargs kill -9 2>/dev/null
+rm -f tmp/pids/server.pid
+bin/dev
+```
+
+The development server runs:
+- Rails server on port 3000
+- esbuild in watch mode for JavaScript bundling
+- Tailwind CSS in watch mode
+
+**Note**: After modifying Stimulus controllers in `app/assets/javascripts/shadcn/controllers/`, you must also run `npm run build` from the project root to update the npm package distribution files.
+
+## Regression Testing
+
+When making changes to interactive components, always verify:
+
+### Context Menu
+1. **Open/Close**: Right-click to open, click outside or press Escape to close
+2. **Double right-click**: Right-clicking twice in quick succession should reposition the menu
+3. **Keyboard navigation**: Arrow keys, Home/End, Enter/Space for selection
+4. **Scroll lock**: Background should not scroll when menu is open
+5. **Animation**: Smooth fade-in/out animation (100ms)
+6. **Positioning**: Menu stays within viewport bounds
+
+### Radio Group
+1. **Labels are clickable**: Clicking the label should select the radio
+2. **Descriptions render**: Items with descriptions show them below the label
+3. **Keyboard navigation**: Tab to focus, arrow keys to move between items
+4. **Single selection**: Only one item can be selected at a time
+
+### Dropdown Menu
+1. **All item types**: Test items, checkboxes, radio groups, separators, labels
+2. **Keyboard shortcuts**: Display correctly with proper styling
+3. **Submenus**: Open on hover, close when moving away
+
+### Dialog/Sheet/Drawer
+1. **Focus trap**: Tab should cycle within the modal
+2. **Escape closes**: Pressing Escape should close the modal
+3. **Overlay click**: Clicking the overlay should close (unless modal)
+4. **Body scroll lock**: Background should not scroll when open
+
+### Testing with Playwright
+
+Use the MCP Playwright tools for automated testing:
+
+```javascript
+// Navigate to docs page
+mcp__playwright__browser_navigate({ url: "http://localhost:3000/docs/context-menu" })
+
+// Take a snapshot to see the page state
+mcp__playwright__browser_snapshot()
+
+// Right-click to open context menu (use browser_run_code for context menu)
+mcp__playwright__browser_run_code({
+  code: `await page.locator('[data-shadcn--context-menu-target="trigger"]').click({ button: 'right' })`
+})
+
+// Press Escape to close
+mcp__playwright__browser_press_key({ key: "Escape" })
 ```
 
 ## Patterns to Follow
