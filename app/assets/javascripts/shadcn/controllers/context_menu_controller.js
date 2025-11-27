@@ -1,35 +1,29 @@
-import { Controller } from "@hotwired/stimulus"
+import BaseMenuController from "./base_menu_controller"
 
 /**
  * Context Menu controller for right-click menus
- * Handles opening at mouse position, closing, keyboard navigation, and item selection
+ * Extends BaseMenuController with context menu-specific positioning and event handling
  */
-export default class extends Controller {
-  static targets = ["trigger", "content", "item"]
+export default class extends BaseMenuController {
+  static targets = [...BaseMenuController.targets]
   static values = {
-    open: { type: Boolean, default: false }
+    ...BaseMenuController.values,
+    hideDelay: { type: Number, default: 100 }
   }
 
   connect() {
-    this.focusedIndex = -1
-    this.boundHandleClickOutside = this.handleClickOutside.bind(this)
-    this.boundHandleKeydown = this.handleKeydown.bind(this)
+    super.connect()
+    this.boundHandleContextMenu = this.handleContextMenu.bind(this)
     this.originalOverflow = null
-    this.hideTimeoutId = null
-  }
-
-  disconnect() {
-    this.hide()
+    this.mouseX = 0
+    this.mouseY = 0
   }
 
   show(event) {
     event?.preventDefault()
 
     // Cancel any pending hide timeout from a previous close
-    if (this.hideTimeoutId) {
-      clearTimeout(this.hideTimeoutId)
-      this.hideTimeoutId = null
-    }
+    this.cancelHideTimeout()
 
     // Store mouse position for positioning
     this.mouseX = event?.clientX || 0
@@ -54,7 +48,7 @@ export default class extends Controller {
     requestAnimationFrame(() => {
       if (this.openValue) {
         document.addEventListener("click", this.boundHandleClickOutside)
-        document.addEventListener("contextmenu", this.boundHandleClickOutside)
+        document.addEventListener("contextmenu", this.boundHandleContextMenu)
       }
     })
     document.addEventListener("keydown", this.boundHandleKeydown)
@@ -73,7 +67,7 @@ export default class extends Controller {
 
     // Remove event listeners immediately to prevent double-triggering
     document.removeEventListener("click", this.boundHandleClickOutside)
-    document.removeEventListener("contextmenu", this.boundHandleClickOutside)
+    document.removeEventListener("contextmenu", this.boundHandleContextMenu)
     document.removeEventListener("keydown", this.boundHandleKeydown)
 
     if (this.hasContentTarget) {
@@ -87,7 +81,7 @@ export default class extends Controller {
           document.body.style.overflow = this.originalOverflow || ""
         }
         this.hideTimeoutId = null
-      }, 100)
+      }, this.hideDelayValue)
     } else {
       // No content target, restore scroll immediately
       document.body.style.overflow = this.originalOverflow || ""
@@ -99,102 +93,24 @@ export default class extends Controller {
     this.dispatch("closed")
   }
 
-  close() {
-    this.hide()
-  }
-
-  selectItem(event) {
-    const item = event.currentTarget
-    if (item.dataset.disabled !== undefined) return
-
-    this.dispatch("select", { detail: { item } })
-    this.hide()
-  }
-
-  handleClickOutside(event) {
-    // Don't close if clicking inside the content
-    if (this.hasContentTarget && this.contentTarget.contains(event.target)) {
-      return
-    }
+  handleContextMenu(event) {
     // Don't close if right-clicking on the trigger element
     // This allows show() to be called again to reposition the menu
-    // Regular left-clicks on trigger should still close the menu
-    if (event.type === "contextmenu" && this.hasTriggerTarget && this.triggerTarget.contains(event.target)) {
+    if (this.hasTriggerTarget && this.triggerTarget.contains(event.target)) {
       return
     }
-    this.hide()
-  }
-
-  handleKeydown(event) {
-    switch (event.key) {
-      case "Escape":
-        this.hide()
-        break
-      case "ArrowDown":
-        event.preventDefault()
-        this.focusNextItem()
-        break
-      case "ArrowUp":
-        event.preventDefault()
-        this.focusPreviousItem()
-        break
-      case "Home":
-        event.preventDefault()
-        this.focusFirstItem()
-        break
-      case "End":
-        event.preventDefault()
-        this.focusLastItem()
-        break
-      case "Enter":
-      case " ":
-        event.preventDefault()
-        this.selectFocusedItem()
-        break
+    // Close if right-clicking outside the content
+    if (this.hasContentTarget && !this.contentTarget.contains(event.target)) {
+      this.hide()
     }
   }
 
-  focusNextItem() {
-    const items = this.enabledItems
-    if (items.length === 0) return
-
-    this.focusedIndex = (this.focusedIndex + 1) % items.length
-    items[this.focusedIndex].focus()
-  }
-
-  focusPreviousItem() {
-    const items = this.enabledItems
-    if (items.length === 0) return
-
-    this.focusedIndex = this.focusedIndex <= 0 ? items.length - 1 : this.focusedIndex - 1
-    items[this.focusedIndex].focus()
-  }
-
-  focusFirstItem() {
-    const items = this.enabledItems
-    if (items.length === 0) return
-
-    this.focusedIndex = 0
-    items[0].focus()
-  }
-
-  focusLastItem() {
-    const items = this.enabledItems
-    if (items.length === 0) return
-
-    this.focusedIndex = items.length - 1
-    items[this.focusedIndex].focus()
-  }
-
-  selectFocusedItem() {
-    const items = this.enabledItems
-    if (this.focusedIndex >= 0 && this.focusedIndex < items.length) {
-      items[this.focusedIndex].click()
+  shouldCloseOnClickOutside(event) {
+    // Don't close if clicking inside the content
+    if (this.hasContentTarget && this.contentTarget.contains(event.target)) {
+      return false
     }
-  }
-
-  get enabledItems() {
-    return this.itemTargets.filter(item => item.dataset.disabled === undefined)
+    return true
   }
 
   positionContent() {

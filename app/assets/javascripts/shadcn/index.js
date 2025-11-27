@@ -14,6 +14,7 @@
  */
 
 // Import all controllers
+import BaseMenuController from "./controllers/base_menu_controller"
 import AccordionController from "./controllers/accordion_controller"
 import AvatarController from "./controllers/avatar_controller"
 import CalendarController from "./controllers/calendar_controller"
@@ -49,6 +50,7 @@ import SidebarController from "./controllers/sidebar_controller"
 
 // Export individual controllers
 export {
+  BaseMenuController,
   AccordionController,
   AvatarController,
   CalendarController,

@@ -744,7 +744,7 @@ describe("ContextMenuController", () => {
       expect(controller.contentTarget.dataset.state).toBe("open")
     })
 
-    test("handleClickOutside should NOT close menu when contextmenu event triggers on trigger element", async () => {
+    test("handleContextMenu should NOT close menu when contextmenu event triggers on trigger element", async () => {
       // Open the menu first
       const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
       controller.show(event)
@@ -755,7 +755,8 @@ describe("ContextMenuController", () => {
 
       // Simulate a contextmenu event on the trigger element
       // This is what happens when the user right-clicks again on the trigger
-      controller.handleClickOutside({ type: "contextmenu", target: controller.triggerTarget })
+      // In the refactored code, contextmenu events are handled by handleContextMenu, not handleClickOutside
+      controller.handleContextMenu({ type: "contextmenu", target: controller.triggerTarget })
       await nextFrame()
 
       // Menu should still be open because it was a contextmenu event on the trigger
