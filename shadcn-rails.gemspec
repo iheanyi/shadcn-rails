@@ -23,7 +23,18 @@ Gem::Specification.new do |spec|
   spec.files = IO.popen(%w[git ls-files -z], chdir: __dir__, err: IO::NULL) do |ls|
     ls.readlines("\x0", chomp: true).reject do |f|
       (f == gemspec) ||
-        f.start_with?(*%w[test/ spec/ features/ .git .github Gemfile])
+        f.start_with?(*%w[
+          test/ spec/ features/ .git .github Gemfile
+          __tests__/ bin/ dist/ docs/ node_modules/
+        ]) ||
+        f.end_with?(*%w[
+          .config.js .config.cjs .setup.js
+        ]) ||
+        %w[
+          .dockerignore .node-version
+          package.json package-lock.json
+          CLAUDE.md PROGRESS.md Rakefile
+        ].include?(f)
     end
   end
   spec.bindir = "exe"
