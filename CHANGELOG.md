@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2025-11-27
+
 ### Added
 
 - **Clipboard controller** for documentation site - Copy buttons now work with "Copied!" feedback
@@ -94,6 +96,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Accessibility guidelines
 - Installation instructions for various JavaScript bundlers
 
-[Unreleased]: https://github.com/iheanyi/shadcn-rails/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/iheanyi/shadcn-rails/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/iheanyi/shadcn-rails/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/iheanyi/shadcn-rails/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/iheanyi/shadcn-rails/releases/tag/v0.1.0
