@@ -35,9 +35,14 @@ export default class extends Controller {
       this.positionContent()
     }
 
-    // Add event listeners
-    document.addEventListener("click", this.boundHandleClickOutside)
-    document.addEventListener("contextmenu", this.boundHandleClickOutside)
+    // Defer adding click listener to prevent immediate close from right-click
+    // The contextmenu event can sometimes trigger a click in the same event cycle
+    requestAnimationFrame(() => {
+      if (this.openValue) {
+        document.addEventListener("click", this.boundHandleClickOutside)
+        document.addEventListener("contextmenu", this.boundHandleClickOutside)
+      }
+    })
     document.addEventListener("keydown", this.boundHandleKeydown)
 
     // Focus first item

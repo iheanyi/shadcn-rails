@@ -32,22 +32,30 @@ module Shadcn
   #   <% end %>
   #
   class ResizablePanelGroupComponent < BaseComponent
-    renders_many :panels, lambda { |default_size: nil, min_size: nil, max_size: nil, **options|
-      ResizablePanelComponent.new(
-        default_size: default_size,
-        min_size: min_size,
-        max_size: max_size,
-        direction: @direction,
-        **options
-      )
-    }
-
-    renders_many :handles, lambda { |with_handle: false, **options|
-      ResizableHandleComponent.new(
-        with_handle: with_handle,
-        direction: @direction,
-        **options
-      )
+    # Use polymorphic slots to preserve the order of panels and handles
+    renders_many :items, types: {
+      panel: {
+        renders: lambda { |default_size: nil, min_size: nil, max_size: nil, **options|
+          ResizablePanelComponent.new(
+            default_size: default_size,
+            min_size: min_size,
+            max_size: max_size,
+            direction: @direction,
+            **options
+          )
+        },
+        as: :panel
+      },
+      handle: {
+        renders: lambda { |with_handle: false, **options|
+          ResizableHandleComponent.new(
+            with_handle: with_handle,
+            direction: @direction,
+            **options
+          )
+        },
+        as: :handle
+      }
     }
 
     DIRECTIONS = {
@@ -70,7 +78,10 @@ module Shadcn
     private
 
     def group_content
+      # Trigger slot evaluation first
       content
+      # Render all items in the order they were added
+      safe_join(items)
     end
 
     def group_attributes
