@@ -7,9 +7,13 @@ module Shadcn
     renders_one :trigger, lambda { |**options, &block|
       MenubarSubTriggerComponent.new(**options, &block)
     }
-    renders_one :content, lambda { |**options|
+    # Note: Named content_slot because 'content' is a reserved ViewComponent method
+    renders_one :content_slot, lambda { |**options|
       MenubarSubContentComponent.new(**options)
     }
+
+    # Alias for more intuitive API
+    alias_method :with_content, :with_content_slot
 
     def call
       content_tag(:div, sub_content, sub_attributes)
@@ -18,7 +22,7 @@ module Shadcn
     private
 
     def sub_content
-      safe_join([trigger, content].compact)
+      safe_join([trigger, content_slot, content].compact)
     end
 
     def sub_attributes
