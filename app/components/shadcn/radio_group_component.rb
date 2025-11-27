@@ -72,7 +72,7 @@ module Shadcn
 
     def call
       content_tag(:div, group_attributes) do
-        safe_join([render_data_items, content].compact)
+        safe_join([render_data_items, render_slot_items].compact)
       end
     end
 
@@ -92,6 +92,13 @@ module Shadcn
           selected: @value.to_s == item[:value].to_s
         ).render_in(view_context)
       end)
+    end
+
+    # Render items from with_item slot calls
+    def render_slot_items
+      return nil if items.empty?
+
+      safe_join(items.map(&:to_s))
     end
 
     def generate_item_id(value)
