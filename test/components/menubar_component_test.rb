@@ -30,22 +30,28 @@ class MenubarComponentTest < ViewComponent::TestCase
   # Menu slots
   def test_renders_with_single_menu
     render_inline(Shadcn::MenubarComponent.new) do |menubar|
-      menubar.with_menu { "File Menu" }
+      menubar.with_menu do |menu|
+        menu.with_trigger { "File" }
+      end
     end
 
-    assert_text "File Menu"
+    assert_selector "[data-shadcn--menubar-target='menu']"
   end
 
   def test_renders_with_multiple_menus
     render_inline(Shadcn::MenubarComponent.new) do |menubar|
-      menubar.with_menu { "File" }
-      menubar.with_menu { "Edit" }
-      menubar.with_menu { "View" }
+      menubar.with_menu do |menu|
+        menu.with_trigger { "File" }
+      end
+      menubar.with_menu do |menu|
+        menu.with_trigger { "Edit" }
+      end
+      menubar.with_menu do |menu|
+        menu.with_trigger { "View" }
+      end
     end
 
-    assert_text "File"
-    assert_text "Edit"
-    assert_text "View"
+    assert_selector "[data-shadcn--menubar-target='menu']", count: 3
   end
 
   # Custom class
