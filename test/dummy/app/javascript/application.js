@@ -12,4 +12,8 @@ window.Stimulus = application
 import { registerShadcnControllers } from "shadcn-rails"
 registerShadcnControllers(application)
 
+// Import local controllers
+import ClipboardController from "./controllers/clipboard_controller"
+application.register("clipboard", ClipboardController)
+
 export { application }
