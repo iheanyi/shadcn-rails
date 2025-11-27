@@ -22,7 +22,7 @@ module Shadcn
   #
   class SelectComponent < BaseComponent
     TRIGGER_CLASSES = "flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1"
-    CONTENT_CLASSES = "absolute left-0 top-full z-50 mt-1 max-h-96 min-w-[8rem] w-full overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95"
+    CONTENT_CLASSES = "absolute left-0 top-full z-50 mt-1 max-h-96 min-w-[var(--radix-select-trigger-width)] w-max overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95"
     VIEWPORT_CLASSES = "p-1"
 
     renders_many :items, lambda { |value:, **options, &block|
@@ -138,12 +138,12 @@ module Shadcn
 
     def select_attributes
       attrs = {
-        class: "relative",
+        class: cn("relative inline-block", class_name),
         "data-controller": "shadcn--select",
         "data-shadcn--select-value-value": @value,
         "data-action": "keydown.escape->shadcn--select#close"
       }
-      attrs.merge!(html_options)
+      attrs.merge!(html_options.except(:class))
       attrs.merge!(build_data)
       attrs.compact
     end

@@ -25,7 +25,7 @@
 
   <!-- Preview -->
   <%= render "docs/demo_card" do %>
-    <%= render Shadcn::SelectComponent.new(name: "fruit", placeholder: "Select a fruit") do |select| %>
+    <%= render Shadcn::SelectComponent.new(name: "fruit", placeholder: "Select a fruit", class_name: "w-[180px]") do |select| %>
       <% select.with_item(value: "apple") { "Apple" } %>
       <% select.with_item(value: "banana") { "Banana" } %>
       <% select.with_item(value: "orange") { "Orange" } %>

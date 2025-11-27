@@ -38,6 +38,12 @@ export default class extends Controller {
 
     this.isOpen = true
 
+    // Set trigger width as CSS variable for dropdown sizing
+    if (this.hasTriggerTarget && this.hasContentTarget) {
+      const triggerWidth = this.triggerTarget.offsetWidth
+      this.contentTarget.style.setProperty('--radix-select-trigger-width', `${triggerWidth}px`)
+    }
+
     if (this.hasContentTarget) {
       this.contentTarget.hidden = false
       this.contentTarget.dataset.state = "open"
