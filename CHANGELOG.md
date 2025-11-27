@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Clipboard controller** for documentation site - Copy buttons now work with "Copied!" feedback
+
+### Fixed
+
+- **Copy button styling** - Fixed code block padding to prevent text overlap with Copy button
+- **Select dropdown clipping** - Fixed overflow issue causing white line through dropdown borders
+
+### Documentation
+
+- Added consistent widths to Select component examples
+- Fixed Form Integration example spacing between label and select
+
 ## [0.2.0] - 2025-11-27
 
 ### Added
