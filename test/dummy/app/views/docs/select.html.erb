@@ -126,8 +126,8 @@
       <h3 class="text-lg font-semibold">Form Integration</h3>
       <p class="text-sm text-muted-foreground">Use Select within forms with proper labels and validation.</p>
       <%= render "docs/demo_card" do %>
-        <%= form_with url: "#", method: :post, class: "space-y-4" do |f| %>
-          <div class="space-y-2">
+        <%= form_with url: "#", method: :post, class: "flex flex-col gap-4" do |f| %>
+          <div class="flex flex-col gap-2">
             <%= render Shadcn::LabelComponent.new(for: "country") { "Country" } %>
             <%= render Shadcn::SelectComponent.new(
               name: "country",
