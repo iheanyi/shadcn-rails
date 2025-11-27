@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { useMatchMedia } from "stimulus-use"
 
 // Constants for sidebar dimensions
 const SIDEBAR_COOKIE_NAME = "sidebar:state"
@@ -7,6 +8,10 @@ const SIDEBAR_WIDTH = "16rem"
 const SIDEBAR_WIDTH_MOBILE = "18rem"
 const SIDEBAR_WIDTH_ICON = "3rem"
 
+/**
+ * Sidebar Controller
+ * Uses stimulus-use useMatchMedia for responsive behavior
+ */
 export default class extends Controller {
   static targets = ["sidebar"]
   static values = {
@@ -26,10 +31,13 @@ export default class extends Controller {
     this.handleKeyDown = this.handleKeyDown.bind(this)
     document.addEventListener("keydown", this.handleKeyDown)
 
-    // Set up mobile detection
+    // Use stimulus-use for responsive media query detection
     this.isMobile = window.innerWidth < 768
-    this.handleResize = this.handleResize.bind(this)
-    window.addEventListener("resize", this.handleResize)
+    useMatchMedia(this, {
+      mediaQueries: {
+        mobile: "(max-width: 767px)"
+      }
+    })
 
     // Initial state sync
     this.syncState()
@@ -37,7 +45,19 @@ export default class extends Controller {
 
   disconnect() {
     document.removeEventListener("keydown", this.handleKeyDown)
-    window.removeEventListener("resize", this.handleResize)
+  }
+
+  // Called by stimulus-use when mobile media query state changes
+  mobileChanged({ matches }) {
+    const wasMobile = this.isMobile
+    this.isMobile = matches
+
+    // Close mobile sidebar when switching to desktop
+    if (wasMobile && !this.isMobile) {
+      this.openMobileValue = false
+    }
+
+    this.syncState()
   }
 
   handleKeyDown(event) {
@@ -48,16 +68,6 @@ export default class extends Controller {
     ) {
       event.preventDefault()
       this.toggle()
-    }
-  }
-
-  handleResize() {
-    const wasMobile = this.isMobile
-    this.isMobile = window.innerWidth < 768
-
-    // Close mobile sidebar when switching to desktop
-    if (wasMobile && !this.isMobile) {
-      this.openMobileValue = false
     }
   }
 
