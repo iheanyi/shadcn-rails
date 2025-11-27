@@ -15,7 +15,7 @@ Beautiful, accessible UI components for Rails built with ViewComponents, Stimulu
 - **ViewComponents** - Leverages Rails' ViewComponent library for composable, testable components
 - **Stimulus** - Interactive components powered by Stimulus controllers
 - **Rails-first** - Designed specifically for Ruby on Rails applications
-- **35+ Components** - Comprehensive library covering all common UI patterns
+- **47 Components** - Comprehensive library covering all common UI patterns
 
 ## Table of Contents
 
@@ -1233,18 +1233,27 @@ application.register("shadcn--tabs", TabsController)
 |------------|------------|
 | `shadcn--accordion` | Accordion |
 | `shadcn--alert-dialog` | AlertDialog |
+| `shadcn--avatar` | Avatar |
 | `shadcn--checkbox` | Checkbox |
 | `shadcn--collapsible` | Collapsible |
+| `shadcn--context-menu` | ContextMenu |
 | `shadcn--dialog` | Dialog |
 | `shadcn--drawer` | Drawer |
 | `shadcn--dropdown-menu` | DropdownMenu |
 | `shadcn--hover-card` | HoverCard |
+| `shadcn--input-otp` | InputOtp |
+| `shadcn--menubar` | Menubar |
+| `shadcn--navigation-menu` | NavigationMenu |
 | `shadcn--popover` | Popover |
+| `shadcn--radio-group` | RadioGroup |
+| `shadcn--resizable` | Resizable |
+| `shadcn--scroll-area` | ScrollArea |
 | `shadcn--select` | Select |
 | `shadcn--sheet` | Sheet |
 | `shadcn--slider` | Slider |
 | `shadcn--switch` | Switch |
 | `shadcn--tabs` | Tabs |
+| `shadcn--toast` | Toast |
 | `shadcn--toggle` | Toggle |
 | `shadcn--toggle-group` | ToggleGroup |
 | `shadcn--tooltip` | Tooltip |

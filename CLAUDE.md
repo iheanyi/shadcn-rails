@@ -82,7 +82,7 @@ Theme presets are in `lib/shadcn/rails/configuration.rb` with full HSL values fo
 
 ### Components (app/components/shadcn/)
 
-The library includes 43 components organized by category:
+The library includes 47 components organized by category:
 
 **Buttons & Actions**
 | File | Description |
@@ -150,6 +150,10 @@ The library includes 43 components organized by category:
 | `pagination_component.rb` | Page navigation with Kaminari/Pagy/WillPaginate support |
 | `collapsible_component.rb` | Show/hide content section |
 | `separator_component.rb` | Visual divider line |
+| `context_menu_component.rb` | Right-click context menu |
+| `menubar_component.rb` | Horizontal menu bar with dropdowns |
+| `navigation_menu_component.rb` | Navigation with dropdown content |
+| `resizable_component.rb` | Resizable panel groups |
 
 ### Generators (lib/generators/shadcn/)
 - `install/` - Initial setup generator
@@ -392,7 +396,7 @@ Check:
 ## Documentation Site
 
 The `test/dummy` app serves as both a testing environment and documentation site. It includes:
-- Full documentation for all 43 components at `/docs`
+- Full documentation for all 47 components at `/docs`
 - Live interactive examples that demonstrate each component
 - Code examples stored in `app/code_examples/{component}/` as `.txt` files
 - `erb_example` helper to display code examples with syntax highlighting
@@ -424,13 +428,11 @@ test/dummy/
 - [ ] Combobox
 - [ ] Date Picker
 - [ ] Calendar
-- [ ] Context Menu
-- [ ] Menubar
-- [ ] Navigation Menu
-- [ ] Resizable panels
 - [ ] Sonner (toast alternative)
 - [ ] Carousel
 - [ ] Chart
+- [ ] Data Table
+- [ ] Sidebar
 
 **Enhancements**:
 - [ ] Form builder integration (Rails form helpers)
@@ -441,11 +443,16 @@ test/dummy/
 - [ ] Drawer gesture support (touch drag to dismiss)
 
 **Completed**:
-- [x] 43 core components implemented
+- [x] 47 core components implemented
 - [x] Full documentation site with live examples
 - [x] Stimulus controllers for all interactive components
 - [x] Pagination with Kaminari/Pagy/WillPaginate adapters
 - [x] CSS animations for dialogs, sheets, toasts, accordions
+- [x] Context Menu component
+- [x] Menubar component
+- [x] Navigation Menu component
+- [x] Resizable panels component
+- [x] Input OTP with group separators
 
 ## Resources
 
