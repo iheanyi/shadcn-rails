@@ -43,10 +43,15 @@ module Shadcn
     }
 
     # Input slot - renders an Input component
-    renders_one :input, lambda { |**options|
+    # @param error [Boolean] Whether to show error styles on the input
+    # Note: If using with_error slot, call it BEFORE with_input for automatic error detection,
+    # or pass error: true explicitly
+    renders_one :input, lambda { |error: nil, **options|
       options[:id] ||= @input_id
       options[:name] ||= @name
-      if @has_error
+      # Use explicit error param if provided, otherwise check error slot
+      has_error = error.nil? ? error? : error
+      if has_error
         options[:class_name] = cn("border-destructive focus-visible:ring-destructive", options[:class_name])
       end
       Shadcn::InputComponent.new(**options)
@@ -67,12 +72,6 @@ module Shadcn
       super(**options)
       @name = name
       @input_id = id || generate_id
-      @has_error = false
-    end
-
-    def before_render
-      # Track if error is present for styling
-      @has_error = error.present?
     end
 
     def call
