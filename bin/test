@@ -1,0 +1,75 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Run all tests (Ruby and JavaScript)
+#
+# Usage:
+#   bin/test          # Run all tests
+#   bin/test ruby     # Run only Ruby tests
+#   bin/test js       # Run only JavaScript tests
+
+require "open3"
+
+class TestRunner
+  def initialize(filter: nil)
+    @filter = filter
+    @failed = false
+  end
+
+  def run
+    puts "\n🧪 Running tests\n"
+    puts "=" * 50
+
+    run_ruby_tests if @filter.nil? || @filter == "ruby"
+    run_js_tests if @filter.nil? || @filter == "js"
+
+    puts "\n" + "=" * 50
+    if @failed
+      puts "❌ Some tests failed"
+      exit 1
+    else
+      puts "✅ All tests passed"
+    end
+  end
+
+  private
+
+  def run_ruby_tests
+    step "Ruby tests"
+    success = system("bundle exec rake test")
+    @failed = true unless success
+  end
+
+  def run_js_tests
+    step "JavaScript tests"
+    success = system("npm test")
+    @failed = true unless success
+  end
+
+  def step(name)
+    puts "\n→ #{name}\n\n"
+  end
+end
+
+# Parse arguments
+filter = case ARGV[0]
+         when "ruby", "rb"
+           "ruby"
+         when "js", "javascript", "node"
+           "js"
+         when "-h", "--help"
+           puts "Usage: bin/test [ruby|js]"
+           puts ""
+           puts "  bin/test       Run all tests"
+           puts "  bin/test ruby  Run only Ruby tests"
+           puts "  bin/test js    Run only JavaScript tests"
+           exit 0
+         when nil
+           nil
+         else
+           puts "Unknown filter: #{ARGV[0]}"
+           puts "Use: bin/test [ruby|js]"
+           exit 1
+         end
+
+TestRunner.new(filter: filter).run
