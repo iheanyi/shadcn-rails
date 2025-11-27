@@ -369,4 +369,225 @@ describe("CalendarController", () => {
       ])
     })
   })
+
+  describe("isDateDisabled", () => {
+    test("returns false for dates within valid range", () => {
+      controller.minDateValue = "2024-11-01"
+      controller.maxDateValue = "2024-11-30"
+
+      const date = new Date(2024, 10, 15)
+      expect(controller.isDateDisabled(date)).toBe(false)
+    })
+
+    test("returns true for dates before minDate", () => {
+      controller.minDateValue = "2024-11-10"
+
+      const date = new Date(2024, 10, 5)
+      expect(controller.isDateDisabled(date)).toBe(true)
+    })
+
+    test("returns true for dates after maxDate", () => {
+      controller.maxDateValue = "2024-11-20"
+
+      const date = new Date(2024, 10, 25)
+      expect(controller.isDateDisabled(date)).toBe(true)
+    })
+
+    test("returns true for dates in disabledDates list", () => {
+      controller.disabledDatesValue = "2024-11-15,2024-11-16,2024-11-17"
+
+      expect(controller.isDateDisabled(new Date(2024, 10, 15))).toBe(true)
+      expect(controller.isDateDisabled(new Date(2024, 10, 18))).toBe(false)
+    })
+
+    test("returns true for disabled days of week", () => {
+      controller.disabledDaysOfWeekValue = "0,6" // Sunday and Saturday
+
+      // November 16, 2024 is a Saturday
+      expect(controller.isDateDisabled(new Date(2024, 10, 16))).toBe(true)
+      // November 17, 2024 is a Sunday
+      expect(controller.isDateDisabled(new Date(2024, 10, 17))).toBe(true)
+      // November 18, 2024 is a Monday
+      expect(controller.isDateDisabled(new Date(2024, 10, 18))).toBe(false)
+    })
+  })
+
+  describe("multiple selection mode", () => {
+    beforeEach(async () => {
+      application.stop()
+      document.body.innerHTML = ""
+
+      document.body.innerHTML = `
+        <div data-controller="calendar"
+             data-calendar-month-value="2024-11-01"
+             data-calendar-mode-value="multiple"
+             data-calendar-selected-value="">
+          <div data-calendar-target="grid"></div>
+          <input type="hidden" data-calendar-target="hiddenInput">
+        </div>
+      `
+
+      application = Application.start()
+      application.register("calendar", CalendarController)
+
+      await new Promise(resolve => requestAnimationFrame(resolve))
+
+      element = document.querySelector('[data-controller="calendar"]')
+      controller = application.getControllerForElementAndIdentifier(element, "calendar")
+    })
+
+    test("initializes with empty array", () => {
+      expect(controller.selectedDate).toEqual([])
+    })
+
+    test("can select multiple dates", () => {
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-10" } } })
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-15" } } })
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-20" } } })
+
+      expect(controller.selectedDate.length).toBe(3)
+      expect(controller.selectedValue).toBe("2024-11-10,2024-11-15,2024-11-20")
+    })
+
+    test("can deselect dates by clicking again", () => {
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-10" } } })
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-15" } } })
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-10" } } }) // deselect
+
+      expect(controller.selectedDate.length).toBe(1)
+      expect(controller.selectedValue).toBe("2024-11-15")
+    })
+
+    test("dispatches select event with dates array", () => {
+      let eventDetail = null
+      element.addEventListener("calendar:select", (e) => {
+        eventDetail = e.detail
+      })
+
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-10" } } })
+
+      expect(eventDetail.dates).toBeDefined()
+      expect(eventDetail.dateStrings).toContain("2024-11-10")
+    })
+  })
+
+  describe("range selection mode", () => {
+    beforeEach(async () => {
+      application.stop()
+      document.body.innerHTML = ""
+
+      document.body.innerHTML = `
+        <div data-controller="calendar"
+             data-calendar-month-value="2024-11-01"
+             data-calendar-mode-value="range"
+             data-calendar-selected-value="">
+          <div data-calendar-target="grid"></div>
+          <input type="hidden" data-calendar-target="hiddenInput">
+        </div>
+      `
+
+      application = Application.start()
+      application.register("calendar", CalendarController)
+
+      await new Promise(resolve => requestAnimationFrame(resolve))
+
+      element = document.querySelector('[data-controller="calendar"]')
+      controller = application.getControllerForElementAndIdentifier(element, "calendar")
+    })
+
+    test("first click sets range start", () => {
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-10" } } })
+
+      expect(controller.rangeStart).not.toBeNull()
+      expect(controller.rangeStart.getDate()).toBe(10)
+      expect(controller.rangeEnd).toBeNull()
+    })
+
+    test("second click sets range end", () => {
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-10" } } })
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-20" } } })
+
+      expect(controller.rangeStart.getDate()).toBe(10)
+      expect(controller.rangeEnd.getDate()).toBe(20)
+      expect(controller.selectedValue).toBe("2024-11-10,2024-11-20")
+    })
+
+    test("swaps start and end if end is before start", () => {
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-20" } } })
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-10" } } })
+
+      expect(controller.rangeStart.getDate()).toBe(10)
+      expect(controller.rangeEnd.getDate()).toBe(20)
+    })
+
+    test("third click starts new range", () => {
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-10" } } })
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-20" } } })
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-25" } } })
+
+      expect(controller.rangeStart.getDate()).toBe(25)
+      expect(controller.rangeEnd).toBeNull()
+    })
+
+    test("isDateInRange returns true for dates between start and end", () => {
+      controller.rangeStart = new Date(2024, 10, 10)
+      controller.rangeEnd = new Date(2024, 10, 20)
+
+      expect(controller.isDateInRange(new Date(2024, 10, 15))).toBe(true)
+      expect(controller.isDateInRange(new Date(2024, 10, 10))).toBe(false) // start
+      expect(controller.isDateInRange(new Date(2024, 10, 20))).toBe(false) // end
+      expect(controller.isDateInRange(new Date(2024, 10, 5))).toBe(false) // before
+      expect(controller.isDateInRange(new Date(2024, 10, 25))).toBe(false) // after
+    })
+  })
+
+  describe("required mode", () => {
+    beforeEach(async () => {
+      application.stop()
+      document.body.innerHTML = ""
+
+      document.body.innerHTML = `
+        <div data-controller="calendar"
+             data-calendar-month-value="2024-11-01"
+             data-calendar-required-value="true"
+             data-calendar-selected-value="2024-11-15">
+          <div data-calendar-target="grid"></div>
+        </div>
+      `
+
+      application = Application.start()
+      application.register("calendar", CalendarController)
+
+      await new Promise(resolve => requestAnimationFrame(resolve))
+
+      element = document.querySelector('[data-controller="calendar"]')
+      controller = application.getControllerForElementAndIdentifier(element, "calendar")
+    })
+
+    test("prevents deselection when required is true", () => {
+      expect(controller.selectedDate.getDate()).toBe(15)
+
+      // Try to deselect by clicking the same date
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-15" } } })
+
+      // Should still be selected
+      expect(controller.selectedDate.getDate()).toBe(15)
+    })
+
+    test("allows selecting a different date", () => {
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-20" } } })
+
+      expect(controller.selectedDate.getDate()).toBe(20)
+    })
+  })
+
+  describe("disabled date selection", () => {
+    test("does not select disabled dates", () => {
+      controller.disabledDatesValue = "2024-11-15"
+
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-15" } } })
+
+      expect(controller.selectedDate).toBeNull()
+    })
+  })
 })
