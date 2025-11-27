@@ -319,7 +319,7 @@ export default class extends Controller {
    */
   handleKeydown(event) {
     if (!this.focusedDate) {
-      this.focusedDate = this.selectedDate || new Date()
+      this.focusedDate = this.getInitialFocusDate()
     }
 
     let newDate = new Date(this.focusedDate)
@@ -418,7 +418,26 @@ export default class extends Controller {
   enableKeyboard() {
     document.addEventListener("keydown", this.boundHandleKeydown)
     if (!this.focusedDate) {
-      this.focusedDate = this.selectedDate || new Date()
+      this.focusedDate = this.getInitialFocusDate()
+    }
+  }
+
+  /**
+   * Get an initial focus date based on selection mode
+   */
+  getInitialFocusDate() {
+    switch (this.modeValue) {
+      case "multiple":
+        // For multiple mode, use first selected date or today
+        return (Array.isArray(this.selectedDate) && this.selectedDate.length > 0)
+          ? this.selectedDate[0]
+          : new Date()
+      case "range":
+        // For range mode, use range start or today
+        return this.rangeStart || new Date()
+      default:
+        // For single mode, use selected date or today
+        return this.selectedDate || new Date()
     }
   }
 
