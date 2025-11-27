@@ -116,6 +116,11 @@ export default class extends Controller {
     if (this.hasContentTarget && this.contentTarget.contains(event.target)) {
       return
     }
+    // Don't close if right-clicking on the trigger element
+    // This allows show() to be called again to reposition the menu
+    if (this.hasTriggerTarget && this.triggerTarget.contains(event.target)) {
+      return
+    }
     this.hide()
   }
 

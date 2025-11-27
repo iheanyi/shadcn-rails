@@ -720,6 +720,48 @@ describe("ContextMenuController", () => {
       }
     })
 
+    test("calling show() while menu is already open repositions instead of closing", async () => {
+      // First right-click to open menu
+      const event1 = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event1)
+      await nextFrame()
+
+      expect(controller.openValue).toBe(true)
+      expect(controller.mouseX).toBe(100)
+      expect(controller.mouseY).toBe(100)
+
+      // Second right-click at different position while menu is open
+      // This simulates what happens when the contextmenu event is triggered again
+      const event2 = { preventDefault: jest.fn(), clientX: 250, clientY: 300 }
+      controller.show(event2)
+      await nextFrame()
+
+      // Menu should still be open at the NEW position
+      expect(controller.openValue).toBe(true)
+      expect(controller.mouseX).toBe(250)
+      expect(controller.mouseY).toBe(300)
+      expect(controller.contentTarget.hidden).toBe(false)
+      expect(controller.contentTarget.dataset.state).toBe("open")
+    })
+
+    test("handleClickOutside should NOT close menu when contextmenu event triggers on trigger element", async () => {
+      // Open the menu first
+      const event = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
+      controller.show(event)
+      await nextFrame()
+      await nextFrame() // Extra frame to ensure event listeners are attached
+
+      expect(controller.openValue).toBe(true)
+
+      // Simulate a contextmenu event on the trigger element
+      // This is what happens when the user right-clicks again on the trigger
+      controller.handleClickOutside({ target: controller.triggerTarget })
+      await nextFrame()
+
+      // Menu should still be open because the click was on the trigger
+      expect(controller.openValue).toBe(true)
+    })
+
     test("cancels pending hide timeout when showing again", async () => {
       const event1 = { preventDefault: jest.fn(), clientX: 100, clientY: 100 }
       controller.show(event1)
