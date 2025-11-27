@@ -1,10 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
-import { useClickOutside, useDebounce } from "stimulus-use"
+import { useClickOutside } from "stimulus-use"
 
 /**
  * Combobox controller for searchable select dropdown
  * Handles open/close, filtering, keyboard navigation, and item selection
- * Uses stimulus-use for click outside detection and debounced filtering
+ * Uses stimulus-use for click outside detection
  */
 export default class extends Controller {
   static targets = ["trigger", "content", "input", "list", "item", "empty", "displayValue", "hiddenInput"]
@@ -14,20 +14,11 @@ export default class extends Controller {
     selectedIndex: { type: Number, default: -1 }
   }
 
-  // Debounce the filter method for better performance with large lists
-  static debounces = [
-    {
-      name: "filter",
-      wait: 150
-    }
-  ]
-
   connect() {
     this.boundHandleKeydown = this.handleKeydown.bind(this)
 
-    // Use stimulus-use for click outside detection and debouncing
+    // Use stimulus-use for click outside detection
     useClickOutside(this)
-    useDebounce(this)
   }
 
   disconnect() {

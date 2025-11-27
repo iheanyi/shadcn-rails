@@ -1,10 +1,8 @@
 import { Controller } from "@hotwired/stimulus"
-import { useDebounce } from "stimulus-use"
 
 /**
  * Command controller for command palette functionality
  * Handles filtering, keyboard navigation, and item selection
- * Uses stimulus-use for debounced filtering
  */
 export default class extends Controller {
   static targets = ["input", "list", "empty", "group", "item"]
@@ -12,16 +10,7 @@ export default class extends Controller {
     selectedIndex: { type: Number, default: -1 }
   }
 
-  // Debounce the filter method for better performance with large lists
-  static debounces = [
-    {
-      name: "filter",
-      wait: 150
-    }
-  ]
-
   connect() {
-    useDebounce(this)
     this.updateSelection()
   }
 
