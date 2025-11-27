@@ -31,7 +31,7 @@ module Shadcn
     renders_many :groups, "GroupComponent"
 
     # Separators between groups
-    renders_many :separators, "SeparatorComponent"
+    renders_many :separators, "OtpSeparatorComponent"
 
     # @param length [Integer] Number of OTP digits
     # @param name [String] Input name for form submission
@@ -169,8 +169,8 @@ module Shadcn
       end
     end
 
-    # Separator subcomponent
-    class SeparatorComponent < BaseComponent
+    # Separator subcomponent (named OtpSeparatorComponent to avoid conflict with standalone SeparatorComponent)
+    class OtpSeparatorComponent < BaseComponent
       BASE_CLASSES = "flex items-center justify-center px-2"
 
       def call
