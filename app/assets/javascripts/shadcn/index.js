@@ -25,6 +25,7 @@ import DropdownController from "./controllers/dropdown_controller"
 import HoverCardController from "./controllers/hover_card_controller"
 import MenubarController from "./controllers/menubar_controller"
 import PopoverController from "./controllers/popover_controller"
+import ResizableController from "./controllers/resizable_controller"
 import RadioGroupController from "./controllers/radio_group_controller"
 import ScrollAreaController from "./controllers/scroll_area_controller"
 import SelectController from "./controllers/select_controller"
@@ -53,6 +54,7 @@ export {
   MenubarController,
   PopoverController,
   RadioGroupController,
+  ResizableController,
   ScrollAreaController,
   SelectController,
   SheetController,
@@ -80,6 +82,7 @@ export const controllers = {
   "shadcn--menubar": MenubarController,
   "shadcn--popover": PopoverController,
   "shadcn--radio-group": RadioGroupController,
+  "shadcn--resizable": ResizableController,
   "shadcn--scroll-area": ScrollAreaController,
   "shadcn--select": SelectController,
   "shadcn--sheet": SheetController,

@@ -85,18 +85,12 @@ class TextareaComponentPreview < ViewComponent::Preview
   # @label With Label and Description
   # Textarea with proper form labeling
   def with_label_and_description
-    tag.div(class: "grid w-full gap-1.5") do
-      safe_join([
-        tag.label("Bio", for: "bio", class: "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"),
-        render(Shadcn::TextareaComponent.new(
-          id: "bio",
-          name: "bio",
-          placeholder: "Tell us a little bit about yourself",
-          rows: 4
-        )),
-        tag.p("Your bio will be displayed on your public profile.", class: "text-sm text-muted-foreground")
-      ])
-    end
+    render(Shadcn::TextareaComponent.new(
+      id: "bio",
+      name: "bio",
+      placeholder: "Tell us a little bit about yourself",
+      rows: 4
+    ))
   end
 
   # @label Autofocus

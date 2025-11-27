@@ -1,0 +1,23 @@
+<%= render Shadcn::ResizablePanelGroupComponent.new(direction: :horizontal, class_name: "h-[300px]") do |group| %>
+  <% group.with_panel(default_size: 25) do %>
+    <div class="flex h-full items-center justify-center p-6">
+      <span class="font-semibold">Sidebar</span>
+    </div>
+  <% end %>
+  <% group.with_handle %>
+  <% group.with_panel(default_size: 75) do %>
+    <%= render Shadcn::ResizablePanelGroupComponent.new(direction: :vertical) do |inner| %>
+      <% inner.with_panel(default_size: 30) do %>
+        <div class="flex h-full items-center justify-center p-6">
+          <span class="font-semibold">Header</span>
+        </div>
+      <% end %>
+      <% inner.with_handle %>
+      <% inner.with_panel(default_size: 70) do %>
+        <div class="flex h-full items-center justify-center p-6">
+          <span class="font-semibold">Content</span>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

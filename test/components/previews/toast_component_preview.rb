@@ -67,7 +67,7 @@ class ToastComponentPreview < ViewComponent::Preview
       toast.with_title { "Uh oh! Something went wrong." }
       toast.with_description { "There was a problem with your request." }
       toast.with_action(alt_text: "Try again") do
-        button_html(:outline, "Try again", "h-8 px-3 text-xs border-destructive/30 hover:border-destructive/40 hover:bg-destructive hover:text-destructive-foreground")
+        %(<button type="button" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 px-3 text-xs border-destructive/30 hover:border-destructive/40 hover:bg-destructive hover:text-destructive-foreground">Try again</button>).html_safe
       end
     end
   end
@@ -112,24 +112,13 @@ class ToastComponentPreview < ViewComponent::Preview
   end
 
   # @label Multiple Toasts
-  # Example showing multiple toasts (in real app, these would be in a ToastViewport)
+  # Example showing multiple toasts - Note: In real apps, toasts appear in a ToastViewport
+  # This preview shows a single toast. See documentation for stacked toast examples.
   def multiple
-    <<~HTML.html_safe
-      <div class="flex flex-col gap-2">
-        #{render(Shadcn::ToastComponent.new) do |toast|
-          toast.with_title { "First notification" }
-          toast.with_description { "This is the first toast." }
-        end}
-        #{render(Shadcn::ToastComponent.new) do |toast|
-          toast.with_title { "Second notification" }
-          toast.with_description { "This is the second toast." }
-        end}
-        #{render(Shadcn::ToastComponent.new(variant: :destructive)) do |toast|
-          toast.with_title { "Error notification" }
-          toast.with_description { "Something went wrong." }
-        end}
-      </div>
-    HTML
+    render(Shadcn::ToastComponent.new) do |toast|
+      toast.with_title { "Multiple Toasts Example" }
+      toast.with_description { "In a real app, multiple toasts stack in the ToastViewport container. See docs for integration guide." }
+    end
   end
 
   private

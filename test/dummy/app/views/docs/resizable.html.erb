@@ -1,0 +1,301 @@
+<% content_for :title, "Resizable" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+    <a href="#stimulus-controller" class="text-muted-foreground hover:text-foreground">Stimulus Controller</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Resizable</h1>
+    <p class="text-xl text-muted-foreground">Accessible resizable panel groups and layouts with keyboard support.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Requires JavaScript
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::ResizablePanelGroupComponent.new(direction: :horizontal, class_name: "h-[200px] max-w-md rounded-lg border") do |group| %>
+      <% group.with_panel(default_size: 50) do %>
+        <div class="flex h-full items-center justify-center p-6">
+          <span class="font-semibold">One</span>
+        </div>
+      <% end %>
+      <% group.with_handle(with_handle: true) %>
+      <% group.with_panel(default_size: 50) do %>
+        <div class="flex h-full items-center justify-center p-6">
+          <span class="font-semibold">Two</span>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component resizable" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("resizable/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Vertical -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Vertical</h3>
+      <p class="text-sm text-muted-foreground">
+        Use the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">direction: :vertical</code> option for vertical resizing.
+      </p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ResizablePanelGroupComponent.new(direction: :vertical, class_name: "h-[200px] max-w-md rounded-lg border") do |group| %>
+          <% group.with_panel(default_size: 25) do %>
+            <div class="flex h-full items-center justify-center p-6">
+              <span class="font-semibold">Header</span>
+            </div>
+          <% end %>
+          <% group.with_handle %>
+          <% group.with_panel(default_size: 75) do %>
+            <div class="flex h-full items-center justify-center p-6">
+              <span class="font-semibold">Content</span>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("resizable/vertical") %>
+    </div>
+
+    <!-- With Handle -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Handle</h3>
+      <p class="text-sm text-muted-foreground">
+        Add a visible grip handle with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">with_handle: true</code>.
+      </p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ResizablePanelGroupComponent.new(direction: :horizontal, class_name: "h-[200px] max-w-md rounded-lg border") do |group| %>
+          <% group.with_panel(default_size: 30) do %>
+            <div class="flex h-full items-center justify-center p-6">
+              <span class="font-semibold">Sidebar</span>
+            </div>
+          <% end %>
+          <% group.with_handle(with_handle: true) %>
+          <% group.with_panel(default_size: 70) do %>
+            <div class="flex h-full items-center justify-center p-6">
+              <span class="font-semibold">Content</span>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("resizable/with_handle") %>
+    </div>
+
+    <!-- Three Panels -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Three Panels</h3>
+      <p class="text-sm text-muted-foreground">
+        Create layouts with multiple panels by adding more panels and handles.
+      </p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ResizablePanelGroupComponent.new(direction: :horizontal, class_name: "h-[200px] max-w-md rounded-lg border") do |group| %>
+          <% group.with_panel(default_size: 25) do %>
+            <div class="flex h-full items-center justify-center p-6">
+              <span class="font-semibold">One</span>
+            </div>
+          <% end %>
+          <% group.with_handle(with_handle: true) %>
+          <% group.with_panel(default_size: 50) do %>
+            <div class="flex h-full items-center justify-center p-6">
+              <span class="font-semibold">Two</span>
+            </div>
+          <% end %>
+          <% group.with_handle(with_handle: true) %>
+          <% group.with_panel(default_size: 25) do %>
+            <div class="flex h-full items-center justify-center p-6">
+              <span class="font-semibold">Three</span>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("resizable/three_panels") %>
+    </div>
+
+    <!-- With Min/Max Constraints -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Min/Max Constraints</h3>
+      <p class="text-sm text-muted-foreground">
+        Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">min_size</code> and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">max_size</code> to constrain panel sizes.
+      </p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ResizablePanelGroupComponent.new(direction: :horizontal, class_name: "h-[200px] max-w-md rounded-lg border") do |group| %>
+          <% group.with_panel(default_size: 30, min_size: 20, max_size: 40) do %>
+            <div class="flex h-full items-center justify-center p-6">
+              <span class="font-semibold text-center text-sm">20-40%</span>
+            </div>
+          <% end %>
+          <% group.with_handle(with_handle: true) %>
+          <% group.with_panel(default_size: 70, min_size: 60, max_size: 80) do %>
+            <div class="flex h-full items-center justify-center p-6">
+              <span class="font-semibold text-center text-sm">60-80%</span>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("resizable/constraints") %>
+    </div>
+
+    <!-- Nested Layout -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Nested Layout</h3>
+      <p class="text-sm text-muted-foreground">
+        Create complex layouts by nesting panel groups.
+      </p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ResizablePanelGroupComponent.new(direction: :horizontal, class_name: "h-[300px] max-w-lg rounded-lg border") do |group| %>
+          <% group.with_panel(default_size: 25) do %>
+            <div class="flex h-full items-center justify-center p-6">
+              <span class="font-semibold">Sidebar</span>
+            </div>
+          <% end %>
+          <% group.with_handle %>
+          <% group.with_panel(default_size: 75) do %>
+            <%= render Shadcn::ResizablePanelGroupComponent.new(direction: :vertical) do |inner| %>
+              <% inner.with_panel(default_size: 30) do %>
+                <div class="flex h-full items-center justify-center p-6">
+                  <span class="font-semibold">Header</span>
+                </div>
+              <% end %>
+              <% inner.with_handle %>
+              <% inner.with_panel(default_size: 70) do %>
+                <div class="flex h-full items-center justify-center p-6">
+                  <span class="font-semibold">Content</span>
+                </div>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("resizable/nested") %>
+    </div>
+
+    <!-- Persistent Layout -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Persistent Layout</h3>
+      <p class="text-sm text-muted-foreground">
+        Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">auto_save_id</code> to persist panel sizes in localStorage.
+      </p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::ResizablePanelGroupComponent.new(direction: :horizontal, auto_save_id: "demo-layout", class_name: "h-[200px] max-w-md rounded-lg border") do |group| %>
+          <% group.with_panel(default_size: 50) do %>
+            <div class="flex h-full items-center justify-center p-6">
+              <span class="font-semibold">Persistent</span>
+            </div>
+          <% end %>
+          <% group.with_handle(with_handle: true) %>
+          <% group.with_panel(default_size: 50) do %>
+            <div class="flex h-full items-center justify-center p-6">
+              <span class="font-semibold">Layout</span>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+      <p class="text-sm text-muted-foreground">
+        Resize the panels above, then refresh the page. Your layout will be restored.
+      </p>
+      <%= erb_example("resizable/persistent") %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">ResizablePanelGroupComponent</h3>
+    <%= render "docs/props_table", title: nil, props: [
+      { name: "direction", type: "Symbol", default: ":horizontal", description: "Direction of panels (:horizontal or :vertical)" },
+      { name: "auto_save_id", type: "String", default: "nil", description: "ID for persisting sizes to localStorage" }
+    ] %>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">Slots</h3>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Slot</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Props</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_panel</td>
+            <td class="p-4 align-middle">
+              <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">default_size:</code>,
+              <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">min_size:</code>,
+              <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">max_size:</code>
+            </td>
+            <td class="p-4 align-middle text-muted-foreground">Resizable panel with optional size constraints (percentages 0-100)</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_handle</td>
+            <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">with_handle:</code></td>
+            <td class="p-4 align-middle text-muted-foreground">Draggable separator between panels</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Stimulus Controller -->
+  <div id="stimulus-controller">
+    <%= render "docs/stimulus_docs",
+      controller_name: "shadcn--resizable",
+      description: "Handles panel resizing with mouse, touch, and keyboard support.",
+      targets: [
+        { name: "panel", description: "Resizable panel elements" },
+        { name: "handle", description: "Draggable resize handles" }
+      ],
+      values: [
+        { name: "direction", type: "String", default: '"horizontal"', description: "Panel direction (horizontal or vertical)" },
+        { name: "autoSaveId", type: "String", default: "null", description: "ID for localStorage persistence" }
+      ],
+      actions: [
+        { name: "startResize", description: "Begin resize operation (mouse/touch)" }
+      ]
+    %>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Handle uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="separator"</code> for semantics</li>
+      <li>Sets appropriate <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-orientation</code></li>
+      <li>Handle is keyboard focusable with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">tabindex="0"</code></li>
+      <li>Keyboard navigation:
+        <ul class="ml-4 list-disc mt-2">
+          <li><kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Arrow Left</kbd>/<kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Arrow Right</kbd> to resize horizontal panels</li>
+          <li><kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Arrow Up</kbd>/<kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Arrow Down</kbd> to resize vertical panels</li>
+          <li><kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Shift</kbd> + Arrow for larger adjustments (10%)</li>
+          <li><kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">Home</kbd> to collapse previous panel to minimum</li>
+          <li><kbd class="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">End</kbd> to collapse next panel to minimum</li>
+        </ul>
+      </li>
+      <li>Touch support for mobile devices</li>
+    </ul>
+  </div>
+</div>

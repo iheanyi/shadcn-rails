@@ -309,6 +309,15 @@ class DocsController < ApplicationController
       category: "Navigation",
       description: "Visually or semantically separates content.",
       has_stimulus: false
+    },
+
+    # Layout
+    "resizable" => {
+      name: "Resizable",
+      category: "Layout",
+      description: "Accessible resizable panel groups and layouts with keyboard support.",
+      has_stimulus: true,
+      controller: "shadcn--resizable"
     }
   }.freeze
 
@@ -318,7 +327,8 @@ class DocsController < ApplicationController
     "Data Display",
     "Feedback",
     "Overlays",
-    "Navigation"
+    "Navigation",
+    "Layout"
   ].freeze
 
   def index
