@@ -1,0 +1,24 @@
+<%= render Shadcn::ContextMenuComponent.new do |menu| %>
+  <% menu.with_trigger do %>
+    <div class="flex h-[100px] w-[200px] items-center justify-center rounded-md border border-dashed text-sm">
+      Right click
+    </div>
+  <% end %>
+  <% menu.with_menu do |content| %>
+    <% content.with_label(inset: true) { "Sort By" } %>
+    <% content.with_separator %>
+    <% content.with_radio_group(value: "date") do |group| %>
+      <% group.with_item(value: "name") { "Name" } %>
+      <% group.with_item(value: "date", checked: true) { "Date Modified" } %>
+      <% group.with_item(value: "size") { "Size" } %>
+      <% group.with_item(value: "type") { "Type" } %>
+    <% end %>
+    <% content.with_separator %>
+    <% content.with_label(inset: true) { "Order" } %>
+    <% content.with_separator %>
+    <% content.with_radio_group(value: "asc") do |group| %>
+      <% group.with_item(value: "asc", checked: true) { "Ascending" } %>
+      <% group.with_item(value: "desc") { "Descending" } %>
+    <% end %>
+  <% end %>
+<% end %>
