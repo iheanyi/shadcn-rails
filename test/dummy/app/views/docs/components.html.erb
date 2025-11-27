@@ -1,0 +1,33 @@
+<% content_for :title, "All Components" %>
+
+<div class="space-y-8">
+  <div class="space-y-4">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Components</h1>
+    <p class="text-xl text-muted-foreground">
+      Browse all <%= @components.size %> components available in shadcn-rails.
+    </p>
+  </div>
+
+  <% @categories.each do |category| %>
+    <div class="space-y-4">
+      <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight"><%= category %></h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        <% @components_by_category[category]&.each do |slug, meta| %>
+          <%= link_to docs_component_path(slug: slug), class: "group rounded-lg border p-4 hover:bg-accent transition-colors" do %>
+            <div class="flex items-start justify-between">
+              <div class="space-y-1">
+                <h3 class="font-semibold group-hover:underline"><%= meta[:name] %></h3>
+                <p class="text-sm text-muted-foreground"><%= meta[:description] %></p>
+              </div>
+              <% if meta[:has_stimulus] %>
+                <span class="shrink-0 ml-2 inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold text-muted-foreground">
+                  JS
+                </span>
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
