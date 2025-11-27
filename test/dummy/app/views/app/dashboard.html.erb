@@ -67,7 +67,7 @@
   <!-- Main content grid -->
   <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
     <!-- Recent Transactions -->
-    <%= render Shadcn::CardComponent.new(class: "lg:col-span-4") do |card| %>
+    <%= render Shadcn::CardComponent.new(class_name: "lg:col-span-4") do |card| %>
       <% card.with_header do |header| %>
         <% header.with_title { "Recent Transactions" } %>
         <% header.with_description { "You made 265 transactions this month." } %>
@@ -164,7 +164,7 @@
     <% end %>
 
     <!-- Recent Sales -->
-    <%= render Shadcn::CardComponent.new(class: "lg:col-span-3") do |card| %>
+    <%= render Shadcn::CardComponent.new(class_name: "lg:col-span-3") do |card| %>
       <% card.with_header do |header| %>
         <% header.with_title { "Recent Sales" } %>
         <% header.with_description { "You made 265 sales this month." } %>
