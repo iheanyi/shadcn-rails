@@ -14,6 +14,7 @@ export default class extends Controller {
     this.focusedIndex = -1
     this.boundHandleClickOutside = this.handleClickOutside.bind(this)
     this.boundHandleKeydown = this.handleKeydown.bind(this)
+    this.originalOverflow = null
   }
 
   disconnect() {
@@ -28,6 +29,10 @@ export default class extends Controller {
     this.mouseY = event?.clientY || 0
 
     this.openValue = true
+
+    // Lock scroll
+    this.originalOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
 
     if (this.hasContentTarget) {
       this.contentTarget.hidden = false
@@ -56,6 +61,9 @@ export default class extends Controller {
     if (!this.openValue) return
 
     this.openValue = false
+
+    // Restore scroll
+    document.body.style.overflow = this.originalOverflow || ""
 
     if (this.hasContentTarget) {
       this.contentTarget.dataset.state = "closed"
