@@ -12,8 +12,8 @@ module Shadcn
   #         <span class="font-semibold">App Name</span>
   #       </div>
   #     <% end %>
-  #     <% sidebar.with_content do |content| %>
-  #       <% content.with_group do |group| %>
+  #     <% sidebar.with_sidebar_content do |sc| %>
+  #       <% sc.with_group do |group| %>
   #         <% group.with_label { "Platform" } %>
   #         <% group.with_group_content do |gc| %>
   #           <% gc.with_menu do |menu| %>
@@ -57,7 +57,7 @@ module Shadcn
     renders_one :header, lambda { |**options|
       SidebarHeaderComponent.new(**options)
     }
-    renders_one :content, lambda { |**options|
+    renders_one :sidebar_content, lambda { |**options|
       SidebarContentComponent.new(**options)
     }
     renders_one :footer, lambda { |**options|
@@ -102,7 +102,7 @@ module Shadcn
     end
 
     def inner_content
-      safe_join([header, content, footer, rail].compact)
+      safe_join([header, sidebar_content, footer, rail].compact)
     end
 
     def inner_attributes

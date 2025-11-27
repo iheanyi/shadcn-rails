@@ -45,6 +45,7 @@ import ToggleController from "./controllers/toggle_controller"
 import ToggleGroupController from "./controllers/toggle_group_controller"
 import TooltipController from "./controllers/tooltip_controller"
 import InputOtpController from "./controllers/input_otp_controller"
+import SidebarController from "./controllers/sidebar_controller"
 
 // Export individual controllers
 export {
@@ -78,7 +79,8 @@ export {
   ToastController,
   ToggleController,
   ToggleGroupController,
-  TooltipController
+  TooltipController,
+  SidebarController
 }
 
 // Controller definitions for registration
@@ -113,7 +115,8 @@ export const controllers = {
   "shadcn--toast": ToastController,
   "shadcn--toggle": ToggleController,
   "shadcn--toggle-group": ToggleGroupController,
-  "shadcn--tooltip": TooltipController
+  "shadcn--tooltip": TooltipController,
+  "shadcn--sidebar": SidebarController
 }
 
 /**
