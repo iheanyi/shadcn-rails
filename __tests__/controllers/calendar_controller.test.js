@@ -1091,6 +1091,221 @@ describe("CalendarController", () => {
     })
   })
 
+  describe("weekStartsOn", () => {
+    test("default weekStartsOn is 0 (Sunday)", () => {
+      expect(controller.weekStartsOnValue).toBe(0)
+    })
+
+    test("renders grid starting from Sunday by default", () => {
+      controller.render()
+
+      const grid = element.querySelector('[data-calendar-target="grid"]')
+      const allDays = grid.querySelectorAll("button[data-date]")
+
+      // November 2024 starts on Friday, with Sunday start the first day should be Oct 27
+      expect(allDays[0].dataset.date).toBe("2024-10-27")
+    })
+
+    test("weekStartsOn=1 starts grid from Monday", async () => {
+      application.stop()
+      document.body.innerHTML = ""
+
+      document.body.innerHTML = `
+        <div data-controller="calendar"
+             data-calendar-month-value="2024-11-01"
+             data-calendar-week-starts-on-value="1">
+          <div data-calendar-target="grid"></div>
+        </div>
+      `
+
+      application = Application.start()
+      application.register("calendar", CalendarController)
+
+      await new Promise(resolve => requestAnimationFrame(resolve))
+
+      element = document.querySelector('[data-controller="calendar"]')
+      controller = application.getControllerForElementAndIdentifier(element, "calendar")
+
+      controller.render()
+
+      const grid = element.querySelector('[data-calendar-target="grid"]')
+      const allDays = grid.querySelectorAll("button[data-date]")
+
+      // November 2024 starts on Friday, with Monday start the first day should be Oct 28
+      expect(allDays[0].dataset.date).toBe("2024-10-28")
+    })
+
+    test("weekStartsOn=1 correctly positions November 1st", async () => {
+      application.stop()
+      document.body.innerHTML = ""
+
+      document.body.innerHTML = `
+        <div data-controller="calendar"
+             data-calendar-month-value="2024-11-01"
+             data-calendar-week-starts-on-value="1">
+          <div data-calendar-target="grid"></div>
+        </div>
+      `
+
+      application = Application.start()
+      application.register("calendar", CalendarController)
+
+      await new Promise(resolve => requestAnimationFrame(resolve))
+
+      element = document.querySelector('[data-controller="calendar"]')
+      controller = application.getControllerForElementAndIdentifier(element, "calendar")
+
+      controller.render()
+
+      const grid = element.querySelector('[data-calendar-target="grid"]')
+      const allDays = grid.querySelectorAll("button[data-date]")
+
+      // November 1, 2024 is Friday
+      // With Monday start: Mon=0, Tue=1, Wed=2, Thu=3, Fri=4
+      // First row: Oct 28 (Mon), Oct 29 (Tue), Oct 30 (Wed), Oct 31 (Thu), Nov 1 (Fri), Nov 2 (Sat), Nov 3 (Sun)
+      expect(allDays[4].dataset.date).toBe("2024-11-01")
+    })
+
+    test("weekStartsOn=1 December 2024 starts correctly", async () => {
+      application.stop()
+      document.body.innerHTML = ""
+
+      document.body.innerHTML = `
+        <div data-controller="calendar"
+             data-calendar-month-value="2024-12-01"
+             data-calendar-week-starts-on-value="1">
+          <div data-calendar-target="grid"></div>
+        </div>
+      `
+
+      application = Application.start()
+      application.register("calendar", CalendarController)
+
+      await new Promise(resolve => requestAnimationFrame(resolve))
+
+      element = document.querySelector('[data-controller="calendar"]')
+      controller = application.getControllerForElementAndIdentifier(element, "calendar")
+
+      controller.render()
+
+      const grid = element.querySelector('[data-calendar-target="grid"]')
+      const allDays = grid.querySelectorAll("button[data-date]")
+
+      // December 1, 2024 is Sunday
+      // With Monday start, first day should be Nov 25 (Monday)
+      expect(allDays[0].dataset.date).toBe("2024-11-25")
+
+      // December 1 should be at position 6 (Sunday = last day of week when starting Monday)
+      expect(allDays[6].dataset.date).toBe("2024-12-01")
+    })
+
+    test("weekStartsOn persists after month navigation", async () => {
+      application.stop()
+      document.body.innerHTML = ""
+
+      document.body.innerHTML = `
+        <div data-controller="calendar"
+             data-calendar-month-value="2024-11-01"
+             data-calendar-week-starts-on-value="1">
+          <div data-calendar-target="grid"></div>
+        </div>
+      `
+
+      application = Application.start()
+      application.register("calendar", CalendarController)
+
+      await new Promise(resolve => requestAnimationFrame(resolve))
+
+      element = document.querySelector('[data-controller="calendar"]')
+      controller = application.getControllerForElementAndIdentifier(element, "calendar")
+
+      // Navigate to December
+      controller.nextMonth()
+
+      const grid = element.querySelector('[data-calendar-target="grid"]')
+      const allDays = grid.querySelectorAll("button[data-date]")
+
+      // Should still start from Monday (Nov 25)
+      expect(allDays[0].dataset.date).toBe("2024-11-25")
+
+      // Navigate back to November
+      controller.previousMonth()
+
+      const gridAfter = element.querySelector('[data-calendar-target="grid"]')
+      const allDaysAfter = gridAfter.querySelectorAll("button[data-date]")
+
+      // Should still start from Monday (Oct 28)
+      expect(allDaysAfter[0].dataset.date).toBe("2024-10-28")
+    })
+  })
+
+  describe("month navigation", () => {
+    test("navigating to next month preserves selection", () => {
+      // Select a date
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-15" } } })
+
+      // Navigate to December
+      controller.nextMonth()
+
+      // Selection should still exist
+      expect(controller.selectedDate.getDate()).toBe(15)
+      expect(controller.selectedDate.getMonth()).toBe(10) // November
+    })
+
+    test("navigating back to previous month shows selection", () => {
+      // Select a date
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-15" } } })
+
+      // Navigate to December and back
+      controller.nextMonth()
+      controller.previousMonth()
+
+      // Check selection is visible
+      const selectedButton = element.querySelector('[data-date="2024-11-15"]')
+      expect(selectedButton.classList.contains("bg-primary")).toBe(true)
+    })
+
+    test("selectMonth changes month", () => {
+      // Select June (index 5)
+      controller.selectMonth({ target: { value: "5" } })
+
+      expect(controller.currentMonth.getMonth()).toBe(5) // June
+    })
+
+    test("selectYear changes year", () => {
+      // Select 2025
+      controller.selectYear({ target: { value: "2025" } })
+
+      expect(controller.currentMonth.getFullYear()).toBe(2025)
+    })
+
+    test("navigating through multiple months maintains state", () => {
+      controller.disabledDaysOfWeekValue = "0,6"
+
+      // Navigate forward several months
+      for (let i = 0; i < 6; i++) {
+        controller.nextMonth()
+      }
+
+      // May 2025
+      expect(controller.currentMonth.getMonth()).toBe(4)
+      expect(controller.currentMonth.getFullYear()).toBe(2025)
+
+      // Navigate back
+      for (let i = 0; i < 6; i++) {
+        controller.previousMonth()
+      }
+
+      // Back to November 2024
+      expect(controller.currentMonth.getMonth()).toBe(10)
+      expect(controller.currentMonth.getFullYear()).toBe(2024)
+
+      // Disabled weekends should still work
+      const saturday = element.querySelector('[data-date="2024-11-16"]')
+      expect(saturday.hasAttribute("disabled")).toBe(true)
+    })
+  })
+
   describe("range mode CSS rendering", () => {
     beforeEach(async () => {
       application.stop()

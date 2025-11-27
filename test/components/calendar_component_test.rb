@@ -14,7 +14,11 @@ class CalendarComponentTest < ViewComponent::TestCase
   def test_renders_month_year_header
     render_inline(Shadcn::CalendarComponent.new(month: Date.new(2024, 6, 15)))
 
-    assert_selector "[data-shadcn--calendar-target='monthYear']", text: "June 2024"
+    # Month and year are now shown via selects
+    assert_selector "select[data-shadcn--calendar-target='monthSelect']"
+    assert_selector "select[data-shadcn--calendar-target='yearSelect']"
+    assert_selector "option[selected]", text: "June"
+    assert_selector "option[selected]", text: "2024"
   end
 
   def test_renders_navigation_buttons
@@ -187,13 +191,174 @@ class CalendarComponentTest < ViewComponent::TestCase
     today = Date.today
     month_name = %w[January February March April May June July August September October November December][today.month - 1]
 
-    assert_selector "[data-shadcn--calendar-target='monthYear']", text: "#{month_name} #{today.year}"
+    # Month and year should be selected in dropdowns
+    assert_selector "option[selected]", text: month_name
+    assert_selector "option[selected]", text: today.year.to_s
   end
 
   def test_defaults_month_to_selected_date_month
     selected = Date.new(2024, 12, 25)
     render_inline(Shadcn::CalendarComponent.new(selected: selected))
 
-    assert_selector "[data-shadcn--calendar-target='monthYear']", text: "December 2024"
+    # December and 2024 should be selected
+    assert_selector "option[selected]", text: "December"
+    assert_selector "option[selected]", text: "2024"
+  end
+
+  # Tests for week_starts_on functionality
+  def test_renders_weekday_headers_starting_sunday_by_default
+    render_inline(Shadcn::CalendarComponent.new)
+
+    weekday_divs = page.all(".text-center.text-xs.font-medium.text-muted-foreground")
+    weekday_texts = weekday_divs.map(&:text)
+
+    assert_equal %w[Su Mo Tu We Th Fr Sa], weekday_texts
+  end
+
+  def test_renders_weekday_headers_starting_monday
+    render_inline(Shadcn::CalendarComponent.new(week_starts_on: 1))
+
+    weekday_divs = page.all(".text-center.text-xs.font-medium.text-muted-foreground")
+    weekday_texts = weekday_divs.map(&:text)
+
+    assert_equal %w[Mo Tu We Th Fr Sa Su], weekday_texts
+  end
+
+  def test_renders_weekday_headers_starting_saturday
+    render_inline(Shadcn::CalendarComponent.new(week_starts_on: 6))
+
+    weekday_divs = page.all(".text-center.text-xs.font-medium.text-muted-foreground")
+    weekday_texts = weekday_divs.map(&:text)
+
+    assert_equal %w[Sa Su Mo Tu We Th Fr], weekday_texts
+  end
+
+  def test_renders_correct_first_day_for_monday_start
+    # December 2024: December 1st is a Sunday
+    # Week starting Monday should show Nov 25 (Monday) as first day
+    render_inline(Shadcn::CalendarComponent.new(
+      month: Date.new(2024, 12, 1),
+      week_starts_on: 1
+    ))
+
+    # First button should be Nov 25 (the Monday before Dec 1)
+    assert_selector "button[data-date='2024-11-25']"
+
+    # Verify grid starts with Mon Nov 25
+    grid = page.find("[data-shadcn--calendar-target='grid']")
+    first_button = grid.all("button[data-shadcn--calendar-target='day']").first
+    assert_equal "2024-11-25", first_button["data-date"]
+  end
+
+  def test_renders_correct_first_day_for_sunday_start
+    # December 2024: December 1st is a Sunday
+    # Week starting Sunday should show Dec 1 as first day
+    render_inline(Shadcn::CalendarComponent.new(
+      month: Date.new(2024, 12, 1),
+      week_starts_on: 0
+    ))
+
+    grid = page.find("[data-shadcn--calendar-target='grid']")
+    first_button = grid.all("button[data-shadcn--calendar-target='day']").first
+    assert_equal "2024-12-01", first_button["data-date"]
+  end
+
+  def test_week_starts_on_passes_correct_stimulus_value
+    render_inline(Shadcn::CalendarComponent.new(week_starts_on: 1))
+
+    assert_selector "[data-shadcn--calendar-week-starts-on-value='1']"
+  end
+
+  def test_november_2024_monday_start_correct_layout
+    # November 2024: November 1st is a Friday
+    # Week starting Monday: first row should be Oct 28 (Mon), Oct 29, Oct 30, Oct 31, Nov 1, Nov 2, Nov 3
+    render_inline(Shadcn::CalendarComponent.new(
+      month: Date.new(2024, 11, 1),
+      week_starts_on: 1
+    ))
+
+    # First day in grid should be Monday Oct 28
+    grid = page.find("[data-shadcn--calendar-target='grid']")
+    all_buttons = grid.all("button[data-shadcn--calendar-target='day']")
+    first_button = all_buttons.first
+
+    assert_equal "2024-10-28", first_button["data-date"], "First day should be Monday Oct 28"
+
+    # Nov 1 (Friday) should be the 5th button (index 4)
+    nov_1_button = all_buttons[4]
+    assert_equal "2024-11-01", nov_1_button["data-date"], "Nov 1 should be in 5th position (Friday)"
+  end
+
+  def test_june_2024_monday_start_correct_layout
+    # June 2024: June 1st is a Saturday
+    # Week starting Monday: first row should be May 27 (Mon), May 28, May 29, May 30, May 31, June 1, June 2
+    render_inline(Shadcn::CalendarComponent.new(
+      month: Date.new(2024, 6, 1),
+      week_starts_on: 1
+    ))
+
+    grid = page.find("[data-shadcn--calendar-target='grid']")
+    all_buttons = grid.all("button[data-shadcn--calendar-target='day']")
+
+    # First day should be Monday May 27
+    assert_equal "2024-05-27", all_buttons[0]["data-date"], "First day should be Monday May 27"
+
+    # June 1 (Saturday) should be the 6th button (index 5)
+    assert_equal "2024-06-01", all_buttons[5]["data-date"], "June 1 should be in 6th position (Saturday)"
+  end
+
+  def test_february_2024_leap_year_monday_start
+    # February 2024: Feb 1 is a Thursday (leap year)
+    # Week starting Monday: first row should be Jan 29 (Mon), Jan 30, Jan 31, Feb 1, Feb 2, Feb 3, Feb 4
+    render_inline(Shadcn::CalendarComponent.new(
+      month: Date.new(2024, 2, 1),
+      week_starts_on: 1
+    ))
+
+    grid = page.find("[data-shadcn--calendar-target='grid']")
+    all_buttons = grid.all("button[data-shadcn--calendar-target='day']")
+
+    # First day should be Monday Jan 29
+    assert_equal "2024-01-29", all_buttons[0]["data-date"], "First day should be Monday Jan 29"
+
+    # Feb 29 should exist (leap year)
+    assert_selector "button[data-date='2024-02-29']"
+  end
+
+  # Month navigation tests (JavaScript handles navigation, Ruby just renders initial state)
+  def test_renders_month_select_with_correct_initial_value
+    render_inline(Shadcn::CalendarComponent.new(month: Date.new(2024, 6, 15)))
+
+    assert_selector "select[data-shadcn--calendar-target='monthSelect']"
+    month_select = page.find("select[data-shadcn--calendar-target='monthSelect']")
+
+    # June should be selected (value 5, 0-indexed)
+    selected_option = month_select.find("option[selected]")
+    assert_equal "5", selected_option.value
+    assert_equal "June", selected_option.text
+  end
+
+  def test_renders_year_select_with_correct_range
+    render_inline(Shadcn::CalendarComponent.new(month: Date.new(2024, 6, 15)))
+
+    year_select = page.find("select[data-shadcn--calendar-target='yearSelect']")
+    options = year_select.all("option")
+
+    # Should have years from 2014 to 2034 (current year ± 10)
+    assert_equal 21, options.length
+
+    # Selected year should be 2024
+    selected_option = year_select.find("option[selected]")
+    assert_equal "2024", selected_option.value
+    assert_equal "2024", selected_option.text
+  end
+
+  def test_renders_correct_navigation_button_actions
+    render_inline(Shadcn::CalendarComponent.new)
+
+    assert_selector "button[data-action='click->shadcn--calendar#previousMonth']"
+    assert_selector "button[data-action='click->shadcn--calendar#nextMonth']"
+    assert_selector "select[data-action='change->shadcn--calendar#selectMonth']"
+    assert_selector "select[data-action='change->shadcn--calendar#selectYear']"
   end
 end

@@ -26,6 +26,16 @@ module Shadcn
     DAY_DISABLED_CLASSES = "text-muted-foreground opacity-50 pointer-events-none"
 
     WEEKDAYS = %w[Su Mo Tu We Th Fr Sa].freeze
+    # Mapping for Rails beginning_of_week symbols
+    WEEK_START_SYMBOLS = {
+      0 => :sunday,
+      1 => :monday,
+      2 => :tuesday,
+      3 => :wednesday,
+      4 => :thursday,
+      5 => :friday,
+      6 => :saturday
+    }.freeze
     MONTHS = %w[January February March April May June July August September October November December].freeze
 
     MODES = %i[single multiple range].freeze
@@ -176,8 +186,12 @@ module Shadcn
 
     def weekday_header
       content_tag(:div, class: "grid grid-cols-7 gap-1 mb-2") do
-        safe_join(WEEKDAYS.map { |day| content_tag(:div, day, class: WEEKDAY_CLASSES) })
+        safe_join(rotated_weekdays.map { |day| content_tag(:div, day, class: WEEKDAY_CLASSES) })
       end
+    end
+
+    def rotated_weekdays
+      WEEKDAYS.rotate(@week_starts_on)
     end
 
     def days_grid
@@ -190,10 +204,13 @@ module Shadcn
       first_day = @month.beginning_of_month
       last_day = @month.end_of_month
 
-      # Get the starting day (Sunday of the week containing the first day)
-      start_date = first_day.beginning_of_week(:sunday)
-      # Get the ending day (Saturday of the week containing the last day)
-      end_date = last_day.end_of_week(:sunday)
+      # Get the week start symbol from the mapping (defaults to :sunday)
+      week_start_symbol = WEEK_START_SYMBOLS[@week_starts_on] || :sunday
+
+      # Get the starting day based on week_starts_on
+      start_date = first_day.beginning_of_week(week_start_symbol)
+      # Get the ending day based on week_starts_on
+      end_date = last_day.end_of_week(week_start_symbol)
 
       (start_date..end_date).to_a
     end
