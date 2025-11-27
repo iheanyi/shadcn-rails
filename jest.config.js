@@ -7,8 +7,11 @@ export default {
     '^.+\\.js$': 'babel-jest'
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!@hotwired/stimulus|stimulus-use)'
+    '/node_modules/(?!@hotwired/stimulus|stimulus-use|@floating-ui)'
   ],
+  moduleNameMapper: {
+    '^@floating-ui/dom$': '<rootDir>/__mocks__/@floating-ui/dom.js'
+  },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   collectCoverageFrom: [
     'app/assets/javascripts/shadcn/controllers/**/*.js',
