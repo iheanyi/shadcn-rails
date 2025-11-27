@@ -289,7 +289,8 @@ module Shadcn
         "shadcn--calendar-selected-value": format_selected_value,
         "shadcn--calendar-mode-value": @mode.to_s,
         "shadcn--calendar-required-value": @required.to_s,
-        "shadcn--calendar-week-starts-on-value": @week_starts_on.to_s
+        "shadcn--calendar-week-starts-on-value": @week_starts_on.to_s,
+        "shadcn--calendar-show-outside-days-value": @show_outside_days.to_s
       }
 
       # Add optional values only if present

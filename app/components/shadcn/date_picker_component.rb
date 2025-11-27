@@ -33,7 +33,9 @@ module Shadcn
     # @param max_date [Date, nil] Maximum selectable date
     # @param name [String, nil] Form field name for hidden input
     # @param disabled_dates [Array<Date>] Specific dates that cannot be selected
+    # @param disabled_days_of_week [Array<Integer>] Days of week to disable (0=Sun, 6=Sat)
     # @param show_outside_days [Boolean] Whether to show days outside current month
+    # @param week_starts_on [Integer] First day of week (0=Sunday, 1=Monday, etc.)
     # @param placeholder [String] Placeholder text when no date selected
     # @param format [Symbol] Date format (:short, :medium, :long)
     # @param disabled [Boolean] Whether the date picker is disabled
@@ -44,7 +46,9 @@ module Shadcn
       max_date: nil,
       name: nil,
       disabled_dates: [],
+      disabled_days_of_week: [],
       show_outside_days: true,
+      week_starts_on: 0,
       placeholder: "Pick a date",
       format: :medium,
       disabled: false,
@@ -57,7 +61,9 @@ module Shadcn
       @max_date = max_date
       @name = name
       @disabled_dates = disabled_dates
+      @disabled_days_of_week = disabled_days_of_week
       @show_outside_days = show_outside_days
+      @week_starts_on = week_starts_on
       @placeholder = placeholder
       @format = format
       @disabled = disabled
@@ -329,16 +335,34 @@ module Shadcn
     def picker_attributes
       {
         class: cn("relative inline-block", class_name),
-        data: {
-          controller: "shadcn--date-picker",
-          "shadcn--date-picker-open-value": "false",
-          "shadcn--date-picker-month-value": @month.iso8601,
-          "shadcn--date-picker-selected-value": @selected&.iso8601,
-          "shadcn--date-picker-format-value": @format.to_s,
-          "shadcn--date-picker-placeholder-value": @placeholder,
-          action: "keydown.escape->shadcn--date-picker#close click@window->shadcn--date-picker#closeOnClickOutside"
-        }
+        data: stimulus_data
       }.merge(html_options).merge(build_data)
+    end
+
+    def stimulus_data
+      data = {
+        controller: "shadcn--date-picker",
+        "shadcn--date-picker-open-value": "false",
+        "shadcn--date-picker-month-value": @month.iso8601,
+        "shadcn--date-picker-selected-value": @selected&.iso8601,
+        "shadcn--date-picker-format-value": @format.to_s,
+        "shadcn--date-picker-placeholder-value": @placeholder,
+        "shadcn--date-picker-show-outside-days-value": @show_outside_days.to_s,
+        "shadcn--date-picker-week-starts-on-value": @week_starts_on.to_s,
+        action: "keydown.escape->shadcn--date-picker#close click@window->shadcn--date-picker#closeOnClickOutside"
+      }
+
+      # Add optional values only if present
+      data["shadcn--date-picker-min-date-value"] = @min_date.iso8601 if @min_date
+      data["shadcn--date-picker-max-date-value"] = @max_date.iso8601 if @max_date
+      data["shadcn--date-picker-disabled-dates-value"] = format_disabled_dates if @disabled_dates.any?
+      data["shadcn--date-picker-disabled-days-of-week-value"] = @disabled_days_of_week.join(",") if @disabled_days_of_week.any?
+
+      data
+    end
+
+    def format_disabled_dates
+      @disabled_dates.map(&:iso8601).join(",")
     end
   end
 end

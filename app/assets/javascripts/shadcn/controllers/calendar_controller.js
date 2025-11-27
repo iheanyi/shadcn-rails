@@ -27,7 +27,8 @@ export default class extends Controller {
     disabledDates: String, // comma-separated YYYY-MM-DD
     disabledDaysOfWeek: String, // comma-separated 0-6
     required: { type: Boolean, default: false },
-    weekStartsOn: { type: Number, default: 0 } // 0 = Sunday, 1 = Monday, etc.
+    weekStartsOn: { type: Number, default: 0 }, // 0 = Sunday, 1 = Monday, etc.
+    showOutsideDays: { type: Boolean, default: true } // Show days from prev/next month
   }
 
   static MONTHS = [
@@ -487,6 +488,13 @@ export default class extends Controller {
       const isFocused = this.focusedDate && currentDate.toDateString() === this.focusedDate.toDateString()
 
       const dateStr = this.formatDateString(currentDate)
+
+      // Skip outside days if showOutsideDays is false
+      if (isOutside && !this.showOutsideDaysValue) {
+        html += '<div class="h-8 w-8"></div>'
+        currentDate.setDate(currentDate.getDate() + 1)
+        continue
+      }
 
       let classes = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center focus:outline-none focus:ring-1 focus:ring-ring"
 

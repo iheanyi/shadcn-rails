@@ -5,6 +5,11 @@ import { Controller } from "@hotwired/stimulus"
  * Handles opening/closing the calendar popover and date selection
  *
  * API inspired by React DayPicker (https://daypicker.dev/)
+ *
+ * Disabled dates:
+ * - minDate/maxDate: Disable dates outside a range
+ * - disabledDates: Comma-separated list of YYYY-MM-DD dates
+ * - disabledDaysOfWeek: Comma-separated list of day numbers (0=Sun, 6=Sat)
  */
 export default class extends Controller {
   static targets = ["trigger", "content", "grid", "monthYear", "day", "displayValue", "hiddenInput"]
@@ -13,7 +18,13 @@ export default class extends Controller {
     month: String,
     selected: String,
     format: { type: String, default: "medium" },
-    placeholder: { type: String, default: "Pick a date" }
+    placeholder: { type: String, default: "Pick a date" },
+    minDate: String,
+    maxDate: String,
+    disabledDates: String, // comma-separated YYYY-MM-DD
+    disabledDaysOfWeek: String, // comma-separated 0-6
+    showOutsideDays: { type: Boolean, default: true },
+    weekStartsOn: { type: Number, default: 0 } // 0 = Sunday, 1 = Monday, etc.
   }
 
   static MONTHS = [
@@ -42,6 +53,37 @@ export default class extends Controller {
   formatDateString(date) {
     if (!date) return ''
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+  }
+
+  /**
+   * Check if a date is disabled
+   */
+  isDateDisabled(date) {
+    const dateStr = this.formatDateString(date)
+
+    // Check min/max date
+    if (this.minDateValue) {
+      const minDate = this.parseLocalDate(this.minDateValue)
+      if (date < minDate) return true
+    }
+    if (this.maxDateValue) {
+      const maxDate = this.parseLocalDate(this.maxDateValue)
+      if (date > maxDate) return true
+    }
+
+    // Check disabled dates list
+    if (this.disabledDatesValue) {
+      const disabledDates = this.disabledDatesValue.split(",").map(d => d.trim())
+      if (disabledDates.includes(dateStr)) return true
+    }
+
+    // Check disabled days of week
+    if (this.disabledDaysOfWeekValue) {
+      const disabledDays = this.disabledDaysOfWeekValue.split(",").map(d => parseInt(d.trim(), 10))
+      if (disabledDays.includes(date.getDay())) return true
+    }
+
+    return false
   }
 
   toggle() {
@@ -86,7 +128,12 @@ export default class extends Controller {
     const dateStr = event.currentTarget.dataset.date
     if (!dateStr) return
 
-    this.selectedDate = this.parseLocalDate(dateStr)
+    const date = this.parseLocalDate(dateStr)
+
+    // Check if disabled
+    if (this.isDateDisabled(date)) return
+
+    this.selectedDate = date
     this.selectedValue = dateStr
 
     // Update hidden input
@@ -152,13 +199,15 @@ export default class extends Controller {
     const firstDay = new Date(year, month, 1)
     const lastDay = new Date(year, month + 1, 0)
 
-    // Get start date (Sunday of first week)
+    // Get start date based on weekStartsOn
     const startDate = new Date(firstDay)
-    startDate.setDate(firstDay.getDate() - firstDay.getDay())
+    const dayOffset = (firstDay.getDay() - this.weekStartsOnValue + 7) % 7
+    startDate.setDate(firstDay.getDate() - dayOffset)
 
-    // Get end date (Saturday of last week)
+    // Get end date (complete the last week)
     const endDate = new Date(lastDay)
-    endDate.setDate(lastDay.getDate() + (6 - lastDay.getDay()))
+    const endDayOffset = (6 - lastDay.getDay() + this.weekStartsOnValue) % 7
+    endDate.setDate(lastDay.getDate() + endDayOffset)
 
     const today = new Date()
     today.setHours(0, 0, 0, 0)
@@ -171,23 +220,47 @@ export default class extends Controller {
       const isToday = currentDate.getTime() === today.getTime()
       const isSelected = this.selectedDate &&
         currentDate.toDateString() === this.selectedDate.toDateString()
+      const isDisabled = this.isDateDisabled(currentDate)
 
       // Use local date components to avoid timezone issues with toISOString()
-      const dateStr = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`
+      const dateStr = this.formatDateString(currentDate)
 
-      let classes = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center rounded-md cursor-pointer hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-
-      if (isSelected) {
-        classes += " bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground"
-      } else if (isToday) {
-        classes += " bg-accent text-accent-foreground"
+      // Skip outside days if showOutsideDays is false
+      if (isOutside && !this.showOutsideDaysValue) {
+        html += '<div class="h-8 w-8"></div>'
+        currentDate.setDate(currentDate.getDate() + 1)
+        continue
       }
 
-      if (isOutside) {
+      let classes = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center rounded-md focus:outline-none focus:ring-1 focus:ring-ring"
+
+      if (isDisabled) {
+        classes += " text-muted-foreground opacity-50 cursor-not-allowed"
+      } else if (isSelected) {
+        classes += " bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground cursor-pointer"
+      } else if (isToday) {
+        classes += " bg-accent text-accent-foreground cursor-pointer hover:bg-accent hover:text-accent-foreground"
+      } else {
+        classes += " cursor-pointer hover:bg-accent hover:text-accent-foreground"
+      }
+
+      if (isOutside && !isDisabled) {
         classes += " text-muted-foreground opacity-50"
       }
 
-      html += `<button type="button" class="${classes}" data-date="${dateStr}" data-shadcn--date-picker-target="day" data-action="click->shadcn--date-picker#selectDay"${isSelected ? ' aria-selected="true"' : ""}>${currentDate.getDate()}</button>`
+      const ariaAttrs = []
+      if (isSelected) ariaAttrs.push('aria-selected="true"')
+      if (isDisabled) {
+        ariaAttrs.push('aria-disabled="true"')
+        ariaAttrs.push('disabled')
+      }
+
+      // Only add click action for non-disabled days
+      const dataAction = isDisabled
+        ? ''
+        : 'data-action="click->shadcn--date-picker#selectDay"'
+
+      html += `<button type="button" class="${classes}" data-date="${dateStr}" data-shadcn--date-picker-target="day" ${dataAction} ${ariaAttrs.join(" ")}>${currentDate.getDate()}</button>`
 
       currentDate.setDate(currentDate.getDate() + 1)
     }
