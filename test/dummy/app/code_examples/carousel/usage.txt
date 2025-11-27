@@ -1,0 +1,13 @@
+<%= render Shadcn::CarouselComponent.new do |carousel| %>
+  <% carousel.with_slides do |slides| %>
+    <% 5.times do |i| %>
+      <% slides.with_item do %>
+        <div class="p-6 text-center bg-muted rounded-lg">
+          Slide <%= i + 1 %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+  <% carousel.with_previous %>
+  <% carousel.with_next %>
+<% end %>

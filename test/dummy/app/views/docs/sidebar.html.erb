@@ -1,0 +1,354 @@
+<% content_for :title, "Sidebar" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Sidebar</h1>
+    <p class="text-xl text-muted-foreground">A composable, themeable and customizable sidebar component.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Stimulus: shadcn--sidebar
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <div class="w-full border rounded-lg overflow-hidden bg-background" style="height: 400px;">
+      <div class="flex h-full" data-controller="shadcn--sidebar" data-shadcn--sidebar-open-value="true" style="--sidebar-width: 240px; --sidebar-width-icon: 48px;">
+        <!-- Sidebar -->
+        <aside class="w-[240px] border-r bg-sidebar h-full flex flex-col shrink-0">
+          <!-- Header -->
+          <div class="flex h-14 items-center border-b px-4 font-semibold">
+            Acme Inc
+          </div>
+          <!-- Content -->
+          <div class="flex-1 overflow-y-auto py-2">
+            <div class="px-3 py-2">
+              <h2 class="mb-2 px-2 text-xs font-semibold text-sidebar-foreground/70 uppercase tracking-wide">Platform</h2>
+              <div class="space-y-1">
+                <a href="#" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium bg-accent text-accent-foreground">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                  Dashboard
+                </a>
+                <a href="#" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground hover:bg-accent hover:text-accent-foreground">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                  Inbox
+                  <span class="ml-auto bg-primary text-primary-foreground text-xs px-1.5 py-0.5 rounded">3</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground hover:bg-accent hover:text-accent-foreground">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                  Settings
+                </a>
+              </div>
+            </div>
+            <div class="px-3 py-2">
+              <h2 class="mb-2 px-2 text-xs font-semibold text-sidebar-foreground/70 uppercase tracking-wide">Projects</h2>
+              <div class="space-y-1">
+                <a href="#" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground hover:bg-accent hover:text-accent-foreground">
+                  <span class="h-2 w-2 rounded-full bg-blue-500"></span>
+                  Design System
+                </a>
+                <a href="#" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground hover:bg-accent hover:text-accent-foreground">
+                  <span class="h-2 w-2 rounded-full bg-green-500"></span>
+                  Mobile App
+                </a>
+                <a href="#" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground hover:bg-accent hover:text-accent-foreground">
+                  <span class="h-2 w-2 rounded-full bg-orange-500"></span>
+                  Marketing
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- Footer -->
+          <div class="border-t p-4">
+            <div class="flex items-center gap-3">
+              <div class="h-8 w-8 rounded-full bg-muted flex items-center justify-center text-xs font-medium">JD</div>
+              <div class="flex-1 text-sm">
+                <div class="font-medium">John Doe</div>
+                <div class="text-xs text-muted-foreground">john@acme.com</div>
+              </div>
+            </div>
+          </div>
+        </aside>
+        <!-- Main content -->
+        <main class="flex-1 p-6">
+          <h1 class="text-2xl font-bold mb-4">Dashboard</h1>
+          <p class="text-muted-foreground">Welcome to your dashboard. Use the sidebar to navigate.</p>
+        </main>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the sidebar components to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component sidebar" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("sidebar/usage") %>
+  </div>
+
+  <!-- Structure -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Structure</h2>
+    <p class="leading-7">The sidebar component is built from many composable parts:</p>
+    <div class="rounded-lg border">
+      <table class="w-full">
+        <thead>
+          <tr class="border-b bg-muted/50">
+            <th class="text-left p-3 text-sm font-medium">Component</th>
+            <th class="text-left p-3 text-sm font-medium">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b">
+            <td class="p-3 text-sm font-mono">SidebarProviderComponent</td>
+            <td class="p-3 text-sm">Root wrapper that provides sidebar context and state</td>
+          </tr>
+          <tr class="border-b">
+            <td class="p-3 text-sm font-mono">SidebarComponent</td>
+            <td class="p-3 text-sm">The main sidebar container</td>
+          </tr>
+          <tr class="border-b">
+            <td class="p-3 text-sm font-mono">SidebarHeaderComponent</td>
+            <td class="p-3 text-sm">Header section (logo, app name)</td>
+          </tr>
+          <tr class="border-b">
+            <td class="p-3 text-sm font-mono">SidebarContentComponent</td>
+            <td class="p-3 text-sm">Scrollable content area</td>
+          </tr>
+          <tr class="border-b">
+            <td class="p-3 text-sm font-mono">SidebarFooterComponent</td>
+            <td class="p-3 text-sm">Footer section (user profile, settings)</td>
+          </tr>
+          <tr class="border-b">
+            <td class="p-3 text-sm font-mono">SidebarGroupComponent</td>
+            <td class="p-3 text-sm">Group container for menu items</td>
+          </tr>
+          <tr class="border-b">
+            <td class="p-3 text-sm font-mono">SidebarGroupLabelComponent</td>
+            <td class="p-3 text-sm">Label for a group section</td>
+          </tr>
+          <tr class="border-b">
+            <td class="p-3 text-sm font-mono">SidebarMenuComponent</td>
+            <td class="p-3 text-sm">Menu container</td>
+          </tr>
+          <tr class="border-b">
+            <td class="p-3 text-sm font-mono">SidebarMenuItemComponent</td>
+            <td class="p-3 text-sm">Individual menu item</td>
+          </tr>
+          <tr class="border-b">
+            <td class="p-3 text-sm font-mono">SidebarMenuButtonComponent</td>
+            <td class="p-3 text-sm">Button/link within menu item</td>
+          </tr>
+          <tr class="border-b">
+            <td class="p-3 text-sm font-mono">SidebarMenuBadgeComponent</td>
+            <td class="p-3 text-sm">Badge for menu items (counts, status)</td>
+          </tr>
+          <tr class="border-b">
+            <td class="p-3 text-sm font-mono">SidebarMenuSubComponent</td>
+            <td class="p-3 text-sm">Submenu container</td>
+          </tr>
+          <tr class="border-b">
+            <td class="p-3 text-sm font-mono">SidebarRailComponent</td>
+            <td class="p-3 text-sm">Thin rail for collapsed sidebar</td>
+          </tr>
+          <tr class="border-b">
+            <td class="p-3 text-sm font-mono">SidebarTriggerComponent</td>
+            <td class="p-3 text-sm">Toggle button for sidebar</td>
+          </tr>
+          <tr>
+            <td class="p-3 text-sm font-mono">SidebarInsetComponent</td>
+            <td class="p-3 text-sm">Content area with margin for sidebar</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Variants -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Variants</h3>
+      <p class="text-sm text-muted-foreground">The sidebar supports three visual variants.</p>
+      <div class="rounded-lg border p-4">
+        <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+          <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">variant: :sidebar</code> - Default fixed sidebar</li>
+          <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">variant: :floating</code> - Floating sidebar with padding</li>
+          <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">variant: :inset</code> - Inset sidebar with background transparency</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Collapsible Modes -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Collapsible Modes</h3>
+      <p class="text-sm text-muted-foreground">Control how the sidebar collapses.</p>
+      <div class="rounded-lg border p-4">
+        <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+          <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">collapsible: :offcanvas</code> - Slides off screen when collapsed</li>
+          <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">collapsible: :icon</code> - Collapses to icon-only mode</li>
+          <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">collapsible: :none</code> - Non-collapsible sidebar</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Side -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Side</h3>
+      <p class="text-sm text-muted-foreground">Position the sidebar on either side of the viewport.</p>
+      <div class="rounded-lg border p-4">
+        <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+          <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">side: :left</code> - Left side (default)</li>
+          <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">side: :right</code> - Right side</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Keyboard Shortcut -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Keyboard Shortcut</h3>
+      <p class="text-sm text-muted-foreground">Toggle the sidebar with <kbd class="rounded bg-muted px-2 py-1 font-mono text-sm">Cmd/Ctrl + B</kbd>. The shortcut key is customizable:</p>
+      <%= render "docs/code_example", language: "erb", code: '<%= render Shadcn::SidebarProviderComponent.new(keyboard_shortcut: "s") do |provider| %>
+  <!-- Sidebar will toggle with Cmd/Ctrl + S -->
+<% end %>' %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+
+    <h3 class="text-lg font-semibold mt-6 mb-4">SidebarProviderComponent</h3>
+    <%= render "docs/props_table", props: [
+      { name: "default_open", type: "Boolean", default: "true", description: "Whether sidebar starts open" },
+      { name: "open", type: "Boolean", default: "nil", description: "Controlled open state" },
+      { name: "keyboard_shortcut", type: "String", default: "\"b\"", description: "Key for Cmd/Ctrl shortcut" }
+    ] %>
+
+    <h3 class="text-lg font-semibold mt-6 mb-4">SidebarComponent</h3>
+    <%= render "docs/props_table", props: [
+      { name: "side", type: "Symbol", default: ":left", description: "Side to show sidebar (:left, :right)" },
+      { name: "variant", type: "Symbol", default: ":sidebar", description: "Visual style (:sidebar, :floating, :inset)" },
+      { name: "collapsible", type: "Symbol", default: ":offcanvas", description: "Collapse mode (:offcanvas, :icon, :none)" },
+      { name: "default_open", type: "Boolean", default: "true", description: "Whether sidebar starts open" }
+    ] %>
+
+    <div class="mt-6 space-y-4">
+      <h3 class="text-lg font-semibold">SidebarComponent Slots</h3>
+      <div class="rounded-lg border">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b bg-muted/50">
+              <th class="text-left p-3 text-sm font-medium">Slot</th>
+              <th class="text-left p-3 text-sm font-medium">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">with_header</td>
+              <td class="p-3 text-sm">Header section with logo/title</td>
+            </tr>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">with_sidebar_content</td>
+              <td class="p-3 text-sm">Main scrollable content area</td>
+            </tr>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">with_footer</td>
+              <td class="p-3 text-sm">Footer section for user info</td>
+            </tr>
+            <tr>
+              <td class="p-3 text-sm font-mono">with_rail</td>
+              <td class="p-3 text-sm">Thin rail for collapsed state</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stimulus Controller -->
+  <%= render "docs/stimulus_docs",
+    controller: "shadcn--sidebar",
+    description: "Manages sidebar open/closed state, keyboard shortcuts, and responsive behavior.",
+    values: [
+      { name: "open", type: "Boolean", description: "Whether sidebar is open (desktop)" },
+      { name: "openMobile", type: "Boolean", description: "Whether sidebar is open (mobile)" },
+      { name: "keyboardShortcut", type: "String", description: "Key for Cmd/Ctrl shortcut" }
+    ],
+    actions: [
+      { name: "toggle", description: "Toggle sidebar open/closed" },
+      { name: "open", description: "Open the sidebar" },
+      { name: "close", description: "Close the sidebar" },
+      { name: "clickOutside", description: "Close on outside click (mobile)" }
+    ]
+  %>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Keyboard shortcut: <kbd class="rounded bg-muted px-2 py-1 font-mono text-sm">Cmd/Ctrl + B</kbd> to toggle</li>
+      <li>State is persisted in a cookie across page loads</li>
+      <li>Responsive behavior: collapses automatically on mobile screens</li>
+      <li>Click outside to close on mobile devices</li>
+      <li>Smooth transitions between expanded and collapsed states</li>
+    </ul>
+  </div>
+
+  <!-- CSS Variables -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Theming</h2>
+    <p class="leading-7">The sidebar uses CSS custom properties for theming:</p>
+    <div class="rounded-lg border">
+      <table class="w-full">
+        <thead>
+          <tr class="border-b bg-muted/50">
+            <th class="text-left p-3 text-sm font-medium">Variable</th>
+            <th class="text-left p-3 text-sm font-medium">Default</th>
+            <th class="text-left p-3 text-sm font-medium">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b">
+            <td class="p-3 text-sm font-mono">--sidebar-width</td>
+            <td class="p-3 text-sm">16rem</td>
+            <td class="p-3 text-sm">Width of expanded sidebar</td>
+          </tr>
+          <tr class="border-b">
+            <td class="p-3 text-sm font-mono">--sidebar-width-icon</td>
+            <td class="p-3 text-sm">3rem</td>
+            <td class="p-3 text-sm">Width when collapsed to icons</td>
+          </tr>
+          <tr class="border-b">
+            <td class="p-3 text-sm font-mono">--sidebar-background</td>
+            <td class="p-3 text-sm">hsl(var(--sidebar))</td>
+            <td class="p-3 text-sm">Background color</td>
+          </tr>
+          <tr>
+            <td class="p-3 text-sm font-mono">--sidebar-foreground</td>
+            <td class="p-3 text-sm">hsl(var(--sidebar-foreground))</td>
+            <td class="p-3 text-sm">Text color</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

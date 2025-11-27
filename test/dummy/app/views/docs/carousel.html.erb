@@ -1,0 +1,295 @@
+<% content_for :title, "Carousel" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Carousel</h1>
+    <p class="text-xl text-muted-foreground">A carousel with motion and swipe built using Stimulus.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Stimulus: shadcn--carousel
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <div class="w-full max-w-md mx-auto px-12">
+      <%= render Shadcn::CarouselComponent.new do |carousel| %>
+        <% carousel.with_slides do |slides| %>
+          <% 5.times do |i| %>
+            <% slides.with_item do %>
+              <div class="flex aspect-square items-center justify-center p-6 bg-muted rounded-lg">
+                <span class="text-4xl font-semibold"><%= i + 1 %></span>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+        <% carousel.with_previous %>
+        <% carousel.with_next %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component carousel" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("carousel/usage") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- With Images -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Images</h3>
+      <p class="text-sm text-muted-foreground">Display images in a carousel.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-lg mx-auto px-12">
+          <%= render Shadcn::CarouselComponent.new do |carousel| %>
+            <% carousel.with_slides do |slides| %>
+              <% slides.with_item do %>
+                <div class="aspect-video bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white text-xl font-bold">
+                  Image 1
+                </div>
+              <% end %>
+              <% slides.with_item do %>
+                <div class="aspect-video bg-gradient-to-br from-green-500 to-teal-600 rounded-lg flex items-center justify-center text-white text-xl font-bold">
+                  Image 2
+                </div>
+              <% end %>
+              <% slides.with_item do %>
+                <div class="aspect-video bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center text-white text-xl font-bold">
+                  Image 3
+                </div>
+              <% end %>
+            <% end %>
+            <% carousel.with_previous %>
+            <% carousel.with_next %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Sizes -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Custom Item Sizes</h3>
+      <p class="text-sm text-muted-foreground">Use the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">basis</code> prop on items to show multiple slides at once.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-xl mx-auto px-12">
+          <%= render Shadcn::CarouselComponent.new do |carousel| %>
+            <% carousel.with_slides do |slides| %>
+              <% 8.times do |i| %>
+                <% slides.with_item(basis: "basis-1/3") do %>
+                  <div class="flex aspect-square items-center justify-center p-4 bg-muted rounded-lg">
+                    <span class="text-2xl font-semibold"><%= i + 1 %></span>
+                  </div>
+                <% end %>
+              <% end %>
+            <% end %>
+            <% carousel.with_previous %>
+            <% carousel.with_next %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Vertical -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Vertical Orientation</h3>
+      <p class="text-sm text-muted-foreground">Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">orientation: :vertical</code> for vertical carousels.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-xs mx-auto pt-12 pb-12">
+          <%= render Shadcn::CarouselComponent.new(orientation: :vertical) do |carousel| %>
+            <% carousel.with_slides(class_name: "max-h-[200px]") do |slides| %>
+              <% 5.times do |i| %>
+                <% slides.with_item do %>
+                  <div class="flex h-[80px] items-center justify-center bg-muted rounded-lg">
+                    <span class="text-2xl font-semibold"><%= i + 1 %></span>
+                  </div>
+                <% end %>
+              <% end %>
+            <% end %>
+            <% carousel.with_previous %>
+            <% carousel.with_next %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Loop -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Infinite Loop</h3>
+      <p class="text-sm text-muted-foreground">Enable infinite looping with the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">loop</code> option.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-md mx-auto px-12">
+          <%= render Shadcn::CarouselComponent.new(loop: true) do |carousel| %>
+            <% carousel.with_slides do |slides| %>
+              <% 5.times do |i| %>
+                <% slides.with_item do %>
+                  <div class="flex aspect-square items-center justify-center p-6 bg-muted rounded-lg">
+                    <span class="text-4xl font-semibold"><%= i + 1 %></span>
+                  </div>
+                <% end %>
+              <% end %>
+            <% end %>
+            <% carousel.with_previous %>
+            <% carousel.with_next %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Autoplay -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Autoplay</h3>
+      <p class="text-sm text-muted-foreground">Automatically advance slides with the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">autoplay</code> option.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-md mx-auto px-12">
+          <%= render Shadcn::CarouselComponent.new(autoplay: true, autoplay_interval: 3000, loop: true) do |carousel| %>
+            <% carousel.with_slides do |slides| %>
+              <% 5.times do |i| %>
+                <% slides.with_item do %>
+                  <div class="flex aspect-square items-center justify-center p-6 bg-primary text-primary-foreground rounded-lg">
+                    <span class="text-4xl font-semibold"><%= i + 1 %></span>
+                  </div>
+                <% end %>
+              <% end %>
+            <% end %>
+            <% carousel.with_previous %>
+            <% carousel.with_next %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Card Content -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Card Content</h3>
+      <p class="text-sm text-muted-foreground">Carousel items can contain any content, including cards.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-lg mx-auto px-12">
+          <%= render Shadcn::CarouselComponent.new do |carousel| %>
+            <% carousel.with_slides do |slides| %>
+              <% [
+                { title: "Getting Started", desc: "Learn the basics of the framework" },
+                { title: "Components", desc: "Explore our component library" },
+                { title: "Theming", desc: "Customize colors and styles" }
+              ].each do |card| %>
+                <% slides.with_item do %>
+                  <%= render Shadcn::CardComponent.new do |c| %>
+                    <% c.with_header do |header| %>
+                      <% header.with_title { card[:title] } %>
+                      <% header.with_description { card[:desc] } %>
+                    <% end %>
+                    <% c.with_content do %>
+                      <div class="h-24 bg-muted rounded flex items-center justify-center">
+                        Content goes here
+                      </div>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              <% end %>
+            <% end %>
+            <% carousel.with_previous %>
+            <% carousel.with_next %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+    <%= render "docs/props_table", props: [
+      { name: "orientation", type: "Symbol", default: ":horizontal", description: "Direction of carousel (:horizontal, :vertical)" },
+      { name: "loop", type: "Boolean", default: "false", description: "Whether to loop infinitely" },
+      { name: "autoplay", type: "Boolean", default: "false", description: "Whether to auto-advance slides" },
+      { name: "autoplay_interval", type: "Integer", default: "4000", description: "Milliseconds between auto-advance" },
+      { name: "align", type: "Symbol", default: ":start", description: "Item alignment (:start, :center, :end)" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes" }
+    ] %>
+
+    <div class="mt-6 space-y-4">
+      <h3 class="text-lg font-semibold">Slots</h3>
+      <div class="rounded-lg border">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b bg-muted/50">
+              <th class="text-left p-3 text-sm font-medium">Slot</th>
+              <th class="text-left p-3 text-sm font-medium">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">with_slides</td>
+              <td class="p-3 text-sm">Container for carousel items</td>
+            </tr>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">slides.with_item(basis:)</td>
+              <td class="p-3 text-sm">Individual carousel item. Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">basis</code> for custom widths</td>
+            </tr>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">with_previous</td>
+              <td class="p-3 text-sm">Previous slide button</td>
+            </tr>
+            <tr>
+              <td class="p-3 text-sm font-mono">with_next</td>
+              <td class="p-3 text-sm">Next slide button</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stimulus Controller -->
+  <%= render "docs/stimulus_docs",
+    controller: "shadcn--carousel",
+    description: "Manages carousel navigation, autoplay, keyboard navigation, and touch/swipe gestures.",
+    values: [
+      { name: "orientation", type: "String", description: "Direction (horizontal or vertical)" },
+      { name: "loop", type: "Boolean", description: "Whether to loop infinitely" },
+      { name: "autoplay", type: "Boolean", description: "Whether to auto-advance" },
+      { name: "autoplayInterval", type: "Number", description: "Milliseconds between auto-advance" },
+      { name: "align", type: "String", description: "Item alignment (start, center, end)" },
+      { name: "selectedIndex", type: "Number", description: "Currently selected slide index" }
+    ],
+    actions: [
+      { name: "previous", description: "Go to the previous slide" },
+      { name: "next", description: "Go to the next slide" },
+      { name: "goToSlide", description: "Go to a specific slide by index (use data-index)" }
+    ]
+  %>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="region"</code> with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-roledescription="carousel"</code></li>
+      <li>Each slide has <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="group"</code> with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-roledescription="slide"</code></li>
+      <li>Non-visible slides are marked with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-hidden="true"</code> and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">inert</code></li>
+      <li>Keyboard navigation: Arrow Left/Right (horizontal) or Up/Down (vertical)</li>
+      <li>Touch/swipe support on mobile devices</li>
+      <li>Autoplay pauses on hover and touch interaction</li>
+    </ul>
+  </div>
+</div>
