@@ -57,10 +57,7 @@ module Shadcn
 
     def call
       content_tag(:div, group_attributes) do
-        safe_join([
-          items.map(&:to_s),
-          content
-        ].flatten.compact)
+        content
       end
     end
 
