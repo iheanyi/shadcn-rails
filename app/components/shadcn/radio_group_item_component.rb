@@ -8,6 +8,9 @@ module Shadcn
   # @example With label parameter (Tier 2 API)
   #   <%= group.with_item(value: "free", label: "Free") %>
   #
+  # @example With label and description
+  #   <%= group.with_item(value: "pro", label: "Pro", description: "For professional developers") %>
+  #
   # @example With block content (backward compatible)
   #   <%= group.with_item(value: "free") { "Free" } %>
   #
@@ -36,10 +39,12 @@ module Shadcn
     ].join(" ")
 
     LABEL_CLASSES = "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+    DESCRIPTION_CLASSES = "text-sm text-muted-foreground"
 
     # @param value [String] The value for this radio option
     # @param id [String, nil] HTML id attribute
     # @param label [String, nil] Label text (alternative to block content)
+    # @param description [String, nil] Description text displayed below the label
     # @param disabled [Boolean] Whether this option is disabled
     # @param group_name [String, nil] The name attribute from parent group
     # @param selected [Boolean] Whether this option is selected
@@ -47,6 +52,7 @@ module Shadcn
       value:,
       id: nil,
       label: nil,
+      description: nil,
       disabled: false,
       group_name: nil,
       selected: false,
@@ -57,6 +63,7 @@ module Shadcn
       @value = value
       @id = id || "radio-#{value}"
       @label = label
+      @description = description
       @disabled = disabled
       @group_name = group_name
       @selected = selected
@@ -66,12 +73,17 @@ module Shadcn
       label_text = @label || content.presence
 
       if label_text.present?
-        # Render with integrated label
-        content_tag(:label, label_wrapper_attributes) do
-          safe_join([
-            radio_input,
-            content_tag(:span, label_text, class: LABEL_CLASSES)
-          ])
+        if @description.present?
+          # Render with label and description
+          render_with_description(label_text)
+        else
+          # Render with integrated label only
+          content_tag(:label, label_wrapper_attributes) do
+            safe_join([
+              radio_input,
+              content_tag(:span, label_text, class: LABEL_CLASSES)
+            ])
+          end
         end
       else
         # Render just the radio input (for use with external labels)
@@ -80,6 +92,20 @@ module Shadcn
     end
 
     private
+
+    def render_with_description(label_text)
+      content_tag(:div, class: "flex items-start space-x-3") do
+        safe_join([
+          content_tag(:div, class: "mt-0.5") { radio_input },
+          content_tag(:div, class: "grid gap-1.5 leading-none") do
+            safe_join([
+              content_tag(:label, label_text, class: cn(LABEL_CLASSES, "cursor-pointer"), for: @id),
+              content_tag(:p, @description, class: DESCRIPTION_CLASSES)
+            ])
+          end
+        ])
+      end
+    end
 
     def radio_input
       tag(:input, input_attributes)
