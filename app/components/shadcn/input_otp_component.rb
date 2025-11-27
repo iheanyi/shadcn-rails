@@ -51,11 +51,10 @@ module Shadcn
 
     def call
       tag.div(**container_attributes) do
-        if groups.any?
-          render_with_groups
-        else
-          render_default_slots
-        end
+        safe_join([
+          hidden_input,
+          groups.any? ? render_with_groups : render_default_slots
+        ])
       end
     end
 
@@ -73,32 +72,51 @@ module Shadcn
       }.merge(html_options).merge(build_data).compact
     end
 
-    def render_with_groups
-      parts = []
-      groups.each_with_index do |group, index|
-        parts << group
-        # Add separator after group if there are more groups
-        if separators[index] && index < groups.size - 1
-          parts << separators[index]
-        end
-      end
-      safe_join(parts)
-    end
-
-    def render_default_slots
-      # Hidden input for form submission
-      hidden_input = tag.input(
+    def hidden_input
+      tag.input(
         type: "hidden",
         name: @name,
         data: { "shadcn--input-otp-target": "hiddenInput" }
       )
+    end
 
+    def render_with_groups
+      parts = []
+      slot_index = 0
+
+      groups.each_with_index do |group, group_index|
+        # Render the group with its slots
+        group_slots = group.slots.times.map do |_|
+          slot = render_slot(slot_index)
+          slot_index += 1
+          slot
+        end
+
+        parts << tag.div(class: "flex items-center") { safe_join(group_slots) }
+
+        # Add separator after group if there's another group
+        if group_index < groups.size - 1
+          separator = separators[group_index]
+          parts << (separator || default_separator)
+        end
+      end
+
+      safe_join(parts)
+    end
+
+    def default_separator
+      tag.div(class: "flex items-center justify-center px-2", role: "separator") do
+        tag.span(class: "text-muted-foreground") { "-" }
+      end
+    end
+
+    def render_default_slots
       # Render all slots in one group
       slots = @length.times.map do |index|
         render_slot(index)
       end
 
-      safe_join([hidden_input, tag.div(class: "flex items-center") { safe_join(slots) }])
+      tag.div(class: "flex items-center") { safe_join(slots) }
     end
 
     def render_slot(index)
@@ -153,11 +171,11 @@ module Shadcn
 
     # Separator subcomponent
     class SeparatorComponent < BaseComponent
-      BASE_CLASSES = "flex items-center justify-center"
+      BASE_CLASSES = "flex items-center justify-center px-2"
 
       def call
         tag.div(class: merge_classes(BASE_CLASSES), role: "separator", **html_options.merge(build_data)) do
-          content.presence || tag.span(class: "w-2 h-px bg-border")
+          content.presence || tag.span(class: "text-muted-foreground") { "-" }
         end
       end
     end

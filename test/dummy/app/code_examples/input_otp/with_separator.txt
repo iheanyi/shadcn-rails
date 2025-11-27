@@ -1,0 +1,5 @@
+<%= render Shadcn::InputOtpComponent.new(length: 6, name: "otp") do |otp| %>
+  <% otp.with_group(slots: 3) %>
+  <% otp.with_separator %>
+  <% otp.with_group(slots: 3) %>
+<% end %>

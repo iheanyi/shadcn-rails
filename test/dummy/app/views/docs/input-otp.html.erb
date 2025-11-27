@@ -43,6 +43,22 @@
   <div id="examples" class="space-y-8">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
 
+    <!-- With Separator -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Separator</h3>
+      <p class="text-sm text-muted-foreground">
+        Group slots and add separators between them for common OTP formats like XXX-XXX.
+      </p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::InputOtpComponent.new(length: 6, name: "otp_grouped") do |otp| %>
+          <% otp.with_group(slots: 3) %>
+          <% otp.with_separator %>
+          <% otp.with_group(slots: 3) %>
+        <% end %>
+      <% end %>
+      <%= erb_example("input_otp/with_separator") %>
+    </div>
+
     <!-- 4-Digit PIN -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">4-Digit PIN</h3>
@@ -94,6 +110,8 @@
   <!-- API Reference -->
   <div id="api-reference">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">Props</h3>
     <%= render "docs/props_table", props: [
       { name: "length", type: "Integer", default: "6", description: "Number of OTP digits" },
       { name: "name", type: "String", default: "nil", description: "Input name for form submission" },
@@ -103,6 +121,31 @@
       { name: "autocomplete", type: "String", default: "one-time-code", description: "Autocomplete attribute" },
       { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" }
     ] %>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">Slots</h3>
+    <div class="relative w-full overflow-auto">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="[&_tr]:border-b">
+          <tr class="border-b transition-colors">
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Slot</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Props</th>
+            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Description</th>
+          </tr>
+        </thead>
+        <tbody class="[&_tr:last-child]:border-0">
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_group</td>
+            <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">slots: 3</code></td>
+            <td class="p-4 align-middle text-muted-foreground">Creates a visual group of OTP slots</td>
+          </tr>
+          <tr class="border-b transition-colors hover:bg-muted/50">
+            <td class="p-4 align-middle font-mono text-sm">with_separator</td>
+            <td class="p-4 align-middle">-</td>
+            <td class="p-4 align-middle text-muted-foreground">Adds a separator (dash) between groups</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <!-- Stimulus Controller -->
