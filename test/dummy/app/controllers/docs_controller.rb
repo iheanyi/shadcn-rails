@@ -181,6 +181,12 @@ class DocsController < ApplicationController
       description: "Displays an empty state with media, title, description, and action content.",
       has_stimulus: false
     },
+    "item" => {
+      name: "Item",
+      category: "Data Display",
+      description: "A flexible flex container for displaying titles, descriptions, and actions.",
+      has_stimulus: false
+    },
     "scroll-area" => {
       name: "Scroll Area",
       category: "Data Display",

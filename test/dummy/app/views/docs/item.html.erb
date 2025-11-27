@@ -1,0 +1,256 @@
+<% content_for :title, "Item" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Item</h1>
+    <p class="text-xl text-muted-foreground">A flexible flex container for displaying titles, descriptions, and actions.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+        No JavaScript Required
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <div class="w-full max-w-md space-y-4">
+      <%= render Shadcn::ItemComponent.new do |item| %>
+        <% item.with_media(variant: :icon) do %>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+        <% end %>
+        <% item.with_content do |content| %>
+          <% content.with_title { "Photo Library" } %>
+          <% content.with_description { "Manage your photos and albums" } %>
+        <% end %>
+        <% item.with_actions do %>
+          <%= render Shadcn::ButtonComponent.new(variant: :outline, size: :sm) { "Open" } %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component item" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("item/default") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Outline Variant -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Outline Variant</h3>
+      <p class="text-sm text-muted-foreground">Use the outline variant for bordered items.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-md">
+          <%= render Shadcn::ItemComponent.new(variant: :outline) do |item| %>
+            <% item.with_media(variant: :icon) do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/></svg>
+            <% end %>
+            <% item.with_content do |content| %>
+              <% content.with_title { "Documents" } %>
+              <% content.with_description { "View and edit your documents" } %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= erb_example("item/outline") %>
+    </div>
+
+    <!-- Muted Variant -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Muted Variant</h3>
+      <p class="text-sm text-muted-foreground">Use the muted variant for subtle backgrounds.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-md">
+          <%= render Shadcn::ItemComponent.new(variant: :muted) do |item| %>
+            <% item.with_media(variant: :icon) do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 14.14 14.14"/></svg>
+            <% end %>
+            <% item.with_content do |content| %>
+              <% content.with_title { "Blocked" } %>
+              <% content.with_description { "This feature is currently unavailable" } %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= erb_example("item/muted") %>
+    </div>
+
+    <!-- As Link -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">As Link</h3>
+      <p class="text-sm text-muted-foreground">Use the href prop to render as a clickable link.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-md">
+          <%= render Shadcn::ItemComponent.new(href: "#", class_name: "hover:bg-accent rounded-lg cursor-pointer transition-colors") do |item| %>
+            <% item.with_media(variant: :icon) do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            <% end %>
+            <% item.with_content do |content| %>
+              <% content.with_title { "Settings" } %>
+              <% content.with_description { "Manage your account settings" } %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= erb_example("item/as_link") %>
+    </div>
+
+    <!-- With Avatar -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Avatar</h3>
+      <p class="text-sm text-muted-foreground">Use with avatars for user lists.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-md">
+          <%= render Shadcn::ItemComponent.new do |item| %>
+            <% item.with_media do %>
+              <%= render Shadcn::AvatarComponent.new(
+                src: "https://github.com/shadcn.png",
+                alt: "John Doe"
+              ) %>
+            <% end %>
+            <% item.with_content do |content| %>
+              <% content.with_title { "John Doe" } %>
+              <% content.with_description { "john@example.com" } %>
+            <% end %>
+            <% item.with_actions do %>
+              <%= render Shadcn::ButtonComponent.new(variant: :ghost, size: :sm) { "Message" } %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= erb_example("item/with_avatar") %>
+    </div>
+
+    <!-- Item List -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Item List</h3>
+      <p class="text-sm text-muted-foreground">Combine multiple items with separators.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-md border rounded-lg divide-y">
+          <%= render Shadcn::ItemComponent.new do |item| %>
+            <% item.with_media(variant: :icon) do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+            <% end %>
+            <% item.with_content do |content| %>
+              <% content.with_title { "Payments" } %>
+              <% content.with_description { "Manage payment methods" } %>
+            <% end %>
+          <% end %>
+          <%= render Shadcn::ItemComponent.new do |item| %>
+            <% item.with_media(variant: :icon) do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            <% end %>
+            <% item.with_content do |content| %>
+              <% content.with_title { "Notifications" } %>
+              <% content.with_description { "Configure notification settings" } %>
+            <% end %>
+          <% end %>
+          <%= render Shadcn::ItemComponent.new do |item| %>
+            <% item.with_media(variant: :icon) do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <% end %>
+            <% item.with_content do |content| %>
+              <% content.with_title { "Security" } %>
+              <% content.with_description { "Manage security preferences" } %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">ItemComponent</h3>
+    <%= render "docs/props_table", props: [
+      { name: "variant", type: "Symbol", default: ":default", description: "Visual style - :default, :outline, or :muted" },
+      { name: "size", type: "Symbol", default: ":default", description: "Size variant - :default or :sm" },
+      { name: "tag", type: "Symbol", default: ":div", description: "HTML tag to render (:div, :li, etc.)" },
+      { name: "href", type: "String", default: "nil", description: "URL for link items (automatically uses :a tag)" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" }
+    ] %>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">ItemMediaComponent</h3>
+    <%= render "docs/props_table", props: [
+      { name: "variant", type: "Symbol", default: ":default", description: "Media variant - :default, :icon, or :image" }
+    ] %>
+
+    <div class="mt-6 space-y-4">
+      <h3 class="text-lg font-semibold">Slots</h3>
+      <div class="rounded-lg border">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b bg-muted/50">
+              <th class="text-left p-3 text-sm font-medium">Slot</th>
+              <th class="text-left p-3 text-sm font-medium">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">with_media(variant:)</td>
+              <td class="p-3 text-sm">Media slot for icons, images, or avatars</td>
+            </tr>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">with_content</td>
+              <td class="p-3 text-sm">Content wrapper containing title and description slots</td>
+            </tr>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">with_title</td>
+              <td class="p-3 text-sm">Title text (inside content slot)</td>
+            </tr>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">with_description</td>
+              <td class="p-3 text-sm">Description text (inside content slot)</td>
+            </tr>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">with_actions</td>
+              <td class="p-3 text-sm">Container for action buttons</td>
+            </tr>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">with_header</td>
+              <td class="p-3 text-sm">Header content above main content</td>
+            </tr>
+            <tr>
+              <td class="p-3 text-sm font-mono">with_footer</td>
+              <td class="p-3 text-sm">Footer content below main content</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Use the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">tag: :li</code> prop when rendering inside a list</li>
+      <li>Interactive items should have visible focus states</li>
+      <li>When using href, the component automatically renders as an anchor tag</li>
+      <li>Use separators with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="separator"</code> between items</li>
+    </ul>
+  </div>
+</div>

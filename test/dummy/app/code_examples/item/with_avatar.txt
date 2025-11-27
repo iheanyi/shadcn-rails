@@ -1,0 +1,15 @@
+<%= render Shadcn::ItemComponent.new do |item| %>
+  <% item.with_media do %>
+    <%= render Shadcn::AvatarComponent.new(
+      src: "https://github.com/shadcn.png",
+      alt: "John Doe"
+    ) %>
+  <% end %>
+  <% item.with_content do |content| %>
+    <% content.with_title { "John Doe" } %>
+    <% content.with_description { "john@example.com" } %>
+  <% end %>
+  <% item.with_actions do %>
+    <%= render Shadcn::ButtonComponent.new(variant: :ghost, size: :sm) { "Message" } %>
+  <% end %>
+<% end %>
