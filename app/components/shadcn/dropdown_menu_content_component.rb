@@ -5,17 +5,32 @@ module Shadcn
   class DropdownMenuContentComponent < BaseComponent
     BASE_CLASSES = "z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2"
 
-    renders_many :items, lambda { |**options, &block|
-      DropdownMenuItemComponent.new(**options, &block)
-    }
-    renders_many :labels, lambda { |**options, &block|
-      DropdownMenuLabelComponent.new(**options, &block)
-    }
-    renders_many :separators, lambda { |**options|
-      DropdownMenuSeparatorComponent.new(**options)
-    }
-    renders_many :groups, lambda { |**options, &block|
-      DropdownMenuGroupComponent.new(**options, &block)
+    # Use polymorphic slots to preserve the order of items, labels, separators, and groups
+    renders_many :menu_items, types: {
+      item: {
+        renders: lambda { |**options, &block|
+          DropdownMenuItemComponent.new(**options, &block)
+        },
+        as: :item
+      },
+      label: {
+        renders: lambda { |**options, &block|
+          DropdownMenuLabelComponent.new(**options, &block)
+        },
+        as: :label
+      },
+      separator: {
+        renders: lambda { |**options|
+          DropdownMenuSeparatorComponent.new(**options)
+        },
+        as: :separator
+      },
+      group: {
+        renders: lambda { |**options, &block|
+          DropdownMenuGroupComponent.new(**options, &block)
+        },
+        as: :group
+      }
     }
 
     def call
@@ -25,12 +40,14 @@ module Shadcn
     private
 
     def menu_content
-      # If items/labels/separators are used, render them
-      # Otherwise render the block content
-      if items.any? || labels.any? || separators.any? || groups.any?
-        safe_join([labels, items, separators, groups, content].flatten.compact)
+      # Trigger slot evaluation first by accessing content
+      raw_content = content
+      # If polymorphic slots were used, render them in order
+      if menu_items.any?
+        safe_join(menu_items)
       else
-        content
+        # Otherwise render the raw block content (for backwards compatibility)
+        raw_content
       end
     end
 
