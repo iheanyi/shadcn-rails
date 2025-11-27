@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    shadcn-rails (0.1.0)
+    shadcn-rails (0.2.0)
       railties (>= 7.0)
       stimulus-rails (>= 1.0)
       tailwind_merge (>= 0.10)
