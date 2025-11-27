@@ -1,0 +1,221 @@
+<% content_for :title, "Empty" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <!-- Header -->
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Empty</h1>
+    <p class="text-xl text-muted-foreground">Displays an empty state with media, title, description, and action content.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+        No JavaScript Required
+      </span>
+    </div>
+  </div>
+
+  <!-- Preview -->
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::EmptyComponent.new do |empty| %>
+      <% empty.with_header do |header| %>
+        <% header.with_media(variant: :icon) do %>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>
+        <% end %>
+        <% header.with_title { "No Projects Yet" } %>
+        <% header.with_description { "You haven't created any projects yet. Get started by creating your first project." } %>
+      <% end %>
+      <% empty.with_content do %>
+        <div class="flex gap-2">
+          <%= render Shadcn::ButtonComponent.new { "Create Project" } %>
+          <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Import Project" } %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <!-- Installation -->
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:component empty" %>
+  </div>
+
+  <!-- Usage -->
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <%= erb_example("empty/default") %>
+  </div>
+
+  <!-- Examples -->
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <!-- Outline Variant -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Outline Style</h3>
+      <p class="text-sm text-muted-foreground">Use a dashed border for a more subtle empty state.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::EmptyComponent.new(class_name: "border border-dashed rounded-lg") do |empty| %>
+          <% empty.with_header do |header| %>
+            <% header.with_media(variant: :icon) do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+            <% end %>
+            <% header.with_title { "Cloud Storage Empty" } %>
+            <% header.with_description { "Upload files to your cloud storage to access them anywhere." } %>
+          <% end %>
+          <% empty.with_content do %>
+            <%= render Shadcn::ButtonComponent.new(variant: :outline, size: :sm) { "Upload Files" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("empty/outline") %>
+    </div>
+
+    <!-- Background Gradient -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Background Gradient</h3>
+      <p class="text-sm text-muted-foreground">Add a subtle gradient background for visual interest.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::EmptyComponent.new(class_name: "bg-gradient-to-b from-muted/50 to-background from-30% rounded-lg") do |empty| %>
+          <% empty.with_header do |header| %>
+            <% header.with_media(variant: :icon) do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            <% end %>
+            <% header.with_title { "No Notifications" } %>
+            <% header.with_description { "You're all caught up. New notifications will appear here." } %>
+          <% end %>
+          <% empty.with_content do %>
+            <%= render Shadcn::ButtonComponent.new(variant: :outline, size: :sm) do %>
+              <svg class="mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+              Refresh
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("empty/notifications") %>
+    </div>
+
+    <!-- With Avatar -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Avatar</h3>
+      <p class="text-sm text-muted-foreground">Use the default media variant to display an avatar or image.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::EmptyComponent.new do |empty| %>
+          <% empty.with_header do |header| %>
+            <% header.with_media do %>
+              <%= render Shadcn::AvatarComponent.new(
+                src: "https://github.com/shadcn.png",
+                alt: "User",
+                size: :lg,
+                class_name: "grayscale"
+              ) %>
+            <% end %>
+            <% header.with_title { "User Offline" } %>
+            <% header.with_description { "This user is currently offline. You can leave a message or try again later." } %>
+          <% end %>
+          <% empty.with_content do %>
+            <%= render Shadcn::ButtonComponent.new(size: :sm) { "Leave Message" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= erb_example("empty/with_avatar") %>
+    </div>
+
+    <!-- 404 Page -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">404 Page</h3>
+      <p class="text-sm text-muted-foreground">Use for error pages with a search input.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::EmptyComponent.new do |empty| %>
+          <% empty.with_header do |header| %>
+            <% header.with_title { "404 - Not Found" } %>
+            <% header.with_description { "The page you're looking for doesn't exist. Try searching below." } %>
+          <% end %>
+          <% empty.with_content do %>
+            <div class="w-full max-w-sm">
+              <%= render Shadcn::InputGroupComponent.new do |group| %>
+                <% group.with_input(placeholder: "Try searching for pages...") %>
+                <% group.with_addon do %>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <% end %>
+              <% end %>
+            </div>
+            <p class="text-sm text-muted-foreground">
+              Need help? <a href="#" class="text-primary underline-offset-4 hover:underline">Contact support</a>
+            </p>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- API Reference -->
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">EmptyComponent</h3>
+    <%= render "docs/props_table", props: [
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" }
+    ] %>
+
+    <h3 class="text-lg font-semibold mt-6 mb-3">EmptyMediaComponent</h3>
+    <%= render "docs/props_table", props: [
+      { name: "variant", type: "Symbol", default: ":default", description: "Media variant - :default or :icon" },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes to apply" }
+    ] %>
+
+    <div class="mt-6 space-y-4">
+      <h3 class="text-lg font-semibold">Slots</h3>
+      <div class="rounded-lg border">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b bg-muted/50">
+              <th class="text-left p-3 text-sm font-medium">Slot</th>
+              <th class="text-left p-3 text-sm font-medium">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">with_header</td>
+              <td class="p-3 text-sm">Header section containing media, title, and description</td>
+            </tr>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">with_media(variant:)</td>
+              <td class="p-3 text-sm">Media slot for icons, avatars, or images. Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">variant: :icon</code> for icon styling.</td>
+            </tr>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">with_title</td>
+              <td class="p-3 text-sm">Title text for the empty state</td>
+            </tr>
+            <tr class="border-b">
+              <td class="p-3 text-sm font-mono">with_description</td>
+              <td class="p-3 text-sm">Description text explaining the empty state</td>
+            </tr>
+            <tr>
+              <td class="p-3 text-sm font-mono">with_content</td>
+              <td class="p-3 text-sm">Action content area (buttons, inputs, etc.)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accessibility -->
+  <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Empty states should provide clear guidance on what the user can do next</li>
+      <li>Use appropriate heading levels for the title based on page context</li>
+      <li>Ensure action buttons are keyboard accessible</li>
+      <li>Consider using aria-live regions if the empty state appears dynamically</li>
+    </ul>
+  </div>
+</div>

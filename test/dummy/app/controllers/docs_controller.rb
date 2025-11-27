@@ -175,6 +175,12 @@ class DocsController < ApplicationController
       description: "Displays content within a desired ratio.",
       has_stimulus: false
     },
+    "empty" => {
+      name: "Empty",
+      category: "Data Display",
+      description: "Displays an empty state with media, title, description, and action content.",
+      has_stimulus: false
+    },
     "scroll-area" => {
       name: "Scroll Area",
       category: "Data Display",
