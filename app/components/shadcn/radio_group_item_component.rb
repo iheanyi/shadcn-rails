@@ -4,6 +4,16 @@ module Shadcn
   # Individual radio button item using native <input type="radio">
   # Styled with CSS to match shadcn/ui design
   # Works without JavaScript
+  #
+  # @example With label parameter (Tier 2 API)
+  #   <%= group.with_item(value: "free", label: "Free") %>
+  #
+  # @example With block content (backward compatible)
+  #   <%= group.with_item(value: "free") { "Free" } %>
+  #
+  # @example Without label (for external labels)
+  #   <%= group.with_item(value: "free", id: "plan-free") %>
+  #
   class RadioGroupItemComponent < BaseComponent
     # CSS classes for the native radio input styled as a custom circle
     ITEM_CLASSES = [
@@ -25,9 +35,18 @@ module Shadcn
       "transition-colors"
     ].join(" ")
 
+    LABEL_CLASSES = "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+
+    # @param value [String] The value for this radio option
+    # @param id [String, nil] HTML id attribute
+    # @param label [String, nil] Label text (alternative to block content)
+    # @param disabled [Boolean] Whether this option is disabled
+    # @param group_name [String, nil] The name attribute from parent group
+    # @param selected [Boolean] Whether this option is selected
     def initialize(
       value:,
       id: nil,
+      label: nil,
       disabled: false,
       group_name: nil,
       selected: false,
@@ -37,18 +56,21 @@ module Shadcn
       super(**options, &block)
       @value = value
       @id = id || "radio-#{value}"
+      @label = label
       @disabled = disabled
       @group_name = group_name
       @selected = selected
     end
 
     def call
-      if content.present?
-        # Render with integrated label if block content provided
+      label_text = @label || content.presence
+
+      if label_text.present?
+        # Render with integrated label
         content_tag(:label, label_wrapper_attributes) do
           safe_join([
             radio_input,
-            content_tag(:span, content, class: "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70")
+            content_tag(:span, label_text, class: LABEL_CLASSES)
           ])
         end
       else
