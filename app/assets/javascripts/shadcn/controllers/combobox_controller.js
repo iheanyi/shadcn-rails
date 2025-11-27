@@ -58,15 +58,21 @@ export default class extends Controller {
     this.contentTarget.dataset.state = "closed"
     this.triggerTarget.setAttribute("aria-expanded", "false")
 
-    // Clear search
-    if (this.hasInputTarget) {
-      this.inputTarget.value = ""
-      this.filter()
-    }
-
-    // Hide after animation
+    // Hide after animation, then reset filter state
     setTimeout(() => {
       this.contentTarget.hidden = true
+      // Reset search and filter state after hiding to avoid flash
+      if (this.hasInputTarget) {
+        this.inputTarget.value = ""
+      }
+      // Reset all items to visible for next open
+      this.itemTargets.forEach((item) => {
+        item.style.display = ""
+      })
+      // Hide empty state
+      if (this.hasEmptyTarget) {
+        this.emptyTarget.style.display = "none"
+      }
     }, 150)
 
     // Remove keyboard listener
@@ -84,13 +90,14 @@ export default class extends Controller {
       const label = item.dataset.label?.toLowerCase() || item.textContent.toLowerCase()
       const value = item.dataset.value?.toLowerCase() || ""
       const matches = query === "" || label.includes(query) || value.includes(query)
-      item.hidden = !matches
+      // Use style.display instead of hidden attribute to avoid Tailwind flex override
+      item.style.display = matches ? "" : "none"
       if (matches) visibleCount++
     })
 
     // Show/hide empty state - only show when there's a query AND no results
     if (this.hasEmptyTarget) {
-      this.emptyTarget.hidden = query === "" || visibleCount > 0
+      this.emptyTarget.style.display = (query === "" || visibleCount > 0) ? "none" : ""
     }
 
     // Reset selection
@@ -195,7 +202,7 @@ export default class extends Controller {
    * Get all visible items
    */
   getVisibleItems() {
-    return this.itemTargets.filter((item) => !item.hidden)
+    return this.itemTargets.filter((item) => item.style.display !== "none")
   }
 
   /**
