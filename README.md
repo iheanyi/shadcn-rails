@@ -2,6 +2,9 @@
 
 Beautiful, accessible UI components for Rails built with ViewComponents, Stimulus, and Tailwind CSS. A Ruby port of [shadcn/ui](https://ui.shadcn.com).
 
+[![CI](https://github.com/iheanyi/shadcn-rails/actions/workflows/ci.yml/badge.svg)](https://github.com/iheanyi/shadcn-rails/actions/workflows/ci.yml)
+[![Gem Version](https://badge.fury.io/rb/shadcn-rails.svg)](https://rubygems.org/gems/shadcn-rails)
+[![npm version](https://badge.fury.io/js/shadcn-rails-stimulus.svg)](https://www.npmjs.com/package/shadcn-rails-stimulus)
 [![Ruby](https://img.shields.io/badge/ruby-%3E%3D%203.1-red.svg)](https://www.ruby-lang.org/)
 [![Rails](https://img.shields.io/badge/rails-%3E%3D%207.0-red.svg)](https://rubyonrails.org/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -1463,7 +1466,7 @@ end
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/yourusername/shadcn-rails.
+Bug reports and pull requests are welcome on GitHub at https://github.com/iheanyi/shadcn-rails.
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
