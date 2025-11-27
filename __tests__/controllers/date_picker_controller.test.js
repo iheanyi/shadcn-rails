@@ -435,4 +435,202 @@ describe("DatePickerController", () => {
       ])
     })
   })
+
+  describe("isDateDisabled", () => {
+    test("returns false for dates within valid range", () => {
+      controller.minDateValue = "2024-11-01"
+      controller.maxDateValue = "2024-11-30"
+
+      const date = new Date(2024, 10, 15)
+      expect(controller.isDateDisabled(date)).toBe(false)
+    })
+
+    test("returns true for dates before minDate", () => {
+      controller.minDateValue = "2024-11-10"
+
+      const date = new Date(2024, 10, 5)
+      expect(controller.isDateDisabled(date)).toBe(true)
+    })
+
+    test("returns true for dates after maxDate", () => {
+      controller.maxDateValue = "2024-11-20"
+
+      const date = new Date(2024, 10, 25)
+      expect(controller.isDateDisabled(date)).toBe(true)
+    })
+
+    test("returns true for dates in disabledDates list", () => {
+      controller.disabledDatesValue = "2024-11-15,2024-11-16,2024-11-17"
+
+      expect(controller.isDateDisabled(new Date(2024, 10, 15))).toBe(true)
+      expect(controller.isDateDisabled(new Date(2024, 10, 18))).toBe(false)
+    })
+
+    test("returns true for disabled days of week", () => {
+      controller.disabledDaysOfWeekValue = "0,6" // Sunday and Saturday
+
+      // November 16, 2024 is a Saturday
+      expect(controller.isDateDisabled(new Date(2024, 10, 16))).toBe(true)
+      // November 17, 2024 is a Sunday
+      expect(controller.isDateDisabled(new Date(2024, 10, 17))).toBe(true)
+      // November 18, 2024 is a Monday
+      expect(controller.isDateDisabled(new Date(2024, 10, 18))).toBe(false)
+    })
+  })
+
+  describe("disabled dates in DatePicker", () => {
+    test("clicking a disabled date does not select it", () => {
+      controller.disabledDaysOfWeekValue = "0,6" // Weekends
+
+      // Try to select a Saturday
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-16" } } })
+
+      expect(controller.selectedDate).toBeNull()
+    })
+
+    test("disabled dates have correct CSS after render", () => {
+      controller.disabledDaysOfWeekValue = "0,6" // Weekends
+      controller.render()
+
+      const grid = element.querySelector('[data-date-picker-target="grid"]')
+      const saturdayButton = grid.querySelector('[data-date="2024-11-16"]')
+
+      expect(saturdayButton.classList.contains("cursor-not-allowed")).toBe(true)
+      expect(saturdayButton.hasAttribute("disabled")).toBe(true)
+      expect(saturdayButton.getAttribute("aria-disabled")).toBe("true")
+    })
+
+    test("disabled dates persist after selecting a date", () => {
+      controller.disabledDaysOfWeekValue = "0,6" // Weekends
+      controller.render()
+
+      // Select a weekday
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-18" } } })
+
+      // Weekends should still be disabled
+      const grid = element.querySelector('[data-date-picker-target="grid"]')
+      const saturdayButton = grid.querySelector('[data-date="2024-11-16"]')
+
+      expect(saturdayButton.hasAttribute("disabled")).toBe(true)
+      expect(saturdayButton.classList.contains("cursor-not-allowed")).toBe(true)
+    })
+  })
+
+  describe("showOutsideDays in DatePicker", () => {
+    test("renders empty placeholders when showOutsideDays is false", async () => {
+      application.stop()
+      document.body.innerHTML = ""
+
+      document.body.innerHTML = `
+        <div data-controller="date-picker"
+             data-date-picker-month-value="2024-11-01"
+             data-date-picker-show-outside-days-value="false">
+          <div data-date-picker-target="grid"></div>
+        </div>
+      `
+
+      application = Application.start()
+      application.register("date-picker", DatePickerController)
+
+      await new Promise(resolve => requestAnimationFrame(resolve))
+
+      element = document.querySelector('[data-controller="date-picker"]')
+      controller = application.getControllerForElementAndIdentifier(element, "date-picker")
+
+      controller.render()
+
+      const grid = element.querySelector('[data-date-picker-target="grid"]')
+
+      // First button should be November 1 (October days replaced with empty divs)
+      const firstButton = grid.querySelector('button[data-date]')
+      expect(firstButton.dataset.date).toBe("2024-11-01")
+
+      // Empty divs should exist for October days
+      const emptyDivs = grid.querySelectorAll('div.h-8.w-8:not([data-date])')
+      expect(emptyDivs.length).toBeGreaterThan(0)
+    })
+
+    test("showOutsideDays persists after month navigation", async () => {
+      application.stop()
+      document.body.innerHTML = ""
+
+      document.body.innerHTML = `
+        <div data-controller="date-picker"
+             data-date-picker-month-value="2024-11-01"
+             data-date-picker-show-outside-days-value="false">
+          <div data-date-picker-target="grid"></div>
+        </div>
+      `
+
+      application = Application.start()
+      application.register("date-picker", DatePickerController)
+
+      await new Promise(resolve => requestAnimationFrame(resolve))
+
+      element = document.querySelector('[data-controller="date-picker"]')
+      controller = application.getControllerForElementAndIdentifier(element, "date-picker")
+
+      // Navigate to December
+      controller.nextMonth()
+
+      // First button should be December 1
+      let grid = element.querySelector('[data-date-picker-target="grid"]')
+      let firstButton = grid.querySelector('button[data-date]')
+      expect(firstButton.dataset.date).toBe("2024-12-01")
+
+      // Navigate back
+      controller.previousMonth()
+
+      // First button should still be November 1
+      grid = element.querySelector('[data-date-picker-target="grid"]')
+      firstButton = grid.querySelector('button[data-date]')
+      expect(firstButton.dataset.date).toBe("2024-11-01")
+    })
+  })
+
+  describe("month navigation with disabled dates", () => {
+    test("disabled days of week persist across month navigation", () => {
+      controller.disabledDaysOfWeekValue = "0,6" // Weekends
+      controller.render()
+
+      // Navigate to December
+      controller.nextMonth()
+
+      // December 7 is a Saturday
+      const grid = element.querySelector('[data-date-picker-target="grid"]')
+      const decSat = grid.querySelector('[data-date="2024-12-07"]')
+      expect(decSat.hasAttribute("disabled")).toBe(true)
+
+      // Navigate back to November
+      controller.previousMonth()
+
+      // November 16 is still Saturday and should be disabled
+      const novSat = element.querySelector('[data-date="2024-11-16"]')
+      expect(novSat.hasAttribute("disabled")).toBe(true)
+    })
+
+    test("minDate/maxDate constraints persist across navigation", () => {
+      controller.minDateValue = "2024-11-10"
+      controller.maxDateValue = "2024-12-20"
+      controller.render()
+
+      // November 5 should be disabled (before minDate)
+      let date5 = element.querySelector('[data-date="2024-11-05"]')
+      expect(date5.hasAttribute("disabled")).toBe(true)
+
+      // Navigate to December
+      controller.nextMonth()
+
+      // December 25 should be disabled (after maxDate)
+      const date25 = element.querySelector('[data-date="2024-12-25"]')
+      expect(date25.hasAttribute("disabled")).toBe(true)
+
+      // Navigate back to November
+      controller.previousMonth()
+
+      // November 5 should still be disabled
+      date5 = element.querySelector('[data-date="2024-11-05"]')
+      expect(date5.hasAttribute("disabled")).toBe(true)
+    })
+  })
 })

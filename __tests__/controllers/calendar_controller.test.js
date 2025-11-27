@@ -892,6 +892,205 @@ describe("CalendarController", () => {
     })
   })
 
+  describe("showOutsideDays", () => {
+    test("renders empty placeholders when showOutsideDays is false", async () => {
+      application.stop()
+      document.body.innerHTML = ""
+
+      document.body.innerHTML = `
+        <div data-controller="calendar"
+             data-calendar-month-value="2024-11-01"
+             data-calendar-show-outside-days-value="false">
+          <div data-calendar-target="grid"></div>
+        </div>
+      `
+
+      application = Application.start()
+      application.register("calendar", CalendarController)
+
+      await new Promise(resolve => requestAnimationFrame(resolve))
+
+      element = document.querySelector('[data-controller="calendar"]')
+      controller = application.getControllerForElementAndIdentifier(element, "calendar")
+
+      controller.render()
+
+      const grid = element.querySelector('[data-calendar-target="grid"]')
+
+      // November 2024 starts on Friday, so first 5 cells should be empty divs
+      const emptyDivs = grid.querySelectorAll('div.h-8.w-8:not([data-date])')
+      expect(emptyDivs.length).toBeGreaterThan(0)
+
+      // First day button should be November 1
+      const firstButton = grid.querySelector('button[data-date]')
+      expect(firstButton.dataset.date).toBe("2024-11-01")
+    })
+
+    test("showOutsideDays persists after month navigation cycle", async () => {
+      application.stop()
+      document.body.innerHTML = ""
+
+      document.body.innerHTML = `
+        <div data-controller="calendar"
+             data-calendar-month-value="2024-11-01"
+             data-calendar-show-outside-days-value="false">
+          <div data-calendar-target="grid"></div>
+        </div>
+      `
+
+      application = Application.start()
+      application.register("calendar", CalendarController)
+
+      await new Promise(resolve => requestAnimationFrame(resolve))
+
+      element = document.querySelector('[data-controller="calendar"]')
+      controller = application.getControllerForElementAndIdentifier(element, "calendar")
+
+      // Navigate forward to December
+      controller.nextMonth()
+
+      // Verify empty placeholders in December (starts on Sunday, so first day should be Dec 1)
+      let grid = element.querySelector('[data-calendar-target="grid"]')
+      let firstButton = grid.querySelector('button[data-date]')
+      expect(firstButton.dataset.date).toBe("2024-12-01")
+
+      // Navigate back to November
+      controller.previousMonth()
+
+      // Verify empty placeholders still work in November
+      grid = element.querySelector('[data-calendar-target="grid"]')
+      firstButton = grid.querySelector('button[data-date]')
+      expect(firstButton.dataset.date).toBe("2024-11-01")
+
+      // Verify empty divs are still present
+      const emptyDivs = grid.querySelectorAll('div.h-8.w-8:not([data-date])')
+      expect(emptyDivs.length).toBeGreaterThan(0)
+    })
+
+    test("showOutsideDays: true (default) shows outside days", () => {
+      controller.showOutsideDaysValue = true
+      controller.render()
+
+      const grid = element.querySelector('[data-calendar-target="grid"]')
+
+      // November 2024 starts on Friday, so there should be October days before
+      const octDates = grid.querySelectorAll('button[data-date^="2024-10"]')
+      expect(octDates.length).toBeGreaterThan(0)
+    })
+  })
+
+  describe("month navigation with selection and disabled dates", () => {
+    test("disabled dates persist after navigating forward then back", () => {
+      controller.disabledDaysOfWeekValue = "0,6" // Weekends
+      controller.render()
+
+      // Verify weekends disabled in November
+      const novSat = element.querySelector('[data-date="2024-11-16"]')
+      expect(novSat.hasAttribute("disabled")).toBe(true)
+
+      // Navigate to December
+      controller.nextMonth()
+
+      // Verify weekends disabled in December (Dec 7 is Saturday)
+      const decSat = element.querySelector('[data-date="2024-12-07"]')
+      expect(decSat.hasAttribute("disabled")).toBe(true)
+
+      // Navigate back to November
+      controller.previousMonth()
+
+      // Verify weekends STILL disabled in November
+      const novSatAgain = element.querySelector('[data-date="2024-11-16"]')
+      expect(novSatAgain.hasAttribute("disabled")).toBe(true)
+      expect(novSatAgain.classList.contains("cursor-not-allowed")).toBe(true)
+    })
+
+    test("selection persists across month navigation", () => {
+      // Select a date in November
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-15" } } })
+      expect(controller.selectedDate.getDate()).toBe(15)
+
+      // Navigate to December
+      controller.nextMonth()
+      expect(controller.currentMonth.getMonth()).toBe(11) // December
+
+      // Selection should still exist
+      expect(controller.selectedDate.getDate()).toBe(15)
+      expect(controller.selectedDate.getMonth()).toBe(10) // November
+
+      // Navigate back to November
+      controller.previousMonth()
+      expect(controller.currentMonth.getMonth()).toBe(10) // November
+
+      // Selected date should be visually marked
+      const selectedButton = element.querySelector('[data-date="2024-11-15"]')
+      expect(selectedButton.classList.contains("bg-primary")).toBe(true)
+      expect(selectedButton.getAttribute("aria-selected")).toBe("true")
+    })
+
+    test("minDate/maxDate persist across year navigation", () => {
+      controller.minDateValue = "2024-06-01"
+      controller.maxDateValue = "2024-12-31"
+      controller.render()
+
+      // Navigate far back to April 2024
+      controller.previousMonth() // October
+      controller.previousMonth() // September
+      controller.previousMonth() // August
+      controller.previousMonth() // July
+      controller.previousMonth() // June
+      controller.previousMonth() // May
+      controller.previousMonth() // April
+
+      // April 2024 should have all dates disabled (before minDate June 1)
+      const aprilDate = element.querySelector('[data-date="2024-04-15"]')
+      expect(aprilDate.hasAttribute("disabled")).toBe(true)
+      expect(aprilDate.classList.contains("cursor-not-allowed")).toBe(true)
+
+      // Navigate forward to January 2025 (9 months from April 2024)
+      for (let i = 0; i < 9; i++) {
+        controller.nextMonth()
+      }
+
+      // January 2025 should have dates disabled (after maxDate Dec 31, 2024)
+      const janDate = element.querySelector('[data-date="2025-01-15"]')
+      expect(janDate).not.toBeNull()
+      expect(janDate.hasAttribute("disabled")).toBe(true)
+      expect(janDate.classList.contains("cursor-not-allowed")).toBe(true)
+    })
+
+    test("combined interaction: select date, navigate, select another, navigate back", () => {
+      controller.disabledDaysOfWeekValue = "0,6"
+      controller.render()
+
+      // Select Monday Nov 18
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-11-18" } } })
+      expect(controller.selectedDate.getDate()).toBe(18)
+
+      // Navigate to December
+      controller.nextMonth()
+
+      // Weekends should still be disabled
+      const decSat = element.querySelector('[data-date="2024-12-07"]')
+      expect(decSat.hasAttribute("disabled")).toBe(true)
+
+      // Select a Wednesday in December (Dec 11)
+      controller.selectDay({ currentTarget: { dataset: { date: "2024-12-11" } } })
+      expect(controller.selectedDate.getDate()).toBe(11)
+      expect(controller.selectedDate.getMonth()).toBe(11) // December
+
+      // Navigate back to November
+      controller.previousMonth()
+
+      // Old selection should no longer be marked (we selected Dec 11)
+      const novDate = element.querySelector('[data-date="2024-11-18"]')
+      expect(novDate.classList.contains("bg-primary")).toBe(false)
+
+      // Weekends should still be disabled
+      const novSat = element.querySelector('[data-date="2024-11-16"]')
+      expect(novSat.hasAttribute("disabled")).toBe(true)
+    })
+  })
+
   describe("range mode CSS rendering", () => {
     beforeEach(async () => {
       application.stop()
