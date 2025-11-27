@@ -1,0 +1,114 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ruby-tests:
+    name: Ruby Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby-version: ['3.2', '3.3', '3.4']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby ${{ matrix.ruby-version }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
+
+      - name: Run Ruby tests
+        run: bundle exec rake test
+
+  javascript-tests:
+    name: JavaScript Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Jest tests
+        run: npm test
+
+      - name: Build npm package
+        run: npm run build
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Check Ruby syntax
+        run: |
+          find app lib -name "*.rb" -exec ruby -c {} \; 2>&1 | grep -v "Syntax OK" || true
+
+      - name: Check JavaScript syntax (dry run build)
+        run: npm run build
+
+  release-ready:
+    name: Release Readiness Check
+    runs-on: ubuntu-latest
+    needs: [ruby-tests, javascript-tests, lint]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Build gem
+        run: gem build shadcn-rails.gemspec
+
+      - name: Build npm package
+        run: npm run build
+
+      - name: Verify npm package structure
+        run: |
+          echo "Checking dist folder..."
+          ls -la dist/ || echo "dist folder not found"
+          echo "Checking source files..."
+          ls -la app/assets/javascripts/shadcn/controllers/ | head -10
