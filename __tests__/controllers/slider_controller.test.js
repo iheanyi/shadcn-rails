@@ -723,4 +723,219 @@ describe("SliderController", () => {
       expect(updateVisualsSpy).toHaveBeenCalled()
     })
   })
+
+  describe("two-way input binding (data-input-target)", () => {
+    let linkedInput
+
+    beforeEach(async () => {
+      const twoWayHTML = `
+        <div data-controller="shadcn--slider"
+             data-shadcn--slider-value-value="50">
+          <input type="range"
+                 id="volume-slider"
+                 min="0"
+                 max="100"
+                 step="1"
+                 value="50"
+                 data-input-target="volume-input"
+                 data-action="input->shadcn--slider#updateStyle">
+        </div>
+      `
+
+      const setup = await setupController(SliderController, twoWayHTML, 'shadcn--slider')
+      application = setup.application
+      element = setup.element
+      controller = setup.controller
+
+      // Create linked input element AFTER setupController (which clears body.innerHTML)
+      linkedInput = document.createElement('input')
+      linkedInput.type = "number"
+      linkedInput.id = "volume-input"
+      linkedInput.value = "50"
+      linkedInput.min = "0"
+      linkedInput.max = "100"
+      document.body.appendChild(linkedInput)
+
+      // Re-run setup to bind the new input
+      controller.setupTwoWayBindings()
+    })
+
+    afterEach(() => {
+      if (linkedInput && linkedInput.parentNode) {
+        linkedInput.parentNode.removeChild(linkedInput)
+      }
+    })
+
+    test("syncs slider value to linked input (slider → input)", () => {
+      const rangeInput = element.querySelector('input[type="range"]')
+
+      rangeInput.value = "75"
+      controller.updateStyle({ target: rangeInput })
+
+      expect(linkedInput.value).toBe("75")
+    })
+
+    test("syncs linked input value to slider (input → slider)", () => {
+      const rangeInput = element.querySelector('input[type="range"]')
+
+      linkedInput.value = "25"
+      linkedInput.dispatchEvent(new Event('input', { bubbles: true }))
+
+      expect(rangeInput.value).toBe("25")
+    })
+
+    test("clamps linked input value to max", () => {
+      const rangeInput = element.querySelector('input[type="range"]')
+
+      linkedInput.value = "150"
+      linkedInput.dispatchEvent(new Event('input', { bubbles: true }))
+
+      expect(rangeInput.value).toBe("100")
+      expect(linkedInput.value).toBe("100")
+    })
+
+    test("clamps linked input value to min", () => {
+      const rangeInput = element.querySelector('input[type="range"]')
+
+      linkedInput.value = "-10"
+      linkedInput.dispatchEvent(new Event('input', { bubbles: true }))
+
+      expect(rangeInput.value).toBe("0")
+      expect(linkedInput.value).toBe("0")
+    })
+
+    test("snaps linked input value to step", () => {
+      const rangeInput = element.querySelector('input[type="range"]')
+      rangeInput.step = "10"
+
+      linkedInput.value = "27"
+      linkedInput.dispatchEvent(new Event('input', { bubbles: true }))
+
+      expect(rangeInput.value).toBe("30")
+      expect(linkedInput.value).toBe("30")
+    })
+
+    test("handles invalid linked input value", () => {
+      const rangeInput = element.querySelector('input[type="range"]')
+
+      linkedInput.value = "invalid"
+      linkedInput.dispatchEvent(new Event('input', { bubbles: true }))
+
+      expect(rangeInput.value).toBe("0")
+      expect(linkedInput.value).toBe("0")
+    })
+
+    test("updates CSS fill when syncing from linked input", () => {
+      const rangeInput = element.querySelector('input[type="range"]')
+      const setPropertySpy = jest.spyOn(rangeInput.style, 'setProperty')
+
+      linkedInput.value = "75"
+      linkedInput.dispatchEvent(new Event('input', { bubbles: true }))
+
+      expect(setPropertySpy).toHaveBeenCalledWith("--slider-fill", "75%")
+    })
+
+    test("dispatches change event when syncing from linked input", () => {
+      let eventDetail = null
+      element.addEventListener("shadcn--slider:change", (e) => {
+        eventDetail = e.detail
+      })
+
+      linkedInput.value = "60"
+      linkedInput.dispatchEvent(new Event('input', { bubbles: true }))
+
+      expect(eventDetail).not.toBeNull()
+      expect(eventDetail.value).toBe(60)
+      expect(eventDetail.percentage).toBe(60)
+    })
+
+    test("handles missing linked input gracefully", () => {
+      const rangeInput = element.querySelector('input[type="range"]')
+      rangeInput.dataset.inputTarget = "non-existent-id"
+
+      expect(() => {
+        rangeInput.value = "75"
+        controller.updateStyle({ target: rangeInput })
+      }).not.toThrow()
+    })
+
+    test("cleans up event listeners on disconnect", () => {
+      const removeEventListenerSpy = jest.spyOn(linkedInput, 'removeEventListener')
+
+      controller.teardownTwoWayBindings()
+
+      expect(removeEventListenerSpy).toHaveBeenCalledWith('input', expect.any(Function))
+      expect(removeEventListenerSpy).toHaveBeenCalledWith('change', expect.any(Function))
+    })
+  })
+
+  describe("two-way binding with output sync", () => {
+    let linkedInput
+    let outputDisplay
+
+    beforeEach(async () => {
+      const combinedHTML = `
+        <div data-controller="shadcn--slider"
+             data-shadcn--slider-value-value="50">
+          <input type="range"
+                 id="combined-slider"
+                 min="0"
+                 max="100"
+                 value="50"
+                 data-input-target="combined-input"
+                 data-output-target="combined-output"
+                 data-output-format="{value}%"
+                 data-action="input->shadcn--slider#updateStyle">
+        </div>
+      `
+
+      const setup = await setupController(SliderController, combinedHTML, 'shadcn--slider')
+      application = setup.application
+      element = setup.element
+      controller = setup.controller
+
+      // Create linked input and output elements
+      linkedInput = document.createElement('input')
+      linkedInput.type = "number"
+      linkedInput.id = "combined-input"
+      linkedInput.value = "50"
+      document.body.appendChild(linkedInput)
+
+      outputDisplay = document.createElement('span')
+      outputDisplay.id = "combined-output"
+      outputDisplay.textContent = "50%"
+      document.body.appendChild(outputDisplay)
+
+      controller.setupTwoWayBindings()
+    })
+
+    afterEach(() => {
+      if (linkedInput && linkedInput.parentNode) {
+        linkedInput.parentNode.removeChild(linkedInput)
+      }
+      if (outputDisplay && outputDisplay.parentNode) {
+        outputDisplay.parentNode.removeChild(outputDisplay)
+      }
+    })
+
+    test("updates both linked input and output when slider changes", () => {
+      const rangeInput = element.querySelector('input[type="range"]')
+
+      rangeInput.value = "80"
+      controller.updateStyle({ target: rangeInput })
+
+      expect(linkedInput.value).toBe("80")
+      expect(outputDisplay.textContent).toBe("80%")
+    })
+
+    test("updates both slider and output when linked input changes", () => {
+      const rangeInput = element.querySelector('input[type="range"]')
+
+      linkedInput.value = "30"
+      linkedInput.dispatchEvent(new Event('input', { bubbles: true }))
+
+      expect(rangeInput.value).toBe("30")
+      expect(outputDisplay.textContent).toBe("30%")
+    })
+  })
 })

@@ -20,6 +20,11 @@ import { Controller } from "@hotwired/stimulus"
  * - name: Input name
  * - disabled: Whether slider is disabled
  * - outputFormat: Format string for output (use {value} for value, {percent} for percentage)
+ *
+ * Data attributes for native <input type="range">:
+ * - data-output-target: ID of element to display value (one-way: slider → output)
+ * - data-output-format: Format string with {value} and {percent} placeholders
+ * - data-input-target: ID of input element for two-way binding (slider ↔ input)
  */
 export default class extends Controller {
   static targets = ["track", "range", "thumb", "input", "output"]
@@ -36,6 +41,112 @@ export default class extends Controller {
   connect() {
     this.isDragging = false
     this.updateVisuals()
+    this.setupTwoWayBindings()
+  }
+
+  disconnect() {
+    this.teardownTwoWayBindings()
+  }
+
+  /**
+   * Set up two-way bindings for native range inputs with data-input-target
+   */
+  setupTwoWayBindings() {
+    this.inputBindings = []
+
+    // Find all native range inputs with data-input-target attribute
+    const rangeInputs = this.element.querySelectorAll('input[type="range"][data-input-target]')
+
+    rangeInputs.forEach(rangeInput => {
+      const inputTargetId = rangeInput.dataset.inputTarget
+      const linkedInput = document.getElementById(inputTargetId)
+
+      if (linkedInput) {
+        // Create bound handler for this specific pair
+        const handler = this.handleLinkedInputChange.bind(this, rangeInput)
+
+        // Store binding info for cleanup
+        this.inputBindings.push({
+          rangeInput,
+          linkedInput,
+          handler
+        })
+
+        // Listen for changes on the linked input
+        linkedInput.addEventListener('input', handler)
+        linkedInput.addEventListener('change', handler)
+      }
+    })
+  }
+
+  /**
+   * Clean up event listeners when disconnecting
+   */
+  teardownTwoWayBindings() {
+    if (this.inputBindings) {
+      this.inputBindings.forEach(({ linkedInput, handler }) => {
+        linkedInput.removeEventListener('input', handler)
+        linkedInput.removeEventListener('change', handler)
+      })
+      this.inputBindings = []
+    }
+  }
+
+  /**
+   * Handle changes from a linked input element (input → slider sync)
+   * @param {HTMLInputElement} rangeInput - The range input to update
+   * @param {Event} event - The input/change event from the linked input
+   */
+  handleLinkedInputChange(rangeInput, event) {
+    const linkedInput = event.target
+    let value = parseFloat(linkedInput.value)
+
+    // Validate and clamp the value
+    const min = parseFloat(rangeInput.min) || 0
+    const max = parseFloat(rangeInput.max) || 100
+    const step = parseFloat(rangeInput.step) || 1
+
+    // Handle invalid input
+    if (isNaN(value)) {
+      value = min
+    }
+
+    // Clamp to min/max
+    value = Math.max(min, Math.min(max, value))
+
+    // Snap to step
+    const steps = Math.round((value - min) / step)
+    value = min + steps * step
+
+    // Update range input
+    rangeInput.value = value
+
+    // Update CSS custom property for fill
+    const percentage = ((value - min) / (max - min)) * 100
+    rangeInput.style.setProperty("--slider-fill", `${percentage}%`)
+
+    // Update the linked input if value was clamped/snapped
+    if (parseFloat(linkedInput.value) !== value) {
+      linkedInput.value = value
+    }
+
+    // Also update output if present
+    const outputTargetId = rangeInput.dataset.outputTarget
+    if (outputTargetId) {
+      const outputElement = document.getElementById(outputTargetId)
+      if (outputElement) {
+        const format = rangeInput.dataset.outputFormat || "{value}"
+        const formattedValue = format
+          .replace("{value}", value)
+          .replace("{percent}", Math.round(percentage))
+        outputElement.textContent = formattedValue
+      }
+    }
+
+    // Dispatch change event
+    this.dispatch("change", {
+      detail: { value: value, percentage: percentage }
+    })
   }
 
   startDrag(event) {
@@ -218,6 +329,15 @@ export default class extends Controller {
           .replace("{value}", value)
           .replace("{percent}", Math.round(percentage))
         outputElement.textContent = formattedValue
+      }
+    }
+
+    // Sync to linked input element for two-way binding (slider → input)
+    const inputTargetId = input.dataset.inputTarget
+    if (inputTargetId) {
+      const linkedInput = document.getElementById(inputTargetId)
+      if (linkedInput) {
+        linkedInput.value = value
       }
     }
 
