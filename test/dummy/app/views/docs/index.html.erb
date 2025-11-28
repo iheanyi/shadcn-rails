@@ -94,6 +94,71 @@
   </div>
 
   <div class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Theming & Customization</h2>
+    <p class="leading-7">
+      shadcn-rails uses CSS custom properties (variables) for theming. All theme values are defined in
+      <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">:root</code> and can be overridden
+      without rebuilding your CSS.
+    </p>
+
+    <div class="rounded-lg border bg-card p-4 space-y-4">
+      <h3 class="font-semibold">Key CSS Variables</h3>
+      <div class="grid gap-3 md:grid-cols-2">
+        <div class="space-y-1">
+          <code class="text-sm font-mono">--radius</code>
+          <p class="text-xs text-muted-foreground">Base border radius. All rounded-* classes derive from this.</p>
+        </div>
+        <div class="space-y-1">
+          <code class="text-sm font-mono">--primary</code>
+          <p class="text-xs text-muted-foreground">Primary brand color (HSL values without hsl() wrapper).</p>
+        </div>
+        <div class="space-y-1">
+          <code class="text-sm font-mono">--background / --foreground</code>
+          <p class="text-xs text-muted-foreground">Base background and text colors.</p>
+        </div>
+        <div class="space-y-1">
+          <code class="text-sm font-mono">--muted / --accent / --destructive</code>
+          <p class="text-xs text-muted-foreground">Semantic color variants for different states.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="leading-7">Override variables in your own CSS to customize the theme:</p>
+    <%= render "docs/code_example", language: "css", code: ':root {
+  --radius: 0.75rem;           /* Larger corners */
+  --primary: 221.2 83.2% 53.3%; /* Blue primary */
+  --destructive: 0 84% 60%;    /* Custom red */
+}
+
+.dark {
+  --primary: 217.2 91.2% 59.8%; /* Lighter blue for dark mode */
+}' %>
+
+    <div class="space-y-4">
+      <h3 class="font-semibold">Tailwind CSS v4 Integration</h3>
+      <p class="text-sm text-muted-foreground">
+        For Tailwind CSS v4, import the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">shadcn/tailwind-v4.css</code>
+        file to map CSS variables to Tailwind utility classes:
+      </p>
+      <%= render "docs/code_example", language: "css", code: '@import "tailwindcss";
+@import "shadcn/base";
+@import "shadcn/tailwind-v4";' %>
+      <p class="text-sm text-muted-foreground">
+        This maps the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">--radius</code> variable to
+        <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">rounded-sm</code> through
+        <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">rounded-3xl</code> classes, so changing
+        <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">--radius</code> updates all border radii instantly.
+      </p>
+    </div>
+
+    <div class="flex gap-2">
+      <%= link_to customization_path, class: "inline-flex items-center justify-center rounded-md text-sm font-medium h-9 px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90" do %>
+        Try Live Theme Customizer
+      <% end %>
+    </div>
+  </div>
+
+  <div class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Components</h2>
     <p class="leading-7">Browse all available components:</p>
 
