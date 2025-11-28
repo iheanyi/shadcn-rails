@@ -4,11 +4,39 @@
  * This file contains the base CSS variables, animations, and utility styles
  * required for shadcn-rails components to work properly.
  *
+ * SETUP
+ * =====
  * Import this file in your application's stylesheet:
- *   @import "shadcn/base";
  *
- * Or with Tailwind CSS:
- *   @import "shadcn/base.css";
+ *   @import "tailwindcss";
+ *   @import "shadcn/base";
+ *   @import "shadcn/tailwind-v4";  // Optional: Tailwind theme integration
+ *
+ * CUSTOMIZATION
+ * =============
+ * All visual properties are controlled via CSS variables. To customize:
+ *
+ * 1. Colors - Override any color variable:
+ *    :root {
+ *      --primary: 221.2 83.2% 53.3%;    // Blue primary
+ *      --destructive: 0 84.2% 60.2%;    // Red for errors
+ *    }
+ *
+ * 2. Border Radius - Change --radius to affect all components:
+ *    :root {
+ *      --radius: 0.75rem;  // Larger corners (default: 0.5rem)
+ *      --radius: 0;        // Sharp corners
+ *    }
+ *
+ * 3. Dark Mode - Override variables in .dark:
+ *    .dark {
+ *      --background: 222.2 84% 4.9%;
+ *      --foreground: 210 40% 98%;
+ *    }
+ *
+ * Changes to CSS variables are hot-reloadable - no server restart needed!
+ *
+ * For Tailwind v4 integration (using @theme), see tailwind-v4.css
  */
 
 /* ============================================
@@ -45,7 +73,14 @@
   --input: 0 0% 89.8%;
   --ring: 0 0% 3.9%;
 
-  /* Border Radius */
+  /* Border Radius
+   * This is the base radius value used by shadcn components.
+   * When using tailwind-v4.css, Tailwind's rounded-* classes will derive from this:
+   *   rounded-sm = calc(var(--radius) - 4px)
+   *   rounded-md = calc(var(--radius) - 2px)
+   *   rounded-lg = var(--radius)
+   *   rounded-xl = calc(var(--radius) + 4px)
+   */
   --radius: 0.5rem;
 
   /* Chart Colors */
