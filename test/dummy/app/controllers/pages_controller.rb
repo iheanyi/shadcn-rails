@@ -13,6 +13,9 @@ class PagesController < ApplicationController
   def themes
   end
 
+  def customization
+  end
+
   def buttons
   end
 
