@@ -46,4 +46,22 @@ class TextareaComponentTest < ViewComponent::TestCase
     assert_selector "textarea[name='bio']"
     assert_selector "textarea#user_bio"
   end
+
+  def test_renders_with_custom_class
+    render_inline(Shadcn::TextareaComponent.new(class_name: "my-textarea"))
+
+    assert_selector "textarea.my-textarea"
+  end
+
+  def test_renders_with_class_alias
+    render_inline(Shadcn::TextareaComponent.new(class: "alias-class"))
+
+    assert_selector "textarea.alias-class"
+  end
+
+  def test_renders_with_data_attributes
+    render_inline(Shadcn::TextareaComponent.new(data: { testid: "textarea" }))
+
+    assert_selector "[data-testid='textarea']"
+  end
 end

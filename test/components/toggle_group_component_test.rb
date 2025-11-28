@@ -82,4 +82,22 @@ class ToggleGroupComponentTest < ViewComponent::TestCase
 
     assert_selector "button[aria-label='Toggle bold']"
   end
+
+  def test_renders_with_custom_class
+    render_inline(Shadcn::ToggleGroupComponent.new(class_name: "my-toggle-group"))
+
+    assert_selector "div.my-toggle-group"
+  end
+
+  def test_renders_with_class_alias
+    render_inline(Shadcn::ToggleGroupComponent.new(class: "alias-class"))
+
+    assert_selector "div.alias-class"
+  end
+
+  def test_renders_with_data_attributes
+    render_inline(Shadcn::ToggleGroupComponent.new(data: { testid: "toggle-group" }))
+
+    assert_selector "[data-testid='toggle-group']"
+  end
 end

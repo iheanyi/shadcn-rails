@@ -63,4 +63,22 @@ class HoverCardComponentTest < ViewComponent::TestCase
 
     assert_selector "[data-align='start']", visible: :all
   end
+
+  def test_renders_with_custom_class
+    render_inline(Shadcn::HoverCardComponent.new(class_name: "my-hover-card"))
+
+    assert_selector "div.my-hover-card"
+  end
+
+  def test_renders_with_class_alias
+    render_inline(Shadcn::HoverCardComponent.new(class: "alias-class"))
+
+    assert_selector "div.alias-class"
+  end
+
+  def test_renders_with_data_attributes
+    render_inline(Shadcn::HoverCardComponent.new(data: { testid: "hover-card" }))
+
+    assert_selector "[data-testid='hover-card']"
+  end
 end

@@ -69,4 +69,22 @@ class DrawerComponentTest < ViewComponent::TestCase
 
     assert_selector "[data-shadcn--drawer-direction-value='right']"
   end
+
+  def test_renders_with_custom_class
+    render_inline(Shadcn::DrawerComponent.new(class_name: "my-drawer"))
+
+    assert_selector "div.my-drawer"
+  end
+
+  def test_renders_with_class_alias
+    render_inline(Shadcn::DrawerComponent.new(class: "alias-class"))
+
+    assert_selector "div.alias-class"
+  end
+
+  def test_renders_with_data_attributes
+    render_inline(Shadcn::DrawerComponent.new(data: { testid: "drawer" }))
+
+    assert_selector "[data-testid='drawer']"
+  end
 end

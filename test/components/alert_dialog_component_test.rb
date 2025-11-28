@@ -66,4 +66,22 @@ class AlertDialogComponentTest < ViewComponent::TestCase
 
     assert_selector "[data-shadcn--dialog-modal-value='true']"
   end
+
+  def test_renders_with_custom_class
+    render_inline(Shadcn::AlertDialogComponent.new(class_name: "my-alert-dialog"))
+
+    assert_selector "div.my-alert-dialog"
+  end
+
+  def test_renders_with_class_alias
+    render_inline(Shadcn::AlertDialogComponent.new(class: "alias-class"))
+
+    assert_selector "div.alias-class"
+  end
+
+  def test_renders_with_data_attributes
+    render_inline(Shadcn::AlertDialogComponent.new(data: { testid: "alert-dialog" }))
+
+    assert_selector "[data-testid='alert-dialog']"
+  end
 end

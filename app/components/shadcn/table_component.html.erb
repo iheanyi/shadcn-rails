@@ -1,5 +1,5 @@
-<div class="relative w-full overflow-auto">
-  <table class="<%= table_classes %>">
+<div class="<%= merge_classes('relative w-full overflow-auto') %>" <%= tag_attributes %>>
+  <table class="<%= BASE_CLASSES %>">
     <%= caption %>
     <%= header %>
     <%= body %>

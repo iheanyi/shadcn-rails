@@ -139,4 +139,40 @@ class TableComponentTest < ViewComponent::TestCase
     assert_selector "tbody td", count: 2
     assert_selector "tfoot td", count: 1
   end
+
+  def test_renders_with_custom_class
+    render_inline(Shadcn::TableComponent.new(class_name: "my-table")) do |table|
+      table.with_body do |body|
+        body.with_row do |row|
+          row.with_cell { "Data" }
+        end
+      end
+    end
+
+    assert_selector "div.my-table"
+  end
+
+  def test_renders_with_class_alias
+    render_inline(Shadcn::TableComponent.new(class: "alias-class")) do |table|
+      table.with_body do |body|
+        body.with_row do |row|
+          row.with_cell { "Data" }
+        end
+      end
+    end
+
+    assert_selector "div.alias-class"
+  end
+
+  def test_renders_with_data_attributes
+    render_inline(Shadcn::TableComponent.new(data: { testid: "table" })) do |table|
+      table.with_body do |body|
+        body.with_row do |row|
+          row.with_cell { "Data" }
+        end
+      end
+    end
+
+    assert_selector "[data-testid='table']"
+  end
 end

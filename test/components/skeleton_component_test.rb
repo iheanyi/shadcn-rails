@@ -27,4 +27,22 @@ class SkeletonComponentTest < ViewComponent::TestCase
 
     assert_selector "div", text: "Loading..."
   end
+
+  def test_renders_with_custom_class
+    render_inline(Shadcn::SkeletonComponent.new(class_name: "my-skeleton"))
+
+    assert_selector "div.my-skeleton"
+  end
+
+  def test_renders_with_class_alias
+    render_inline(Shadcn::SkeletonComponent.new(class: "alias-class"))
+
+    assert_selector "div.alias-class"
+  end
+
+  def test_renders_with_data_attributes
+    render_inline(Shadcn::SkeletonComponent.new(data: { testid: "skeleton" }))
+
+    assert_selector "[data-testid='skeleton']"
+  end
 end

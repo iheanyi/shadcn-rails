@@ -49,4 +49,22 @@ class AvatarComponentTest < ViewComponent::TestCase
     render_inline(Shadcn::AvatarComponent.new(alt: "User", size: :xl))
     assert_selector "span.h-16.w-16"
   end
+
+  def test_renders_with_custom_class
+    render_inline(Shadcn::AvatarComponent.new(alt: "User", class_name: "my-avatar"))
+
+    assert_selector "span.my-avatar"
+  end
+
+  def test_renders_with_class_alias
+    render_inline(Shadcn::AvatarComponent.new(alt: "User", class: "alias-class"))
+
+    assert_selector "span.alias-class"
+  end
+
+  def test_renders_with_data_attributes
+    render_inline(Shadcn::AvatarComponent.new(alt: "User", data: { testid: "avatar" }))
+
+    assert_selector "[data-testid='avatar']"
+  end
 end

@@ -319,4 +319,22 @@ class PaginationComponentTest < ViewComponent::TestCase
     assert_selector "a[href='?page=1']", text: "1"
     assert_selector "a[href='?page=10']", text: "10"
   end
+
+  def test_renders_with_custom_class
+    render_inline(Shadcn::PaginationComponent.new(class_name: "my-pagination"))
+
+    assert_selector "nav.my-pagination"
+  end
+
+  def test_renders_with_class_alias
+    render_inline(Shadcn::PaginationComponent.new(class: "alias-class"))
+
+    assert_selector "nav.alias-class"
+  end
+
+  def test_renders_with_data_attributes
+    render_inline(Shadcn::PaginationComponent.new(data: { testid: "pagination" }))
+
+    assert_selector "[data-testid='pagination']"
+  end
 end

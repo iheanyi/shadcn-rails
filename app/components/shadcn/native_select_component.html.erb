@@ -1,10 +1,9 @@
-<div class="<%= WRAPPER_CLASSES %>">
+<div class="<%= merge_classes(WRAPPER_CLASSES) %>" <%= tag_attributes %>>
   <select <%= "name=\"#{ERB::Util.html_escape_once(@name)}\"".html_safe if @name %>
           <%= "id=\"#{ERB::Util.html_escape_once(@id)}\"".html_safe if @id %>
           <%= "disabled" if @disabled %>
           <%= "required" if @required %>
-          class="<%= select_classes %>"
-          <%= tag_attributes %>>
+          class="<%= SELECT_CLASSES %>">
     <%= select_content %>
   </select>
   <svg xmlns="http://www.w3.org/2000/svg"

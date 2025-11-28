@@ -101,4 +101,28 @@ class NativeSelectComponentTest < ViewComponent::TestCase
     assert_selector "select.rounded-md"
     assert_selector "select.border"
   end
+
+  def test_renders_with_custom_class
+    render_inline(Shadcn::NativeSelectComponent.new(name: "test", class_name: "my-select")) do |select|
+      select.with_option(value: "1") { "One" }
+    end
+
+    assert_selector "div.my-select"
+  end
+
+  def test_renders_with_class_alias
+    render_inline(Shadcn::NativeSelectComponent.new(name: "test", class: "alias-class")) do |select|
+      select.with_option(value: "1") { "One" }
+    end
+
+    assert_selector "div.alias-class"
+  end
+
+  def test_renders_with_data_attributes
+    render_inline(Shadcn::NativeSelectComponent.new(name: "test", data: { testid: "native-select" })) do |select|
+      select.with_option(value: "1") { "One" }
+    end
+
+    assert_selector "[data-testid='native-select']"
+  end
 end

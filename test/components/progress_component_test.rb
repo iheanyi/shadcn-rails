@@ -37,4 +37,22 @@ class ProgressComponentTest < ViewComponent::TestCase
 
     assert_selector "div[aria-valuenow='100']"
   end
+
+  def test_renders_with_custom_class
+    render_inline(Shadcn::ProgressComponent.new(value: 50, class_name: "my-progress"))
+
+    assert_selector "div.my-progress"
+  end
+
+  def test_renders_with_class_alias
+    render_inline(Shadcn::ProgressComponent.new(value: 50, class: "alias-class"))
+
+    assert_selector "div.alias-class"
+  end
+
+  def test_renders_with_data_attributes
+    render_inline(Shadcn::ProgressComponent.new(value: 50, data: { testid: "progress" }))
+
+    assert_selector "[data-testid='progress']"
+  end
 end
