@@ -105,7 +105,46 @@ Components are copied to `app/components/shadcn/` and controllers to `app/javasc
 
 ## Theming
 
-Configure colors in your initializer:
+### CSS Variables
+
+shadcn-rails uses CSS custom properties for theming. Override any variable to customize:
+
+```css
+:root {
+  --radius: 0.75rem;           /* Larger corners */
+  --primary: 221.2 83.2% 53.3%; /* Blue primary (HSL without hsl()) */
+  --destructive: 0 84% 60%;    /* Custom red */
+}
+
+.dark {
+  --primary: 217.2 91.2% 59.8%; /* Lighter blue for dark mode */
+}
+```
+
+Key variables:
+- `--radius` - Base border radius (all `rounded-*` classes derive from this)
+- `--primary`, `--secondary`, `--accent`, `--destructive` - Semantic colors
+- `--background`, `--foreground` - Base page colors
+- `--muted`, `--card`, `--popover` - Surface colors
+
+### Tailwind CSS v4
+
+For Tailwind CSS v4, import the theme file to map CSS variables to utility classes:
+
+```css
+@import "tailwindcss";
+@import "shadcn/base";
+@import "shadcn/tailwind-v4";
+```
+
+This enables:
+- `rounded-sm` through `rounded-3xl` derived from `--radius`
+- Color classes (`bg-primary`, `text-muted-foreground`) using theme variables
+- Hot-reloadable theme changes without rebuilding CSS
+
+### Initializer Configuration
+
+Configure base colors in your initializer:
 
 ```ruby
 # config/initializers/shadcn.rb
