@@ -1,9 +1,53 @@
-<div class="max-w-6xl mx-auto space-y-12">
+<div class="max-w-6xl mx-auto space-y-8" id="theme-customizer">
   <div class="text-center space-y-4">
     <h1 class="text-4xl font-bold">Live Theme Customization</h1>
     <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
       Adjust CSS variables in real-time. Changes are instant - no page reload needed!
     </p>
+  </div>
+
+  <!-- Theme Presets & Mode Toggle -->
+  <div class="flex flex-wrap items-center justify-center gap-4">
+    <!-- Dark Mode Toggle -->
+    <div class="flex items-center gap-2 px-4 py-2 rounded-lg border bg-card">
+      <span class="text-sm font-medium">Light</span>
+      <button
+        id="dark-mode-toggle"
+        class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors bg-input"
+        role="switch"
+        aria-checked="false"
+      >
+        <span class="inline-block h-4 w-4 transform rounded-full bg-background shadow-sm transition-transform translate-x-1"></span>
+      </button>
+      <span class="text-sm font-medium">Dark</span>
+    </div>
+
+    <div class="h-8 w-px bg-border"></div>
+
+    <!-- Theme Presets -->
+    <div class="flex flex-wrap gap-2">
+      <button class="theme-preset px-3 py-1.5 text-sm font-medium rounded-md border bg-card hover:bg-accent transition-colors" data-theme="neutral">
+        <span class="inline-block w-3 h-3 rounded-full mr-1.5 bg-neutral-900"></span>Neutral
+      </button>
+      <button class="theme-preset px-3 py-1.5 text-sm font-medium rounded-md border bg-card hover:bg-accent transition-colors" data-theme="blue">
+        <span class="inline-block w-3 h-3 rounded-full mr-1.5" style="background: hsl(221.2 83.2% 53.3%)"></span>Blue
+      </button>
+      <button class="theme-preset px-3 py-1.5 text-sm font-medium rounded-md border bg-card hover:bg-accent transition-colors" data-theme="green">
+        <span class="inline-block w-3 h-3 rounded-full mr-1.5" style="background: hsl(142.1 76.2% 36.3%)"></span>Green
+      </button>
+      <button class="theme-preset px-3 py-1.5 text-sm font-medium rounded-md border bg-card hover:bg-accent transition-colors" data-theme="red">
+        <span class="inline-block w-3 h-3 rounded-full mr-1.5" style="background: hsl(0 72.2% 50.6%)"></span>Red
+      </button>
+      <button class="theme-preset px-3 py-1.5 text-sm font-medium rounded-md border bg-card hover:bg-accent transition-colors" data-theme="rose">
+        <span class="inline-block w-3 h-3 rounded-full mr-1.5" style="background: hsl(346.8 77.2% 49.8%)"></span>Rose
+      </button>
+      <button class="theme-preset px-3 py-1.5 text-sm font-medium rounded-md border bg-card hover:bg-accent transition-colors" data-theme="orange">
+        <span class="inline-block w-3 h-3 rounded-full mr-1.5" style="background: hsl(24.6 95% 53.1%)"></span>Orange
+      </button>
+      <button class="theme-preset px-3 py-1.5 text-sm font-medium rounded-md border bg-card hover:bg-accent transition-colors" data-theme="violet">
+        <span class="inline-block w-3 h-3 rounded-full mr-1.5" style="background: hsl(262.1 83.3% 57.8%)"></span>Violet
+      </button>
+    </div>
   </div>
 
   <!-- Customization Controls -->
@@ -13,7 +57,7 @@
       <%= render Shadcn::CardComponent.new do |card| %>
         <% card.with_header do |header| %>
           <% header.with_title { "Theme Controls" } %>
-          <% header.with_description { "Modify CSS variables to see instant changes" } %>
+          <% header.with_description { "Fine-tune CSS variables to see instant changes" } %>
         <% end %>
         <% card.with_content_slot do %>
           <div class="space-y-6">
@@ -21,81 +65,51 @@
             <div class="space-y-2">
               <%= render Shadcn::LabelComponent.new(for: "radius") { "Border Radius" } %>
               <div class="flex items-center gap-4">
-                <input
-                  type="range"
-                  id="radius"
-                  min="0"
-                  max="20"
-                  value="8"
-                  class="flex-1"
-                  data-theme-customizer-target="radius"
-                  data-action="input->theme-customizer#updateRadius"
-                />
-                <span id="radius-value" class="text-sm font-mono w-16">0.5rem</span>
+                <input type="range" id="radius" min="0" max="20" value="8" class="flex-1 h-2 rounded-full appearance-none bg-secondary cursor-pointer" />
+                <span id="radius-value" class="text-sm font-mono w-16 text-right">0.5rem</span>
               </div>
-              <p class="text-xs text-muted-foreground">Controls: rounded-sm, rounded-md, rounded-lg, rounded-xl</p>
             </div>
 
             <!-- Primary Color -->
             <div class="space-y-2">
-              <%= render Shadcn::LabelComponent.new(for: "primary-hue") { "Primary Color Hue" } %>
+              <%= render Shadcn::LabelComponent.new(for: "primary-hue") { "Primary Color" } %>
               <div class="flex items-center gap-4">
-                <input
-                  type="range"
-                  id="primary-hue"
-                  min="0"
-                  max="360"
-                  value="0"
-                  class="flex-1"
-                  data-theme-customizer-target="primaryHue"
-                  data-action="input->theme-customizer#updatePrimary"
-                />
-                <span id="primary-value" class="text-sm font-mono w-20">0 0% 9%</span>
+                <input type="range" id="primary-hue" min="0" max="360" value="0" class="flex-1 h-2 rounded-full appearance-none cursor-pointer" style="background: linear-gradient(to right, hsl(0 70% 50%), hsl(60 70% 50%), hsl(120 70% 50%), hsl(180 70% 50%), hsl(240 70% 50%), hsl(300 70% 50%), hsl(360 70% 50%))" />
+                <div id="primary-swatch" class="w-6 h-6 rounded border" style="background: hsl(0 0% 9%)"></div>
+              </div>
+            </div>
+
+            <!-- Secondary Color -->
+            <div class="space-y-2">
+              <%= render Shadcn::LabelComponent.new(for: "secondary-hue") { "Secondary Color" } %>
+              <div class="flex items-center gap-4">
+                <input type="range" id="secondary-hue" min="0" max="360" value="0" class="flex-1 h-2 rounded-full appearance-none cursor-pointer" style="background: linear-gradient(to right, hsl(0 10% 90%), hsl(60 10% 90%), hsl(120 10% 90%), hsl(180 10% 90%), hsl(240 10% 90%), hsl(300 10% 90%), hsl(360 10% 90%))" />
+                <div id="secondary-swatch" class="w-6 h-6 rounded border" style="background: hsl(0 0% 96.1%)"></div>
+              </div>
+            </div>
+
+            <!-- Accent Color -->
+            <div class="space-y-2">
+              <%= render Shadcn::LabelComponent.new(for: "accent-hue") { "Accent Color" } %>
+              <div class="flex items-center gap-4">
+                <input type="range" id="accent-hue" min="0" max="360" value="0" class="flex-1 h-2 rounded-full appearance-none cursor-pointer" style="background: linear-gradient(to right, hsl(0 10% 90%), hsl(60 10% 90%), hsl(120 10% 90%), hsl(180 10% 90%), hsl(240 10% 90%), hsl(300 10% 90%), hsl(360 10% 90%))" />
+                <div id="accent-swatch" class="w-6 h-6 rounded border" style="background: hsl(0 0% 96.1%)"></div>
               </div>
             </div>
 
             <!-- Destructive Color -->
             <div class="space-y-2">
-              <%= render Shadcn::LabelComponent.new(for: "destructive-hue") { "Destructive Color Hue" } %>
+              <%= render Shadcn::LabelComponent.new(for: "destructive-hue") { "Destructive Color" } %>
               <div class="flex items-center gap-4">
-                <input
-                  type="range"
-                  id="destructive-hue"
-                  min="0"
-                  max="360"
-                  value="0"
-                  class="flex-1"
-                  data-theme-customizer-target="destructiveHue"
-                  data-action="input->theme-customizer#updateDestructive"
-                />
-                <span id="destructive-value" class="text-sm font-mono w-24">0 84% 60%</span>
-              </div>
-            </div>
-
-            <!-- Border Color -->
-            <div class="space-y-2">
-              <%= render Shadcn::LabelComponent.new(for: "border-lightness") { "Border Lightness" } %>
-              <div class="flex items-center gap-4">
-                <input
-                  type="range"
-                  id="border-lightness"
-                  min="50"
-                  max="100"
-                  value="90"
-                  class="flex-1"
-                  data-theme-customizer-target="borderLightness"
-                  data-action="input->theme-customizer#updateBorder"
-                />
-                <span id="border-value" class="text-sm font-mono w-20">0 0% 90%</span>
+                <input type="range" id="destructive-hue" min="0" max="360" value="0" class="flex-1 h-2 rounded-full appearance-none cursor-pointer" style="background: linear-gradient(to right, hsl(0 84% 60%), hsl(60 84% 60%), hsl(120 84% 60%), hsl(180 84% 60%), hsl(240 84% 60%), hsl(300 84% 60%), hsl(360 84% 60%))" />
+                <div id="destructive-swatch" class="w-6 h-6 rounded border" style="background: hsl(0 84.2% 60.2%)"></div>
               </div>
             </div>
 
             <!-- Reset Button -->
-            <div class="pt-4">
-              <%= render Shadcn::ButtonComponent.new(
-                variant: :outline,
-                id: "reset-btn"
-              ) { "Reset to Defaults" } %>
+            <div class="pt-4 flex gap-2">
+              <%= render Shadcn::ButtonComponent.new(variant: :outline, id: "reset-btn") { "Reset to Defaults" } %>
+              <%= render Shadcn::ButtonComponent.new(variant: :secondary, id: "copy-btn") { "Copy CSS" } %>
             </div>
           </div>
         <% end %>
@@ -108,11 +122,15 @@
           <% header.with_description { "Copy this to your stylesheet" } %>
         <% end %>
         <% card.with_content_slot do %>
-          <pre class="bg-muted p-4 rounded-lg text-xs font-mono overflow-x-auto"><code id="css-output">:root {
+          <pre class="bg-muted p-4 rounded-lg text-xs font-mono overflow-x-auto max-h-64"><code id="css-output">:root {
   --radius: 0.5rem;
   --primary: 0 0% 9%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 0 0% 96.1%;
+  --secondary-foreground: 0 0% 9%;
+  --accent: 0 0% 96.1%;
+  --accent-foreground: 0 0% 9%;
   --destructive: 0 84.2% 60.2%;
-  --border: 0 0% 89.8%;
 }</code></pre>
         <% end %>
       <% end %>
@@ -123,7 +141,7 @@
       <%= render Shadcn::CardComponent.new do |card| %>
         <% card.with_header do |header| %>
           <% header.with_title { "Live Preview" } %>
-          <% header.with_description { "These are real shadcn components responding to CSS variables" } %>
+          <% header.with_description { "Real shadcn components responding to CSS variables" } %>
         <% end %>
         <% card.with_content_slot do %>
           <div class="space-y-6">
@@ -165,7 +183,7 @@
               <% end %>
             </div>
 
-            <!-- Card inside Card -->
+            <!-- Nested Card -->
             <div class="space-y-2">
               <p class="text-sm font-medium">Nested Card</p>
               <%= render Shadcn::CardComponent.new(class_name: "bg-muted/50") do |inner| %>
@@ -236,7 +254,6 @@
             <h4 class="font-semibold">1. CSS Variables in base.css</h4>
             <p class="text-sm text-muted-foreground">
               All theme values are defined as CSS custom properties in <code class="bg-muted px-1 rounded">:root</code>.
-              These include colors, radius, and more.
             </p>
             <pre class="bg-muted p-3 rounded text-xs font-mono">:root {
   --primary: 0 0% 9%;
@@ -247,8 +264,7 @@
           <div class="space-y-2">
             <h4 class="font-semibold">2. Tailwind Maps Variables</h4>
             <p class="text-sm text-muted-foreground">
-              The <code class="bg-muted px-1 rounded">tailwind-v4.css</code> file uses
-              <code class="bg-muted px-1 rounded">@theme</code> to map Tailwind classes to variables.
+              The <code class="bg-muted px-1 rounded">tailwind-v4.css</code> maps Tailwind classes to variables.
             </p>
             <pre class="bg-muted p-3 rounded text-xs font-mono">@theme {
   --color-primary: hsl(var(--primary));
@@ -259,7 +275,7 @@
           <div class="space-y-2">
             <h4 class="font-semibold">3. Override to Customize</h4>
             <p class="text-sm text-muted-foreground">
-              Override variables in your own CSS. Changes apply instantly without rebuilding.
+              Override variables in your CSS. Changes apply instantly!
             </p>
             <pre class="bg-muted p-3 rounded text-xs font-mono">/* Your custom theme */
 :root {
@@ -275,32 +291,396 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  // Theme presets with full color definitions
+  const themes = {
+    neutral: {
+      light: {
+        primary: '0 0% 9%',
+        primaryForeground: '0 0% 98%',
+        secondary: '0 0% 96.1%',
+        secondaryForeground: '0 0% 9%',
+        accent: '0 0% 96.1%',
+        accentForeground: '0 0% 9%',
+        destructive: '0 84.2% 60.2%',
+        destructiveForeground: '0 0% 98%',
+        background: '0 0% 100%',
+        foreground: '0 0% 3.9%',
+        card: '0 0% 100%',
+        cardForeground: '0 0% 3.9%',
+        muted: '0 0% 96.1%',
+        mutedForeground: '0 0% 45.1%',
+        border: '0 0% 89.8%',
+        input: '0 0% 89.8%',
+        ring: '0 0% 3.9%'
+      },
+      dark: {
+        primary: '0 0% 98%',
+        primaryForeground: '0 0% 9%',
+        secondary: '0 0% 14.9%',
+        secondaryForeground: '0 0% 98%',
+        accent: '0 0% 14.9%',
+        accentForeground: '0 0% 98%',
+        destructive: '0 62.8% 30.6%',
+        destructiveForeground: '0 0% 98%',
+        background: '0 0% 3.9%',
+        foreground: '0 0% 98%',
+        card: '0 0% 3.9%',
+        cardForeground: '0 0% 98%',
+        muted: '0 0% 14.9%',
+        mutedForeground: '0 0% 63.9%',
+        border: '0 0% 14.9%',
+        input: '0 0% 14.9%',
+        ring: '0 0% 83.1%'
+      }
+    },
+    blue: {
+      light: {
+        primary: '221.2 83.2% 53.3%',
+        primaryForeground: '210 40% 98%',
+        secondary: '210 40% 96.1%',
+        secondaryForeground: '222.2 47.4% 11.2%',
+        accent: '210 40% 96.1%',
+        accentForeground: '222.2 47.4% 11.2%',
+        destructive: '0 84.2% 60.2%',
+        destructiveForeground: '210 40% 98%',
+        background: '0 0% 100%',
+        foreground: '222.2 84% 4.9%',
+        card: '0 0% 100%',
+        cardForeground: '222.2 84% 4.9%',
+        muted: '210 40% 96.1%',
+        mutedForeground: '215.4 16.3% 46.9%',
+        border: '214.3 31.8% 91.4%',
+        input: '214.3 31.8% 91.4%',
+        ring: '221.2 83.2% 53.3%'
+      },
+      dark: {
+        primary: '217.2 91.2% 59.8%',
+        primaryForeground: '222.2 47.4% 11.2%',
+        secondary: '217.2 32.6% 17.5%',
+        secondaryForeground: '210 40% 98%',
+        accent: '217.2 32.6% 17.5%',
+        accentForeground: '210 40% 98%',
+        destructive: '0 62.8% 30.6%',
+        destructiveForeground: '210 40% 98%',
+        background: '222.2 84% 4.9%',
+        foreground: '210 40% 98%',
+        card: '222.2 84% 4.9%',
+        cardForeground: '210 40% 98%',
+        muted: '217.2 32.6% 17.5%',
+        mutedForeground: '215 20.2% 65.1%',
+        border: '217.2 32.6% 17.5%',
+        input: '217.2 32.6% 17.5%',
+        ring: '224.3 76.3% 48%'
+      }
+    },
+    green: {
+      light: {
+        primary: '142.1 76.2% 36.3%',
+        primaryForeground: '355.7 100% 97.3%',
+        secondary: '138.5 76.5% 96.7%',
+        secondaryForeground: '155.1 100% 6.5%',
+        accent: '138.5 76.5% 96.7%',
+        accentForeground: '155.1 100% 6.5%',
+        destructive: '0 84.2% 60.2%',
+        destructiveForeground: '0 0% 98%',
+        background: '0 0% 100%',
+        foreground: '155.1 100% 6.5%',
+        card: '0 0% 100%',
+        cardForeground: '155.1 100% 6.5%',
+        muted: '138.5 76.5% 96.7%',
+        mutedForeground: '155.1 37.8% 40.4%',
+        border: '141 29.4% 89%',
+        input: '141 29.4% 89%',
+        ring: '142.1 76.2% 36.3%'
+      },
+      dark: {
+        primary: '142.1 70.6% 45.3%',
+        primaryForeground: '144.9 80.4% 10%',
+        secondary: '145.1 27.4% 18.2%',
+        secondaryForeground: '138.5 76.5% 96.7%',
+        accent: '145.1 27.4% 18.2%',
+        accentForeground: '138.5 76.5% 96.7%',
+        destructive: '0 62.8% 30.6%',
+        destructiveForeground: '0 0% 98%',
+        background: '155.1 100% 3.5%',
+        foreground: '138.5 76.5% 96.7%',
+        card: '155.1 100% 3.5%',
+        cardForeground: '138.5 76.5% 96.7%',
+        muted: '145.1 27.4% 18.2%',
+        mutedForeground: '141.9 23.4% 56.1%',
+        border: '145.1 27.4% 18.2%',
+        input: '145.1 27.4% 18.2%',
+        ring: '142.1 70.6% 45.3%'
+      }
+    },
+    red: {
+      light: {
+        primary: '0 72.2% 50.6%',
+        primaryForeground: '0 85.7% 97.3%',
+        secondary: '0 0% 96.1%',
+        secondaryForeground: '0 0% 9%',
+        accent: '0 0% 96.1%',
+        accentForeground: '0 0% 9%',
+        destructive: '0 84.2% 60.2%',
+        destructiveForeground: '0 0% 98%',
+        background: '0 0% 100%',
+        foreground: '0 0% 3.9%',
+        card: '0 0% 100%',
+        cardForeground: '0 0% 3.9%',
+        muted: '0 0% 96.1%',
+        mutedForeground: '0 0% 45.1%',
+        border: '0 0% 89.8%',
+        input: '0 0% 89.8%',
+        ring: '0 72.2% 50.6%'
+      },
+      dark: {
+        primary: '0 72.2% 50.6%',
+        primaryForeground: '0 85.7% 97.3%',
+        secondary: '0 0% 14.9%',
+        secondaryForeground: '0 0% 98%',
+        accent: '0 0% 14.9%',
+        accentForeground: '0 0% 98%',
+        destructive: '0 62.8% 30.6%',
+        destructiveForeground: '0 0% 98%',
+        background: '0 0% 3.9%',
+        foreground: '0 0% 98%',
+        card: '0 0% 3.9%',
+        cardForeground: '0 0% 98%',
+        muted: '0 0% 14.9%',
+        mutedForeground: '0 0% 63.9%',
+        border: '0 0% 14.9%',
+        input: '0 0% 14.9%',
+        ring: '0 72.2% 50.6%'
+      }
+    },
+    rose: {
+      light: {
+        primary: '346.8 77.2% 49.8%',
+        primaryForeground: '355.7 100% 97.3%',
+        secondary: '0 0% 96.1%',
+        secondaryForeground: '0 0% 9%',
+        accent: '0 0% 96.1%',
+        accentForeground: '0 0% 9%',
+        destructive: '0 84.2% 60.2%',
+        destructiveForeground: '0 0% 98%',
+        background: '0 0% 100%',
+        foreground: '0 0% 3.9%',
+        card: '0 0% 100%',
+        cardForeground: '0 0% 3.9%',
+        muted: '0 0% 96.1%',
+        mutedForeground: '0 0% 45.1%',
+        border: '0 0% 89.8%',
+        input: '0 0% 89.8%',
+        ring: '346.8 77.2% 49.8%'
+      },
+      dark: {
+        primary: '346.8 77.2% 49.8%',
+        primaryForeground: '355.7 100% 97.3%',
+        secondary: '0 0% 14.9%',
+        secondaryForeground: '0 0% 98%',
+        accent: '0 0% 14.9%',
+        accentForeground: '0 0% 98%',
+        destructive: '0 62.8% 30.6%',
+        destructiveForeground: '0 0% 98%',
+        background: '0 0% 3.9%',
+        foreground: '0 0% 98%',
+        card: '0 0% 3.9%',
+        cardForeground: '0 0% 98%',
+        muted: '0 0% 14.9%',
+        mutedForeground: '0 0% 63.9%',
+        border: '0 0% 14.9%',
+        input: '0 0% 14.9%',
+        ring: '346.8 77.2% 49.8%'
+      }
+    },
+    orange: {
+      light: {
+        primary: '24.6 95% 53.1%',
+        primaryForeground: '60 9.1% 97.8%',
+        secondary: '60 4.8% 95.9%',
+        secondaryForeground: '24 9.8% 10%',
+        accent: '60 4.8% 95.9%',
+        accentForeground: '24 9.8% 10%',
+        destructive: '0 84.2% 60.2%',
+        destructiveForeground: '60 9.1% 97.8%',
+        background: '0 0% 100%',
+        foreground: '20 14.3% 4.1%',
+        card: '0 0% 100%',
+        cardForeground: '20 14.3% 4.1%',
+        muted: '60 4.8% 95.9%',
+        mutedForeground: '25 5.3% 44.7%',
+        border: '20 5.9% 90%',
+        input: '20 5.9% 90%',
+        ring: '24.6 95% 53.1%'
+      },
+      dark: {
+        primary: '20.5 90.2% 48.2%',
+        primaryForeground: '60 9.1% 97.8%',
+        secondary: '12 6.5% 15.1%',
+        secondaryForeground: '60 9.1% 97.8%',
+        accent: '12 6.5% 15.1%',
+        accentForeground: '60 9.1% 97.8%',
+        destructive: '0 72.2% 50.6%',
+        destructiveForeground: '60 9.1% 97.8%',
+        background: '20 14.3% 4.1%',
+        foreground: '60 9.1% 97.8%',
+        card: '20 14.3% 4.1%',
+        cardForeground: '60 9.1% 97.8%',
+        muted: '12 6.5% 15.1%',
+        mutedForeground: '24 5.4% 63.9%',
+        border: '12 6.5% 15.1%',
+        input: '12 6.5% 15.1%',
+        ring: '20.5 90.2% 48.2%'
+      }
+    },
+    violet: {
+      light: {
+        primary: '262.1 83.3% 57.8%',
+        primaryForeground: '210 20% 98%',
+        secondary: '220 14.3% 95.9%',
+        secondaryForeground: '220.9 39.3% 11%',
+        accent: '220 14.3% 95.9%',
+        accentForeground: '220.9 39.3% 11%',
+        destructive: '0 84.2% 60.2%',
+        destructiveForeground: '210 20% 98%',
+        background: '0 0% 100%',
+        foreground: '224 71.4% 4.1%',
+        card: '0 0% 100%',
+        cardForeground: '224 71.4% 4.1%',
+        muted: '220 14.3% 95.9%',
+        mutedForeground: '220 8.9% 46.1%',
+        border: '220 13% 91%',
+        input: '220 13% 91%',
+        ring: '262.1 83.3% 57.8%'
+      },
+      dark: {
+        primary: '263.4 70% 50.4%',
+        primaryForeground: '210 20% 98%',
+        secondary: '215 27.9% 16.9%',
+        secondaryForeground: '210 20% 98%',
+        accent: '215 27.9% 16.9%',
+        accentForeground: '210 20% 98%',
+        destructive: '0 62.8% 30.6%',
+        destructiveForeground: '210 20% 98%',
+        background: '224 71.4% 4.1%',
+        foreground: '210 20% 98%',
+        card: '224 71.4% 4.1%',
+        cardForeground: '210 20% 98%',
+        muted: '215 27.9% 16.9%',
+        mutedForeground: '217.9 10.6% 64.9%',
+        border: '215 27.9% 16.9%',
+        input: '215 27.9% 16.9%',
+        ring: '263.4 70% 50.4%'
+      }
+    }
+  };
+
+  let isDark = false;
+  let currentTheme = 'neutral';
+
   // Elements
+  const darkModeToggle = document.getElementById('dark-mode-toggle');
   const radiusSlider = document.getElementById('radius');
   const radiusValue = document.getElementById('radius-value');
   const primarySlider = document.getElementById('primary-hue');
-  const primaryValue = document.getElementById('primary-value');
+  const primarySwatch = document.getElementById('primary-swatch');
+  const secondarySlider = document.getElementById('secondary-hue');
+  const secondarySwatch = document.getElementById('secondary-swatch');
+  const accentSlider = document.getElementById('accent-hue');
+  const accentSwatch = document.getElementById('accent-swatch');
   const destructiveSlider = document.getElementById('destructive-hue');
-  const destructiveValue = document.getElementById('destructive-value');
-  const borderSlider = document.getElementById('border-lightness');
-  const borderValue = document.getElementById('border-value');
+  const destructiveSwatch = document.getElementById('destructive-swatch');
   const cssOutput = document.getElementById('css-output');
   const resetBtn = document.getElementById('reset-btn');
+  const copyBtn = document.getElementById('copy-btn');
+  const themePresets = document.querySelectorAll('.theme-preset');
+
+  function applyTheme(themeName, dark = isDark) {
+    const theme = themes[themeName];
+    if (!theme) return;
+
+    const mode = dark ? theme.dark : theme.light;
+    const root = document.documentElement;
+
+    // Apply all CSS variables
+    root.style.setProperty('--primary', mode.primary);
+    root.style.setProperty('--primary-foreground', mode.primaryForeground);
+    root.style.setProperty('--secondary', mode.secondary);
+    root.style.setProperty('--secondary-foreground', mode.secondaryForeground);
+    root.style.setProperty('--accent', mode.accent);
+    root.style.setProperty('--accent-foreground', mode.accentForeground);
+    root.style.setProperty('--destructive', mode.destructive);
+    root.style.setProperty('--destructive-foreground', mode.destructiveForeground);
+    root.style.setProperty('--background', mode.background);
+    root.style.setProperty('--foreground', mode.foreground);
+    root.style.setProperty('--card', mode.card);
+    root.style.setProperty('--card-foreground', mode.cardForeground);
+    root.style.setProperty('--muted', mode.muted);
+    root.style.setProperty('--muted-foreground', mode.mutedForeground);
+    root.style.setProperty('--border', mode.border);
+    root.style.setProperty('--input', mode.input);
+    root.style.setProperty('--ring', mode.ring);
+
+    // Update swatches
+    primarySwatch.style.background = `hsl(${mode.primary})`;
+    secondarySwatch.style.background = `hsl(${mode.secondary})`;
+    accentSwatch.style.background = `hsl(${mode.accent})`;
+    destructiveSwatch.style.background = `hsl(${mode.destructive})`;
+
+    // Update active state
+    themePresets.forEach(btn => {
+      btn.classList.toggle('ring-2', btn.dataset.theme === themeName);
+      btn.classList.toggle('ring-primary', btn.dataset.theme === themeName);
+    });
+
+    currentTheme = themeName;
+    updateCssOutput();
+  }
 
   function updateCssOutput() {
-    const radius = getComputedStyle(document.documentElement).getPropertyValue('--radius').trim();
-    const primary = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
-    const destructive = getComputedStyle(document.documentElement).getPropertyValue('--destructive').trim();
-    const border = getComputedStyle(document.documentElement).getPropertyValue('--border').trim();
+    const root = document.documentElement;
+    const getVar = (name) => getComputedStyle(root).getPropertyValue(name).trim();
 
-    cssOutput.textContent = `:root {
-  --radius: ${radius};
-  --primary: ${primary};
-  --destructive: ${destructive};
-  --border: ${border};
+    const selector = isDark ? '.dark' : ':root';
+    cssOutput.textContent = `${selector} {
+  --radius: ${getVar('--radius')};
+  --background: ${getVar('--background')};
+  --foreground: ${getVar('--foreground')};
+  --primary: ${getVar('--primary')};
+  --primary-foreground: ${getVar('--primary-foreground')};
+  --secondary: ${getVar('--secondary')};
+  --secondary-foreground: ${getVar('--secondary-foreground')};
+  --accent: ${getVar('--accent')};
+  --accent-foreground: ${getVar('--accent-foreground')};
+  --destructive: ${getVar('--destructive')};
+  --muted: ${getVar('--muted')};
+  --muted-foreground: ${getVar('--muted-foreground')};
+  --border: ${getVar('--border')};
+  --input: ${getVar('--input')};
+  --ring: ${getVar('--ring')};
 }`;
   }
 
+  // Dark mode toggle
+  darkModeToggle.addEventListener('click', function() {
+    isDark = !isDark;
+    document.documentElement.classList.toggle('dark', isDark);
+    this.setAttribute('aria-checked', isDark);
+    this.querySelector('span').classList.toggle('translate-x-1', !isDark);
+    this.querySelector('span').classList.toggle('translate-x-6', isDark);
+    this.classList.toggle('bg-primary', isDark);
+    this.classList.toggle('bg-input', !isDark);
+    applyTheme(currentTheme, isDark);
+  });
+
+  // Theme preset buttons
+  themePresets.forEach(btn => {
+    btn.addEventListener('click', function() {
+      applyTheme(this.dataset.theme);
+    });
+  });
+
+  // Radius slider
   radiusSlider.addEventListener('input', function(e) {
     const value = e.target.value;
     const rem = (value / 16).toFixed(3).replace(/\.?0+$/, '') + 'rem';
@@ -309,52 +689,92 @@ document.addEventListener('DOMContentLoaded', function() {
     updateCssOutput();
   });
 
+  // Color sliders
   primarySlider.addEventListener('input', function(e) {
     const hue = e.target.value;
-    const value = hue == 0 ? '0 0% 9%' : `${hue} 70% 50%`;
+    const value = hue == 0 ? (isDark ? '0 0% 98%' : '0 0% 9%') : `${hue} 70% ${isDark ? '60%' : '50%'}`;
     document.documentElement.style.setProperty('--primary', value);
-    document.documentElement.style.setProperty('--primary-foreground', '0 0% 98%');
-    primaryValue.textContent = value;
+    document.documentElement.style.setProperty('--primary-foreground', isDark ? '0 0% 9%' : '0 0% 98%');
+    document.documentElement.style.setProperty('--ring', value);
+    primarySwatch.style.background = `hsl(${value})`;
+    updateCssOutput();
+  });
+
+  secondarySlider.addEventListener('input', function(e) {
+    const hue = e.target.value;
+    const value = hue == 0 ? (isDark ? '0 0% 14.9%' : '0 0% 96.1%') : `${hue} 10% ${isDark ? '15%' : '96%'}`;
+    document.documentElement.style.setProperty('--secondary', value);
+    document.documentElement.style.setProperty('--secondary-foreground', isDark ? '0 0% 98%' : '0 0% 9%');
+    secondarySwatch.style.background = `hsl(${value})`;
+    updateCssOutput();
+  });
+
+  accentSlider.addEventListener('input', function(e) {
+    const hue = e.target.value;
+    const value = hue == 0 ? (isDark ? '0 0% 14.9%' : '0 0% 96.1%') : `${hue} 10% ${isDark ? '15%' : '96%'}`;
+    document.documentElement.style.setProperty('--accent', value);
+    document.documentElement.style.setProperty('--accent-foreground', isDark ? '0 0% 98%' : '0 0% 9%');
+    accentSwatch.style.background = `hsl(${value})`;
     updateCssOutput();
   });
 
   destructiveSlider.addEventListener('input', function(e) {
     const hue = e.target.value;
-    const value = `${hue} 84% 60%`;
+    const value = `${hue} 84% ${isDark ? '30%' : '60%'}`;
     document.documentElement.style.setProperty('--destructive', value);
-    destructiveValue.textContent = value;
+    destructiveSwatch.style.background = `hsl(${value})`;
     updateCssOutput();
   });
 
-  borderSlider.addEventListener('input', function(e) {
-    const lightness = e.target.value;
-    const value = `0 0% ${lightness}%`;
-    document.documentElement.style.setProperty('--border', value);
-    borderValue.textContent = value;
-    updateCssOutput();
-  });
-
+  // Reset button
   resetBtn.addEventListener('click', function() {
-    // Reset CSS variables
-    document.documentElement.style.removeProperty('--radius');
-    document.documentElement.style.removeProperty('--primary');
-    document.documentElement.style.removeProperty('--primary-foreground');
-    document.documentElement.style.removeProperty('--destructive');
-    document.documentElement.style.removeProperty('--border');
+    // Remove all inline styles
+    const root = document.documentElement;
+    const vars = ['--radius', '--primary', '--primary-foreground', '--secondary', '--secondary-foreground',
+                  '--accent', '--accent-foreground', '--destructive', '--destructive-foreground',
+                  '--background', '--foreground', '--card', '--card-foreground', '--muted', '--muted-foreground',
+                  '--border', '--input', '--ring'];
+    vars.forEach(v => root.style.removeProperty(v));
+
+    // Reset to light mode
+    isDark = false;
+    root.classList.remove('dark');
+    darkModeToggle.setAttribute('aria-checked', 'false');
+    darkModeToggle.querySelector('span').classList.add('translate-x-1');
+    darkModeToggle.querySelector('span').classList.remove('translate-x-6');
+    darkModeToggle.classList.remove('bg-primary');
+    darkModeToggle.classList.add('bg-input');
 
     // Reset sliders
     radiusSlider.value = 8;
     primarySlider.value = 0;
+    secondarySlider.value = 0;
+    accentSlider.value = 0;
     destructiveSlider.value = 0;
-    borderSlider.value = 90;
 
-    // Reset display values
+    // Reset display
     radiusValue.textContent = '0.5rem';
-    primaryValue.textContent = '0 0% 9%';
-    destructiveValue.textContent = '0 84% 60%';
-    borderValue.textContent = '0 0% 90%';
+    primarySwatch.style.background = 'hsl(0 0% 9%)';
+    secondarySwatch.style.background = 'hsl(0 0% 96.1%)';
+    accentSwatch.style.background = 'hsl(0 0% 96.1%)';
+    destructiveSwatch.style.background = 'hsl(0 84.2% 60.2%)';
+
+    // Reset theme buttons
+    themePresets.forEach(btn => {
+      btn.classList.remove('ring-2', 'ring-primary');
+    });
+    currentTheme = 'neutral';
 
     updateCssOutput();
+  });
+
+  // Copy button
+  copyBtn.addEventListener('click', function() {
+    navigator.clipboard.writeText(cssOutput.textContent).then(() => {
+      const originalText = this.textContent;
+      this.textContent = 'Copied!';
+      setTimeout(() => { this.textContent = originalText; }, 2000);
+    });
   });
 });
 </script>
