@@ -11,12 +11,18 @@
  * This enables:
  * - Border radius classes (rounded-*) to use --radius variable
  * - Color classes (bg-primary, text-muted-foreground, etc.) to use theme colors
- * - Shadow classes to use theme-aware shadows
+ * - Ring and ring-offset classes for focus states
  *
- * To customize the radius, simply change --radius in your CSS:
+ * CUSTOMIZATION
+ * =============
+ * Override any CSS variable in your own CSS to customize:
+ *
  *   :root {
- *     --radius: 0.75rem;  // Larger corners
+ *     --radius: 0.75rem;           // Larger corners
+ *     --primary: 221.2 83.2% 53.3%; // Blue primary color
  *   }
+ *
+ * Changes are hot-reloadable - no server restart needed!
  */
 
 @theme {
@@ -34,6 +40,12 @@
   /* ===========================================
      Colors
      Maps Tailwind color classes to CSS variables
+
+     Usage examples:
+     - bg-primary      -> uses --color-primary
+     - text-foreground -> uses --color-foreground
+     - border-input    -> uses --color-input
+     - bg-primary/50   -> 50% opacity of primary
      =========================================== */
 
   /* Background & Foreground */
@@ -89,4 +101,16 @@
   --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
   --color-sidebar-border: hsl(var(--sidebar-border));
   --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  /* ===========================================
+     Ring Offset
+     For focus ring offset (ring-offset-*)
+     =========================================== */
+  --ring-offset-color: hsl(var(--background));
 }
+
+/*
+ * Note: Global base styles (*, body) are defined in base.css
+ * They apply the --border color to all borders and set body colors.
+ * No need to duplicate them here in @layer base.
+ */
