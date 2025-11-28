@@ -575,7 +575,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
 
-  let isDark = false;
+  // Detect initial dark mode from system preference or existing .dark class
+  let isDark = document.documentElement.classList.contains('dark') ||
+               window.matchMedia('(prefers-color-scheme: dark)').matches;
   let currentTheme = 'neutral';
 
   // Elements
@@ -776,5 +778,18 @@ document.addEventListener('DOMContentLoaded', function() {
       setTimeout(() => { this.textContent = originalText; }, 2000);
     });
   });
+
+  // Initialize dark mode state on page load
+  if (isDark) {
+    document.documentElement.classList.add('dark');
+    darkModeToggle.setAttribute('aria-checked', 'true');
+    darkModeToggle.querySelector('span').classList.remove('translate-x-1');
+    darkModeToggle.querySelector('span').classList.add('translate-x-6');
+    darkModeToggle.classList.add('bg-primary');
+    darkModeToggle.classList.remove('bg-input');
+  }
+
+  // Apply the default theme with correct mode
+  applyTheme(currentTheme, isDark);
 });
 </script>
