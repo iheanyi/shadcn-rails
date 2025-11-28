@@ -1,0 +1,370 @@
+<div class="max-w-6xl mx-auto space-y-12" data-controller="theme-customizer">
+  <div class="text-center space-y-4">
+    <h1 class="text-4xl font-bold">Live Theme Customization</h1>
+    <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
+      Adjust CSS variables in real-time. Changes are instant - no page reload needed!
+    </p>
+  </div>
+
+  <!-- Customization Controls -->
+  <div class="grid md:grid-cols-2 gap-8">
+    <!-- Left: Controls -->
+    <div class="space-y-6">
+      <%= render Shadcn::CardComponent.new do |card| %>
+        <% card.with_header do |header| %>
+          <% header.with_title { "Theme Controls" } %>
+          <% header.with_description { "Modify CSS variables to see instant changes" } %>
+        <% end %>
+        <% card.with_content_slot do %>
+          <div class="space-y-6">
+            <!-- Radius Control -->
+            <div class="space-y-2">
+              <%= render Shadcn::LabelComponent.new(for: "radius") { "Border Radius" } %>
+              <div class="flex items-center gap-4">
+                <input
+                  type="range"
+                  id="radius"
+                  min="0"
+                  max="20"
+                  value="8"
+                  class="flex-1"
+                  data-theme-customizer-target="radius"
+                  data-action="input->theme-customizer#updateRadius"
+                />
+                <span class="text-sm font-mono w-16" data-theme-customizer-target="radiusValue">0.5rem</span>
+              </div>
+              <p class="text-xs text-muted-foreground">Controls: rounded-sm, rounded-md, rounded-lg, rounded-xl</p>
+            </div>
+
+            <!-- Primary Color -->
+            <div class="space-y-2">
+              <%= render Shadcn::LabelComponent.new(for: "primary-hue") { "Primary Color Hue" } %>
+              <div class="flex items-center gap-4">
+                <input
+                  type="range"
+                  id="primary-hue"
+                  min="0"
+                  max="360"
+                  value="0"
+                  class="flex-1"
+                  data-theme-customizer-target="primaryHue"
+                  data-action="input->theme-customizer#updatePrimary"
+                />
+                <span class="text-sm font-mono w-20" data-theme-customizer-target="primaryValue">0 0% 9%</span>
+              </div>
+            </div>
+
+            <!-- Destructive Color -->
+            <div class="space-y-2">
+              <%= render Shadcn::LabelComponent.new(for: "destructive-hue") { "Destructive Color Hue" } %>
+              <div class="flex items-center gap-4">
+                <input
+                  type="range"
+                  id="destructive-hue"
+                  min="0"
+                  max="360"
+                  value="0"
+                  class="flex-1"
+                  data-theme-customizer-target="destructiveHue"
+                  data-action="input->theme-customizer#updateDestructive"
+                />
+                <span class="text-sm font-mono w-24" data-theme-customizer-target="destructiveValue">0 84% 60%</span>
+              </div>
+            </div>
+
+            <!-- Border Color -->
+            <div class="space-y-2">
+              <%= render Shadcn::LabelComponent.new(for: "border-lightness") { "Border Lightness" } %>
+              <div class="flex items-center gap-4">
+                <input
+                  type="range"
+                  id="border-lightness"
+                  min="50"
+                  max="100"
+                  value="90"
+                  class="flex-1"
+                  data-theme-customizer-target="borderLightness"
+                  data-action="input->theme-customizer#updateBorder"
+                />
+                <span class="text-sm font-mono w-20" data-theme-customizer-target="borderValue">0 0% 90%</span>
+              </div>
+            </div>
+
+            <!-- Reset Button -->
+            <div class="pt-4">
+              <%= render Shadcn::ButtonComponent.new(
+                variant: :outline,
+                data: { action: "click->theme-customizer#reset" }
+              ) { "Reset to Defaults" } %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+
+      <!-- Generated CSS -->
+      <%= render Shadcn::CardComponent.new do |card| %>
+        <% card.with_header do |header| %>
+          <% header.with_title { "Generated CSS" } %>
+          <% header.with_description { "Copy this to your stylesheet" } %>
+        <% end %>
+        <% card.with_content_slot do %>
+          <pre class="bg-muted p-4 rounded-lg text-xs font-mono overflow-x-auto"><code data-theme-customizer-target="cssOutput">:root {
+  --radius: 0.5rem;
+  --primary: 0 0% 9%;
+  --destructive: 0 84.2% 60.2%;
+  --border: 0 0% 89.8%;
+}</code></pre>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Right: Live Preview -->
+    <div class="space-y-6">
+      <%= render Shadcn::CardComponent.new do |card| %>
+        <% card.with_header do |header| %>
+          <% header.with_title { "Live Preview" } %>
+          <% header.with_description { "These are real shadcn components responding to CSS variables" } %>
+        <% end %>
+        <% card.with_content_slot do %>
+          <div class="space-y-6">
+            <!-- Buttons -->
+            <div class="space-y-2">
+              <p class="text-sm font-medium">Buttons</p>
+              <div class="flex flex-wrap gap-2">
+                <%= render Shadcn::ButtonComponent.new { "Primary" } %>
+                <%= render Shadcn::ButtonComponent.new(variant: :secondary) { "Secondary" } %>
+                <%= render Shadcn::ButtonComponent.new(variant: :destructive) { "Destructive" } %>
+                <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Outline" } %>
+                <%= render Shadcn::ButtonComponent.new(variant: :ghost) { "Ghost" } %>
+              </div>
+            </div>
+
+            <!-- Badges -->
+            <div class="space-y-2">
+              <p class="text-sm font-medium">Badges</p>
+              <div class="flex flex-wrap gap-2">
+                <%= render Shadcn::BadgeComponent.new { "Default" } %>
+                <%= render Shadcn::BadgeComponent.new(variant: :secondary) { "Secondary" } %>
+                <%= render Shadcn::BadgeComponent.new(variant: :destructive) { "Destructive" } %>
+                <%= render Shadcn::BadgeComponent.new(variant: :outline) { "Outline" } %>
+              </div>
+            </div>
+
+            <!-- Input -->
+            <div class="space-y-2">
+              <p class="text-sm font-medium">Input</p>
+              <%= render Shadcn::InputComponent.new(placeholder: "Type something...") %>
+            </div>
+
+            <!-- Alert -->
+            <div class="space-y-2">
+              <p class="text-sm font-medium">Alert</p>
+              <%= render Shadcn::AlertComponent.new do |alert| %>
+                <% alert.with_title { "Heads up!" } %>
+                <% alert.with_description { "This alert uses theme colors and border radius." } %>
+              <% end %>
+            </div>
+
+            <!-- Card inside Card -->
+            <div class="space-y-2">
+              <p class="text-sm font-medium">Nested Card</p>
+              <%= render Shadcn::CardComponent.new(class_name: "bg-muted/50") do |inner| %>
+                <% inner.with_content_slot do %>
+                  <p class="text-sm">Notice how the border radius changes!</p>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+
+      <!-- More Components -->
+      <%= render Shadcn::CardComponent.new do |card| %>
+        <% card.with_header do |header| %>
+          <% header.with_title { "More Components" } %>
+        <% end %>
+        <% card.with_content_slot do %>
+          <div class="space-y-4">
+            <!-- Progress -->
+            <div class="space-y-2">
+              <p class="text-sm font-medium">Progress</p>
+              <%= render Shadcn::ProgressComponent.new(value: 60) %>
+            </div>
+
+            <!-- Switch -->
+            <div class="space-y-2">
+              <p class="text-sm font-medium">Switch</p>
+              <div class="flex items-center gap-2">
+                <%= render Shadcn::SwitchComponent.new(checked: true) %>
+                <span class="text-sm">Enabled</span>
+              </div>
+            </div>
+
+            <!-- Checkbox -->
+            <div class="space-y-2">
+              <p class="text-sm font-medium">Checkbox</p>
+              <div class="flex items-center gap-2">
+                <%= render Shadcn::CheckboxComponent.new(checked: true) %>
+                <span class="text-sm">Checked</span>
+              </div>
+            </div>
+
+            <!-- Kbd -->
+            <div class="space-y-2">
+              <p class="text-sm font-medium">Keyboard</p>
+              <div class="flex gap-1">
+                <%= render Shadcn::KbdComponent.new { "⌘" } %>
+                <%= render Shadcn::KbdComponent.new { "K" } %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- How It Works -->
+  <div class="space-y-6">
+    <%= render Shadcn::CardComponent.new do |card| %>
+      <% card.with_header do |header| %>
+        <% header.with_title { "How It Works" } %>
+        <% header.with_description { "Understanding the CSS variable theming system" } %>
+      <% end %>
+      <% card.with_content_slot do %>
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="space-y-2">
+            <h4 class="font-semibold">1. CSS Variables in base.css</h4>
+            <p class="text-sm text-muted-foreground">
+              All theme values are defined as CSS custom properties in <code class="bg-muted px-1 rounded">:root</code>.
+              These include colors, radius, and more.
+            </p>
+            <pre class="bg-muted p-3 rounded text-xs font-mono">:root {
+  --primary: 0 0% 9%;
+  --radius: 0.5rem;
+}</pre>
+          </div>
+
+          <div class="space-y-2">
+            <h4 class="font-semibold">2. Tailwind Maps Variables</h4>
+            <p class="text-sm text-muted-foreground">
+              The <code class="bg-muted px-1 rounded">tailwind-v4.css</code> file uses
+              <code class="bg-muted px-1 rounded">@theme</code> to map Tailwind classes to variables.
+            </p>
+            <pre class="bg-muted p-3 rounded text-xs font-mono">@theme {
+  --color-primary: hsl(var(--primary));
+  --radius-lg: var(--radius);
+}</pre>
+          </div>
+
+          <div class="space-y-2">
+            <h4 class="font-semibold">3. Override to Customize</h4>
+            <p class="text-sm text-muted-foreground">
+              Override variables in your own CSS. Changes apply instantly without rebuilding.
+            </p>
+            <pre class="bg-muted p-3 rounded text-xs font-mono">/* Your custom theme */
+:root {
+  --primary: 221 83% 53%;
+  --radius: 1rem;
+}</pre>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<script>
+(() => {
+  const application = Stimulus.Application.start();
+
+  application.register("theme-customizer", class extends Stimulus.Controller {
+    static targets = [
+      "radius", "radiusValue",
+      "primaryHue", "primaryValue",
+      "destructiveHue", "destructiveValue",
+      "borderLightness", "borderValue",
+      "cssOutput"
+    ];
+
+    connect() {
+      this.defaults = {
+        radius: 8,
+        primaryHue: 0,
+        destructiveHue: 0,
+        borderLightness: 90
+      };
+    }
+
+    updateRadius(event) {
+      const value = event.target.value;
+      const rem = (value / 16).toFixed(3).replace(/\.?0+$/, '') + 'rem';
+      document.documentElement.style.setProperty('--radius', rem);
+      this.radiusValueTarget.textContent = rem;
+      this.updateCssOutput();
+    }
+
+    updatePrimary(event) {
+      const hue = event.target.value;
+      // Create a nice saturated color at this hue
+      const value = hue == 0 ? '0 0% 9%' : `${hue} 70% 50%`;
+      document.documentElement.style.setProperty('--primary', value);
+      document.documentElement.style.setProperty('--primary-foreground', '0 0% 98%');
+      this.primaryValueTarget.textContent = value;
+      this.updateCssOutput();
+    }
+
+    updateDestructive(event) {
+      const hue = event.target.value;
+      const value = `${hue} 84% 60%`;
+      document.documentElement.style.setProperty('--destructive', value);
+      this.destructiveValueTarget.textContent = value;
+      this.updateCssOutput();
+    }
+
+    updateBorder(event) {
+      const lightness = event.target.value;
+      const value = `0 0% ${lightness}%`;
+      document.documentElement.style.setProperty('--border', value);
+      this.borderValueTarget.textContent = value;
+      this.updateCssOutput();
+    }
+
+    updateCssOutput() {
+      const radius = getComputedStyle(document.documentElement).getPropertyValue('--radius').trim();
+      const primary = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
+      const destructive = getComputedStyle(document.documentElement).getPropertyValue('--destructive').trim();
+      const border = getComputedStyle(document.documentElement).getPropertyValue('--border').trim();
+
+      this.cssOutputTarget.textContent = `:root {
+  --radius: ${radius};
+  --primary: ${primary};
+  --destructive: ${destructive};
+  --border: ${border};
+}`;
+    }
+
+    reset() {
+      // Reset to defaults
+      document.documentElement.style.removeProperty('--radius');
+      document.documentElement.style.removeProperty('--primary');
+      document.documentElement.style.removeProperty('--primary-foreground');
+      document.documentElement.style.removeProperty('--destructive');
+      document.documentElement.style.removeProperty('--border');
+
+      // Reset sliders
+      this.radiusTarget.value = this.defaults.radius;
+      this.primaryHueTarget.value = this.defaults.primaryHue;
+      this.destructiveHueTarget.value = this.defaults.destructiveHue;
+      this.borderLightnessTarget.value = this.defaults.borderLightness;
+
+      // Reset display values
+      this.radiusValueTarget.textContent = '0.5rem';
+      this.primaryValueTarget.textContent = '0 0% 9%';
+      this.destructiveValueTarget.textContent = '0 84% 60%';
+      this.borderValueTarget.textContent = '0 0% 90%';
+
+      this.updateCssOutput();
+    }
+  });
+})();
+</script>
