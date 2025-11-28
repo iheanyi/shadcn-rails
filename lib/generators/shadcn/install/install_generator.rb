@@ -145,10 +145,18 @@ module Shadcn
       def setup_bundler
         # Add to package.json dependencies
         if File.exist?("package.json")
-          say "Please add the following to your JavaScript entry point:", :yellow
+          say "Please install the npm package and add to your JavaScript entry point:", :yellow
           say ""
-          say "  import { registerShadcnControllers } from 'shadcn-rails'"
+          say "  npm install shadcn-rails-stimulus"
+          say ""
+          say "  // In your JavaScript entry point:"
+          say "  import { registerShadcnControllers } from 'shadcn-rails-stimulus'"
           say "  registerShadcnControllers(application)"
+          say ""
+          say "For CSS (if using cssbundling), import in your stylesheet:", :yellow
+          say ""
+          say "  @import 'shadcn-rails-stimulus/styles/base';"
+          say "  @import 'shadcn-rails-stimulus/styles/tailwind-v4';  /* For Tailwind v4 */"
           say ""
         end
       end
