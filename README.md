@@ -132,15 +132,34 @@ Key variables:
 For Tailwind CSS v4, import the theme file to map CSS variables to utility classes:
 
 ```css
+/* With Sprockets/Propshaft (importmap) */
 @import "tailwindcss";
 @import "shadcn/base";
 @import "shadcn/tailwind-v4";
+
+/* With cssbundling (esbuild/webpack) */
+@import "tailwindcss";
+@import "shadcn-rails-stimulus/styles/base";
+@import "shadcn-rails-stimulus/styles/tailwind-v4";
 ```
 
 This enables:
 - `rounded-sm` through `rounded-3xl` derived from `--radius`
 - Color classes (`bg-primary`, `text-muted-foreground`) using theme variables
 - Hot-reloadable theme changes without rebuilding CSS
+
+### CSS with cssbundling
+
+If you're using jsbundling/cssbundling (esbuild, webpack, etc.), import styles from the npm package:
+
+```css
+/* In your application.css or main stylesheet */
+@import "shadcn-rails-stimulus/styles/base";
+@import "shadcn-rails-stimulus/styles/components";
+
+/* For Tailwind v4 theme mapping */
+@import "shadcn-rails-stimulus/styles/tailwind-v4";
+```
 
 ### Initializer Configuration
 
