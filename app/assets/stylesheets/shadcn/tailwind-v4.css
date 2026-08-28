@@ -25,6 +25,8 @@
  * Changes are hot-reloadable - no server restart needed!
  */
 
+@source "../../../components/shadcn";
+
 @theme {
   /* ===========================================
      Border Radius

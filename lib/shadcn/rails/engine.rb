@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "shadcn/rails/registry"
+
 module Shadcn
   module Rails
     class Engine < ::Rails::Engine
@@ -25,6 +27,8 @@ module Shadcn
 
         app.config.eager_load_paths.delete(components_path)
         app.config.eager_load_paths << components_path
+
+        ignore_ejected_component_units(app)
 
         # Enable reloading of engine components in development
         if ::Rails.env.development?
@@ -52,6 +56,22 @@ module Shadcn
         if app.config.respond_to?(:assets) && app.config.assets.respond_to?(:paths)
           app.config.assets.paths << root.join("app/assets/stylesheets")
           app.config.assets.paths << root.join("app/assets/javascripts")
+        end
+      end
+
+      def ignore_ejected_component_units(app)
+        ignored_paths = ejected_component_units(app).flat_map do |unit|
+          unit.ruby_files.map { |path| Shadcn::Rails::Registry.gem_path(path) }
+        end
+
+        ::Rails.autoloaders.main.ignore(*ignored_paths) if ignored_paths.any?
+      end
+
+      def ejected_component_units(app)
+        Shadcn::Rails::Registry.keys.map { |name| Shadcn::Rails::Registry.fetch(name) }.select do |unit|
+          unit.ruby_files.any? do |path|
+            File.exist?(app.root.join(path))
+          end
         end
       end
 

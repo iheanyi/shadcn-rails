@@ -2,6 +2,7 @@
 
 require "rails/generators"
 require "rails/generators/base"
+require "shadcn/rails/registry"
 
 module Shadcn
   module Generators
@@ -29,74 +30,6 @@ module Shadcn
 
       desc "Adds shadcn components to your application for customization"
 
-      # Map component names to their root files. Related Ruby component files
-      # are discovered by family prefix so compound components copy as a unit.
-      COMPONENT_FILES = {
-        "accordion" => { component: "accordion_component.rb", controller: "accordion_controller.js" },
-        "alert" => { component: "alert_component.rb", controller: nil },
-        "alert_dialog" => { component: "alert_dialog_component.rb", controller: "dialog_controller.js" },
-        "aspect_ratio" => { component: "aspect_ratio_component.rb", controller: nil },
-        "avatar" => { component: "avatar_component.rb", controller: "avatar_controller.js" },
-        "badge" => { component: "badge_component.rb", controller: nil },
-        "breadcrumb" => { component: "breadcrumb_component.rb", controller: nil },
-        "button" => { component: "button_component.rb", controller: nil },
-        "button_group" => { component: "button_group_component.rb", controller: nil },
-        "calendar" => { component: "calendar_component.rb", controller: "calendar_controller.js" },
-        "card" => { component: "card_component.rb", controller: nil },
-        "carousel" => { component: "carousel_component.rb", controller: "carousel_controller.js" },
-        "checkbox" => { component: "checkbox_component.rb", controller: "checkbox_controller.js" },
-        "collapsible" => { component: "collapsible_component.rb", controller: "collapsible_controller.js" },
-        "combobox" => { component: "combobox_component.rb", controller: "combobox_controller.js" },
-        "command" => { component: "command_component.rb", controller: "command_controller.js" },
-        "context_menu" => { component: "context_menu_component.rb", controller: "context_menu_controller.js" },
-        "date_picker" => { component: "date_picker_component.rb", controller: "date_picker_controller.js" },
-        "dialog" => { component: "dialog_component.rb", controller: "dialog_controller.js" },
-        "drawer" => { component: "drawer_component.rb", controller: "drawer_controller.js" },
-        "dropdown_menu" => { component: "dropdown_menu_component.rb", controller: "dropdown_controller.js" },
-        "empty" => { component: "empty_component.rb", controller: nil },
-        "field" => { component: "field_component.rb", controller: nil },
-        "hover_card" => { component: "hover_card_component.rb", controller: "hover_card_controller.js" },
-        "input" => { component: "input_component.rb", controller: nil },
-        "input_group" => { component: "input_group_component.rb", controller: nil },
-        "input_otp" => { component: "input_otp_component.rb", controller: "input_otp_controller.js" },
-        "item" => { component: "item_component.rb", controller: nil },
-        "kbd" => { component: "kbd_component.rb", controller: nil },
-        "label" => { component: "label_component.rb", controller: nil },
-        "menubar" => { component: "menubar_component.rb", controller: "menubar_controller.js" },
-        "native_select" => { component: "native_select_component.rb", controller: nil },
-        "navigation_menu" => { component: "navigation_menu_component.rb", controller: "navigation_menu_controller.js" },
-        "pagination" => { component: "pagination_component.rb", controller: nil },
-        "popover" => { component: "popover_component.rb", controller: "popover_controller.js" },
-        "progress" => { component: "progress_component.rb", controller: nil },
-        "radio_group" => { component: "radio_group_component.rb", controller: "radio_group_controller.js" },
-        "resizable" => { component: "resizable_panel_group_component.rb", controller: "resizable_controller.js" },
-        "scroll_area" => { component: "scroll_area_component.rb", controller: "scroll_area_controller.js" },
-        "select" => { component: "select_component.rb", controller: "select_controller.js" },
-        "separator" => { component: "separator_component.rb", controller: nil },
-        "sheet" => { component: "sheet_component.rb", controller: "sheet_controller.js" },
-        "sidebar" => { component: "sidebar_component.rb", controller: "sidebar_controller.js" },
-        "skeleton" => { component: "skeleton_component.rb", controller: nil },
-        "slider" => { component: "slider_component.rb", controller: "slider_controller.js" },
-        "spinner" => { component: "spinner_component.rb", controller: nil },
-        "switch" => { component: "switch_component.rb", controller: "switch_controller.js" },
-        "table" => { component: "table_component.rb", controller: nil },
-        "tabs" => { component: "tabs_component.rb", controller: "tabs_controller.js" },
-        "textarea" => { component: "textarea_component.rb", controller: nil },
-        "toast" => { component: "toast_component.rb", controller: "toast_controller.js" },
-        "toggle" => { component: "toggle_component.rb", controller: "toggle_controller.js" },
-        "toggle_group" => { component: "toggle_group_component.rb", controller: "toggle_group_controller.js" },
-        "tooltip" => { component: "tooltip_component.rb", controller: "tooltip_controller.js" },
-        "typography" => { component: "typography_component.rb", controller: nil }
-      }.freeze
-
-      COMPONENT_ALIASES = {
-        "dropdown" => "dropdown_menu"
-      }.freeze
-
-      COMPONENT_CONTROLLERS = {
-        "command" => %w[command_controller.js command_dialog_controller.js]
-      }.freeze
-
       def validate_components
         if options[:list]
           display_available_components
@@ -104,7 +37,7 @@ module Shadcn
         end
 
         if options[:all]
-          @components_to_add = COMPONENT_FILES.keys
+          @components_to_add = Shadcn::Rails::Registry.keys
         else
           validate_requested_components
           @components_to_add = normalized_components
@@ -116,7 +49,7 @@ module Shadcn
         say "Adding #{@components_to_add.length} component(s):", :green
         @components_to_add.each { |c| say "  - #{c}" }
         if include_controllers?
-          controllers = @components_to_add.sum { |c| controller_files(c).length }
+          controllers = @components_to_add.sum { |c| component_unit(c).controllers.length }
           say ""
           say "Including #{controllers} Stimulus controller(s)", :cyan if controllers > 0
         end
@@ -164,28 +97,11 @@ module Shadcn
         say "Available shadcn components:", :green
         say ""
 
-        # Group by category
-        categories = {
-          "Buttons & Actions" => %w[button button_group toggle toggle_group],
-          "Form Inputs" => %w[checkbox field input input_group input_otp label native_select radio_group select slider switch textarea],
-          "Data Display" => %w[avatar badge card empty item kbd progress skeleton spinner table typography aspect_ratio scroll_area],
-          "Feedback" => %w[alert toast tooltip],
-          "Overlays" => %w[alert_dialog dialog drawer dropdown_menu hover_card popover sheet context_menu],
-          "Navigation" => %w[accordion breadcrumb collapsible menubar navigation_menu pagination separator tabs resizable],
-          "Advanced" => %w[calendar carousel combobox command date_picker sidebar]
-        }
-
-        categories.each do |category, comps|
-          available = comps & COMPONENT_FILES.keys
-          next if available.empty?
-
-          say "  #{category}:", :yellow
-          available.each do |name|
-            controller_info = COMPONENT_FILES[name][:controller] ? " ✦" : ""
-            say "    #{name}#{controller_info}"
-          end
-          say ""
+        Shadcn::Rails::Registry.keys.each do |name|
+          controller_info = component_unit(name).controllers.any? ? " ✦" : ""
+          say "  #{name}#{controller_info}"
         end
+        say ""
 
         say "  ✦ = includes Stimulus controller", :cyan
         say ""
@@ -204,7 +120,7 @@ module Shadcn
           exit 1
         end
 
-        invalid = components.reject { |component| COMPONENT_FILES.key?(normalize_component_name(component)) }
+        invalid = components.reject { |component| Shadcn::Rails::Registry.key?(component) }
         if invalid.any?
           say "Error: Unknown component(s): #{invalid.join(', ')}", :red
           say ""
@@ -214,109 +130,28 @@ module Shadcn
       end
 
       def add_component(name)
-        component_files(name).each do |filename|
-          copy_ruby_component(filename)
-          copy_erb_template(filename)
+        unit = component_unit(name)
+
+        (unit.ruby_files + unit.templates).each do |path|
+          copy_component_file(path)
         end
 
         if include_controllers?
-          controller_files(name).each do |filename|
-            copy_stimulus_controller(filename)
+          (unit.controllers + unit.depends_on).each do |path|
+            copy_javascript_file(path)
           end
         end
-      end
 
-      def copy_ruby_component(filename)
-        source_path = gem_component_path(filename)
-        destination_path = File.join(options[:path], "shadcn", filename)
-
-        if destination_file_exists?(destination_path) && !options[:force]
-          say "  skip  #{filename} (already exists, use --force to overwrite)", :yellow
-        else
-          create_file destination_path, File.read(source_path)
-          say "  create  #{filename}", :green
+        unit.css_sidecars.each do |path|
+          copy_css_sidecar(path)
         end
       end
 
-      def copy_erb_template(ruby_filename)
-        erb_filename = ruby_filename.sub(/\.rb$/, ".html.erb")
-        source_path = gem_component_path(erb_filename)
+      def copy_component_file(path)
+        source_path = Shadcn::Rails::Registry.gem_path(path)
+        destination_path = File.join(options[:path], "shadcn", File.basename(path))
 
-        # Only copy if the template exists
-        return unless File.exist?(source_path)
-
-        destination_path = File.join(options[:path], "shadcn", erb_filename)
-
-        if destination_file_exists?(destination_path) && !options[:force]
-          say "  skip  #{erb_filename} (already exists, use --force to overwrite)", :yellow
-        else
-          create_file destination_path, File.read(source_path)
-          say "  create  #{erb_filename}", :green
-        end
-      end
-
-      def copy_stimulus_controller(filename)
-        source_path = gem_controller_path(filename)
-        destination_path = "app/javascript/controllers/shadcn/#{filename}"
-
-        copy_javascript_file(source_path, destination_path, filename)
-
-        controller_source(source_path).scan(%r{from\s+["']\./([^"']+)["']}).flatten.each do |import_path|
-          next unless import_path.end_with?("_controller")
-
-          dependency = "#{import_path}.js"
-          copy_stimulus_controller(dependency) if File.exist?(gem_controller_path(dependency))
-        end
-
-        controller_source(source_path).scan(%r{from\s+["']\.\./utils/([^"']+)["']}).flatten.each do |utility_name|
-          copy_javascript_utility("#{utility_name}.js")
-        end
-      end
-
-      def copy_javascript_utility(filename)
-        source_path = File.join(gem_root, "app/assets/javascripts/shadcn/utils", filename)
-        destination_path = "app/javascript/controllers/shadcn/utils/#{filename}"
-
-        copy_javascript_file(source_path, destination_path, "utils/#{filename}")
-      end
-
-      def copy_javascript_file(source_path, destination_path, display_name)
-        if destination_file_exists?(destination_path) && !options[:force]
-          say "  skip  #{display_name} (already exists, use --force to overwrite)", :yellow
-        else
-          create_file destination_path, destination_javascript(source_path)
-          say "  create  #{display_name}", :green
-        end
-      end
-
-      def component_files(name)
-        family_prefix = name
-
-        Dir[gem_component_path("*_component.rb")]
-          .map { |path| File.basename(path) }
-          .select { |filename| component_family_file?(filename, family_prefix) }
-          .sort
-      end
-
-      def component_family_file?(filename, family_prefix)
-        basename = filename.sub(/_component\.rb\z/, "")
-        return false unless basename == family_prefix || basename.start_with?("#{family_prefix}_")
-
-        component_owner(basename) == family_prefix
-      end
-
-      def component_owner(basename)
-        component_roots
-          .select { |root| basename == root || basename.start_with?("#{root}_") }
-          .max_by(&:length)
-      end
-
-      def component_roots
-        @component_roots ||= COMPONENT_FILES.keys
-      end
-
-      def controller_files(name)
-        Array(COMPONENT_CONTROLLERS[name] || COMPONENT_FILES.fetch(name)[:controller]).compact
+        copy_registry_file(source_path, destination_path, File.basename(path))
       end
 
       def copied_controllers?
@@ -324,42 +159,53 @@ module Shadcn
       end
 
       def copied_controller_files
-        @copied_controller_files ||= @components_to_add.flat_map { |component| controller_files(component) }.uniq
+        @copied_controller_files ||= @components_to_add
+          .flat_map { |component| component_unit(component).controllers }
+          .map { |path| File.basename(path) }
+          .uniq
       end
 
       def normalized_components
-        components.map { |component| normalize_component_name(component) }.uniq
+        components.map { |component| Shadcn::Rails::Registry.normalize_name(component) }.uniq
       end
 
-      def normalize_component_name(component)
-        normalized = component.tr("-", "_")
-        COMPONENT_ALIASES.fetch(normalized, normalized)
-      end
+      def copy_javascript_file(path)
+        source_path = Shadcn::Rails::Registry.gem_path(path)
+        destination_path = path.sub(%r{\Aapp/assets/javascripts/shadcn/controllers/}, "app/javascript/controllers/shadcn/")
+          .sub(%r{\Aapp/assets/javascripts/shadcn/utils/}, "app/javascript/controllers/shadcn/utils/")
+        display_name = destination_path.sub(%r{\Aapp/javascript/controllers/shadcn/}, "")
 
-      def destination_javascript(source_path)
-        controller_source(source_path).gsub(%r{from\s+["']\.\./utils/([^"']+)["']}) do
-          %(from "./utils/#{Regexp.last_match(1)}")
+        copy_registry_file(source_path, destination_path, display_name) do |content|
+          content.gsub(%r{from\s+["']\.\./utils/([^"']+)["']}) do
+            %(from "./utils/#{Regexp.last_match(1)}")
+          end
         end
       end
 
-      def controller_source(source_path)
-        File.read(source_path)
+      def copy_css_sidecar(path)
+        source_path = Shadcn::Rails::Registry.gem_path(path)
+        destination_path = path
+
+        copy_registry_file(source_path, destination_path, File.basename(path))
+      end
+
+      def copy_registry_file(source_path, destination_path, display_name)
+        if destination_file_exists?(destination_path) && !options[:force]
+          say "  skip  #{display_name} (already exists, use --force to overwrite)", :yellow
+        else
+          content = File.read(source_path)
+          content = yield(content) if block_given?
+          create_file destination_path, content
+          say "  create  #{display_name}", :green
+        end
+      end
+
+      def component_unit(name)
+        Shadcn::Rails::Registry.fetch(name)
       end
 
       def destination_file_exists?(path)
         File.exist?(File.expand_path(path, destination_root))
-      end
-
-      def gem_component_path(filename)
-        File.join(gem_root, "app/components/shadcn", filename)
-      end
-
-      def gem_controller_path(filename)
-        File.join(gem_root, "app/assets/javascripts/shadcn/controllers", filename)
-      end
-
-      def gem_root
-        @gem_root ||= File.expand_path("../../../../..", __FILE__)
       end
 
       def include_controllers?

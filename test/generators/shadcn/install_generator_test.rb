@@ -65,6 +65,7 @@ class ShadcnInstallGeneratorTest < Rails::Generators::TestCase
   def test_tailwind_v4_theme_file_maps_primary_color
     theme_file = File.expand_path("../../../app/assets/stylesheets/shadcn/tailwind-v4.css", __dir__)
 
+    assert_includes File.read(theme_file), '@source "../../../components/shadcn";'
     assert_includes File.read(theme_file), "--color-primary: hsl(var(--primary));"
   end
 

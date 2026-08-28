@@ -2,6 +2,7 @@
 
 require "rails/generators"
 require "rails/generators/base"
+require "shadcn/rails/registry"
 
 module Shadcn
   module Generators
@@ -44,7 +45,7 @@ module Shadcn
         return unless destination_file_exists?("tailwind.config.js")
 
         inject_into_file "tailwind.config.js", after: "content: [" do
-          "\n    './app/components/**/*.{rb,html,erb}',\n    './app/views/**/*.{html,erb}',"
+          "\n    './app/components/**/*.{rb,html,erb}',\n    './app/views/**/*.{html,erb}',\n    '#{Shadcn::Rails::Registry.gem_path("app/components/shadcn")}/**/*.{rb,html,erb}',"
         end
 
         say "Updated tailwind.config.js to include component paths", :green
