@@ -178,19 +178,19 @@ Shadcn::Rails.configure do |config|
 end
 ```
 
-For Tailwind CSS v4, import the theme bridge:
+For Rails 8 with Tailwind CSS v4, import the generated shadcn engine bundle:
 
 ```css
 @import "tailwindcss";
-@import "shadcn/base";
-@import "shadcn/components";
-@import "shadcn/tailwind-v4";
+@import "../builds/tailwind/shadcn_rails";
 ```
 
 Rails 8 with Tailwind CSS v4 is the supported install path. `rails generate
-shadcn:install` adds these imports to `app/assets/tailwind/application.css`.
-The installer still keeps a Tailwind v3 injection path for existing Rails apps
-that use `app/assets/stylesheets/application.tailwind.css`.
+shadcn:install` adds that import to `app/assets/tailwind/application.css`. The
+generated engine bundle imports `shadcn/base`, `shadcn/components`, and
+`shadcn/tailwind-v4` from the gem. The installer still keeps a Tailwind v3
+injection path for existing Rails apps that use
+`app/assets/stylesheets/application.tailwind.css`.
 
 With npm-based CSS bundling, import from the npm package:
 

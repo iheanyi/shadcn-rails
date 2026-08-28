@@ -29,9 +29,7 @@ class ShadcnInstallGeneratorTest < Rails::Generators::TestCase
 
     assert_file "app/assets/tailwind/application.css" do |content|
       assert_includes content, '@import "tailwindcss";'
-      assert_includes content, '@import "shadcn/base";'
-      assert_includes content, '@import "shadcn/components";'
-      assert_includes content, '@import "shadcn/tailwind-v4";'
+      assert_includes content, '@import "../builds/tailwind/shadcn_rails";'
     end
 
     assert_file "config/importmap.rb" do |content|
@@ -67,6 +65,15 @@ class ShadcnInstallGeneratorTest < Rails::Generators::TestCase
 
     assert_includes File.read(theme_file), '@source "../../../components/shadcn";'
     assert_includes File.read(theme_file), "--color-primary: hsl(var(--primary));"
+  end
+
+  def test_tailwind_v4_engine_entrypoint_imports_shadcn_styles
+    engine_file = File.expand_path("../../../app/assets/tailwind/shadcn_rails/engine.css", __dir__)
+    content = File.read(engine_file)
+
+    assert_includes content, '@import "../../stylesheets/shadcn/base.css";'
+    assert_includes content, '@import "../../stylesheets/shadcn/components.css";'
+    assert_includes content, '@import "../../stylesheets/shadcn/tailwind-v4.css";'
   end
 
   def test_tailwind_v4_theme_file_maps_dialog_motion_utilities

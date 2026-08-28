@@ -84,9 +84,9 @@ module Shadcn
         say "       --primary: 221 83% 53%;     /* Custom primary color */"
         say "     }"
         say ""
-        say "  For Tailwind CSS v4, the installer imports the theme file:"
+        say "  For Tailwind CSS v4, the installer imports the shadcn engine bundle:"
         say ""
-        say "     @import \"shadcn/tailwind-v4\";"
+        say "     @import \"../builds/tailwind/shadcn_rails\";"
         say ""
         say "To add individual components to your app for customization:"
         say ""
@@ -117,12 +117,10 @@ module Shadcn
 
       def inject_tailwind_v4_styles(path)
         styles = <<~CSS
-          @import "shadcn/base";
-          @import "shadcn/components";
-          @import "shadcn/tailwind-v4";
+          @import "../builds/tailwind/shadcn_rails";
         CSS
 
-        inject_css_imports(path, styles, after: /@import\s+["']tailwindcss["'];?\n/)
+        inject_css_imports(path, styles, marker: "shadcn_rails", after: /@import\s+["']tailwindcss["'];?\n/)
       end
 
       def inject_tailwind_v3_styles(path)
@@ -157,8 +155,8 @@ module Shadcn
         end
       end
 
-      def inject_css_imports(path, styles, location)
-        append_unless_present(path, "shadcn/base") do
+      def inject_css_imports(path, styles, marker: "shadcn/base", **location)
+        append_unless_present(path, marker) do
           inject_into_file path, location do
             "#{styles}\n"
           end

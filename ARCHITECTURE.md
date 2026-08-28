@@ -33,7 +33,7 @@ The engine still autoloads gem components. For an ejected unit it `ignore`s thos
 
 `BaseComponent`, helpers, and theme CSS stay gem kernel. Subcomponents (`dialog_content`) are not add keys.
 
-Rails 8 with Tailwind v4 is the supported install path. Install on Rails 8 must inject Tailwind v4 `@theme` (ship `tailwind-v4.css` in the gem) and pin JS deps importmap actually needs (`@floating-ui/dom`, `stimulus-use`). Tailwind v3 injection remains a fallback for existing apps. Tailwind content globs must include the gem component path so unejected classes exist in the CSS build.
+Rails 8 with Tailwind v4 is the supported install path. Install on Rails 8 must inject the shadcn Tailwind engine bundle, which includes Tailwind v4 `@theme` (ship `tailwind-v4.css` in the gem), and pin JS deps importmap actually needs (`@floating-ui/dom`, `stimulus-use`). Tailwind v3 injection remains a fallback for existing apps. Tailwind content globs must include the gem component path so unejected classes exist in the CSS build.
 
 LICENSE is a file, not gemspec metadata.
 

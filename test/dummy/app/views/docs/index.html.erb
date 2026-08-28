@@ -69,9 +69,7 @@
 
     <p class="leading-7">For Rails 8 with Tailwind CSS v4 (<code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">app/assets/tailwind/application.css</code>):</p>
     <%= render "docs/code_example", language: "css", code: '@import "tailwindcss";
-@import "shadcn/base";
-@import "shadcn/components";
-@import "shadcn/tailwind-v4";' %>
+@import "../builds/tailwind/shadcn_rails";' %>
 
     <p class="leading-7">For Sprockets (application.css):</p>
     <%= render "docs/code_example", language: "css", code: '/*
@@ -135,13 +133,13 @@
     <div class="space-y-4">
       <h3 class="font-semibold">Tailwind CSS v4 Integration</h3>
       <p class="text-sm text-muted-foreground">
-        For Tailwind CSS v4, import the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">shadcn/tailwind-v4.css</code>
-        file to map CSS variables to Tailwind utility classes:
+        For Tailwind CSS v4, import the generated shadcn engine bundle. It includes
+        <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">shadcn/base.css</code>,
+        <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">shadcn/components.css</code>, and
+        <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">shadcn/tailwind-v4.css</code>:
       </p>
       <%= render "docs/code_example", language: "css", code: '@import "tailwindcss";
-@import "shadcn/base";
-@import "shadcn/components";
-@import "shadcn/tailwind-v4";' %>
+@import "../builds/tailwind/shadcn_rails";' %>
       <p class="text-sm text-muted-foreground">
         This maps the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">--radius</code> variable to
         <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">rounded-sm</code> through
