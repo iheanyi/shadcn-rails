@@ -28,11 +28,11 @@ module Shadcn
       def add_stylesheet
         return if options[:skip_tailwind]
 
-        if File.exist?(tailwind_v4_stylesheet)
+        if destination_file_exists?(tailwind_v4_stylesheet)
           inject_tailwind_v4_styles(tailwind_v4_stylesheet)
-        elsif File.exist?(tailwind_v3_stylesheet)
+        elsif destination_file_exists?(tailwind_v3_stylesheet)
           inject_tailwind_v3_styles(tailwind_v3_stylesheet)
-        elsif File.exist?(application_stylesheet)
+        elsif destination_file_exists?(application_stylesheet)
           inject_application_styles(application_stylesheet)
         else
           say "Could not find application stylesheet. Please manually import shadcn styles.", :yellow
@@ -41,7 +41,7 @@ module Shadcn
 
       def configure_tailwind
         return if options[:skip_tailwind]
-        return unless File.exist?("tailwind.config.js")
+        return unless destination_file_exists?("tailwind.config.js")
 
         inject_into_file "tailwind.config.js", after: "content: [" do
           "\n    './app/components/**/*.{rb,html,erb}',\n    './app/views/**/*.{html,erb}',"
@@ -99,7 +99,7 @@ module Shadcn
       private
 
       def importmap?
-        File.exist?("config/importmap.rb")
+        destination_file_exists?("config/importmap.rb")
       end
 
       def tailwind_v4_stylesheet
@@ -136,7 +136,7 @@ module Shadcn
       end
 
       def inject_application_styles(path)
-        content = File.read(path)
+        content = read_destination_file(path)
 
         if content.match?(/@import\s+["']tailwindcss["']/)
           inject_tailwind_v4_styles(path)
@@ -167,7 +167,7 @@ module Shadcn
       end
 
       def append_unless_present(path, marker)
-        if File.read(path).include?(marker)
+        if read_destination_file(path).include?(marker)
           say "Skipped #{path}; shadcn styles are already present", :yellow
         else
           addition = yield
@@ -181,13 +181,13 @@ module Shadcn
       end
 
       def using_esbuild?
-        File.exist?("esbuild.config.mjs") ||
-          (File.exist?("package.json") && File.read("package.json").include?("esbuild"))
+        destination_file_exists?("esbuild.config.mjs") ||
+          (destination_file_exists?("package.json") && read_destination_file("package.json").include?("esbuild"))
       end
 
       def using_webpack?
-        File.exist?("webpack.config.js") ||
-          (File.exist?("package.json") && File.read("package.json").include?("webpack"))
+        destination_file_exists?("webpack.config.js") ||
+          (destination_file_exists?("package.json") && read_destination_file("package.json").include?("webpack"))
       end
 
       def setup_importmap
@@ -196,7 +196,7 @@ module Shadcn
         append_importmap_pin %(pin "stimulus-use", to: "https://cdn.jsdelivr.net/npm/stimulus-use@0.52.3/+esm")
 
         # Update application.js to register controllers
-        if File.exist?("app/javascript/controllers/application.js")
+        if destination_file_exists?("app/javascript/controllers/application.js")
           append_unless_present("app/javascript/controllers/application.js", "registerShadcnControllers") do
             <<~JS
 
@@ -218,7 +218,7 @@ module Shadcn
 
       def setup_bundler
         # Add to package.json dependencies
-        if File.exist?("package.json")
+        if destination_file_exists?("package.json")
           say "Please install the npm package and add to your JavaScript entry point:", :yellow
           say ""
           say "  npm install shadcn-rails-stimulus"
@@ -233,6 +233,14 @@ module Shadcn
           say "  @import 'shadcn-rails-stimulus/styles/tailwind-v4';  /* For Tailwind v4 */"
           say ""
         end
+      end
+
+      def read_destination_file(path)
+        File.read(File.expand_path(path, destination_root))
+      end
+
+      def destination_file_exists?(path)
+        File.exist?(File.expand_path(path, destination_root))
       end
     end
   end

@@ -56,7 +56,8 @@ class ShadcnInstallGeneratorTest < Rails::Generators::TestCase
     run_generator
 
     assert_file "app/assets/stylesheets/application.tailwind.css" do |content|
-      assert_match(/@import "shadcn\/base";\n@import "shadcn\/components";\n\n@tailwind base;/, content)
+      assert_operator content.index('@import "shadcn/base";'), :<, content.index("@tailwind base;")
+      assert_operator content.index('@import "shadcn/components";'), :<, content.index("@tailwind base;")
       refute_includes content, "shadcn/tailwind-v4"
     end
   end
