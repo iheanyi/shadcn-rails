@@ -100,10 +100,7 @@ class ShadcnAddGeneratorTest < Rails::Generators::TestCase
         dummy_root,
         "rails",
         "runner",
-        <<~RUBY.squish
-          puts Shadcn::DialogContentComponent.instance_method(:call).source_location.first
-          puts Shadcn::ButtonComponent.instance_method(:button_classes).source_location.first
-        RUBY
+        "puts Shadcn::DialogContentComponent.instance_method(:call).source_location.first; puts Shadcn::ButtonComponent.instance_method(:button_classes).source_location.first"
       )
       dialog_content_source, button_source = output.lines.map(&:strip)
 
