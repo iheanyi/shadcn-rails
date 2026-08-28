@@ -94,8 +94,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Theme presets**: neutral, slate, stone, zinc, gray
 - **Rails generators**:
   - `rails g shadcn:install` - Initial setup
-  - `rails g shadcn:component [name]` - Add individual components
-  - `rails g shadcn:theme [name]` - Switch color themes
+  - `rails g shadcn:add [name]` - Copy components into your app for customization
 - **Tailwind CSS integration** with class merging utility
 - **Accessibility features** following WAI-ARIA patterns
 - **npm package** (`shadcn-rails-stimulus`) for Stimulus controllers

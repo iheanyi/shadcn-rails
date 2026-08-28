@@ -80,13 +80,13 @@
       >
         <p class="text-sm text-muted-foreground mb-2">Add to your <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">config/importmap.rb</code>:</p>
         <%= render "docs/code_example", language: "ruby", code: <<~CODE
-pin "shadcn-rails", to: "shadcn/index.js"
+pin "shadcn", to: "shadcn/index.js"
 CODE
         %>
         <p class="text-sm text-muted-foreground mb-2">Then in your <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">app/javascript/controllers/index.js</code>:</p>
         <%= render "docs/code_example", language: "javascript", code: <<~CODE
 import { Application } from "@hotwired/stimulus"
-import { registerShadcnControllers } from "shadcn-rails"
+import { registerShadcnControllers } from "shadcn"
 
 const application = Application.start()
 registerShadcnControllers(application)
@@ -103,11 +103,11 @@ CODE
         hidden
       >
         <p class="text-sm text-muted-foreground mb-2">Install the package:</p>
-        <%= render "docs/code_example", language: "bash", code: "npm install shadcn-rails" %>
+        <%= render "docs/code_example", language: "bash", code: "npm install shadcn-rails-stimulus" %>
         <p class="text-sm text-muted-foreground mb-2">Then in your <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">app/javascript/controllers/index.js</code>:</p>
         <%= render "docs/code_example", language: "javascript", code: <<~CODE
 import { Application } from "@hotwired/stimulus"
-import { registerShadcnControllers } from "shadcn-rails"
+import { registerShadcnControllers } from "shadcn-rails-stimulus"
 
 const application = Application.start()
 registerShadcnControllers(application)
@@ -124,11 +124,11 @@ CODE
         hidden
       >
         <p class="text-sm text-muted-foreground mb-2">Install the package:</p>
-        <%= render "docs/code_example", language: "bash", code: "yarn add shadcn-rails" %>
+        <%= render "docs/code_example", language: "bash", code: "yarn add shadcn-rails-stimulus" %>
         <p class="text-sm text-muted-foreground mb-2">Then in your <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">app/javascript/controllers/index.js</code>:</p>
         <%= render "docs/code_example", language: "javascript", code: <<~CODE
 import { Application } from "@hotwired/stimulus"
-import { registerShadcnControllers } from "shadcn-rails"
+import { registerShadcnControllers } from "shadcn-rails-stimulus"
 
 const application = Application.start()
 registerShadcnControllers(application)
@@ -145,11 +145,11 @@ CODE
         hidden
       >
         <p class="text-sm text-muted-foreground mb-2">Install the package:</p>
-        <%= render "docs/code_example", language: "bash", code: "npm install shadcn-rails" %>
+        <%= render "docs/code_example", language: "bash", code: "npm install shadcn-rails-stimulus" %>
         <p class="text-sm text-muted-foreground mb-2">Then in your <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">app/javascript/controllers/index.js</code>:</p>
         <%= render "docs/code_example", language: "javascript", code: <<~CODE
 import { Application } from "@hotwired/stimulus"
-import { registerShadcnControllers } from "shadcn-rails"
+import { registerShadcnControllers } from "shadcn-rails-stimulus"
 
 const application = Application.start()
 registerShadcnControllers(application)
@@ -161,7 +161,7 @@ CODE
     <p class="text-sm text-muted-foreground">Or import just this controller:</p>
     <% controller_file = controller_name.gsub("shadcn--", "").gsub("-", "_") %>
     <%= render "docs/code_example", language: "javascript", code: <<~CODE
-import #{controller_file.camelize}Controller from "shadcn-rails/controllers/#{controller_file}_controller"
+import #{controller_file.camelize}Controller from "shadcn-rails-stimulus/controllers/#{controller_file}_controller"
 
 application.register("#{controller_name}", #{controller_file.camelize}Controller)
 CODE
@@ -254,7 +254,7 @@ CODE
       Type definitions are included. Import types as needed:
     </p>
     <%= render "docs/code_example", language: "typescript", code: <<~CODE
-import type { #{controller_file.camelize}Controller } from "shadcn-rails"
+import type { #{controller_file.camelize}Controller } from "shadcn-rails-stimulus"
 CODE
     %>
   </div>

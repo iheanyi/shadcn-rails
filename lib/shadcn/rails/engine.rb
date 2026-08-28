@@ -6,14 +6,20 @@ module Shadcn
       isolate_namespace Shadcn::Rails
 
 
-      # Configure autoloading for components
+      # Configure autoloading for components. Keep the engine component path
+      # behind the host app's paths so files copied by shadcn:add shadow the gem.
       initializer "shadcn-rails.autoloading", before: :set_autoload_paths do |app|
-        components_path = root.join("app/components")
+        components_path = root.join("app/components").to_s
+
+        app.config.autoload_paths.delete(components_path)
         app.config.autoload_paths << components_path
+
+        app.config.eager_load_paths.delete(components_path)
+        app.config.eager_load_paths << components_path
 
         # Enable reloading of engine components in development
         if ::Rails.env.development?
-          app.reloaders << app.config.file_watcher.new([], { components_path.to_s => ["rb"] }) do
+          app.reloaders << app.config.file_watcher.new([], { components_path => ["rb"] }) do
             # Trigger reload when component files change
           end
         end

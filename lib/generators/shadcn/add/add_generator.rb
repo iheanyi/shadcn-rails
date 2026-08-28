@@ -137,19 +137,22 @@ module Shadcn
         say ""
         say "Components are now in your application:", :yellow
         say "  - Ruby components: #{options[:path]}/shadcn/"
-        if include_controllers?
+        if copied_controllers?
           say "  - Stimulus controllers: app/javascript/controllers/shadcn/"
         end
         say ""
         say "These local files will take precedence over the gem's components."
         say "You can now customize them as needed."
         say ""
-        if include_controllers?
-          say "Note: Register the controllers in your Stimulus application:", :cyan
+        if copied_controllers?
+          say "Note: Register copied controllers in your Stimulus application as needed.", :cyan
           say ""
-          say "  // In app/javascript/controllers/index.js"
-          say "  import ShadcnDialog from \"./shadcn/dialog_controller\""
-          say "  application.register(\"shadcn--dialog\", ShadcnDialog)"
+          copied_controller_files.each do |filename|
+            controller_name = filename.sub(/_controller\.js\z/, "").tr("_", "-")
+            class_name = "Shadcn#{filename.sub(/_controller\.js\z/, "").camelize}"
+            say "  import #{class_name} from \"./shadcn/#{filename.sub(/\.js\z/, "")}\""
+            say "  application.register(\"shadcn--#{controller_name}\", #{class_name})"
+          end
           say ""
         end
       end
@@ -314,6 +317,14 @@ module Shadcn
 
       def controller_files(name)
         Array(COMPONENT_CONTROLLERS[name] || COMPONENT_FILES.fetch(name)[:controller]).compact
+      end
+
+      def copied_controllers?
+        include_controllers? && copied_controller_files.any?
+      end
+
+      def copied_controller_files
+        @copied_controller_files ||= @components_to_add.flat_map { |component| controller_files(component) }.uniq
       end
 
       def normalized_components

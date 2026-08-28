@@ -15,7 +15,7 @@ module Shadcn
         # @param block [Proc] Optional block for component content
         #
         # @example
-        #   <%= shadcn :button, variant: :primary do %>
+        #   <%= shadcn :button, variant: :default do %>
         #     Click me
         #   <% end %>
         #

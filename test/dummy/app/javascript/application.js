@@ -8,8 +8,8 @@ application.debug = false
 window.Stimulus = application
 
 // Import shadcn-rails controllers from the gem's source directory
-// The "shadcn-rails" import is aliased in package.json to point to the gem's JS
-import { registerShadcnControllers } from "shadcn-rails"
+// The "shadcn-rails-stimulus" import is aliased in package.json to point to the gem's JS
+import { registerShadcnControllers } from "shadcn-rails-stimulus"
 registerShadcnControllers(application)
 
 // Import local controllers

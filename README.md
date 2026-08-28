@@ -46,7 +46,11 @@ bundle add shadcn-rails
 rails generate shadcn:install
 ```
 
-If your app bundles JavaScript or CSS through npm, add the Stimulus package too:
+For importmap apps, the installer pins the local `shadcn` entrypoint plus its
+external dependencies (`@floating-ui/dom` and `stimulus-use`) in
+`config/importmap.rb`.
+
+If your app bundles JavaScript or CSS through npm, add the Stimulus package:
 
 ```bash
 npm install shadcn-rails-stimulus
@@ -54,7 +58,7 @@ npm install shadcn-rails-stimulus
 yarn add shadcn-rails-stimulus
 ```
 
-Register all controllers:
+Then register all controllers:
 
 ```javascript
 import { Application } from "@hotwired/stimulus"
@@ -179,8 +183,12 @@ For Tailwind CSS v4, import the theme bridge:
 ```css
 @import "tailwindcss";
 @import "shadcn/base";
+@import "shadcn/components";
 @import "shadcn/tailwind-v4";
 ```
+
+On Rails 8 apps generated with Tailwind CSS v4, `rails generate shadcn:install`
+adds these imports to `app/assets/tailwind/application.css`.
 
 With npm-based CSS bundling, import from the npm package:
 

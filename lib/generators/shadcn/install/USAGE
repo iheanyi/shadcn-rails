@@ -6,7 +6,6 @@ Example:
 
     This will create:
         config/initializers/shadcn.rb
-        config/shadcn.yml
 
     And configure:
         Tailwind CSS (if present)

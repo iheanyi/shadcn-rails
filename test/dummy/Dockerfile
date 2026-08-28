@@ -46,7 +46,7 @@ RUN sed -i 's|path: "../.."|path: "/shadcn-rails"|' Gemfile && \
 RUN npm ci && \
     NODE_PATH=/rails/node_modules npx esbuild app/javascript/application.js --bundle --sourcemap \
     --outdir=app/assets/builds --public-path=/assets --loader:.js=jsx \
-    --alias:shadcn-rails=/shadcn-rails/app/assets/javascripts/shadcn/index.js
+    --alias:shadcn-rails-stimulus=/shadcn-rails/app/assets/javascripts/shadcn/index.js
 
 # Precompile assets
 RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
