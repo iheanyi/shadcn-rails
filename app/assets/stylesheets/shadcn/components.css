@@ -287,6 +287,76 @@ button[data-state="off"].shadcn-toggle {
    Dialog & Sheet Components
    ============================================ */
 
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes zoom-in-95 {
+  from { transform: scale(0.95); }
+  to { transform: scale(1); }
+}
+
+@keyframes zoom-out-95 {
+  from { transform: scale(1); }
+  to { transform: scale(0.95); }
+}
+
+@keyframes zoom-in {
+  from { transform: scale(0.95); }
+  to { transform: scale(1); }
+}
+
+@keyframes zoom-out {
+  from { transform: scale(1); }
+  to { transform: scale(0.95); }
+}
+
+@keyframes slide-in-from-top {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes slide-in-from-bottom {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes slide-in-from-left {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slide-in-from-right {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slide-out-to-top {
+  from { transform: translateY(0); }
+  to { transform: translateY(-100%); }
+}
+
+@keyframes slide-out-to-bottom {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+}
+
+@keyframes slide-out-to-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+@keyframes slide-out-to-right {
+  from { transform: translateX(0); }
+  to { transform: translateX(100%); }
+}
+
 /* Overlay styles */
 .shadcn-overlay {
   position: fixed;
@@ -327,6 +397,22 @@ button[data-state="off"].shadcn-toggle {
 
 .shadcn-sheet-content[data-side="right"][data-state="open"] {
   animation: slide-in-from-right 300ms ease-out;
+}
+
+.shadcn-sheet-content[data-side="top"][data-state="closed"] {
+  animation: slide-out-to-top 300ms ease-in;
+}
+
+.shadcn-sheet-content[data-side="bottom"][data-state="closed"] {
+  animation: slide-out-to-bottom 300ms ease-in;
+}
+
+.shadcn-sheet-content[data-side="left"][data-state="closed"] {
+  animation: slide-out-to-left 300ms ease-in;
+}
+
+.shadcn-sheet-content[data-side="right"][data-state="closed"] {
+  animation: slide-out-to-right 300ms ease-in;
 }
 
 /* ============================================

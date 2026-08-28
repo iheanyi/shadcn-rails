@@ -69,6 +69,30 @@ class ShadcnInstallGeneratorTest < Rails::Generators::TestCase
     assert_includes File.read(theme_file), "--color-primary: hsl(var(--primary));"
   end
 
+  def test_tailwind_v4_theme_file_maps_dialog_motion_utilities
+    theme_file = File.expand_path("../../../app/assets/stylesheets/shadcn/tailwind-v4.css", __dir__)
+    content = File.read(theme_file)
+
+    assert_includes content, "--animate-in: enter 150ms ease-out both;"
+    assert_includes content, "--animate-out: exit 150ms ease-in both;"
+    assert_includes content, "@keyframes enter"
+    assert_includes content, "@keyframes zoom-in-95"
+    assert_includes content, "@utility fade-in-0"
+    assert_includes content, "@utility zoom-in-95"
+    assert_includes content, "@utility slide-in-from-left-*"
+    assert_includes content, "@utility slide-out-to-left-*"
+  end
+
+  def test_component_fallback_file_defines_dialog_motion_keyframes
+    components_file = File.expand_path("../../../app/assets/stylesheets/shadcn/components.css", __dir__)
+    content = File.read(components_file)
+
+    assert_includes content, "@keyframes fade-in"
+    assert_includes content, "@keyframes zoom-in-95"
+    assert_includes content, ".shadcn-dialog-content[data-state=\"open\"]"
+    assert_includes content, "animation: fade-in 150ms ease-out, zoom-in 150ms ease-out;"
+  end
+
   private
 
   def write_file(path, content)
