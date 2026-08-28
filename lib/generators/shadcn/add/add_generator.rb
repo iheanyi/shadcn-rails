@@ -29,7 +29,8 @@ module Shadcn
 
       desc "Adds shadcn components to your application for customization"
 
-      # Map component names to their files
+      # Map component names to their root files. Related Ruby component files
+      # are discovered by family prefix so compound components copy as a unit.
       COMPONENT_FILES = {
         "accordion" => { component: "accordion_component.rb", controller: "accordion_controller.js" },
         "alert" => { component: "alert_component.rb", controller: nil },
@@ -52,11 +53,13 @@ module Shadcn
         "dialog" => { component: "dialog_component.rb", controller: "dialog_controller.js" },
         "drawer" => { component: "drawer_component.rb", controller: "drawer_controller.js" },
         "dropdown_menu" => { component: "dropdown_menu_component.rb", controller: "dropdown_controller.js" },
+        "empty" => { component: "empty_component.rb", controller: nil },
         "field" => { component: "field_component.rb", controller: nil },
         "hover_card" => { component: "hover_card_component.rb", controller: "hover_card_controller.js" },
         "input" => { component: "input_component.rb", controller: nil },
         "input_group" => { component: "input_group_component.rb", controller: nil },
         "input_otp" => { component: "input_otp_component.rb", controller: "input_otp_controller.js" },
+        "item" => { component: "item_component.rb", controller: nil },
         "kbd" => { component: "kbd_component.rb", controller: nil },
         "label" => { component: "label_component.rb", controller: nil },
         "menubar" => { component: "menubar_component.rb", controller: "menubar_controller.js" },
@@ -86,6 +89,14 @@ module Shadcn
         "typography" => { component: "typography_component.rb", controller: nil }
       }.freeze
 
+      COMPONENT_ALIASES = {
+        "dropdown" => "dropdown_menu"
+      }.freeze
+
+      COMPONENT_CONTROLLERS = {
+        "command" => %w[command_controller.js command_dialog_controller.js]
+      }.freeze
+
       def validate_components
         if options[:list]
           display_available_components
@@ -96,7 +107,7 @@ module Shadcn
           @components_to_add = COMPONENT_FILES.keys
         else
           validate_requested_components
-          @components_to_add = components
+          @components_to_add = normalized_components
         end
       end
 
@@ -105,7 +116,7 @@ module Shadcn
         say "Adding #{@components_to_add.length} component(s):", :green
         @components_to_add.each { |c| say "  - #{c}" }
         if include_controllers?
-          controllers = @components_to_add.count { |c| COMPONENT_FILES[c][:controller] }
+          controllers = @components_to_add.sum { |c| controller_files(c).length }
           say ""
           say "Including #{controllers} Stimulus controller(s)", :cyan if controllers > 0
         end
@@ -154,7 +165,7 @@ module Shadcn
         categories = {
           "Buttons & Actions" => %w[button button_group toggle toggle_group],
           "Form Inputs" => %w[checkbox field input input_group input_otp label native_select radio_group select slider switch textarea],
-          "Data Display" => %w[avatar badge card kbd progress skeleton spinner table typography aspect_ratio scroll_area],
+          "Data Display" => %w[avatar badge card empty item kbd progress skeleton spinner table typography aspect_ratio scroll_area],
           "Feedback" => %w[alert toast tooltip],
           "Overlays" => %w[alert_dialog dialog drawer dropdown_menu hover_card popover sheet context_menu],
           "Navigation" => %w[accordion breadcrumb collapsible menubar navigation_menu pagination separator tabs resizable],
@@ -190,7 +201,7 @@ module Shadcn
           exit 1
         end
 
-        invalid = components - COMPONENT_FILES.keys
+        invalid = components.reject { |component| COMPONENT_FILES.key?(normalize_component_name(component)) }
         if invalid.any?
           say "Error: Unknown component(s): #{invalid.join(', ')}", :red
           say ""
@@ -200,21 +211,19 @@ module Shadcn
       end
 
       def add_component(name)
-        files = COMPONENT_FILES[name]
+        component_files(name).each do |filename|
+          copy_ruby_component(filename)
+          copy_erb_template(filename)
+        end
 
-        # Copy Ruby component
-        copy_ruby_component(name, files[:component])
-
-        # Copy ERB template if it exists
-        copy_erb_template(name, files[:component])
-
-        # Copy Stimulus controller if requested and exists
-        if include_controllers? && files[:controller]
-          copy_stimulus_controller(name, files[:controller])
+        if include_controllers?
+          controller_files(name).each do |filename|
+            copy_stimulus_controller(filename)
+          end
         end
       end
 
-      def copy_ruby_component(name, filename)
+      def copy_ruby_component(filename)
         source_path = gem_component_path(filename)
         destination_path = File.join(options[:path], "shadcn", filename)
 
@@ -226,7 +235,7 @@ module Shadcn
         end
       end
 
-      def copy_erb_template(name, ruby_filename)
+      def copy_erb_template(ruby_filename)
         erb_filename = ruby_filename.sub(/\.rb$/, ".html.erb")
         source_path = gem_component_path(erb_filename)
 
@@ -243,20 +252,87 @@ module Shadcn
         end
       end
 
-      def copy_stimulus_controller(name, filename)
+      def copy_stimulus_controller(filename)
         source_path = gem_controller_path(filename)
         destination_path = "app/javascript/controllers/shadcn/#{filename}"
 
-        # Create directory if it doesn't exist
-        directory = File.dirname(destination_path)
-        empty_directory directory unless File.directory?(directory)
+        copy_javascript_file(source_path, destination_path, filename)
 
-        if File.exist?(destination_path) && !options[:force]
-          say "  skip  #{filename} (already exists, use --force to overwrite)", :yellow
-        else
-          copy_file source_path, destination_path
-          say "  create  #{filename}", :green
+        controller_source(source_path).scan(%r{from\s+["']\./([^"']+)["']}).flatten.each do |import_path|
+          next unless import_path.end_with?("_controller")
+
+          dependency = "#{import_path}.js"
+          copy_stimulus_controller(dependency) if File.exist?(gem_controller_path(dependency))
         end
+
+        controller_source(source_path).scan(%r{from\s+["']\.\./utils/([^"']+)["']}).flatten.each do |utility_name|
+          copy_javascript_utility("#{utility_name}.js")
+        end
+      end
+
+      def copy_javascript_utility(filename)
+        source_path = File.join(gem_root, "app/assets/javascripts/shadcn/utils", filename)
+        destination_path = "app/javascript/controllers/shadcn/utils/#{filename}"
+
+        copy_javascript_file(source_path, destination_path, "utils/#{filename}")
+      end
+
+      def copy_javascript_file(source_path, destination_path, display_name)
+        if File.exist?(destination_path) && !options[:force]
+          say "  skip  #{display_name} (already exists, use --force to overwrite)", :yellow
+        else
+          create_file destination_path, destination_javascript(source_path)
+          say "  create  #{display_name}", :green
+        end
+      end
+
+      def component_files(name)
+        family_prefix = name
+
+        Dir[gem_component_path("*_component.rb")]
+          .map { |path| File.basename(path) }
+          .select { |filename| component_family_file?(filename, family_prefix) }
+          .sort
+      end
+
+      def component_family_file?(filename, family_prefix)
+        basename = filename.sub(/_component\.rb\z/, "")
+        return false unless basename == family_prefix || basename.start_with?("#{family_prefix}_")
+
+        component_owner(basename) == family_prefix
+      end
+
+      def component_owner(basename)
+        component_roots
+          .select { |root| basename == root || basename.start_with?("#{root}_") }
+          .max_by(&:length)
+      end
+
+      def component_roots
+        @component_roots ||= COMPONENT_FILES.keys
+      end
+
+      def controller_files(name)
+        Array(COMPONENT_CONTROLLERS[name] || COMPONENT_FILES.fetch(name)[:controller]).compact
+      end
+
+      def normalized_components
+        components.map { |component| normalize_component_name(component) }.uniq
+      end
+
+      def normalize_component_name(component)
+        normalized = component.tr("-", "_")
+        COMPONENT_ALIASES.fetch(normalized, normalized)
+      end
+
+      def destination_javascript(source_path)
+        controller_source(source_path).gsub(%r{from\s+["']\.\./utils/([^"']+)["']}) do
+          %(from "./utils/#{Regexp.last_match(1)}")
+        end
+      end
+
+      def controller_source(source_path)
+        File.read(source_path)
       end
 
       def gem_component_path(filename)

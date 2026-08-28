@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email = ["iekechukwu@gmail.com"]
 
   spec.summary = "Beautiful, accessible UI components for Rails using ViewComponents and Stimulus"
-  spec.description = "A Rails port of shadcn/ui - a collection of beautifully designed, accessible components built with ViewComponents, Stimulus, and Tailwind CSS. Includes theming support, dark mode, and full component parity with the original library."
+  spec.description = "A Rails port of shadcn/ui - a collection of components built with ViewComponents, Stimulus, and Tailwind CSS. Includes theming support, dark mode, and generators for copying component source into your application."
   spec.homepage = "https://github.com/iheanyi/shadcn-rails"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.1.0"
