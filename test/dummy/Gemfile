@@ -21,7 +21,7 @@ gem "stimulus-rails"
 gem "importmap-rails"
 
 # Tailwind
-gem "tailwindcss-rails"
+gem "tailwindcss-rails", "~> 4.0"
 
 # Live reloading
 gem "hotwire-livereload", group: :development

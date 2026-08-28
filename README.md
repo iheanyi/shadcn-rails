@@ -187,8 +187,10 @@ For Tailwind CSS v4, import the theme bridge:
 @import "shadcn/tailwind-v4";
 ```
 
-On Rails 8 apps generated with Tailwind CSS v4, `rails generate shadcn:install`
-adds these imports to `app/assets/tailwind/application.css`.
+Rails 8 with Tailwind CSS v4 is the supported install path. `rails generate
+shadcn:install` adds these imports to `app/assets/tailwind/application.css`.
+The installer still keeps a Tailwind v3 injection path for existing Rails apps
+that use `app/assets/stylesheets/application.tailwind.css`.
 
 With npm-based CSS bundling, import from the npm package:
 
@@ -202,7 +204,8 @@ With npm-based CSS bundling, import from the npm package:
 
 - Ruby >= 3.1
 - Rails >= 7.0
-- Tailwind CSS >= 3.0
+- Tailwind CSS v4 for the supported Rails 8 install path; v3 remains an
+  installer fallback for existing apps
 - Stimulus >= 3.0
 - ViewComponent >= 3.0
 

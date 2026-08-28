@@ -25,7 +25,7 @@ gem "lookbook", ">= 2.0"
 gem "stimulus-rails"
 gem "turbo-rails"
 gem "importmap-rails"
-gem "tailwindcss-rails"
+gem "tailwindcss-rails", "~> 4.0"
 gem "sprockets-rails"
 
 # Debugging

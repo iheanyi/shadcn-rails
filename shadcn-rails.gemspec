@@ -55,5 +55,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "capybara", "~> 3.0"
   spec.add_development_dependency "cuprite", "~> 0.15"
   spec.add_development_dependency "lookbook", "~> 2.0"
-  spec.add_development_dependency "tailwindcss-rails", "~> 3.0"
+  spec.add_development_dependency "tailwindcss-rails", "~> 4.0"
 end

@@ -67,13 +67,11 @@
       </div>
     </div>
 
-    <p class="leading-7">For Tailwind CSS (application.tailwind.css):</p>
-    <%= render "docs/code_example", language: "css", code: '@import "shadcn/base";
+    <p class="leading-7">For Rails 8 with Tailwind CSS v4 (<code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">app/assets/tailwind/application.css</code>):</p>
+    <%= render "docs/code_example", language: "css", code: '@import "tailwindcss";
+@import "shadcn/base";
 @import "shadcn/components";
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;' %>
+@import "shadcn/tailwind-v4";' %>
 
     <p class="leading-7">For Sprockets (application.css):</p>
     <%= render "docs/code_example", language: "css", code: '/*
