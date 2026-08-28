@@ -3,6 +3,7 @@
 require "test_helper"
 require "rails/generators/test_case"
 require "generators/shadcn/add/add_generator"
+require "open3"
 
 class ShadcnAddGeneratorTest < Rails::Generators::TestCase
   tests Shadcn::Generators::AddGenerator
@@ -91,11 +92,56 @@ class ShadcnAddGeneratorTest < Rails::Generators::TestCase
     assert_file "app/components/shadcn/resizable_handle_component.rb"
   end
 
+  def test_dialog_source_location_is_app_after_add
+    within_clean_dummy_app do |dummy_root|
+      run_dummy_command!(dummy_root, "rails", "generate", "shadcn:add", "dialog")
+
+      output = run_dummy_command!(
+        dummy_root,
+        "rails",
+        "runner",
+        <<~RUBY.squish
+          puts Shadcn::DialogContentComponent.instance_method(:call).source_location.first
+          puts Shadcn::ButtonComponent.instance_method(:button_classes).source_location.first
+        RUBY
+      )
+      dialog_content_source, button_source = output.lines.map(&:strip)
+
+      assert_includes dialog_content_source, File.join("test", "dummy", "app", "components", "shadcn", "dialog_content_component.rb")
+      assert_includes button_source, File.join("app", "components", "shadcn", "button_component.rb")
+      refute_includes button_source, File.join("test", "dummy", "app", "components")
+    end
+  end
+
   private
 
   def write_file(path, content)
     full_path = File.join(destination_root, path)
     FileUtils.mkdir_p(File.dirname(full_path))
     File.write(full_path, content)
+  end
+
+  def within_clean_dummy_app
+    dummy_root = File.expand_path("../../dummy", __dir__)
+    cleanup_dummy_generated_files(dummy_root)
+
+    yield dummy_root
+  ensure
+    cleanup_dummy_generated_files(dummy_root) if dummy_root
+  end
+
+  def cleanup_dummy_generated_files(dummy_root)
+    FileUtils.rm_rf(File.join(dummy_root, "app/components"))
+    FileUtils.rm_rf(File.join(dummy_root, "app/javascript/controllers/shadcn"))
+    FileUtils.rm_rf(File.join(dummy_root, "log"))
+    FileUtils.rm_rf(File.join(dummy_root, "tmp"))
+  end
+
+  def run_dummy_command!(dummy_root, *command)
+    env = { "BUNDLE_GEMFILE" => File.expand_path("../../../Gemfile", __dir__) }
+    stdout, stderr, status = Open3.capture3(env, "bundle", "exec", *command, chdir: dummy_root)
+
+    assert status.success?, "Expected #{command.join(' ')} to succeed.\nSTDOUT:\n#{stdout}\nSTDERR:\n#{stderr}"
+    stdout
   end
 end

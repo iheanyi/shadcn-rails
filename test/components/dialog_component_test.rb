@@ -44,6 +44,26 @@ class DialogComponentTest < ViewComponent::TestCase
     assert_selector "template[data-shadcn--dialog-target='template']", visible: :all
   end
 
+  def test_with_body_renders_without_raising
+    result = render_inline(Shadcn::DialogComponent.new) do |dialog|
+      dialog.with_body do |content|
+        content.with_title { "Body Slot" }
+      end
+    end
+
+    assert_includes result.to_html, "Body Slot"
+  end
+
+  def test_with_content_alias_renders_without_raising
+    result = render_inline(Shadcn::DialogComponent.new) do |dialog|
+      dialog.with_content do |content|
+        content.with_title { "Content Alias" }
+      end
+    end
+
+    assert_includes result.to_html, "Content Alias"
+  end
+
   def test_renders_template_with_content
     result = render_inline(Shadcn::DialogComponent.new) do |dialog|
       dialog.with_body
