@@ -227,10 +227,10 @@ module Shadcn
         source_path = gem_component_path(filename)
         destination_path = File.join(options[:path], "shadcn", filename)
 
-        if File.exist?(destination_path) && !options[:force]
+        if destination_file_exists?(destination_path) && !options[:force]
           say "  skip  #{filename} (already exists, use --force to overwrite)", :yellow
         else
-          copy_file source_path, destination_path
+          create_file destination_path, File.read(source_path)
           say "  create  #{filename}", :green
         end
       end
@@ -244,10 +244,10 @@ module Shadcn
 
         destination_path = File.join(options[:path], "shadcn", erb_filename)
 
-        if File.exist?(destination_path) && !options[:force]
+        if destination_file_exists?(destination_path) && !options[:force]
           say "  skip  #{erb_filename} (already exists, use --force to overwrite)", :yellow
         else
-          copy_file source_path, destination_path
+          create_file destination_path, File.read(source_path)
           say "  create  #{erb_filename}", :green
         end
       end
@@ -278,7 +278,7 @@ module Shadcn
       end
 
       def copy_javascript_file(source_path, destination_path, display_name)
-        if File.exist?(destination_path) && !options[:force]
+        if destination_file_exists?(destination_path) && !options[:force]
           say "  skip  #{display_name} (already exists, use --force to overwrite)", :yellow
         else
           create_file destination_path, destination_javascript(source_path)
@@ -333,6 +333,10 @@ module Shadcn
 
       def controller_source(source_path)
         File.read(source_path)
+      end
+
+      def destination_file_exists?(path)
+        File.exist?(File.expand_path(path, destination_root))
       end
 
       def gem_component_path(filename)
