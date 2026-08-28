@@ -10,6 +10,15 @@ module Shadcn
       # behind the host app's paths so files copied by shadcn:add shadow the gem.
       initializer "shadcn-rails.autoloading", before: :set_autoload_paths do |app|
         components_path = root.join("app/components").to_s
+        app_components_path = app.root.join("app/components").to_s
+
+        if File.directory?(app_components_path)
+          app.config.autoload_paths.delete(app_components_path)
+          app.config.autoload_paths.unshift(app_components_path)
+
+          app.config.eager_load_paths.delete(app_components_path)
+          app.config.eager_load_paths.unshift(app_components_path)
+        end
 
         app.config.autoload_paths.delete(components_path)
         app.config.autoload_paths << components_path
