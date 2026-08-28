@@ -84,6 +84,12 @@ class ShadcnInstallGeneratorTest < Rails::Generators::TestCase
     assert_includes content, "--animate-out: exit 150ms ease-in both;"
     assert_includes content, "@keyframes enter"
     assert_includes content, "@keyframes zoom-in-95"
+    assert_includes content, ".shadcn-dialog-content[data-state=\"open\"]"
+    assert_includes content, "animation: enter 200ms cubic-bezier(0.16, 1, 0.3, 1) both;"
+    assert_includes content, ".shadcn-toast[data-state=\"open\"]"
+    assert_includes content, "--tw-enter-translate-x: 100%;"
+    assert_includes content, ".shadcn-tooltip[data-state=\"open\"]"
+    assert_includes content, "animation: fade-in 150ms ease-out both;"
     assert_includes content, "@utility fade-in-0"
     assert_includes content, "@utility zoom-in-95"
     assert_includes content, "@utility slide-in-from-left-*"
@@ -97,7 +103,7 @@ class ShadcnInstallGeneratorTest < Rails::Generators::TestCase
     assert_includes content, "@keyframes fade-in"
     assert_includes content, "@keyframes zoom-in-95"
     assert_includes content, ".shadcn-dialog-content[data-state=\"open\"]"
-    assert_includes content, "animation: fade-in 150ms ease-out, zoom-in 150ms ease-out;"
+    assert_includes content, "animation: fade-in 200ms cubic-bezier(0.16, 1, 0.3, 1), zoom-in-95 200ms cubic-bezier(0.16, 1, 0.3, 1);"
   end
 
   private

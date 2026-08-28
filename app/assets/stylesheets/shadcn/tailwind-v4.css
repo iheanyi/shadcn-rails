@@ -307,6 +307,71 @@
   --tw-exit-translate-x: 100%;
 }
 
+/* Motion lock for component hooks that need specific timing. */
+.shadcn-overlay[data-state="open"] {
+  animation: fade-in 150ms ease-out both;
+}
+
+.shadcn-overlay[data-state="closed"] {
+  animation: fade-out 150ms ease-out both;
+}
+
+.shadcn-dialog-content[data-state="open"] {
+  animation: enter 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  --tw-enter-opacity: 0;
+  --tw-enter-scale: 0.95;
+}
+
+.shadcn-dialog-content[data-state="closed"] {
+  animation: exit 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  --tw-exit-opacity: 0;
+  --tw-exit-scale: 0.95;
+}
+
+.shadcn-dropdown[data-state="open"] {
+  animation: enter 150ms ease-out both;
+  --tw-enter-opacity: 0;
+  --tw-enter-scale: 0.95;
+}
+
+.shadcn-dropdown[data-state="closed"] {
+  animation: exit 100ms ease-in both;
+  --tw-exit-opacity: 0;
+  --tw-exit-scale: 0.95;
+}
+
+.shadcn-toast[data-state="open"] {
+  animation: enter 200ms ease-out both;
+  --tw-enter-opacity: 0;
+  --tw-enter-translate-x: 100%;
+}
+
+.shadcn-toast[data-state="closed"] {
+  animation: exit 200ms ease-in both;
+  --tw-exit-opacity: 0;
+  --tw-exit-translate-x: 100%;
+}
+
+.shadcn-tooltip[data-state="open"] {
+  animation: fade-in 150ms ease-out both;
+}
+
+.shadcn-tooltip[data-state="closed"] {
+  animation: fade-out 150ms ease-out both;
+}
+
+.shadcn-hover-card[data-state="open"] {
+  animation: enter 150ms ease-out both;
+  --tw-enter-opacity: 0;
+  --tw-enter-scale: 0.95;
+}
+
+.shadcn-hover-card[data-state="closed"] {
+  animation: exit 150ms ease-in both;
+  --tw-exit-opacity: 0;
+  --tw-exit-scale: 0.95;
+}
+
 /*
  * Note: Global base styles (*, body) are defined in base.css
  * They apply the --border color to all borders and set body colors.
