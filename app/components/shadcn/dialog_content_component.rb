@@ -46,14 +46,14 @@ module Shadcn
     end
 
     def dialog_panel
-      content_tag(:div, panel_content, {
+      content_tag(:div, panel_content, merge_html_attributes({
         class: cn(CONTENT_CLASSES, class_name),
         role: "dialog",
         "aria-modal": "true",
         "data-shadcn--dialog-target": "content",
         "data-state": "closed",
         tabindex: "-1"
-      })
+      }))
     end
 
     def panel_content

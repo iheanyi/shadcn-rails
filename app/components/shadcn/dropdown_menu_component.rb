@@ -51,5 +51,9 @@ module Shadcn
         action: "keydown.escape->shadcn--dropdown#close clickOutside->shadcn--dropdown#close"
       }
     end
+
+    def dropdown_attributes
+      merge_html_attributes({ class: dropdown_classes }, dropdown_data_attrs)
+    end
   end
 end

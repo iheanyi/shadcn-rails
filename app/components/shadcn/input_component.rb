@@ -76,6 +76,31 @@ module Shadcn
 
     private
 
+    def input_attributes
+      html_options
+        .merge(build_data)
+        .merge(
+          type: @type,
+          name: @name,
+          id: @id,
+          value: @value,
+          placeholder: @placeholder,
+          disabled: @disabled || nil,
+          required: @required || nil,
+          readonly: @readonly || nil,
+          autofocus: @autofocus || nil,
+          autocomplete: @autocomplete,
+          pattern: @pattern,
+          min: @min,
+          max: @max,
+          step: @step,
+          minlength: @minlength,
+          maxlength: @maxlength,
+          class: input_classes
+        )
+        .compact
+    end
+
     def input_classes
       merge_classes(BASE_CLASSES)
     end

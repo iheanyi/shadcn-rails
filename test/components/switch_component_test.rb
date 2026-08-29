@@ -32,6 +32,13 @@ class SwitchComponentTest < ViewComponent::TestCase
     assert_selector "button[disabled]"
   end
 
+  def test_disabled_switch_does_not_render_hidden_unchecked_input
+    render_inline(Shadcn::SwitchComponent.new(name: "locked", disabled: true))
+
+    assert_selector "input[type='checkbox'][name='locked'][disabled]", visible: :all
+    assert_selector "input[type='hidden'][name='locked']", count: 0
+  end
+
   def test_renders_required_state
     render_inline(Shadcn::SwitchComponent.new(required: true))
 
@@ -44,6 +51,12 @@ class SwitchComponentTest < ViewComponent::TestCase
     # Controller is on the wrapper span, not the button
     assert_selector "span[data-controller='shadcn--switch']"
     assert_selector "button[data-action*='click->shadcn--switch#toggle']"
+  end
+
+  def test_appends_host_data_action_without_losing_switch_actions
+    render_inline(Shadcn::SwitchComponent.new(data: { action: "analytics#track" }))
+
+    assert_selector "button[data-action='click->shadcn--switch#toggle keydown->shadcn--switch#handleKeydown analytics#track']"
   end
 
   def test_renders_thumb_element

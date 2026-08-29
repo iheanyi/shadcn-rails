@@ -1,14 +1,6 @@
-<div role="group"
-     class="<%= group_classes %>"
-     data-controller="shadcn--toggle-group"
-     data-shadcn--toggle-group-type-value="<%= @type %>"
-     data-shadcn--toggle-group-value-value="<%= value_string %>"
-     <%= tag_attributes %>>
+<%= tag.div(**group_attributes) do %>
   <% if has_name? %>
-    <input type="hidden"
-           name="<%= @name %>"
-           value="<%= value_string %>"
-           data-shadcn--toggle-group-target="input" />
+    <%= tag.input(**hidden_input_attributes) %>
   <% end %>
   <%= safe_join(items.map(&:to_s)) %>
-</div>
+<% end %>

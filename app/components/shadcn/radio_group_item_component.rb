@@ -112,17 +112,18 @@ module Shadcn
     end
 
     def input_attributes
-      attrs = {
+      merge_html_attributes({
         type: "radio",
         name: @group_name,
         value: @value,
         id: @id,
         class: cn(ITEM_CLASSES, "peer", class_name),
         disabled: @disabled || nil,
-        checked: @selected || nil
-      }
-      attrs.merge!(html_options.except(:class))
-      attrs.compact
+        checked: @selected || nil,
+        "data-value": @value,
+        "data-shadcn--radio-group-target": "item",
+        "data-action": "change->shadcn--radio-group#select keydown->shadcn--radio-group#handleKeydown"
+      })
     end
 
     def label_wrapper_attributes

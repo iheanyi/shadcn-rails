@@ -100,4 +100,12 @@ class ToggleGroupComponentTest < ViewComponent::TestCase
 
     assert_selector "[data-testid='toggle-group']"
   end
+
+  def test_item_appends_host_data_action_without_losing_toggle_action
+    render_inline(Shadcn::ToggleGroupComponent.new) do |group|
+      group.with_item(value: "left", data: { action: "analytics#track" }) { "Left" }
+    end
+
+    assert_selector "button[data-action='click->shadcn--toggle-group#toggle analytics#track']"
+  end
 end

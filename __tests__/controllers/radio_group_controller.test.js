@@ -409,6 +409,51 @@ describe("RadioGroupController", () => {
     })
   })
 
+  describe("native radio inputs", () => {
+    const nativeRadioHTML = `
+      <div data-controller="shadcn--radio-group"
+           data-shadcn--radio-group-name-value="contact[method]"
+           data-shadcn--radio-group-value-value="email">
+        <input type="radio"
+               name="contact[method]"
+               value="email"
+               data-value="email"
+               checked
+               data-shadcn--radio-group-target="item"
+               data-action="change->shadcn--radio-group#select keydown->shadcn--radio-group#handleKeydown">
+        <input type="radio"
+               name="contact[method]"
+               value="phone"
+               data-value="phone"
+               data-shadcn--radio-group-target="item"
+               data-action="change->shadcn--radio-group#select keydown->shadcn--radio-group#handleKeydown">
+      </div>
+    `
+
+    beforeEach(async () => {
+      const setup = await setupController(RadioGroupController, nativeRadioHTML, 'shadcn--radio-group')
+      application = setup.application
+      element = setup.element
+      controller = setup.controller
+    })
+
+    test("keyboard navigation checks the newly selected native input", async () => {
+      const firstItem = controller.itemTargets[0]
+      const secondItem = controller.itemTargets[1]
+
+      controller.handleKeydown({
+        key: "ArrowDown",
+        preventDefault: jest.fn(),
+        currentTarget: firstItem
+      })
+      await nextFrame()
+
+      expect(firstItem.checked).toBe(false)
+      expect(secondItem.checked).toBe(true)
+      expect(controller.valueValue).toBe("phone")
+    })
+  })
+
   describe("disabled items", () => {
     const disabledHTML = `
       <div data-controller="shadcn--radio-group"

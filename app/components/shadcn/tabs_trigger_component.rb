@@ -20,7 +20,7 @@ module Shadcn
     private
 
     def trigger_attributes
-      {
+      merge_html_attributes({
         type: "button",
         role: "tab",
         class: merge_classes(BASE_CLASSES),
@@ -31,7 +31,7 @@ module Shadcn
         "data-action": "click->shadcn--tabs#selectTab",
         "aria-selected": "false",
         tabindex: "-1"
-      }
+      })
     end
   end
 end

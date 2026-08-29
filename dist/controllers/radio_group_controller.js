@@ -63,6 +63,9 @@ export default class default_1 extends Controller {
     updateSelection() {
         this.itemTargets.forEach((item) => {
             const isSelected = item.dataset.value === this.valueValue;
+            if (item.matches('input[type="radio"]')) {
+                item.checked = isSelected;
+            }
             item.setAttribute("aria-checked", isSelected.toString());
             item.dataset.state = isSelected ? "checked" : "unchecked";
             item.tabIndex = isSelected ? 0 : -1;

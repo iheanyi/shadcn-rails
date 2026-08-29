@@ -1,0 +1,13 @@
+<%= form_for @contact, url: "/form_builder_test", builder: Shadcn::FormBuilder do |f| %>
+  <%= f.label :email %>
+  <%= f.email_field :email, placeholder: "legacy@example.com" %>
+  <%= f.check_box :subscribed %>
+  <%= f.select :status, Contact.statuses.keys, {}, class: "legacy-status-select" %>
+
+  <%= f.fields_for :addresses_attributes, @contact.addresses.first, index: 0 do |address_fields| %>
+    <%= address_fields.label :city %>
+    <%= address_fields.text_field :city %>
+  <% end %>
+
+  <%= f.submit "Save" %>
+<% end %>

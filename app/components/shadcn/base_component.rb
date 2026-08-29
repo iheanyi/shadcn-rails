@@ -46,13 +46,13 @@ module Shadcn
       cn(default_classes, class_name)
     end
 
-    # Build data attributes hash
-    # Converts Ruby-style keys to HTML data attributes
-    # @param additional_data [Hash] Additional data attributes to merge
+    # Build data attributes hash.
+    # Converts Ruby-style keys to HTML data attributes and appends Stimulus
+    # controller/action hooks instead of clobbering either side.
+    # @param default_data [Hash] Component-owned data attributes
     # @return [Hash] Merged data attributes
-    def build_data(additional_data = {})
-      merged = data.merge(additional_data)
-      merged.transform_keys { |key| "data-#{key.to_s.dasherize}" }
+    def build_data(default_data = {})
+      merge_data_attributes(default_data, data)
     end
 
     # Build the complete HTML attributes hash
@@ -60,10 +60,59 @@ module Shadcn
     # @param additional_data [Hash] Additional data attributes
     # @return [Hash] Complete HTML attributes
     def build_html_attributes(default_classes, additional_data = {})
-      attrs = html_options.dup
+      attrs = merge_html_attributes({}, additional_data)
       attrs[:class] = merge_classes(default_classes)
-      attrs.merge!(build_data(additional_data))
       attrs
+    end
+
+    def merge_html_attributes(default_attrs = {}, default_data = {})
+      attrs = default_attrs.dup
+      component_data = extract_data_attributes!(attrs).merge(default_data)
+      host_attrs = html_options.dup
+      host_data = data.merge(extract_data_attributes!(host_attrs))
+
+      attrs.merge!(host_attrs)
+      attrs.merge!(merge_data_attributes(component_data, host_data))
+      attrs.compact
+    end
+
+    def merge_data_attributes(default_data = {}, host_data = {})
+      normalized_defaults = normalize_data_hash(default_data)
+      normalized_host = normalize_data_hash(host_data)
+
+      normalized_host.each do |key, value|
+        if %w[action controller].include?(key) && normalized_defaults[key].present? && value.present?
+          normalized_defaults[key] = [normalized_defaults[key], value].join(" ")
+        else
+          normalized_defaults[key] = value
+        end
+      end
+
+      normalized_defaults
+        .compact
+        .transform_keys { |key| "data-#{key.to_s.dasherize}" }
+    end
+
+    def extract_data_attributes!(attrs)
+      extracted = {}
+
+      attrs.keys.each do |key|
+        key_string = key.to_s
+
+        if key_string == "data"
+          extracted.merge!(attrs.delete(key) || {})
+        elsif key_string.start_with?("data-")
+          extracted[key_string.delete_prefix("data-")] = attrs.delete(key)
+        end
+      end
+
+      extracted
+    end
+
+    def normalize_data_hash(attributes)
+      attributes.each_with_object({}) do |(key, value), normalized|
+        normalized[key.to_s.delete_prefix("data-")] = value
+      end
     end
 
     # Helper to build Stimulus controller data attributes

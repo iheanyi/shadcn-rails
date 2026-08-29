@@ -5546,6 +5546,9 @@ let default_1$c = class default_1 extends stimulus.Controller {
     updateSelection() {
         this.itemTargets.forEach((item) => {
             const isSelected = item.dataset.value === this.valueValue;
+            if (item.matches('input[type="radio"]')) {
+                item.checked = isSelected;
+            }
             item.setAttribute("aria-checked", isSelected.toString());
             item.dataset.state = isSelected ? "checked" : "unchecked";
             item.tabIndex = isSelected ? 0 : -1;
@@ -6716,7 +6719,7 @@ let default_1$1 = class default_1 extends stimulus.Controller {
             value = value.slice(-1);
             input.value = value;
         }
-        this.updateHiddenInput();
+        this.updateHiddenInput({ dispatch: true });
         this.updateCarets();
         // Auto-advance to next slot
         if (value && index < this.lengthValue - 1) {
@@ -6733,7 +6736,7 @@ let default_1$1 = class default_1 extends stimulus.Controller {
                     event.preventDefault();
                     this.focusInput(index - 1);
                     this.inputTargets[index - 1].value = "";
-                    this.updateHiddenInput();
+                    this.updateHiddenInput({ dispatch: true });
                     this.updateCarets();
                 }
                 break;
@@ -6751,7 +6754,7 @@ let default_1$1 = class default_1 extends stimulus.Controller {
                 break;
             case "Delete":
                 input.value = "";
-                this.updateHiddenInput();
+                this.updateHiddenInput({ dispatch: true });
                 this.updateCarets();
                 break;
         }
@@ -6789,7 +6792,7 @@ let default_1$1 = class default_1 extends stimulus.Controller {
                 input.value = char;
             }
         });
-        this.updateHiddenInput();
+        this.updateHiddenInput({ dispatch: true });
         this.updateCarets();
         // Focus appropriate slot after paste
         const nextEmptyIndex = this.findNextEmptySlot(startIndex);
@@ -6820,11 +6823,15 @@ let default_1$1 = class default_1 extends stimulus.Controller {
         }
         return -1;
     }
-    updateHiddenInput() {
+    updateHiddenInput({ dispatch = false } = {}) {
         if (!this.hasHiddenInputTarget)
             return;
         const value = this.inputTargets.map((input) => input.value || "").join("");
         this.hiddenInputTarget.value = value;
+        if (dispatch) {
+            this.hiddenInputTarget.dispatchEvent(new Event("input", { bubbles: true }));
+            this.dispatch("change", { detail: { value } });
+        }
     }
     updateCarets() {
         // Hide all carets
@@ -6854,7 +6861,7 @@ let default_1$1 = class default_1 extends stimulus.Controller {
         this.inputTargets.forEach((input) => {
             input.value = "";
         });
-        this.updateHiddenInput();
+        this.updateHiddenInput({ dispatch: true });
         this.updateCarets();
         this.focusInput(0);
     }

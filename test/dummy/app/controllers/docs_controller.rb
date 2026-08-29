@@ -413,6 +413,31 @@ class DocsController < ApplicationController
 
   def show
     @slug = params[:slug]
+
+    if @slug == "form"
+      @component = {
+        name: "Form",
+        category: "Form Inputs",
+        description: "Vanilla Rails form_with and form_for integration through Shadcn::FormBuilder.",
+        has_stimulus: false
+      }
+      @contact = Contact.new(
+        email: "person@example.com",
+        notes: "Interested in a follow-up next week.",
+        subscribed: true,
+        status: "lead",
+        rating: 7,
+        budget: 50,
+        tags: ["vip"],
+        contact_method: "email",
+        channels: ["email"],
+        source: "docs"
+      )
+
+      render @slug
+      return
+    end
+
     @component = COMPONENTS[@slug]
 
     if @component.nil?

@@ -58,7 +58,7 @@ module Shadcn
     end
 
     def item_attributes
-      attrs = {
+      merge_html_attributes({
         class: cn(BASE_CLASSES, class_name),
         role: "menuitemcheckbox",
         "aria-checked": @checked.to_s,
@@ -67,10 +67,7 @@ module Shadcn
         "data-state": @checked ? "checked" : "unchecked",
         "data-shadcn--dropdown-target": "item",
         "data-action": "click->shadcn--dropdown#toggleCheckbox"
-      }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
+      })
     end
   end
 end

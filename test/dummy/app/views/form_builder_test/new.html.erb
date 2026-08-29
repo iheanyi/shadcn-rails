@@ -1,0 +1,37 @@
+<%= form_with model: @contact, url: "/form_builder_test", builder: Shadcn::FormBuilder do |f| %>
+  <%= f.field :email, as: :email_field, placeholder: "you@example.com", required: true %>
+  <%= f.label :email, class: "sr-only" %>
+  <%= f.label :notes %>
+  <%= f.text_area :notes, rows: 4, autocomplete: "off" %>
+  <%= f.textarea :notes, rows: 2 %>
+  <%= f.check_box :subscribed %>
+  <%= f.checkbox :subscribed, id: "contact_subscribed_alias" %>
+  <%= f.check_box :disabled_checkbox, disabled: true %>
+  <%= f.switch :notifications %>
+  <%= f.switch :disabled_switch, disabled: true %>
+  <%= f.hidden_field :source %>
+  <%= f.file_field :attachments, multiple: true %>
+  <%= f.date_field :birthdate %>
+  <%= f.datetime_field :meeting_at %>
+  <%= f.time_field :follow_up_time %>
+  <%= f.month_field :billing_month %>
+  <%= f.week_field :signup_week %>
+  <%= f.range_field :rating, min: 0, max: 10, step: 1 %>
+  <%= f.slider :budget, min: 0, max: 100, step: 5 %>
+  <%= f.toggle_group :tags, [["vip", "VIP"], ["newsletter", "Newsletter"]], multiple: true %>
+  <%= f.radio_group :contact_method, [["email", "Email"], ["phone", "Phone"]] %>
+  <%= f.collection_radio_buttons :status, Contact.statuses.keys, :to_s, :humanize %>
+  <%= f.collection_check_boxes :channels, ["email", "sms"], :to_s, :humanize %>
+  <%= f.radio_button :status, "lead", label: "Lead" %>
+  <%= f.radio_button :status, "customer", label: "Customer" %>
+  <%= f.select :status, Contact.statuses.keys, {}, class: "status-select", required: true %>
+
+  <%= f.fields_for :addresses_attributes, @contact.addresses.first, index: 0 do |address_fields| %>
+    <%= address_fields.label :city %>
+    <%= address_fields.text_field :city %>
+  <% end %>
+
+  <%= f.submit class: "submit-extra" %>
+  <%= f.button "Create" %>
+  <%= f.button class: "button-extra" %>
+<% end %>
