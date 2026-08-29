@@ -90,12 +90,11 @@ module Shadcn
     end
 
     def button_classes
-      cn(
+      merge_classes(cn(
         BASE_CLASSES,
         VARIANTS[@variant],
-        SIZES[@size],
-        class_name
-      )
+        SIZES[@size]
+      ))
     end
   end
 end

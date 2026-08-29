@@ -21,8 +21,8 @@ module Shadcn
       # Default radius for components
       attr_accessor :radius
 
-      # Dark mode strategy: :class, :media, or :selector
-      attr_accessor :dark_mode
+      # Dark mode strategy: :class, :media, or :both
+      attr_reader :dark_mode
 
       # Icon library to use: :lucide (default), :heroicons, etc.
       attr_accessor :icon_library
