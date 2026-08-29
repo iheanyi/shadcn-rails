@@ -405,6 +405,9 @@ class DocsController < ApplicationController
   end
 
   def editor_example
+    @editor_params = editor_example_params
+    @submitted_editor_params = @editor_params if request.post?
+
     render "docs/examples/editor"
   end
 
@@ -436,4 +439,14 @@ class DocsController < ApplicationController
     nil
   end
   helper_method :component_class
+
+  def editor_example_params
+    submitted = params.fetch(:editor, {}).permit(:marks, :alignment, :body)
+
+    {
+      marks: submitted[:marks].presence || "bold",
+      alignment: submitted[:alignment].presence || "left",
+      body: submitted[:body].presence || "Edit this note, toggle marks, choose alignment, then preview or save."
+    }
+  end
 end

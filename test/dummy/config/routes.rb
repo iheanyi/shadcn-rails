@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   get "docs", to: "docs#index", as: :docs
   get "docs/components", to: "docs#components", as: :docs_components
   get "docs/examples/editor", to: "docs#editor_example", as: :docs_editor_example
+  post "docs/examples/editor", to: "docs#editor_example"
   get "docs/components/:slug", to: "docs#show", as: :docs_component
 
   # UX Test Application

@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["canvas", "params", "preview", "toastRegion", "toastTemplate"]
+  static targets = ["canvas", "params", "preview"]
 
   connect() {
     this.applyCurrentState()
@@ -32,13 +32,6 @@ export default class extends Controller {
     this.updatePreview()
   }
 
-  save(event) {
-    event.preventDefault()
-    this.applyCurrentState()
-    this.updateParams()
-    this.showToast()
-  }
-
   applyCurrentState() {
     this.applyMarks(this.paramsForForm().editor.marks)
     this.applyAlignment(this.paramsForForm().editor.alignment)
@@ -67,8 +60,7 @@ export default class extends Controller {
   }
 
   paramsForForm() {
-    const form = this.element.querySelector("form")
-    const formData = new FormData(form)
+    const formData = new FormData(this.element)
 
     return {
       editor: {
@@ -83,10 +75,5 @@ export default class extends Controller {
     if (Array.isArray(value)) return value
     if (!value) return []
     return value.toString().split(",").filter(Boolean)
-  }
-
-  showToast() {
-    const toast = this.toastTemplateTarget.content.cloneNode(true)
-    this.toastRegionTarget.replaceChildren(toast)
   }
 }

@@ -1,5 +1,5 @@
-<div data-controller="editor" class="space-y-6">
-  <%= tag.form class: "space-y-4" do %>
+<%= form_with scope: :editor, url: docs_editor_example_path, method: :post, data: { controller: "editor" }, class: "space-y-6" do %>
+  <div class="space-y-4">
     <div class="flex flex-wrap items-center gap-3">
       <div class="space-y-2">
         <p class="text-sm font-medium">Marks</p>
@@ -7,7 +7,7 @@
           type: :multiple,
           variant: :outline,
           name: "editor[marks]",
-          value: ["bold"],
+          value: @editor_params[:marks].to_s.split(","),
           data: { action: "shadcn--toggle-group:change->editor#marksChanged" }
         ) do |group| %>
           <% group.with_item(value: "bold", aria_label: "Bold") { "B" } %>
@@ -22,7 +22,7 @@
           type: :single,
           variant: :outline,
           name: "editor[alignment]",
-          value: "left",
+          value: @editor_params[:alignment],
           data: { action: "shadcn--toggle-group:change->editor#alignmentChanged" }
         ) do |group| %>
           <% group.with_item(value: "left", aria_label: "Align left") { "Left" } %>
@@ -36,7 +36,7 @@
       name: "editor[body]",
       id: "editor_body",
       rows: 6,
-      value: "Edit this note, toggle marks, choose alignment, then preview or save.",
+      value: @editor_params[:body],
       data: {
         "editor-target": "canvas",
         action: "input->editor#canvasChanged"
@@ -45,9 +45,9 @@
 
     <%= render Shadcn::ButtonGroupComponent.new do |group| %>
       <% group.with_button(variant: :outline, type: "button", data: { action: "click->editor#preview" }) { "Preview" } %>
-      <% group.with_button(type: "submit", data: { action: "click->editor#save" }) { "Save" } %>
+      <% group.with_button(type: "submit") { "Save" } %>
     <% end %>
-  <% end %>
+  </div>
 
   <div class="grid gap-4 md:grid-cols-2">
     <div class="rounded-lg border bg-card p-4">
@@ -60,13 +60,4 @@
       <pre data-editor-target="params" class="min-h-24 whitespace-pre-wrap rounded-md bg-muted p-3 text-xs"></pre>
     </div>
   </div>
-
-  <ol data-editor-target="toastRegion" class="fixed bottom-4 right-4 z-50 w-full max-w-sm space-y-2"></ol>
-
-  <template data-editor-target="toastTemplate">
-    <%= render Shadcn::ToastComponent.new(duration: 3000) do |toast| %>
-      <% toast.with_title { "Draft saved" } %>
-      <% toast.with_description { "The params panel shows what the form would post." } %>
-    <% end %>
-  </template>
-</div>
+<% end %>

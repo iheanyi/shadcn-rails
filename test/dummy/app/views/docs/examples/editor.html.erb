@@ -12,7 +12,7 @@
     <div>
       <h2 class="text-2xl font-semibold tracking-tight">Live demo</h2>
       <p class="text-muted-foreground">
-        Toggle marks or alignment, type in the textarea, then preview or save to see the posted params shape.
+        Toggle marks or alignment, type in the textarea, then preview live or save to POST the form back to this page.
       </p>
     </div>
 
@@ -20,6 +20,16 @@
       <%= render "docs/examples/editor_demo" %>
     <% end %>
   </section>
+
+  <% if @submitted_editor_params %>
+    <section>
+      <h2 class="text-2xl font-semibold tracking-tight">Submitted params</h2>
+      <%= render "docs/code_example",
+        language: "ruby",
+        title: "params[:editor]",
+        code: JSON.pretty_generate(@submitted_editor_params) %>
+    </section>
+  <% end %>
 
   <section>
     <h2 class="text-2xl font-semibold tracking-tight">Example source</h2>
