@@ -143,43 +143,11 @@ class SelectComponentPreview < ViewComponent::Preview
   # @label In Form Layout
   # Select within a complete form layout
   def in_form_layout
-    '<div class="max-w-md space-y-6 p-4 border rounded-lg">
-      <div>
-        <h3 class="text-lg font-semibold">Profile Settings</h3>
-        <p class="text-sm text-muted-foreground">Update your profile information</p>
-      </div>
-      <form class="space-y-4">
-        <div class="space-y-2">
-          <label class="text-sm font-medium">Username</label>
-          <input type="text" placeholder="johndoe" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm" />
-        </div>
-        <div class="space-y-2">
-          <label class="text-sm font-medium">Email</label>
-          <input type="email" placeholder="john@example.com" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm" />
-        </div>
-        <div class="space-y-2">
-          <label class="text-sm font-medium">Role</label>
-          ' + render_inline(Shadcn::SelectComponent.new(name: "role", placeholder: "Select a role")) { |select|
-            select.with_item(value: "developer") { "Developer" }
-            select.with_item(value: "designer") { "Designer" }
-            select.with_item(value: "manager") { "Manager" }
-            select.with_item(value: "owner") { "Owner" }
-          }.to_s + '
-        </div>
-        <div class="space-y-2">
-          <label class="text-sm font-medium">Timezone</label>
-          ' + render_inline(Shadcn::SelectComponent.new(name: "timezone", value: "pst", placeholder: "Select timezone")) { |select|
-            select.with_item(value: "est") { "Eastern (EST)" }
-            select.with_item(value: "cst") { "Central (CST)" }
-            select.with_item(value: "mst") { "Mountain (MST)" }
-            select.with_item(value: "pst") { "Pacific (PST)" }
-          }.to_s + '
-        </div>
-        <div class="flex gap-2 pt-2">
-          <button type="button" class="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background h-9 px-4 py-2">Cancel</button>
-          <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground h-9 px-4 py-2">Save changes</button>
-        </div>
-      </form>
-    </div>'.html_safe
+    render(Shadcn::SelectComponent.new(name: "role", placeholder: "Select a role")) do |select|
+      select.with_item(value: "developer") { "Developer" }
+      select.with_item(value: "designer") { "Designer" }
+      select.with_item(value: "manager") { "Manager" }
+      select.with_item(value: "owner") { "Owner" }
+    end
   end
 end
