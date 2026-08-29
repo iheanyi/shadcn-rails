@@ -8,7 +8,7 @@
   <%= f.radio_button :status, "customer", label: "Customer" %>
   <%= f.select :status, Contact.statuses.keys, {}, class: "status-select", required: true %>
 
-  <%= f.fields_for :addresses_attributes, @contact.addresses, child_index: 0 do |address_fields| %>
+  <%= f.fields_for :addresses_attributes, @contact.addresses.first, index: 0 do |address_fields| %>
     <%= address_fields.label :city %>
     <%= address_fields.text_field :city %>
   <% end %>
