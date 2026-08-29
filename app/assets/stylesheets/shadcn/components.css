@@ -18,7 +18,7 @@
 /* Button-based Switch with data-state */
 button[role="switch"] {
   background-color: hsl(var(--input));
-  transition: background-color 0.2s ease-in-out;
+  transition: background-color 150ms ease-in-out;
 }
 
 button[role="switch"][data-state="checked"] {
@@ -30,6 +30,10 @@ button[role="switch"][data-state="unchecked"] {
 }
 
 /* Switch thumb positioning */
+button[role="switch"] > span {
+  transition: transform 150ms ease-in-out;
+}
+
 button[role="switch"] > span[data-state="checked"] {
   transform: translateX(1rem);
 }
@@ -287,6 +291,76 @@ button[data-state="off"].shadcn-toggle {
    Dialog & Sheet Components
    ============================================ */
 
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes zoom-in-95 {
+  from { transform: scale(0.95); }
+  to { transform: scale(1); }
+}
+
+@keyframes zoom-out-95 {
+  from { transform: scale(1); }
+  to { transform: scale(0.95); }
+}
+
+@keyframes zoom-in {
+  from { transform: scale(0.95); }
+  to { transform: scale(1); }
+}
+
+@keyframes zoom-out {
+  from { transform: scale(1); }
+  to { transform: scale(0.95); }
+}
+
+@keyframes slide-in-from-top {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes slide-in-from-bottom {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes slide-in-from-left {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slide-in-from-right {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slide-out-to-top {
+  from { transform: translateY(0); }
+  to { transform: translateY(-100%); }
+}
+
+@keyframes slide-out-to-bottom {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+}
+
+@keyframes slide-out-to-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+@keyframes slide-out-to-right {
+  from { transform: translateX(0); }
+  to { transform: translateX(100%); }
+}
+
 /* Overlay styles */
 .shadcn-overlay {
   position: fixed;
@@ -305,11 +379,11 @@ button[data-state="off"].shadcn-toggle {
 
 /* Dialog content */
 .shadcn-dialog-content[data-state="open"] {
-  animation: fade-in 150ms ease-out, zoom-in 150ms ease-out;
+  animation: fade-in 200ms cubic-bezier(0.16, 1, 0.3, 1), zoom-in-95 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .shadcn-dialog-content[data-state="closed"] {
-  animation: fade-out 150ms ease-in, zoom-out 150ms ease-in;
+  animation: fade-out 200ms cubic-bezier(0.16, 1, 0.3, 1), zoom-out-95 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Sheet content - slides from different directions */
@@ -329,18 +403,42 @@ button[data-state="off"].shadcn-toggle {
   animation: slide-in-from-right 300ms ease-out;
 }
 
+.shadcn-sheet-content[data-side="top"][data-state="closed"] {
+  animation: slide-out-to-top 300ms ease-in;
+}
+
+.shadcn-sheet-content[data-side="bottom"][data-state="closed"] {
+  animation: slide-out-to-bottom 300ms ease-in;
+}
+
+.shadcn-sheet-content[data-side="left"][data-state="closed"] {
+  animation: slide-out-to-left 300ms ease-in;
+}
+
+.shadcn-sheet-content[data-side="right"][data-state="closed"] {
+  animation: slide-out-to-right 300ms ease-in;
+}
+
 /* ============================================
    Popover & Tooltip Components
    ============================================ */
 
 .shadcn-popover[data-state="open"],
-.shadcn-tooltip[data-state="open"] {
+.shadcn-hover-card[data-state="open"] {
   animation: fade-in 150ms ease-out, zoom-in 150ms ease-out;
 }
 
 .shadcn-popover[data-state="closed"],
-.shadcn-tooltip[data-state="closed"] {
+.shadcn-hover-card[data-state="closed"] {
   animation: fade-out 150ms ease-in, zoom-out 150ms ease-in;
+}
+
+.shadcn-tooltip[data-state="open"] {
+  animation: fade-in 150ms ease-out;
+}
+
+.shadcn-tooltip[data-state="closed"] {
+  animation: fade-out 150ms ease-out;
 }
 
 /* ============================================
@@ -352,7 +450,7 @@ button[data-state="off"].shadcn-toggle {
 }
 
 .shadcn-dropdown[data-state="closed"] {
-  animation: fade-out 150ms ease-in, zoom-out 150ms ease-in;
+  animation: fade-out 100ms ease-in, zoom-out 100ms ease-in;
 }
 
 /* ============================================
@@ -403,11 +501,11 @@ button[data-state="off"].shadcn-toggle {
    ============================================ */
 
 .shadcn-toast[data-state="open"] {
-  animation: slide-in-from-right 300ms ease-out;
+  animation: fade-in 200ms ease-out, slide-in-from-right 200ms ease-out;
 }
 
 .shadcn-toast[data-state="closed"] {
-  animation: fade-out 150ms ease-in, slide-out-to-right 300ms ease-in;
+  animation: fade-out 200ms ease-in, slide-out-to-right 200ms ease-in;
 }
 
 /* Toast variants */
@@ -428,14 +526,6 @@ button[data-state="off"].shadcn-toggle {
 /* ============================================
    Hover Card Component
    ============================================ */
-
-.shadcn-hover-card[data-state="open"] {
-  animation: fade-in 150ms ease-out, zoom-in 150ms ease-out;
-}
-
-.shadcn-hover-card[data-state="closed"] {
-  animation: fade-out 150ms ease-in, zoom-out 150ms ease-in;
-}
 
 /* ============================================
    Context Menu Component

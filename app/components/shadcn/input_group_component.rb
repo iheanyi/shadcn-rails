@@ -34,7 +34,7 @@ module Shadcn
   #   <% end %>
   #
   class InputGroupComponent < BaseComponent
-    BASE_CLASSES = "flex items-center rounded-md border border-input ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2"
+    BASE_CLASSES = "flex items-center rounded-md border border-input focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px]"
 
     # Prefix addon slot
     renders_one :prefix, "AddonComponent"
@@ -43,7 +43,7 @@ module Shadcn
     renders_one :input, lambda { |**options|
       # Remove border, ring, rounded corners and shadow from input since the group handles it
       options[:class_name] = cn(
-        "border-0 rounded-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-0 focus:outline-none",
+        "border-0 rounded-none shadow-none outline-none ring-0 focus:ring-0 focus-visible:border-transparent focus-visible:ring-0 focus-visible:outline-none",
         options[:class_name]
       )
       Shadcn::InputComponent.new(**options)

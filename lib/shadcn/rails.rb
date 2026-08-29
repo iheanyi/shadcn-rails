@@ -14,6 +14,7 @@ end
 require_relative "rails/version"
 require_relative "rails/configuration"
 require_relative "rails/class_merger"
+require_relative "rails/registry"
 require_relative "rails/helpers/class_name_helper"
 require_relative "rails/helpers/component_helper"
 require_relative "rails/helpers/pagination_helper"
@@ -67,9 +68,7 @@ module Shadcn
 
       # List all available components
       def available_components
-        @available_components ||= Dir[File.join(__dir__, "../../app/components/shadcn/*_component.rb")].map do |file|
-          File.basename(file, "_component.rb").to_sym
-        end
+        Registry.keys.map(&:to_sym)
       end
 
       # Generate CSS variables for the current theme

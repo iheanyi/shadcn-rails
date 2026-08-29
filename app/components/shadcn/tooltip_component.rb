@@ -18,7 +18,7 @@ module Shadcn
   #   <% end %>
   #
   class TooltipComponent < BaseComponent
-    CONTENT_CLASSES = "z-50 overflow-hidden rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground whitespace-nowrap animate-tooltip-in data-[state=closed]:animate-tooltip-out"
+    CONTENT_CLASSES = "shadcn-tooltip z-50 overflow-hidden rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground whitespace-nowrap animate-tooltip-in data-[state=closed]:animate-tooltip-out"
 
     # @param text [String] Tooltip text content
     # @param side [Symbol] Side to show tooltip (:top, :right, :bottom, :left)

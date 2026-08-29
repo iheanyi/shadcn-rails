@@ -115,7 +115,7 @@ describe("ClipboardController", () => {
   describe("without button target", () => {
     const noButtonHTML = `
       <div data-controller="clipboard">
-        <pre data-clipboard-target="source"><code>npm install shadcn-rails</code></pre>
+        <pre data-clipboard-target="source"><code>npm install shadcn-rails-stimulus</code></pre>
         <button data-action="click->clipboard#copy">Copy</button>
       </div>
     `
@@ -131,7 +131,7 @@ describe("ClipboardController", () => {
       controller.copy()
       await nextFrame()
 
-      expect(mockClipboard.writeText).toHaveBeenCalledWith("npm install shadcn-rails")
+      expect(mockClipboard.writeText).toHaveBeenCalledWith("npm install shadcn-rails-stimulus")
     })
 
     test("does not throw when showing success without button target", async () => {

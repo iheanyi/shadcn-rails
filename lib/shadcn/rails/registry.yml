@@ -1,0 +1,666 @@
+---
+accordion:
+  name: accordion
+  ruby_files:
+    - app/components/shadcn/accordion_component.rb
+    - app/components/shadcn/accordion_content_component.rb
+    - app/components/shadcn/accordion_item_component.rb
+    - app/components/shadcn/accordion_trigger_component.rb
+  templates:
+    - app/components/shadcn/accordion_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/accordion_controller.js
+  css_sidecars: []
+  depends_on: []
+alert:
+  name: alert
+  ruby_files:
+    - app/components/shadcn/alert_component.rb
+    - app/components/shadcn/alert_description_component.rb
+    - app/components/shadcn/alert_title_component.rb
+  templates:
+    - app/components/shadcn/alert_component.html.erb
+  controllers: []
+  css_sidecars: []
+  depends_on: []
+alert_dialog:
+  name: alert_dialog
+  ruby_files:
+    - app/components/shadcn/alert_dialog_action_component.rb
+    - app/components/shadcn/alert_dialog_cancel_component.rb
+    - app/components/shadcn/alert_dialog_component.rb
+    - app/components/shadcn/alert_dialog_content_component.rb
+    - app/components/shadcn/alert_dialog_description_component.rb
+    - app/components/shadcn/alert_dialog_footer_component.rb
+    - app/components/shadcn/alert_dialog_header_component.rb
+    - app/components/shadcn/alert_dialog_title_component.rb
+  templates:
+    - app/components/shadcn/alert_dialog_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/dialog_controller.js
+  css_sidecars: []
+  depends_on: []
+aspect_ratio:
+  name: aspect_ratio
+  ruby_files:
+    - app/components/shadcn/aspect_ratio_component.rb
+  templates:
+    - app/components/shadcn/aspect_ratio_component.html.erb
+  controllers: []
+  css_sidecars: []
+  depends_on: []
+avatar:
+  name: avatar
+  ruby_files:
+    - app/components/shadcn/avatar_component.rb
+    - app/components/shadcn/avatar_fallback_component.rb
+  templates:
+    - app/components/shadcn/avatar_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/avatar_controller.js
+  css_sidecars: []
+  depends_on: []
+badge:
+  name: badge
+  ruby_files:
+    - app/components/shadcn/badge_component.rb
+  templates:
+    - app/components/shadcn/badge_component.html.erb
+  controllers: []
+  css_sidecars: []
+  depends_on: []
+breadcrumb:
+  name: breadcrumb
+  ruby_files:
+    - app/components/shadcn/breadcrumb_component.rb
+    - app/components/shadcn/breadcrumb_item_component.rb
+  templates:
+    - app/components/shadcn/breadcrumb_component.html.erb
+  controllers: []
+  css_sidecars: []
+  depends_on: []
+button:
+  name: button
+  ruby_files:
+    - app/components/shadcn/button_component.rb
+  templates:
+    - app/components/shadcn/button_component.html.erb
+  controllers: []
+  css_sidecars: []
+  depends_on: []
+button_group:
+  name: button_group
+  ruby_files:
+    - app/components/shadcn/button_group_component.rb
+  templates: []
+  controllers: []
+  css_sidecars: []
+  depends_on: []
+calendar:
+  name: calendar
+  ruby_files:
+    - app/components/shadcn/calendar_component.rb
+  templates: []
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/calendar_controller.js
+  css_sidecars: []
+  depends_on: []
+card:
+  name: card
+  ruby_files:
+    - app/components/shadcn/card_action_component.rb
+    - app/components/shadcn/card_component.rb
+    - app/components/shadcn/card_content_component.rb
+    - app/components/shadcn/card_description_component.rb
+    - app/components/shadcn/card_footer_component.rb
+    - app/components/shadcn/card_header_component.rb
+    - app/components/shadcn/card_title_component.rb
+  templates:
+    - app/components/shadcn/card_component.html.erb
+  controllers: []
+  css_sidecars: []
+  depends_on: []
+carousel:
+  name: carousel
+  ruby_files:
+    - app/components/shadcn/carousel_component.rb
+  templates: []
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/carousel_controller.js
+  css_sidecars: []
+  depends_on: []
+checkbox:
+  name: checkbox
+  ruby_files:
+    - app/components/shadcn/checkbox_component.rb
+  templates:
+    - app/components/shadcn/checkbox_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/checkbox_controller.js
+  css_sidecars: []
+  depends_on: []
+collapsible:
+  name: collapsible
+  ruby_files:
+    - app/components/shadcn/collapsible_component.rb
+    - app/components/shadcn/collapsible_content_component.rb
+  templates:
+    - app/components/shadcn/collapsible_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/collapsible_controller.js
+  css_sidecars: []
+  depends_on: []
+combobox:
+  name: combobox
+  ruby_files:
+    - app/components/shadcn/combobox_component.rb
+  templates: []
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/combobox_controller.js
+  css_sidecars: []
+  depends_on:
+    - app/assets/javascripts/shadcn/utils/floating.js
+command:
+  name: command
+  ruby_files:
+    - app/components/shadcn/command_component.rb
+    - app/components/shadcn/command_dialog_component.rb
+    - app/components/shadcn/command_empty_component.rb
+    - app/components/shadcn/command_group_component.rb
+    - app/components/shadcn/command_input_component.rb
+    - app/components/shadcn/command_item_component.rb
+    - app/components/shadcn/command_list_component.rb
+    - app/components/shadcn/command_separator_component.rb
+    - app/components/shadcn/command_shortcut_component.rb
+  templates: []
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/command_controller.js
+    - app/assets/javascripts/shadcn/controllers/command_dialog_controller.js
+  css_sidecars: []
+  depends_on: []
+context_menu:
+  name: context_menu
+  ruby_files:
+    - app/components/shadcn/context_menu_checkbox_item_component.rb
+    - app/components/shadcn/context_menu_component.rb
+    - app/components/shadcn/context_menu_content_component.rb
+    - app/components/shadcn/context_menu_item_component.rb
+    - app/components/shadcn/context_menu_label_component.rb
+    - app/components/shadcn/context_menu_radio_group_component.rb
+    - app/components/shadcn/context_menu_radio_item_component.rb
+    - app/components/shadcn/context_menu_separator_component.rb
+    - app/components/shadcn/context_menu_shortcut_component.rb
+  templates:
+    - app/components/shadcn/context_menu_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/context_menu_controller.js
+    - app/assets/javascripts/shadcn/controllers/base_menu_controller.js
+  css_sidecars: []
+  depends_on:
+    - app/assets/javascripts/shadcn/utils/floating.js
+date_picker:
+  name: date_picker
+  ruby_files:
+    - app/components/shadcn/date_picker_component.rb
+  templates: []
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/date_picker_controller.js
+  css_sidecars: []
+  depends_on: []
+dialog:
+  name: dialog
+  ruby_files:
+    - app/components/shadcn/dialog_component.rb
+    - app/components/shadcn/dialog_content_component.rb
+    - app/components/shadcn/dialog_description_component.rb
+    - app/components/shadcn/dialog_footer_component.rb
+    - app/components/shadcn/dialog_header_component.rb
+    - app/components/shadcn/dialog_title_component.rb
+  templates:
+    - app/components/shadcn/dialog_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/dialog_controller.js
+  css_sidecars: []
+  depends_on: []
+drawer:
+  name: drawer
+  ruby_files:
+    - app/components/shadcn/drawer_component.rb
+    - app/components/shadcn/drawer_content_component.rb
+    - app/components/shadcn/drawer_description_component.rb
+    - app/components/shadcn/drawer_footer_component.rb
+    - app/components/shadcn/drawer_header_component.rb
+    - app/components/shadcn/drawer_title_component.rb
+  templates:
+    - app/components/shadcn/drawer_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/drawer_controller.js
+  css_sidecars: []
+  depends_on: []
+dropdown_menu:
+  name: dropdown_menu
+  ruby_files:
+    - app/components/shadcn/dropdown_menu_checkbox_item_component.rb
+    - app/components/shadcn/dropdown_menu_component.rb
+    - app/components/shadcn/dropdown_menu_content_component.rb
+    - app/components/shadcn/dropdown_menu_group_component.rb
+    - app/components/shadcn/dropdown_menu_item_component.rb
+    - app/components/shadcn/dropdown_menu_label_component.rb
+    - app/components/shadcn/dropdown_menu_radio_group_component.rb
+    - app/components/shadcn/dropdown_menu_radio_item_component.rb
+    - app/components/shadcn/dropdown_menu_separator_component.rb
+    - app/components/shadcn/dropdown_menu_shortcut_component.rb
+  templates:
+    - app/components/shadcn/dropdown_menu_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/dropdown_controller.js
+    - app/assets/javascripts/shadcn/controllers/base_menu_controller.js
+  css_sidecars: []
+  depends_on:
+    - app/assets/javascripts/shadcn/utils/floating.js
+empty:
+  name: empty
+  ruby_files:
+    - app/components/shadcn/empty_component.rb
+    - app/components/shadcn/empty_content_component.rb
+    - app/components/shadcn/empty_description_component.rb
+    - app/components/shadcn/empty_header_component.rb
+    - app/components/shadcn/empty_media_component.rb
+    - app/components/shadcn/empty_title_component.rb
+  templates: []
+  controllers: []
+  css_sidecars: []
+  depends_on: []
+field:
+  name: field
+  ruby_files:
+    - app/components/shadcn/field_component.rb
+  templates: []
+  controllers: []
+  css_sidecars: []
+  depends_on: []
+hover_card:
+  name: hover_card
+  ruby_files:
+    - app/components/shadcn/hover_card_component.rb
+    - app/components/shadcn/hover_card_content_component.rb
+  templates:
+    - app/components/shadcn/hover_card_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/hover_card_controller.js
+  css_sidecars: []
+  depends_on:
+    - app/assets/javascripts/shadcn/utils/floating.js
+input:
+  name: input
+  ruby_files:
+    - app/components/shadcn/input_component.rb
+  templates:
+    - app/components/shadcn/input_component.html.erb
+  controllers: []
+  css_sidecars: []
+  depends_on: []
+input_group:
+  name: input_group
+  ruby_files:
+    - app/components/shadcn/input_group_component.rb
+  templates: []
+  controllers: []
+  css_sidecars: []
+  depends_on: []
+input_otp:
+  name: input_otp
+  ruby_files:
+    - app/components/shadcn/input_otp_component.rb
+  templates: []
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/input_otp_controller.js
+  css_sidecars: []
+  depends_on: []
+item:
+  name: item
+  ruby_files:
+    - app/components/shadcn/item_actions_component.rb
+    - app/components/shadcn/item_component.rb
+    - app/components/shadcn/item_content_component.rb
+    - app/components/shadcn/item_description_component.rb
+    - app/components/shadcn/item_footer_component.rb
+    - app/components/shadcn/item_group_component.rb
+    - app/components/shadcn/item_header_component.rb
+    - app/components/shadcn/item_media_component.rb
+    - app/components/shadcn/item_separator_component.rb
+    - app/components/shadcn/item_title_component.rb
+  templates: []
+  controllers: []
+  css_sidecars: []
+  depends_on: []
+kbd:
+  name: kbd
+  ruby_files:
+    - app/components/shadcn/kbd_component.rb
+  templates:
+    - app/components/shadcn/kbd_component.html.erb
+  controllers: []
+  css_sidecars: []
+  depends_on: []
+label:
+  name: label
+  ruby_files:
+    - app/components/shadcn/label_component.rb
+  templates:
+    - app/components/shadcn/label_component.html.erb
+  controllers: []
+  css_sidecars: []
+  depends_on: []
+menubar:
+  name: menubar
+  ruby_files:
+    - app/components/shadcn/menubar_checkbox_item_component.rb
+    - app/components/shadcn/menubar_component.rb
+    - app/components/shadcn/menubar_content_component.rb
+    - app/components/shadcn/menubar_item_component.rb
+    - app/components/shadcn/menubar_label_component.rb
+    - app/components/shadcn/menubar_menu_component.rb
+    - app/components/shadcn/menubar_radio_group_component.rb
+    - app/components/shadcn/menubar_radio_item_component.rb
+    - app/components/shadcn/menubar_separator_component.rb
+    - app/components/shadcn/menubar_shortcut_component.rb
+    - app/components/shadcn/menubar_sub_component.rb
+    - app/components/shadcn/menubar_sub_content_component.rb
+    - app/components/shadcn/menubar_sub_trigger_component.rb
+    - app/components/shadcn/menubar_trigger_component.rb
+  templates:
+    - app/components/shadcn/menubar_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/menubar_controller.js
+  css_sidecars: []
+  depends_on: []
+native_select:
+  name: native_select
+  ruby_files:
+    - app/components/shadcn/native_select_component.rb
+  templates:
+    - app/components/shadcn/native_select_component.html.erb
+  controllers: []
+  css_sidecars: []
+  depends_on: []
+navigation_menu:
+  name: navigation_menu
+  ruby_files:
+    - app/components/shadcn/navigation_menu_component.rb
+    - app/components/shadcn/navigation_menu_content_component.rb
+    - app/components/shadcn/navigation_menu_item_component.rb
+    - app/components/shadcn/navigation_menu_link_component.rb
+    - app/components/shadcn/navigation_menu_list_component.rb
+    - app/components/shadcn/navigation_menu_trigger_component.rb
+  templates:
+    - app/components/shadcn/navigation_menu_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/navigation_menu_controller.js
+  css_sidecars: []
+  depends_on: []
+pagination:
+  name: pagination
+  ruby_files:
+    - app/components/shadcn/pagination_component.rb
+    - app/components/shadcn/pagination_content_component.rb
+    - app/components/shadcn/pagination_ellipsis_component.rb
+    - app/components/shadcn/pagination_item_component.rb
+    - app/components/shadcn/pagination_next_component.rb
+    - app/components/shadcn/pagination_previous_component.rb
+  templates:
+    - app/components/shadcn/pagination_component.html.erb
+  controllers: []
+  css_sidecars: []
+  depends_on: []
+popover:
+  name: popover
+  ruby_files:
+    - app/components/shadcn/popover_component.rb
+    - app/components/shadcn/popover_content_component.rb
+  templates:
+    - app/components/shadcn/popover_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/popover_controller.js
+  css_sidecars: []
+  depends_on:
+    - app/assets/javascripts/shadcn/utils/floating.js
+progress:
+  name: progress
+  ruby_files:
+    - app/components/shadcn/progress_component.rb
+  templates:
+    - app/components/shadcn/progress_component.html.erb
+  controllers: []
+  css_sidecars: []
+  depends_on: []
+radio_group:
+  name: radio_group
+  ruby_files:
+    - app/components/shadcn/radio_group_component.rb
+    - app/components/shadcn/radio_group_item_component.rb
+  templates:
+    - app/components/shadcn/radio_group_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/radio_group_controller.js
+  css_sidecars: []
+  depends_on: []
+resizable:
+  name: resizable
+  ruby_files:
+    - app/components/shadcn/resizable_handle_component.rb
+    - app/components/shadcn/resizable_panel_component.rb
+    - app/components/shadcn/resizable_panel_group_component.rb
+  templates: []
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/resizable_controller.js
+  css_sidecars: []
+  depends_on: []
+scroll_area:
+  name: scroll_area
+  ruby_files:
+    - app/components/shadcn/scroll_area_component.rb
+  templates:
+    - app/components/shadcn/scroll_area_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/scroll_area_controller.js
+  css_sidecars: []
+  depends_on: []
+select:
+  name: select
+  ruby_files:
+    - app/components/shadcn/select_component.rb
+    - app/components/shadcn/select_group_component.rb
+    - app/components/shadcn/select_item_component.rb
+    - app/components/shadcn/select_separator_component.rb
+  templates:
+    - app/components/shadcn/select_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/select_controller.js
+  css_sidecars: []
+  depends_on:
+    - app/assets/javascripts/shadcn/utils/floating.js
+separator:
+  name: separator
+  ruby_files:
+    - app/components/shadcn/separator_component.rb
+  templates:
+    - app/components/shadcn/separator_component.html.erb
+  controllers: []
+  css_sidecars: []
+  depends_on: []
+sheet:
+  name: sheet
+  ruby_files:
+    - app/components/shadcn/sheet_component.rb
+    - app/components/shadcn/sheet_content_component.rb
+    - app/components/shadcn/sheet_description_component.rb
+    - app/components/shadcn/sheet_footer_component.rb
+    - app/components/shadcn/sheet_header_component.rb
+    - app/components/shadcn/sheet_title_component.rb
+  templates:
+    - app/components/shadcn/sheet_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/sheet_controller.js
+  css_sidecars: []
+  depends_on: []
+sidebar:
+  name: sidebar
+  ruby_files:
+    - app/components/shadcn/sidebar_component.rb
+    - app/components/shadcn/sidebar_content_component.rb
+    - app/components/shadcn/sidebar_footer_component.rb
+    - app/components/shadcn/sidebar_group_action_component.rb
+    - app/components/shadcn/sidebar_group_component.rb
+    - app/components/shadcn/sidebar_group_content_component.rb
+    - app/components/shadcn/sidebar_group_label_component.rb
+    - app/components/shadcn/sidebar_header_component.rb
+    - app/components/shadcn/sidebar_inset_component.rb
+    - app/components/shadcn/sidebar_menu_action_component.rb
+    - app/components/shadcn/sidebar_menu_badge_component.rb
+    - app/components/shadcn/sidebar_menu_button_component.rb
+    - app/components/shadcn/sidebar_menu_component.rb
+    - app/components/shadcn/sidebar_menu_item_component.rb
+    - app/components/shadcn/sidebar_menu_skeleton_component.rb
+    - app/components/shadcn/sidebar_menu_sub_button_component.rb
+    - app/components/shadcn/sidebar_menu_sub_component.rb
+    - app/components/shadcn/sidebar_menu_sub_item_component.rb
+    - app/components/shadcn/sidebar_provider_component.rb
+    - app/components/shadcn/sidebar_rail_component.rb
+    - app/components/shadcn/sidebar_separator_component.rb
+    - app/components/shadcn/sidebar_trigger_component.rb
+  templates: []
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/sidebar_controller.js
+  css_sidecars: []
+  depends_on: []
+skeleton:
+  name: skeleton
+  ruby_files:
+    - app/components/shadcn/skeleton_component.rb
+  templates:
+    - app/components/shadcn/skeleton_component.html.erb
+  controllers: []
+  css_sidecars: []
+  depends_on: []
+slider:
+  name: slider
+  ruby_files:
+    - app/components/shadcn/slider_component.rb
+  templates:
+    - app/components/shadcn/slider_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/slider_controller.js
+  css_sidecars: []
+  depends_on: []
+spinner:
+  name: spinner
+  ruby_files:
+    - app/components/shadcn/spinner_component.rb
+  templates:
+    - app/components/shadcn/spinner_component.html.erb
+  controllers: []
+  css_sidecars: []
+  depends_on: []
+switch:
+  name: switch
+  ruby_files:
+    - app/components/shadcn/switch_component.rb
+  templates:
+    - app/components/shadcn/switch_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/switch_controller.js
+  css_sidecars: []
+  depends_on: []
+table:
+  name: table
+  ruby_files:
+    - app/components/shadcn/table_body_component.rb
+    - app/components/shadcn/table_caption_component.rb
+    - app/components/shadcn/table_cell_component.rb
+    - app/components/shadcn/table_component.rb
+    - app/components/shadcn/table_footer_component.rb
+    - app/components/shadcn/table_head_component.rb
+    - app/components/shadcn/table_header_component.rb
+    - app/components/shadcn/table_row_component.rb
+  templates:
+    - app/components/shadcn/table_component.html.erb
+  controllers: []
+  css_sidecars: []
+  depends_on: []
+tabs:
+  name: tabs
+  ruby_files:
+    - app/components/shadcn/tabs_component.rb
+    - app/components/shadcn/tabs_content_component.rb
+    - app/components/shadcn/tabs_list_component.rb
+    - app/components/shadcn/tabs_trigger_component.rb
+  templates:
+    - app/components/shadcn/tabs_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/tabs_controller.js
+  css_sidecars: []
+  depends_on: []
+textarea:
+  name: textarea
+  ruby_files:
+    - app/components/shadcn/textarea_component.rb
+  templates:
+    - app/components/shadcn/textarea_component.html.erb
+  controllers: []
+  css_sidecars: []
+  depends_on: []
+toast:
+  name: toast
+  ruby_files:
+    - app/components/shadcn/toast_action_component.rb
+    - app/components/shadcn/toast_component.rb
+    - app/components/shadcn/toast_description_component.rb
+    - app/components/shadcn/toast_title_component.rb
+    - app/components/shadcn/toast_viewport_component.rb
+  templates:
+    - app/components/shadcn/toast_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/toast_controller.js
+  css_sidecars: []
+  depends_on: []
+toggle:
+  name: toggle
+  ruby_files:
+    - app/components/shadcn/toggle_component.rb
+  templates:
+    - app/components/shadcn/toggle_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/toggle_controller.js
+  css_sidecars: []
+  depends_on: []
+toggle_group:
+  name: toggle_group
+  ruby_files:
+    - app/components/shadcn/toggle_group_component.rb
+    - app/components/shadcn/toggle_group_item_component.rb
+  templates:
+    - app/components/shadcn/toggle_group_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/toggle_group_controller.js
+  css_sidecars: []
+  depends_on: []
+tooltip:
+  name: tooltip
+  ruby_files:
+    - app/components/shadcn/tooltip_component.rb
+  templates:
+    - app/components/shadcn/tooltip_component.html.erb
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/tooltip_controller.js
+  css_sidecars: []
+  depends_on:
+    - app/assets/javascripts/shadcn/utils/floating.js
+typography:
+  name: typography
+  ruby_files:
+    - app/components/shadcn/typography_component.rb
+  templates: []
+  controllers: []
+  css_sidecars: []
+  depends_on: []

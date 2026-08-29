@@ -27,6 +27,7 @@ module Shadcn
     renders_one :body, lambda { |**options|
       DialogContentComponent.new(**options)
     }
+    alias_method :with_content, :with_body
 
     # @param id [String] Unique identifier for the dialog (used for Turbo Stream targeting)
     # @param open [Boolean] Whether dialog starts open

@@ -2,6 +2,7 @@
 
 require "rails/generators"
 require "rails/generators/base"
+require "shadcn/rails/registry"
 
 module Shadcn
   module Generators
@@ -25,21 +26,16 @@ module Shadcn
         template "initializer.rb.tt", "config/initializers/shadcn.rb"
       end
 
-      def create_config_file
-        template "shadcn.yml.tt", "config/shadcn.yml"
-      end
-
       def add_stylesheet
         return if options[:skip_tailwind]
 
-        if File.exist?("app/assets/stylesheets/application.tailwind.css")
-          inject_into_file "app/assets/stylesheets/application.tailwind.css", before: "@tailwind base;" do
-            "/* shadcn-rails styles */\n@import \"shadcn/base\";\n@import \"shadcn/components\";\n\n"
-          end
-        elsif File.exist?("app/assets/stylesheets/application.css")
-          append_to_file "app/assets/stylesheets/application.css" do
-            "\n/*\n *= require shadcn/base\n *= require shadcn/components\n */\n"
-          end
+        if destination_file_exists?(tailwind_v4_stylesheet)
+          ensure_tailwind_v4_shadcn_path
+          inject_tailwind_v4_styles(tailwind_v4_stylesheet)
+        elsif destination_file_exists?(tailwind_v3_stylesheet)
+          inject_tailwind_v3_styles(tailwind_v3_stylesheet)
+        elsif destination_file_exists?(application_stylesheet)
+          inject_application_styles(application_stylesheet)
         else
           say "Could not find application stylesheet. Please manually import shadcn styles.", :yellow
         end
@@ -47,10 +43,10 @@ module Shadcn
 
       def configure_tailwind
         return if options[:skip_tailwind]
-        return unless File.exist?("tailwind.config.js")
+        return unless destination_file_exists?("tailwind.config.js")
 
         inject_into_file "tailwind.config.js", after: "content: [" do
-          "\n    './app/components/**/*.{rb,html,erb}',\n    './app/views/**/*.{html,erb}',"
+          "\n    './app/components/**/*.{rb,html,erb}',\n    './app/views/**/*.{html,erb}',\n    `${require('child_process').execSync('bundle show shadcn-rails', { encoding: 'utf8' }).trim()}/app/components/shadcn/**/*.{rb,html,erb}`,"
         end
 
         say "Updated tailwind.config.js to include component paths", :green
@@ -77,7 +73,7 @@ module Shadcn
         say "  2. Import the Stimulus controllers in your application"
         say "  3. Start using components in your views:"
         say ""
-        say "     <%= render Shadcn::ButtonComponent.new(variant: :primary) do %>"
+        say "     <%= render Shadcn::ButtonComponent.new(variant: :default) do %>"
         say "       Click me"
         say "     <% end %>"
         say ""
@@ -89,9 +85,11 @@ module Shadcn
         say "       --primary: 221 83% 53%;     /* Custom primary color */"
         say "     }"
         say ""
-        say "  For Tailwind CSS v4, also import the theme file:"
+        say "  For Tailwind CSS v4, the installer imports shadcn styles from:"
         say ""
-        say "     @import \"shadcn/tailwind-v4\";"
+        say "     @import \"./shadcn/base.css\";"
+        say "     @import \"./shadcn/components.css\";"
+        say "     @import \"./shadcn/tailwind-v4.css\";"
         say ""
         say "To add individual components to your app for customization:"
         say ""
@@ -105,31 +103,125 @@ module Shadcn
       private
 
       def importmap?
-        File.exist?("config/importmap.rb")
+        destination_file_exists?("config/importmap.rb")
+      end
+
+      def tailwind_v4_stylesheet
+        "app/assets/tailwind/application.css"
+      end
+
+      def tailwind_v3_stylesheet
+        "app/assets/stylesheets/application.tailwind.css"
+      end
+
+      def application_stylesheet
+        "app/assets/stylesheets/application.css"
+      end
+
+      def inject_tailwind_v4_styles(path)
+        styles = <<~CSS
+          @import "./shadcn/base.css";
+          @import "./shadcn/components.css";
+          @import "./shadcn/tailwind-v4.css";
+        CSS
+
+        inject_css_imports(path, styles, marker: "./shadcn/tailwind-v4.css", after: /@import\s+["']tailwindcss["'];?\n/)
+      end
+
+      def ensure_tailwind_v4_shadcn_path
+        destination = File.expand_path("app/assets/tailwind/shadcn", destination_root)
+        source = Shadcn::Rails::Registry.gem_path("app/assets/stylesheets/shadcn")
+
+        if File.symlink?(destination) && File.realpath(destination) == File.realpath(source)
+          say "Skipped app/assets/tailwind/shadcn; shadcn styles are already linked", :yellow
+          return
+        end
+
+        if File.exist?(destination)
+          say "Skipped app/assets/tailwind/shadcn; path already exists", :yellow
+          return
+        end
+
+        FileUtils.mkdir_p(File.dirname(destination))
+        FileUtils.ln_s(source, destination)
+        say "Linked app/assets/tailwind/shadcn to shadcn-rails styles", :green
+      end
+
+      def inject_tailwind_v3_styles(path)
+        styles = <<~CSS
+          /* shadcn-rails styles */
+          @import "shadcn/base";
+          @import "shadcn/components";
+
+        CSS
+
+        inject_css_imports(path, styles, before: "@tailwind base;")
+      end
+
+      def inject_application_styles(path)
+        content = read_destination_file(path)
+
+        if content.match?(/@import\s+["']tailwindcss["']/)
+          ensure_tailwind_v4_shadcn_path
+          inject_tailwind_v4_styles(path)
+        elsif sprockets_manifest?(content)
+          append_unless_present(path, "shadcn/base") do
+            "\n/*\n *= require shadcn/base\n *= require shadcn/components\n */\n"
+          end
+        else
+          append_unless_present(path, "shadcn/base") do
+            <<~CSS
+
+              /* shadcn-rails styles */
+              @import "shadcn/base";
+              @import "shadcn/components";
+            CSS
+          end
+        end
+      end
+
+      def inject_css_imports(path, styles, marker: "shadcn/base", **location)
+        append_unless_present(path, marker) do
+          inject_into_file path, location do
+            "#{styles}\n"
+          end
+
+          nil
+        end
+      end
+
+      def append_unless_present(path, marker)
+        if read_destination_file(path).include?(marker)
+          say "Skipped #{path}; shadcn styles are already present", :yellow
+        else
+          addition = yield
+          append_to_file(path, addition) if addition
+          say "Updated #{path} with shadcn styles", :green
+        end
+      end
+
+      def sprockets_manifest?(content)
+        content.include?("*= require") || content.include?("*= link")
       end
 
       def using_esbuild?
-        File.exist?("esbuild.config.mjs") ||
-          (File.exist?("package.json") && File.read("package.json").include?("esbuild"))
+        destination_file_exists?("esbuild.config.mjs") ||
+          (destination_file_exists?("package.json") && read_destination_file("package.json").include?("esbuild"))
       end
 
       def using_webpack?
-        File.exist?("webpack.config.js") ||
-          (File.exist?("package.json") && File.read("package.json").include?("webpack"))
+        destination_file_exists?("webpack.config.js") ||
+          (destination_file_exists?("package.json") && read_destination_file("package.json").include?("webpack"))
       end
 
       def setup_importmap
-        append_to_file "config/importmap.rb" do
-          <<~RUBY
-
-            # shadcn-rails Stimulus controllers
-            pin "shadcn", to: "shadcn/index.js"
-          RUBY
-        end
+        append_importmap_pin %(pin "shadcn", to: "shadcn/index.js")
+        append_importmap_pin %(pin "@floating-ui/dom", to: "https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.13/+esm")
+        append_importmap_pin %(pin "stimulus-use", to: "https://cdn.jsdelivr.net/npm/stimulus-use@0.52.3/+esm")
 
         # Update application.js to register controllers
-        if File.exist?("app/javascript/controllers/application.js")
-          append_to_file "app/javascript/controllers/application.js" do
+        if destination_file_exists?("app/javascript/controllers/application.js")
+          append_unless_present("app/javascript/controllers/application.js", "registerShadcnControllers") do
             <<~JS
 
               // Import and register shadcn-rails controllers
@@ -142,9 +234,15 @@ module Shadcn
         say "Configured importmap for shadcn-rails", :green
       end
 
+      def append_importmap_pin(pin)
+        append_unless_present("config/importmap.rb", pin) do
+          "\n#{pin}\n"
+        end
+      end
+
       def setup_bundler
         # Add to package.json dependencies
-        if File.exist?("package.json")
+        if destination_file_exists?("package.json")
           say "Please install the npm package and add to your JavaScript entry point:", :yellow
           say ""
           say "  npm install shadcn-rails-stimulus"
@@ -159,6 +257,14 @@ module Shadcn
           say "  @import 'shadcn-rails-stimulus/styles/tailwind-v4';  /* For Tailwind v4 */"
           say ""
         end
+      end
+
+      def read_destination_file(path)
+        File.read(File.expand_path(path, destination_root))
+      end
+
+      def destination_file_exists?(path)
+        File.exist?(File.expand_path(path, destination_root))
       end
     end
   end

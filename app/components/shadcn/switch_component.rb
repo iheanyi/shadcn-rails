@@ -25,7 +25,7 @@ module Shadcn
 
     THUMB_CLASSES = [
       "pointer-events-none block h-4 w-4 rounded-full bg-background shadow-lg ring-0",
-      "transition-transform data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0"
+      "transition-transform duration-150 data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0"
     ].join(" ")
 
     # @param name [String, nil] Input name attribute

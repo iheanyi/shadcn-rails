@@ -27,6 +27,7 @@
   },
   "files": [
     "dist",
+    "app/components/shadcn",
     "app/assets/javascripts/shadcn",
     "app/assets/stylesheets/shadcn"
   ],

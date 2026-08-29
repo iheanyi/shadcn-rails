@@ -9,7 +9,7 @@
  *   registerShadcnControllers(application)
  *
  * Usage with esbuild/webpack:
- *   import { registerShadcnControllers } from "shadcn-rails"
+ *   import { registerShadcnControllers } from "shadcn-rails-stimulus"
  *   registerShadcnControllers(application)
  */
 

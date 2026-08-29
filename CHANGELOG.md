@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added a root MIT LICENSE file.
+- Added `ARCHITECTURE.md` documenting the ViewComponent + Stimulus component-unit model.
+- Added `Shadcn::Rails::Registry` and `lib/shadcn/rails/registry.yml` as the single source of truth for component units.
+- Added `DialogComponent#with_content` as an alias for `with_body`.
+- Added Tailwind CSS v4 theme and motion utilities, including keyframes used by dialog, dropdown, toast, tooltip, hover card, and sheet components.
+
+### Changed
+
+- Updated README copy to describe the real ViewComponent + Stimulus/Hotwire scope, component count, install path, and `shadcn:add` behavior.
+- Updated `shadcn:add` to copy complete component units instead of root component files only.
+- Updated engine autoloading so ejected app component units win by ignoring the gem's matching ruby files.
+- Updated Rails 8 Tailwind CSS v4 install to link resolvable shadcn CSS files into `app/assets/tailwind/shadcn` and import them relatively.
+- Updated development and dummy app Tailwind dependencies to `tailwindcss-rails` 4.x while keeping Tailwind as a host-provided dependency at runtime.
+
+### Fixed
+
+- Fixed importmap setup to pin `@floating-ui/dom` and `stimulus-use`.
+- Fixed copied Stimulus controller support files and imports for ejected component units.
+- Fixed install and docs references to non-existent generators and invalid `variant: :primary` examples.
+- Fixed Input, Textarea, and InputGroup focus rings to avoid stacked Safari/user-agent focus outlines and hard duplicate rings.
+
 ## [0.2.1] - 2025-11-27
 
 ### Added
@@ -94,8 +117,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Theme presets**: neutral, slate, stone, zinc, gray
 - **Rails generators**:
   - `rails g shadcn:install` - Initial setup
-  - `rails g shadcn:component [name]` - Add individual components
-  - `rails g shadcn:theme [name]` - Switch color themes
+  - `rails g shadcn:add [name]` - Copy components into your app for customization
 - **Tailwind CSS integration** with class merging utility
 - **Accessibility features** following WAI-ARIA patterns
 - **npm package** (`shadcn-rails-stimulus`) for Stimulus controllers

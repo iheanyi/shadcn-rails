@@ -54,6 +54,34 @@ class InputGroupComponentTest < ViewComponent::TestCase
     assert_selector "input.shadow-none"
   end
 
+  def test_wrapper_owns_soft_focus_ring
+    render_inline(Shadcn::InputGroupComponent.new) do |group|
+      group.with_input
+    end
+
+    classes = page.find("div")[:class]
+    assert_includes classes, "focus-within:border-ring"
+    assert_includes classes, "focus-within:ring-ring/50"
+    assert_includes classes, "focus-within:ring-[3px]"
+    refute_includes classes, "focus-within:ring-2"
+    refute_includes classes, "focus-within:ring-offset-2"
+  end
+
+  def test_inner_input_suppresses_own_focus_ring
+    render_inline(Shadcn::InputGroupComponent.new) do |group|
+      group.with_input
+    end
+
+    classes = page.find("input")[:class]
+    assert_includes classes, "outline-none"
+    assert_includes classes, "ring-0"
+    assert_includes classes, "focus:ring-0"
+    assert_includes classes, "focus-visible:ring-0"
+    assert_includes classes, "focus-visible:outline-none"
+    refute_includes classes, "focus-visible:ring-1"
+    refute_includes classes, "focus-visible:ring-[3px]"
+  end
+
   def test_renders_addon_with_muted_text
     render_inline(Shadcn::InputGroupComponent.new) do |group|
       group.with_prefix { "https://" }
