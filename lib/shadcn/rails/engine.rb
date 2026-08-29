@@ -44,6 +44,10 @@ module Shadcn
         end
       end
 
+      config.to_prepare do
+        Shadcn::Rails.define_component_aliases
+      end
+
       initializer "shadcn-rails.helpers" do
         ActiveSupport.on_load(:action_view) do
           include Shadcn::Rails::Helpers::ClassNameHelper

@@ -24,6 +24,11 @@ module Shadcn
           render(component_class.new(**args), &block)
         end
 
+        # Emits the configured theme variables from CSS source files.
+        def shadcn_theme
+          content_tag(:style, Shadcn::Rails.theme_css.html_safe, data: { shadcn_theme: true })
+        end
+
         # Shorthand helpers for common components
         # These provide a more Rails-like API
 

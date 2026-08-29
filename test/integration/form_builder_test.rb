@@ -124,7 +124,7 @@ class FormBuilderTest < ActionDispatch::IntegrationTest
     get "/form_builder_test/form_for"
 
     assert_response :success
-    assert_select "form[action='/form_builder_test'][method='post']"
+    assert_select "form[action='/form_builder_test'][method='post'][enctype='multipart/form-data']"
     assert_select "label[for='contact_email']", text: "Email"
     assert_select "input[type='email'][name='contact[email]'][id='contact_email'][value='legacy@example.com']"
     assert_select "input[type='hidden'][name='contact[subscribed]'][value='0']"
@@ -140,6 +140,7 @@ class FormBuilderTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "label[for='contact_addresses_attributes_0_city']", text: "City"
     assert_select "input[type='text'][name='contact[addresses_attributes][0][city]'][id='contact_addresses_attributes_0_city'][value='Enugu']"
+    assert_select "input[type='file'][name='contact[addresses_attributes][0][photo]'][id='contact_addresses_attributes_0_photo']"
   end
 
   test "form_for submitted params use vanilla Rails contact structure" do

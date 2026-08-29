@@ -21,11 +21,30 @@ class ShadcnInstallGeneratorTest < Rails::Generators::TestCase
       import { Application } from "@hotwired/stimulus"
       const application = Application.start()
     JS
+    write_file "app/views/layouts/application.html.erb", <<~ERB
+      <html>
+        <head>
+          <title>Dummy</title>
+        </head>
+        <body><%= yield %></body>
+      </html>
+    ERB
 
     run_generator
 
     assert_file "config/initializers/shadcn.rb"
     assert_no_file "config/shadcn.yml"
+    assert_file "config/initializers/shadcn.rb" do |content|
+      assert_includes content, "config.theme = :neutral"
+      assert_includes content, 'config.radius = "0.5rem"'
+      assert_includes content, "config.dark_mode = :class"
+      assert_includes content, 'config.tailwind_prefix = ""'
+      refute_includes content, "config.base_color"
+    end
+    assert_file "app/views/layouts/application.html.erb" do |content|
+      assert_includes content, "<%= shadcn_theme %>"
+      assert_operator content.index("<%= shadcn_theme %>"), :<, content.index("</head>")
+    end
 
     assert_file "app/assets/tailwind/application.css" do |content|
       assert_includes content, '@import "tailwindcss";'
@@ -65,6 +84,23 @@ class ShadcnInstallGeneratorTest < Rails::Generators::TestCase
       assert_operator content.index('@import "shadcn/base";'), :<, content.index("@tailwind base;")
       assert_operator content.index('@import "shadcn/components";'), :<, content.index("@tailwind base;")
       refute_includes content, "shadcn/tailwind-v4"
+    end
+  end
+
+  def test_install_does_not_duplicate_theme_helper
+    write_file "app/views/layouts/application.html.erb", <<~ERB
+      <html>
+        <head>
+          <%= shadcn_theme %>
+        </head>
+        <body><%= yield %></body>
+      </html>
+    ERB
+
+    run_generator ["--skip-tailwind"]
+
+    assert_file "app/views/layouts/application.html.erb" do |content|
+      assert_equal 1, content.scan("shadcn_theme").size
     end
   end
 

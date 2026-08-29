@@ -72,7 +72,7 @@ class DocsParityTest < ViewComponent::TestCase
 
     assert_includes layout, 'stylesheet_link_tag "tailwind"'
     assert_includes layout, 'javascript_include_tag "application"'
-    assert_includes layout, "Shadcn::Rails.theme_css"
+    assert_includes layout, "shadcn_theme"
     assert_includes layout, 'components.css'
     refute_includes layout, "cdn.tailwindcss.com"
   end

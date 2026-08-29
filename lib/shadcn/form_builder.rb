@@ -66,7 +66,7 @@ module Shadcn
 
     def file_field(method, options = {})
       options = options.dup
-      @multipart = true
+      self.multipart = true
 
       render_component(
         Shadcn::InputComponent.new(
