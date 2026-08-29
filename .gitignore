@@ -14,5 +14,6 @@
 /.tsbuild/
 /.playwright-mcp/
 /.claude/
-/test/dummy/**/*/builds
+/test/dummy/**/*/builds/*
+!/test/dummy/app/assets/builds/.keep
 *.gem
