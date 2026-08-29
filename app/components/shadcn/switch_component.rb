@@ -61,7 +61,7 @@ module Shadcn
     private
 
     def hidden_input?
-      @include_hidden && @name.present? && @unchecked_value
+      @include_hidden && !@disabled && @name.present? && @unchecked_value
     end
 
     def hidden_input_attributes

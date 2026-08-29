@@ -22,8 +22,7 @@ module Shadcn
       time_field: "time",
       month_field: "month",
       week_field: "week",
-      color_field: "color",
-      file_field: "file"
+      color_field: "color"
     }.freeze
 
     INPUT_TYPES.each do |helper_name, input_type|
@@ -37,6 +36,11 @@ module Shadcn
     end
 
     def button(value = nil, options = {}, &block)
+      if value.is_a?(Hash)
+        options = value
+        value = nil
+      end
+
       options = options.dup
       options[:type] ||= "submit"
       options[:name] ||= "button"
@@ -60,12 +64,26 @@ module Shadcn
       )
     end
 
+    def file_field(method, options = {})
+      options = options.dup
+      @multipart = true
+
+      render_component(
+        Shadcn::InputComponent.new(
+          **control_options(method, options, ERROR_CLASSES, multiple: multiple_field?(options)).merge(
+            type: "file",
+            value: nil
+          )
+        )
+      )
+    end
+
     def toggle_group(method, items, options = {})
       options = options.dup
       multiple = options.delete(:multiple)
       type = options.delete(:type) { multiple ? :multiple : :single }
       value = options.delete(:value) { value_for(method) }
-      selected_values = Array(value).map(&:to_s)
+      selected_values = selected_values_for(value, multiple: type.to_sym == :multiple)
       item_options = normalize_choice_items(items)
 
       render_component(
@@ -244,6 +262,11 @@ module Shadcn
     end
 
     def label(method, text = nil, options = {}, &block)
+      if text.is_a?(Hash)
+        options = text
+        text = nil
+      end
+
       options = options.dup
       value = options.delete(:value)
       options[:for] ||= value ? shadcn_field_id(method, value) : shadcn_field_id(method)
@@ -255,6 +278,11 @@ module Shadcn
     end
 
     def submit(value = nil, options = {})
+      if value.is_a?(Hash)
+        options = value
+        value = nil
+      end
+
       options = options.dup
       options[:type] = "submit"
       options[:variant] ||= :default
@@ -298,6 +326,9 @@ module Shadcn
       end
     end
 
+    alias_method :textarea, :text_area
+    alias_method :checkbox, :check_box
+
     private
 
     def render_component(component, &block)
@@ -306,11 +337,14 @@ module Shadcn
 
     def input_component(method, input_type, options)
       options = options.dup
-      value = options.delete(:value) { input_type == "file" ? nil : value_for(method) }
+      value = options.delete(:value) { value_for(method) }
 
       render_component(
         Shadcn::InputComponent.new(
-          **control_options(method, options, ERROR_CLASSES).merge(type: input_type, value: value)
+          **control_options(method, options, ERROR_CLASSES).merge(
+            type: input_type,
+            value: formatted_input_value(input_type, value)
+          )
         )
       )
     end
@@ -336,10 +370,11 @@ module Shadcn
     def native_select(method, options_html, html_options)
       multiple = html_options[:multiple] || html_options["multiple"]
       select_class = html_options.delete(:class) || html_options.delete("class")
+      select_class = Shadcn::Rails.cn(ERROR_CLASSES, select_class) if errors_for(method).any?
 
       render_component(
         Shadcn::NativeSelectComponent.new(
-          **control_options(method, html_options, ERROR_CLASSES, multiple: multiple).merge(
+          **control_options(method, html_options, nil, multiple: multiple).merge(
             options_html: options_html.to_s.html_safe,
             select_class: select_class
           )
@@ -400,6 +435,37 @@ module Shadcn
       end
     end
 
+    def selected_values_for(value, multiple:)
+      values = Array(value).flat_map do |item|
+        multiple && item.is_a?(String) ? item.split(",") : item
+      end
+
+      values.map(&:to_s)
+    end
+
+    def formatted_input_value(input_type, value)
+      return value unless value.respond_to?(:strftime)
+
+      case input_type
+      when "date"
+        value.strftime("%Y-%m-%d")
+      when "datetime-local"
+        value.strftime("%Y-%m-%dT%H:%M:%S")
+      when "time"
+        value.strftime("%H:%M:%S")
+      when "month"
+        value.strftime("%Y-%m")
+      when "week"
+        value.strftime("%G-W%V")
+      else
+        value
+      end
+    end
+
+    def multiple_field?(options)
+      options[:multiple] || options["multiple"]
+    end
+
     def control_options(method, options, error_classes, multiple: false)
       options = options.dup
       options[:name] ||= shadcn_field_name(method, multiple: multiple)
@@ -411,7 +477,7 @@ module Shadcn
     def apply_error_options(options, method, error_classes)
       return options unless errors_for(method).any?
 
-      options[:class] = Shadcn::Rails.cn(error_classes, options[:class])
+      options[:class] = Shadcn::Rails.cn(error_classes, options[:class]) if error_classes.present?
       options[:aria] = (options[:aria] || {}).merge(invalid: true)
 
       describedby = [options.dig(:aria, :describedby), error_id(method)].compact.join(" ")
