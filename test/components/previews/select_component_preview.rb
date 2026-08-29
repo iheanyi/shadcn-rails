@@ -84,19 +84,12 @@ class SelectComponentPreview < ViewComponent::Preview
   # @label Required Field
   # Select with required validation
   def required_field
-    '<form class="space-y-4">
-      <div class="space-y-2">
-        <label class="text-sm font-medium">Country *</label>
-        ' + render_inline(Shadcn::SelectComponent.new(name: "country", required: true, placeholder: "Select a country")) { |select|
-          select.with_item(value: "us") { "United States" }
-          select.with_item(value: "ca") { "Canada" }
-          select.with_item(value: "uk") { "United Kingdom" }
-          select.with_item(value: "au") { "Australia" }
-        }.to_s + '
-        <p class="text-xs text-muted-foreground">This field is required</p>
-      </div>
-      <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground h-9 px-4 py-2">Submit</button>
-    </form>'.html_safe
+    render(Shadcn::SelectComponent.new(name: "country", required: true, placeholder: "Select a country")) do |select|
+      select.with_item(value: "us") { "United States" }
+      select.with_item(value: "ca") { "Canada" }
+      select.with_item(value: "uk") { "United Kingdom" }
+      select.with_item(value: "au") { "Australia" }
+    end
   end
 
   # @label Framework Selection
