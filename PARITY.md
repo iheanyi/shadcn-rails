@@ -1,257 +1,335 @@
-# PARITY: verified audit vs upstream shadcn/ui, and the plan to close the gaps
+# PARITY: verified audit vs upstream shadcn/ui, and implementation-ready specs to close the gaps
 
-*Written August 2026 against `main` at `8df2d41` ("Make advertised shadcn-rails API true") and against current upstream shadcn/ui (`shadcn-ui/ui` `apps/v4/lib/components.ts` `UI_COMPONENTS`, 60 entries, plus the live docs at ui.shadcn.com). Every claim below was checked against the tree or against upstream; where PROGRESS.md or EVALUATION.md disagree with the code, the code wins and the discrepancy is noted.*
+*Written August 2026 against `main` at `8df2d41` ("Make advertised shadcn-rails API true") and against current upstream shadcn/ui (`shadcn-ui/ui` `apps/v4/lib/components.ts` `UI_COMPONENTS`, 60 entries, plus the live docs at ui.shadcn.com). Every claim was checked against the tree or against upstream; where PROGRESS.md or EVALUATION.md disagree with the code, the code wins and the discrepancy is noted. This is a plan: no component implementations ship in this PR.*
 
-**Scope guardrails (locked):** ViewComponent + Stimulus only. No Inertia, no React, no Radix. This document does not staff EVALUATION.md's 30/60/90-day professionalization plan; it is a component-parity and UX plan.
+**Scope guardrails (locked):** ViewComponent + Stimulus only. No Inertia, no React, no Radix. This document does not staff EVALUATION.md's 30/60/90-day professionalization plan.
 
-**Locked product decisions folded into this plan:**
+**Locked product decisions this plan implements:**
 
-- **Ship Chart, Data Table, and Direction** as real, working units — tests, dummy docs, keyboard/a11y. Not stubs.
-- **Do not skip Form.** The Field + Rails form helpers path must be genuinely good (errors, hint, required, composition with Input/Select/Checkbox/Radio/Textarea/Native Select). The evidence below supports shipping a `Shadcn::FormBuilder`; see Decision 4.
-- **Sonner ships only if it is a real UX upgrade over the existing Toast.** It isn't a separate thing — the upgrade is real but belongs *inside* Toast; see Decision 5.
-- **Every shipped component must appear in the docs/component library**, backed by a small showcase abstraction so examples are defined once; see §5.
-- Feel-test consumer is [iheanyi/shadcn-rails-phonebook PR #1](https://github.com/iheanyi/shadcn-rails-phonebook/pull/1). That repo is read-only evidence for this plan; we do not change it.
+- **Ship Chart, Data Table, and Direction** as real, working units — tests, dummy docs, keyboard/a11y. Not stubs. (§P5, §P4, §P6)
+- **Do not skip Form.** The Field + Rails form helpers path must be genuinely good; the evidence supports shipping a `Shadcn::FormBuilder`. (§P3b)
+- **Sonner ships only if it is a real UX upgrade over the existing Toast.** Verdict: the upgrade is real but belongs *inside* Toast; no second toast unit. (§P3a)
+- **Every shipped component must appear in the docs/component library**, backed by a showcase abstraction so each example is defined once. (§P0)
+- Feel-test consumer is [iheanyi/shadcn-rails-phonebook PR #1](https://github.com/iheanyi/shadcn-rails-phonebook/pull/1). Read-only evidence; we do not change that repo.
+
+**Repo conventions every spec below follows** (so "files to add" is unambiguous):
+
+- Components: `app/components/shadcn/{name}_component.rb`, sidecar template `{name}_component.html.erb` when markup is non-trivial. All inherit `Shadcn::BaseComponent` (`cn`, `merge_classes`, `html_options`, `build_data`).
+- Stimulus: `app/assets/javascripts/shadcn/controllers/{name}_controller.js`, imported/exported in `app/assets/javascripts/shadcn/index.js`, registered as `shadcn--{name}` in the `controllers` map. Shared JS in `app/assets/javascripts/shadcn/utils/`.
+- Generator unit: one row per family in `lib/shadcn/rails/registry.yml` (`ruby_files`, `templates`, `controllers`, `css_sidecars`, `depends_on`). `rails g shadcn:add {name}` copies every listed path and rewrites `../utils/` imports (`add_generator.rb:132-181`).
+- Tests: `test/components/{name}_component_test.rb` (ViewComponent::TestCase), `__tests__/controllers/{name}_controller.test.js` (Jest + jsdom harness).
+- Docs: `test/dummy/app/views/docs/{name}.html.erb`, entry in `DocsController::COMPONENTS`, sidebar link in `layouts/docs.html.erb`, preview in `test/components/previews/{name}_component_preview.rb`.
 
 ---
 
 ## 1. Verified inventory vs upstream `UI_COMPONENTS` (60 names)
 
-Method: diffed the 60 names in upstream `UI_COMPONENTS` against `app/components/shadcn/` (198 component files, 55 families), `lib/shadcn/rails/registry.yml` (55 unit keys), and `test/dummy/app/views/docs/` (55 component pages). The three lists agree with each other exactly.
+Method: diffed the 60 upstream names against `app/components/shadcn/` (198 component files, 55 families), `lib/shadcn/rails/registry.yml` (55 unit keys), and `test/dummy/app/views/docs/` (55 component pages). The three in-repo lists agree exactly.
 
-**Present: 55 of 60** — accordion, alert, alert-dialog, aspect-ratio, avatar, badge, breadcrumb, button, button-group, calendar, card, carousel, checkbox, collapsible, combobox, command, context-menu, date-picker, dialog, drawer, dropdown-menu, empty, field, hover-card, input, input-group, input-otp, item, kbd, label, menubar, native-select, navigation-menu, pagination, popover, progress, radio-group, resizable, scroll-area, select, separator, sheet, sidebar, skeleton, slider, spinner, switch, table, tabs, textarea, toast, toggle, toggle-group, tooltip, typography.
+**Present: 55/60** — accordion, alert, alert-dialog, aspect-ratio, avatar, badge, breadcrumb, button, button-group, calendar, card, carousel, checkbox, collapsible, combobox, command, context-menu, date-picker, dialog, drawer, dropdown-menu, empty, field, hover-card, input, input-group, input-otp, item, kbd, label, menubar, native-select, navigation-menu, pagination, popover, progress, radio-group, resizable, scroll-area, select, separator, sheet, sidebar, skeleton, slider, spinner, switch, table, tabs, textarea, toast, toggle, toggle-group, tooltip, typography.
 
-**Missing: 5 of 60** — all now have a decision (§4):
+**Missing: 5/60** — `chart` (§P5), `data-table` (§P4), `direction` (§P6), `form` (§P3b), `sonner` (§P3a — capability ships inside Toast, no new unit).
 
-| Upstream name | Status | Decision (§4) |
-|---|---|---|
-| `chart` | Missing | **Ship** — Rails-native chart unit on the existing `--chart-1..5` tokens |
-| `data-table` | Missing | **Ship** — server-first sortable/filterable unit on Table + Pagination |
-| `direction` | Missing | **Ship** — direction component + RTL hardening pass |
-| `form` | Missing | **Ship as `Shadcn::FormBuilder` + Field hardening** (the Rails translation of upstream's Form) |
-| `sonner` | Missing as a named unit | **Skip the name, ship the capability** — upgrade Toast to a managed toaster (imperative API, stacking, position, swipe). No second toast component. |
+**Sub-unit gaps inside "present" families:** `dropdown_menu` and `context_menu` have no `*_sub*` components or controller submenu behavior; `menubar` has all three sub components and working hover submenus — the pattern needs extraction, not invention (§P2).
 
-**Sub-unit gaps inside "present" families (names verified against the tree):**
+**Stale-doc corrections:**
 
-- `dropdown_menu` has checkbox/radio/shortcut/group items but **no `dropdown_menu_sub*` files**, and `dropdown_controller.js` has no submenu targets or behavior.
-- `context_menu` likewise has **no `context_menu_sub*` files** (upstream ContextMenu has Sub/SubTrigger/SubContent).
-- `menubar` is the only menu family with sub components (`menubar_sub_component.rb`, `menubar_sub_trigger_component.rb`, `menubar_sub_content_component.rb`) and working hover-open submenu logic in `menubar_controller.js` — proof the pattern is portable; it needs extraction, not invention.
-
-**Stale-doc corrections (so nobody plans against them again):**
-
-- PROGRESS.md says "57/59 implemented" and lists dropdown checkbox/radio items and keyboard shortcuts as TODO — they exist (`dropdown_menu_checkbox_item_component.rb`, `dropdown_menu_radio_item_component.rb`, `dropdown_menu_shortcut_component.rb`, and the controller implements them). The real dropdown gap is submenus only.
-- PROGRESS.md says Toast-over-Sonner is fine because "shadcn/ui deprecated Toast in favor of Sonner." Upstream reversed this: the current Toast is Base UI-backed with an imperative `toast.add()` API, type/promise states, stacking, and swipe dismissal, and upstream lists **both** toast and sonner. Our Toast matches neither's UX today (§3.5).
-- EVALUATION.md's headline code gaps (broken `shadcn:add` for compound units, missing LICENSE, no Tailwind v4 install path) were **fixed by `8df2d41`**: the unit registry (`lib/shadcn/rails/registry.yml`, 55 units with `ruby_files`/`templates`/`controllers`/`depends_on`), full-unit copy with import-path rewrite (`add_generator.rb:132-181`), Zeitwerk `ignore` for ejected units (`engine.rb:62-75`), `--list`/`--all`, MIT LICENSE, and a Tailwind v4 CSS-first install that symlinks gem CSS and pins `@floating-ui/dom`/`stimulus-use` for importmap (`install_generator.rb:121-147`, `217-234`). The remaining gaps are behavioral, not distributional.
+- PROGRESS.md says "57/59" and lists dropdown checkbox/radio/shortcut items as TODO — they exist (`dropdown_menu_checkbox_item_component.rb`, `dropdown_menu_radio_item_component.rb`, `dropdown_menu_shortcut_component.rb`, implemented in `dropdown_controller.js`). The real dropdown gap is submenus only.
+- PROGRESS.md justifies Toast-over-Sonner via "upstream deprecated Toast." Upstream reversed that: current upstream Toast is Base UI-backed with imperative `toast.add()`, type/promise states, stacking, and swipe dismissal, and upstream lists **both** toast and sonner. Our Toast matches neither's UX today.
+- EVALUATION.md's headline distribution gaps were fixed by `8df2d41`: unit registry with full-unit `shadcn:add` + import rewriting + Zeitwerk `ignore` for ejected units (`engine.rb:62-75`), `--list`/`--all`, MIT LICENSE, Tailwind v4 CSS-first install with gem-CSS symlink and importmap pins (`install_generator.rb:121-147`, `217-234`). Remaining gaps are behavioral, not distributional.
 
 ---
 
 ## 2. Consumer evidence: what the phonebook had to work around
 
-[shadcn-rails-phonebook PR #1](https://github.com/iheanyi/shadcn-rails-phonebook/pull/1) is a small Rails 8 Hotwire app consuming this gem. Every workaround it contains is a library UX gap:
+[shadcn-rails-phonebook PR #1](https://github.com/iheanyi/shadcn-rails-phonebook/pull/1) is a Rails 8 Hotwire app consuming this gem. Each workaround marks a library gap, and each is named as an acceptance criterion in the spec that fixes it:
 
-1. **`dialog_autoshow_controller.js`** — renders an `sr-only` trigger and programmatically `.click()`s it inside `requestAnimationFrame` to open a dialog from a Turbo Frame response. There is no server-driven or programmatic open API.
-2. **`dialog_deferred_clear_controller.js`** — to close a dialog from a Turbo Stream, it queries the DOM for the open dialog's close button, clicks it, then `setTimeout(220)` before clearing the frame so the close animation can finish. There is no `close()` API, no close event to await, and the animation duration is load-bearing knowledge the consumer had to discover.
-3. **Manual tooltip event forwarding** — `_favorite_button.html.erb` adds `data-action="mouseover->shadcn--tooltip#show mouseout->shadcn--tooltip#hide focusin->shadcn--tooltip#show focusout->shadcn--tooltip#hide"` onto its own form. Root cause verified in the gem: the trigger wrapper listens for `focus`/`blur` (`tooltip_component.html.erb:9`), which do not bubble — so keyboard-focusing a button inside the trigger never opens the tooltip. The PR description says the same forwarding was needed for HoverCard.
-4. **Toasts with `duration: 0`** — each Turbo Stream renders its own `ToastViewportComponent` + persistent toast. There is no toaster/stacking/queue, so server-driven toasts are single-shot DOM replacements.
-5. **"Global Turbo Streams" for portal-rendered forms** — because dialog content is portaled by copying `template.innerHTML` to `document.body`, forms inside dialogs live outside their Turbo Frame, and the app had to route responses as global streams.
+1. **`dialog_autoshow_controller.js`** — renders an `sr-only` trigger and `.click()`s it in `requestAnimationFrame` to open a dialog from a Turbo Frame. No programmatic/server-driven open API. → §P1
+2. **`dialog_deferred_clear_controller.js`** — closes a dialog from a Turbo Stream by DOM-querying the open dialog's close button, clicking it, then `setTimeout(220)` before clearing the frame so the close animation finishes. No `close()` API, no lifecycle events, animation duration is load-bearing consumer knowledge. → §P1
+3. **Manual tooltip event forwarding** — `data-action="mouseover->shadcn--tooltip#show ... focusin->shadcn--tooltip#show ..."` added on the consumer's own form, because the gem trigger listens for non-bubbling `focus`/`blur` (`tooltip_component.html.erb:9`): keyboard focus on a wrapped control never opens the tooltip. Same forwarding was needed for HoverCard. → §P1
+4. **Toasts with `duration: 0`**, one viewport per Turbo Stream render — no toaster, no stacking. → §P3a
+5. **Global Turbo Streams for dialog forms** — dialog content is portaled via `innerHTML` copy to `document.body`, so forms inside dialogs escape their Turbo Frame. → §P1
 
-The feel-test for this plan is concrete: **when the relevant phases land, the phonebook should be able to delete both workaround controllers, all manual tooltip/hover-card event forwarding, and the `duration: 0` toast hack** — and the flows in its demo recording (dialog create/edit, delete confirm, toasts, tooltips, hover cards, dropdown actions) should feel the same or better.
-
----
-
-## 3. Feature-level UX gaps on shipped components (verified in code)
-
-Severity reflects how quickly a real app hits the gap. File references are current as of `8df2d41`.
-
-### 3.1 Overlay engine (Dialog, Alert Dialog, Sheet, Drawer) — High
-
-- **Portals copy `innerHTML` instead of moving nodes** (`dialog_controller.js:39`, `sheet_controller.js`, `drawer_controller.js:33`). Any Stimulus controller inside overlay content is silently disconnected in the portal; only close buttons are manually re-bound. This is the root cause of phonebook items 1, 2, and 5.
-- **Sheet overlay click is dead after portaling**: the template wires `click->shadcn--sheet#close` on the overlay, but the controller re-binds only close buttons (`sheet_controller.js:47-50`).
-- **No `aria-labelledby`/`aria-describedby` anywhere** (`grep` over `app/components/shadcn` is empty). `DialogTitleComponent` renders a bare `<h2>` with no id; content is never labeled by its title. Radix does this automatically; screen-reader users get an unnamed dialog.
-- **Focus trap doesn't filter** disabled/hidden elements (`dialog_controller.js:148-150` matches raw `button, [href], input, ...`), and there's no `inert`/`aria-hidden` on background content.
-- **Drawer has no focus trap or focus restore** (only `content.focus()` on open).
-- **Alert Dialog dismisses on overlay click** (inherits dialog behavior); upstream AlertDialog deliberately does not.
-- **No programmatic open/close API or lifecycle events** consumers can rely on (phonebook items 1–2).
-
-### 3.2 Menus (Dropdown, Context Menu, Menubar) — High
-
-- No submenus in dropdown/context menu (§1). Menubar's implementation is hover-only; ArrowRight/ArrowLeft moves between top-level menus (`menubar_controller.js` `openNextMenu`/`openPreviousMenu`), not into/out of submenus.
-- No typeahead in any menu (`base_menu_controller.js` handles arrows/Home/End/Enter/Escape only). Roving focus with disabled-skip exists and works (`base_menu_controller.js:140-212`).
-
-### 3.3 Drawer gestures — High on mobile
-
-`drawer_controller.js`'s docstring says "with swipe support" but the file contains zero `touch*`/`pointer*` handlers — the claim is false. Open/close is click/Escape plus a 200ms CSS animation; the handle bar is decorative (`drawer_content_component.rb:70-74`). No drag-to-dismiss, no velocity, no snap points (PROGRESS.md is accurate here).
-
-### 3.4 Sidebar mobile — High on mobile
-
-Desktop parity is decent: cookie persistence (`sidebar:state`), Cmd/Ctrl+B shortcut, collapsible `offcanvas`/`icon` modes as data attributes (`sidebar_controller.js:4-9`, `63-71`; `sidebar_component.rb:50-54`). But there is **no mobile Sheet rendering** — the sidebar is `hidden md:block` on small screens, where upstream renders it inside a Sheet. `clickOutside` is defined but never hooked up.
-
-### 3.5 Toast — High if you want client-side toasts, Medium otherwise
-
-`toast_controller.js` is per-element only: auto-dismiss timer, close with 200ms animation, `pause`/`resume` methods that **no template wires up** (no mouseenter/leave actions in `toast_component.html.erb`). There is no toaster manager: no JS `toast()` API, no stacking/queue, no position config, no promise/loading states; the viewport references a `data-shadcn--toaster-target` that no registered controller consumes, and swipe-dismiss exists only as copied Radix CSS class names with no JS behind them.
-
-### 3.6 Tooltip / Popover / Hover Card — Medium
-
-- Tooltip: `focus`/`blur` don't bubble from inner controls (§2 item 3 — an a11y bug, keyboard users never see tooltips on wrapped controls); no Escape-to-dismiss (WCAG 1.4.13); `skipDelay` value is declared and never read (`tooltip_controller.js:14`); leaving the trigger immediately schedules hide with no grace path onto the content.
-- Popover: solid (click toggle, outside click, Escape, Floating UI), but `modal: true` is a pointer-events hack with no focus trap.
-- Hover Card: good delays (700/300) and content-enter cancels close; missing Escape close.
-
-### 3.7 Select / Combobox / Command — Medium
-
-Select is the strongest (hidden input for form submission, `role="combobox"`/listbox/option, arrows/Home/End, disabled skip) but has no typeahead and doesn't `scrollIntoView` the highlighted option. Combobox has filtering + `scrollIntoView` but highlight is CSS-class-only with no `aria-activedescendant`, and no Home/End. Command's input has no `aria-controls`/`aria-activedescendant` and the list lacks `role="listbox"` wiring.
-
-### 3.8 Calendar / Date Picker — Medium
-
-Calendar has real keyboard grid navigation (arrows, PageUp/Down ± Shift for year, Home/End) and `role="grid"`, but month/weekday names are hardcoded English arrays in both Ruby and JS, and day cells are plain buttons without `row`/`gridcell` semantics. **Date Picker does not reuse Calendar's keyboard navigation** — its days only get click actions (`date_picker_controller.js:258-263`), so the popover calendar is mouse-only.
-
-### 3.9 Turbo lifecycle — High for the target audience
-
-Zero `turbo:` handling in library JS (`grep` for `turbo` over `app/assets/javascripts/shadcn` is empty). Open portals, `body.style.overflow = "hidden"` scroll locks, and open menu state can leak into Turbo's page cache and across navigations. For a Hotwire-first library this is a defining gap, and it compounds the portal problem (§3.1).
-
-### 3.10 Test and doc coverage on shipped behavior — Medium
-
-- 11 controllers have no Jest suite: avatar, base_menu (indirect only), command, command_dialog, dropdown, hover_card, input_otp, scroll_area, sidebar, toast, toggle. One orphan test exists for a controller that doesn't (`clipboard_controller.test.js`).
-- Dummy docs pages exist for all 55 families, but Lookbook previews cover only ~43 — missing calendar, carousel, combobox, command, context-menu, date-picker, empty, item, menubar, navigation-menu, resizable, sidebar.
-- The docs layout runs the real gem JS bundle via esbuild, but the Lookbook preview layout still inlines hand-copied Stimulus controllers — a permanent drift risk and the reason previews can't be trusted as behavior evidence.
-- `data-slot` attributes (upstream's per-primitive styling hooks) appear nowhere in the tree.
+**The feel-test:** when P1 and P3a land, the phonebook can delete both workaround controllers, all manual event forwarding, and the `duration: 0` hack, and its recorded flows (create/edit dialog, delete confirm, toasts, tooltips, hover cards, dropdown actions) feel the same or better. When P3b/P4 land, its `_form.html.erb` and `_contacts.html.erb` shrink materially. Verification happens as a follow-up PR on that repo — not in this plan's PRs.
 
 ---
 
-## 4. Decisions on the five missing names
+## 3. Implementation specs, in build order
 
-### 4.1 Chart — ship (locked)
-
-Upstream Chart is not a chart engine; it's a themed container + tooltip + legend over Recharts, and its portable value is the theming contract. The `--chart-1..5` tokens **already exist** in this repo (`base.css:87-91`, mapped in `tailwind-v4.css:91-95`) — the foundation is laid and unused.
-
-**Shape:** `Shadcn::ChartComponent` (container that scopes chart color variables and sizing) + `ChartTooltipComponent`/`ChartLegendComponent` rendered as shadcn-styled HTML, with a `shadcn--chart` Stimulus controller wrapping **Chart.js** (canvas) configured from data attributes and using Chart.js's external-tooltip hook to drive the HTML tooltip. Chart.js over Chartkick because we need per-element control to bind our tooltip/legend markup and theme tokens (Chartkick's abstraction hides exactly the layer we're theming), and over hand-rolled SVG because "must actually work" includes resize, hover interpolation, and stacked series that are not worth rebuilding. Chart.js is an optional npm/importmap peer (pinnable, no build required), consistent with how `@floating-ui/dom` is handled. Initial scope: bar, line, area, pie/donut — the types upstream's docs lead with. Radar/radial deferred.
-
-**Definition of working:** Ruby tests for markup/config serialization, Jest for config building + tooltip driving, docs page with the four chart types on live data, keyboard/a11y = accessible fallback (`role="img"` + label, data table fallback slot).
-
-### 4.2 Data Table — ship (locked)
-
-Upstream's own docs say every data table is different and hand you a TanStack recipe rather than a component. The honest Rails translation is **server-first**: sorting/filtering/pagination as URL params over Turbo, which is both more idiomatic and better UX for server-rendered data than porting a client-side grid.
-
-**Shape:** `Shadcn::DataTableComponent` built on the existing Table family + Pagination (which already has Kaminari/will_paginate/Pagy adapters — `pagination_component.rb:21-38`): a column DSL (`with_column :name, sortable: true`), sort-link header rendering with `aria-sort` and direction indicators, a filter slot composing Input, current-sort/direction params helpers, and an empty-state slot composing Empty. A small optional Stimulus controller can provide client-side sorting for small static tables, but the primary path is params + Turbo. Ship with a full CRUD-ish docs recipe (the phonebook's contacts table is exactly the shape it must handle: search + sort + row actions + empty state).
-
-**Definition of working:** Ruby tests for column DSL/sort-state rendering/aria-sort, docs page with a live sortable+filterable demo against seeded data, keyboard = links/buttons all natively focusable (no custom key handling needed by design).
-
-### 4.3 Direction — ship (locked)
-
-Upstream `direction` is a React context provider over the `dir` attribute; a context provider is not portable, but what it *enables* — components that actually work in RTL — is. Shipping a `DirectionComponent` alone would be a stub, which is exactly what the locked decision forbids.
-
-**Shape:** three parts. (1) `Shadcn::DirectionProviderComponent` (or `shadcn_direction` helper) that sets `dir` on a wrapper + exposes the value to Stimulus controllers, with README guidance to put `dir` on `<html>`. (2) The real work: an RTL hardening pass replacing physical utilities (`ml-`/`mr-`/`left-`/`right-`/`pl-`/`pr-`) with logical ones (`ms-`/`me-`/`start-`/`end-`) across component class strings, flipping Floating UI placements when `dir="rtl"` (Floating UI supports this via the `placement` axis; our `utils/floating.js` needs to read direction), and mirroring directional icons/chevrons. (3) RTL examples in docs (upstream shows RTL sections on component pages). Scope the first pass to the components upstream demos in RTL (form controls, card/login block, dropdown, dialog, sheet, sidebar) and extend from there.
-
-**Definition of working:** an RTL docs page rendering the login-block demo `dir="rtl"`, Ruby tests asserting logical classes on the migrated components, Jest coverage for RTL-aware Floating UI placement.
-
-### 4.4 Form — ship the Rails-native win (locked: do not skip)
-
-Upstream's Form component is glue: it wires labels, descriptions, error messages, and aria attributes to fields automatically (via React Hook Form). The evidence says the current Field-only path does **not** deliver that UX in Rails:
-
-- `FieldComponent` never wires `aria-describedby` from the input to its description/error, never sets `aria-invalid`, and its `required:` flag is label-only (`field_component.rb:39-58` passes only id/name/class to the input).
-- There is **zero form-builder integration in the gem** (no `FormBuilder`/`form_with` references under `app/`), so model errors are hand-extracted by every consumer — the phonebook wrote its own `contact_error` helper and per-field conditionals to do what Rails should do once.
-
-**Shape:** two layers, both needed. (1) **Field hardening** — auto-ids on description/error, `aria-describedby`/`aria-invalid` wiring, required propagated to the control, and first-class composition for Select/Checkbox/Radio Group/Textarea/Native Select through typed slots (today only Input is typed; everything else goes through the generic `control` slot). (2) **`Shadcn::FormBuilder`** (`ActionView::Helpers::FormBuilder` subclass) so `form_with model: @contact, builder: Shadcn::FormBuilder` gives `f.field :email`, `f.select :role, ...`, `f.checkbox :favorite`, etc. — each rendering the hardened Field with label/hint/error pulled from the model (`object.errors[attr]`), required inferred from presence validators, and ids/names from Rails conventions. This is the same job upstream's `<Form>` does for RHF, translated to the idiomatic Rails abstraction. The evidence threshold for "a real form-builder win" is met: without it, every consumer re-implements error extraction (§2), and with it the phonebook's `_form.html.erb` collapses to a handful of `f.field` calls.
-
-**Definition of working:** builder methods for all six control types with model-error/hint/required round-trips under test, a "Forms" docs page (new — the missing upstream name gets a page), and the phonebook form partial demonstrably shrinking in the feel-test.
-
-### 4.5 Sonner — skip the name, ship the capability inside Toast (locked criteria applied)
-
-The test was: add Sonner only if it's a real UX upgrade over the existing Toast; if it's Toast with a new name, keep Toast and say so. Verified facts: upstream now ships **both** — and its *Toast* has absorbed the Sonner-style UX (imperative `toast.add()`, success/info/warning/error/loading types, `toast.promise`, stacking, swipe dismissal, action buttons). Meanwhile our Toast has none of that (§3.5), so a "Sonner port" and a "Toast upgrade" would be the same work shipped under two names — the situation the locked criteria exist to prevent.
-
-**Call: keep Toast as the single toast unit and upgrade it into a managed toaster.** Ship a `shadcn--toaster` controller owning the viewport (the `data-shadcn--toaster-target` hook already in the markup finally gets a consumer): a JS `toast()` API (exported from `shadcn-rails-stimulus`), stacking with a visible-count limit, position config on the viewport, wiring the existing-but-dead `pause`/`resume` on hover, swipe-to-dismiss JS behind the already-shipped Radix swipe CSS classes, action-button support (component exists), and — the Rails differentiator — a documented **Turbo Stream server API** (`turbo_stream.append` into the viewport, plus a flash-message integration example) so server-driven toasts stack instead of replacing each other. `toast.promise`-style loading states are the stretch goal, not the bar. No `SonnerComponent` will exist; the docs page for Toast gains an "upstream Sonner equivalence" note.
+Ordering rationale: docs infrastructure first (every later phase must prove itself there), then the overlay/menu primitives that later units build on, then the locked ships in dependency order (Forms before Data Table because the table's filter toolbar composes form controls; Chart and Direction are self-contained; Direction last because it touches most class strings and should not race the phases that churn them). Complexity is blast radius, not calendar time.
 
 ---
 
-## 5. Docs and showcase abstraction (locked: every component visible, defined once)
+### P0 — Docs/showcase abstraction
 
-Current state (verified): docs pages exist for all 55 families and run the real gem JS bundle; Lookbook previews cover only ~43 families and run on a layout with **hand-inlined copies of the Stimulus controllers**; code samples live in ~53 directories of `.txt` files under `test/dummy/app/code_examples/` maintained by hand alongside the demos they duplicate. Three sources of truth, drifting independently — PROGRESS.md's staleness is the predictable output of this structure.
+**Missing today:** three drifting sources of truth. Docs pages (55/55) hand-duplicate demos and `.txt` code samples (`test/dummy/app/code_examples/`, ~53 dirs, loaded by `docs_helper.rb#code_example_file`); Lookbook previews cover only ~43/55 families (missing: calendar, carousel, combobox, command, context_menu, date_picker, empty, item, menubar, navigation_menu, resizable, sidebar); the preview layout (`component_preview.html.erb`) hand-inlines copies of Stimulus controllers instead of loading the gem bundle, so previews don't exercise shipped JS. Nothing enforces coverage — which is how PROGRESS.md went stale.
 
-**Proposal — one showcase source, three renderers:**
+**Implementation:**
 
-1. **Examples live in ViewComponent/Lookbook previews** (`test/components/previews/`), one preview class per family, one method per named example. Lookbook already supports this shape and the repo already has 43 of them.
-2. **Docs pages embed previews instead of duplicating them.** The dummy docs render each example through the preview (ViewComponent's `render_preview` / Lookbook embeds) and display its source via extraction from the preview file — retiring the parallel `.txt` code-example tree. A small `showcase` helper (`showcase "button", :variants`) replaces today's hand-built `_demo_card` + `_code_example` pairs.
-3. **The preview layout drops inline controllers** and loads the same esbuild bundle the docs layout already uses, so previews exercise the shipped JS instead of a drifting copy. (This also unblocks the CLAUDE.md-documented nested-render preview problems from being papered over with raw HTML strings.)
-4. **A registry-driven parity gate in CI**: for every key in `registry.yml`, assert a docs page, a preview class, and (where a controller exists) a Jest suite. New components physically cannot ship undocumented — which operationalizes the "every shipped component shows up in the library" decision for Chart/Data Table/Direction/Forms.
+- *Files:* `test/dummy/app/helpers/showcase_helper.rb` (new); edits to `test/dummy/app/views/layouts/component_preview.html.erb`, docs pages (incremental migration), `test/components/previews/*` (12 new preview classes); `test/docs_parity_test.rb` (new).
+- *Showcase helper:* `showcase("dialog", :default)` renders the named preview example live (ViewComponent `render_preview` / Lookbook embed) inside the existing `_demo_card` chrome, and displays that example's source extracted from the preview method (Lookbook exposes preview source; fallback is a file/AST slice). One method in one preview class per example; docs pages and Lookbook both render it. `.txt` examples are deleted per page as it migrates; `docs_helper.rb` keeps `bash_example` for CLI snippets only.
+- *Preview layout:* replace inline controllers + CDN Tailwind with the same esbuild bundle and gem CSS the docs layout already uses (`docs.html.erb:115` pattern). This retires the CLAUDE.md-documented "inline controllers for previews" convention.
+- *Parity gate:* `test/docs_parity_test.rb` iterates `Shadcn::Rails::Registry.keys` and asserts per key: docs page exists, `DocsController::COMPONENTS` entry exists, preview class exists, and (when the unit lists controllers) a matching `__tests__/controllers/*_controller.test.js` exists. Runs in the normal Ruby suite, so CI enforces it.
+- *Generator unit:* none (dummy-app only).
+- *Tests:* the gate itself, plus a smoke test that renders every preview example (`ViewComponent::Preview.all` loop) so previews can't silently break.
 
-This is deliberately small: no new site, no Bridgetown, no registry server. It converts existing assets into a single pipeline.
+**Dependencies & order:** first — everything after must land with a showcase entry, and the gate is what enforces "every shipped component shows up in the docs."
+
+**How we know it works:** gate fails when a registry key lacks docs/preview/Jest (verify by deleting one temporarily in a branch); the dialog preview opens/closes in Lookbook with no inline JS in the layout; a migrated docs page renders the identical example Lookbook does, with source shown from the same file.
 
 ---
 
-## 6. Sequenced plan
+### P1 — Overlay engine: Dialog, Alert Dialog, Sheet, Drawer (+ Tooltip/Hover Card fixes)
 
-Ordering rationale: fix the primitives every other phase builds on first (portal/a11y/Turbo), make docs cheap to extend second (everything after must prove itself there), then land the locked ships in the order that lets each build on the previous (Forms before Data Table because the table's filter UX composes form controls; Chart and Direction last because they're self-contained). Complexity is expressed as blast radius, not calendar time. Each phase names its "UX is actually better" check — dummy docs demo plus, where applicable, a phonebook workaround that becomes deletable.
+**Missing vs upstream (Radix Dialog/AlertDialog + Vaul-minus-gestures):**
 
-### Phase 0 — Docs/showcase foundation (§5)
+- *API:* no programmatic `open()`/`close()` contract, no lifecycle events (`phonebook` items 1–2). Radix exposes controlled open state and `onOpenChange`.
+- *Behavior:* portal copies `template.innerHTML` to `document.body` (`dialog_controller.js:39`, `sheet_controller.js`, `drawer_controller.js:33`) — nested Stimulus controllers inside overlay content never connect in the portal; only close buttons are re-bound; sheet's overlay-click close is dead after portaling (`sheet_controller.js:47-50` re-binds close buttons only). Alert Dialog closes on overlay click (Radix AlertDialog does not). Zero `turbo:` lifecycle handling in library JS — open portals and `body.style.overflow` locks leak into Turbo's page cache.
+- *A11y:* no `aria-labelledby`/`aria-describedby` anywhere (grep is empty; `DialogTitleComponent` renders a bare `<h2>`, no id); focus trap doesn't filter disabled/hidden nodes (`dialog_controller.js:148-150`); no `inert`/`aria-hidden` on background; drawer has no trap or focus restore at all.
+- *Motion:* close animations exist (`components.css:372-387` `data-state` keyframes) but removal is a hardcoded `setTimeout(200)` — consumers must know the duration (phonebook item 2).
 
-- **Work:** preview layout onto the real JS bundle; previews for the 12 missing families; docs pages embed previews; retire `.txt` examples as pages migrate; registry parity gate in CI. Mark PROGRESS.md's parity sections as superseded by this document (do not rewrite EVALUATION.md).
-- **Complexity:** low-risk, wide but mechanical (dummy app + previews only; zero library runtime changes).
-- **Depends on:** nothing.
-- **Better-UX check:** previews demonstrably run gem JS (an interactive preview like dialog works in Lookbook without inline controllers); CI fails on an undocumented registry key.
+**Implementation:**
 
-### Phase 1 — Overlay engine correctness (§3.1, §3.9)
+- *Approach — native `<dialog>` top layer instead of portals.* Content components (`dialog_content_component.rb`, `alert_dialog_content_component.rb`, `sheet_content_component.rb`, `drawer_content_component.rb`) render a `<dialog>` element instead of a `<template>` + portal. `showModal()` gives: top-layer stacking (the entire reason portals exist — with **no DOM moves, so nested Stimulus controllers just work**, killing phonebook items 1/2/5 at the root), background inertness for free, and native Escape semantics. The overlay `<div>` is replaced by `::backdrop` styling. Fallback if `<dialog>` proves too constraining for a case (none anticipated; drawers/sheets are fine in top layer): a moved-node portal util (`utils/portal.js`) that relocates real nodes with a placeholder comment and restores on close — never `innerHTML`.
+- *Files:* rewrite `dialog_controller.js`, `sheet_controller.js`, `drawer_controller.js`; new `app/assets/javascripts/shadcn/utils/overlay.js` (shared show/hide/animation/event logic used by all three); template + content-component edits per family; `components.css` gains `::backdrop` rules mirroring `.shadcn-overlay` and keeps `data-state` keyframes.
+- *Controller contract (all overlays):* values `open`, `dismissible` (Alert Dialog renders `dismissible: false` from `alert_dialog_component.rb`, disabling backdrop-click and Escape-cancel-through); methods `open()`/`close()` public and idempotent; events `shadcn--dialog:open`, `:opened`, `:close`, `:closed` (the `*ed` pair fires after animation, detected via `animationend`/`transitionend` with a duration-parse fallback — no magic 200ms). Backdrop click = `click` where `event.target === dialogEl` when dismissible. Focus: filter trap/initial-focus queries with `:not(:disabled)`, `[hidden]`, `aria-hidden`, and visibility checks (shared helper in `utils/overlay.js`); restore `previousActiveElement` on close (extend to drawer, which lacks it).
+- *A11y wiring (Ruby side):* content components accept/generate a stable `@id`; slot lambdas pass derived ids down — `renders_one :title, ->(**o) { DialogTitleComponent.new(id: "#{@id}-title", **o) }`, same for description; content sets `aria-labelledby`/`aria-describedby` to those ids (omitting absent slots). Mirror in alert dialog, sheet, drawer header components.
+- *Server-driven open:* document (and test) the two idioms the phonebook needed: render with `open: true` (already a value; now works because `openValueChanged` → `showModal()` on connect) for Turbo Frame responses, and `dialog.close()` reachable via a rendered `<button data-action="shadcn--dialog#close">` or a one-line Stimulus call — plus the `:closed` event to sequence frame clearing.
+- *Turbo lifecycle:* `registerShadcnControllers` installs a single `turbo:before-cache` listener; overlay controllers register open instances in a module-level `Set`; the listener closes them instantly (skip animation), clears scroll locks, and cancels toaster timers (§P3a hooks in here too).
+- *Tooltip/Hover Card fixes (small, same review area):* template swaps `focus->`/`blur->` for `focusin->`/`focusout->` (the phonebook bug); Escape-to-dismiss while open (WCAG 1.4.13); implement `skipDelay` (module-level `lastHideAt`; show instantly if within `skipDelayValue`); `pointerenter` on tooltip content cancels the pending hide (hover bridging). Hover Card gets Escape close.
+- *Generator unit:* no registry changes — same file paths per unit (dialog/alert_dialog/sheet/drawer/tooltip/hover_card rows already list them).
+- *Tests:* Jest — rewrite dialog/sheet/drawer suites for: open/close events (incl. `*ed` after animation), nested-controller survival (register a dummy controller inside content, assert `connect()` fires while open), backdrop-click matrix (dialog yes / alert-dialog no), Escape matrix, focus filtering (disabled button skipped), focus restore, `turbo:before-cache` teardown, `open: true` on connect. Ruby — id/aria wiring for all four families' title/description slots.
+- *Docs/showcase:* dialog/alert-dialog/sheet/drawer pages gain "Open from the server (Turbo)" examples and updated Accessibility sections (name/description wiring); tooltip page documents keyboard behavior and skip-delay.
 
-- **Work:** moved-node portal (preserve Stimulus connections; return nodes on close) for dialog/alert-dialog/sheet/drawer; programmatic `open()`/`close()` API + dispatched lifecycle events with animation-completion semantics; auto-id `aria-labelledby`/`aria-describedby` wiring; focus-trap filtering (disabled/hidden), `inert` background; alert-dialog stops closing on overlay click; fix sheet overlay rebinding; `turbo:before-cache` cleanup across all stateful controllers (overlays, menus, tooltips, scroll locks).
-- **Complexity:** highest of the plan — invasive rewrites of the four overlay controllers plus new Jest suites; behavior-compatible for existing markup.
-- **Depends on:** Phase 0 (docs demos are the regression harness).
-- **Better-UX check:** phonebook deletes `dialog_autoshow_controller.js` and `dialog_deferred_clear_controller.js` and stops routing dialog forms as global streams; a nested Stimulus controller (e.g. a form validation controller) works inside a portaled dialog in the docs demo; navigating away with an open dialog leaves no scroll-lock residue.
+**Dependencies & order:** after P0 (docs demos are the regression harness). Everything later builds on this engine — do it before menus and toaster.
 
-### Phase 2 — Menu completion (§3.2)
+**How we know it works:** the four Jest suites above pass; a docs demo places a live Stimulus controller (e.g. a character counter) inside a dialog and it works; axe-core on the dialog docs page reports an accessible name and description for the dialog; **feel:** phonebook deletes `dialog_autoshow_controller.js` and `dialog_deferred_clear_controller.js`, drops global-stream routing for dialog forms, removes all tooltip/hover-card event forwarding — flows unchanged or smoother.
 
-- **Work:** extract menubar's submenu behavior into shared base-menu logic; add `dropdown_menu_sub*` and `context_menu_sub*` component units (+ registry rows); keyboard submenu navigation (ArrowRight open / ArrowLeft close, Escape ancestry) for all three menu families; typeahead in `base_menu_controller`; Jest for dropdown/base_menu/command (closing the §3.10 gaps for menu surfaces).
-- **Complexity:** medium-high; concentrated in base_menu + one new controller concern; new components are thin.
-- **Depends on:** Phase 1 (menus inherit portal/Turbo fixes; don't build submenus on the old foundation twice).
-- **Better-UX check:** docs demo with two-level dropdown and context menus fully keyboard-operable; typeahead works on the long menu demo.
+---
 
-### Phase 3 — Toast → managed toaster (§4.5) and Forms (§4.4)
+### P2 — Menu completion: Dropdown/Context submenus + typeahead
 
-Two independent tracks, parallelizable:
+**Missing vs upstream (Radix DropdownMenu/ContextMenu):**
 
-- **Toaster:** `shadcn--toaster` viewport controller, JS `toast()` API, stacking/limit, position, hover pause wiring, swipe-to-dismiss, Turbo Stream server API + flash integration docs. Keep the `Toast` name; no Sonner unit.
-- **Forms:** Field a11y hardening + typed slots for the six control types; `Shadcn::FormBuilder` with model-derived errors/hints/required; "Forms" docs page.
-- **Complexity:** both medium; toaster is new JS with real interaction testing needs; FormBuilder is new Ruby surface with a big test matrix but no JS.
-- **Depends on:** Phase 0; Forms benefits from Phase 1's dialog fixes for the modal-form docs demo but doesn't require them.
-- **Better-UX check:** phonebook drops `duration: 0` and per-render viewports — create/delete flows produce stacking, auto-dismissing, hover-pausable toasts from Turbo Streams; phonebook `_form.html.erb` rewritten as `f.field` calls with model errors appearing without helper code.
+- *API:* no `DropdownMenuSub`/`SubTrigger`/`SubContent` or `ContextMenuSub*` components. Menubar has the trio (`menubar_sub_component.rb` etc.) with hover-open/close-timer/positioning in `menubar_controller.js:158-175` — proof of pattern.
+- *Behavior:* no submenu open on hover or ArrowRight, no close on ArrowLeft; menubar's ArrowLeft/Right moves between *top-level* menus only. No typeahead in any menu (`base_menu_controller.js` handles arrows/Home/End/Enter/Escape only; roving focus + disabled-skip already work, `base_menu_controller.js:140-212`).
+- *A11y:* sub triggers need `aria-haspopup="menu"`/`aria-expanded` (menubar's sub trigger already models this, `menubar_sub_trigger_component.rb:44-52`).
+- *Motion:* submenu `data-state` open/close animations — CSS already covers menu content states; submenus reuse it.
 
-### Phase 4 — Data Table (§4.2)
+**Implementation:**
 
-- **Work:** `DataTableComponent` with column DSL, `aria-sort` sortable headers, params helpers, filter/empty slots, Pagination adapter reuse; optional client-sort Stimulus controller; full docs recipe with seeded data.
-- **Complexity:** medium; composition of existing units plus a params contract worth designing carefully.
-- **Depends on:** Phase 3 Forms (filter toolbar composes the hardened form controls); Phase 0 gate.
-- **Better-UX check:** docs demo covers sort + filter + paginate + empty state entirely server-driven over Turbo; the phonebook contacts table is re-expressible as a DataTable with less markup than its hand-built `_contacts.html.erb`.
+- *Files:* new `app/components/shadcn/dropdown_menu_sub_component.rb`, `dropdown_menu_sub_trigger_component.rb`, `dropdown_menu_sub_content_component.rb`; same trio for `context_menu_*`; edits to `base_menu_controller.js` (submenu + typeahead), `menubar_controller.js` (refactor to shared logic + keyboard submenu nav), `dropdown_menu_content_component.rb`/`context_menu_content_component.rb` (register `with_sub` slot).
+- *Slot shape (mirrors menubar's existing API exactly):* `MenubarSubComponent`'s shape is the template — `renders_one :trigger` (SubTrigger with chevron, `role="menuitem"`, `aria-haspopup="menu"`, `aria-expanded`, `data-state`), `renders_one :content_slot` aliased `with_content` (SubContent, `role="menu"`, hidden, `data-state="closed"`). Content components add `renders_many`-compatible polymorphic registration alongside existing `with_item`/`with_checkbox_item`/etc. so authoring reads: `content.with_sub do |sub| sub.with_trigger { "Share" }; sub.with_content do |c| c.with_item { "Email" } end end`.
+- *Stimulus:* move menubar's `openSub`/`closeSub`/close-timer/positioning into `base_menu_controller.js` with targets `sub`, `subTrigger`, `subContent` (dropdown and context menu controllers extend base and inherit it; menubar keeps its own top-level strip logic but delegates sub behavior to the shared code). Positioning via existing `positionFloating` with `placement: right-start` + `flip` (RTL-aware after §P6). Keyboard: ArrowRight on a focused sub trigger opens and focuses first enabled item; ArrowLeft inside sub content closes and refocuses the trigger; Escape closes the whole tree. Typeahead in base menu: 500ms rolling buffer, prefix-match on `textContent` of `enabledItems`, wrap-around search from the focused item — shared by dropdown/context/menubar (extract `utils/typeahead.js`; Select reuses it in §P8).
+- *Generator unit:* append the six new ruby files to the `dropdown_menu` and `context_menu` rows in `registry.yml`.
+- *Tests:* Jest — new `dropdown_controller.test.js` (currently missing entirely — the most complex controller has no suite) + base-menu submenu suite (hover open, timer close, ArrowRight/ArrowLeft/Escape, focus placement) + typeahead suite. Ruby — sub trio components: roles, aria, data-state, chevron, slot composition.
+- *Docs/showcase:* dropdown-menu and context-menu pages gain a submenu example (upstream's "Share → Email/Message" shape) and a long-menu typeahead demo; previews updated (context_menu preview is one of the 12 new ones from P0).
 
-### Phase 5 — Chart (§4.1)
+**Dependencies & order:** after P1 (menus inherit the Turbo cleanup and shouldn't be rebuilt on the old base twice). Before P4 (Data Table row-action menus may want submenus).
 
-- **Work:** ChartComponent container + tooltip/legend components on the existing `--chart-1..5` tokens; `shadcn--chart` controller over Chart.js (optional peer, importmap-pinnable); bar/line/area/pie; a11y fallback slot; docs page.
-- **Complexity:** medium-high; the new-dependency decision and canvas-to-HTML tooltip bridge are the risky parts, both isolated from the rest of the library.
-- **Depends on:** Phase 0 only.
-- **Better-UX check:** four live themed charts in docs that re-theme correctly when switching theme/dark mode in the theme playground.
+**How we know it works:** Jest suites above; docs demo with a two-level dropdown and context menu fully keyboard-operable (recorded once for the PR); typeahead jumps focus in the long-menu demo; **feel:** phonebook's row-actions dropdown gains nothing it must change — regression check only.
 
-### Phase 6 — Direction / RTL (§4.3)
+---
 
-- **Work:** DirectionProvider component/helper; logical-property migration of component class strings (scoped first pass per §4.3); RTL-aware Floating UI in `utils/floating.js`; icon mirroring; RTL docs section.
-- **Complexity:** wide but shallow in Ruby class strings; subtle in JS positioning. Sequenced last deliberately: it touches most components' classes, so it lands after Phases 1–5 stop churning those same strings, and the showcase gate ensures every migrated component has a place to verify RTL rendering.
-- **Depends on:** Phases 1–2 (don't migrate overlay/menu classes twice); Phase 0.
-- **Better-UX check:** the RTL docs page renders the login-block and menu demos correctly in `dir="rtl"`, including dropdown placement flipping.
+### P3a — Toast → managed toaster (the Sonner answer)
 
-### Deliberately in-plan but unscheduled (next after Phase 6, order by demand)
+**Missing vs upstream (current upstream Toast has absorbed Sonner's UX; both exist upstream):**
 
-- **Drawer gestures** (§3.3): pointer-based drag-to-dismiss with velocity; snap points only if a consumer needs them. Also delete the false "with swipe support" docstring *now* — that's a one-line honesty fix that shouldn't wait for the feature.
-- **Sidebar mobile Sheet** (§3.4): render the sidebar in a Sheet below the breakpoint; depends on Phase 1's sheet fixes.
-- **Tooltip/Select polish** (§3.6–3.7): focusin/focusout fix (small and high-value — could justifiably ride along with Phase 1), Escape-to-dismiss, `skipDelay`, select typeahead + scrollIntoView, `aria-activedescendant` for combobox/command.
-- **Date Picker keyboard reuse of Calendar navigation**; Calendar i18n via `Intl`/locale props (§3.8).
+- *API:* no imperative JS `toast()` — upstream has `toast.add({title, description, type, actionProps})`, `toast.close(id)`, `toast.promise(...)`. Ours is server-rendered-only.
+- *Behavior:* no toaster manager — no stacking/queue/visible-limit, no position config; `data-shadcn--toaster-target="viewport"` exists in `toast_viewport_component.rb:9` but **no toaster controller is registered** in `index.js`; `pause`/`resume` exist on the controller but no template wires them; each Turbo Stream render replaces rather than appends (phonebook item 4).
+- *Motion:* swipe-to-dismiss exists only as copied Radix CSS class names — zero swipe JS.
+- *A11y:* viewport should be `role="region"` + `aria-label`, toasts `role="status"`/`aria-live="polite"` (destructive: `assertive`).
 
-## 7. What NOT to build
+**Verdict against the locked criteria:** a separate `SonnerComponent` would duplicate this exact work under a second name — **keep Toast as the single unit, ship the toaster inside it.** The Toast docs page gets an explicit "Sonner equivalence" note.
 
-- **No Inertia, React, or Radix anything** — settled by EVALUATION.md and out of scope here.
-- **No `SonnerComponent`** — the capability ships inside Toast (§4.5); two toast systems is the failure mode.
-- **No client-side data grid** (TanStack-equivalent virtual scrolling, client filtering of large sets). Server-first is the Rails answer; revisit only with a concrete consumer need.
-- **No chart engine of our own** — no hand-rolled SVG axis/scale/interpolation code; we theme and wrap.
-- **No `Form` component that duplicates the FormBuilder** — one form abstraction, the Rails-idiomatic one.
-- **No full-tree RTL migration in one shot** — scoped passes behind demos, or it becomes an unreviewable diff.
-- **No OKLCH/theming migration, registry server, or community/staffing work in this plan** — EVALUATION.md territory, explicitly not staffed here.
+**Implementation:**
+
+- *Files:* new `app/components/shadcn/toaster_component.rb` (+ sidecar template), new `app/assets/javascripts/shadcn/controllers/toaster_controller.js` (registered `shadcn--toaster`), new export `toast` in `index.js`; edits to `toast_component.html.erb` (wire `mouseenter->shadcn--toast#pause mouseleave->shadcn--toast#resume`, add swipe targets/actions, `role="status"`), `toast_viewport_component.rb` (region role/label), optional `lib/shadcn/rails/helpers/toast_helper.rb`.
+- *`ToasterComponent`:* rendered once in the layout (documented like upstream's `<Toaster />`): wraps `ToastViewportComponent` with stable `id: "shadcn-toaster"`, `data-controller="shadcn--toaster"`, `position:` param (`:bottom_right` default; class map for the six positions), `limit:` value (default 3), and a `<template data-shadcn--toaster-target="template">` containing blank toast markup (title/description/action slots) for client-side clones.
+- *JS API:* `toast({ title, description, variant, duration, action: {label, onClick} })` exported from `shadcn-rails-stimulus`; resolves the toaster controller via `document.getElementById("shadcn-toaster")` + Stimulus `getControllerForElementAndIdentifier`; returns an id; `toast.dismiss(id)` closes. Stacking: append to viewport, enforce `limit` by queueing overflow; existing per-toast `shadcn--toast` controller keeps ownership of timers/close animation.
+- *Server API (the Rails differentiator):* documented Turbo Stream idiom — `turbo_stream.append "shadcn-toaster-viewport"` rendering `Shadcn::ToastComponent` — plus a flash-integration example (layout snippet turning `flash` into toasts). Appending into a persistent viewport is what makes server toasts stack instead of replace.
+- *Swipe:* pointerdown/move/up on the toast root driving the already-shipped `--radix-toast-swipe-move-x` CSS vars and `data-swipe` states; dismiss past 50% width or velocity threshold, else snap back.
+- *Stretch (not the bar):* `toast.promise(promise, {loading, success, error})` updating one toast element through states.
+- *Generator unit:* `toast` row in `registry.yml` gains `toaster_component.rb` (+ template) and `toaster_controller.js`.
+- *Tests:* Jest — new `toaster_controller.test.js` (add/stack/limit/queue/position/dismiss-by-id) and `toast_controller.test.js` (currently missing: timer, pause/resume, close animation, swipe threshold). Ruby — ToasterComponent markup (id, role, position classes, template presence).
+- *Docs/showcase:* Toast page rewritten: JS API, Turbo Stream recipe, flash integration, positions, the Sonner note. Showcase entries for stacking and action toasts.
+
+**Dependencies & order:** after P1 (shares the `turbo:before-cache` registry for timer cleanup). Parallel with P3b — no shared files.
+
+**How we know it works:** Jest suites above; docs demo fires 5 toasts and shows limit/queue behavior; **feel:** phonebook deletes `duration: 0` and its per-render viewport partial — create/edit/delete each produce stacking, auto-dismissing, hover-pausable toasts from plain `turbo_stream.append`.
+
+---
+
+### P3b — Form UX: Field hardening + `Shadcn::FormBuilder`
+
+**Missing vs upstream (`form` — RHF glue that auto-wires label/description/error/aria):**
+
+- *A11y:* `FieldComponent` never emits `aria-describedby` (input → description/error), never sets `aria-invalid`, and `required:` only styles the label — nothing reaches the control (`field_component.rb:39-58` passes only id/name/class to `InputComponent`).
+- *API:* only Input is a typed slot; Select/Checkbox/Radio Group/Textarea/Native Select go through the untyped `control` slot with no id/name/error plumbing. No model integration anywhere in the gem (no `FormBuilder`, no `form_with` references under `app/`) — the phonebook hand-wrote `contact_error` and per-field conditionals.
+- *Behavior:* no error auto-detection from an ActiveModel object; no required inference from validators.
+
+**Form-builder recommendation (evidence-based, per the locked ask):** the builder is justified — without it every consumer re-implements error extraction (§2), and it is the exact Rails analogue of the job upstream's `<Form>` does for React Hook Form. Ship both layers below; the builder is additive, the Field hardening benefits non-builder users too.
+
+**Implementation:**
+
+- *Files:* edit `app/components/shadcn/field_component.rb`; new `lib/shadcn/rails/form_builder.rb` (+ `lib/shadcn/rails/helpers/form_helper.rb` for `shadcn_form_with`); require from `lib/shadcn/rails.rb`.
+- *Field hardening (slot shape):* keep `with_label`/`with_description`/`with_error`/`with_control`; add typed slots mirroring `with_input`'s lambda pattern — `with_textarea`, `with_select` (→ `SelectComponent`), `with_native_select`, `with_checkbox`, `with_radio_group` — each receiving derived `id`/`name`, error state, and `required`. Auto-ids: description renders with `id="#{@input_id}-description"`, error with `id="#{@input_id}-error"`; every typed control gets `aria-describedby` (space-joined present ids), `aria-invalid: "true"` when error present, and `required` when flagged. Error keeps `role="alert"`.
+- *`Shadcn::FormBuilder < ActionView::Helpers::FormBuilder`:* one core method — `field(attribute, as: :input, label: nil, hint: nil, required: nil, **control_options)` — rendering `FieldComponent` with: label from `object.class.human_attribute_name(attribute)`, error from `object.errors[attribute].first`, hint via `hint:`, required inferred from `validators_on(attribute).any?(PresenceValidator)` unless overridden, id/name from Rails conventions (`field_id`/`field_name`). `as:` selects the typed slot (`:input`, `:textarea`, `:select`, `:native_select`, `:checkbox`, `:radio_group`); per-type conveniences (`f.field :role, as: :select, options: [...]`) delegate to the components' existing option APIs. `shadcn_form_with(model:, **)` = `form_with(model:, builder: Shadcn::FormBuilder, **)`.
+- *Generator unit:* `field` row unchanged (same files). The builder is gem kernel (like `BaseComponent`) — not an add key; ARCHITECTURE.md's kernel note extends to it. `registry.yml` untouched except a docs cross-link.
+- *Tests:* Ruby — Field aria matrix (describedby joins, invalid, required, per typed slot); FormBuilder against an ActiveModel test class: all six `as:` types round-trip label/error/hint/required; error styling propagates; ids match Rails conventions.
+- *Docs/showcase:* new `docs/forms.html.erb` page (+ sidebar + `COMPONENTS` entry) — the missing upstream name gets a page: model-backed form, validation errors, every control type, `shadcn_form_with`. Field page updated for typed slots. Showcase preview `form_preview.rb` with an in-memory ActiveModel.
+
+**Dependencies & order:** after P0; independent of P1/P2/P3a (parallel-safe). Before P4 (Data Table's filter toolbar composes these controls).
+
+**How we know it works:** the Ruby matrices above; axe-core on the forms docs page (every control labeled, errors announced); **feel:** phonebook `_form.html.erb` re-expressed as `shadcn_form_with` + `f.field` calls with zero hand-written error extraction, submitting inside the P1 dialog.
+
+---
+
+### P4 — Data Table
+
+**Missing vs upstream:** upstream `data-table` is explicitly a recipe (TanStack Table + their Table primitives — sorting, filtering, column visibility, pagination, row selection), not a packaged component; its docs say every data table is bespoke. We ship the Rails translation: a **server-first** unit where sort/filter/pagination are URL params over Turbo — more idiomatic and honest than porting a client grid.
+
+**Implementation:**
+
+- *Files:* new `app/components/shadcn/data_table_component.rb` (+ sidecar template), `data_table_column_component.rb`; new `lib/shadcn/rails/helpers/data_table_helper.rb` (sort-URL building, direction cycling asc → desc → none, param preservation); optional new `data_table_controller.js` (client-side sort for small static tables — progressive enhancement, explicitly secondary).
+- *Slot shape:*
+
+  ```erb
+  <%= render Shadcn::DataTableComponent.new(rows: @contacts, sort: params[:sort], dir: params[:dir]) do |table| %>
+    <% table.with_toolbar do %>   <%# filter form: Input, Select, etc. (P3b controls) %>
+    <% table.with_column(:name, sortable: true) do |contact| %> ... <% end %>
+    <% table.with_column(:email, sortable: true) %>
+    <% table.with_column(:actions, align: :end) do |contact| %> ... row dropdown ... <% end %>
+    <% table.with_empty_state do %> <%# composes EmptyComponent %> <% end %>
+    <% table.with_footer do %> <%= render Shadcn::PaginationComponent.new(pagy: @pagy) %> <% end %>
+  <% end %>
+  ```
+
+  Internally composes the existing Table family (`TableComponent`, `TableHeadComponent`, rows/cells) — no new table CSS. Sortable headers render as links preserving other query params, with `aria-sort` (`ascending`/`descending`/`none`) and a direction indicator; column blocks receive the row object; default cell renders `row.public_send(key)`.
+- *Behavior:* sorting/filtering happen in the host controller (documented recipe: safe-list sortable keys, `order(...)`, `where(...)`, paginate with Kaminari/Pagy — the Pagination component already has those adapters, `pagination_component.rb:21-38`). Empty state renders when `rows.empty?`. Turbo handles the round-trip; no JS required on the primary path.
+- *A11y/keyboard:* by construction — headers are real links, toolbar is a real form, actions are the existing menu components; `aria-sort` is the only custom attribute. No custom key handling to test or break.
+- *Generator unit:* new `data_table` row (2 ruby files + template + helper note; controller listed only if the optional client-sort ships). Add-time dependency on the `table` unit: extend `depends_on` semantics so a unit may reference another unit key and `AddGenerator` recursively copies it (small, tested generator change — today `depends_on` only lists JS utils).
+- *Tests:* Ruby — column DSL rendering, `aria-sort` tri-state, sort-URL cycling + param preservation, block cells, empty state, footer slot; generator test for recursive `depends_on`. Jest only if the optional controller ships.
+- *Docs/showcase:* `docs/data-table.html.erb` with a live seeded demo (search + sort + paginate + empty state, fully server-driven), the host-controller recipe as a code example, and Kaminari/Pagy variants.
+
+**Dependencies & order:** after P3b (toolbar composes hardened form controls) and P2 (row-action menus); after P0's gate so it cannot land undocumented.
+
+**How we know it works:** Ruby suite above; docs demo round-trips sort/filter/pagination over Turbo with correct `aria-sort` at each state; **feel:** phonebook's `_contacts.html.erb` (search + sort + row actions + empty state) is re-expressible as a DataTable with materially less markup.
+
+---
+
+### P5 — Chart
+
+**Missing vs upstream:** the entire family. Upstream Chart is not an engine — it's `ChartContainer`/`ChartTooltip`/`ChartLegend` theming over Recharts, driven by a config that maps series → label/color and injects `--color-{series}` CSS vars. The portable part is that theming contract; the repo already ships its half: `--chart-1..5` in `base.css:87-91`, mapped to Tailwind in `tailwind-v4.css:91-95` — currently unused.
+
+**Engine decision:** wrap **Chart.js** (canvas) via Stimulus. Over Chartkick because we need the external-tooltip/legend hooks to bind our own shadcn-styled HTML (Chartkick abstracts away exactly that layer); over hand-rolled SVG because resize/hover/stacking are not worth rebuilding ("must actually work" includes them). Chart.js is an optional peer: importmap-pinnable, no build step, dynamic-imported so apps without charts pay nothing.
+
+**Implementation:**
+
+- *Files:* new `app/components/shadcn/chart_component.rb` (+ sidecar), `chart_tooltip_component.rb`, `chart_legend_component.rb`; new `chart_controller.js` (registered `shadcn--chart`) + `app/assets/javascripts/shadcn/utils/chart_config.js` (pure config-building functions, extracted for Jest); `components.css` gains `.shadcn-chart` sizing/tooltip rules.
+- *Slot/API shape:*
+
+  ```erb
+  <%= render Shadcn::ChartComponent.new(
+        type: :bar, data: @monthly,                     # rows: [{month: "Jan", desktop: 186, mobile: 80}, ...]
+        config: { desktop: { label: "Desktop", color: "var(--chart-1)" },
+                  mobile:  { label: "Mobile",  color: "var(--chart-2)" } }) do |chart| %>
+    <% chart.with_fallback do %> <%# visually-hidden data table for AT %> <% end %>
+  <% end %>
+  ```
+
+  Container renders a `role="img"` + `aria-label` div with inline `--color-{series}` vars (upstream's convention), a `<canvas>`, tooltip/legend targets, and serialized `type`/`data`/`config` as Stimulus values. `renders_one :fallback` (encouraged in docs; the a11y answer).
+- *Stimulus:* `connect()` dynamic-imports `chart.js/auto` (actionable console error naming the pin command if absent); builds config via `chart_config.js` — colors resolved from CSS vars with `getComputedStyle` so theme/dark-mode tokens apply; Chart.js's built-in legend/tooltip disabled; external-tooltip handler writes into `ChartTooltipComponent`'s target (shadcn-styled: indicator dot per series, label, value); legend rendered from config into the legend target. Re-render on dark-mode class flips (MutationObserver on `<html>`) and destroy on `disconnect`/`turbo:before-cache`.
+- *Scope:* bar, line, area, pie/donut (upstream's lead types). Radar/radial deferred and said so in docs.
+- *Generator unit:* new `chart` row (3 ruby files + template + controller + `utils/chart_config.js` in `depends_on`); `AddGenerator`'s post-install message prints the Chart.js pin/npm instruction.
+- *Tests:* Ruby — container serialization, per-series CSS var injection, aria-label, fallback slot. Jest — `chart_config.js` pure functions per chart type, CSS-var color resolution (mocked `getComputedStyle`), tooltip-model → HTML mapping.
+- *Docs/showcase:* `docs/chart.html.erb` with the four types on live data, a theming section (tokens + dark mode), the a11y fallback pattern, and install instructions per bundler; theme-playground link so re-theming is demonstrable.
+
+**Dependencies & order:** after P0 only — self-contained. Sequenced after P4 because Data Table has a consumer waiting (phonebook) and Chart doesn't.
+
+**How we know it works:** Jest + Ruby suites above; docs page re-themes all four charts when toggling dark mode / theme playground values; screen reader gets the label + fallback table; **feel:** n/a for phonebook (no charts) — the docs demo is the feel-test, per the showcase gate.
+
+---
+
+### P6 — Direction / RTL
+
+**Missing vs upstream:** upstream `direction` is a React context provider (`DirectionProvider` + `useDirection`) over the `dir` attribute, and upstream component pages show RTL sections. A context provider is not portable; what it *enables* — components that actually render and position correctly in RTL — is. A `DirectionComponent` alone would be a stub, which the locked decision forbids; the real deliverable is the RTL hardening pass.
+
+**Implementation:**
+
+- *Files:* new `app/components/shadcn/direction_provider_component.rb`; edits to `app/assets/javascripts/shadcn/utils/floating.js` (RTL-aware placement); class-string edits across the first-pass component list (below); docs page + RTL examples.
+- *Provider shape:* `Shadcn::DirectionProviderComponent.new(direction: :rtl)` renders a `dir`-attributed wrapper; README documents putting `dir` on `<html>` as the primary idiom. JS reads direction per-element: `utils/floating.js` gains `resolveDir(el) = el.closest("[dir]")?.dir || document.documentElement.dir || "ltr"`.
+- *Positioning:* `positionFloating`/`positionAtPoint` flip physical placements (`left`↔`right`, and `-start`/`-end` alignment on top/bottom placements) when `resolveDir(reference) === "rtl"` before calling `computePosition`. Submenus (P2) and selects inherit it because they share the util.
+- *Class migration (wide but mechanical):* physical → logical utilities in component `BASE_CLASSES`/variant strings — `ml-`→`ms-`, `mr-`→`me-`, `pl-`→`ps-`, `pr-`→`pe-`, `left-`→`start-`, `right-`→`end-`, `text-left`→`text-start`, `rounded-l*`→`rounded-s*`; directional chevrons/arrows get `rtl:rotate-180` (or logical icon swap) where they encode direction. Sheet/drawer `side:` params keep physical names (they mean physical screen edges) — documented explicitly.
+- *First pass scope (matches upstream's RTL demo surface):* button, input, textarea, label, field, card, checkbox, radio group, switch, select, dropdown/context/menubar (chevrons + `ms-auto` shortcuts), dialog/sheet (close-button corner), sidebar. Remaining families migrate in follow-up passes behind the same tests.
+- *Generator unit:* new `direction` row (1 ruby file; no controller, no template). Registry `css_sidecars` stays empty.
+- *Tests:* Ruby — provider renders `dir`; migrated components assert logical classes (regression-lock the migration). Jest — floating placement flip matrix under `dir="rtl"`.
+- *Docs/showcase:* `docs/direction.html.erb` with a `dir` toggle rendering the upstream-style login block, a dropdown, and a dialog in RTL; RTL notes added to migrated components' pages (showcase entries render both directions).
+
+**Dependencies & order:** last of the numbered phases, deliberately — it touches most component class strings and must not race P1/P2's churn of those same strings; depends on P2's shared floating util for submenu flipping.
+
+**How we know it works:** the class-assertion suite + placement-flip Jest matrix; the RTL docs page renders mirrored layouts with dropdowns opening to the correct side under `dir="rtl"`; **feel:** docs-based (phonebook is LTR) — the RTL login-block demo is the acceptance artifact.
+
+---
+
+### P7 — Mobile/pointer UX: Drawer gestures + Sidebar mobile sheet
+
+**Missing vs upstream (Vaul; shadcn Sidebar):**
+
+- *Drawer:* `drawer_controller.js`'s docstring claims "with swipe support" — **false**: zero `touch*`/`pointer*` handlers; open/close is click/Escape + a 200ms timeout; the handle bar is decorative (`drawer_content_component.rb:70-74`). Vaul provides drag-to-dismiss with velocity, overlay fade proportional to drag, scroll coordination, and snap points. *Fix the docstring lie immediately — a one-line honesty edit that should not wait for this phase.*
+- *Sidebar:* desktop parity is decent (cookie `sidebar:state`, Cmd/Ctrl+B, `offcanvas`/`icon` modes — `sidebar_controller.js:4-9,63-71`, `sidebar_component.rb:50-54`) but there is **no mobile rendering at all** (`hidden md:block`); upstream renders the sidebar in a Sheet below the breakpoint. `clickOutside` is defined but never wired; `SIDEBAR_WIDTH*` JS constants are dead.
+
+**Implementation:**
+
+- *Drawer files/behavior:* edit `drawer_controller.js` + `drawer_content_component.rb`. Handle becomes `data-shadcn--drawer-target="handle"` with `touch-action: none`; content gets `pointerdown` (on handle always; on body only when content `scrollTop === 0` for bottom drawers — the scroll-coordination rule) → track `pointermove` displacement along the drawer axis, apply inline `transform` with transitions suppressed via a `data-dragging` attribute (CSS: `.shadcn-drawer-content[data-dragging] { transition: none }`), fade overlay proportionally; `pointerup` dismisses when displacement > 25% of the panel or velocity > ~0.5 px/ms, else snaps back by clearing the transform with transitions restored. Also add the P1 focus trap/restore drawer never had. `snap_points:` (array-of-fractions value) is specced as the follow-up flag, not v1.
+- *Sidebar files/behavior:* edit `sidebar_component.rb` (+ template) to render a mobile branch — the sidebar content inside sheet-style top-layer markup (reuses P1's `<dialog>` overlay engine; side from the sidebar's `side` param; width `--sidebar-width-mobile: 18rem`) shown below the `md` breakpoint; `sidebar_controller.js`'s existing `openMobile` value drives it (`toggle()` already branches on `isMobileValue`). Wire `useClickOutside` for offcanvas desktop mode or delete the dead method; delete or use the dead width constants.
+- *Generator unit:* no registry changes (same files per unit).
+- *Tests:* Jest — new `sidebar_controller.test.js` (currently missing: cookie, shortcut, mobile toggle) and drawer drag suite (synthetic PointerEvents: below-threshold snap-back, past-threshold dismiss, velocity dismiss, scroll-coordination guard). Ruby — sidebar mobile branch markup; drawer handle target.
+- *Docs/showcase:* drawer page gains a gesture note + mobile-viewport demo instructions; sidebar page gains a mobile section; both preview classes (sidebar is among P0's 12 new ones) get mobile examples.
+
+**Dependencies & order:** after P1 (sidebar's mobile sheet is built on the new overlay engine; drawer inherits its focus/lifecycle work). Independent of P3–P6; can interleave.
+
+**How we know it works:** the two Jest suites; device-emulation check on docs (drawer drags and dismisses with velocity; sidebar opens as a sheet on a small viewport); **feel:** the phonebook demo's skipped mobile pass (PR #1 skipped it as optional) becomes viable.
+
+---
+
+### P8 — Selection & date polish + coverage backfill
+
+**Missing vs upstream (Radix Select/Combobox/cmdk; react-day-picker):**
+
+- *Select:* no typeahead; highlighted option not scrolled into view; roving focus without `aria-activedescendant`. (Hidden input, combobox/listbox/option roles, arrows/Home/End, disabled-skip already work.)
+- *Combobox:* highlight is CSS-class-only — no `aria-activedescendant`/`aria-selected`; no Home/End.
+- *Command:* list lacks `role="listbox"`; input lacks `aria-controls`/`aria-activedescendant`.
+- *Calendar/Date Picker:* Calendar has real grid keyboard nav but English-only hardcoded month/weekday names (Ruby and JS) and plain-button day cells (no `row`/`gridcell`); **Date Picker doesn't reuse Calendar's keyboard nav** — days are click-only (`date_picker_controller.js:258-263`).
+- *Coverage:* controllers with no Jest suite after P2/P3a/P7 close their share: avatar, command, command_dialog, hover_card, input_otp, scroll_area, toggle; plus the orphan `clipboard_controller.test.js` (tests a controller that doesn't exist — delete it or ship the controller; decide by whether copy-to-clipboard docs examples want it).
+
+**Implementation:**
+
+- *Files:* edits to `select_controller.js` (+`utils/typeahead.js` from P2, `scrollIntoView({block:"nearest"})` on highlight, optional `aria-activedescendant` mode), `combobox_controller.js` (activedescendant + `aria-selected` + Home/End), `command_controller.js` + `command_list_component.rb`/`command_input_component.rb` (listbox role, `aria-controls`, activedescendant), `date_picker_controller.js` + `date_picker_component.rb` (embed `CalendarComponent`/controller instead of duplicating a private grid — the refactor that makes keyboard nav free), `calendar_component.rb` + `calendar_controller.js` (`locale:` param; names via `I18n.l`/`Date::MONTHNAMES` in Ruby, `Intl.DateTimeFormat` in JS; add `role="row"`/`gridcell` to the grid markup).
+- *Generator unit:* date_picker row adds a `depends_on` unit reference to calendar (uses P4's recursive `depends_on`).
+- *Tests:* Jest — select typeahead/scroll suite; combobox and command a11y suites; date-picker keyboard suite (arrows/PageUp/Home inside the popover); calendar locale rendering. Plus the seven backfill suites (behavioral basics: connect, primary interaction, cleanup). Ruby — calendar grid roles + locale; command roles.
+- *Docs/showcase:* a11y sections on the four pages updated to state the implemented ARIA pattern (the "scope honesty" EVALUATION.md called for); date-picker page adds a keyboard demo; calendar page adds a locale example.
+
+**Dependencies & order:** last — polish on stable primitives; typeahead util arrives in P2; the P0 gate's Jest requirement is what drives the backfill list to zero.
+
+**How we know it works:** all listed suites green and the P0 parity gate's controller→Jest assertion passes repo-wide (no exemptions left); keyboard-only walkthrough on the four docs pages (select/combobox/command/date-picker) recorded once; **feel:** phonebook search/select interactions regress nothing.
+
+---
+
+## 4. What NOT to build
+
+- **No Inertia, React, or Radix anything** — settled direction; out of scope here.
+- **No `SonnerComponent`** — the capability ships inside Toast (§P3a); two toast systems is the failure mode the locked criteria exist to prevent.
+- **No client-side data grid** (virtual scrolling, client filtering of large sets, row selection state machines). Server-first is the Rails answer; revisit only with a concrete consumer need.
+- **No chart engine of our own** — no hand-rolled SVG axis/scale/interpolation; we theme and wrap Chart.js.
+- **No `FormComponent` that duplicates the FormBuilder** — one form abstraction, the Rails-idiomatic one (§P3b).
+- **No full-tree RTL migration in one shot** — scoped passes behind class-assertion tests (§P6), or it becomes an unreviewable diff.
+- **No OKLCH/theming migration, `data-slot` adoption, registry server, or community/staffing work in this plan** — EVALUATION.md territory, explicitly not staffed here.
+- **No drawer snap points in v1** of gestures (§P7) — drag-to-dismiss first; snap points behind a flag when a consumer needs them.
 - **No rewriting EVALUATION.md or PROGRESS.md into new plans** — PROGRESS.md's stale parity sections get a pointer to this document; history stays.
 
-## 8. How we'll know the plan worked
+## 5. Definition of done for the whole plan
 
-1. **Inventory:** all 60 upstream names resolve to either a shipped unit (58) or a documented equivalence (form → FormBuilder page, sonner → Toast page note) — with `registry.yml`, docs, previews, and tests in lockstep via the Phase 0 CI gate.
-2. **Feel test:** the phonebook runs against the upgraded gem with both workaround controllers deleted, no manual overlay event forwarding, no `duration: 0`, and its form/table partials materially smaller — verified by a follow-up PR on that repo (separate work, not part of this plan's PRs).
-3. **Behavior evidence:** every phase adds Jest/Ruby tests for the behaviors it claims (no controller shipped without a suite going forward), and the docs demo for each phase is the manual regression script.
+1. **Inventory:** all 60 upstream names resolve to a shipped unit (58) or a documented equivalence with its own docs page (form → Forms/FormBuilder page, sonner → Toast page note) — with `registry.yml`, docs pages, previews, and Jest suites in lockstep, enforced by the P0 parity gate rather than by a table that can go stale.
+2. **Feel test:** the phonebook runs against the upgraded gem with both workaround controllers deleted, no manual overlay event forwarding, no `duration: 0`, and its form/table partials materially smaller — verified by a follow-up PR on that repo (separate work; that repo is not touched by this plan's PRs).
+3. **Behavior evidence:** every phase lands with the Jest/Ruby suites named in its spec (no controller ships or remains without a suite), and each phase's docs/showcase entry doubles as its manual regression script.
