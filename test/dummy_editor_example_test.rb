@@ -34,8 +34,8 @@ class DummyEditorExampleTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_includes response.body, "params[:editor]"
-    assert_includes response.body, '"marks": "bold,underline"'
-    assert_includes response.body, '"alignment": "right"'
-    assert_includes response.body, '"body": "Ship it"'
+    assert_select "code.language-ruby", /"marks": "bold,underline"/
+    assert_select "code.language-ruby", /"alignment": "right"/
+    assert_select "code.language-ruby", /"body": "Ship it"/
   end
 end
