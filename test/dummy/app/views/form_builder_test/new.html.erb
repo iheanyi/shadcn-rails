@@ -1,0 +1,17 @@
+<%= form_with model: @contact, url: "/form_builder_test", builder: Shadcn::FormBuilder do |f| %>
+  <%= f.field :email, as: :email_field, placeholder: "you@example.com", required: true %>
+  <%= f.label :notes %>
+  <%= f.text_area :notes, rows: 4, autocomplete: "off" %>
+  <%= f.check_box :subscribed %>
+  <%= f.switch :notifications %>
+  <%= f.radio_button :status, "lead", label: "Lead" %>
+  <%= f.radio_button :status, "customer", label: "Customer" %>
+  <%= f.select :status, Contact.statuses.keys, {}, class: "status-select", required: true %>
+
+  <%= f.fields_for :addresses_attributes, @contact.addresses, child_index: 0 do |address_fields| %>
+    <%= address_fields.label :city %>
+    <%= address_fields.text_field :city %>
+  <% end %>
+
+  <%= f.submit "Save" %>
+<% end %>

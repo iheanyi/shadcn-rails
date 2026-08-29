@@ -93,6 +93,12 @@ class DocsController < ApplicationController
       description: "A form field wrapper with label, input, description, and error message support.",
       has_stimulus: false
     },
+    "form" => {
+      name: "Form",
+      category: "Form Inputs",
+      description: "Vanilla Rails form_with integration through Shadcn::FormBuilder.",
+      has_stimulus: false
+    },
     "input-group" => {
       name: "Input Group",
       category: "Form Inputs",

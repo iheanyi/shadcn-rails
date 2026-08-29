@@ -22,6 +22,8 @@ Rails.application.routes.draw do
   get "docs/examples/editor", to: "docs#editor_example", as: :docs_editor_example
   post "docs/examples/editor", to: "docs#editor_example"
   get "docs/components/:slug", to: "docs#show", as: :docs_component
+  get "form_builder_test/new", to: "form_builder_test#new"
+  post "form_builder_test", to: "form_builder_test#create"
 
   # UX Test Application
   get "app", to: "app#dashboard"

@@ -1,11 +1,5 @@
-<div class="<%= merge_classes(WRAPPER_CLASSES) %>" <%= tag_attributes %>>
-  <select <%= "name=\"#{ERB::Util.html_escape_once(@name)}\"".html_safe if @name %>
-          <%= "id=\"#{ERB::Util.html_escape_once(@id)}\"".html_safe if @id %>
-          <%= "disabled" if @disabled %>
-          <%= "required" if @required %>
-          class="<%= SELECT_CLASSES %>">
-    <%= select_content %>
-  </select>
+<%= tag.div(**wrapper_attributes) do %>
+  <%= content_tag(:select, select_content, **select_attributes) %>
   <svg xmlns="http://www.w3.org/2000/svg"
        width="16"
        height="16"
@@ -18,4 +12,4 @@
        class="<%= CHEVRON_CLASSES %>">
     <path d="m6 9 6 6 6-6" />
   </svg>
-</div>
+<% end %>

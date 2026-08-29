@@ -34,6 +34,8 @@ module Shadcn
     # @param checked [Boolean] Whether switch is on
     # @param disabled [Boolean] Whether switch is disabled
     # @param required [Boolean] Whether switch is required
+    # @param unchecked_value [String, nil] Hidden value submitted when unchecked
+    # @param include_hidden [Boolean] Whether to render the hidden unchecked value input
     def initialize(
       name: nil,
       id: nil,
@@ -41,6 +43,8 @@ module Shadcn
       checked: false,
       disabled: false,
       required: false,
+      unchecked_value: "0",
+      include_hidden: true,
       **options
     )
       super(**options)
@@ -50,9 +54,57 @@ module Shadcn
       @checked = checked
       @disabled = disabled
       @required = required
+      @unchecked_value = unchecked_value
+      @include_hidden = include_hidden
     end
 
     private
+
+    def hidden_input?
+      @include_hidden && @name.present? && @unchecked_value
+    end
+
+    def hidden_input_attributes
+      {
+        type: "hidden",
+        name: @name,
+        value: @unchecked_value,
+        autocomplete: "off"
+      }
+    end
+
+    def checkbox_input_attributes
+      {
+        type: "checkbox",
+        class: "sr-only",
+        name: @name,
+        id: @id,
+        value: @value,
+        checked: @checked || nil,
+        disabled: @disabled || nil,
+        required: @required || nil,
+        "data-shadcn--switch-target": "input",
+        tabindex: "-1"
+      }.compact
+    end
+
+    def button_attributes
+      html_options
+        .merge(build_data)
+        .merge(
+          type: "button",
+          role: "switch",
+          class: switch_classes,
+          disabled: @disabled || nil,
+          "aria-checked": @checked,
+          "aria-required": @required || nil,
+          "data-state": state,
+          "data-shadcn--switch-target": "button",
+          "data-action": "click->shadcn--switch#toggle keydown->shadcn--switch#handleKeydown",
+          tabindex: "0"
+        )
+        .compact
+    end
 
     def has_label?
       content.present?

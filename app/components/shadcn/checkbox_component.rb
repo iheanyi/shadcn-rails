@@ -33,6 +33,8 @@ module Shadcn
     # @param checked [Boolean] Whether checkbox is checked
     # @param disabled [Boolean] Whether checkbox is disabled
     # @param required [Boolean] Whether checkbox is required
+    # @param unchecked_value [String, nil] Hidden value submitted when unchecked
+    # @param include_hidden [Boolean] Whether to render the hidden unchecked value input
     def initialize(
       name: nil,
       id: nil,
@@ -40,6 +42,8 @@ module Shadcn
       checked: false,
       disabled: false,
       required: false,
+      unchecked_value: "0",
+      include_hidden: true,
       **options
     )
       super(**options)
@@ -49,9 +53,40 @@ module Shadcn
       @checked = checked
       @disabled = disabled
       @required = required
+      @unchecked_value = unchecked_value
+      @include_hidden = include_hidden
     end
 
     private
+
+    def hidden_input?
+      @include_hidden && @name.present? && @unchecked_value
+    end
+
+    def hidden_input_attributes
+      {
+        type: "hidden",
+        name: @name,
+        value: @unchecked_value,
+        autocomplete: "off"
+      }
+    end
+
+    def checkbox_attributes
+      html_options
+        .merge(build_data)
+        .merge(
+          type: "checkbox",
+          name: @name,
+          id: @id,
+          value: @value,
+          checked: @checked || nil,
+          disabled: @disabled || nil,
+          required: @required || nil,
+          class: checkbox_classes
+        )
+        .compact
+    end
 
     def checkbox_classes
       cn(BASE_CLASSES, class_name)

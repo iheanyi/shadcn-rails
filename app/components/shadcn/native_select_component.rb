@@ -49,22 +49,49 @@ module Shadcn
     # @param id [String, nil] Select ID attribute
     # @param disabled [Boolean] Whether the select is disabled
     # @param required [Boolean] Whether the select is required
-    def initialize(name: nil, id: nil, disabled: false, required: false, **options)
+    # @param options_html [String, nil] Pre-rendered option tags, useful for Rails FormBuilder output
+    # @param select_class [String, nil] Additional classes for the select element
+    def initialize(name: nil, id: nil, disabled: false, required: false, options_html: nil, select_class: nil, **options)
       super(**options)
       @name = name
       @id = id
       @disabled = disabled
       @required = required
+      @options_html = options_html
+      @select_class = select_class
     end
 
     private
 
+    def wrapper_attributes
+      {
+        class: merge_classes(WRAPPER_CLASSES)
+      }
+    end
+
+    def select_attributes
+      html_options
+        .merge(build_data)
+        .merge(
+          name: @name,
+          id: @id,
+          disabled: @disabled || nil,
+          required: @required || nil,
+          class: select_classes
+        )
+        .compact
+    end
+
     def select_classes
-      merge_classes(SELECT_CLASSES)
+      cn(SELECT_CLASSES, @select_class)
     end
 
     def select_content
-      if optgroups.any?
+      if @options_html.present?
+        @options_html
+      elsif content.present?
+        content
+      elsif optgroups.any?
         safe_join(optgroups)
       else
         safe_join(options)

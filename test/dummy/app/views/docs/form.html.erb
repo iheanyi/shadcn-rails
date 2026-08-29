@@ -1,0 +1,65 @@
+<% content_for :title, "Form" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#default-builder" class="text-muted-foreground hover:text-foreground">Default Builder</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Form</h1>
+    <p class="text-xl text-muted-foreground">Use shadcn-rails controls with vanilla Rails forms and real Rails params.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+        No JavaScript Required
+      </span>
+    </div>
+  </div>
+
+  <%= render "docs/demo_card" do %>
+    <div class="w-full max-w-sm">
+      <%= form_with scope: :contact, url: "#", builder: Shadcn::FormBuilder, class: "space-y-4" do |f| %>
+        <%= f.field :email, as: :email_field, placeholder: "you@example.com" %>
+        <%= f.field :notes, as: :text_area, placeholder: "How can we help?" %>
+        <div class="flex items-center gap-2">
+          <%= f.check_box :subscribed %>
+          <%= f.label :subscribed, "Subscribe to updates" %>
+        </div>
+        <%= f.select :status, ["lead", "customer", "archived"] %>
+        <%= f.submit "Save" %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <p class="leading-7">
+      Pass <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">builder: Shadcn::FormBuilder</code>
+      to <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">form_with</code>. The standard Rails helper names render shadcn-rails
+      ViewComponents while preserving Rails names, ids, nested fields, and submitted params.
+    </p>
+    <%= erb_example("form/form_builder") %>
+  </div>
+
+  <div id="default-builder" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Default Builder</h2>
+    <p class="leading-7">
+      To make the builder the default for your app, configure Rails in your own controller. The gem does not set this automatically.
+    </p>
+    <%= render "docs/code_example", language: "ruby", code: "class ApplicationController < ActionController::Base\n  default_form_builder Shadcn::FormBuilder\nend" %>
+  </div>
+
+  <div id="api-reference" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">API Reference</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Text-like helpers render <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">Shadcn::InputComponent</code> with the matching input type.</li>
+      <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">text_area</code> renders <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">Shadcn::TextareaComponent</code>.</li>
+      <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">check_box</code> and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">switch</code> include Rails-style hidden unchecked value inputs.</li>
+      <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">select</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">collection_select</code>, and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">grouped_collection_select</code> render native <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">&lt;select&gt;</code> elements.</li>
+      <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">field</code> renders a label, control, and model error messages with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-invalid</code> wiring.</li>
+    </ul>
+  </div>
+</div>

@@ -57,6 +57,26 @@ module Shadcn
 
     private
 
+    def textarea_attributes
+      html_options
+        .merge(build_data)
+        .merge(
+          name: @name,
+          id: @id,
+          placeholder: @placeholder,
+          rows: @rows,
+          cols: @cols,
+          disabled: @disabled || nil,
+          required: @required || nil,
+          readonly: @readonly || nil,
+          autofocus: @autofocus || nil,
+          minlength: @minlength,
+          maxlength: @maxlength,
+          class: textarea_classes
+        )
+        .compact
+    end
+
     def textarea_classes
       merge_classes(BASE_CLASSES)
     end

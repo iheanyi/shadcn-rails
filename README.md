@@ -139,6 +139,33 @@ built-in components.
 <% end %>
 ```
 
+## Rails forms
+
+Use `Shadcn::FormBuilder` with vanilla Rails `form_with` to render shadcn-rails
+controls while preserving Rails field names, ids, nested `fields_for`, hidden
+checkbox values, and submitted params:
+
+```erb
+<%= form_with model: @contact, builder: Shadcn::FormBuilder do |f| %>
+  <%= f.label :email %>
+  <%= f.email_field :email, placeholder: "you@example.com" %>
+  <%= f.text_area :notes %>
+  <%= f.check_box :subscribed %>
+  <%= f.select :status, Contact.statuses.keys %>
+  <%= f.submit "Save" %>
+<% end %>
+```
+
+To use it app-wide, configure Rails in your application controller:
+
+```ruby
+class ApplicationController < ActionController::Base
+  default_form_builder Shadcn::FormBuilder
+end
+```
+
+The gem does not set a default form builder automatically.
+
 ## Components
 
 | Category | Components |
