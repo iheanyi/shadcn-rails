@@ -405,7 +405,7 @@ class DocsController < ApplicationController
   end
 
   def editor_example
-    render "examples/editor"
+    render "docs/examples/editor"
   end
 
   def show
