@@ -90,7 +90,8 @@ module Shadcn
         /^bg-/ => :background,
         /^text-(?!left|center|right|justify|xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl)/ => :text_color,
         /^border-(?!solid|dashed|dotted|double|none|[0-9])/ => :border_color,
-        /^ring-(?!offset)/ => :ring_color,
+        /^ring-(?:0|1|2|4|8|\[.+\])$/ => :ring_width,
+        /^ring-(?!offset|0$|1$|2$|4$|8$|\[)/ => :ring_color,
         /^ring-offset-(?!\d)/ => :ring_offset_color,
 
         # Border radius
@@ -205,7 +206,7 @@ module Shadcn
 
         # Strip responsive and state prefixes
         def strip_prefixes(klass)
-          klass.gsub(/^(?:sm:|md:|lg:|xl:|2xl:|hover:|focus:|active:|disabled:|dark:|group-hover:|peer-\w+:)+/, "")
+          klass.gsub(/^(?:sm:|md:|lg:|xl:|2xl:|hover:|focus:|focus-visible:|focus-within:|active:|disabled:|dark:|group-hover:|peer-\w+:)+/, "")
         end
 
         # Find the conflict group for a class
