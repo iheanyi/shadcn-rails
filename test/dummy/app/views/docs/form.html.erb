@@ -71,7 +71,7 @@
           <% end %>
         </div>
       <% end %>
-      <%= erb_example("form/form_builder") %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/form/form_builder.txt")) %>
     </div>
   </div>
 
@@ -104,7 +104,7 @@
           <% end %>
         </div>
       <% end %>
-      <%= erb_example("form/form_for") %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/form/form_for.txt")) %>
     </div>
   </div>
 
