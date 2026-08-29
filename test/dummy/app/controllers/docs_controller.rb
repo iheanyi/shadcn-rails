@@ -426,6 +426,13 @@ class DocsController < ApplicationController
       return
     end
 
+    @contact = Contact.new(
+      email: "person@example.com",
+      notes: "Interested in a follow-up next week.",
+      subscribed: true,
+      status: "lead"
+    ) if @slug == "form"
+
     # Try to render a specific template, fall back to a generic show template
     render @slug
   rescue ActionView::MissingTemplate

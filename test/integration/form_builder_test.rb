@@ -113,4 +113,21 @@ class FormBuilderTest < ActionDispatch::IntegrationTest
     assert_equal "archived", parsed["status"]
     assert_equal "Aba", parsed.dig("addresses_attributes", "0", "city")
   end
+
+  test "docs form page renders live form_with and form_for demos" do
+    get "/docs/components/form"
+
+    assert_response :success
+    assert_select "h2", text: "form_with"
+    assert_select "h2", text: "form_for"
+    assert_select "form", minimum: 2
+    assert_select "input[type='email'][name='contact[email]'][id='contact_email'][value='person@example.com']", 2
+    assert_select "textarea[name='contact[notes]'][id='contact_notes']", text: "Interested in a follow-up next week.", count: 2
+    assert_select "input[type='hidden'][name='contact[subscribed]'][value='0']", 2
+    assert_select "input[type='checkbox'][name='contact[subscribed]'][id='contact_subscribed'][value='1'][checked]", 2
+    assert_select "select[name='contact[status]'][id='contact_status']", 2
+    assert_select "button[type='submit'][name='commit'][value='Save']", text: "Save", count: 2
+    assert_includes response.body, "form_with model: @contact"
+    assert_includes response.body, "form_for @contact"
+  end
 end

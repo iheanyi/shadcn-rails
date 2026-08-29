@@ -1,7 +1,23 @@
-<%= form_for @contact, builder: Shadcn::FormBuilder do |f| %>
-  <%= f.label :email %>
-  <%= f.email_field :email, placeholder: "you@example.com" %>
-  <%= f.check_box :subscribed %>
-  <%= f.select :status, Contact.statuses.keys %>
+<%= form_for @contact, builder: Shadcn::FormBuilder, html: { class: "space-y-4" } do |f| %>
+  <div class="space-y-2">
+    <%= f.label :email %>
+    <%= f.email_field :email, placeholder: "you@example.com" %>
+  </div>
+
+  <div class="space-y-2">
+    <%= f.label :notes %>
+    <%= f.text_area :notes, rows: 4, placeholder: "Notes about this contact" %>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <%= f.check_box :subscribed %>
+    <%= f.label :subscribed, "Subscribe to updates" %>
+  </div>
+
+  <div class="space-y-2">
+    <%= f.label :status %>
+    <%= f.select :status, Contact.statuses.keys %>
+  </div>
+
   <%= f.submit "Save" %>
 <% end %>

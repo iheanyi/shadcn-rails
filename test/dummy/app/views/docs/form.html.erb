@@ -2,7 +2,8 @@
 
 <% content_for :toc do %>
   <div class="flex flex-col space-y-2 text-sm">
-    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#form-with" class="text-muted-foreground hover:text-foreground">form_with</a>
+    <a href="#form-for" class="text-muted-foreground hover:text-foreground">form_for</a>
     <a href="#default-builder" class="text-muted-foreground hover:text-foreground">Default Builder</a>
     <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
   </div>
@@ -19,33 +20,76 @@
     </div>
   </div>
 
-  <%= render "docs/demo_card" do %>
-    <div class="w-full max-w-sm">
-      <%= form_with scope: :contact, url: "#", builder: Shadcn::FormBuilder, class: "space-y-4" do |f| %>
-        <%= f.field :email, as: :email_field, placeholder: "you@example.com" %>
-        <%= f.field :notes, as: :text_area, placeholder: "How can we help?" %>
-        <div class="flex items-center gap-2">
-          <%= f.check_box :subscribed %>
-          <%= f.label :subscribed, "Subscribe to updates" %>
-        </div>
-        <%= f.select :status, ["lead", "customer", "archived"] %>
-        <%= f.submit "Save" %>
-      <% end %>
-    </div>
-  <% end %>
-
-  <div id="usage" class="space-y-4">
-    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+  <div class="space-y-4">
     <p class="leading-7">
       Pass <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">builder: Shadcn::FormBuilder</code>
       to <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">form_with</code> or
       <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">form_for</code>. The standard Rails helper names render shadcn-rails
       ViewComponents while preserving Rails names, ids, nested fields, and submitted params.
     </p>
-    <h3 class="text-lg font-semibold">form_with</h3>
-    <%= erb_example("form/form_builder") %>
-    <h3 class="text-lg font-semibold">form_for</h3>
-    <%= erb_example("form/form_for") %>
+  </div>
+
+  <div id="form-with" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">form_with</h2>
+    <div class="grid gap-4 lg:grid-cols-2">
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-sm">
+          <%= form_with model: @contact, url: "#", builder: Shadcn::FormBuilder, class: "space-y-4" do |f| %>
+            <div class="space-y-2">
+              <%= f.label :email %>
+              <%= f.email_field :email, placeholder: "you@example.com" %>
+            </div>
+            <div class="space-y-2">
+              <%= f.label :notes %>
+              <%= f.text_area :notes, rows: 4, placeholder: "Notes about this contact" %>
+            </div>
+            <div class="flex items-center gap-2">
+              <%= f.check_box :subscribed %>
+              <%= f.label :subscribed, "Subscribe to updates" %>
+            </div>
+            <div class="space-y-2">
+              <%= f.label :status %>
+              <%= f.select :status, Contact.statuses.keys %>
+            </div>
+            <%= f.submit "Save" %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= erb_example("form/form_builder") %>
+    </div>
+  </div>
+
+  <div id="form-for" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">form_for</h2>
+    <p class="leading-7">
+      <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">form_for</code> is older, but still supported on purpose.
+    </p>
+    <div class="grid gap-4 lg:grid-cols-2">
+      <%= render "docs/demo_card" do %>
+        <div class="w-full max-w-sm">
+          <%= form_for @contact, url: "#", builder: Shadcn::FormBuilder, html: { class: "space-y-4" } do |f| %>
+            <div class="space-y-2">
+              <%= f.label :email %>
+              <%= f.email_field :email, placeholder: "you@example.com" %>
+            </div>
+            <div class="space-y-2">
+              <%= f.label :notes %>
+              <%= f.text_area :notes, rows: 4, placeholder: "Notes about this contact" %>
+            </div>
+            <div class="flex items-center gap-2">
+              <%= f.check_box :subscribed %>
+              <%= f.label :subscribed, "Subscribe to updates" %>
+            </div>
+            <div class="space-y-2">
+              <%= f.label :status %>
+              <%= f.select :status, Contact.statuses.keys %>
+            </div>
+            <%= f.submit "Save" %>
+          <% end %>
+        </div>
+      <% end %>
+      <%= erb_example("form/form_for") %>
+    </div>
   </div>
 
   <div id="default-builder" class="space-y-4">
