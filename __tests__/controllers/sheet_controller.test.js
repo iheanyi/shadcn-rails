@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import SheetController from "../../app/assets/javascripts/shadcn/controllers/sheet_controller.js"
+import SheetController from "../../app/assets/javascripts/shadcn/controllers/sheet_controller.ts"
 import { setupController, cleanupController, click, wait, nextFrame, keydown, waitForPortal, getFocusableElements, waitForEvent } from '../helpers/stimulus-test-helper.js'
 
 describe("SheetController", () => {

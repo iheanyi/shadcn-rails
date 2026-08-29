@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import DrawerController from "../../app/assets/javascripts/shadcn/controllers/drawer_controller.js"
+import DrawerController from "../../app/assets/javascripts/shadcn/controllers/drawer_controller.ts"
 import { click, wait, nextFrame, keydown, waitForEvent } from '../helpers/stimulus-test-helper.js'
 
 describe("DrawerController", () => {

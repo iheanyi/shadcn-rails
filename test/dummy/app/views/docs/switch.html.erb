@@ -22,12 +22,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <div class="flex items-center space-x-2">
-      <%= render Shadcn::SwitchComponent.new(id: "airplane-mode-preview") %>
-      <%= render Shadcn::LabelComponent.new(for: "airplane-mode-preview") { "Airplane Mode" } %>
-    </div>
-  <% end %>
+  <%= showcase("switch", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -39,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("switch/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -67,7 +62,7 @@
           <%= render Shadcn::LabelComponent.new(for: "checked-switch-demo") { "Enabled by default" } %>
         </div>
       <% end %>
-      <%= erb_example("switch/checked") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Disabled -->
@@ -85,7 +80,7 @@
           </div>
         </div>
       <% end %>
-      <%= erb_example("switch/disabled") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Form Example -->

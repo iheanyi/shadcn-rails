@@ -1,0 +1,63 @@
+<%= form_with scope: :editor, url: docs_editor_example_path, method: :post, data: { controller: "editor" }, class: "space-y-6" do %>
+  <div class="space-y-4">
+    <div class="flex flex-wrap items-center gap-3">
+      <div class="space-y-2">
+        <p class="text-sm font-medium">Marks</p>
+        <%= render Shadcn::ToggleGroupComponent.new(
+          type: :multiple,
+          variant: :outline,
+          name: "editor[marks]",
+          value: @editor_params[:marks].to_s.split(","),
+          data: { action: "shadcn--toggle-group:change->editor#marksChanged" }
+        ) do |group| %>
+          <% group.with_item(value: "bold", aria_label: "Bold") { "B" } %>
+          <% group.with_item(value: "italic", aria_label: "Italic") { "I" } %>
+          <% group.with_item(value: "underline", aria_label: "Underline") { "U" } %>
+        <% end %>
+      </div>
+
+      <div class="space-y-2">
+        <p class="text-sm font-medium">Alignment</p>
+        <%= render Shadcn::ToggleGroupComponent.new(
+          type: :single,
+          variant: :outline,
+          name: "editor[alignment]",
+          value: @editor_params[:alignment],
+          data: { action: "shadcn--toggle-group:change->editor#alignmentChanged" }
+        ) do |group| %>
+          <% group.with_item(value: "left", aria_label: "Align left") { "Left" } %>
+          <% group.with_item(value: "center", aria_label: "Align center") { "Center" } %>
+          <% group.with_item(value: "right", aria_label: "Align right") { "Right" } %>
+        <% end %>
+      </div>
+    </div>
+
+    <%= render Shadcn::TextareaComponent.new(
+      name: "editor[body]",
+      id: "editor_body",
+      rows: 6,
+      value: @editor_params[:body],
+      data: {
+        "editor-target": "canvas",
+        action: "input->editor#canvasChanged"
+      }
+    ) %>
+
+    <%= render Shadcn::ButtonGroupComponent.new do |group| %>
+      <% group.with_button(variant: :outline, type: "button", data: { action: "click->editor#preview" }) { "Preview" } %>
+      <% group.with_button(type: "submit") { "Save" } %>
+    <% end %>
+  </div>
+
+  <div class="grid gap-4 md:grid-cols-2">
+    <div class="rounded-lg border bg-card p-4">
+      <h3 class="mb-2 text-sm font-medium">Preview</h3>
+      <div data-editor-target="preview" class="min-h-24 rounded-md bg-muted p-3 text-sm"></div>
+    </div>
+
+    <div class="rounded-lg border bg-card p-4">
+      <h3 class="mb-2 text-sm font-medium">Params</h3>
+      <pre data-editor-target="params" class="min-h-24 whitespace-pre-wrap rounded-md bg-muted p-3 text-xs"></pre>
+    </div>
+  </div>
+<% end %>

@@ -7,13 +7,15 @@ const application = Application.start()
 application.debug = false
 window.Stimulus = application
 
-// Import shadcn-rails controllers from the gem's source directory
-// The "shadcn-rails-stimulus" import is aliased in package.json to point to the gem's JS
+// Import shadcn-rails controllers from the compiled gem bundle.
+// The "shadcn-rails-stimulus" import is aliased in package.json to dist/index.esm.js.
 import { registerShadcnControllers } from "shadcn-rails-stimulus"
 registerShadcnControllers(application)
 
 // Import local controllers
 import ClipboardController from "./controllers/clipboard_controller"
+import EditorController from "./controllers/editor_controller"
 application.register("clipboard", ClipboardController)
+application.register("editor", EditorController)
 
 export { application }

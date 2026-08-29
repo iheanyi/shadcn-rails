@@ -1,5 +1,0 @@
-<%= render Shadcn::NativeSelectComponent.new(name: "country") do |select| %>
-  <% select.with_option(value: "", disabled: true, selected: true) { "Select a country" } %>
-  <% select.with_option(value: "us") { "United States" } %>
-  <% select.with_option(value: "uk") { "United Kingdom" } %>
-<% end %>

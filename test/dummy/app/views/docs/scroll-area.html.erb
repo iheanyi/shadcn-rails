@@ -23,20 +23,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::ScrollAreaComponent.new(class_name: "h-72 w-48 rounded-md border") do %>
-      <div class="p-4">
-        <h4 class="mb-4 text-sm font-medium leading-none">Tags</h4>
-        <% tags = ["React", "Next.js", "Tailwind CSS", "Radix UI", "shadcn/ui", "Ruby on Rails", "ViewComponent", "Stimulus", "Hotwire", "Turbo"] %>
-        <% tags.each_with_index do |tag, index| %>
-          <div class="text-sm">
-            <%= tag %>
-          </div>
-          <%= content_tag(:div, "", class: "my-2 h-px bg-border") unless index == tags.length - 1 %>
-        <% end %>
-      </div>
-    <% end %>
-  <% end %>
+  <%= showcase("scroll-area", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -48,7 +35,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("scroll_area/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -70,7 +57,7 @@
           </div>
         <% end %>
       <% end %>
-      <%= erb_example("scroll_area/vertical") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Horizontal Scroll -->
@@ -87,7 +74,7 @@
           </div>
         <% end %>
       <% end %>
-      <%= erb_example("scroll_area/horizontal") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Tags List -->
@@ -107,7 +94,7 @@
           </div>
         <% end %>
       <% end %>
-      <%= erb_example("scroll_area/tags") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Fixed Height Container -->

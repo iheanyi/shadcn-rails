@@ -455,6 +455,7 @@
           <h4 class="mb-1 px-2 text-sm font-semibold">Getting Started</h4>
           <%= link_to "Introduction", docs_path, class: "group flex w-full items-center rounded-md px-2 py-1.5 text-sm font-medium #{action_name == 'index' && !params[:slug] ? 'bg-accent text-accent-foreground' : 'hover:bg-accent hover:text-accent-foreground'}" %>
           <%= link_to "All Components", docs_components_path, class: "group flex w-full items-center rounded-md px-2 py-1.5 text-sm #{action_name == 'components' ? 'bg-accent text-accent-foreground font-medium' : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'}" %>
+          <%= link_to "Editor Example", docs_editor_example_path, class: "group flex w-full items-center rounded-md px-2 py-1.5 text-sm #{action_name == 'editor_example' ? 'bg-accent text-accent-foreground font-medium' : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'}" %>
         </div>
 
         <!-- Components by Category -->

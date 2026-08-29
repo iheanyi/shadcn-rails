@@ -23,38 +23,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::TableComponent.new do |table| %>
-      <% table.with_header do |header| %>
-        <% header.with_row do |row| %>
-          <% row.with_head { "Name" } %>
-          <% row.with_head { "Email" } %>
-          <% row.with_head { "Role" } %>
-          <% row.with_head(class: "text-right") { "Status" } %>
-        <% end %>
-      <% end %>
-      <% table.with_body do |body| %>
-        <% body.with_row do |row| %>
-          <% row.with_cell(class: "font-medium") { "John Doe" } %>
-          <% row.with_cell { "john@example.com" } %>
-          <% row.with_cell { "Admin" } %>
-          <% row.with_cell(class: "text-right") { "Active" } %>
-        <% end %>
-        <% body.with_row do |row| %>
-          <% row.with_cell(class: "font-medium") { "Jane Smith" } %>
-          <% row.with_cell { "jane@example.com" } %>
-          <% row.with_cell { "Editor" } %>
-          <% row.with_cell(class: "text-right") { "Active" } %>
-        <% end %>
-        <% body.with_row do |row| %>
-          <% row.with_cell(class: "font-medium") { "Bob Johnson" } %>
-          <% row.with_cell { "bob@example.com" } %>
-          <% row.with_cell { "User" } %>
-          <% row.with_cell(class: "text-right") { "Inactive" } %>
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
+  <%= showcase("table", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -67,7 +36,7 @@
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
     <p class="leading-7">The Table component uses a slot-based API with nested components for header, body, footer, and caption.</p>
-    <%= erb_example("table/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -102,7 +71,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("table/with_caption") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Footer -->
@@ -139,7 +108,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("table/with_footer") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Invoices Example -->
@@ -185,7 +154,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("table/invoices") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Selected Row -->
@@ -216,7 +185,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("table/selected_row") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
   </div>
 

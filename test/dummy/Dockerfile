@@ -21,6 +21,10 @@ WORKDIR /shadcn-rails
 # Copy the entire gem first
 COPY . .
 
+# Build the TypeScript Stimulus package so the dummy app consumes the same
+# compiled bundle and declarations that npm/importmap users receive.
+RUN npm ci && npm run build
+
 # Now set up the dummy app
 WORKDIR /rails
 
@@ -39,14 +43,11 @@ RUN sed -i 's|path: "../.."|path: "/shadcn-rails"|' Gemfile && \
     bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
 
-# Install npm dependencies and build JavaScript with esbuild
-# Note: The esbuild alias in package.json uses relative path ../../app/assets/javascripts/shadcn/index.js
-# which works locally but in Docker we need to use the absolute gem path.
-# NODE_PATH helps esbuild find @hotwired/stimulus when bundling files from /shadcn-rails/
+# Install npm dependencies and build JavaScript with esbuild.
 RUN npm ci && \
     NODE_PATH=/rails/node_modules npx esbuild app/javascript/application.js --bundle --sourcemap \
     --outdir=app/assets/builds --public-path=/assets --loader:.js=jsx \
-    --alias:shadcn-rails-stimulus=/shadcn-rails/app/assets/javascripts/shadcn/index.js
+    --alias:shadcn-rails-stimulus=/shadcn-rails/dist/index.esm.js
 
 # Precompile assets
 RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile

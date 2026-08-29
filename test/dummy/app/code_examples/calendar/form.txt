@@ -1,4 +1,0 @@
-<%= render Shadcn::CalendarComponent.new(
-  name: "event[date]",
-  selected: Date.today
-) %>

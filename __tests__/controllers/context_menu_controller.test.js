@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import ContextMenuController from "../../app/assets/javascripts/shadcn/controllers/context_menu_controller.js"
+import ContextMenuController from "../../app/assets/javascripts/shadcn/controllers/context_menu_controller.ts"
 import { setupController, cleanupController, click, nextFrame, wait } from '../helpers/stimulus-test-helper.js'
 
 describe("ContextMenuController", () => {

@@ -1,4 +1,0 @@
-<%= render Shadcn::ButtonComponent.new do %>
-  <svg>...</svg>
-  Upload
-<% end %>

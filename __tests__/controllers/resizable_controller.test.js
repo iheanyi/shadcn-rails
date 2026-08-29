@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import ResizableController from "../../app/assets/javascripts/shadcn/controllers/resizable_controller.js"
+import ResizableController from "../../app/assets/javascripts/shadcn/controllers/resizable_controller.ts"
 import { setupController, cleanupController, click, nextFrame, wait } from '../helpers/stimulus-test-helper.js'
 
 describe("ResizableController", () => {

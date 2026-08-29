@@ -3,6 +3,12 @@
 # @label Typography
 # @display bg_color "#ffffff"
 class TypographyComponentPreview < ViewComponent::Preview
+  # @label Default
+  # Default typography example
+  def default
+    h1
+  end
+
   # @label Heading 1
   # Large heading style
   def h1
@@ -85,6 +91,8 @@ class TypographyComponentPreview < ViewComponent::Preview
   # @label Demo Page
   # Full typography demonstration
   def demo
-    render_with_template
+    render(Shadcn::TypographyComponent.new(variant: :p)) do
+      "Typography examples cover headings, paragraphs, lists, quotes, and inline code styles."
+    end
   end
 end

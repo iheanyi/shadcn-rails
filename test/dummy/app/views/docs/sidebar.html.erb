@@ -22,72 +22,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <div class="w-full border rounded-lg overflow-hidden bg-background" style="height: 400px;">
-      <div class="flex h-full" data-controller="shadcn--sidebar" data-shadcn--sidebar-open-value="true" style="--sidebar-width: 240px; --sidebar-width-icon: 48px;">
-        <!-- Sidebar -->
-        <aside class="w-[240px] border-r bg-sidebar h-full flex flex-col shrink-0">
-          <!-- Header -->
-          <div class="flex h-14 items-center border-b px-4 font-semibold">
-            Acme Inc
-          </div>
-          <!-- Content -->
-          <div class="flex-1 overflow-y-auto py-2">
-            <div class="px-3 py-2">
-              <h2 class="mb-2 px-2 text-xs font-semibold text-sidebar-foreground/70 uppercase tracking-wide">Platform</h2>
-              <div class="space-y-1">
-                <a href="#" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium bg-accent text-accent-foreground">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
-                  Dashboard
-                </a>
-                <a href="#" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground hover:bg-accent hover:text-accent-foreground">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
-                  Inbox
-                  <span class="ml-auto bg-primary text-primary-foreground text-xs px-1.5 py-0.5 rounded">3</span>
-                </a>
-                <a href="#" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground hover:bg-accent hover:text-accent-foreground">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-                  Settings
-                </a>
-              </div>
-            </div>
-            <div class="px-3 py-2">
-              <h2 class="mb-2 px-2 text-xs font-semibold text-sidebar-foreground/70 uppercase tracking-wide">Projects</h2>
-              <div class="space-y-1">
-                <a href="#" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground hover:bg-accent hover:text-accent-foreground">
-                  <span class="h-2 w-2 rounded-full bg-blue-500"></span>
-                  Design System
-                </a>
-                <a href="#" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground hover:bg-accent hover:text-accent-foreground">
-                  <span class="h-2 w-2 rounded-full bg-green-500"></span>
-                  Mobile App
-                </a>
-                <a href="#" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-sidebar-foreground hover:bg-accent hover:text-accent-foreground">
-                  <span class="h-2 w-2 rounded-full bg-orange-500"></span>
-                  Marketing
-                </a>
-              </div>
-            </div>
-          </div>
-          <!-- Footer -->
-          <div class="border-t p-4">
-            <div class="flex items-center gap-3">
-              <div class="h-8 w-8 rounded-full bg-muted flex items-center justify-center text-xs font-medium">JD</div>
-              <div class="flex-1 text-sm">
-                <div class="font-medium">John Doe</div>
-                <div class="text-xs text-muted-foreground">john@acme.com</div>
-              </div>
-            </div>
-          </div>
-        </aside>
-        <!-- Main content -->
-        <main class="flex-1 p-6">
-          <h1 class="text-2xl font-bold mb-4">Dashboard</h1>
-          <p class="text-muted-foreground">Welcome to your dashboard. Use the sidebar to navigate.</p>
-        </main>
-      </div>
-    </div>
-  <% end %>
+  <%= showcase("sidebar", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -99,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("sidebar/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Structure -->
@@ -226,7 +161,7 @@
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Keyboard Shortcut</h3>
       <p class="text-sm text-muted-foreground">Toggle the sidebar with <kbd class="rounded bg-muted px-2 py-1 font-mono text-sm">Cmd/Ctrl + B</kbd>. The shortcut key is customizable:</p>
-      <%= erb_example("sidebar/keyboard_shortcut") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
   </div>
 

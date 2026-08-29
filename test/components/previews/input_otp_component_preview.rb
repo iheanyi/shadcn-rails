@@ -30,6 +30,6 @@ class InputOtpComponentPreview < ViewComponent::Preview
   # @label In Form
   # OTP input within a form context
   def in_form
-    render_with_template
+    render(Shadcn::InputOtpComponent.new(length: 6, name: "otp", pattern: "^[0-9]*$"))
   end
 end

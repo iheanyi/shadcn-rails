@@ -1,5 +1,0 @@
-<%= render Shadcn::FieldComponent.new do |field| %>
-  <% field.with_label { "Password" } %>
-  <% field.with_input(type: :password) %>
-  <% field.with_error { "Password must be at least 8 characters." } %>
-<% end %>

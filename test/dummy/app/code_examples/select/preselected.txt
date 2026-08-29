@@ -1,9 +1,0 @@
-<%= render Shadcn::SelectComponent.new(
-  name: "fruit",
-  value: "banana",
-  placeholder: "Select a fruit"
-) do |select| %>
-  <% select.with_item(value: "apple") { "Apple" } %>
-  <% select.with_item(value: "banana") { "Banana" } %>
-  <% select.with_item(value: "orange") { "Orange" } %>
-<% end %>

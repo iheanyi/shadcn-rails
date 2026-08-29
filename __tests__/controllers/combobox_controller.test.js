@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import ComboboxController from "../../app/assets/javascripts/shadcn/controllers/combobox_controller.js"
+import ComboboxController from "../../app/assets/javascripts/shadcn/controllers/combobox_controller.ts"
 import {
   setupController,
   cleanupController,

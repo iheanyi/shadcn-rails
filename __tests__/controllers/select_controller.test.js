@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import SelectController from "../../app/assets/javascripts/shadcn/controllers/select_controller.js"
+import SelectController from "../../app/assets/javascripts/shadcn/controllers/select_controller.ts"
 import { setupController, cleanupController, click, nextFrame, keydown } from '../helpers/stimulus-test-helper.js'
 
 describe("SelectController", () => {

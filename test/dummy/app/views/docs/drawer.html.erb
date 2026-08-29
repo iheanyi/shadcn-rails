@@ -24,32 +24,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::DrawerComponent.new do |drawer| %>
-      <% drawer.with_trigger do %>
-        <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Open Drawer<% end %>
-      <% end %>
-      <% drawer.with_body do |content| %>
-        <% content.with_header do |header| %>
-          <% header.with_title { "Edit Profile" } %>
-          <% header.with_description { "Make changes to your profile here. Click save when you're done." } %>
-        <% end %>
-        <div class="p-4 space-y-4">
-          <div class="space-y-2">
-            <%= render Shadcn::LabelComponent.new(for: "drawer-name") { "Name" } %>
-            <%= render Shadcn::InputComponent.new(id: "drawer-name", value: "John Doe") %>
-          </div>
-          <div class="space-y-2">
-            <%= render Shadcn::LabelComponent.new(for: "drawer-username") { "Username" } %>
-            <%= render Shadcn::InputComponent.new(id: "drawer-username", value: "@johndoe") %>
-          </div>
-        </div>
-        <% content.with_footer do %>
-          <%= render Shadcn::ButtonComponent.new(type: "submit", class_name: "w-full") { "Save changes" } %>
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
+  <%= showcase("drawer", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -61,7 +36,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("drawer/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -90,7 +65,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("drawer/basic") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Form -->
@@ -125,7 +100,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("drawer/with_form") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Different Directions -->
@@ -199,13 +174,13 @@
       <% end %>
       <div class="space-y-4">
         <h4 class="text-sm font-semibold">From Left</h4>
-        <%= erb_example("drawer/from_left") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
 
         <h4 class="text-sm font-semibold">From Right</h4>
-        <%= erb_example("drawer/from_right") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
 
         <h4 class="text-sm font-semibold">From Top</h4>
-        <%= erb_example("drawer/from_top") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
       </div>
     </div>
 

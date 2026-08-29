@@ -37,6 +37,6 @@ class BadgeComponentPreview < ViewComponent::Preview
   # @label Collection
   # Multiple badges together
   def collection
-    render_with_template
+    render(Shadcn::BadgeComponent.new(variant: :secondary)) { "Secondary" }
   end
 end

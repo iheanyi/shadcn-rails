@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import TooltipController from "../../app/assets/javascripts/shadcn/controllers/tooltip_controller.js"
+import TooltipController from "../../app/assets/javascripts/shadcn/controllers/tooltip_controller.ts"
 import { wait, nextFrame, keydown } from '../helpers/stimulus-test-helper.js'
 
 describe("TooltipController", () => {

@@ -170,7 +170,7 @@ module Shadcn
       end
 
       def copy_javascript_file(path)
-        source_path = Shadcn::Rails::Registry.gem_path(path)
+        source_path = compiled_javascript_source_path(path)
         destination_path = path.sub(%r{\Aapp/assets/javascripts/shadcn/controllers/}, "app/javascript/controllers/shadcn/")
           .sub(%r{\Aapp/assets/javascripts/shadcn/utils/}, "app/javascript/controllers/shadcn/utils/")
         display_name = destination_path.sub(%r{\Aapp/javascript/controllers/shadcn/}, "")
@@ -180,6 +180,11 @@ module Shadcn
             %(from "./utils/#{Regexp.last_match(1)}")
           end
         end
+      end
+
+      def compiled_javascript_source_path(path)
+        compiled_path = path.sub(%r{\Aapp/assets/javascripts/shadcn/}, "dist/")
+        Shadcn::Rails::Registry.gem_path(compiled_path)
       end
 
       def copy_css_sidecar(path)

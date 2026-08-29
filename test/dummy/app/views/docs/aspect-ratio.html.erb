@@ -22,13 +22,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <div class="w-[450px]">
-      <%= render Shadcn::AspectRatioComponent.new(ratio: 16.0/9.0, class_name: "bg-muted") do %>
-        <img src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80" alt="Photo by Drew Beamer" class="h-full w-full rounded-md object-cover" />
-      <% end %>
-    </div>
-  <% end %>
+  <%= showcase("aspect-ratio", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -40,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("aspect_ratio/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->

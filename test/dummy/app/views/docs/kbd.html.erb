@@ -22,12 +22,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <div class="flex items-center gap-1">
-      <%= render Shadcn::KbdComponent.new { "⌘" } %>
-      <%= render Shadcn::KbdComponent.new { "K" } %>
-    </div>
-  <% end %>
+  <%= showcase("kbd", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -63,7 +58,7 @@
           <%= render Shadcn::KbdComponent.new { "S" } %>
         </div>
       <% end %>
-      <%= erb_example("kbd/combination") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Common Shortcuts -->

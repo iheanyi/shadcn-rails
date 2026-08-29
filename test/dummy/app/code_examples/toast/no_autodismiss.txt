@@ -1,4 +1,0 @@
-<%= render Shadcn::ToastComponent.new(duration: 0) do |toast| %>
-  <% toast.with_title { "Important" } %>
-  <% toast.with_description { "This toast will stay until manually dismissed." } %>
-<% end %>

@@ -22,9 +22,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::LabelComponent.new(for: "preview-email") { "Your email address" } %>
-  <% end %>
+  <%= showcase("label", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -36,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("label/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -64,7 +62,7 @@
           <%= render Shadcn::InputComponent.new(id: "name-required", required: true, placeholder: "Enter your name") %>
         </div>
       <% end %>
-      <%= erb_example("label/required") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Checkbox -->

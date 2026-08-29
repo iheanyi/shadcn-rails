@@ -22,9 +22,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::InputComponent.new(type: "email", placeholder: "Email") %>
-  <% end %>
+  <%= showcase("input", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -36,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("input/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -60,7 +58,7 @@
           <%= render Shadcn::InputComponent.new(type: "email", id: "email-demo", placeholder: "Email") %>
         </div>
       <% end %>
-      <%= erb_example("input/with_label") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Input Types -->
@@ -97,7 +95,7 @@
           <%= render Shadcn::InputComponent.new(id: "picture-demo", type: "file") %>
         </div>
       <% end %>
-      <%= erb_example("input/file") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Disabled -->
@@ -106,7 +104,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::InputComponent.new(disabled: true, placeholder: "Disabled") %>
       <% end %>
-      <%= erb_example("input/disabled") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Button -->

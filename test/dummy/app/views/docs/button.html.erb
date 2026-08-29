@@ -22,9 +22,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::ButtonComponent.new do %>Button<% end %>
-  <% end %>
+  <%= showcase("button", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -36,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("button/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -49,7 +47,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::ButtonComponent.new do %>Default<% end %>
       <% end %>
-      <%= erb_example("button/default") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Secondary -->
@@ -58,7 +56,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::ButtonComponent.new(variant: :secondary) do %>Secondary<% end %>
       <% end %>
-      <%= erb_example("button/secondary") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Destructive -->
@@ -67,7 +65,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::ButtonComponent.new(variant: :destructive) do %>Destructive<% end %>
       <% end %>
-      <%= erb_example("button/destructive") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Outline -->
@@ -76,7 +74,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Outline<% end %>
       <% end %>
-      <%= erb_example("button/outline") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Ghost -->
@@ -85,7 +83,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::ButtonComponent.new(variant: :ghost) do %>Ghost<% end %>
       <% end %>
-      <%= erb_example("button/ghost") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Link -->
@@ -94,7 +92,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::ButtonComponent.new(variant: :link) do %>Link<% end %>
       <% end %>
-      <%= erb_example("button/link") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Sizes -->
@@ -107,7 +105,7 @@
           <%= render Shadcn::ButtonComponent.new(size: :lg) do %>Large<% end %>
         </div>
       <% end %>
-      <%= erb_example("button/sizes") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Icon Button -->
@@ -126,7 +124,7 @@
           <% end %>
         </div>
       <% end %>
-      <%= erb_example("button/icon") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Icon -->
@@ -138,7 +136,7 @@
           Upload
         <% end %>
       <% end %>
-      <%= erb_example("button/with_icon") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Loading -->
@@ -147,7 +145,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::ButtonComponent.new(loading: true, disabled: true) do %>Please wait<% end %>
       <% end %>
-      <%= erb_example("button/loading") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Disabled -->
@@ -156,7 +154,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::ButtonComponent.new(disabled: true) do %>Disabled<% end %>
       <% end %>
-      <%= erb_example("button/disabled") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- As Link -->
@@ -165,7 +163,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::ButtonComponent.new(href: "#", variant: :outline) do %>Go to page<% end %>
       <% end %>
-      <%= erb_example("button/as_link") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
   </div>
 

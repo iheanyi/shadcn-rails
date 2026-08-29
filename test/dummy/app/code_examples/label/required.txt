@@ -1,1 +1,0 @@
-<%= render Shadcn::LabelComponent.new(for: "name", required: true) { "Name" } %>

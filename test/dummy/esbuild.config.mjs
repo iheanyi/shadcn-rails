@@ -4,8 +4,8 @@ import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-// Path to the gem's JS directory (relative to test/dummy)
-const gemJsPath = resolve(__dirname, '../../app/assets/javascripts/shadcn')
+// Path to the compiled gem JS consumed by host applications.
+const gemJsPath = resolve(__dirname, '../../dist')
 
 const ctx = await esbuild.context({
   entryPoints: ['app/javascript/application.js'],
@@ -15,12 +15,12 @@ const ctx = await esbuild.context({
   publicPath: '/assets',
   loader: { '.js': 'jsx' },
   alias: {
-    'shadcn-rails-stimulus': resolve(__dirname, '../../app/assets/javascripts/shadcn/index.js')
+    'shadcn-rails-stimulus': resolve(__dirname, '../../dist/index.esm.js')
   },
   logLevel: 'info',
 })
 
-// Watch for changes in both the app and the gem's JS directory
+// Watch for changes in both the app and the compiled gem JS directory
 console.log(`[esbuild] Watching for changes in:`)
 console.log(`  - app/javascript`)
 console.log(`  - ${gemJsPath}`)

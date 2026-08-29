@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import NavigationMenuController from "../../app/assets/javascripts/shadcn/controllers/navigation_menu_controller.js"
+import NavigationMenuController from "../../app/assets/javascripts/shadcn/controllers/navigation_menu_controller.ts"
 import { setupController, cleanupController, click, nextFrame, wait } from '../helpers/stimulus-test-helper.js'
 
 describe("NavigationMenuController", () => {

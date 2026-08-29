@@ -24,21 +24,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::DropdownMenuComponent.new do |menu| %>
-      <% menu.with_trigger do %>
-        <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Open Menu" } %>
-      <% end %>
-      <% menu.with_menu do |content| %>
-        <% content.with_label { "My Account" } %>
-        <% content.with_separator %>
-        <% content.with_item(href: "#") { "Profile" } %>
-        <% content.with_item(href: "#") { "Settings" } %>
-        <% content.with_separator %>
-        <% content.with_item(variant: :destructive, href: "#") { "Log out" } %>
-      <% end %>
-    <% end %>
-  <% end %>
+  <%= showcase("dropdown-menu", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -50,7 +36,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("dropdown_menu/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -72,7 +58,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("dropdown_menu/basic") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Icons -->
@@ -100,7 +86,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("dropdown_menu/with_icons") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Separators and Labels -->
@@ -125,7 +111,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("dropdown_menu/with_separators") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Keyboard Shortcuts -->
@@ -158,7 +144,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("dropdown_menu/with_shortcuts") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Destructive Items -->
@@ -178,7 +164,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("dropdown_menu/destructive") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Disabled Items -->
@@ -197,7 +183,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("dropdown_menu/disabled") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Inset Items -->
@@ -220,7 +206,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("dropdown_menu/inset") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Alignment -->
@@ -260,7 +246,7 @@
           <% end %>
         </div>
       <% end %>
-      <%= erb_example("dropdown_menu/alignment") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
   </div>
 

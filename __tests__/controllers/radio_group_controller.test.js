@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import RadioGroupController from "../../app/assets/javascripts/shadcn/controllers/radio_group_controller.js"
+import RadioGroupController from "../../app/assets/javascripts/shadcn/controllers/radio_group_controller.ts"
 import { setupController, cleanupController, click, nextFrame, keydown } from '../helpers/stimulus-test-helper.js'
 
 describe("RadioGroupController", () => {

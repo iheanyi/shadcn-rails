@@ -30,13 +30,13 @@ class LabelComponentPreview < ViewComponent::Preview
   # @label With Input
   # Label associated with an input field
   def with_input
-    render_with_template
+    render(Shadcn::LabelComponent.new(for: "email")) { "Email Address" }
   end
 
   # @label Form Example
   # Multiple labels in a form
   def form_example
-    render_with_template
+    render(Shadcn::LabelComponent.new(for: "name", required: true)) { "Name" }
   end
 
   # @label Without For
@@ -48,6 +48,6 @@ class LabelComponentPreview < ViewComponent::Preview
   # @label Disabled Context
   # Label in disabled input context (uses peer classes)
   def disabled_context
-    render_with_template
+    render(Shadcn::LabelComponent.new(for: "disabled", class_name: "opacity-50")) { "Disabled Field" }
   end
 end

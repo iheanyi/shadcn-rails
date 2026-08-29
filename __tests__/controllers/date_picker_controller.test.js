@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import DatePickerController from "../../app/assets/javascripts/shadcn/controllers/date_picker_controller.js"
+import DatePickerController from "../../app/assets/javascripts/shadcn/controllers/date_picker_controller.ts"
 
 describe("DatePickerController", () => {
   let application

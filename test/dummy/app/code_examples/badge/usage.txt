@@ -1,1 +1,0 @@
-<%= render Shadcn::BadgeComponent.new { "Badge" } %>

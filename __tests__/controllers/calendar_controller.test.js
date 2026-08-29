@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import CalendarController from "../../app/assets/javascripts/shadcn/controllers/calendar_controller.js"
+import CalendarController from "../../app/assets/javascripts/shadcn/controllers/calendar_controller.ts"
 
 describe("CalendarController", () => {
   let application

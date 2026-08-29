@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import TabsController from "../../app/assets/javascripts/shadcn/controllers/tabs_controller.js"
+import TabsController from "../../app/assets/javascripts/shadcn/controllers/tabs_controller.ts"
 import { setupController, cleanupController, click, wait, nextFrame, keydown, mockLocation, mockHistory, waitForEvent } from '../helpers/stimulus-test-helper.js'
 
 describe("TabsController", () => {

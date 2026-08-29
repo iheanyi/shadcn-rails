@@ -1,4 +1,0 @@
-<%= render Shadcn::InputGroupComponent.new do |group| %>
-  <% group.with_prefix { "https://" } %>
-  <% group.with_input(placeholder: "example.com") %>
-<% end %>

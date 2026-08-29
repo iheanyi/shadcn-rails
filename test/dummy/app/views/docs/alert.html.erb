@@ -22,12 +22,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::AlertComponent.new do |alert| %>
-      <% alert.with_title { "Heads up!" } %>
-      <% alert.with_description { "You can add components to your app using the cli." } %>
-    <% end %>
-  <% end %>
+  <%= showcase("alert", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -39,7 +34,10 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("alert/usage") %>
+    <p class="leading-7">
+      Alert examples are owned by <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">AlertComponentPreview</code>
+      and rendered in docs through <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">showcase("alert", :default)</code>.
+    </p>
   </div>
 
   <!-- Examples -->
@@ -49,52 +47,25 @@
     <!-- Default -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Default</h3>
-      <%= render "docs/demo_card" do %>
-        <%= render Shadcn::AlertComponent.new do |alert| %>
-          <% alert.with_title { "Note" } %>
-          <% alert.with_description { "This is a default alert for general information." } %>
-        <% end %>
-      <% end %>
+      <%= showcase("alert", :default) %>
     </div>
 
     <!-- Destructive -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Destructive</h3>
-      <%= render "docs/demo_card" do %>
-        <%= render Shadcn::AlertComponent.new(variant: :destructive) do |alert| %>
-          <% alert.with_title { "Error" } %>
-          <% alert.with_description { "Your session has expired. Please log in again." } %>
-        <% end %>
-      <% end %>
-      <%= erb_example("alert/destructive") %>
+      <%= showcase("alert", :destructive) %>
     </div>
 
     <!-- With Icon -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">With Icon</h3>
-      <%= render "docs/demo_card" do %>
-        <%= render Shadcn::AlertComponent.new do |alert| %>
-          <% alert.with_icon do %>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <% end %>
-          <% alert.with_title { "Warning" } %>
-          <% alert.with_description { "Your free trial ends in 3 days. Upgrade to continue using all features." } %>
-        <% end %>
-      <% end %>
+      <%= showcase("alert", :with_icon) %>
     </div>
 
-    <!-- Destructive with Icon -->
+    <!-- Success -->
     <div class="space-y-4">
-      <h3 class="text-lg font-semibold">Destructive with Icon</h3>
-      <%= render "docs/demo_card" do %>
-        <%= render Shadcn::AlertComponent.new(variant: :destructive) do |alert| %>
-          <% alert.with_icon do %>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          <% end %>
-          <% alert.with_title { "Error" } %>
-          <% alert.with_description { "Something went wrong. Please try again later." } %>
-        <% end %>
-      <% end %>
+      <h3 class="text-lg font-semibold">Success</h3>
+      <%= showcase("alert", :success) %>
     </div>
 
     <!-- Multiple Alerts -->

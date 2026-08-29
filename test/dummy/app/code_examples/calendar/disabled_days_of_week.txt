@@ -1,3 +1,0 @@
-<%= render Shadcn::CalendarComponent.new(
-  disabled_days_of_week: [0, 6]  # Disable weekends
-) %>

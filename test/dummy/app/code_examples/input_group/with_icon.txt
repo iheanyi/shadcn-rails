@@ -1,6 +1,0 @@
-<%= render Shadcn::InputGroupComponent.new do |group| %>
-  <% group.with_prefix do %>
-    <svg><!-- search icon --></svg>
-  <% end %>
-  <% group.with_input(type: :search, placeholder: "Search...") %>
-<% end %>

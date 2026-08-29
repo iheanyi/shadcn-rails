@@ -22,19 +22,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::ToggleGroupComponent.new(type: :single) do |group| %>
-      <% group.with_item(value: "left", aria_label: "Align left") do %>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="3" y1="6" y2="6"/><line x1="15" x2="3" y1="12" y2="12"/><line x1="17" x2="3" y1="18" y2="18"/></svg>
-      <% end %>
-      <% group.with_item(value: "center", aria_label: "Align center") do %>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="3" y1="6" y2="6"/><line x1="18" x2="6" y1="12" y2="12"/><line x1="21" x2="3" y1="18" y2="18"/></svg>
-      <% end %>
-      <% group.with_item(value: "right", aria_label: "Align right") do %>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="3" y1="6" y2="6"/><line x1="21" x2="9" y1="12" y2="12"/><line x1="21" x2="7" y1="18" y2="18"/></svg>
-      <% end %>
-    <% end %>
-  <% end %>
+  <%= showcase("toggle-group", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -46,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("toggle_group/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -89,7 +77,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("toggle_group/multiple") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Outline -->
@@ -108,7 +96,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("toggle_group/outline") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Sizes -->
@@ -146,7 +134,7 @@
           </div>
         </div>
       <% end %>
-      <%= erb_example("toggle_group/sizes") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Default Value -->
@@ -166,7 +154,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("toggle_group/default_value") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Disabled -->
@@ -186,7 +174,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("toggle_group/disabled") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
   </div>
 

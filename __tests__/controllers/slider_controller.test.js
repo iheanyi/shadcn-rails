@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import SliderController from "../../app/assets/javascripts/shadcn/controllers/slider_controller.js"
+import SliderController from "../../app/assets/javascripts/shadcn/controllers/slider_controller.ts"
 import { setupController, cleanupController, click, nextFrame, keydown } from '../helpers/stimulus-test-helper.js'
 
 describe("SliderController", () => {

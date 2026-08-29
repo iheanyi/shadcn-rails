@@ -23,19 +23,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::PaginationComponent.new do |pagination| %>
-      <% pagination.with_pagination_content do |content| %>
-        <% content.with_previous(href: "#") %>
-        <% content.with_item(href: "#") { "1" } %>
-        <% content.with_item(href: "#", active: true) { "2" } %>
-        <% content.with_item(href: "#") { "3" } %>
-        <% content.with_ellipse %>
-        <% content.with_item(href: "#") { "10" } %>
-        <% content.with_next_page(href: "#") %>
-      <% end %>
-    <% end %>
-  <% end %>
+  <%= showcase("pagination", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -50,13 +38,13 @@
     <p class="leading-7">There are three ways to use the Pagination component:</p>
 
     <h3 class="text-lg font-semibold mt-4">1. Slot-based API (Full Control)</h3>
-    <%= erb_example("pagination/usage_slot") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
 
     <h3 class="text-lg font-semibold mt-6">2. Collection-based API (Kaminari/will_paginate)</h3>
-    <%= erb_example("pagination/usage_collection") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
 
     <h3 class="text-lg font-semibold mt-6">3. Pagy-based API</h3>
-    <%= erb_example("pagination/usage_pagy") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -97,7 +85,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("pagination/ellipse") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Disabled Navigation -->
@@ -115,7 +103,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("pagination/disabled") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
   </div>
 
@@ -134,8 +122,8 @@
         <a href="https://github.com/kaminari/kaminari" target="_blank" class="underline hover:text-foreground">Kaminari</a>
         is the most popular pagination gem for Rails.
       </p>
-      <%= ruby_example("pagination/kaminari_controller", title: "Controller") %>
-      <%= erb_example("pagination/kaminari_view", title: "View") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- will_paginate -->
@@ -145,8 +133,8 @@
         <a href="https://github.com/mislav/will_paginate" target="_blank" class="underline hover:text-foreground">will_paginate</a>
         is a classic pagination library.
       </p>
-      <%= ruby_example("pagination/will_paginate_controller", title: "Controller") %>
-      <%= erb_example("pagination/will_paginate_view", title: "View") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Pagy -->
@@ -156,8 +144,8 @@
         <a href="https://github.com/ddnexus/pagy" target="_blank" class="underline hover:text-foreground">Pagy</a>
         is the fastest pagination gem with the smallest memory footprint.
       </p>
-      <%= ruby_example("pagination/pagy_controller", title: "Controller") %>
-      <%= erb_example("pagination/pagy_view", title: "View") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Custom URL Builder -->
@@ -167,7 +155,7 @@
         The <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">url_builder</code> lambda receives the page number
         and should return the URL for that page. This gives you full control over URL generation.
       </p>
-      <%= erb_example("pagination/url_builder") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Window Size -->
@@ -176,7 +164,7 @@
       <p class="text-sm text-muted-foreground">
         Control how many pages are shown around the current page with the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">window</code> option.
       </p>
-      <%= erb_example("pagination/window") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
   </div>
 

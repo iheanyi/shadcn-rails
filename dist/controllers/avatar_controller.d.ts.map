@@ -1,0 +1,1 @@
+{"version":3,"file":"avatar_controller.d.ts","sourceRoot":"","sources":["../../app/assets/javascripts/shadcn/controllers/avatar_controller.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,UAAU,EAAE,MAAM,oBAAoB,CAAA;AAE/C;;GAEG;AACH,MAAM,CAAC,OAAO,MAAO,SAAQ,UAAU,CAAC,WAAW,CAAC;IAClD,MAAM,CAAC,OAAO,WAAwB;IAEtC,WAAW,SAOV;IAED,UAAU,SAOT;CACF"}

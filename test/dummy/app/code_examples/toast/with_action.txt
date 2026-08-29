@@ -1,7 +1,0 @@
-<%= render Shadcn::ToastComponent.new do |toast| %>
-  <% toast.with_title { "Scheduled" } %>
-  <% toast.with_description { "Your message has been scheduled." } %>
-  <% toast.with_action(alt_text: "Undo") do %>
-    Undo
-  <% end %>
-<% end %>

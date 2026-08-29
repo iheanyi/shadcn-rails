@@ -23,7 +23,6 @@ Rails.application.configure do
     config.hotwire_livereload.listen_paths << Rails.root.join("../../app/components")
     config.hotwire_livereload.listen_paths << Rails.root.join("../../app/assets/javascripts")
     config.hotwire_livereload.listen_paths << Rails.root.join("app/views/docs")
-    config.hotwire_livereload.listen_paths << Rails.root.join("app/code_examples")
     config.hotwire_livereload.listen_paths << Rails.root.join("app/assets/builds")
   end
 

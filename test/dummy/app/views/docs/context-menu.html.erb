@@ -24,37 +24,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::ContextMenuComponent.new do |menu| %>
-      <% menu.with_trigger do %>
-        <div class="flex h-[150px] w-[300px] items-center justify-center rounded-md border border-dashed text-sm">
-          Right click here
-        </div>
-      <% end %>
-      <% menu.with_menu do |content| %>
-        <% content.with_label { "Actions" } %>
-        <% content.with_separator %>
-        <% content.with_item(href: "#") do |item| %>
-          Back
-          <% item.with_shortcut { "⌘[" } %>
-        <% end %>
-        <% content.with_item(href: "#", disabled: true) do |item| %>
-          Forward
-          <% item.with_shortcut { "⌘]" } %>
-        <% end %>
-        <% content.with_item(href: "#") do |item| %>
-          Reload
-          <% item.with_shortcut { "⌘R" } %>
-        <% end %>
-        <% content.with_separator %>
-        <% content.with_item(href: "#") do |item| %>
-          Save As...
-          <% item.with_shortcut { "⇧⌘S" } %>
-        <% end %>
-        <% content.with_item(href: "#") { "Print" } %>
-      <% end %>
-    <% end %>
-  <% end %>
+  <%= showcase("context-menu", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -66,7 +36,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("context_menu/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -90,7 +60,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("context_menu/basic") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Icons -->
@@ -120,7 +90,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("context_menu/with_icons") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Separators and Labels -->
@@ -148,7 +118,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("context_menu/with_separators") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Keyboard Shortcuts -->
@@ -183,7 +153,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("context_menu/with_shortcuts") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Destructive Items -->
@@ -205,7 +175,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("context_menu/destructive") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Disabled Items -->
@@ -226,7 +196,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("context_menu/disabled") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Checkbox Items -->
@@ -254,7 +224,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("context_menu/checkbox_items") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Radio Items -->
@@ -278,7 +248,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("context_menu/radio_items") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
   </div>
 

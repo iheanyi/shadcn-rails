@@ -1,1 +1,0 @@
-<%= render Shadcn::BadgeComponent.new(variant: :outline) { "Outline" } %>

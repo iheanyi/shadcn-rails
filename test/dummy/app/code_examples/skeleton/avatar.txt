@@ -1,7 +1,0 @@
-<div class="flex items-center space-x-4">
-  <%= render Shadcn::SkeletonComponent.new(class_name: "h-12 w-12 rounded-full") %>
-  <div class="space-y-2">
-    <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-[250px]") %>
-    <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-[200px]") %>
-  </div>
-</div>

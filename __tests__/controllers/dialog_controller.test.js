@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import DialogController from '../../app/assets/javascripts/shadcn/controllers/dialog_controller.js'
+import DialogController from '../../app/assets/javascripts/shadcn/controllers/dialog_controller.ts'
 import {
   setupController,
   cleanupController,

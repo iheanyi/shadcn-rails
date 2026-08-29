@@ -24,30 +24,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <div class="w-full max-w-md space-y-2">
-      <%= render Shadcn::CollapsibleComponent.new do |collapsible| %>
-        <% collapsible.with_trigger do %>
-          <div class="flex items-center justify-between space-x-4">
-            <h4 class="text-sm font-semibold">@peduarte starred 3 repositories</h4>
-            <%= render Shadcn::ButtonComponent.new(variant: :ghost, size: :sm, class_name: "w-9 p-0") do %>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m6 9 6 6 6-6"></path>
-              </svg>
-              <span class="sr-only">Toggle</span>
-            <% end %>
-          </div>
-        <% end %>
-        <% collapsible.with_body do %>
-          <div class="rounded-md border px-4 py-3 font-mono text-sm space-y-2">
-            <div>@radix-ui/primitives</div>
-            <div>@radix-ui/colors</div>
-            <div>@stitches/react</div>
-          </div>
-        <% end %>
-      <% end %>
-    </div>
-  <% end %>
+  <%= showcase("collapsible", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -59,7 +36,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("collapsible/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -108,7 +85,7 @@
           <% end %>
         </div>
       <% end %>
-      <%= erb_example("collapsible/initially_open") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Disabled -->
@@ -131,7 +108,7 @@
           <% end %>
         </div>
       <% end %>
-      <%= erb_example("collapsible/disabled") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Animation -->
@@ -211,7 +188,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("collapsible/settings_panel") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Nested Content Example -->

@@ -23,60 +23,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::TabsComponent.new(default_value: "account", class_name: "w-[400px]") do |tabs| %>
-      <% tabs.with_list do |list| %>
-        <% list.with_trigger(value: "account") { "Account" } %>
-        <% list.with_trigger(value: "password") { "Password" } %>
-      <% end %>
-      <% tabs.with_panel(value: "account") do %>
-        <%= render Shadcn::CardComponent.new do |card| %>
-          <% card.with_header do |header| %>
-            <% header.with_title { "Account" } %>
-            <% header.with_description { "Make changes to your account here. Click save when you're done." } %>
-          <% end %>
-          <% card.with_content_slot do %>
-            <div class="space-y-4">
-              <div class="space-y-2">
-                <%= render Shadcn::LabelComponent.new(for: "name") { "Name" } %>
-                <%= render Shadcn::InputComponent.new(id: "name", value: "John Doe") %>
-              </div>
-              <div class="space-y-2">
-                <%= render Shadcn::LabelComponent.new(for: "username") { "Username" } %>
-                <%= render Shadcn::InputComponent.new(id: "username", value: "@johndoe") %>
-              </div>
-            </div>
-          <% end %>
-          <% card.with_footer do %>
-            <%= render Shadcn::ButtonComponent.new { "Save changes" } %>
-          <% end %>
-        <% end %>
-      <% end %>
-      <% tabs.with_panel(value: "password") do %>
-        <%= render Shadcn::CardComponent.new do |card| %>
-          <% card.with_header do |header| %>
-            <% header.with_title { "Password" } %>
-            <% header.with_description { "Change your password here. After saving, you'll be logged out." } %>
-          <% end %>
-          <% card.with_content_slot do %>
-            <div class="space-y-4">
-              <div class="space-y-2">
-                <%= render Shadcn::LabelComponent.new(for: "current") { "Current password" } %>
-                <%= render Shadcn::InputComponent.new(id: "current", type: "password") %>
-              </div>
-              <div class="space-y-2">
-                <%= render Shadcn::LabelComponent.new(for: "new") { "New password" } %>
-                <%= render Shadcn::InputComponent.new(id: "new", type: "password") %>
-              </div>
-            </div>
-          <% end %>
-          <% card.with_footer do %>
-            <%= render Shadcn::ButtonComponent.new { "Save password" } %>
-          <% end %>
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
+  <%= showcase("tabs", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -88,7 +35,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("tabs/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -116,7 +63,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("tabs/basic") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- URL Sync -->
@@ -126,7 +73,7 @@
         Sync the active tab with the URL using the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">url_param</code> option.
         This is useful for shareable links and browser back/forward navigation.
       </p>
-      <%= erb_example("tabs/url_sync") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Disabled Tab -->
@@ -150,7 +97,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("tabs/disabled") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
   </div>
 

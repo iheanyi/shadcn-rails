@@ -24,51 +24,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <button
-      onclick="showToast()"
-      class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
-    >
-      Show Toast
-    </button>
-
-    <%= render Shadcn::ToastViewportComponent.new do %>
-      <div id="toast-container"></div>
-    <% end %>
-
-    <script>
-      function showToast() {
-        const container = document.getElementById('toast-container');
-        const toastHtml = `
-          <li
-            class="group pointer-events-auto relative flex w-full items-center justify-between space-x-2 overflow-hidden rounded-md border p-4 pr-6 shadow-lg transition-all data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-80 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-top-full data-[state=open]:sm:slide-in-from-bottom-full border bg-background text-foreground"
-            role="status"
-            aria-live="polite"
-            data-controller="shadcn--toast"
-            data-shadcn--toast-duration-value="5000"
-            data-shadcn--toast-open-value="true"
-            data-state="open"
-          >
-            <div class="grid gap-1">
-              <div class="text-sm font-semibold [&+div]:text-xs">Scheduled: Catch up</div>
-              <div class="text-sm opacity-90">Friday, February 10, 2023 at 5:57 PM</div>
-            </div>
-            <button
-              type="button"
-              class="absolute right-1 top-1 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-1 group-hover:opacity-100"
-              data-action="click->shadcn--toast#close"
-              aria-label="Close"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" class="h-4 w-4">
-                <path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-          </li>
-        `;
-        container.insertAdjacentHTML('beforeend', toastHtml);
-      }
-    </script>
-  <% end %>
+  <%= showcase("toast", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -85,7 +41,7 @@
       The <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">ToastViewportComponent</code>
       provides a container positioned at the bottom-right of the screen (or top on mobile).
     </p>
-    <%= erb_example("toast/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -96,14 +52,14 @@
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Simple</h3>
       <p class="text-sm text-muted-foreground">A minimal toast with just a description.</p>
-      <%= erb_example("toast/simple") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Title -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">With Title</h3>
       <p class="text-sm text-muted-foreground">Include both a title and description for more context.</p>
-      <%= erb_example("toast/with_title") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Action -->
@@ -114,14 +70,14 @@
         The <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">alt_text</code> parameter
         is required for accessibility.
       </p>
-      <%= erb_example("toast/with_action") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Destructive -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Destructive</h3>
       <p class="text-sm text-muted-foreground">Use the destructive variant for error messages or critical notifications.</p>
-      <%= erb_example("toast/destructive") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Custom Duration -->
@@ -131,7 +87,7 @@
         Control how long the toast is displayed before auto-dismissing.
         Duration is specified in milliseconds.
       </p>
-      <%= erb_example("toast/custom_duration") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- No Auto-dismiss -->
@@ -141,7 +97,7 @@
         Set <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">duration: 0</code>
         to prevent automatic dismissal. The user must manually close the toast.
       </p>
-      <%= erb_example("toast/no_autodismiss") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
   </div>
 

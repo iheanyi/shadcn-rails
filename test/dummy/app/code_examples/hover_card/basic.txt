@@ -1,8 +1,0 @@
-<%= render Shadcn::HoverCardComponent.new do |card| %>
-  <% card.with_trigger do %>
-    <span class="underline cursor-pointer">Hover over me</span>
-  <% end %>
-  <% card.with_card_content do %>
-    <p class="text-sm">This is the hover card content.</p>
-  <% end %>
-<% end %>

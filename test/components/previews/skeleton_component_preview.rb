@@ -36,18 +36,18 @@ class SkeletonComponentPreview < ViewComponent::Preview
   # @label Card
   # Complete card skeleton with image and text
   def card
-    render_with_template
+    render(Shadcn::SkeletonComponent.new(class_name: "h-[180px] w-[320px] rounded-xl"))
   end
 
   # @label Profile
   # Profile skeleton with avatar and text
   def profile
-    render_with_template
+    render(Shadcn::SkeletonComponent.new(class_name: "h-12 w-12 rounded-full"))
   end
 
   # @label Article
   # Article skeleton with multiple text lines
   def article
-    render_with_template
+    render(Shadcn::SkeletonComponent.new(class_name: "h-4 w-[320px]"))
   end
 end

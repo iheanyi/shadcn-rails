@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import SwitchController from "../../app/assets/javascripts/shadcn/controllers/switch_controller.js"
+import SwitchController from "../../app/assets/javascripts/shadcn/controllers/switch_controller.ts"
 import { setupController, cleanupController, click, nextFrame, keydown } from '../helpers/stimulus-test-helper.js'
 
 describe("SwitchController", () => {
