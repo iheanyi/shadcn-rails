@@ -24,23 +24,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::AlertDialogComponent.new do |dialog| %>
-      <% dialog.with_trigger do %>
-        <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Show Dialog<% end %>
-      <% end %>
-      <% dialog.with_body do |body| %>
-        <% body.with_header do |header| %>
-          <% header.with_title { "Are you absolutely sure?" } %>
-          <% header.with_description { "This action cannot be undone. This will permanently delete your account and remove your data from our servers." } %>
-        <% end %>
-        <% body.with_footer do |footer| %>
-          <% footer.with_cancel { "Cancel" } %>
-          <% footer.with_action { "Continue" } %>
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
+  <%= showcase("alert-dialog", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -52,7 +36,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("alert_dialog/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -80,7 +64,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("alert_dialog/basic") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Destructive Action -->
@@ -107,7 +91,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("alert_dialog/destructive") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Custom Content -->
@@ -137,7 +121,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("alert_dialog/custom_actions") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
   </div>
 

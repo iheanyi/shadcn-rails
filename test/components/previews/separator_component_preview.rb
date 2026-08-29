@@ -37,18 +37,18 @@ class SeparatorComponentPreview < ViewComponent::Preview
   # @label In Content
   # Separator between content sections
   def in_content
-    render_with_template
+    render(Shadcn::SeparatorComponent.new)
   end
 
   # @label With Text
   # Separator with text in between
   def with_text
-    render_with_template
+    render(Shadcn::SeparatorComponent.new)
   end
 
   # @label Vertical in Toolbar
   # Vertical separator in a toolbar layout
   def vertical_in_toolbar
-    render_with_template
+    render(Shadcn::SeparatorComponent.new(orientation: :vertical))
   end
 end

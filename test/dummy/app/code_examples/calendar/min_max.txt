@@ -1,4 +1,0 @@
-<%= render Shadcn::CalendarComponent.new(
-  min_date: Date.today,
-  max_date: Date.today + 30.days
-) %>

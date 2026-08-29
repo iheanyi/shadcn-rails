@@ -1,5 +1,0 @@
-<%= render Shadcn::ButtonGroupComponent.new(orientation: :vertical) do |group| %>
-  <% group.with_button(variant: :outline) { "Top" } %>
-  <% group.with_button(variant: :outline) { "Middle" } %>
-  <% group.with_button(variant: :outline) { "Bottom" } %>
-<% end %>

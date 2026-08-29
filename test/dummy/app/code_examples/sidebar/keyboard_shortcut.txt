@@ -1,3 +1,0 @@
-<%= render Shadcn::SidebarProviderComponent.new(keyboard_shortcut: "s") do |provider| %>
-  <!-- Sidebar will toggle with Cmd/Ctrl + S -->
-<% end %>

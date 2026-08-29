@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --public-path=/assets --loader:.js=jsx --alias:shadcn-rails-stimulus=../../app/assets/javascripts/shadcn/index.js",
+    "build": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --public-path=/assets --loader:.js=jsx --alias:shadcn-rails-stimulus=../../app/assets/javascripts/shadcn/index.ts",
     "build:watch": "node esbuild.config.mjs"
   },
   "devDependencies": {

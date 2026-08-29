@@ -56,6 +56,7 @@ module Shadcn
         if app.config.respond_to?(:assets) && app.config.assets.respond_to?(:paths)
           app.config.assets.paths << root.join("app/assets/stylesheets")
           app.config.assets.paths << root.join("app/assets/javascripts")
+          app.config.assets.paths << root.join("dist")
         end
       end
 
@@ -79,6 +80,7 @@ module Shadcn
         if defined?(Importmap)
           app.config.importmap.paths << root.join("config/importmap.rb")
           app.config.importmap.cache_sweepers << root.join("app/assets/javascripts")
+          app.config.importmap.cache_sweepers << root.join("dist")
         end
       end
 

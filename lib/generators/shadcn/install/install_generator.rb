@@ -215,7 +215,7 @@ module Shadcn
       end
 
       def setup_importmap
-        append_importmap_pin %(pin "shadcn", to: "shadcn/index.js")
+        append_importmap_pin %(pin "shadcn", to: "index.esm.js")
         append_importmap_pin %(pin "@floating-ui/dom", to: "https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.6.13/+esm")
         append_importmap_pin %(pin "stimulus-use", to: "https://cdn.jsdelivr.net/npm/stimulus-use@0.52.3/+esm")
 

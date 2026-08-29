@@ -86,59 +86,25 @@ class ToggleComponentPreview < ViewComponent::Preview
   # @label Text Formatting
   # Multiple toggles for text formatting
   def text_formatting
-    content_tag(:div, class: "flex items-center gap-2") do
-      render(Shadcn::ToggleComponent.new(aria_label: "Toggle bold")) do
-        bold_icon
-      end +
-      render(Shadcn::ToggleComponent.new(aria_label: "Toggle italic", pressed: true)) do
-        italic_icon
-      end +
-      render(Shadcn::ToggleComponent.new(aria_label: "Toggle underline")) do
-        underline_icon
-      end +
-      render(Shadcn::ToggleComponent.new(aria_label: "Toggle strikethrough")) do
-        strikethrough_icon
-      end
+    render(Shadcn::ToggleComponent.new(aria_label: "Toggle bold")) do
+      bold_icon
     end
   end
 
   # @label Text Alignment
   # Toggles for text alignment
   def text_alignment
-    content_tag(:div, class: "flex items-center gap-2") do
-      render(Shadcn::ToggleComponent.new(variant: :outline, aria_label: "Align left", pressed: true)) do
-        align_left_icon
-      end +
-      render(Shadcn::ToggleComponent.new(variant: :outline, aria_label: "Align center")) do
-        align_center_icon
-      end +
-      render(Shadcn::ToggleComponent.new(variant: :outline, aria_label: "Align right")) do
-        align_right_icon
-      end
+    render(Shadcn::ToggleComponent.new(variant: :outline, aria_label: "Align left", pressed: true)) do
+      align_left_icon
     end
   end
 
   # @label With Labels
   # Toggles with text labels
   def with_labels
-    content_tag(:div, class: "flex items-center gap-2") do
-      render(Shadcn::ToggleComponent.new(variant: :outline, aria_label: "Toggle bold")) do
-        content_tag(:div, class: "flex items-center gap-2") do
-          bold_icon +
-          content_tag(:span, "Bold", class: "text-sm")
-        end
-      end +
-      render(Shadcn::ToggleComponent.new(variant: :outline, aria_label: "Toggle italic")) do
-        content_tag(:div, class: "flex items-center gap-2") do
-          italic_icon +
-          content_tag(:span, "Italic", class: "text-sm")
-        end
-      end +
-      render(Shadcn::ToggleComponent.new(variant: :outline, aria_label: "Toggle underline")) do
-        content_tag(:div, class: "flex items-center gap-2") do
-          underline_icon +
-          content_tag(:span, "Underline", class: "text-sm")
-        end
+    render(Shadcn::ToggleComponent.new(variant: :outline, aria_label: "Toggle bold")) do
+      content_tag(:div, class: "flex items-center gap-2") do
+        bold_icon + content_tag(:span, "Bold", class: "text-sm")
       end
     end
   end
@@ -146,16 +112,8 @@ class ToggleComponentPreview < ViewComponent::Preview
   # @label Disabled State
   # Multiple toggles in disabled state
   def disabled_state
-    content_tag(:div, class: "flex items-center gap-2") do
-      render(Shadcn::ToggleComponent.new(aria_label: "Toggle bold", disabled: true)) do
-        bold_icon
-      end +
-      render(Shadcn::ToggleComponent.new(aria_label: "Toggle italic", disabled: true, pressed: true)) do
-        italic_icon
-      end +
-      render(Shadcn::ToggleComponent.new(variant: :outline, aria_label: "Toggle underline", disabled: true)) do
-        underline_icon
-      end
+    render(Shadcn::ToggleComponent.new(aria_label: "Toggle bold", disabled: true)) do
+      bold_icon
     end
   end
 

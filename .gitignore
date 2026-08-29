@@ -6,6 +6,12 @@
 /pkg/
 /spec/reports/
 /tmp/
+/node_modules/
+/vendor/bundle/
+/test/dummy/log/
+/test/dummy/tmp/
+/test/tmp/
+/.tsbuild/
 /.playwright-mcp/
 /.claude/
 /test/dummy/**/*/builds

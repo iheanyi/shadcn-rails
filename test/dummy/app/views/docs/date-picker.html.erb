@@ -22,9 +22,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::DatePickerComponent.new %>
-  <% end %>
+  <%= showcase("date-picker", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -36,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("date-picker/default") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -50,7 +48,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::DatePickerComponent.new(selected: Date.today) %>
       <% end %>
-      <%= erb_example("date-picker/selected") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Form Integration -->
@@ -67,7 +65,7 @@
           ) %>
         </div>
       <% end %>
-      <%= erb_example("date-picker/form") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Date Formats -->
@@ -90,7 +88,7 @@
           </div>
         </div>
       <% end %>
-      <%= erb_example("date-picker/formats") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Date Constraints -->
@@ -104,7 +102,7 @@
           placeholder: "Select date (next 30 days)"
         ) %>
       <% end %>
-      <%= erb_example("date-picker/constraints") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Disabled State -->

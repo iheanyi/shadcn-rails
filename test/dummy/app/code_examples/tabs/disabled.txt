@@ -1,1 +1,0 @@
-<% list.with_trigger(value: "disabled", disabled: true) { "Disabled" } %>

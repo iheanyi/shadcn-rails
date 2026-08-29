@@ -13,94 +13,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::MenubarComponent.new do |menubar| %>
-      <% menubar.with_menu do |menu| %>
-        <% menu.with_trigger { "File" } %>
-        <% menu.with_menu do |content| %>
-          <% content.with_item(href: "#") do |item| %>
-            New Tab
-            <% item.with_shortcut { "⌘T" } %>
-          <% end %>
-          <% content.with_item(href: "#") do |item| %>
-            New Window
-            <% item.with_shortcut { "⌘N" } %>
-          <% end %>
-          <% content.with_item(href: "#", disabled: true) do |item| %>
-            New Incognito Window
-          <% end %>
-          <% content.with_separator %>
-          <% content.with_item(href: "#") do |item| %>
-            Share
-          <% end %>
-          <% content.with_separator %>
-          <% content.with_item(href: "#") do |item| %>
-            Print
-            <% item.with_shortcut { "⌘P" } %>
-          <% end %>
-        <% end %>
-      <% end %>
-      <% menubar.with_menu do |menu| %>
-        <% menu.with_trigger { "Edit" } %>
-        <% menu.with_menu do |content| %>
-          <% content.with_item(href: "#") do |item| %>
-            Undo
-            <% item.with_shortcut { "⌘Z" } %>
-          <% end %>
-          <% content.with_item(href: "#") do |item| %>
-            Redo
-            <% item.with_shortcut { "⇧⌘Z" } %>
-          <% end %>
-          <% content.with_separator %>
-          <% content.with_item(href: "#") do |item| %>
-            Cut
-            <% item.with_shortcut { "⌘X" } %>
-          <% end %>
-          <% content.with_item(href: "#") do |item| %>
-            Copy
-            <% item.with_shortcut { "⌘C" } %>
-          <% end %>
-          <% content.with_item(href: "#") do |item| %>
-            Paste
-            <% item.with_shortcut { "⌘V" } %>
-          <% end %>
-        <% end %>
-      <% end %>
-      <% menubar.with_menu do |menu| %>
-        <% menu.with_trigger { "View" } %>
-        <% menu.with_menu do |content| %>
-          <% content.with_checkbox_item(checked: true) { "Always Show Bookmarks Bar" } %>
-          <% content.with_checkbox_item(checked: false) { "Always Show Full URLs" } %>
-          <% content.with_separator %>
-          <% content.with_item(href: "#") do |item| %>
-            Reload
-            <% item.with_shortcut { "⌘R" } %>
-          <% end %>
-          <% content.with_item(href: "#", disabled: true) do |item| %>
-            Force Reload
-            <% item.with_shortcut { "⇧⌘R" } %>
-          <% end %>
-          <% content.with_separator %>
-          <% content.with_item(href: "#") { "Toggle Fullscreen" } %>
-          <% content.with_item(href: "#") { "Hide Sidebar" } %>
-        <% end %>
-      <% end %>
-      <% menubar.with_menu do |menu| %>
-        <% menu.with_trigger { "Profiles" } %>
-        <% menu.with_menu do |content| %>
-          <% content.with_radio_group(value: "benoit") do |group| %>
-            <% group.with_item(value: "andy") { "Andy" } %>
-            <% group.with_item(value: "benoit", checked: true) { "Benoit" } %>
-            <% group.with_item(value: "luis") { "Luis" } %>
-          <% end %>
-          <% content.with_separator %>
-          <% content.with_item(href: "#") { "Edit..." } %>
-          <% content.with_separator %>
-          <% content.with_item(href: "#") { "Add Profile..." } %>
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
+  <%= showcase("menubar", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -111,7 +24,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("menubar/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -141,7 +54,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("menubar/basic") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Shortcuts -->
@@ -170,7 +83,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("menubar/with_shortcuts") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Checkboxes -->
@@ -192,7 +105,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("menubar/with_checkboxes") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Radio Group -->
@@ -217,7 +130,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("menubar/with_radio_group") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Disabled Items -->
@@ -239,7 +152,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("menubar/disabled") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
   </div>
 

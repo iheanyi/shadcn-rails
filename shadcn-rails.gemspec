@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
       (f == gemspec) ||
         f.start_with?(*%w[
           test/ spec/ features/ .git .github Gemfile
-          __tests__/ bin/ dist/ docs/ node_modules/
+          __tests__/ bin/ docs/ node_modules/
         ]) ||
         f.end_with?(*%w[
           .config.js .config.cjs .setup.js

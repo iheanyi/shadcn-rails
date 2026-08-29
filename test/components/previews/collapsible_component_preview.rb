@@ -76,25 +76,13 @@ class CollapsibleComponentPreview < ViewComponent::Preview
   # @label Multiple Items
   # Multiple collapsible sections
   def multiple_items
-    tag.div(class: "space-y-2 w-full max-w-md") do
-      safe_join([
-        render(Shadcn::CollapsibleComponent.new) do |collapsible|
-          collapsible.with_trigger do
-            section_trigger("@peduarte starred 3 repositories")
-          end
-          collapsible.with_body do
-            section_content(["@radix-ui/primitives", "@radix-ui/colors", "@stitches/react"])
-          end
-        end,
-        render(Shadcn::CollapsibleComponent.new(open: true)) do |collapsible|
-          collapsible.with_trigger do
-            section_trigger("@shadcn followed 5 users")
-          end
-          collapsible.with_body do
-            section_content(["@vercel", "@nextjs", "@tailwindcss", "@radix-ui", "@remix-run"])
-          end
-        end
-      ])
+    render(Shadcn::CollapsibleComponent.new(open: true, class_name: "w-full max-w-md")) do |collapsible|
+      collapsible.with_trigger do
+        section_trigger("@shadcn followed 5 users")
+      end
+      collapsible.with_body do
+        section_content(["@vercel", "@nextjs", "@tailwindcss", "@radix-ui", "@remix-run"])
+      end
     end
   end
 
@@ -150,4 +138,5 @@ class CollapsibleComponentPreview < ViewComponent::Preview
       end
     end
   end
+
 end

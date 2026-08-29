@@ -23,13 +23,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::BreadcrumbComponent.new do |breadcrumb| %>
-      <% breadcrumb.with_item(href: "/") { "Home" } %>
-      <% breadcrumb.with_item(href: "/components") { "Components" } %>
-      <% breadcrumb.with_item(current: true) { "Breadcrumb" } %>
-    <% end %>
-  <% end %>
+  <%= showcase("breadcrumb", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -45,7 +39,7 @@
       Use the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">with_item</code> method to add breadcrumb items.
       Set <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">current: true</code> on the last item to mark it as the current page.
     </p>
-    <%= erb_example("breadcrumb/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -63,7 +57,7 @@
           <% breadcrumb.with_item(href: "/docs/components") { "Components" } %>
         <% end %>
       <% end %>
-      <%= erb_example("breadcrumb/basic") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Current Page -->
@@ -80,7 +74,7 @@
           <% breadcrumb.with_item(current: true) { "Laptop" } %>
         <% end %>
       <% end %>
-      <%= erb_example("breadcrumb/current_page") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Custom Styling -->
@@ -96,7 +90,7 @@
           <% breadcrumb.with_item(current: true) { "Breadcrumb" } %>
         <% end %>
       <% end %>
-      <%= erb_example("breadcrumb/custom_class") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Separator Note -->

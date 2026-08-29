@@ -1,1 +1,0 @@
-<%= render Shadcn::InputComponent.new(type: "email", placeholder: "Email") %>

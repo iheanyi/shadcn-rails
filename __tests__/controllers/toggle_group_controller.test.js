@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import ToggleGroupController from "../../app/assets/javascripts/shadcn/controllers/toggle_group_controller.js"
+import ToggleGroupController from "../../app/assets/javascripts/shadcn/controllers/toggle_group_controller.ts"
 import { setupController, cleanupController, click, wait, nextFrame, keydown, waitForEvent } from '../helpers/stimulus-test-helper.js'
 
 describe("ToggleGroupController", () => {

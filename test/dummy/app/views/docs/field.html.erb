@@ -22,15 +22,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <div class="max-w-sm">
-      <%= render Shadcn::FieldComponent.new do |field| %>
-        <% field.with_label { "Email" } %>
-        <% field.with_input(type: :email, placeholder: "you@example.com") %>
-        <% field.with_description { "We'll never share your email." } %>
-      <% end %>
-    </div>
-  <% end %>
+  <%= showcase("field", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -42,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("field/default") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -61,7 +53,7 @@
           <% end %>
         </div>
       <% end %>
-      <%= erb_example("field/with_description") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Error -->
@@ -76,7 +68,7 @@
           <% end %>
         </div>
       <% end %>
-      <%= erb_example("field/with_error") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Required Field -->
@@ -106,7 +98,7 @@
           <% end %>
         </div>
       <% end %>
-      <%= erb_example("field/with_textarea") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Form Example -->

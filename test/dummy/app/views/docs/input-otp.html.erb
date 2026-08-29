@@ -22,9 +22,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::InputOtpComponent.new(length: 6, name: "otp") %>
-  <% end %>
+  <%= showcase("input-otp", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -36,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("input_otp/default") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -56,7 +54,7 @@
           <% otp.with_group(slots: 3) %>
         <% end %>
       <% end %>
-      <%= erb_example("input_otp/with_separator") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- 4-Digit PIN -->
@@ -65,7 +63,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::InputOtpComponent.new(length: 4, name: "pin") %>
       <% end %>
-      <%= erb_example("input_otp/pin") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Numeric Only -->
@@ -75,7 +73,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::InputOtpComponent.new(length: 6, name: "otp_numeric", pattern: "^[0-9]*$") %>
       <% end %>
-      <%= erb_example("input_otp/numeric") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Disabled -->
@@ -84,7 +82,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::InputOtpComponent.new(length: 6, name: "otp_disabled", disabled: true) %>
       <% end %>
-      <%= erb_example("input_otp/disabled") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- In Form -->
@@ -103,7 +101,7 @@
           <%= render Shadcn::ButtonComponent.new(class_name: "w-full") { "Verify" } %>
         </div>
       <% end %>
-      <%= erb_example("input_otp/form_field") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
   </div>
 

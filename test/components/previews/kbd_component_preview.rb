@@ -12,7 +12,7 @@ class KbdComponentPreview < ViewComponent::Preview
   # @label Shortcut Combination
   # Display a keyboard shortcut combination
   def combination
-    render_with_template
+    render(Shadcn::KbdComponent.new) { "Ctrl + K" }
   end
 
   # @label Command Key
@@ -24,6 +24,6 @@ class KbdComponentPreview < ViewComponent::Preview
   # @label Full Shortcut
   # Common shortcut patterns
   def shortcuts
-    render_with_template
+    render(Shadcn::KbdComponent.new) { "Ctrl + Shift + P" }
   end
 end

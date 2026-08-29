@@ -22,14 +22,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <div class="max-w-sm">
-      <%= render Shadcn::InputGroupComponent.new do |group| %>
-        <% group.with_prefix { "https://" } %>
-        <% group.with_input(placeholder: "example.com") %>
-      <% end %>
-    </div>
-  <% end %>
+  <%= showcase("input-group", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -41,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("input_group/default") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -59,7 +52,7 @@
           <% end %>
         </div>
       <% end %>
-      <%= erb_example("input_group/with_suffix") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Both -->
@@ -74,7 +67,7 @@
           <% end %>
         </div>
       <% end %>
-      <%= erb_example("input_group/with_both") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Icon -->
@@ -93,7 +86,7 @@
           <% end %>
         </div>
       <% end %>
-      <%= erb_example("input_group/with_icon") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Currency Input -->

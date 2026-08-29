@@ -1,3 +1,0 @@
-<%= render Shadcn::ToastComponent.new(duration: 3000) do |toast| %>
-  <% toast.with_description { "This will close in 3 seconds." } %>
-<% end %>

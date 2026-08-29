@@ -22,9 +22,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::TextareaComponent.new(placeholder: "Type your message here.") %>
-  <% end %>
+  <%= showcase("textarea", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -36,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("textarea/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -60,7 +58,7 @@
           <%= render Shadcn::TextareaComponent.new(id: "message-demo", placeholder: "Type your message here.") %>
         </div>
       <% end %>
-      <%= erb_example("textarea/with_label") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Text -->
@@ -93,7 +91,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::TextareaComponent.new(disabled: true, placeholder: "Disabled textarea") %>
       <% end %>
-      <%= erb_example("textarea/disabled") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Button -->

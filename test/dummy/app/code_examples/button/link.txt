@@ -1,3 +1,0 @@
-<%= render Shadcn::ButtonComponent.new(variant: :link) do %>
-  Link
-<% end %>

@@ -22,9 +22,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::SpinnerComponent.new %>
-  <% end %>
+  <%= showcase("spinner", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">

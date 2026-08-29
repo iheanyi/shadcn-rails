@@ -24,15 +24,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <div class="flex justify-center">
-      <%= render Shadcn::RadioGroupComponent.new(name: "preview", value: "comfortable") do |group| %>
-        <% group.with_item(value: "default", label: "Default") %>
-        <% group.with_item(value: "comfortable", label: "Comfortable") %>
-        <% group.with_item(value: "compact", label: "Compact") %>
-      <% end %>
-    </div>
-  <% end %>
+  <%= showcase("radio-group", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -47,7 +39,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("radio_group/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -73,7 +65,7 @@
           <% end %>
         </div>
       <% end %>
-      <%= erb_example("radio_group/horizontal") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Description -->
@@ -91,7 +83,7 @@
           </div>
         </div>
       <% end %>
-      <%= erb_example("radio_group/with_description") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Disabled State -->
@@ -106,7 +98,7 @@
           <% end %>
         </div>
       <% end %>
-      <%= erb_example("radio_group/disabled") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Form Integration -->
@@ -115,7 +107,7 @@
       <p class="text-sm text-muted-foreground">
         The radio group works seamlessly with Rails forms. The <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">name</code> attribute determines the form parameter name.
       </p>
-      <%= erb_example("radio_group/form") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
   </div>
 

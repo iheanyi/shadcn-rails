@@ -22,16 +22,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <div class="max-w-sm">
-      <%= render Shadcn::NativeSelectComponent.new(name: "country") do |select| %>
-        <% select.with_option(value: "", disabled: true, selected: true) { "Select a country" } %>
-        <% select.with_option(value: "us") { "United States" } %>
-        <% select.with_option(value: "uk") { "United Kingdom" } %>
-        <% select.with_option(value: "ca") { "Canada" } %>
-      <% end %>
-    </div>
-  <% end %>
+  <%= showcase("native-select", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -43,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("native_select/default") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -67,7 +58,7 @@
           <% end %>
         </div>
       <% end %>
-      <%= erb_example("native_select/optgroups") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Disabled -->
@@ -81,7 +72,7 @@
           <% end %>
         </div>
       <% end %>
-      <%= erb_example("native_select/disabled") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Required -->

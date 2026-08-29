@@ -1,0 +1,80 @@
+# frozen_string_literal: true
+
+require "test_helper"
+
+Dir[Rails.root.join("../../test/components/previews/**/*_preview.rb")].sort.each { |file| require file }
+
+class DocsParityTest < ViewComponent::TestCase
+  def test_each_registry_component_has_docs_controller_entry_docs_page_preview_and_controller_tests
+    Shadcn::Rails::Registry.keys.each do |key|
+      slug = key.tr("_", "-")
+      unit = Shadcn::Rails::Registry.fetch(key)
+      docs_page = Rails.root.join("app/views/docs/#{slug}.html.erb")
+      preview_class = preview_class_for(key)
+
+      assert DocsController::COMPONENTS.key?(slug), "Expected DocsController::COMPONENTS to include #{slug}"
+      assert File.exist?(docs_page), "Expected docs page for #{slug}"
+      assert_includes File.read(docs_page), "showcase(\"#{slug}\"", "Expected docs page for #{slug} to render showcase(\"#{slug}\")"
+      assert preview_class.present?, "Expected preview class #{preview_class_name_for(key)}"
+      assert_includes preview_class.public_instance_methods(false), :default, "Expected #{preview_class.name} to define #default"
+
+      unit.controllers.each do |controller_path|
+        test_name = "#{File.basename(controller_path, ".js")}.test.js"
+        assert File.exist?(Rails.root.join("../../__tests__/controllers/#{test_name}")),
+          "Expected Jest smoke or behavior test for #{controller_path}"
+      end
+    end
+  end
+
+  def test_docs_controller_entries_match_registry_keys
+    registry_slugs = Shadcn::Rails::Registry.keys.map { |key| key.tr("_", "-") }.sort
+    docs_slugs = DocsController::COMPONENTS.keys.sort
+
+    assert_equal registry_slugs, docs_slugs
+  end
+
+  def test_all_preview_examples_render
+    ViewComponent::Preview.all.each do |preview_class|
+      preview_examples_for(preview_class).each do |example|
+        content = render_preview_example(preview_class, example)
+
+        assert content.present?, "Expected #{preview_class.name}##{example} to render content"
+      rescue StandardError => error
+        flunk "Expected #{preview_class.name}##{example} to render, got #{error.class}: #{error.message}\n#{error.backtrace&.first(5)&.join("\n")}"
+      end
+    end
+  end
+
+  private
+
+  def preview_class_for(key)
+    preview_class_name_for(key).safe_constantize
+  end
+
+  def preview_class_name_for(key)
+    "#{key.camelize}ComponentPreview"
+  end
+
+  def preview_examples_for(preview_class)
+    preview_class.public_instance_methods(false).filter do |method_name|
+      preview_method = preview_class.instance_method(method_name)
+      preview_method.parameters.none? { |type, _name| type == :req || type == :keyreq }
+    end.sort
+  end
+
+  def render_preview_example(preview_class, example)
+    preview_result = preview_class.new.public_send(example)
+    return preview_result if preview_result.is_a?(String)
+
+    if preview_result.is_a?(Hash) && preview_result[:component]
+      component = preview_result[:component]
+      args = preview_result.fetch(:args, {})
+      block = preview_result[:block]
+      render_inline(component, **args, &block)
+      return rendered_content
+    end
+
+    render_inline(preview_result)
+    rendered_content
+  end
+end

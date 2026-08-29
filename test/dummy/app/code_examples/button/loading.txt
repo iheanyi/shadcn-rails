@@ -1,3 +1,0 @@
-<%= render Shadcn::ButtonComponent.new(loading: true, disabled: true) do %>
-  Please wait
-<% end %>

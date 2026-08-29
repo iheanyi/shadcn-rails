@@ -1,1 +1,0 @@
-<%= render Shadcn::InputComponent.new(disabled: true, placeholder: "Disabled") %>

@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import CheckboxController from "../../app/assets/javascripts/shadcn/controllers/checkbox_controller.js"
+import CheckboxController from "../../app/assets/javascripts/shadcn/controllers/checkbox_controller.ts"
 import { setupController, cleanupController, click, nextFrame, keydown } from '../helpers/stimulus-test-helper.js'
 
 describe("CheckboxController", () => {

@@ -1,5 +1,0 @@
-<%= render Shadcn::AvatarComponent.new(
-  src: "https://github.com/shadcn.png",
-  alt: "Shadcn",
-  fallback: "CN"
-) %>

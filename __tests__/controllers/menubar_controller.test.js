@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import MenubarController from "../../app/assets/javascripts/shadcn/controllers/menubar_controller.js"
+import MenubarController from "../../app/assets/javascripts/shadcn/controllers/menubar_controller.ts"
 import { setupController, cleanupController, click, nextFrame, wait } from '../helpers/stimulus-test-helper.js'
 
 describe("MenubarController", () => {

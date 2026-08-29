@@ -1,5 +1,0 @@
-<%= render Shadcn::DatePickerComponent.new(
-  min_date: Date.today,
-  max_date: Date.today + 30.days,
-  placeholder: "Select date (next 30 days)"
-) %>

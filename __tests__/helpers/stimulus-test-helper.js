@@ -5,18 +5,25 @@ import { Application } from "@hotwired/stimulus"
  * Creates a DOM element with the controller connected
  */
 export function setupController(Controller, html, controllerName = 'test') {
+  document.body.innerHTML = html
+
   const application = Application.start()
   application.register(controllerName, Controller)
 
-  document.body.innerHTML = html
-
   // Wait for Stimulus to connect the controller
   return new Promise((resolve) => {
-    requestAnimationFrame(() => {
+    const startedAt = Date.now()
+    const findController = () => {
       const element = document.querySelector(`[data-controller="${controllerName}"]`)
       const controller = application.getControllerForElementAndIdentifier(element, controllerName)
-      resolve({ application, element, controller })
-    })
+      if (controller || Date.now() - startedAt > 100) {
+        resolve({ application, element, controller })
+      } else {
+        requestAnimationFrame(findController)
+      }
+    }
+
+    requestAnimationFrame(findController)
   })
 }
 
@@ -52,7 +59,9 @@ export function wait(ms) {
  * Wait for an animation frame
  */
 export function nextFrame() {
-  return new Promise(resolve => requestAnimationFrame(resolve))
+  return new Promise(resolve => {
+    requestAnimationFrame(() => setTimeout(resolve, 0))
+  })
 }
 
 /**

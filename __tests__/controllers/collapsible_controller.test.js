@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import CollapsibleController from "../../app/assets/javascripts/shadcn/controllers/collapsible_controller.js"
+import CollapsibleController from "../../app/assets/javascripts/shadcn/controllers/collapsible_controller.ts"
 import { setupController, cleanupController, click, nextFrame, wait } from '../helpers/stimulus-test-helper.js'
 
 describe("CollapsibleController", () => {

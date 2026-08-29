@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "rootDir": "app/assets/javascripts/shadcn",
+    "outDir": ".tsbuild",
+    "declarationDir": "dist",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true
+  },
+  "include": [
+    "app/assets/javascripts/shadcn/**/*.ts"
+  ]
+}

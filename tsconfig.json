@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "skipLibCheck": false,
+    "isolatedModules": true,
+    "useDefineForClassFields": false,
+    "paths": {
+      "shadcn-rails-stimulus": ["./app/assets/javascripts/shadcn/index.ts"],
+      "shadcn-rails-stimulus/controllers": ["./app/assets/javascripts/shadcn/controllers/index.ts"],
+      "shadcn-rails-stimulus/controllers/*": ["./app/assets/javascripts/shadcn/controllers/*.ts"]
+    },
+    "noEmit": true
+  },
+  "include": [
+    "app/assets/javascripts/shadcn/**/*.ts",
+    "test/types/**/*.ts"
+  ]
+}

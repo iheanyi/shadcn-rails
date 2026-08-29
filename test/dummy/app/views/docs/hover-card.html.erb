@@ -24,31 +24,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::HoverCardComponent.new do |card| %>
-      <% card.with_trigger do %>
-        <a href="#" class="underline">@nextjs</a>
-      <% end %>
-      <% card.with_card_content do %>
-        <div class="flex justify-between space-x-4">
-          <%= render Shadcn::AvatarComponent.new do |avatar| %>
-            <% avatar.with_image(src: "https://github.com/vercel.png", alt: "@nextjs") %>
-            <% avatar.with_fallback { "VR" } %>
-          <% end %>
-          <div class="space-y-1">
-            <h4 class="text-sm font-semibold">@nextjs</h4>
-            <p class="text-sm">The React Framework - created and maintained by @vercel.</p>
-            <div class="flex items-center pt-2">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 opacity-70" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
-              </svg>
-              <span class="text-xs text-muted-foreground">Joined December 2021</span>
-            </div>
-          </div>
-        </div>
-      <% end %>
-    <% end %>
-  <% end %>
+  <%= showcase("hover-card", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -60,7 +36,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("hover_card/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -81,7 +57,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("hover_card/basic") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- User Profile Preview -->
@@ -113,7 +89,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("hover_card/user_profile") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Link Preview -->
@@ -141,7 +117,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("hover_card/link_preview") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Custom Delays -->
@@ -160,7 +136,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("hover_card/custom_delay") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Positioning -->
@@ -208,7 +184,7 @@
           <% end %>
         </div>
       <% end %>
-      <%= erb_example("hover_card/positioning") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
   </div>
 

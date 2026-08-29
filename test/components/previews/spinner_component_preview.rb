@@ -37,6 +37,6 @@ class SpinnerComponentPreview < ViewComponent::Preview
   # @label With Button
   # Spinner inside a loading button
   def with_button
-    render_with_template
+    render(Shadcn::SpinnerComponent.new(size: :sm))
   end
 end

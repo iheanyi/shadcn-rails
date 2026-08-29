@@ -23,32 +23,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::DialogComponent.new do |dialog| %>
-      <% dialog.with_trigger do %>
-        <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Open Dialog<% end %>
-      <% end %>
-      <% dialog.with_body do |content| %>
-        <% content.with_header do |header| %>
-          <% header.with_title { "Edit Profile" } %>
-          <% header.with_description { "Make changes to your profile here. Click save when you're done." } %>
-        <% end %>
-        <div class="grid gap-4 py-4">
-          <div class="grid grid-cols-4 items-center gap-4">
-            <%= render Shadcn::LabelComponent.new(for: "name", class_name: "text-right") { "Name" } %>
-            <%= render Shadcn::InputComponent.new(id: "name", value: "John Doe", class_name: "col-span-3") %>
-          </div>
-          <div class="grid grid-cols-4 items-center gap-4">
-            <%= render Shadcn::LabelComponent.new(for: "username", class_name: "text-right") { "Username" } %>
-            <%= render Shadcn::InputComponent.new(id: "username", value: "@johndoe", class_name: "col-span-3") %>
-          </div>
-        </div>
-        <% content.with_footer do %>
-          <%= render Shadcn::ButtonComponent.new(type: "submit") { "Save changes" } %>
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
+  <%= showcase("dialog", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -60,7 +35,10 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("dialog/usage") %>
+    <p class="leading-7">
+      Dialog examples are defined once in <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">DialogComponentPreview</code>.
+      The showcase helper renders the same preview used by Lookbook and displays the preview method source.
+    </p>
   </div>
 
   <!-- Examples -->
@@ -70,66 +48,22 @@
     <!-- Basic Dialog -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Basic Dialog</h3>
-      <%= render "docs/demo_card" do %>
-        <%= render Shadcn::DialogComponent.new do |dialog| %>
-          <% dialog.with_trigger do %>
-            <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Basic Dialog<% end %>
-          <% end %>
-          <% dialog.with_body do |content| %>
-            <% content.with_header do |header| %>
-              <% header.with_title { "Are you sure?" } %>
-              <% header.with_description { "This action cannot be undone." } %>
-            <% end %>
-            <% content.with_footer do %>
-              <div class="flex gap-2 justify-end">
-                <%= render Shadcn::ButtonComponent.new(variant: :outline, data: { action: "click->shadcn--dialog#close" }) { "Cancel" } %>
-                <%= render Shadcn::ButtonComponent.new(variant: :destructive) { "Delete" } %>
-              </div>
-            <% end %>
-          <% end %>
-        <% end %>
-      <% end %>
-      <%= erb_example("dialog/basic") %>
+      <%= showcase("dialog", :default) %>
     </div>
 
     <!-- Custom Close Button -->
     <div class="space-y-4">
-      <h3 class="text-lg font-semibold">Custom Close Button</h3>
+      <h3 class="text-lg font-semibold">Alert Dialog Style</h3>
       <p class="text-sm text-muted-foreground">
-        Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">data-action="click->shadcn--dialog#close"</code> on any element to close the dialog.
+        Dialog examples can be specialized in preview methods and reused here without copying markup into the docs page.
       </p>
-      <%= erb_example("dialog/close_button") %>
+      <%= showcase("dialog", :alert) %>
     </div>
 
     <!-- With Form -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">With Form</h3>
-      <%= render "docs/demo_card" do %>
-        <%= render Shadcn::DialogComponent.new do |dialog| %>
-          <% dialog.with_trigger do %>
-            <%= render Shadcn::ButtonComponent.new do %>Create Account<% end %>
-          <% end %>
-          <% dialog.with_body do |content| %>
-            <% content.with_header do |header| %>
-              <% header.with_title { "Create Account" } %>
-              <% header.with_description { "Enter your details to create a new account." } %>
-            <% end %>
-            <div class="grid gap-4 py-4">
-              <div class="space-y-2">
-                <%= render Shadcn::LabelComponent.new(for: "email") { "Email" } %>
-                <%= render Shadcn::InputComponent.new(id: "email", type: "email", placeholder: "email@example.com") %>
-              </div>
-              <div class="space-y-2">
-                <%= render Shadcn::LabelComponent.new(for: "password") { "Password" } %>
-                <%= render Shadcn::InputComponent.new(id: "password", type: "password") %>
-              </div>
-            </div>
-            <% content.with_footer do %>
-              <%= render Shadcn::ButtonComponent.new(type: "submit", class_name: "w-full") { "Create Account" } %>
-            <% end %>
-          <% end %>
-        <% end %>
-      <% end %>
+      <%= showcase("dialog", :with_form) %>
     </div>
   </div>
 

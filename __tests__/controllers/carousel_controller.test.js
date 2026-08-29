@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import CarouselController from "../../app/assets/javascripts/shadcn/controllers/carousel_controller.js"
+import CarouselController from "../../app/assets/javascripts/shadcn/controllers/carousel_controller.ts"
 import { setupController, cleanupController, click, wait, nextFrame, keydown, waitForEvent } from '../helpers/stimulus-test-helper.js'
 
 describe("CarouselController", () => {

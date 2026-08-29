@@ -1,1 +1,0 @@
-<%= render Shadcn::TextareaComponent.new(disabled: true, placeholder: "Disabled textarea") %>

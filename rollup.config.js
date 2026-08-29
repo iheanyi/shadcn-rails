@@ -1,24 +1,33 @@
 import resolve from "@rollup/plugin-node-resolve"
 
-const input = "app/assets/javascripts/shadcn/index.js"
-
-export default [
-  // ESM build
+const builds = [
   {
-    input,
+    input: ".tsbuild/index.js",
+    esm: "dist/index.esm.js",
+    cjs: "dist/index.js"
+  },
+  {
+    input: ".tsbuild/controllers/index.js",
+    esm: "dist/controllers/index.esm.js",
+    cjs: "dist/controllers/index.js"
+  }
+]
+
+export default builds.flatMap((build) => [
+  {
+    input: build.input,
     output: {
-      file: "dist/index.esm.js",
+      file: build.esm,
       format: "esm",
       sourcemap: true
     },
     external: ["@hotwired/stimulus"],
     plugins: [resolve()]
   },
-  // CommonJS build
   {
-    input,
+    input: build.input,
     output: {
-      file: "dist/index.js",
+      file: build.cjs,
       format: "cjs",
       sourcemap: true,
       exports: "named"
@@ -26,4 +35,4 @@ export default [
     external: ["@hotwired/stimulus"],
     plugins: [resolve()]
   }
-]
+])

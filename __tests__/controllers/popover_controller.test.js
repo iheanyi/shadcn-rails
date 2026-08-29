@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import PopoverController from "../../app/assets/javascripts/shadcn/controllers/popover_controller.js"
+import PopoverController from "../../app/assets/javascripts/shadcn/controllers/popover_controller.ts"
 import { setupController, cleanupController, click, wait, nextFrame, keydown, waitForEvent } from '../helpers/stimulus-test-helper.js'
 
 describe("PopoverController", () => {

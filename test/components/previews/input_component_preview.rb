@@ -24,7 +24,7 @@ class InputComponentPreview < ViewComponent::Preview
   # @label With Label
   # Input with associated label
   def with_label
-    render_with_template
+    render(Shadcn::InputComponent.new(type: "email", id: "email", placeholder: "email@example.com"))
   end
 
   # @label Disabled

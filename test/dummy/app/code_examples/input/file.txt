@@ -1,4 +1,0 @@
-<div class="grid w-full max-w-sm items-center gap-1.5">
-  <%= render Shadcn::LabelComponent.new(for: "picture") { "Picture" } %>
-  <%= render Shadcn::InputComponent.new(id: "picture", type: "file") %>
-</div>

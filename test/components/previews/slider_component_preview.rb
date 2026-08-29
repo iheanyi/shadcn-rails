@@ -75,6 +75,6 @@ class SliderComponentPreview < ViewComponent::Preview
   # @label With Label
   # Slider with label and value display
   def with_label
-    render_with_template
+    render(Shadcn::SliderComponent.new(name: "volume", value: 50, max: 100))
   end
 end

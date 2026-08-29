@@ -1,4 +1,0 @@
-<%= render Shadcn::PaginationComponent.new(
-  collection: @posts,
-  url_builder: ->(page) { posts_path(page: page) }
-) %>

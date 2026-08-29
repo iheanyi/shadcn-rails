@@ -1,1 +1,0 @@
-<%= render Shadcn::SliderComponent.new(value: 50, max: 100, class_name: "w-[60%]") %>

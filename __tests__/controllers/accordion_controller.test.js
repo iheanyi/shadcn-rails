@@ -1,5 +1,5 @@
 import { Application } from "@hotwired/stimulus"
-import AccordionController from "../../app/assets/javascripts/shadcn/controllers/accordion_controller.js"
+import AccordionController from "../../app/assets/javascripts/shadcn/controllers/accordion_controller.ts"
 import { click, wait, nextFrame, keydown, waitForEvent } from '../helpers/stimulus-test-helper.js'
 
 describe("AccordionController", () => {

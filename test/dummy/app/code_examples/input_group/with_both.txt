@@ -1,5 +1,0 @@
-<%= render Shadcn::InputGroupComponent.new do |group| %>
-  <% group.with_prefix { "$" } %>
-  <% group.with_input(type: :number, placeholder: "0.00") %>
-  <% group.with_suffix { "USD" } %>
-<% end %>

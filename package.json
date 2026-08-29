@@ -8,16 +8,18 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.esm.js",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.js"
     },
     "./controllers": {
+      "types": "./dist/controllers/index.d.ts",
       "import": "./dist/controllers/index.esm.js",
       "require": "./dist/controllers/index.js"
     },
     "./controllers/*": {
-      "import": "./app/assets/javascripts/shadcn/controllers/*.js"
+      "types": "./dist/controllers/*.d.ts",
+      "import": "./dist/controllers/*.js"
     },
     "./styles": "./app/assets/stylesheets/shadcn/index.css",
     "./styles/base": "./app/assets/stylesheets/shadcn/base.css",
@@ -32,9 +34,10 @@
     "app/assets/stylesheets/shadcn"
   ],
   "scripts": {
-    "build": "rollup -c",
+    "build": "rm -rf dist .tsbuild && tsc -p tsconfig.build.json && rollup -c && cp .tsbuild/controllers/*_controller.js dist/controllers/ && mkdir -p dist/utils && cp .tsbuild/utils/*.js dist/utils/",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
     "watch": "rollup -c -w",
-    "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
+    "test": "npm run typecheck && NODE_OPTIONS='--experimental-vm-modules' jest",
     "test:watch": "NODE_OPTIONS='--experimental-vm-modules' jest --watch",
     "test:coverage": "NODE_OPTIONS='--experimental-vm-modules' jest --coverage",
     "prepublishOnly": "npm run build"
@@ -67,6 +70,7 @@
   "devDependencies": {
     "@babel/core": "^7.28.5",
     "@babel/preset-env": "^7.28.5",
+    "@babel/preset-typescript": "^7.29.7",
     "@hotwired/stimulus": "^3.2.2",
     "@rollup/plugin-node-resolve": "^15.0.0",
     "@testing-library/dom": "^10.4.1",
@@ -74,6 +78,7 @@
     "babel-jest": "^30.2.0",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
-    "rollup": "^4.0.0"
+    "rollup": "^4.0.0",
+    "typescript": "^7.0.2"
   }
 }

@@ -22,22 +22,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <div class="w-full max-w-md space-y-4">
-      <%= render Shadcn::ItemComponent.new do |item| %>
-        <% item.with_media(variant: :icon) do %>
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
-        <% end %>
-        <% item.with_content do |content| %>
-          <% content.with_title { "Photo Library" } %>
-          <% content.with_description { "Manage your photos and albums" } %>
-        <% end %>
-        <% item.with_actions do %>
-          <%= render Shadcn::ButtonComponent.new(variant: :outline, size: :sm) { "Open" } %>
-        <% end %>
-      <% end %>
-    </div>
-  <% end %>
+  <%= showcase("item", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -49,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("item/default") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -73,7 +58,7 @@
           <% end %>
         </div>
       <% end %>
-      <%= erb_example("item/outline") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Muted Variant -->
@@ -93,7 +78,7 @@
           <% end %>
         </div>
       <% end %>
-      <%= erb_example("item/muted") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- As Link -->
@@ -113,7 +98,7 @@
           <% end %>
         </div>
       <% end %>
-      <%= erb_example("item/as_link") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Avatar -->
@@ -139,7 +124,7 @@
           <% end %>
         </div>
       <% end %>
-      <%= erb_example("item/with_avatar") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Item List -->

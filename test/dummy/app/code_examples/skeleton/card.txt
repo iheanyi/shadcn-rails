@@ -1,7 +1,0 @@
-<div class="flex flex-col space-y-3">
-  <%= render Shadcn::SkeletonComponent.new(class_name: "h-[125px] w-[250px] rounded-xl") %>
-  <div class="space-y-2">
-    <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-[250px]") %>
-    <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-[200px]") %>
-  </div>
-</div>

@@ -23,93 +23,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::NavigationMenuComponent.new do |nav| %>
-      <% nav.with_list do |list| %>
-        <% list.with_item do |item| %>
-          <% item.with_trigger { "Getting Started" } %>
-          <% item.with_dropdown do %>
-            <ul class="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-              <li class="row-span-3">
-                <a class="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md" href="#">
-                  <div class="mb-2 mt-4 text-lg font-medium">shadcn-rails</div>
-                  <p class="text-sm leading-tight text-muted-foreground">
-                    Beautiful UI components for Rails applications built with Tailwind CSS.
-                  </p>
-                </a>
-              </li>
-              <li>
-                <a class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground" href="#">
-                  <div class="text-sm font-medium leading-none">Introduction</div>
-                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                    Learn about the shadcn-rails component library.
-                  </p>
-                </a>
-              </li>
-              <li>
-                <a class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground" href="#">
-                  <div class="text-sm font-medium leading-none">Installation</div>
-                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                    How to install dependencies and set up your project.
-                  </p>
-                </a>
-              </li>
-              <li>
-                <a class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground" href="#">
-                  <div class="text-sm font-medium leading-none">Typography</div>
-                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                    Styles for headings, paragraphs, lists, and more.
-                  </p>
-                </a>
-              </li>
-            </ul>
-          <% end %>
-        <% end %>
-        <% list.with_item do |item| %>
-          <% item.with_trigger { "Components" } %>
-          <% item.with_dropdown do %>
-            <ul class="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-              <li>
-                <a class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground" href="#">
-                  <div class="text-sm font-medium leading-none">Alert Dialog</div>
-                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                    A modal dialog that interrupts the user with important content.
-                  </p>
-                </a>
-              </li>
-              <li>
-                <a class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground" href="#">
-                  <div class="text-sm font-medium leading-none">Hover Card</div>
-                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                    For sighted users to preview content available behind a link.
-                  </p>
-                </a>
-              </li>
-              <li>
-                <a class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground" href="#">
-                  <div class="text-sm font-medium leading-none">Progress</div>
-                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                    Displays an indicator showing the completion progress of a task.
-                  </p>
-                </a>
-              </li>
-              <li>
-                <a class="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground" href="#">
-                  <div class="text-sm font-medium leading-none">Tabs</div>
-                  <p class="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                    A set of layered sections of content.
-                  </p>
-                </a>
-              </li>
-            </ul>
-          <% end %>
-        <% end %>
-        <% list.with_item do |item| %>
-          <% item.with_link(href: "/docs") { "Documentation" } %>
-        <% end %>
-      <% end %>
-    <% end %>
-  <% end %>
+  <%= showcase("navigation-menu", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -121,7 +35,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("navigation-menu/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -149,7 +63,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("navigation-menu/simple_links") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Content -->
@@ -158,7 +72,7 @@
       <p class="text-sm text-muted-foreground">
         Add dropdown content with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">with_trigger</code> and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">with_dropdown</code>.
       </p>
-      <%= erb_example("navigation-menu/with_content") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
   </div>
 

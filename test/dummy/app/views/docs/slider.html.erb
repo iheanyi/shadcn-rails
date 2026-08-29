@@ -22,15 +22,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <div class="w-[60%] space-y-2">
-      <div class="flex justify-between">
-        <span class="text-sm font-medium">Preview</span>
-        <span id="preview-slider-value" class="text-sm text-muted-foreground">50%</span>
-      </div>
-      <%= render Shadcn::SliderComponent.new(value: 50, max: 100, data: { "output-target": "preview-slider-value", "output-format": "{value}%" }) %>
-    </div>
-  <% end %>
+  <%= showcase("slider", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -42,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("slider/usage") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -80,7 +72,7 @@
           ) %>
         </div>
       <% end %>
-      <%= erb_example("slider/synced_label") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Two-Way Input Binding -->
@@ -112,7 +104,7 @@
           </p>
         </div>
       <% end %>
-      <%= erb_example("slider/two_way_binding") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Custom Range -->
@@ -174,7 +166,7 @@
           </div>
         </div>
       <% end %>
-      <%= erb_example("slider/decimal") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Disabled -->

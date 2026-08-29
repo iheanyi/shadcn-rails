@@ -22,23 +22,7 @@
   </div>
 
   <!-- Preview -->
-  <%= render "docs/demo_card" do %>
-    <%= render Shadcn::EmptyComponent.new do |empty| %>
-      <% empty.with_header do |header| %>
-        <% header.with_media(variant: :icon) do %>
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>
-        <% end %>
-        <% header.with_title { "No Projects Yet" } %>
-        <% header.with_description { "You haven't created any projects yet. Get started by creating your first project." } %>
-      <% end %>
-      <% empty.with_content do %>
-        <div class="flex gap-2">
-          <%= render Shadcn::ButtonComponent.new { "Create Project" } %>
-          <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Import Project" } %>
-        </div>
-      <% end %>
-    <% end %>
-  <% end %>
+  <%= showcase("empty", :default) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -50,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= erb_example("empty/default") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>
 
   <!-- Examples -->
@@ -75,7 +59,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("empty/outline") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Background Gradient -->
@@ -99,7 +83,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("empty/notifications") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Avatar -->
@@ -125,7 +109,7 @@
           <% end %>
         <% end %>
       <% end %>
-      <%= erb_example("empty/with_avatar") %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- 404 Page -->

@@ -41,7 +41,7 @@ class ShadcnInstallGeneratorTest < Rails::Generators::TestCase
     assert File.exist?(File.join(shadcn_path, "tailwind-v4.css"))
 
     assert_file "config/importmap.rb" do |content|
-      assert_includes content, 'pin "shadcn", to: "shadcn/index.js"'
+      assert_includes content, 'pin "shadcn", to: "index.esm.js"'
       assert_includes content, 'pin "@floating-ui/dom"'
       assert_includes content, 'pin "stimulus-use"'
     end
