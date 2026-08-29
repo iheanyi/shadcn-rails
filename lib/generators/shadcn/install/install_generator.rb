@@ -30,6 +30,7 @@ module Shadcn
         return if options[:skip_tailwind]
 
         if destination_file_exists?(tailwind_v4_stylesheet)
+          ensure_tailwind_v4_shadcn_path
           inject_tailwind_v4_styles(tailwind_v4_stylesheet)
         elsif destination_file_exists?(tailwind_v3_stylesheet)
           inject_tailwind_v3_styles(tailwind_v3_stylesheet)
@@ -45,7 +46,7 @@ module Shadcn
         return unless destination_file_exists?("tailwind.config.js")
 
         inject_into_file "tailwind.config.js", after: "content: [" do
-          "\n    './app/components/**/*.{rb,html,erb}',\n    './app/views/**/*.{html,erb}',\n    '#{Shadcn::Rails::Registry.gem_path("app/components/shadcn")}/**/*.{rb,html,erb}',"
+          "\n    './app/components/**/*.{rb,html,erb}',\n    './app/views/**/*.{html,erb}',\n    `${require('child_process').execSync('bundle show shadcn-rails', { encoding: 'utf8' }).trim()}/app/components/shadcn/**/*.{rb,html,erb}`,"
         end
 
         say "Updated tailwind.config.js to include component paths", :green
@@ -84,9 +85,11 @@ module Shadcn
         say "       --primary: 221 83% 53%;     /* Custom primary color */"
         say "     }"
         say ""
-        say "  For Tailwind CSS v4, the installer imports the shadcn engine bundle:"
+        say "  For Tailwind CSS v4, the installer imports shadcn styles from:"
         say ""
-        say "     @import \"../builds/tailwind/shadcn_rails\";"
+        say "     @import \"./shadcn/base.css\";"
+        say "     @import \"./shadcn/components.css\";"
+        say "     @import \"./shadcn/tailwind-v4.css\";"
         say ""
         say "To add individual components to your app for customization:"
         say ""
@@ -117,10 +120,31 @@ module Shadcn
 
       def inject_tailwind_v4_styles(path)
         styles = <<~CSS
-          @import "../builds/tailwind/shadcn_rails";
+          @import "./shadcn/base.css";
+          @import "./shadcn/components.css";
+          @import "./shadcn/tailwind-v4.css";
         CSS
 
-        inject_css_imports(path, styles, marker: "shadcn_rails", after: /@import\s+["']tailwindcss["'];?\n/)
+        inject_css_imports(path, styles, marker: "./shadcn/tailwind-v4.css", after: /@import\s+["']tailwindcss["'];?\n/)
+      end
+
+      def ensure_tailwind_v4_shadcn_path
+        destination = File.expand_path("app/assets/tailwind/shadcn", destination_root)
+        source = Shadcn::Rails::Registry.gem_path("app/assets/stylesheets/shadcn")
+
+        if File.symlink?(destination) && File.realpath(destination) == File.realpath(source)
+          say "Skipped app/assets/tailwind/shadcn; shadcn styles are already linked", :yellow
+          return
+        end
+
+        if File.exist?(destination)
+          say "Skipped app/assets/tailwind/shadcn; path already exists", :yellow
+          return
+        end
+
+        FileUtils.mkdir_p(File.dirname(destination))
+        FileUtils.ln_s(source, destination)
+        say "Linked app/assets/tailwind/shadcn to shadcn-rails styles", :green
       end
 
       def inject_tailwind_v3_styles(path)
@@ -138,6 +162,7 @@ module Shadcn
         content = read_destination_file(path)
 
         if content.match?(/@import\s+["']tailwindcss["']/)
+          ensure_tailwind_v4_shadcn_path
           inject_tailwind_v4_styles(path)
         elsif sprockets_manifest?(content)
           append_unless_present(path, "shadcn/base") do

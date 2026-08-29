@@ -29,8 +29,16 @@ class ShadcnInstallGeneratorTest < Rails::Generators::TestCase
 
     assert_file "app/assets/tailwind/application.css" do |content|
       assert_includes content, '@import "tailwindcss";'
-      assert_includes content, '@import "../builds/tailwind/shadcn_rails";'
+      assert_includes content, '@import "./shadcn/base.css";'
+      assert_includes content, '@import "./shadcn/components.css";'
+      assert_includes content, '@import "./shadcn/tailwind-v4.css";'
+      refute_includes content, "../builds/tailwind/shadcn_rails"
     end
+
+    shadcn_path = File.join(destination_root, "app/assets/tailwind/shadcn")
+    assert File.symlink?(shadcn_path), "Expected app/assets/tailwind/shadcn to be a symlink"
+    assert_equal File.realpath(File.expand_path("../../../app/assets/stylesheets/shadcn", __dir__)), File.realpath(shadcn_path)
+    assert File.exist?(File.join(shadcn_path, "tailwind-v4.css"))
 
     assert_file "config/importmap.rb" do |content|
       assert_includes content, 'pin "shadcn", to: "shadcn/index.js"'
@@ -57,6 +65,26 @@ class ShadcnInstallGeneratorTest < Rails::Generators::TestCase
       assert_operator content.index('@import "shadcn/base";'), :<, content.index("@tailwind base;")
       assert_operator content.index('@import "shadcn/components";'), :<, content.index("@tailwind base;")
       refute_includes content, "shadcn/tailwind-v4"
+    end
+  end
+
+  def test_tailwind_v3_config_resolves_gem_component_path_at_build_time
+    write_file "tailwind.config.js", <<~JS
+      module.exports = {
+        content: [
+        ],
+        theme: {
+          extend: {},
+        },
+      }
+    JS
+
+    run_generator
+
+    assert_file "tailwind.config.js" do |content|
+      assert_includes content, "bundle show shadcn-rails"
+      assert_includes content, "/app/components/shadcn/**/*.{rb,html,erb}`"
+      refute_includes content, Shadcn::Rails::Registry.gem_path("app/components/shadcn")
     end
   end
 
