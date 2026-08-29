@@ -54,7 +54,6 @@ module Shadcn
       # @return [Class] Component class
       def component_for(name)
         name = name.to_sym
-        return configuration.component_aliases[name] if configuration.component_aliases.key?(name)
 
         # Validate name contains only lowercase letters and underscores (security hardening)
         unless name.to_s.match?(/\A[a-z_]+\z/)
@@ -72,66 +71,44 @@ module Shadcn
         Registry.keys.map(&:to_sym)
       end
 
-      # Generate CSS variables for the current theme
-      def css_variables(theme: :light)
-        vars = if theme == :dark
-          Configuration::DARK_THEME_VARIABLES[configuration.base_color.to_sym] || {}
-        else
-          configuration.base_variables
-        end
-
-        vars.map { |key, value| "--#{key.to_s.tr('_', '-')}: #{value};" }.join("\n  ")
-      end
-
       # Generate complete CSS for themes
       # Supports three dark mode strategies:
       # - :media - uses @media (prefers-color-scheme: dark) for automatic detection
       # - :class - uses .dark class selector (default for manual toggling)
       # - :both - includes both media query AND .dark class for maximum flexibility
       def theme_css
-        light_vars = css_variables(theme: :light)
-        dark_vars = css_variables(theme: :dark)
-        mode = configuration.dark_mode
+        css = configured_theme_css
+        root_block = apply_radius(extract_css_block(css, ":root"))
+        dark_block = extract_css_block(css, ".dark")
 
-        css = <<~CSS
-          :root {
-            #{light_vars}
-          }
-        CSS
+        [root_block, dark_mode_css(dark_block)].compact.join("\n\n")
+      end
 
-        case mode
-        when :media
-          css += <<~CSS
+      def define_component_aliases
+        define_component_alias(:Component, :BaseComponent)
 
-            @media (prefers-color-scheme: dark) {
-              :root {
-                #{dark_vars}
-              }
-            }
-          CSS
-        when :both
-          css += <<~CSS
-
-            @media (prefers-color-scheme: dark) {
-              :root {
-                #{dark_vars}
-              }
-            }
-
-            .dark {
-              #{dark_vars}
-            }
-          CSS
-        else # :class (default)
-          css += <<~CSS
-
-            .dark {
-              #{dark_vars}
-            }
-          CSS
+        Registry.each do |unit|
+          unit.ruby_files.each do |path|
+            component_name = File.basename(path, ".rb").camelize.to_sym
+            public_name = component_name.to_s.delete_suffix("Component").to_sym
+            define_component_alias(public_name, component_name)
+          end
         end
+      end
 
-        css
+      def resolve_component_alias(name)
+        define_component_alias(:Component, :BaseComponent) if name == :Component
+
+        component_name = :"#{name}Component"
+        define_component_alias(name, component_name)
+      end
+
+      def theme_path(theme = configuration.theme)
+        if theme == :neutral
+          File.expand_path("../../app/assets/stylesheets/shadcn/base.css", __dir__)
+        else
+          File.expand_path("../../app/assets/stylesheets/shadcn/themes/#{theme}.css", __dir__)
+        end
       end
 
       # Shorthand for the cn() class merger
@@ -169,7 +146,62 @@ module Shadcn
           end
         end
       end
+
+      def configured_theme_css
+        File.read(theme_path)
+      rescue Errno::ENOENT
+        raise Error, "Theme CSS not found for #{configuration.theme.inspect}"
+      end
+
+      def extract_css_block(css, selector)
+        pattern = /^#{Regexp.escape(selector)}\s*\{.*?^\}/m
+        css[pattern] || raise(Error, "Theme CSS for #{configuration.theme.inspect} is missing #{selector}")
+      end
+
+      def apply_radius(root_block)
+        radius = configuration.radius
+        return root_block if radius.blank?
+
+        if root_block.match?(/--radius:\s*[^;]+;/)
+          root_block.sub(/--radius:\s*[^;]+;/, "--radius: #{radius};")
+        else
+          root_block.sub(/\n\}\s*\z/, "\n  --radius: #{radius};\n}")
+        end
+      end
+
+      def dark_mode_css(dark_block)
+        case configuration.dark_mode
+        when :media
+          dark_media_block(dark_block)
+        when :both
+          [dark_media_block(dark_block), dark_block].join("\n\n")
+        else
+          dark_block
+        end
+      end
+
+      def dark_media_block(dark_block)
+        <<~CSS.strip
+          @media (prefers-color-scheme: dark) {
+          #{dark_block.sub(/^\.dark/, ":root").lines.map { |line| "  #{line}" }.join.chomp}
+          }
+        CSS
+      end
+
+      def define_component_alias(public_name, component_name)
+        return if Shadcn.const_defined?(public_name, false)
+        return unless Shadcn.const_defined?(component_name, false)
+
+        Shadcn.const_set(public_name, Shadcn.const_get(component_name, false))
+      end
     end
+  end
+
+  def self.const_missing(name)
+    component = Rails.resolve_component_alias(name)
+    return component if component
+
+    super
   end
 end
 

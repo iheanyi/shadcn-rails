@@ -2,9 +2,12 @@
 
 # shadcn-rails configuration
 Shadcn::Rails.configure do |config|
-  # Base color theme
+  # Color theme
   # Available themes: neutral, slate, stone, zinc, gray
-  config.base_color = "<%= options[:theme] %>"
+  config.theme = :<%= options[:theme] %>
+
+  # Border radius for generated theme CSS
+  config.radius = "0.5rem"
 
   # Dark mode strategy
   # Available strategies: :class, :media, :both
@@ -12,4 +15,7 @@ Shadcn::Rails.configure do |config|
   # - :media - Uses @media (prefers-color-scheme: dark) for system preference
   # - :both - Includes both for maximum flexibility
   config.dark_mode = :<%= options[:dark_mode] %>
+
+  # Tailwind class prefix, when your app configures one
+  config.tailwind_prefix = ""
 end

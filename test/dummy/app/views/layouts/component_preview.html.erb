@@ -8,8 +8,8 @@
   <%= csp_meta_tag rescue nil %>
   <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
   <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+  <%= shadcn_theme %>
   <style>
-    <%= Shadcn::Rails.theme_css %>
     <%= File.read(Shadcn::Rails::Registry.gem_path("app/assets/stylesheets/shadcn/components.css")) %>
 
     body {

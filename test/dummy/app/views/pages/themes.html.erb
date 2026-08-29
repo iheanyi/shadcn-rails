@@ -15,9 +15,18 @@
     <a href="?theme=zinc" class="px-4 py-2 rounded-md border hover:bg-accent <%= params[:theme] == 'zinc' ? 'bg-accent' : '' %>">Zinc</a>
   </div>
 
-  <% current_theme = (params[:theme] || 'neutral').to_sym %>
-  <% theme_vars = Shadcn::Rails::Configuration::THEME_VARIABLES[current_theme] || Shadcn::Rails::Configuration::THEME_VARIABLES[:neutral] %>
-  <% dark_theme_vars = Shadcn::Rails::Configuration::DARK_THEME_VARIABLES[current_theme] || Shadcn::Rails::Configuration::DARK_THEME_VARIABLES[:neutral] %>
+  <%
+    available_themes = Shadcn::Rails::Configuration::THEMES
+    requested_theme = (params[:theme] || "neutral").to_sym
+    current_theme = available_themes.include?(requested_theme) ? requested_theme : :neutral
+    read_theme_vars = lambda do |theme_name, selector|
+      css = File.read(Shadcn::Rails.theme_path(theme_name))
+      block = css[/^#{Regexp.escape(selector)}\s*\{.*?^\}/m] || ""
+      block.scan(/--([\w-]+):\s*([^;]+);/).to_h
+    end
+    theme_vars = read_theme_vars.call(current_theme, ":root")
+    dark_theme_vars = read_theme_vars.call(current_theme, ".dark")
+  %>
 
   <!-- Theme Info -->
   <div class="text-center">
@@ -30,7 +39,7 @@
     <!-- Light Mode -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold text-center">Light Mode</h3>
-      <div class="rounded-lg border overflow-hidden" style="<%= theme_vars.map { |k, v| "--#{k.to_s.tr('_', '-')}: #{v}" }.join('; ') %>; --radius: 0.5rem;">
+      <div class="rounded-lg border overflow-hidden" style="<%= theme_vars.map { |k, v| "--#{k}: #{v}" }.join('; ') %>; --radius: 0.5rem;">
         <div class="p-6 space-y-4" style="background: hsl(var(--background)); color: hsl(var(--foreground));">
           <!-- Sample UI -->
           <div class="rounded-lg border p-4 space-y-4" style="background: hsl(var(--card)); color: hsl(var(--card-foreground)); border-color: hsl(var(--border));">
@@ -57,7 +66,7 @@
     <!-- Dark Mode -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold text-center">Dark Mode</h3>
-      <div class="rounded-lg border overflow-hidden" style="<%= dark_theme_vars.map { |k, v| "--#{k.to_s.tr('_', '-')}: #{v}" }.join('; ') %>; --radius: 0.5rem;">
+      <div class="rounded-lg border overflow-hidden" style="<%= dark_theme_vars.map { |k, v| "--#{k}: #{v}" }.join('; ') %>; --radius: 0.5rem;">
         <div class="p-6 space-y-4" style="background: hsl(var(--background)); color: hsl(var(--foreground));">
           <!-- Sample UI -->
           <div class="rounded-lg border p-4 space-y-4" style="background: hsl(var(--card)); color: hsl(var(--card-foreground)); border-color: hsl(var(--border));">
@@ -102,9 +111,9 @@
             </thead>
             <tbody>
               <% theme_vars.each do |key, value| %>
-                <% next if key.to_s.start_with?('chart_') || key == :radius %>
+                <% next if key.start_with?("chart-") || key == "radius" %>
                 <tr class="border-t">
-                  <td class="px-4 py-2 font-mono text-xs">--<%= key.to_s.tr('_', '-') %></td>
+                  <td class="px-4 py-2 font-mono text-xs">--<%= key %></td>
                   <td class="px-4 py-2 font-mono text-xs"><%= value %></td>
                   <td class="px-4 py-2">
                     <div class="w-6 h-6 rounded border" style="background: hsl(<%= value %>);"></div>
@@ -130,9 +139,9 @@
             </thead>
             <tbody>
               <% dark_theme_vars.each do |key, value| %>
-                <% next if key.to_s.start_with?('chart_') %>
+                <% next if key.start_with?("chart-") %>
                 <tr class="border-t">
-                  <td class="px-4 py-2 font-mono text-xs">--<%= key.to_s.tr('_', '-') %></td>
+                  <td class="px-4 py-2 font-mono text-xs">--<%= key %></td>
                   <td class="px-4 py-2 font-mono text-xs"><%= value %></td>
                   <td class="px-4 py-2">
                     <div class="w-6 h-6 rounded border" style="background: hsl(<%= value %>);"></div>
@@ -150,12 +159,31 @@
   <div class="space-y-4 p-6 bg-muted rounded-lg">
     <h3 class="text-xl font-semibold">How to Use Themes</h3>
     <div class="space-y-4 text-sm">
-      <p>To change the theme in your Rails application, configure it in an initializer:</p>
+      <p>To change the theme in your Rails application, configure it in an initializer and render the theme helper in your layout head:</p>
       <pre class="bg-background p-4 rounded-md overflow-x-auto font-mono text-xs"><code># config/initializers/shadcn.rb
 Shadcn::Rails.configure do |config|
-  config.base_color = "<%= current_theme %>"  # Options: neutral, slate, stone, gray, zinc
-  config.dark_mode = :class  # Options: :class, :media, :selector
+  config.theme = :<%= current_theme %>          # Options: :neutral, :slate, :zinc, :stone, :gray
+  config.radius = "0.5rem"
+  config.dark_mode = :class     # Options: :class, :media, :both
+  config.tailwind_prefix = ""
 end</code></pre>
+
+      <pre class="bg-background p-4 rounded-md overflow-x-auto font-mono text-xs"><code>&lt;!-- app/views/layouts/application.html.erb --&gt;
+&lt;head&gt;
+  &lt;%= shadcn_theme %&gt;
+&lt;/head&gt;</code></pre>
+
+      <p>For one-off component styling, pass Rails-standard <code class="bg-background px-1 py-0.5 rounded">class:</code> values when rendering:</p>
+      <pre class="bg-background p-4 rounded-md overflow-x-auto font-mono text-xs"><code>&lt;%= render Shadcn::Button.new(class: "h-11") do %&gt;
+  Save changes
+&lt;% end %&gt;</code></pre>
+
+      <p>For brand colors in Tailwind CSS v4, override the design token in your stylesheet with <code class="bg-background px-1 py-0.5 rounded">@theme</code>:</p>
+      <pre class="bg-background p-4 rounded-md overflow-x-auto font-mono text-xs"><code>@theme {
+  --color-primary: oklch(0.55 0.22 260);
+}</code></pre>
+
+      <p><code class="bg-background px-1 py-0.5 rounded">config.base_color = "slate"</code> remains supported as a deprecated alias for <code class="bg-background px-1 py-0.5 rounded">config.theme = :slate</code>.</p>
 
       <p>For dark mode, add the <code class="bg-background px-1 py-0.5 rounded">dark</code> class to your <code class="bg-background px-1 py-0.5 rounded">&lt;html&gt;</code> element:</p>
       <pre class="bg-background p-4 rounded-md overflow-x-auto font-mono text-xs"><code>&lt;html class="dark"&gt;
@@ -168,13 +196,13 @@ end</code></pre>
   <div class="space-y-6">
     <h3 class="text-xl font-semibold text-center">All Themes Comparison</h3>
     <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-      <% %i[neutral slate stone gray zinc].each do |theme_name| %>
-        <% vars = Shadcn::Rails::Configuration::THEME_VARIABLES[theme_name] %>
+      <% available_themes.each do |theme_name| %>
+        <% vars = read_theme_vars.call(theme_name, ":root") %>
         <div class="rounded-lg border overflow-hidden">
           <div class="p-4 text-center border-b">
             <span class="font-semibold capitalize"><%= theme_name %></span>
           </div>
-          <div class="p-4 space-y-2" style="<%= vars.map { |k, v| "--#{k.to_s.tr('_', '-')}: #{v}" }.join('; ') %>; background: hsl(var(--background));">
+          <div class="p-4 space-y-2" style="<%= vars.map { |k, v| "--#{k}: #{v}" }.join('; ') %>; background: hsl(var(--background));">
             <div class="h-8 rounded" style="background: hsl(var(--primary));"></div>
             <div class="h-8 rounded" style="background: hsl(var(--secondary));"></div>
             <div class="h-8 rounded" style="background: hsl(var(--muted));"></div>

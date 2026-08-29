@@ -43,7 +43,7 @@ module Shadcn
     # @param default_classes [String] Default component classes
     # @return [String] Merged class string
     def merge_classes(default_classes)
-      cn(default_classes, class_name)
+      prefix_classes(cn(default_classes, class_name))
     end
 
     # Build data attributes hash.
@@ -145,9 +145,35 @@ module Shadcn
 
     # Add prefix to Tailwind classes if configured
     def prefix_classes(classes)
-      return classes if config.tailwind_prefix.blank?
+      return classes if classes.blank? || config.tailwind_prefix.blank?
 
-      classes.split.map { |c| "#{config.tailwind_prefix}#{c}" }.join(" ")
+      classes.split.map { |class_name| prefix_class_name(class_name) }.join(" ")
+    end
+
+    def prefix_class_name(class_name)
+      return class_name if class_name.start_with?("shadcn-")
+
+      variant_prefix, utility = split_variant_prefix(class_name)
+      important = utility.delete_prefix!("!") ? "!" : ""
+      negative = utility.delete_prefix!("-") ? "-" : ""
+      return class_name if utility.start_with?(config.tailwind_prefix)
+
+      "#{variant_prefix}#{important}#{negative}#{config.tailwind_prefix}#{utility}"
+    end
+
+    def split_variant_prefix(class_name)
+      bracket_depth = 0
+      split_at = nil
+
+      class_name.each_char.with_index do |char, index|
+        bracket_depth += 1 if char == "["
+        bracket_depth -= 1 if char == "]"
+        split_at = index if char == ":" && bracket_depth.zero?
+      end
+
+      return ["", class_name] unless split_at
+
+      [class_name[0..split_at], class_name[(split_at + 1)..]]
     end
 
     # Build HTML attributes string for use in templates

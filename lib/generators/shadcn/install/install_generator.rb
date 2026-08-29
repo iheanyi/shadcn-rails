@@ -26,6 +26,23 @@ module Shadcn
         template "initializer.rb.tt", "config/initializers/shadcn.rb"
       end
 
+      def install_theme_helper
+        layout = application_layout
+
+        unless layout
+          say "Could not find app/views/layouts/application.html.erb. Please add <%= shadcn_theme %> to your layout head.", :yellow
+          return
+        end
+
+        append_unless_present(layout, "shadcn_theme") do
+          inject_into_file layout, before: %r{\s*</head>} do
+            "    <%= shadcn_theme %>\n"
+          end
+
+          nil
+        end
+      end
+
       def add_stylesheet
         return if options[:skip_tailwind]
 
@@ -73,7 +90,7 @@ module Shadcn
         say "  2. Import the Stimulus controllers in your application"
         say "  3. Start using components in your views:"
         say ""
-        say "     <%= render Shadcn::ButtonComponent.new(variant: :default) do %>"
+        say "     <%= render Shadcn::Button.new(variant: :default, class: \"h-11\") do %>"
         say "       Click me"
         say "     <% end %>"
         say ""
@@ -116,6 +133,11 @@ module Shadcn
 
       def application_stylesheet
         "app/assets/stylesheets/application.css"
+      end
+
+      def application_layout
+        path = "app/views/layouts/application.html.erb"
+        path if destination_file_exists?(path)
       end
 
       def inject_tailwind_v4_styles(path)

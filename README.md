@@ -113,10 +113,10 @@ built-in components.
 
 ```erb
 <%# Button %>
-<%= render Shadcn::ButtonComponent.new(variant: :default) { "Click me" } %>
+<%= render Shadcn::Button.new(variant: :default, class: "h-11") { "Click me" } %>
 
 <%# Card %>
-<%= render Shadcn::CardComponent.new do |card| %>
+<%= render Shadcn::Card.new do |card| %>
   <% card.with_header do |header| %>
     <% header.with_title { "Welcome" } %>
   <% end %>
@@ -126,9 +126,9 @@ built-in components.
 <% end %>
 
 <%# Dialog %>
-<%= render Shadcn::DialogComponent.new do |dialog| %>
+<%= render Shadcn::Dialog.new do |dialog| %>
   <% dialog.with_trigger do %>
-    <%= render Shadcn::ButtonComponent.new { "Open" } %>
+    <%= render Shadcn::Button.new { "Open" } %>
   <% end %>
   <% dialog.with_body do |body| %>
     <% body.with_header do |header| %>
@@ -212,9 +212,29 @@ Configure base colors in your initializer:
 ```ruby
 # config/initializers/shadcn.rb
 Shadcn::Rails.configure do |config|
-  config.base_color = "slate"  # neutral, slate, stone, gray, zinc
+  config.theme = :slate        # :neutral, :slate, :zinc, :stone, :gray
+  config.radius = "0.5rem"
   config.dark_mode = :class    # :class, :media, :both
+  config.tailwind_prefix = ""
 end
+```
+
+`config.base_color = "slate"` remains supported as a deprecated alias for
+`config.theme = :slate`.
+
+The install generator adds the configured theme to your layout head:
+
+```erb
+<%= shadcn_theme %>
+```
+
+For brand-level Tailwind CSS v4 overrides, keep the gem tokens in CSS and layer
+your app's `@theme` values in your stylesheet:
+
+```css
+@theme {
+  --color-primary: oklch(0.55 0.22 260);
+}
 ```
 
 For Rails 8 with Tailwind CSS v4, import the shadcn styles linked by the
