@@ -106,6 +106,17 @@ class ShadcnInstallGeneratorTest < Rails::Generators::TestCase
     assert_includes content, "animation: fade-in 200ms cubic-bezier(0.16, 1, 0.3, 1), zoom-in-95 200ms cubic-bezier(0.16, 1, 0.3, 1);"
   end
 
+  def test_base_focus_utilities_do_not_force_hard_rings
+    base_file = File.expand_path("../../../app/assets/stylesheets/shadcn/base.css", __dir__)
+    content = File.read(base_file)
+
+    assert_includes content, ".outline-none"
+    assert_includes content, ".focus-visible\\:ring-0:focus-visible"
+    refute_includes content, ".focus-visible\\:ring-1:focus-visible"
+    refute_includes content, ".focus-visible\\:ring-2:focus-visible"
+    refute_includes content, ".focus-visible\\:ring-offset-2:focus-visible"
+  end
+
   private
 
   def write_file(path, content)

@@ -580,20 +580,17 @@ body {
   outline: none;
 }
 
-.focus-visible\:ring-1:focus-visible {
-  box-shadow: 0 0 0 1px hsl(var(--ring));
+.focus\:outline-none:focus {
+  outline: none;
 }
 
-.focus-visible\:ring-2:focus-visible {
-  box-shadow: 0 0 0 2px hsl(var(--ring));
+.outline-none {
+  outline: none;
 }
 
-.focus-visible\:ring-ring:focus-visible {
-  --tw-ring-color: hsl(var(--ring));
-}
-
-.focus-visible\:ring-offset-2:focus-visible {
-  box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring));
+.focus-visible\:ring-0:focus-visible,
+.focus\:ring-0:focus {
+  box-shadow: none;
 }
 
 /* ============================================

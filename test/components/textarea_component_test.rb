@@ -64,4 +64,16 @@ class TextareaComponentTest < ViewComponent::TestCase
 
     assert_selector "[data-testid='textarea']"
   end
+
+  def test_uses_soft_focus_ring_without_user_agent_outline
+    render_inline(Shadcn::TextareaComponent.new)
+
+    classes = page.find("textarea")[:class]
+    assert_includes classes, "outline-none"
+    assert_includes classes, "focus-visible:border-ring"
+    assert_includes classes, "focus-visible:ring-ring/50"
+    assert_includes classes, "focus-visible:ring-[3px]"
+    refute_includes classes, "focus-visible:ring-1"
+    refute_includes classes, "focus-visible:outline-none"
+  end
 end
