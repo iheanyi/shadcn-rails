@@ -70,4 +70,47 @@ class FormBuilderTest < ActionDispatch::IntegrationTest
     assert_select "[role='listbox']", 0
     assert_select "button[role='combobox']", 0
   end
+
+  test "form_for renders shadcn components with Rails field names and ids" do
+    get "/form_builder_test/form_for"
+
+    assert_response :success
+    assert_select "form[action='/form_builder_test'][method='post']"
+    assert_select "label[for='contact_email']", text: "Email"
+    assert_select "input[type='email'][name='contact[email]'][id='contact_email'][value='legacy@example.com']"
+    assert_select "input[type='hidden'][name='contact[subscribed]'][value='0']"
+    assert_select "input[type='checkbox'][name='contact[subscribed]'][id='contact_subscribed'][value='1']"
+    assert_select "select.legacy-status-select[name='contact[status]'][id='contact_status']"
+    assert_select "select option[value='lead'][selected]", text: "lead"
+    assert_select "button[type='submit'][name='commit'][value='Save']", text: "Save"
+  end
+
+  test "form_for renders nested fields_for names and ids" do
+    get "/form_builder_test/form_for"
+
+    assert_response :success
+    assert_select "label[for='contact_addresses_attributes_0_city']", text: "City"
+    assert_select "input[type='text'][name='contact[addresses_attributes][0][city]'][id='contact_addresses_attributes_0_city'][value='Enugu']"
+  end
+
+  test "form_for submitted params use vanilla Rails contact structure" do
+    post "/form_builder_test", params: {
+      contact: {
+        email: "legacy-submit@example.com",
+        subscribed: "0",
+        status: "archived",
+        addresses_attributes: {
+          "0" => { city: "Aba" }
+        }
+      }
+    }
+
+    assert_response :success
+    parsed = JSON.parse(response.body)
+
+    assert_equal "legacy-submit@example.com", parsed["email"]
+    assert_equal "0", parsed["subscribed"]
+    assert_equal "archived", parsed["status"]
+    assert_equal "Aba", parsed.dig("addresses_attributes", "0", "city")
+  end
 end

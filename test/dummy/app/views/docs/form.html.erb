@@ -38,10 +38,14 @@
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
     <p class="leading-7">
       Pass <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">builder: Shadcn::FormBuilder</code>
-      to <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">form_with</code>. The standard Rails helper names render shadcn-rails
+      to <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">form_with</code> or
+      <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">form_for</code>. The standard Rails helper names render shadcn-rails
       ViewComponents while preserving Rails names, ids, nested fields, and submitted params.
     </p>
+    <h3 class="text-lg font-semibold">form_with</h3>
     <%= erb_example("form/form_builder") %>
+    <h3 class="text-lg font-semibold">form_for</h3>
+    <%= erb_example("form/form_for") %>
   </div>
 
   <div id="default-builder" class="space-y-4">

@@ -1,0 +1,7 @@
+<%= form_for @contact, builder: Shadcn::FormBuilder do |f| %>
+  <%= f.label :email %>
+  <%= f.email_field :email, placeholder: "you@example.com" %>
+  <%= f.check_box :subscribed %>
+  <%= f.select :status, Contact.statuses.keys %>
+  <%= f.submit "Save" %>
+<% end %>

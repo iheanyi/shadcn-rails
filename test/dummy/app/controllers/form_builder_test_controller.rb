@@ -15,6 +15,16 @@ class FormBuilderTestController < ApplicationController
     @contact.valid? if params[:invalid]
   end
 
+  def form_for
+    @contact = Contact.new(
+      email: "legacy@example.com",
+      notes: "Legacy notes",
+      subscribed: false,
+      status: "lead",
+      addresses: [Address.new(city: "Enugu")]
+    )
+  end
+
   def create
     render json: params.require(:contact).permit(
       :email,
