@@ -23,7 +23,6 @@ module Shadcn
       month_field: "month",
       week_field: "week",
       color_field: "color",
-      range_field: "range",
       file_field: "file"
     }.freeze
 
@@ -31,6 +30,114 @@ module Shadcn
       define_method(helper_name) do |method, options = {}|
         input_component(method, input_type, options)
       end
+    end
+
+    def hidden_field(method, options = {})
+      super
+    end
+
+    def button(value = nil, options = {}, &block)
+      options = options.dup
+      options[:type] ||= "submit"
+      options[:name] ||= "button"
+      options[:value] ||= value if value
+
+      render_component(Shadcn::ButtonComponent.new(**options)) do
+        block_given? ? @template.capture(&block) : (value || "Button")
+      end
+    end
+
+    def range_field(method, options = {})
+      slider(method, options)
+    end
+
+    def slider(method, options = {})
+      options = options.dup
+      value = options.delete(:value) { value_for(method) || 0 }
+
+      render_component(
+        Shadcn::SliderComponent.new(**control_options(method, options, ERROR_CLASSES).merge(value: value))
+      )
+    end
+
+    def toggle_group(method, items, options = {})
+      options = options.dup
+      multiple = options.delete(:multiple)
+      type = options.delete(:type) { multiple ? :multiple : :single }
+      value = options.delete(:value) { value_for(method) }
+      selected_values = Array(value).map(&:to_s)
+      item_options = normalize_choice_items(items)
+
+      render_component(
+        Shadcn::ToggleGroupComponent.new(
+          **control_options(method, options, ERROR_CLASSES).merge(type: type, value: value)
+        )
+      ) do |group|
+        item_options.each do |item|
+          group.with_item(
+            value: item[:value],
+            pressed: selected_values.include?(item[:value].to_s),
+            aria_label: item[:label]
+          ) { item[:label] }
+        end
+      end
+    end
+
+    def radio_group(method, items, options = {})
+      options = options.dup
+      value = options.delete(:value) { value_for(method) }
+      item_options = normalize_choice_items(items).map do |item|
+        item.merge(id: shadcn_field_id(method, item[:value]))
+      end
+
+      render_component(
+        Shadcn::RadioGroupComponent.new(
+          **control_options(method, options, ERROR_CLASSES).merge(value: value, items: item_options)
+        )
+      )
+    end
+
+    def collection_radio_buttons(method, collection, value_method, text_method, options = {}, html_options = {})
+      radio_group(
+        method,
+        normalize_collection_items(collection, value_method, text_method),
+        options.merge(html_options)
+      )
+    end
+
+    def collection_check_boxes(method, collection, value_method, text_method, options = {}, html_options = {})
+      options = options.dup
+      html_options = html_options.dup
+      include_hidden = options.key?(:include_hidden) ? options.delete(:include_hidden) : true
+      selected_values = Array(options.delete(:selected) { value_for(method) }).map(&:to_s)
+      name = shadcn_field_name(method, multiple: true)
+
+      parts = []
+      if include_hidden
+        parts << @template.tag.input(type: "hidden", name: name, value: "", autocomplete: "off")
+      end
+
+      normalize_collection_items(collection, value_method, text_method).each do |item|
+        id = shadcn_field_id(method, item[:value])
+        checkbox_options = control_options(method, html_options.merge(id: id), CHECKABLE_ERROR_CLASSES, multiple: true)
+
+        parts << @template.tag.div(class: "flex items-center gap-2") do
+          @template.safe_join([
+            render_component(
+              Shadcn::CheckboxComponent.new(
+                **checkbox_options.merge(
+                  value: item[:value],
+                  checked: selected_values.include?(item[:value].to_s),
+                  include_hidden: false
+                )
+              )
+            ),
+            render_component(Shadcn::LabelComponent.new(for: id)) { item[:label] }
+          ])
+        end
+      end
+
+      @template.safe_join(parts)
     end
 
     def text_area(method, options = {})
@@ -259,6 +366,38 @@ module Shadcn
       end
 
       (tags << option_tags.to_s).html_safe
+    end
+
+    def normalize_choice_items(items)
+      items.map do |item|
+        case item
+        when Hash
+          { value: item.fetch(:value), label: item.fetch(:label, item.fetch(:value).to_s.humanize) }
+        when Array
+          { value: item.first, label: (item[1] || item.first).to_s }
+        else
+          { value: item, label: item.to_s.humanize }
+        end
+      end
+    end
+
+    def normalize_collection_items(collection, value_method, text_method)
+      collection.map do |item|
+        {
+          value: value_from_collection_item(item, value_method),
+          label: value_from_collection_item(item, text_method).to_s
+        }
+      end
+    end
+
+    def value_from_collection_item(item, method_name)
+      if item.respond_to?(method_name)
+        item.public_send(method_name)
+      elsif item.is_a?(Hash)
+        item.fetch(method_name)
+      else
+        item.public_send(method_name)
+      end
     end
 
     def control_options(method, options, error_classes, multiple: false)

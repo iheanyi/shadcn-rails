@@ -19,5 +19,25 @@
     <%= f.select :status, Contact.statuses.keys %>
   </div>
 
+  <div class="space-y-2">
+    <%= f.label :rating %>
+    <%= f.slider :rating, min: 0, max: 10, step: 1 %>
+  </div>
+
+  <div class="space-y-2">
+    <%= f.label :tags %>
+    <%= f.toggle_group :tags, [["vip", "VIP"], ["newsletter", "Newsletter"]], multiple: true %>
+  </div>
+
+  <div class="space-y-2">
+    <%= f.label :contact_method %>
+    <%= f.radio_group :contact_method, [["email", "Email"], ["phone", "Phone"]] %>
+  </div>
+
+  <div class="space-y-2">
+    <%= f.label :channels %>
+    <%= f.collection_check_boxes :channels, ["email", "sms"], :to_s, :humanize %>
+  </div>
+
   <%= f.submit "Save" %>
 <% end %>

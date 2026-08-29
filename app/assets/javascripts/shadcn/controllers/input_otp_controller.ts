@@ -37,7 +37,7 @@ export default class extends Controller<HTMLElement> {
       input.value = value
     }
 
-    this.updateHiddenInput()
+    this.updateHiddenInput({ dispatch: true })
     this.updateCarets()
 
     // Auto-advance to next slot
@@ -57,7 +57,7 @@ export default class extends Controller<HTMLElement> {
           event.preventDefault()
           this.focusInput(index - 1)
           this.inputTargets[index - 1].value = ""
-          this.updateHiddenInput()
+          this.updateHiddenInput({ dispatch: true })
           this.updateCarets()
         }
         break
@@ -78,7 +78,7 @@ export default class extends Controller<HTMLElement> {
 
       case "Delete":
         input.value = ""
-        this.updateHiddenInput()
+        this.updateHiddenInput({ dispatch: true })
         this.updateCarets()
         break
     }
@@ -122,7 +122,7 @@ export default class extends Controller<HTMLElement> {
       }
     })
 
-    this.updateHiddenInput()
+    this.updateHiddenInput({ dispatch: true })
     this.updateCarets()
 
     // Focus appropriate slot after paste
@@ -157,11 +157,16 @@ export default class extends Controller<HTMLElement> {
     return -1
   }
 
-  updateHiddenInput() {
+  updateHiddenInput({ dispatch = false } = {}) {
     if (!this.hasHiddenInputTarget) return
 
     const value = this.inputTargets.map((input: HTMLInputElement) => input.value || "").join("")
     this.hiddenInputTarget.value = value
+
+    if (dispatch) {
+      this.hiddenInputTarget.dispatchEvent(new Event("input", { bubbles: true }))
+      this.dispatch("change", { detail: { value } })
+    }
   }
 
   updateCarets() {
@@ -199,7 +204,7 @@ export default class extends Controller<HTMLElement> {
     this.inputTargets.forEach((input: HTMLInputElement) => {
       input.value = ""
     })
-    this.updateHiddenInput()
+    this.updateHiddenInput({ dispatch: true })
     this.updateCarets()
     this.focusInput(0)
   }

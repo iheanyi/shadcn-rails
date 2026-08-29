@@ -14,11 +14,23 @@ class FormBuilderTest < ActionDispatch::IntegrationTest
     assert_select "input[type='checkbox'][name='contact[subscribed]'][id='contact_subscribed'][value='1'][checked]"
     assert_select "input[type='hidden'][name='contact[notifications]'][value='0']"
     assert_select "input[type='checkbox'][name='contact[notifications]'][id='contact_notifications'][value='1'][checked]"
+    assert_select "input[type='hidden'][name='contact[source]'][id='contact_source'][value='website']", visible: :all
+    assert_select "input[type='range'][name='contact[rating]'][id='contact_rating'][value='7.0'][min='0.0'][max='10.0'][step='1.0']"
+    assert_select "input[type='range'][name='contact[budget]'][id='contact_budget'][value='50.0'][min='0.0'][max='100.0'][step='5.0']"
+    assert_select "div[data-controller='shadcn--toggle-group'][data-shadcn--toggle-group-type-value='multiple']"
+    assert_select "input[type='hidden'][name='contact[tags]'][value='vip']", visible: :all
+    assert_select "button[data-value='vip'][data-state='on']", text: "VIP"
+    assert_select "div[role='radiogroup'][data-controller='shadcn--radio-group'][data-shadcn--radio-group-name-value='contact[contact_method]']"
+    assert_select "input[type='radio'][name='contact[contact_method]'][id='contact_contact_method_email'][value='email'][checked]"
+    assert_select "input[type='radio'][name='contact[status]'][id='contact_status_customer'][value='customer'][checked]"
+    assert_select "input[type='hidden'][name='contact[channels][]'][value='']", visible: :all
+    assert_select "input[type='checkbox'][name='contact[channels][]'][id='contact_channels_email'][value='email'][checked]"
     assert_select "input[type='radio'][name='contact[status]'][id='contact_status_lead'][value='lead']"
     assert_select "input[type='radio'][name='contact[status]'][id='contact_status_customer'][value='customer'][checked]"
     assert_select "select.status-select[name='contact[status]'][id='contact_status'][required]"
     assert_select "select option[value='customer'][selected]", text: "customer"
     assert_select "button[type='submit'][name='commit'][value='Save']", text: "Save"
+    assert_select "button[type='submit'][name='button'][value='Create']", text: "Create"
   end
 
   test "renders nested fields_for names and ids" do
@@ -37,6 +49,12 @@ class FormBuilderTest < ActionDispatch::IntegrationTest
         subscribed: "0",
         notifications: "0",
         status: "lead",
+        rating: "8",
+        budget: "75",
+        tags: "vip,newsletter",
+        contact_method: "phone",
+        channels: ["email", "sms"],
+        source: "campaign",
         addresses_attributes: {
           "0" => { city: "Ibadan" }
         }
@@ -51,6 +69,12 @@ class FormBuilderTest < ActionDispatch::IntegrationTest
     assert_equal "0", parsed["subscribed"]
     assert_equal "0", parsed["notifications"]
     assert_equal "lead", parsed["status"]
+    assert_equal "8", parsed["rating"]
+    assert_equal "75", parsed["budget"]
+    assert_equal "vip,newsletter", parsed["tags"]
+    assert_equal "phone", parsed["contact_method"]
+    assert_equal ["email", "sms"], parsed["channels"]
+    assert_equal "campaign", parsed["source"]
     assert_equal "Ibadan", parsed.dig("addresses_attributes", "0", "city")
   end
 
@@ -126,8 +150,15 @@ class FormBuilderTest < ActionDispatch::IntegrationTest
     assert_select "input[type='hidden'][name='contact[subscribed]'][value='0']", 2
     assert_select "input[type='checkbox'][name='contact[subscribed]'][id='contact_subscribed'][value='1'][checked]", 2
     assert_select "select[name='contact[status]'][id='contact_status']", 2
+    assert_select "input[type='range'][name='contact[rating]'][id='contact_rating'][value='7.0']", 1
+    assert_select "div[data-controller='shadcn--toggle-group'] input[type='hidden'][name='contact[tags]'][value='vip']", 1
+    assert_select "div[role='radiogroup'][data-controller='shadcn--radio-group'] input[name='contact[contact_method]'][value='email'][checked]", 1
+    assert_select "input[type='checkbox'][name='contact[channels][]'][id='contact_channels_email'][value='email'][checked]", 1
     assert_select "button[type='submit'][name='commit'][value='Save']", text: "Save", count: 2
     assert_includes response.body, "form_with model: @contact"
     assert_includes response.body, "form_for @contact"
+    assert_includes response.body, "f.slider :rating"
+    assert_includes response.body, "f.toggle_group :tags"
+    assert_includes response.body, "f.radio_group :contact_method"
   end
 end

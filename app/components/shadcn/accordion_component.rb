@@ -39,6 +39,20 @@ module Shadcn
 
     private
 
+    def accordion_attributes
+      merge_html_attributes(
+        {
+          class: accordion_classes
+        },
+        {
+          controller: "shadcn--accordion",
+          "shadcn--accordion-type-value": @type,
+          "shadcn--accordion-collapsible-value": @collapsible,
+          "shadcn--accordion-default-value": @default_value ? default_value_string : nil
+        }
+      )
+    end
+
     def accordion_classes
       class_name
     end

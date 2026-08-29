@@ -47,17 +47,14 @@ module Shadcn
     end
 
     def item_attributes
-      attrs = {
+      merge_html_attributes({
         class: item_classes,
         role: "menuitem",
         tabindex: @disabled ? nil : "-1",
         href: @href,
         "data-disabled": @disabled ? "" : nil,
         "data-action": "click->shadcn--dropdown#selectItem"
-      }
-      attrs.merge!(html_options)
-      attrs.merge!(build_data)
-      attrs.compact
+      })
     end
   end
 end

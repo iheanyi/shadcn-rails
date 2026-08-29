@@ -61,15 +61,17 @@ module Shadcn
     private
 
     def container_attributes
-      {
-        class: merge_classes(BASE_CLASSES),
-        data: {
+      merge_html_attributes(
+        {
+          class: merge_classes(BASE_CLASSES)
+        },
+        {
           controller: "shadcn--input-otp",
           "shadcn--input-otp-length-value": @length,
           "shadcn--input-otp-pattern-value": @pattern,
           "shadcn--input-otp-disabled-value": @disabled
         }
-      }.merge(html_options).merge(build_data).compact
+      )
     end
 
     def hidden_input

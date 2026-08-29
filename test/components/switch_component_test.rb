@@ -46,6 +46,12 @@ class SwitchComponentTest < ViewComponent::TestCase
     assert_selector "button[data-action*='click->shadcn--switch#toggle']"
   end
 
+  def test_appends_host_data_action_without_losing_switch_actions
+    render_inline(Shadcn::SwitchComponent.new(data: { action: "analytics#track" }))
+
+    assert_selector "button[data-action='click->shadcn--switch#toggle keydown->shadcn--switch#handleKeydown analytics#track']"
+  end
+
   def test_renders_thumb_element
     render_inline(Shadcn::SwitchComponent.new)
 

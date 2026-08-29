@@ -58,5 +58,9 @@ module Shadcn
         "shadcn--sheet-side-value": @side.to_s
       }
     end
+
+    def sheet_attributes
+      merge_html_attributes({ class: sheet_classes }, sheet_data_attrs)
+    end
   end
 end

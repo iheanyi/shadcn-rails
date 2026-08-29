@@ -44,7 +44,7 @@ module Shadcn
     private
 
     def button_attributes
-      attrs = {
+      merge_html_attributes({
         type: "button",
         class: cn(BASE_CLASSES, VARIANTS[@variant], SIZES[@size], class_name),
         disabled: @disabled || nil,
@@ -54,9 +54,7 @@ module Shadcn
         "data-value": @value,
         "data-shadcn--toggle-group-target": "item",
         "data-action": "click->shadcn--toggle-group#toggle"
-      }
-      attrs.merge!(html_options)
-      attrs.compact
+      })
     end
   end
 end

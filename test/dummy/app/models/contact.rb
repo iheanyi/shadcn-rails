@@ -3,7 +3,18 @@
 class Contact
   include ActiveModel::Model
 
-  attr_accessor :email, :notes, :subscribed, :notifications, :status, :addresses
+  attr_accessor :email,
+    :notes,
+    :subscribed,
+    :notifications,
+    :status,
+    :rating,
+    :budget,
+    :tags,
+    :contact_method,
+    :channels,
+    :source,
+    :addresses
 
   validates :email, presence: true
 

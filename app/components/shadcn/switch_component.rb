@@ -89,9 +89,8 @@ module Shadcn
     end
 
     def button_attributes
-      html_options
-        .merge(build_data)
-        .merge(
+      merge_html_attributes(
+        {
           type: "button",
           role: "switch",
           class: switch_classes,
@@ -102,8 +101,8 @@ module Shadcn
           "data-shadcn--switch-target": "button",
           "data-action": "click->shadcn--switch#toggle keydown->shadcn--switch#handleKeydown",
           tabindex: "0"
-        )
-        .compact
+        }
+      )
     end
 
     def has_label?

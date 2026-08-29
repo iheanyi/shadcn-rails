@@ -54,6 +54,20 @@ module Shadcn
 
     private
 
+    def tabs_attributes
+      merge_html_attributes(
+        {
+          class: tabs_classes,
+          "data-orientation": @orientation
+        },
+        {
+          controller: "shadcn--tabs",
+          "shadcn--tabs-default-value": @default_value,
+          "shadcn--tabs-url-param-value": @url_param
+        }
+      )
+    end
+
     def tabs_classes
       class_name
     end

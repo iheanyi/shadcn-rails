@@ -10,6 +10,12 @@ class FormBuilderTestController < ApplicationController
       subscribed: "1",
       notifications: "1",
       status: "customer",
+      rating: 7,
+      budget: 50,
+      tags: ["vip"],
+      contact_method: "email",
+      channels: ["email"],
+      source: "website",
       addresses: [Address.new(city: "Lagos")]
     )
     @contact.valid? if params[:invalid]
@@ -21,6 +27,12 @@ class FormBuilderTestController < ApplicationController
       notes: "Legacy notes",
       subscribed: false,
       status: "lead",
+      rating: 3,
+      budget: 25,
+      tags: [],
+      contact_method: "phone",
+      channels: [],
+      source: "referral",
       addresses: [Address.new(city: "Enugu")]
     )
   end
@@ -32,6 +44,12 @@ class FormBuilderTestController < ApplicationController
       :subscribed,
       :notifications,
       :status,
+      :rating,
+      :budget,
+      :tags,
+      :contact_method,
+      :source,
+      channels: [],
       addresses_attributes: [:city]
     )
   end

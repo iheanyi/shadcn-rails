@@ -61,7 +61,7 @@ module Shadcn
     end
 
     def panel_attributes
-      {
+      merge_html_attributes({
         class: cn(BASE_CONTENT_CLASSES, SheetComponent::SIDES[@side], class_name),
         role: "dialog",
         "aria-modal": "true",
@@ -69,7 +69,7 @@ module Shadcn
         "data-side": @side.to_s,
         "data-state": "closed",
         tabindex: "-1"
-      }
+      })
     end
 
     def close_button

@@ -51,6 +51,22 @@
               <%= f.label :status %>
               <%= f.select :status, Contact.statuses.keys %>
             </div>
+            <div class="space-y-2">
+              <%= f.label :rating %>
+              <%= f.slider :rating, min: 0, max: 10, step: 1 %>
+            </div>
+            <div class="space-y-2">
+              <%= f.label :tags %>
+              <%= f.toggle_group :tags, [["vip", "VIP"], ["newsletter", "Newsletter"]], multiple: true %>
+            </div>
+            <div class="space-y-2">
+              <%= f.label :contact_method %>
+              <%= f.radio_group :contact_method, [["email", "Email"], ["phone", "Phone"]] %>
+            </div>
+            <div class="space-y-2">
+              <%= f.label :channels %>
+              <%= f.collection_check_boxes :channels, ["email", "sms"], :to_s, :humanize %>
+            </div>
             <%= f.submit "Save" %>
           <% end %>
         </div>
@@ -107,6 +123,8 @@
       <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">text_area</code> renders <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">Shadcn::TextareaComponent</code>.</li>
       <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">check_box</code> and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">switch</code> include Rails-style hidden unchecked value inputs.</li>
       <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">select</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">collection_select</code>, and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">grouped_collection_select</code> render native <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">&lt;select&gt;</code> elements.</li>
+      <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">range_field</code> and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">slider</code> render <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">Shadcn::SliderComponent</code> as a real range input.</li>
+      <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">toggle_group</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">radio_group</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">collection_radio_buttons</code>, and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">collection_check_boxes</code> use Rails field names so submitted params stay vanilla.</li>
       <li><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">field</code> renders a label, control, and model error messages with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-invalid</code> wiring.</li>
     </ul>
   </div>

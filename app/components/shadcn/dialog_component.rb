@@ -53,5 +53,15 @@ module Shadcn
         "dialog-id": @id
       }
     end
+
+    def dialog_attributes
+      merge_html_attributes(
+        {
+          id: @id,
+          class: dialog_classes
+        },
+        dialog_data_attrs
+      )
+    end
   end
 end

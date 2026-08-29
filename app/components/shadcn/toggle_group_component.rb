@@ -58,6 +58,29 @@ module Shadcn
 
     private
 
+    def group_attributes
+      merge_html_attributes(
+        {
+          role: "group",
+          class: group_classes
+        },
+        {
+          controller: "shadcn--toggle-group",
+          "shadcn--toggle-group-type-value": @type,
+          "shadcn--toggle-group-value-value": value_string
+        }
+      )
+    end
+
+    def hidden_input_attributes
+      {
+        type: "hidden",
+        name: @name,
+        value: value_string,
+        "data-shadcn--toggle-group-target": "input"
+      }
+    end
+
     def group_classes
       merge_classes(BASE_CLASSES)
     end

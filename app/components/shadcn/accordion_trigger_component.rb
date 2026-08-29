@@ -36,14 +36,14 @@ module Shadcn
     end
 
     def trigger_attributes
-      {
+      merge_html_attributes({
         type: "button",
         class: cn(TRIGGER_CLASSES, class_name),
         "data-shadcn--accordion-target": "trigger",
         "data-action": "click->shadcn--accordion#toggle",
         "data-state": "closed",
         "aria-expanded": "false"
-      }
+      })
     end
   end
 end

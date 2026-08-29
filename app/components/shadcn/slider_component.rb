@@ -40,6 +40,24 @@ module Shadcn
 
     private
 
+    def slider_attributes
+      merge_html_attributes(
+        {
+          type: "range",
+          name: @name,
+          value: @value,
+          min: @min,
+          max: @max,
+          step: @step,
+          disabled: @disabled || nil,
+          class: slider_classes,
+          style: slider_style,
+          "data-controller": "shadcn--slider",
+          "data-action": "input->shadcn--slider#updateStyle"
+        }
+      )
+    end
+
     def slider_classes
       merge_classes(BASE_CLASSES)
     end

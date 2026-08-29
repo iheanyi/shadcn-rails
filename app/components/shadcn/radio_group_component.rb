@@ -72,6 +72,22 @@ module Shadcn
 
     private
 
+    def group_attributes
+      merge_html_attributes(
+        {
+          role: "radiogroup",
+          class: group_classes,
+          "aria-required": @required || nil,
+          "aria-disabled": @disabled || nil
+        },
+        {
+          controller: "shadcn--radio-group",
+          "shadcn--radio-group-name-value": @name,
+          "shadcn--radio-group-value-value": @value
+        }
+      )
+    end
+
     def group_classes
       cn(BASE_CLASSES, orientation_classes, class_name)
     end
@@ -92,11 +108,12 @@ module Shadcn
       safe_join(@items_data.map do |item|
         RadioGroupItemComponent.new(
           value: item[:value],
-          id: generate_item_id(item[:value]),
+          id: item[:id] || generate_item_id(item[:value]),
           label: item[:label],
           disabled: @disabled || item[:disabled],
           group_name: @name,
-          selected: @value.to_s == item[:value].to_s
+          selected: @value.to_s == item[:value].to_s,
+          data: item[:data] || {}
         ).render_in(view_context)
       end)
     end

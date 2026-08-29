@@ -430,7 +430,13 @@ class DocsController < ApplicationController
       email: "person@example.com",
       notes: "Interested in a follow-up next week.",
       subscribed: true,
-      status: "lead"
+      status: "lead",
+      rating: 7,
+      budget: 50,
+      tags: ["vip"],
+      contact_method: "email",
+      channels: ["email"],
+      source: "docs"
     ) if @slug == "form"
 
     # Try to render a specific template, fall back to a generic show template

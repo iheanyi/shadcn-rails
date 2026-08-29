@@ -4,6 +4,13 @@
   <%= f.text_area :notes, rows: 4, autocomplete: "off" %>
   <%= f.check_box :subscribed %>
   <%= f.switch :notifications %>
+  <%= f.hidden_field :source %>
+  <%= f.range_field :rating, min: 0, max: 10, step: 1 %>
+  <%= f.slider :budget, min: 0, max: 100, step: 5 %>
+  <%= f.toggle_group :tags, [["vip", "VIP"], ["newsletter", "Newsletter"]], multiple: true %>
+  <%= f.radio_group :contact_method, [["email", "Email"], ["phone", "Phone"]] %>
+  <%= f.collection_radio_buttons :status, Contact.statuses.keys, :to_s, :humanize %>
+  <%= f.collection_check_boxes :channels, ["email", "sms"], :to_s, :humanize %>
   <%= f.radio_button :status, "lead", label: "Lead" %>
   <%= f.radio_button :status, "customer", label: "Customer" %>
   <%= f.select :status, Contact.statuses.keys, {}, class: "status-select", required: true %>
@@ -14,4 +21,5 @@
   <% end %>
 
   <%= f.submit "Save" %>
+  <%= f.button "Create" %>
 <% end %>
