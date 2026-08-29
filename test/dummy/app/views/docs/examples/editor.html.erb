@@ -1,0 +1,39 @@
+<% content_for :title, "Editor Example" %>
+
+<div class="space-y-8">
+  <div>
+    <h1 class="text-4xl font-bold tracking-tight">Editor Example</h1>
+    <p class="mt-4 text-lg text-muted-foreground">
+      A dummy-only host Stimulus controller coordinates shadcn-rails components without adding a new registry component.
+    </p>
+  </div>
+
+  <section class="space-y-4">
+    <div>
+      <h2 class="text-2xl font-semibold tracking-tight">Live demo</h2>
+      <p class="text-muted-foreground">
+        Toggle marks or alignment, type in the textarea, then preview or save to see the posted params shape.
+      </p>
+    </div>
+
+    <%= render "docs/demo_card", title: "Host editor controller", description: "The wrapper uses data-controller=\"editor\" while shadcn ToggleGroup events drive the editor state." do %>
+      <%= render "docs/examples/editor_demo" %>
+    <% end %>
+  </section>
+
+  <section>
+    <h2 class="text-2xl font-semibold tracking-tight">Example source</h2>
+    <%= render "docs/code_example",
+      language: "erb",
+      title: "app/views/docs/examples/_editor_demo.html.erb",
+      code: File.read(Rails.root.join("app/views/docs/examples/_editor_demo.html.erb")) %>
+  </section>
+
+  <section>
+    <h2 class="text-2xl font-semibold tracking-tight">Host Stimulus controller</h2>
+    <%= render "docs/code_example",
+      language: "javascript",
+      title: "app/javascript/controllers/editor_controller.js",
+      code: File.read(Rails.root.join("app/javascript/controllers/editor_controller.js")) %>
+  </section>
+</div>

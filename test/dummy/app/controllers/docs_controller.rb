@@ -404,6 +404,10 @@ class DocsController < ApplicationController
     @components_by_category = COMPONENTS.group_by { |_slug, meta| meta[:category] }
   end
 
+  def editor_example
+    render "examples/editor"
+  end
+
   def show
     @slug = params[:slug]
     @component = COMPONENTS[@slug]
