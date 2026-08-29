@@ -31,7 +31,7 @@ export default class default_1 extends Controller {
             value = value.slice(-1);
             input.value = value;
         }
-        this.updateHiddenInput();
+        this.updateHiddenInput({ dispatch: true });
         this.updateCarets();
         // Auto-advance to next slot
         if (value && index < this.lengthValue - 1) {
@@ -48,7 +48,7 @@ export default class default_1 extends Controller {
                     event.preventDefault();
                     this.focusInput(index - 1);
                     this.inputTargets[index - 1].value = "";
-                    this.updateHiddenInput();
+                    this.updateHiddenInput({ dispatch: true });
                     this.updateCarets();
                 }
                 break;
@@ -66,7 +66,7 @@ export default class default_1 extends Controller {
                 break;
             case "Delete":
                 input.value = "";
-                this.updateHiddenInput();
+                this.updateHiddenInput({ dispatch: true });
                 this.updateCarets();
                 break;
         }
@@ -104,7 +104,7 @@ export default class default_1 extends Controller {
                 input.value = char;
             }
         });
-        this.updateHiddenInput();
+        this.updateHiddenInput({ dispatch: true });
         this.updateCarets();
         // Focus appropriate slot after paste
         const nextEmptyIndex = this.findNextEmptySlot(startIndex);
@@ -135,11 +135,15 @@ export default class default_1 extends Controller {
         }
         return -1;
     }
-    updateHiddenInput() {
+    updateHiddenInput({ dispatch = false } = {}) {
         if (!this.hasHiddenInputTarget)
             return;
         const value = this.inputTargets.map((input) => input.value || "").join("");
         this.hiddenInputTarget.value = value;
+        if (dispatch) {
+            this.hiddenInputTarget.dispatchEvent(new Event("input", { bubbles: true }));
+            this.dispatch("change", { detail: { value } });
+        }
     }
     updateCarets() {
         // Hide all carets
@@ -169,7 +173,7 @@ export default class default_1 extends Controller {
         this.inputTargets.forEach((input) => {
             input.value = "";
         });
-        this.updateHiddenInput();
+        this.updateHiddenInput({ dispatch: true });
         this.updateCarets();
         this.focusInput(0);
     }

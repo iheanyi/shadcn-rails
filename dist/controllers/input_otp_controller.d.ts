@@ -28,7 +28,9 @@ export default class extends Controller<HTMLElement> {
     focusSlot(event: ShadcnEvent): void;
     focusInput(index: number): void;
     findNextEmptySlot(startIndex: number): number;
-    updateHiddenInput(): void;
+    updateHiddenInput({ dispatch }?: {
+        dispatch?: boolean | undefined;
+    }): void;
     updateCarets(): void;
     get value(): any;
     get isComplete(): boolean;
