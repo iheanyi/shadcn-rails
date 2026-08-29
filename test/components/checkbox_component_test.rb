@@ -34,7 +34,7 @@ class CheckboxComponentTest < ViewComponent::TestCase
     render_inline(Shadcn::CheckboxComponent.new(name: "locked", disabled: true))
 
     assert_selector "input[type='checkbox'][name='locked'][disabled]"
-    assert_selector "input[type='hidden'][name='locked']", 0
+    assert_selector "input[type='hidden'][name='locked']", count: 0
   end
 
   def test_renders_required_state
