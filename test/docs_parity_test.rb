@@ -4,7 +4,34 @@ require "test_helper"
 
 Dir[Rails.root.join("../../test/components/previews/**/*_preview.rb")].sort.each { |file| require file }
 
+class ShowcaseSourceExtractionFixture
+  def label_kwargs
+    options = { for: "email", class: "text-sm font-medium" }
+    options
+  end
+
+  def postfix_if
+    "Visible source" if true
+  end
+
+  def dropdown_align_end
+    render(Shadcn::DropdownMenuComponent.new(align: :end)) do |menu|
+      menu.with_item { "Account" }
+    end
+  end
+
+  def tooltip_interpolation_end
+    "Tooltip #{value.end}"
+  end
+
+  def after_source_fixture
+    "not part of the extracted source"
+  end
+end
+
 class DocsParityTest < ViewComponent::TestCase
+  include ShowcaseHelper
+
   def test_each_registry_component_has_docs_controller_entry_docs_page_preview_and_controller_tests
     Shadcn::Rails::Registry.keys.each do |key|
       slug = key.tr("_", "-")
@@ -24,6 +51,30 @@ class DocsParityTest < ViewComponent::TestCase
           "Expected Jest smoke or behavior test for #{controller_path}"
       end
     end
+  end
+
+  def test_showcase_source_extraction_is_ruby_aware
+    {
+      label_kwargs: ["for:", "class:"],
+      postfix_if: ["if true"],
+      dropdown_align_end: ["align: :end"],
+      tooltip_interpolation_end: ['#{value.end}']
+    }.each do |method_name, expected_snippets|
+      source = send(:preview_method_source, ShowcaseSourceExtractionFixture, method_name)
+
+      expected_snippets.each { |snippet| assert_includes source, snippet }
+      refute_includes source, "after_source_fixture"
+    end
+  end
+
+  def test_component_preview_layout_links_compiled_tailwind_stylesheet
+    layout = File.read(Rails.root.join("app/views/layouts/component_preview.html.erb"))
+
+    assert_includes layout, 'stylesheet_link_tag "tailwind"'
+    assert_includes layout, 'javascript_include_tag "application"'
+    assert_includes layout, "Shadcn::Rails.theme_css"
+    assert_includes layout, 'components.css'
+    refute_includes layout, "cdn.tailwindcss.com"
   end
 
   def test_docs_controller_entries_match_registry_keys

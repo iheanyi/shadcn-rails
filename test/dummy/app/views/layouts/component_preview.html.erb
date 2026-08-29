@@ -6,6 +6,7 @@
   <title>Component Preview</title>
   <%= csrf_meta_tags %>
   <%= csp_meta_tag rescue nil %>
+  <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
   <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
   <style>
     <%= Shadcn::Rails.theme_css %>
@@ -14,13 +15,11 @@
     body {
       margin: 0;
       padding: 1rem;
-      background-color: hsl(var(--background));
-      color: hsl(var(--foreground));
       font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
   </style>
 </head>
-<body>
+<body class="bg-background text-foreground">
   <%= yield %>
 </body>
 </html>
