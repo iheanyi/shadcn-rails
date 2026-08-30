@@ -15,7 +15,8 @@ const ctx = await esbuild.context({
   publicPath: '/assets',
   loader: { '.js': 'jsx' },
   alias: {
-    'shadcn-rails-stimulus': resolve(__dirname, '../../dist/index.esm.js')
+    'shadcn-rails-stimulus': resolve(__dirname, '../../dist/index.esm.js'),
+    'chart.js/auto': resolve(__dirname, 'node_modules/chart.js/auto/auto.js')
   },
   logLevel: 'info',
 })
