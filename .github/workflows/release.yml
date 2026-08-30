@@ -11,10 +11,14 @@ on:
         required: true
         type: string
 
+# Depot runners require a GitHub organization with the Depot GitHub App
+# installed. This repo currently lives under the personal `iheanyi` account,
+# so default to GitHub-hosted runners. Set repository variable CI_RUNNER to
+# `depot-ubuntu-24.04` once Depot runners are available.
 jobs:
   verify:
     name: Verify Release
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     outputs:
       version: ${{ steps.version.outputs.version }}
 
@@ -70,7 +74,7 @@ jobs:
   release-gem:
     name: Release Ruby Gem
     needs: verify
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     permissions:
       contents: read
       id-token: write
@@ -99,7 +103,7 @@ jobs:
   release-npm:
     name: Release npm Package
     needs: verify
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     permissions:
       contents: read
       id-token: write
@@ -129,7 +133,7 @@ jobs:
   create-github-release:
     name: Create GitHub Release
     needs: [verify, release-gem, release-npm]
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     permissions:
       contents: write
 
@@ -159,7 +163,7 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           name: v${{ needs.verify.outputs.version }}
           body: |
