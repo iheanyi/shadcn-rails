@@ -106,6 +106,7 @@ class DataTableComponentTest < ViewComponent::TestCase
     end
 
     customer_header = page.find("th", text: "Customer")
+    assert_equal "ascending", customer_header["aria-sort"]
     href = customer_header.find("a")["href"]
     assert_includes href, "q=paid"
     assert_includes href, "sort=name"

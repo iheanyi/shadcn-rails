@@ -72,7 +72,9 @@ module Shadcn
     end
 
     def sort_href_for(column)
-      next_direction = shadcn_data_table_next_sort_direction(column.sort_key, sort: @sort, dir: @dir)
+      current_sort = current_sort_value
+      current_dir = current_dir_value
+      next_direction = shadcn_data_table_next_sort_direction(column.sort_key, sort: current_sort, dir: current_dir)
 
       if @sort_url_builder
         return @sort_url_builder.call(column.sort_key, next_direction)
@@ -86,8 +88,8 @@ module Shadcn
         page_param: @page_param,
         reset_page: @reset_page_on_sort
       }
-      options[:current_sort] = @sort unless @sort.nil?
-      options[:current_dir] = @dir unless @dir.nil?
+      options[:current_sort] = current_sort unless current_sort.nil?
+      options[:current_dir] = current_dir unless current_dir.nil?
 
       shadcn_data_table_sort_url(
         column.sort_key,
@@ -96,7 +98,23 @@ module Shadcn
     end
 
     def aria_sort_for(column)
-      shadcn_data_table_aria_sort(column.sort_key, sort: @sort, dir: @dir)
+      shadcn_data_table_aria_sort(column.sort_key, sort: current_sort_value, dir: current_dir_value)
+    end
+
+    def current_sort_value
+      return @sort unless @sort.nil?
+
+      current_params[@sort_param.to_s]
+    end
+
+    def current_dir_value
+      return @dir unless @dir.nil?
+
+      current_params[@dir_param.to_s]
+    end
+
+    def current_params
+      @current_params ||= shadcn_data_table_params_hash(@params)
     end
 
     def sort_indicator_for(column)
