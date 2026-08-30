@@ -8,7 +8,7 @@ application.debug = false
 window.Stimulus = application
 
 // Import shadcn-rails controllers from the compiled gem bundle.
-// The "shadcn-rails-stimulus" import is aliased in package.json to dist/index.esm.js.
+// The package imports are aliased by the package.json build script.
 import { registerShadcnControllers } from "shadcn-rails-stimulus"
 import { registerShadcnChartController } from "shadcn-rails-stimulus/chart"
 registerShadcnControllers(application)
