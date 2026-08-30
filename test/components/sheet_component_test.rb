@@ -99,4 +99,23 @@ class SheetComponentTest < ViewComponent::TestCase
     # Body renders inside a template tag
     assert_selector "template[data-shadcn--sheet-target='template']", visible: false
   end
+
+  def test_close_button_uses_ghost_hover_and_keyboard_focus_styles
+    result = render_inline(Shadcn::SheetComponent.new) do |sheet|
+      sheet.with_body { "Content" }
+    end
+
+    html = result.to_html
+    close_button_match = html.match(/<button type="button" class="([^"]*)"[^>]*aria-label="Close"/)
+    assert close_button_match
+
+    close_classes = close_button_match[1].split
+    assert_includes close_classes, "hover:bg-accent"
+    assert_includes close_classes, "hover:text-accent-foreground"
+    assert_includes close_classes, "focus-visible:ring-2"
+    refute_includes close_classes, "focus:ring-2"
+    refute_includes close_classes, "ring-offset-2"
+    refute_includes close_classes, "ring-offset-background"
+    refute close_classes.any? { |class_name| class_name.start_with?("data-[state=open]:") }
+  end
 end
