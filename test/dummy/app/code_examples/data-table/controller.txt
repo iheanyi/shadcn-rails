@@ -1,0 +1,16 @@
+SORTS = {
+  "name" => "contacts.name",
+  "email" => "contacts.email",
+  "created_at" => "contacts.created_at"
+}.freeze
+
+def index
+  scope = Contact.all
+  scope = scope.where("name ILIKE ?", "%#{params[:q]}%") if params[:q].present?
+
+  if SORTS.key?(params[:sort]) && %w[asc desc].include?(params[:dir])
+    scope = scope.order(SORTS.fetch(params[:sort]) => params[:dir])
+  end
+
+  @pagy, @contacts = pagy(scope)
+end

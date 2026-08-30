@@ -1,0 +1,43 @@
+<div class="<%= wrapper_classes %>" <%= tag_attributes %>>
+  <%= toolbar %>
+
+  <%= render Shadcn::TableComponent.new do |table| %>
+    <% table.with_caption { @caption } if @caption.present? %>
+
+    <% table.with_header do |header| %>
+      <% header.with_row do |row| %>
+        <% columns.each do |column| %>
+          <% row.with_head(class_name: column.header_classes, "aria-sort": (aria_sort_for(column) if column.sortable?)) do %>
+            <% if column.sortable? %>
+              <%= render_sortable_header(column) %>
+            <% else %>
+              <%= column.label %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% table.with_body do |body| %>
+      <% if table_rows.empty? %>
+        <% body.with_row do |row| %>
+          <% row.with_cell(colspan: column_count, class_name: EMPTY_CELL_CLASSES) do %>
+            <%= render_empty_state %>
+          <% end %>
+        <% end %>
+      <% else %>
+        <% table_rows.each do |record| %>
+          <% body.with_row do |row| %>
+            <% columns.each do |column| %>
+              <% row.with_cell(class_name: column.cell_classes) do %>
+                <%= column.value_for(record, self) %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <%= footer %>
+</div>

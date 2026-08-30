@@ -92,6 +92,29 @@ class ShadcnAddGeneratorTest < Rails::Generators::TestCase
     assert_file "app/components/shadcn/resizable_handle_component.rb"
   end
 
+  def test_data_table_copies_table_dependency
+    run_generator %w[data_table]
+
+    assert_file "app/components/shadcn/data_table_component.rb"
+    assert_file "app/components/shadcn/data_table_column_component.rb"
+    assert_file "app/components/shadcn/data_table_component.html.erb"
+
+    assert_file "app/components/shadcn/table_component.rb"
+    assert_file "app/components/shadcn/table_component.html.erb"
+    assert_file "app/components/shadcn/table_body_component.rb"
+    assert_file "app/components/shadcn/table_cell_component.rb"
+    assert_file "app/components/shadcn/table_head_component.rb"
+    assert_file "app/components/shadcn/table_header_component.rb"
+    assert_file "app/components/shadcn/table_row_component.rb"
+
+    assert_file "app/components/shadcn/empty_component.rb"
+    assert_file "app/components/shadcn/empty_content_component.rb"
+    assert_file "app/components/shadcn/empty_description_component.rb"
+    assert_file "app/components/shadcn/empty_header_component.rb"
+    assert_file "app/components/shadcn/empty_media_component.rb"
+    assert_file "app/components/shadcn/empty_title_component.rb"
+  end
+
   def test_dialog_source_location_is_app_after_add
     within_clean_dummy_app do |dummy_root|
       run_dummy_command!(dummy_root, "rails", "generate", "shadcn:add", "dialog")

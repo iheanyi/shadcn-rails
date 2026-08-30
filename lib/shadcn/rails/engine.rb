@@ -53,6 +53,7 @@ module Shadcn
           include Shadcn::Rails::Helpers::ClassNameHelper
           include Shadcn::Rails::Helpers::ComponentHelper
           include Shadcn::Rails::Helpers::PaginationHelper
+          include Shadcn::Rails::Helpers::DataTableHelper
         end
       end
 

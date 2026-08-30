@@ -298,6 +298,24 @@
       <% end %>
     </div>
 
+    <!-- Data Table -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Data Table</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::DataTableComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">Server-first sortable and filterable table recipe.</p>
+      <%= render(Shadcn::DataTableComponent.new(rows: [
+        { name: "Olivia Martin", email: "olivia@example.com", status: "Paid", amount: "$19.99" },
+        { name: "Jackson Lee", email: "jackson@example.com", status: "Processing", amount: "$39.00" }
+      ], sort: "name", dir: "asc", params: { "sort" => "name", "dir" => "asc" }, path: "/showcase")) do |table| %>
+        <% table.with_column(:name, label: "Customer", sortable: true) %>
+        <% table.with_column(:email, sortable: true) %>
+        <% table.with_column(:status) %>
+        <% table.with_column(:amount, align: :end) %>
+      <% end %>
+    </div>
+
     <!-- Progress -->
     <div class="space-y-4 p-6 border rounded-lg">
       <div class="flex items-center justify-between">
