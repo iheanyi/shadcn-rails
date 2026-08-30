@@ -214,4 +214,34 @@ describe("SonnerController", () => {
     expect(toastElement).toHaveTextContent("Triggered from data attributes")
     expect(toastElement).toHaveAttribute("data-variant", "info")
   })
+
+  test("demo action can render an action button with follow-up toast", async () => {
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      [
+        '<button data-action="click->shadcn--sonner#demo"',
+        ' data-title="Invite sent to Jordan"',
+        ' data-description="jordan@example.com was added to the billing workspace."',
+        ' data-variant="success"',
+        ' data-duration="0"',
+        ' data-action-label="Undo"',
+        ' data-action-title="Invite canceled"',
+        ' data-action-description="Jordan was removed from the pending invitation list."',
+        ' data-action-duration="0">Invite with undo</button>'
+      ].join("")
+    )
+    const button = document.querySelector("button[data-title='Invite sent to Jordan']")
+
+    controller.element.appendChild(button)
+    await nextFrame()
+    click(button)
+
+    const actionButton = document.querySelector("[data-sonner-action]")
+    expect(actionButton).toHaveTextContent("Undo")
+
+    click(actionButton)
+
+    expect(document.body).toHaveTextContent("Invite canceled")
+    expect(document.body).toHaveTextContent("Jordan was removed from the pending invitation list.")
+  })
 })

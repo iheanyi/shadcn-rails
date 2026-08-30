@@ -182,7 +182,8 @@ export default class SonnerController extends Controller {
             title: trigger.dataset.title,
             description: trigger.dataset.description,
             variant: normalizeVariant(trigger.dataset.variant),
-            duration: normalizeDuration(trigger.dataset.duration, this.durationValue)
+            duration: normalizeDuration(trigger.dataset.duration, this.durationValue),
+            action: this.demoAction(trigger)
         });
     }
     pause(event) {
@@ -398,6 +399,25 @@ export default class SonnerController extends Controller {
         if (typeof action === "string")
             return { label: action };
         return action;
+    }
+    demoAction(trigger) {
+        const label = trigger.dataset.actionLabel;
+        if (!label)
+            return undefined;
+        return {
+            label,
+            onClick: () => {
+                const title = trigger.dataset.actionTitle;
+                if (!title)
+                    return;
+                this.show({
+                    title,
+                    description: trigger.dataset.actionDescription,
+                    variant: normalizeVariant(trigger.dataset.actionVariant),
+                    duration: normalizeDuration(trigger.dataset.actionDuration, this.durationValue)
+                });
+            }
+        };
     }
     toastClassName(variant, currentClassName = "") {
         const classNames = new Set([TOAST_BASE_CLASSES, TOAST_VARIANT_CLASSES[variant], currentClassName]

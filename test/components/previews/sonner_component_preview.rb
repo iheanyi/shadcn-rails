@@ -14,6 +14,10 @@ class SonnerComponentPreview < ViewComponent::Preview
           #{demo_button("Simulate error", "Payment failed", "The card was declined. Ask the customer for another payment method.", "destructive", 0)}
           #{demo_button("Warn shipping", "Address needs review", "Shipping rates changed after the postal code update.", "warning", 0)}
           #{demo_button("Show audit note", "Audit log updated", "Maya Chen added a note to the customer timeline.", "info", 0)}
+          #{demo_button("Saving contact", "Saving contact...", "Syncing Nora Lee to HubSpot.", "default", 0)}
+          #{demo_button("Save contact", "Contact saved", "Maya Chen's role and phone number were updated.", "success", 0)}
+          #{demo_button("Send invite", "Invite sent", "Nora Lee received a workspace invitation by email.", "info", 0)}
+          #{demo_button("Invite with undo", "Invite sent to Jordan", "jordan@example.com was added to the billing workspace.", "success", 0, action_label: "Undo", action_title: "Invite canceled", action_description: "Jordan was removed from the pending invitation list.")}
         </div>
       HTML
     end
@@ -51,8 +55,13 @@ class SonnerComponentPreview < ViewComponent::Preview
 
   private
 
-  def demo_button(label, title, description, variant = "default", duration = nil)
+  def demo_button(label, title, description, variant = "default", duration = nil, action_label: nil, action_title: nil, action_description: nil)
     duration_attribute = duration.nil? ? "" : %( data-duration="#{duration}")
+    action_attributes = [
+      action_label && %(data-action-label="#{ERB::Util.html_escape(action_label)}"),
+      action_title && %(data-action-title="#{ERB::Util.html_escape(action_title)}"),
+      action_description && %(data-action-description="#{ERB::Util.html_escape(action_description)}")
+    ].compact.join(" ")
 
     <<~HTML.squish.html_safe
       <button
@@ -61,7 +70,7 @@ class SonnerComponentPreview < ViewComponent::Preview
         data-action="click->shadcn--sonner#demo"
         data-title="#{ERB::Util.html_escape(title)}"
         data-description="#{ERB::Util.html_escape(description)}"
-        data-variant="#{variant}"#{duration_attribute}>
+        data-variant="#{variant}"#{duration_attribute} #{action_attributes}>
         #{ERB::Util.html_escape(label)}
       </button>
     HTML

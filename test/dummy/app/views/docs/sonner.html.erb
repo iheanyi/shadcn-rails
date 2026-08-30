@@ -40,6 +40,10 @@
         <%= button_tag "Simulate error", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Payment failed", description: "The card was declined. Ask the customer for another payment method.", variant: "destructive", duration: 0 } %>
         <%= button_tag "Warn shipping", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Address needs review", description: "Shipping rates changed after the postal code update.", variant: "warning", duration: 0 } %>
         <%= button_tag "Show audit note", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Audit log updated", description: "Maya Chen added a note to the customer timeline.", variant: "info", duration: 0 } %>
+        <%= button_tag "Saving contact", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Saving contact...", description: "Syncing Nora Lee to HubSpot.", variant: "default", duration: 0 } %>
+        <%= button_tag "Save contact", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Contact saved", description: "Maya Chen's role and phone number were updated.", variant: "success", duration: 0 } %>
+        <%= button_tag "Send invite", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Invite sent", description: "Nora Lee received a workspace invitation by email.", variant: "info", duration: 0 } %>
+        <%= button_tag "Invite with undo", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Invite sent to Jordan", description: "jordan@example.com was added to the billing workspace.", variant: "success", duration: 0, action_label: "Undo", action_title: "Invite canceled", action_description: "Jordan was removed from the pending invitation list.", action_variant: "default", action_duration: 0 } %>
       </div>
     </div>
   <% end %>
