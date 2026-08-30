@@ -523,7 +523,7 @@ export default class CalendarController extends Controller<HTMLElement> {
         continue
       }
 
-      let classes = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center focus:outline-none focus:ring-1 focus:ring-ring"
+      let classes = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
 
       // Range styling
       if (isInRange) {

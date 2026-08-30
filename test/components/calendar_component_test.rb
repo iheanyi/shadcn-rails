@@ -45,6 +45,28 @@ class CalendarComponentTest < ViewComponent::TestCase
     assert_selector "button[data-shadcn--calendar-target='day']", minimum: 28
   end
 
+  def test_day_buttons_use_v4_focus_visible_ring_styles
+    render_inline(Shadcn::CalendarComponent.new(month: Date.new(2024, 6, 1)))
+
+    classes = page.find("button[data-shadcn--calendar-target='day']")["class"].split
+    assert_includes classes, "focus-visible:border-ring"
+    assert_includes classes, "focus-visible:ring-[3px]"
+    assert_includes classes, "focus-visible:ring-ring/50"
+    refute_includes classes, "focus:ring-1"
+    refute_includes classes, "focus:outline-none"
+  end
+
+  def test_month_year_selects_use_focus_visible_ring_styles
+    render_inline(Shadcn::CalendarComponent.new(month: Date.new(2024, 6, 1)))
+
+    classes = page.find("select[data-shadcn--calendar-target='monthSelect']")["class"].split
+    assert_includes classes, "focus-visible:border-ring"
+    assert_includes classes, "focus-visible:ring-[3px]"
+    assert_includes classes, "focus-visible:ring-ring/50"
+    refute_includes classes, "focus:ring-1"
+    refute_includes classes, "focus:outline-none"
+  end
+
   def test_renders_selected_date
     selected = Date.new(2024, 6, 15)
     render_inline(Shadcn::CalendarComponent.new(selected: selected, month: selected))

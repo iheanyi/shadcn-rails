@@ -19,7 +19,7 @@ module Shadcn
     MONTH_YEAR_CLASSES = "text-sm font-medium"
     NAV_BUTTON_CLASSES = "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-7 w-7"
     WEEKDAY_CLASSES = "text-center text-xs font-medium text-muted-foreground"
-    DAY_CLASSES = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center rounded-md cursor-pointer hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+    DAY_CLASSES = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center rounded-md cursor-pointer hover:bg-accent hover:text-accent-foreground outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
     DAY_SELECTED_CLASSES = "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground"
     DAY_TODAY_CLASSES = "bg-accent text-accent-foreground"
     DAY_OUTSIDE_CLASSES = "text-muted-foreground opacity-50"
@@ -149,7 +149,7 @@ module Shadcn
         class: cn(
           "appearance-none bg-transparent text-sm font-medium cursor-pointer",
           "hover:bg-accent hover:text-accent-foreground rounded px-2 py-1",
-          "focus:outline-none focus:ring-1 focus:ring-ring"
+          "outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
         ),
         data: {
           "shadcn--calendar-target": "monthSelect",
@@ -171,7 +171,7 @@ module Shadcn
         class: cn(
           "appearance-none bg-transparent text-sm font-medium cursor-pointer",
           "hover:bg-accent hover:text-accent-foreground rounded px-2 py-1",
-          "focus:outline-none focus:ring-1 focus:ring-ring"
+          "outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
         ),
         data: {
           "shadcn--calendar-target": "yearSelect",

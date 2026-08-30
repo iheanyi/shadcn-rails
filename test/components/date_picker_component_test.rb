@@ -98,6 +98,16 @@ class DatePickerComponentTest < ViewComponent::TestCase
     assert_includes rendered_content, "data-date=\"2024-06-01\""
   end
 
+  def test_day_buttons_use_v4_focus_visible_ring_styles
+    render_inline(Shadcn::DatePickerComponent.new(month: Date.new(2024, 6, 1)))
+
+    assert_includes rendered_content, "focus-visible:border-ring"
+    assert_includes rendered_content, "focus-visible:ring-[3px]"
+    assert_includes rendered_content, "focus-visible:ring-ring/50"
+    refute_includes rendered_content, "focus:ring-1"
+    refute_includes rendered_content, "focus:outline-none"
+  end
+
   def test_renders_hidden_input_with_name
     render_inline(Shadcn::DatePickerComponent.new(
       name: "event[date]",

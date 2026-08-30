@@ -23,6 +23,18 @@ class SelectComponentTest < ViewComponent::TestCase
     assert_selector "button[data-shadcn--select-target='trigger']"
   end
 
+  def test_trigger_uses_v4_focus_visible_ring_styles
+    render_inline(Shadcn::SelectComponent.new)
+
+    classes = page.find("button[data-shadcn--select-target='trigger']")["class"].split
+    assert_includes classes, "focus-visible:border-ring"
+    assert_includes classes, "focus-visible:ring-[3px]"
+    assert_includes classes, "focus-visible:ring-ring/50"
+    refute_includes classes, "focus:ring-2"
+    refute_includes classes, "focus:ring-offset-2"
+    refute_includes classes, "ring-offset-background"
+  end
+
   def test_trigger_has_combobox_role
     render_inline(Shadcn::SelectComponent.new)
 

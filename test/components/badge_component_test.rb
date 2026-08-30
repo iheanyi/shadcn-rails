@@ -11,6 +11,17 @@ class BadgeComponentTest < ViewComponent::TestCase
     assert_selector "span.bg-primary"
   end
 
+  def test_uses_v4_focus_visible_ring_styles
+    render_inline(Shadcn::BadgeComponent.new) { "Badge" }
+
+    classes = page.find("span", text: "Badge")["class"].split
+    assert_includes classes, "focus-visible:border-ring"
+    assert_includes classes, "focus-visible:ring-[3px]"
+    assert_includes classes, "focus-visible:ring-ring/50"
+    refute_includes classes, "focus:ring-2"
+    refute_includes classes, "focus:ring-offset-2"
+  end
+
   def test_renders_secondary_variant
     render_inline(Shadcn::BadgeComponent.new(variant: :secondary)) { "Secondary" }
 

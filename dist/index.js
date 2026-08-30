@@ -1178,7 +1178,7 @@ class CalendarController extends stimulus.Controller {
                 currentDate.setDate(currentDate.getDate() + 1);
                 continue;
             }
-            let classes = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center focus:outline-none focus:ring-1 focus:ring-ring";
+            let classes = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50";
             // Range styling
             if (isInRange) {
                 classes += " bg-accent/50";
@@ -1690,7 +1690,7 @@ class DatePickerController extends stimulus.Controller {
                 currentDate.setDate(currentDate.getDate() + 1);
                 continue;
             }
-            let classes = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center rounded-md focus:outline-none focus:ring-1 focus:ring-ring";
+            let classes = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center rounded-md outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50";
             if (isDisabled) {
                 classes += " text-muted-foreground opacity-50 cursor-not-allowed";
             }
@@ -6782,7 +6782,7 @@ class SonnerController extends stimulus.Controller {
     buildCloseButton() {
         const button = document.createElement("button");
         button.type = "button";
-        button.className = "absolute right-1 top-1 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-1 focus:ring-ring group-hover:opacity-100 group-[.destructive]:text-red-300 group-[.destructive]:hover:text-red-50";
+        button.className = "absolute right-1 top-1 inline-flex size-8 items-center justify-center rounded-md border-0 bg-transparent p-0 text-foreground/50 opacity-0 transition-opacity hover:bg-accent hover:text-accent-foreground hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring group-hover:opacity-100 group-[.destructive]:text-red-300 group-[.destructive]:hover:bg-destructive/20 group-[.destructive]:hover:text-red-50";
         button.setAttribute("aria-label", "Dismiss notification");
         button.setAttribute("data-sonner-close", "true");
         button.setAttribute("data-action", "click->shadcn--sonner#close");
