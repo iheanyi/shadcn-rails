@@ -21,6 +21,7 @@ import AccordionController from "./controllers/accordion_controller"
 import AvatarController from "./controllers/avatar_controller"
 import CalendarController from "./controllers/calendar_controller"
 import CarouselController from "./controllers/carousel_controller"
+import ChartController from "./controllers/chart_controller"
 import DatePickerController from "./controllers/date_picker_controller"
 import CheckboxController from "./controllers/checkbox_controller"
 import CollapsibleController from "./controllers/collapsible_controller"
@@ -67,6 +68,7 @@ export {
   AvatarController,
   CalendarController,
   CarouselController,
+  ChartController,
   DatePickerController,
   CheckboxController,
   CollapsibleController,
@@ -106,6 +108,7 @@ export const controllers: ShadcnControllerMap = {
   "shadcn--avatar": AvatarController,
   "shadcn--calendar": CalendarController,
   "shadcn--carousel": CarouselController,
+  "shadcn--chart": ChartController,
   "shadcn--date-picker": DatePickerController,
   "shadcn--checkbox": CheckboxController,
   "shadcn--collapsible": CollapsibleController,

@@ -7,6 +7,7 @@ export type ShadcnControllerIdentifier =
   | "shadcn--avatar"
   | "shadcn--calendar"
   | "shadcn--carousel"
+  | "shadcn--chart"
   | "shadcn--date-picker"
   | "shadcn--checkbox"
   | "shadcn--collapsible"

@@ -1,0 +1,126 @@
+<% content_for :title, "Chart" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+    <a href="#accessibility" class="text-muted-foreground hover:text-foreground">Accessibility</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Chart</h1>
+    <p class="text-xl text-muted-foreground">Interactive charts themed with shadcn CSS variables and rendered on Chart.js canvas.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Requires JavaScript
+      </span>
+      <span class="inline-flex items-center rounded-md bg-amber-50 dark:bg-amber-950 px-2 py-1 text-xs font-medium text-amber-700 dark:text-amber-300 ring-1 ring-inset ring-amber-700/10 dark:ring-amber-300/10">
+        Requires Chart.js
+      </span>
+    </div>
+  </div>
+
+  <%= showcase("chart", :default) %>
+
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the component and install the Chart.js peer dependency:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:add chart\nnpm install chart.js@^4.5.1" %>
+  </div>
+
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <p class="leading-7">Pass Chart.js-style data plus a config hash keyed by dataset key, dataset label, or pie label.</p>
+    <%= render "docs/code_example", language: "ruby", code: <<~RUBY.strip %>
+      data = {
+        labels: ["January", "February", "March"],
+        datasets: [
+          { key: "desktop", label: "Desktop", data: [186, 305, 237] },
+          { key: "mobile", label: "Mobile", data: [80, 200, 120] }
+        ]
+      }
+
+      config = {
+        desktop: { label: "Desktop", color: "hsl(var(--chart-1))" },
+        mobile: { label: "Mobile", color: "hsl(var(--chart-2))" }
+      }
+
+      render Shadcn::ChartComponent.new(
+        type: :bar,
+        data: data,
+        config: config,
+        aria_label: "Monthly visitors by device"
+      )
+    RUBY
+  </div>
+
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <div class="grid gap-6 xl:grid-cols-2">
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold">Line</h3>
+        <%= showcase("chart", :line) %>
+      </div>
+
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold">Area</h3>
+        <%= showcase("chart", :area) %>
+      </div>
+
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold">Pie</h3>
+        <%= showcase("chart", :pie) %>
+      </div>
+
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold">Donut</h3>
+        <%= showcase("chart", :donut) %>
+      </div>
+    </div>
+  </div>
+
+  <div id="api-reference">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
+    <%= render "docs/props_table", props: [
+      { name: "type", type: "Symbol/String", default: "required", description: "One of :bar, :line, :area, :pie, or :donut." },
+      { name: "data", type: "Hash", default: "required", description: "Chart.js-compatible labels and datasets." },
+      { name: "config", type: "Hash", default: "{}", description: "Series labels and colors. Colors default to --chart-1 through --chart-5." },
+      { name: "aria_label", type: "String", default: "\"Chart\"", description: "Accessible name for the chart region." },
+      { name: "class_name", type: "String", default: "nil", description: "Additional CSS classes for the chart container." }
+    ] %>
+
+    <div class="mt-6 space-y-4">
+      <h3 class="text-lg font-semibold">Slots</h3>
+      <div class="rounded-lg border">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b bg-muted/50">
+              <th class="text-left p-3 text-sm font-medium">Slot</th>
+              <th class="text-left p-3 text-sm font-medium">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="p-3 text-sm font-mono">with_fallback</td>
+              <td class="p-3 text-sm">Visually hidden fallback content, usually a data table for assistive technology.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="accessibility" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>The chart container renders with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="img"</code> and an accessible label.</li>
+      <li>The canvas is hidden from assistive technology, since canvas content is not meaningfully exposed.</li>
+      <li>Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">with_fallback</code> to provide a screen-reader-only table with the same data.</li>
+    </ul>
+  </div>
+</div>

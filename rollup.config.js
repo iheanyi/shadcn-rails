@@ -1,5 +1,7 @@
 import resolve from "@rollup/plugin-node-resolve"
 
+const external = ["@hotwired/stimulus", "chart.js/auto"]
+
 const builds = [
   {
     input: ".tsbuild/index.js",
@@ -21,7 +23,7 @@ export default builds.flatMap((build) => [
       format: "esm",
       sourcemap: true
     },
-    external: ["@hotwired/stimulus"],
+    external,
     plugins: [resolve()]
   },
   {
@@ -32,7 +34,7 @@ export default builds.flatMap((build) => [
       sourcemap: true,
       exports: "named"
     },
-    external: ["@hotwired/stimulus"],
+    external,
     plugins: [resolve()]
   }
 ])
