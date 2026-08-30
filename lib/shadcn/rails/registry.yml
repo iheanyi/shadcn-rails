@@ -129,6 +129,16 @@ carousel:
     - app/assets/javascripts/shadcn/controllers/carousel_controller.js
   css_sidecars: []
   depends_on: []
+chart:
+  name: chart
+  ruby_files:
+    - app/components/shadcn/chart_component.rb
+  templates: []
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/chart_controller.js
+  css_sidecars: []
+  depends_on:
+    - app/assets/javascripts/shadcn/utils/chart_config.js
 checkbox:
   name: checkbox
   ruby_files:

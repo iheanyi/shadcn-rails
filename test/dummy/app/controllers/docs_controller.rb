@@ -143,6 +143,13 @@ class DocsController < ApplicationController
       description: "Displays a card with header, content, and footer.",
       has_stimulus: false
     },
+    "chart" => {
+      name: "Chart",
+      category: "Data Display",
+      description: "Interactive charts themed with shadcn CSS variables and rendered with Chart.js.",
+      has_stimulus: true,
+      controller: "shadcn--chart"
+    },
     "table" => {
       name: "Table",
       category: "Data Display",

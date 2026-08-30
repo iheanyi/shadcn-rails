@@ -12,10 +12,19 @@
       "import": "./dist/index.esm.js",
       "require": "./dist/index.js"
     },
+    "./chart": {
+      "types": "./dist/chart.d.ts",
+      "import": "./dist/chart.esm.js",
+      "require": "./dist/chart.js"
+    },
     "./controllers": {
       "types": "./dist/controllers/index.d.ts",
       "import": "./dist/controllers/index.esm.js",
       "require": "./dist/controllers/index.js"
+    },
+    "./controllers/chart": {
+      "types": "./dist/controllers/chart_controller.d.ts",
+      "import": "./dist/controllers/chart_controller.js"
     },
     "./controllers/*": {
       "types": "./dist/controllers/*.d.ts",
@@ -65,7 +74,8 @@
     "stimulus-use": "^0.52.3"
   },
   "peerDependencies": {
-    "@hotwired/stimulus": "^3.0.0"
+    "@hotwired/stimulus": "^3.0.0",
+    "chart.js": "^4.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",
@@ -80,5 +90,10 @@
     "jest-environment-jsdom": "^30.2.0",
     "rollup": "^4.0.0",
     "typescript": "^7.0.2"
+  },
+  "peerDependenciesMeta": {
+    "chart.js": {
+      "optional": true
+    }
   }
 }

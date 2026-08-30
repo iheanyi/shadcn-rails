@@ -330,6 +330,51 @@
       </div>
     </div>
 
+    <!-- Chart -->
+    <div class="space-y-4 p-6 border rounded-lg">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Chart</h3>
+        <span class="text-xs text-muted-foreground font-mono">Shadcn::ChartComponent</span>
+      </div>
+      <p class="text-sm text-muted-foreground">Interactive charts rendered with Chart.js and themed by shadcn tokens.</p>
+      <%= render Shadcn::ChartComponent.new(
+        type: :bar,
+        data: {
+          labels: ["January", "February", "March", "April", "May", "June"],
+          datasets: [
+            { key: "desktop", label: "Desktop", data: [186, 305, 237, 73, 209, 214] },
+            { key: "mobile", label: "Mobile", data: [80, 200, 120, 190, 130, 140] }
+          ]
+        },
+        config: {
+          desktop: { label: "Desktop", color: "hsl(var(--chart-1))" },
+          mobile: { label: "Mobile", color: "hsl(var(--chart-2))" }
+        },
+        aria_label: "Monthly visitors by device"
+      ) do |chart| %>
+        <% chart.with_fallback do %>
+          <table>
+            <caption>Monthly visitors by device</caption>
+            <thead>
+              <tr>
+                <th scope="col">Month</th>
+                <th scope="col">Desktop</th>
+                <th scope="col">Mobile</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">January</th><td>186</td><td>80</td></tr>
+              <tr><th scope="row">February</th><td>305</td><td>200</td></tr>
+              <tr><th scope="row">March</th><td>237</td><td>120</td></tr>
+              <tr><th scope="row">April</th><td>73</td><td>190</td></tr>
+              <tr><th scope="row">May</th><td>209</td><td>130</td></tr>
+              <tr><th scope="row">June</th><td>214</td><td>140</td></tr>
+            </tbody>
+          </table>
+        <% end %>
+      <% end %>
+    </div>
+
     <!-- Skeleton -->
     <div class="space-y-4 p-6 border rounded-lg">
       <div class="flex items-center justify-between">

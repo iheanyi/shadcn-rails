@@ -91,6 +91,16 @@ module Shadcn
           end
           say ""
         end
+
+        if @components_to_add.include?("chart")
+          say "Chart requires Chart.js as an optional peer dependency:", :cyan
+          say "  npm install chart.js@^4.5.1"
+          say "  ./bin/importmap pin chart.js/auto"
+          say "Then register the opt-in Chart controller entry:", :cyan
+          say "  import { registerShadcnChartController } from \"shadcn-rails-stimulus/chart\""
+          say "  registerShadcnChartController(application)"
+          say ""
+        end
       end
 
       private
