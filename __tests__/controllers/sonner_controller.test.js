@@ -164,6 +164,58 @@ describe("SonnerController", () => {
     expect(toastElement).toHaveAttribute("data-state", "open")
   })
 
+  test("updating a toast id creates replaces and removes the action button", () => {
+    const id = toast("Invite sent", { duration: 0 })
+    const firstAction = jest.fn()
+    const replacementAction = jest.fn()
+
+    toast({ id, title: "Invite sent", action: { label: "Undo", onClick: firstAction }, duration: 0 })
+
+    let toastElement = document.querySelector(`[data-shadcn-sonner-toast-id="${id}"]`)
+    let actionButton = toastElement.querySelector("[data-sonner-action]")
+    expect(actionButton).toHaveTextContent("Undo")
+
+    toast({ id, title: "Invite resent", action: { label: "Resend", onClick: replacementAction }, duration: 0 })
+
+    toastElement = document.querySelector(`[data-shadcn-sonner-toast-id="${id}"]`)
+    actionButton = toastElement.querySelector("[data-sonner-action]")
+    expect(actionButton).toHaveTextContent("Resend")
+
+    click(actionButton)
+
+    expect(firstAction).not.toHaveBeenCalled()
+    expect(replacementAction).toHaveBeenCalledTimes(1)
+
+    toast({ id, title: "Invite finished", duration: 0 })
+
+    toastElement = document.querySelector(`[data-shadcn-sonner-toast-id="${id}"]`)
+    expect(toastElement.querySelector("[data-sonner-action]")).toBeNull()
+    expect(toastElement.querySelector("[data-sonner-close]")).not.toBeNull()
+  })
+
+  test("updating server toast markup creates a body without replacing close button", async () => {
+    const id = "server-toast"
+    const toastElement = document.createElement("li")
+    toastElement.dataset.sonnerToast = "true"
+    toastElement.dataset.shadcnSonnerToastId = id
+    toastElement.dataset.duration = "0"
+    toastElement.innerHTML = '<button type="button" data-sonner-close="true" data-action="click->shadcn--sonner#close">Close</button>'
+
+    controller.viewportTarget.appendChild(toastElement)
+    await nextFrame()
+
+    toast({ id, title: "Contact saved", description: "Maya Chen was updated.", duration: 0 })
+
+    const bodyElement = toastElement.querySelector("[data-sonner-body]")
+    const closeButton = toastElement.querySelector("[data-sonner-close]")
+
+    expect(bodyElement).not.toBeNull()
+    expect(bodyElement).toHaveTextContent("Contact saved")
+    expect(bodyElement).toHaveTextContent("Maya Chen was updated.")
+    expect(closeButton).not.toBeNull()
+    expect(closeButton).toHaveTextContent("Close")
+  })
+
   test("pauses and resumes auto-dismiss while hovered", () => {
     jest.useFakeTimers()
     const id = toast("Hover me", { duration: 100 })

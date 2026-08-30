@@ -6314,6 +6314,7 @@ const TOAST_VARIANT_CLASSES = {
     warning: "border-yellow-500/40 bg-background text-foreground",
     info: "border-blue-500/40 bg-background text-foreground"
 };
+const TOAST_ACTION_BUTTON_CLASSES = "inline-flex h-8 shrink-0 items-center justify-center rounded-md border border-input bg-background px-3 text-xs font-medium text-foreground hover:bg-accent hover:text-accent-foreground";
 const TOAST_ACTIONS = [
     "mouseenter->shadcn--sonner#pause",
     "mouseleave->shadcn--sonner#resume",
@@ -6642,20 +6643,7 @@ class SonnerController extends Controller {
         toastElement.appendChild(bodyElement);
         const action = this.normalizeAction(options.action);
         if (action) {
-            const actionButton = document.createElement("button");
-            actionButton.type = "button";
-            actionButton.className = "inline-flex h-8 shrink-0 items-center justify-center rounded-md border border-input bg-background px-3 text-xs font-medium text-foreground hover:bg-accent hover:text-accent-foreground";
-            actionButton.textContent = action.label;
-            actionButton.dataset.sonnerAction = "true";
-            actionButton.addEventListener("click", (event) => {
-                const handler = this.actionHandlers.get(id);
-                handler?.(event);
-                this.closeToast(toastElement);
-            });
-            if (action.onClick) {
-                this.actionHandlers.set(id, action.onClick);
-            }
-            toastElement.appendChild(actionButton);
+            toastElement.appendChild(this.buildActionButton(toastElement, id, action));
         }
         toastElement.appendChild(this.buildCloseButton());
         return toastElement;
@@ -6665,24 +6653,25 @@ class SonnerController extends Controller {
         toastElement.dataset.variant = variant;
         toastElement.dataset.position = this.positionValue;
         toastElement.className = this.toastClassName(variant);
-        const bodyElement = toastElement.querySelector("[data-sonner-body]") ?? toastElement.firstElementChild;
-        if (bodyElement instanceof HTMLElement) {
-            bodyElement.textContent = "";
-            bodyElement.className = "grid gap-1";
-            bodyElement.dataset.sonnerBody = "true";
-            if (options.title) {
-                const titleElement = document.createElement("div");
-                titleElement.className = "text-sm font-semibold leading-none tracking-tight";
-                titleElement.textContent = options.title;
-                bodyElement.appendChild(titleElement);
-            }
-            if (options.description) {
-                const descriptionElement = document.createElement("div");
-                descriptionElement.className = "text-sm opacity-90";
-                descriptionElement.textContent = options.description;
-                bodyElement.appendChild(descriptionElement);
-            }
+        const id = this.ensureToastId(toastElement);
+        const bodyElement = this.ensureBodyElement(toastElement);
+        bodyElement.textContent = "";
+        bodyElement.className = "grid gap-1";
+        bodyElement.dataset.sonnerBody = "true";
+        if (options.title) {
+            const titleElement = document.createElement("div");
+            titleElement.className = "text-sm font-semibold leading-none tracking-tight";
+            titleElement.textContent = options.title;
+            bodyElement.appendChild(titleElement);
         }
+        if (options.description) {
+            const descriptionElement = document.createElement("div");
+            descriptionElement.className = "text-sm opacity-90";
+            descriptionElement.textContent = options.description;
+            bodyElement.appendChild(descriptionElement);
+        }
+        this.syncActionButton(toastElement, id, options.action);
+        this.ensureCloseButton(toastElement);
     }
     normalizeAction(action) {
         if (!action)
@@ -6721,6 +6710,58 @@ class SonnerController extends Controller {
         if (toastElement.querySelector("[data-sonner-close]"))
             return;
         toastElement.appendChild(this.buildCloseButton());
+    }
+    ensureBodyElement(toastElement) {
+        const existingBody = toastElement.querySelector("[data-sonner-body]");
+        if (existingBody)
+            return existingBody;
+        const bodyElement = document.createElement("div");
+        bodyElement.className = "grid gap-1";
+        bodyElement.dataset.sonnerBody = "true";
+        const firstControl = toastElement.querySelector("[data-sonner-action], [data-sonner-close]");
+        if (firstControl) {
+            toastElement.insertBefore(bodyElement, firstControl);
+        }
+        else {
+            toastElement.prepend(bodyElement);
+        }
+        return bodyElement;
+    }
+    syncActionButton(toastElement, id, actionOption) {
+        const existingAction = toastElement.querySelector("[data-sonner-action]");
+        const action = this.normalizeAction(actionOption);
+        existingAction?.remove();
+        if (!action) {
+            this.actionHandlers.delete(id);
+            return;
+        }
+        const actionButton = this.buildActionButton(toastElement, id, action);
+        const closeButton = toastElement.querySelector("[data-sonner-close]");
+        if (closeButton) {
+            toastElement.insertBefore(actionButton, closeButton);
+        }
+        else {
+            toastElement.appendChild(actionButton);
+        }
+    }
+    buildActionButton(toastElement, id, action) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = TOAST_ACTION_BUTTON_CLASSES;
+        button.textContent = action.label;
+        button.dataset.sonnerAction = "true";
+        button.addEventListener("click", (event) => {
+            const handler = this.actionHandlers.get(id);
+            handler?.(event);
+            this.closeToast(toastElement);
+        });
+        if (action.onClick) {
+            this.actionHandlers.set(id, action.onClick);
+        }
+        else {
+            this.actionHandlers.delete(id);
+        }
+        return button;
     }
     buildCloseButton() {
         const button = document.createElement("button");
