@@ -6,10 +6,14 @@ on:
   pull_request:
     branches: [main]
 
+# Depot runners require a GitHub organization with the Depot GitHub App
+# installed. This repo currently lives under the personal `iheanyi` account,
+# so default to GitHub-hosted runners. Set repository variable CI_RUNNER to
+# `depot-ubuntu-24.04` once Depot runners are available.
 jobs:
   ruby-tests:
     name: Ruby Tests
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     strategy:
       matrix:
         ruby-version: ['3.2', '3.3', '3.4']
@@ -28,7 +32,7 @@ jobs:
 
   javascript-tests:
     name: JavaScript Tests
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -50,7 +54,7 @@ jobs:
 
   lint:
     name: Lint
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -79,7 +83,7 @@ jobs:
 
   release-ready:
     name: Release Readiness Check
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
     needs: [ruby-tests, javascript-tests, lint]
 
     steps:
