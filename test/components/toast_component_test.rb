@@ -82,6 +82,7 @@ class ToastComponentTest < ViewComponent::TestCase
     assert_includes classes, "hover:bg-accent"
     assert_includes classes, "hover:text-accent-foreground"
     assert_includes classes, "focus-visible:ring-2"
+    assert_includes classes, "focus-visible:opacity-100"
     assert_includes classes, "focus-visible:ring-ring"
     refute_includes classes, "focus:ring-1"
     refute_includes classes, "focus:outline-none"

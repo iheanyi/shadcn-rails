@@ -56,6 +56,7 @@ describe("SonnerController", () => {
     expect(closeButton.classList).toContain("hover:bg-accent")
     expect(closeButton.classList).toContain("hover:text-accent-foreground")
     expect(closeButton.classList).toContain("focus-visible:ring-2")
+    expect(closeButton.classList).toContain("focus-visible:opacity-100")
     expect(closeButton.classList).toContain("focus-visible:ring-ring")
     expect(closeButton.classList).not.toContain("focus:ring-1")
     expect(closeButton.classList).not.toContain("focus:outline-none")
