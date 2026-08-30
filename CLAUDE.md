@@ -562,7 +562,7 @@ The `test/dummy` app serves as both a testing environment and documentation site
 - Live interactive examples that demonstrate each component
 - Code examples stored in `app/code_examples/{component}/` as `.txt` files
 - `erb_example` helper to display code examples with syntax highlighting
-- Showcase page at `/showcase`
+- Component index at `/docs/components`
 
 ### Documentation Structure
 
