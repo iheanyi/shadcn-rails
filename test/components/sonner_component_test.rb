@@ -6,10 +6,10 @@ class SonnerComponentTest < ViewComponent::TestCase
   def test_renders_sonner_toaster_viewport
     render_inline(Shadcn::SonnerComponent.new)
 
-    assert_selector "div[data-controller='shadcn--sonner']"
+    assert_selector "div#shadcn-sonner-viewport-root[data-controller='shadcn--sonner'][data-turbo-permanent]"
     assert_selector "ol#shadcn-sonner-viewport[role='region'][aria-label='Notifications']"
     assert_selector "ol[data-shadcn--sonner-target='viewport']"
-    assert_selector "ol[data-turbo-permanent]"
+    assert_no_selector "ol[data-turbo-permanent]"
   end
 
   def test_renders_controller_values
@@ -30,6 +30,13 @@ class SonnerComponentTest < ViewComponent::TestCase
     render_inline(Shadcn::SonnerComponent.new(position: :bottom_left))
 
     assert_selector "ol.bottom-0.left-0.flex-col-reverse"
+  end
+
+  def test_supports_custom_root_id_for_persistent_toaster
+    render_inline(Shadcn::SonnerComponent.new(id: "account-toasts", root_id: "account-toaster"))
+
+    assert_selector "div#account-toaster[data-controller='shadcn--sonner'][data-turbo-permanent]"
+    assert_selector "ol#account-toasts[data-shadcn--sonner-target='viewport']"
   end
 
   def test_renders_content_inside_controller_scope

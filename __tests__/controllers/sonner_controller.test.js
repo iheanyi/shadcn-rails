@@ -67,9 +67,24 @@ describe("SonnerController", () => {
 
     await nextFrame()
     jest.useFakeTimers()
+    expect(closeButton.dataset.sonnerCloseBound).toBeUndefined()
     closeIconPath.dispatchEvent(new PointerEventConstructor("pointerdown", { bubbles: true }))
     click(closeIconPath)
     jest.advanceTimersByTime(250)
+
+    expect(document.querySelector(`[data-shadcn-sonner-toast-id="${id}"]`)).toBeNull()
+  })
+
+  test("toast.dismiss(id) removes queued toasts before the toaster connects", async () => {
+    cleanupController(application)
+    application = null
+
+    const id = toast("Queued save", { duration: 0 })
+    toast.dismiss(id)
+
+    const setup = await setupController(SonnerController, toasterHtml(), "shadcn--sonner")
+    application = setup.application
+    controller = setup.controller
 
     expect(document.querySelector(`[data-shadcn-sonner-toast-id="${id}"]`)).toBeNull()
   })
@@ -86,8 +101,11 @@ describe("SonnerController", () => {
     toast("Third", { duration: 0 })
     jest.advanceTimersByTime(250)
 
+    const toastElements = Array.from(document.querySelectorAll("[data-shadcn-sonner-toast-id]"))
     expect(document.querySelector(`[data-shadcn-sonner-toast-id="${firstId}"]`)).toBeNull()
-    expect(document.querySelectorAll("[data-shadcn-sonner-toast-id]")).toHaveLength(2)
+    expect(toastElements).toHaveLength(2)
+    expect(toastElements[0]).toHaveTextContent("Third")
+    expect(toastElements[1]).toHaveTextContent("Second")
   })
 
   test("pauses and resumes auto-dismiss while hovered", () => {
@@ -118,6 +136,8 @@ describe("SonnerController", () => {
 
     expect(toastElement.dataset.shadcnSonnerToastId).toMatch(/^sonner-/)
     expect(toastElement.dataset.shadcnSonnerBound).toBe("true")
+    expect(toastElement.getAttribute("data-action")).toContain("mouseenter->shadcn--sonner#pause")
+    expect(toastElement.getAttribute("data-action")).toContain("pointerdown->shadcn--sonner#startSwipe")
     expect(toastElement).toHaveTextContent("Server-rendered toast")
     expect(toastElement.querySelector("[data-sonner-close]")).not.toBeNull()
   })
