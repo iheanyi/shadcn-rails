@@ -1,0 +1,25 @@
+<%= render Shadcn::DataTableComponent.new(
+  rows: @contacts,
+  sort: params[:sort],
+  dir: params[:dir],
+  params: request.query_parameters,
+  path: contacts_path
+) do |table| %>
+  <% table.with_toolbar do %>
+    <%= form_with url: contacts_path, method: :get, data: { turbo_frame: "contacts" } do %>
+      <%= render Shadcn::InputComponent.new(name: "q", value: params[:q], placeholder: "Search contacts...") %>
+      <%= render Shadcn::ButtonComponent.new(type: "submit") { "Search" } %>
+    <% end %>
+  <% end %>
+
+  <% table.with_column(:name, sortable: true) %>
+  <% table.with_column(:email, sortable: true) %>
+  <% table.with_column(:status) %>
+  <% table.with_column(:actions, align: :end) do |contact| %>
+    <%= link_to "Edit", edit_contact_path(contact), class: "text-sm underline" %>
+  <% end %>
+
+  <% table.with_footer do %>
+    <%= render Shadcn::PaginationComponent.new(pagy: @pagy) %>
+  <% end %>
+<% end %>

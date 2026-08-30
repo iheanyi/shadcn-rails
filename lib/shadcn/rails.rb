@@ -18,6 +18,7 @@ require_relative "rails/registry"
 require_relative "rails/helpers/class_name_helper"
 require_relative "rails/helpers/component_helper"
 require_relative "rails/helpers/pagination_helper"
+require_relative "rails/helpers/data_table_helper"
 require_relative "form_builder"
 require_relative "rails/engine"
 

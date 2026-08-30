@@ -1,0 +1,168 @@
+<% content_for :title, "Data Table" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#live-demo" class="text-muted-foreground hover:text-foreground">Live Demo</a>
+    <a href="#controller-recipe" class="text-muted-foreground hover:text-foreground">Controller Recipe</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+    <a href="#accessibility" class="text-muted-foreground hover:text-foreground">Accessibility</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Data Table</h1>
+    <p class="text-xl text-muted-foreground">Server-first sortable, filterable tables built from Table and Pagination.</p>
+    <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+        No JavaScript Required
+      </span>
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Turbo Friendly
+      </span>
+    </div>
+  </div>
+
+  <%= showcase("data-table", :default) %>
+
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the Data Table component and its Table dependency to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:add data_table" %>
+  </div>
+
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <p class="leading-7">
+      Data Table is a Rails translation of the upstream shadcn/ui data-table recipe. It renders table structure,
+      sortable header links, toolbar and footer slots, while your controller owns filtering, safe-listed sorting,
+      and pagination from URL params.
+    </p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/data-table/default.txt")) %>
+  </div>
+
+  <div id="live-demo" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Live Demo</h2>
+    <p class="text-sm text-muted-foreground">
+      Search, filter, sort by a header, or move between pages. Turbo updates the frame with normal GET URLs.
+    </p>
+
+    <%= turbo_frame_tag "data-table-demo" do %>
+      <%= render Shadcn::DataTableComponent.new(
+        rows: @data_table_rows,
+        sort: @data_table_sort,
+        dir: @data_table_dir,
+        params: request.query_parameters,
+        path: docs_component_path(slug: "data-table"),
+        caption: "#{pluralize(@data_table_total_count, 'invoice')} found"
+      ) do |table| %>
+        <% table.with_toolbar do %>
+          <%= form_with url: docs_component_path(slug: "data-table"), method: :get, data: { turbo_frame: "data-table-demo" }, class: "flex flex-col gap-3 sm:flex-row sm:items-end" do %>
+            <%= hidden_field_tag :sort, @data_table_sort if @data_table_sort.present? %>
+            <%= hidden_field_tag :dir, @data_table_dir if @data_table_dir.present? %>
+
+            <div class="w-full sm:max-w-xs">
+              <%= render Shadcn::FieldComponent.new(name: "q", id: "data-table-search") do |field| %>
+                <% field.with_label { "Search" } %>
+                <% field.with_input(value: @data_table_search, placeholder: "Search invoices..." ) %>
+              <% end %>
+            </div>
+
+            <div class="w-full sm:max-w-[180px]">
+              <%= render Shadcn::FieldComponent.new(name: "status", id: "data-table-status") do |field| %>
+                <% field.with_label { "Status" } %>
+                <% field.with_control do %>
+                  <%= render Shadcn::NativeSelectComponent.new(name: "status", id: "data-table-status") do |select| %>
+                    <% select.with_option(value: "", selected: @data_table_status.blank?) { "All statuses" } %>
+                    <% %w[Paid Processing Pending Failed].each do |status| %>
+                      <% select.with_option(value: status, selected: @data_table_status == status) { status } %>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </div>
+
+            <div class="flex gap-2">
+              <%= render Shadcn::ButtonComponent.new(type: "submit") { "Apply" } %>
+              <%= render Shadcn::ButtonComponent.new(href: docs_component_path(slug: "data-table"), variant: :outline) { "Reset" } %>
+            </div>
+          <% end %>
+        <% end %>
+
+        <% table.with_column(:name, label: "Customer", sortable: true) %>
+        <% table.with_column(:email, sortable: true) %>
+        <% table.with_column(:status, sortable: true) do |invoice| %>
+          <span class="inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium"><%= invoice[:status] %></span>
+        <% end %>
+        <% table.with_column(:amount, label: "Amount", sortable: true, align: :end) do |invoice| %>
+          <%= number_to_currency(invoice[:amount] / 100.0) %>
+        <% end %>
+
+        <% table.with_empty_state do %>
+          <%= render Shadcn::EmptyComponent.new(class_name: "py-10") do |empty| %>
+            <% empty.with_header do |header| %>
+              <% header.with_title { "No invoices found" } %>
+              <% header.with_description { "Try a different search term or status filter." } %>
+            <% end %>
+            <% empty.with_content do %>
+              <%= render Shadcn::ButtonComponent.new(href: docs_component_path(slug: "data-table"), variant: :outline) { "Clear filters" } %>
+            <% end %>
+          <% end %>
+        <% end %>
+
+        <% table.with_footer do %>
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p class="text-sm text-muted-foreground">
+              Page <%= @data_table_page.current_page %> of <%= @data_table_page.total_pages %>
+            </p>
+            <%= render Shadcn::PaginationComponent.new(
+              collection: @data_table_page,
+              url_builder: ->(page) { docs_component_path(slug: "data-table", **request.query_parameters.merge("page" => page).symbolize_keys) }
+            ) %>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div id="controller-recipe" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Controller Recipe</h2>
+    <p class="leading-7">
+      Keep sorting server-side and safe-list the columns your controller may order by. The component only renders
+      URLs and ARIA state.
+    </p>
+    <%= render "docs/code_example", language: "ruby", code: File.read(Rails.root.join("app/code_examples/data-table/controller.txt")) %>
+  </div>
+
+  <div id="api-reference" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">API Reference</h2>
+    <%= render "docs/props_table", title: "DataTableComponent", props: [
+      { name: "rows", type: "Enumerable", default: "required", description: "Rows rendered by the table. Filtering, sorting, and pagination should already be applied." },
+      { name: "sort", type: "String", default: "nil", description: "Current sort key from params." },
+      { name: "dir", type: "String", default: "nil", description: "Current direction, asc or desc." },
+      { name: "params", type: "Hash", default: "request.query_parameters", description: "Query params preserved by sort header links." },
+      { name: "path", type: "String", default: "request.path", description: "Base path for generated sort URLs." },
+      { name: "caption", type: "String", default: "nil", description: "Optional table caption." }
+    ] %>
+
+    <%= render "docs/props_table", title: "Column DSL", props: [
+      { name: "with_column(key)", type: "Symbol", default: "required", description: "Defines a column. Without a block, values come from row[key] or row.public_send(key)." },
+      { name: "label", type: "String", default: "key.humanize", description: "Header label." },
+      { name: "sortable", type: "Boolean", default: "false", description: "Renders the header as a sort link with aria-sort." },
+      { name: "sort_key", type: "String", default: "key", description: "Param value used for sorting when it differs from the display key." },
+      { name: "align", type: "Symbol", default: ":start", description: "Cell and header alignment: :start, :center, or :end." }
+    ] %>
+  </div>
+
+  <div id="accessibility" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>Sortable headers are real links, so browser navigation and assistive technologies work without custom JavaScript.</li>
+      <li>Sortable header cells expose <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-sort</code> as <code>ascending</code>, <code>descending</code>, or <code>none</code>.</li>
+      <li>The toolbar uses standard Rails form controls and submits with GET params.</li>
+      <li>The footer slot composes PaginationComponent, preserving keyboard and screen-reader behavior from pagination links.</li>
+    </ul>
+  </div>
+</div>

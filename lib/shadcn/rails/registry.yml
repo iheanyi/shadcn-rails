@@ -198,6 +198,17 @@ context_menu:
   css_sidecars: []
   depends_on:
     - app/assets/javascripts/shadcn/utils/floating.js
+data_table:
+  name: data_table
+  ruby_files:
+    - app/components/shadcn/data_table_column_component.rb
+    - app/components/shadcn/data_table_component.rb
+  templates:
+    - app/components/shadcn/data_table_component.html.erb
+  controllers: []
+  css_sidecars: []
+  depends_on:
+    - table
 date_picker:
   name: date_picker
   ruby_files:

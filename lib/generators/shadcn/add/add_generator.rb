@@ -3,6 +3,7 @@
 require "rails/generators"
 require "rails/generators/base"
 require "shadcn/rails/registry"
+require "set"
 
 module Shadcn
   module Generators
@@ -57,6 +58,8 @@ module Shadcn
       end
 
       def add_components
+        @added_component_units = Set.new
+
         @components_to_add.each do |component|
           add_component(component)
         end
@@ -130,14 +133,22 @@ module Shadcn
       end
 
       def add_component(name)
+        name = Shadcn::Rails::Registry.normalize_name(name)
+        return if @added_component_units.include?(name)
+
+        @added_component_units.add(name)
         unit = component_unit(name)
 
         (unit.ruby_files + unit.templates).each do |path|
           copy_component_file(path)
         end
 
+        component_dependencies(unit).each do |dependency|
+          add_component(dependency)
+        end
+
         if include_controllers?
-          (unit.controllers + unit.depends_on).each do |path|
+          (unit.controllers + file_dependencies(unit)).each do |path|
             copy_javascript_file(path)
           end
         end
@@ -207,6 +218,14 @@ module Shadcn
 
       def component_unit(name)
         Shadcn::Rails::Registry.fetch(name)
+      end
+
+      def component_dependencies(unit)
+        unit.depends_on.select { |dependency| Shadcn::Rails::Registry.key?(dependency) }
+      end
+
+      def file_dependencies(unit)
+        unit.depends_on.reject { |dependency| Shadcn::Rails::Registry.key?(dependency) }
       end
 
       def destination_file_exists?(path)

@@ -21,6 +21,16 @@ class ShadcnRegistryTest < Minitest::Test
     assert_includes unit.controllers, "app/assets/javascripts/shadcn/controllers/dialog_controller.js"
   end
 
+  def test_data_table_unit_depends_on_table_unit
+    unit = Shadcn::Rails::Registry.fetch("data-table")
+
+    assert_equal "data_table", unit.name
+    assert_includes unit.ruby_files, "app/components/shadcn/data_table_component.rb"
+    assert_includes unit.ruby_files, "app/components/shadcn/data_table_column_component.rb"
+    assert_includes unit.templates, "app/components/shadcn/data_table_component.html.erb"
+    assert_includes unit.depends_on, "table"
+  end
+
   def test_registry_normalizes_hyphenated_names
     assert_equal Shadcn::Rails::Registry.fetch("dropdown_menu"), Shadcn::Rails::Registry.fetch("dropdown-menu")
   end

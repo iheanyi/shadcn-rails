@@ -3,6 +3,16 @@
 class DocsController < ApplicationController
   layout "docs"
 
+  DataTablePage = Struct.new(:current_page, :total_pages, keyword_init: true) do
+    def prev_page
+      current_page > 1 ? current_page - 1 : nil
+    end
+
+    def next_page
+      current_page < total_pages ? current_page + 1 : nil
+    end
+  end
+
   # Complete list of all shadcn-rails components with metadata
   COMPONENTS = {
     # Buttons & Actions
@@ -137,6 +147,12 @@ class DocsController < ApplicationController
       name: "Table",
       category: "Data Display",
       description: "A responsive table component.",
+      has_stimulus: false
+    },
+    "data-table" => {
+      name: "Data Table",
+      category: "Data Display",
+      description: "Server-first sortable, filterable tables built from Table and Pagination.",
       has_stimulus: false
     },
     "progress" => {
@@ -445,6 +461,8 @@ class DocsController < ApplicationController
       return
     end
 
+    prepare_data_table_demo if @slug == "data-table"
+
     # Try to render a specific template, fall back to a generic show template
     render @slug
   rescue ActionView::MissingTemplate
@@ -473,5 +491,66 @@ class DocsController < ApplicationController
       alignment: submitted[:alignment].presence || "left",
       body: submitted[:body].presence || "Edit this note, toggle marks, choose alignment, then preview or save."
     }
+  end
+
+  def prepare_data_table_demo
+    @data_table_search = params[:q].to_s
+    @data_table_status = params[:status].to_s
+    @data_table_sort = params[:sort].to_s
+    @data_table_dir = %w[asc desc].include?(params[:dir].to_s) ? params[:dir].to_s : nil
+
+    records = data_table_records
+    records = filter_data_table_records(records)
+    records = sort_data_table_records(records)
+
+    per_page = 5
+    current_page = [params[:page].to_i, 1].max
+    total_pages = [(records.length.to_f / per_page).ceil, 1].max
+    current_page = [current_page, total_pages].min
+
+    @data_table_total_count = records.length
+    @data_table_rows = records[((current_page - 1) * per_page), per_page] || []
+    @data_table_page = DataTablePage.new(current_page: current_page, total_pages: total_pages)
+  end
+
+  def filter_data_table_records(records)
+    records = records.select { |record| record[:status] == @data_table_status } if @data_table_status.present?
+
+    return records if @data_table_search.blank?
+
+    query = @data_table_search.downcase
+    records.select do |record|
+      record.values_at(:name, :email, :status).any? { |value| value.to_s.downcase.include?(query) }
+    end
+  end
+
+  def sort_data_table_records(records)
+    sorters = {
+      "name" => ->(record) { record[:name].downcase },
+      "email" => ->(record) { record[:email].downcase },
+      "status" => ->(record) { record[:status].downcase },
+      "amount" => ->(record) { record[:amount] }
+    }
+    sorter = sorters[@data_table_sort]
+    return records unless sorter && @data_table_dir
+
+    sorted = records.sort_by(&sorter)
+    @data_table_dir == "desc" ? sorted.reverse : sorted
+  end
+
+  def data_table_records
+    [
+      { name: "Olivia Martin", email: "olivia@example.com", status: "Paid", amount: 1999 },
+      { name: "Jackson Lee", email: "jackson@example.com", status: "Paid", amount: 3900 },
+      { name: "Isabella Nguyen", email: "isabella@example.com", status: "Processing", amount: 299 },
+      { name: "William Kim", email: "william@example.com", status: "Pending", amount: 9900 },
+      { name: "Sofia Davis", email: "sofia@example.com", status: "Paid", amount: 3900 },
+      { name: "Noah Garcia", email: "noah@example.com", status: "Failed", amount: 199 },
+      { name: "Ava Thompson", email: "ava@example.com", status: "Processing", amount: 1500 },
+      { name: "Mia Wilson", email: "mia@example.com", status: "Pending", amount: 2499 },
+      { name: "Ethan Clark", email: "ethan@example.com", status: "Paid", amount: 5000 },
+      { name: "Amelia Brown", email: "amelia@example.com", status: "Failed", amount: 750 },
+      { name: "Lucas Miller", email: "lucas@example.com", status: "Processing", amount: 1200 }
+    ]
   end
 end
