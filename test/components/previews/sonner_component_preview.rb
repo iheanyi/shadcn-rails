@@ -9,11 +9,11 @@ class SonnerComponentPreview < ViewComponent::Preview
     render(Shadcn::SonnerComponent.new(id: "sonner-default-viewport", limit: 5, duration: 15_000)) do
       <<~HTML.html_safe
         <div class="flex flex-wrap gap-2">
-          #{demo_button("Create invoice", "Invoice created", "Invoice #1042 was created for Acme Studio.")}
-          #{demo_button("Save customer", "Customer saved", "Billing contact and tax ID were updated.", "success")}
-          #{demo_button("Simulate error", "Payment failed", "The card was declined. Ask the customer for another payment method.", "destructive")}
-          #{demo_button("Warn shipping", "Address needs review", "Shipping rates changed after the postal code update.", "warning")}
-          #{demo_button("Show audit note", "Audit log updated", "Maya Chen added a note to the customer timeline.", "info")}
+          #{demo_button("Create invoice", "Invoice created", "Invoice #1042 was created for Acme Studio.", "default", 0)}
+          #{demo_button("Save customer", "Customer saved", "Billing contact and tax ID were updated.", "success", 0)}
+          #{demo_button("Simulate error", "Payment failed", "The card was declined. Ask the customer for another payment method.", "destructive", 0)}
+          #{demo_button("Warn shipping", "Address needs review", "Shipping rates changed after the postal code update.", "warning", 0)}
+          #{demo_button("Show audit note", "Audit log updated", "Maya Chen added a note to the customer timeline.", "info", 0)}
         </div>
       HTML
     end
