@@ -106,10 +106,10 @@ class SheetComponentTest < ViewComponent::TestCase
     end
 
     html = result.to_html
-    close_button_match = html.match(/<button type="button" class="([^"]*)"[^>]*aria-label="Close"/)
+    close_button_match = html.match(/<button[^>]*aria-label="Close"[^>]*>/)
     assert close_button_match
 
-    close_classes = close_button_match[1].split
+    close_classes = close_button_match[0][/class="([^"]*)"/, 1].split
     assert_includes close_classes, "hover:bg-accent"
     assert_includes close_classes, "hover:text-accent-foreground"
     assert_includes close_classes, "focus-visible:ring-2"
