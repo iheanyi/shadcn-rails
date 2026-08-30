@@ -232,6 +232,13 @@ GEM
       io-console (~> 0.5)
     rouge (4.6.1)
     securerandom (0.4.1)
+    sentry-rails (6.7.0)
+      railties (>= 5.2.0)
+      sentry-ruby (~> 6.7.0)
+    sentry-ruby (6.7.0)
+      bigdecimal
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      logger
     sin_lru_redux (2.5.2)
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
@@ -285,6 +292,8 @@ DEPENDENCIES
   lookbook (>= 2.0)
   puma
   rails (>= 7.0)
+  sentry-rails
+  sentry-ruby
   shadcn-rails!
   sprockets-rails
   sqlite3 (~> 1.4)
