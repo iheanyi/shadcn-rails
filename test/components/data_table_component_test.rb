@@ -7,6 +7,10 @@ class DataTableComponentTest < ViewComponent::TestCase
 
   Invoice = Struct.new(:name, :email, :status, :amount, keyword_init: true)
 
+  teardown do
+    Shadcn::Rails.reset_configuration!
+  end
+
   def test_renders_columns_and_rows_with_default_and_block_cells
     render_inline(Shadcn::DataTableComponent.new(rows: invoices, path: "/invoices")) do |table|
       table.with_column(:name, label: "Customer", sortable: true)
@@ -69,6 +73,46 @@ class DataTableComponentTest < ViewComponent::TestCase
     assert_includes email_href, "dir=asc"
   end
 
+  def test_sortable_headers_cycle_from_component_sort_when_params_do_not_include_sort
+    render_inline(
+      Shadcn::DataTableComponent.new(
+        rows: invoices,
+        sort: "name",
+        dir: "asc",
+        params: { "q" => "paid" },
+        path: "/invoices"
+      )
+    ) do |table|
+      table.with_column(:name, label: "Customer", sortable: true)
+    end
+
+    customer_header = page.find("th", text: "Customer")
+    assert_equal "ascending", customer_header["aria-sort"]
+    href = customer_header.find("a")["href"]
+    assert_includes href, "q=paid"
+    assert_includes href, "sort=name"
+    assert_includes href, "dir=desc"
+  end
+
+  def test_sortable_headers_cycle_from_params_when_component_sort_is_not_set
+    render_inline(
+      Shadcn::DataTableComponent.new(
+        rows: invoices,
+        params: { "q" => "paid", "sort" => "name", "dir" => "asc" },
+        path: "/invoices"
+      )
+    ) do |table|
+      table.with_column(:name, label: "Customer", sortable: true)
+    end
+
+    customer_header = page.find("th", text: "Customer")
+    assert_equal "ascending", customer_header["aria-sort"]
+    href = customer_header.find("a")["href"]
+    assert_includes href, "q=paid"
+    assert_includes href, "sort=name"
+    assert_includes href, "dir=desc"
+  end
+
   def test_descending_sort_link_cycles_to_unsorted_url
     render_inline(
       Shadcn::DataTableComponent.new(
@@ -87,6 +131,39 @@ class DataTableComponentTest < ViewComponent::TestCase
 
     href = customer_header.find("a")["href"]
     assert_equal "/invoices?q=paid", href
+  end
+
+  def test_sortable_header_classes_respect_tailwind_prefix
+    Shadcn::Rails.configure do |config|
+      config.tailwind_prefix = "tw-"
+    end
+
+    render_inline(Shadcn::DataTableComponent.new(rows: invoices, path: "/invoices")) do |table|
+      table.with_column(:name, label: "Customer", sortable: true)
+    end
+
+    header_link = page.find("th", text: "Customer").find("a")
+    indicator = header_link.find("span")
+
+    assert_includes header_link["class"].split, "tw-inline-flex"
+    assert_includes header_link["class"].split, "tw-gap-1"
+    assert_includes header_link["class"].split, "hover:tw-text-foreground"
+    assert_includes header_link["class"].split, "focus-visible:tw-ring-1"
+    assert_includes indicator["class"].split, "tw-text-muted-foreground"
+  end
+
+  def test_computed_method_column_wins_when_key_is_not_present_in_bracket_lookup
+    row = Object.new
+    attributes = { "first_name" => "Olivia", "last_name" => "Martin" }
+    row.define_singleton_method(:key?) { |key| attributes.key?(key.to_s) }
+    row.define_singleton_method(:[]) { |key| attributes.fetch(key.to_s) }
+    row.define_singleton_method(:full_name) { "#{self[:first_name]} #{self[:last_name]}" }
+
+    render_inline(Shadcn::DataTableComponent.new(rows: [row], path: "/invoices")) do |table|
+      table.with_column(:full_name, label: "Customer")
+    end
+
+    assert_selector "td", text: "Olivia Martin"
   end
 
   def test_empty_state_slot_renders_with_column_colspan

@@ -44,18 +44,18 @@ module Shadcn
     end
 
     def header_classes
-      cn(ALIGNMENT_CLASSES.fetch(@align, ""), @header_class_name)
+      prefix_classes(cn(ALIGNMENT_CLASSES.fetch(@align, ""), @header_class_name))
     end
 
     def cell_classes
-      cn(ALIGNMENT_CLASSES.fetch(@align, ""), @cell_class_name, class_name)
+      prefix_classes(cn(ALIGNMENT_CLASSES.fetch(@align, ""), @cell_class_name, class_name))
     end
 
     def header_link_classes
-      cn(
+      prefix_classes(cn(
         "inline-flex items-center gap-1 rounded-sm underline-offset-4 hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
         HEADER_LINK_ALIGNMENT_CLASSES.fetch(@align, "")
-      )
+      ))
     end
 
     def value_for(row, renderer)
@@ -71,17 +71,15 @@ module Shadcn
     private
 
     def default_value(row)
-      if row.respond_to?(:[])
-        if row.respond_to?(:key?) && row.key?(@key)
-          row[@key]
-        elsif row.respond_to?(:key?) && row.key?(@key.to_s)
-          row[@key.to_s]
-        else
-          row[@key] || row[@key.to_s]
-        end
-      elsif row.respond_to?(@key)
-        row.public_send(@key)
+      if row.respond_to?(:key?)
+        return row[@key] if row.key?(@key)
+        return row[@key.to_s] if row.key?(@key.to_s)
       end
+
+      return row.public_send(@key) if row.respond_to?(@key)
+      return unless row.respond_to?(:[])
+
+      row[@key] || row[@key.to_s]
     end
   end
 end
