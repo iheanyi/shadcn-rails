@@ -85,7 +85,9 @@ module Shadcn
         sort_param: @sort_param,
         dir_param: @dir_param,
         page_param: @page_param,
-        reset_page: @reset_page_on_sort
+        reset_page: @reset_page_on_sort,
+        current_sort: @sort,
+        current_dir: @dir
       )
     end
 
@@ -104,7 +106,7 @@ module Shadcn
           "sort"
         end
 
-      content_tag(:span, label, class: SORT_INDICATOR_CLASSES, "aria-hidden": true)
+      content_tag(:span, label, class: prefix_classes(SORT_INDICATOR_CLASSES), "aria-hidden": true)
     end
 
     def render_empty_state
