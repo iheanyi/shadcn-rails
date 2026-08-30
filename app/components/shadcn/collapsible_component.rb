@@ -7,10 +7,8 @@ module Shadcn
   #
   # @example Basic collapsible
   #   <%= render Shadcn::CollapsibleComponent.new do |collapsible| %>
-  #     <% collapsible.with_trigger do %>
-  #       <%= render Shadcn::ButtonComponent.new(variant: :ghost, size: :sm) do %>
-  #         Toggle
-  #       <% end %>
+  #     <% collapsible.with_trigger(variant: :ghost, size: :sm) do %>
+  #       Toggle
   #     <% end %>
   #     <% collapsible.with_body do %>
   #       Hidden content here
@@ -18,8 +16,11 @@ module Shadcn
   #   <% end %>
   #
   class CollapsibleComponent < BaseComponent
-    renders_one :trigger
+    renders_one :trigger, lambda { |**options, &block|
+      CollapsibleTriggerComponent.new(open: @open, disabled: @disabled, **options, &block)
+    }
     renders_one :body, lambda { |**options, &block|
+      options[:open] = @open unless options.key?(:open)
       CollapsibleContentComponent.new(**options, &block)
     }
 
@@ -38,16 +39,7 @@ module Shadcn
     end
 
     def collapsible_content
-      safe_join([trigger_wrapper, body].compact)
-    end
-
-    def trigger_wrapper
-      return unless trigger
-
-      content_tag(:div, trigger, {
-        "data-shadcn--collapsible-target": "trigger",
-        "data-action": "click->shadcn--collapsible#toggle"
-      })
+      safe_join([trigger, body].compact)
     end
 
     def state

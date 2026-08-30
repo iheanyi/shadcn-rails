@@ -1,37 +1,37 @@
-<%= render Shadcn::CardComponent.new(class_name: "w-full max-w-md") do |card| %>
+<%= render Shadcn::Card.new(class_name: "w-full max-w-md") do |card| %>
   <% card.with_header do |header| %>
     <% header.with_title { "Account Settings" } %>
     <% header.with_description { "Manage your account preferences" } %>
   <% end %>
   <% card.with_content do %>
     <div class="space-y-4">
-      <%= render Shadcn::CollapsibleComponent.new do |collapsible| %>
-        <% collapsible.with_trigger do %>
-          <div class="flex items-center justify-between w-full">
-            <div class="space-y-0.5">
-              <div class="text-sm font-medium">Notification Preferences</div>
-              <div class="text-sm text-muted-foreground">Configure how you receive notifications</div>
-            </div>
-            <%= render Shadcn::ButtonComponent.new(variant: :ghost, size: :sm, class_name: "w-9 p-0") do %>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m6 9 6 6 6-6"></path>
-              </svg>
-            <% end %>
-          </div>
+      <%= render Shadcn::Collapsible.new do |collapsible| %>
+        <% collapsible.with_trigger(
+          variant: nil,
+          size: nil,
+          class_name: "group flex w-full items-center justify-between rounded-md p-2 text-left transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+        ) do %>
+          <span class="space-y-0.5">
+            <span class="block text-sm font-medium">Notification Preferences</span>
+            <span class="block text-sm text-muted-foreground">Configure how you receive notifications</span>
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="m6 9 6 6 6-6"></path>
+    </svg>
         <% end %>
         <% collapsible.with_body do %>
           <div class="pt-4 space-y-3">
             <div class="flex items-center justify-between">
               <span class="text-sm">Email notifications</span>
-              <%= render Shadcn::CheckboxComponent.new(id: "email-notif") %>
+              <%= render Shadcn::Checkbox.new(id: "email-notif") %>
             </div>
             <div class="flex items-center justify-between">
               <span class="text-sm">Push notifications</span>
-              <%= render Shadcn::CheckboxComponent.new(id: "push-notif") %>
+              <%= render Shadcn::Checkbox.new(id: "push-notif") %>
             </div>
             <div class="flex items-center justify-between">
               <span class="text-sm">SMS notifications</span>
-              <%= render Shadcn::CheckboxComponent.new(id: "sms-notif") %>
+              <%= render Shadcn::Checkbox.new(id: "sms-notif") %>
             </div>
           </div>
         <% end %>

@@ -14,11 +14,14 @@ export default class extends Controller<HTMLElement> {
             default: boolean;
         };
     };
+    private hasConnected;
     connect(): void;
     toggle(): void;
     open(): void;
     close(): void;
-    updateState(): void;
+    updateState({ animate }?: {
+        animate?: boolean | undefined;
+    }): void;
     openValueChanged(): void;
 }
 //# sourceMappingURL=collapsible_controller.d.ts.map
