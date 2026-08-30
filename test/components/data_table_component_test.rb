@@ -166,6 +166,16 @@ class DataTableComponentTest < ViewComponent::TestCase
     assert_selector "td", text: "Olivia Martin"
   end
 
+  def test_missing_hash_keys_do_not_call_hash_methods
+    render_inline(Shadcn::DataTableComponent.new(rows: [{ name: "Olivia Martin" }], path: "/invoices")) do |table|
+      table.with_column(:name)
+      table.with_column(:count)
+      table.with_column(:key)
+    end
+
+    assert_equal ["Olivia Martin", "", ""], page.all("td").map { |cell| cell.text.strip }
+  end
+
   def test_empty_state_slot_renders_with_column_colspan
     render_inline(Shadcn::DataTableComponent.new(rows: [], path: "/invoices")) do |table|
       table.with_column(:name)

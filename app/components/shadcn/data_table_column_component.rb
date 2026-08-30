@@ -76,6 +76,7 @@ module Shadcn
         return row[@key.to_s] if row.key?(@key.to_s)
       end
 
+      return if row.is_a?(Hash)
       return row.public_send(@key) if row.respond_to?(@key)
       return unless row.respond_to?(:[])
 
