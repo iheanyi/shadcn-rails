@@ -1,0 +1,181 @@
+<% content_for :title, "Sonner" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#turbo-streams" class="text-muted-foreground hover:text-foreground">Turbo Streams</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+    <a href="#accessibility" class="text-muted-foreground hover:text-foreground">Accessibility</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <% sonner_button_classes = "inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-xs transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" %>
+
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Sonner</h1>
+    <p class="text-xl text-muted-foreground">An opinionated toast manager for Rails apps.</p>
+    <div class="flex flex-wrap items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+        Recommended
+      </span>
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Stimulus Controller
+      </span>
+    </div>
+  </div>
+
+  <%# showcase("sonner", :default) is intentionally rendered page-level here so fixed Sonner viewports are not clipped by preview cards. %>
+  <%= render Shadcn::SonnerComponent.new(id: "sonner-default-viewport", limit: 5, duration: 15_000) do %>
+    <div class="rounded-lg border bg-card p-6">
+      <div class="mb-4 space-y-1">
+        <h2 class="text-lg font-semibold">Recommended toast API</h2>
+        <p class="text-sm text-muted-foreground">Realistic app events using the page-level Sonner toaster.</p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <%= button_tag "Create invoice", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Invoice created", description: "Invoice #1042 was created for Acme Studio.", variant: "default", duration: 0 } %>
+        <%= button_tag "Save customer", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Customer saved", description: "Billing contact and tax ID were updated.", variant: "success", duration: 0 } %>
+        <%= button_tag "Simulate error", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Payment failed", description: "The card was declined. Ask the customer for another payment method.", variant: "destructive", duration: 0 } %>
+        <%= button_tag "Warn shipping", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Address needs review", description: "Shipping rates changed after the postal code update.", variant: "warning", duration: 0 } %>
+        <%= button_tag "Show audit note", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Audit log updated", description: "Maya Chen added a note to the customer timeline.", variant: "info", duration: 0 } %>
+        <%= button_tag "Saving contact", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Saving contact...", description: "Syncing Nora Lee to HubSpot.", variant: "default", duration: 0 } %>
+        <%= button_tag "Save contact", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Contact saved", description: "Maya Chen's role and phone number were updated.", variant: "success", duration: 0 } %>
+        <%= button_tag "Send invite", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Invite sent", description: "Nora Lee received a workspace invitation by email.", variant: "info", duration: 0 } %>
+        <%= button_tag "Invite with undo", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Invite sent to Jordan", description: "jordan@example.com was added to the billing workspace.", variant: "success", duration: 0, action_label: "Undo", action_title: "Invite canceled", action_description: "Jordan was removed from the pending invitation list.", action_variant: "default", action_duration: 0 } %>
+      </div>
+    </div>
+  <% end %>
+
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the Sonner unit to your app:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:add sonner" %>
+  </div>
+
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <p class="leading-7">
+      Render the toaster once, usually in your application layout. Use Sonner for new toast work.
+      The older Toast component remains available for low-level markup and compatibility.
+    </p>
+    <%= render "docs/code_example", language: "erb", code: "<" + "%= render Shadcn::SonnerComponent.new %" + ">" %>
+    <%= render "docs/code_example", language: "javascript", code: <<~JS.strip
+      import { toast } from "shadcn-rails-stimulus"
+
+      toast("Invoice created", {
+        description: "Invoice #1042 was created for Acme Studio.",
+        variant: "success",
+        action: {
+          label: "Undo",
+          onClick: () => rollbackInvoice()
+        }
+      })
+
+      toast("Payment failed", {
+        description: "The card was declined. Ask the customer for another payment method.",
+        variant: "destructive",
+        duration: 8000
+      })
+
+      const savingId = toast("Saving customer", { description: "Updating billing contact...", duration: 0 })
+      submitCustomerForm().then(() => toast.dismiss(savingId))
+    JS
+    %>
+  </div>
+
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Positions</h3>
+      <p class="text-sm text-muted-foreground">Choose where the viewport is pinned.</p>
+      <%= render Shadcn::SonnerComponent.new(id: "sonner-top-center-viewport", position: :top_center, duration: 5000) do %>
+        <div class="rounded-lg border bg-card p-6">
+          <%= button_tag "Publish post", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Post published", description: "The changelog is live and subscribers were notified.", variant: "info" } %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Stack limit</h3>
+      <p class="text-sm text-muted-foreground">Keep the visible stack small by setting a limit.</p>
+      <%= render Shadcn::SonnerComponent.new(id: "sonner-limit-viewport", limit: 2, duration: 8000) do %>
+        <div class="rounded-lg border bg-card p-6">
+          <div class="flex flex-wrap gap-2">
+            <%= button_tag "Create draft", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Draft created", description: "Proposal #918 is ready for review.", variant: "default" } %>
+            <%= button_tag "Save edits", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Proposal saved", description: "Line items and delivery terms were updated.", variant: "success" } %>
+            <%= button_tag "Show error", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Sync failed", description: "CRM sync timed out. Retry from the activity feed.", variant: "destructive" } %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Persistent toast</h3>
+      <p class="text-sm text-muted-foreground">Set duration to 0 for a toast that only closes when dismissed.</p>
+      <%= render Shadcn::ToasterComponent.new(id: "sonner-persistent-viewport", duration: 0) do %>
+        <div class="rounded-lg border bg-card p-6">
+          <%= button_tag "Save profile", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Profile saved", description: "Avatar, display name, and notification settings were saved.", variant: "success", duration: 0 } %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div id="turbo-streams" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Turbo Streams</h2>
+    <p class="leading-7">
+      The viewport is persistent and has a stable id, so a Turbo Stream can append server-rendered toast markup.
+      The Sonner controller initializes appended nodes, applies missing classes, starts timers, and adds a dismiss button.
+    </p>
+    <%= render "docs/code_example", language: "erb", code: [
+      "<" + "%= turbo_stream.append \"shadcn-sonner-viewport\" do %" + ">",
+      "  <li data-sonner-toast=\"true\"",
+      "      data-variant=\"destructive\"",
+      "      data-duration=\"8000\">",
+      "    Failed to save changes.",
+      "  </li>",
+      "<" + "% end %" + ">"
+    ].join("\n") %>
+  </div>
+
+  <div id="api-reference" class="space-y-6">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">API Reference</h2>
+
+    <div>
+      <h3 class="text-lg font-semibold mb-3">SonnerComponent</h3>
+      <%= render "docs/props_table", title: nil, props: [
+        { name: "position", type: "Symbol, String", default: ":bottom_right", description: "Viewport position: top_left, top_center, top_right, bottom_left, bottom_center, bottom_right" },
+        { name: "limit", type: "Integer", default: "3", description: "Maximum number of visible toasts" },
+        { name: "duration", type: "Integer", default: "4000", description: "Default auto-dismiss duration in milliseconds. Use 0 to disable auto-dismiss" },
+        { name: "id", type: "String", default: "shadcn-sonner-viewport", description: "Viewport id used by Turbo Stream append actions" },
+        { name: "viewport_class_name", type: "String", default: "nil", description: "Additional classes for the fixed viewport" },
+        { name: "persistent", type: "Boolean", default: "true", description: "Adds data-turbo-permanent to the controller root" }
+      ] %>
+    </div>
+
+    <div>
+      <h3 class="text-lg font-semibold mb-3">toast(input, options)</h3>
+      <%= render "docs/props_table", title: nil, props: [
+        { name: "id", type: "String, Number", default: "generated", description: "Reuse an id to update an existing toast" },
+        { name: "title", type: "String", default: "nil", description: "Toast title. Passing a string as the first argument sets this value" },
+        { name: "description", type: "String", default: "nil", description: "Toast body text" },
+        { name: "variant", type: "String", default: "default", description: "default, success, destructive, warning, or info" },
+        { name: "duration", type: "Number", default: "toaster duration", description: "Per-toast auto-dismiss duration in milliseconds" },
+        { name: "action", type: "String, Object", default: "nil", description: "Action label or { label, onClick } object" },
+        { name: "position", type: "String", default: "toaster position", description: "Routes the toast to a toaster with the matching position when present" }
+      ] %>
+    </div>
+  </div>
+
+  <div id="accessibility" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>The viewport uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="region"</code> and an accessible label.</li>
+      <li>Each toast uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="status"</code> and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-live="polite"</code>.</li>
+      <li>Auto-dismiss pauses while the user hovers over a toast.</li>
+      <li>Toasts can be dismissed with the close button or by swiping horizontally.</li>
+    </ul>
+  </div>
+</div>

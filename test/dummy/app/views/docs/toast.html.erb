@@ -15,8 +15,11 @@
   <!-- Header -->
   <div class="space-y-2">
     <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Toast</h1>
-    <p class="text-xl text-muted-foreground">A succinct message that is displayed temporarily.</p>
+    <p class="text-xl text-muted-foreground">Low-level toast markup kept for compatibility.</p>
     <div class="flex items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-yellow-50 dark:bg-yellow-950 px-2 py-1 text-xs font-medium text-yellow-700 dark:text-yellow-300 ring-1 ring-inset ring-yellow-700/10 dark:ring-yellow-300/10">
+        Back-compat
+      </span>
       <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
         Stimulus Controller
       </span>
@@ -29,6 +32,10 @@
   <!-- Installation -->
   <div id="installation" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">
+      For new toast work, install <%= link_to "Sonner", docs_component_path(slug: "sonner"), class: "font-medium underline underline-offset-4" %>.
+      Install Toast only when you need the lower-level compatibility component.
+    </p>
     <p class="leading-7">Add the component to your project:</p>
     <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:add toast" %>
   </div>
@@ -37,9 +44,10 @@
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
     <p class="leading-7">
-      Toasts are typically triggered by user actions and rendered dynamically.
-      The <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">ToastViewportComponent</code>
-      provides a container positioned at the bottom-right of the screen (or top on mobile).
+      Toast renders individual notification markup and is kept for apps that already depend on it.
+      New code should use <%= link_to "Sonner", docs_component_path(slug: "sonner"), class: "font-medium underline underline-offset-4" %>,
+      which provides the recommended <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">toast()</code> API,
+      stacking, positions, swipe dismissal, and Turbo Stream support.
     </p>
     <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
   </div>

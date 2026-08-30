@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
+const TOAST_REMOVE_DELAY = 400;
 /**
  * Toast controller for notification toasts
  */
@@ -18,11 +19,10 @@ export default class default_1 extends Controller {
     close() {
         this.openValue = false;
         this.element.dataset.state = "closed";
-        // Remove after animation
         setTimeout(() => {
             this.element.remove();
             this.dispatch("closed");
-        }, 200);
+        }, this.prefersReducedMotion() ? 0 : TOAST_REMOVE_DELAY);
     }
     startDismissTimer() {
         this.clearDismissTimer();
@@ -45,6 +45,9 @@ export default class default_1 extends Controller {
         if (this.openValue && this.durationValue > 0) {
             this.startDismissTimer();
         }
+    }
+    prefersReducedMotion() {
+        return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
     }
 }
 //# sourceMappingURL=toast_controller.js.map
