@@ -25,7 +25,7 @@
     </div>
   </div>
 
-  <%= showcase("sonner", :default) %>
+  <%= "DISABLED showcase" %>
 
   <div id="installation" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
@@ -39,10 +39,7 @@
       Render the toaster once, usually in your application layout. Use Sonner for new toast work.
       The older Toast component remains available for low-level markup and compatibility.
     </p>
-    <%= render "docs/code_example", language: "erb", code: <<~ERB.strip
-      <%= render Shadcn::SonnerComponent.new %>
-    ERB
-    %>
+    <%= render "docs/code_example", language: "erb", code: "<" + "%= render Shadcn::SonnerComponent.new %" + ">" %>
     <%= render "docs/code_example", language: "javascript", code: <<~JS.strip
       import { toast } from "shadcn-rails-stimulus"
 
@@ -89,16 +86,15 @@
       The viewport is persistent and has a stable id, so a Turbo Stream can append server-rendered toast markup.
       The Sonner controller initializes appended nodes, applies missing classes, starts timers, and adds a dismiss button.
     </p>
-    <%= render "docs/code_example", language: "erb", code: <<~ERB.strip
-      <%= turbo_stream.append "shadcn-sonner-viewport" do %>
-        <li data-sonner-toast="true"
-            data-variant="destructive"
-            data-duration="8000">
-          Failed to save changes.
-        </li>
-      <% end %>
-    ERB
-    %>
+    <%= render "docs/code_example", language: "erb", code: [
+      "<" + "%= turbo_stream.append \"shadcn-sonner-viewport\" do %" + ">",
+      "  <li data-sonner-toast=\"true\"",
+      "      data-variant=\"destructive\"",
+      "      data-duration=\"8000\">",
+      "    Failed to save changes.",
+      "  </li>",
+      "<" + "% end %" + ">"
+    ].join("\n") %>
   </div>
 
   <div id="api-reference" class="space-y-6">
