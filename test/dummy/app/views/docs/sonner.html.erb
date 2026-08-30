@@ -12,6 +12,8 @@
 <% end %>
 
 <div class="space-y-8">
+  <% sonner_button_classes = "inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-xs transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" %>
+
   <div class="space-y-2">
     <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Sonner</h1>
     <p class="text-xl text-muted-foreground">An opinionated toast manager for Rails apps.</p>
@@ -25,7 +27,22 @@
     </div>
   </div>
 
-  <%= showcase("sonner", :default) %>
+  <%# showcase("sonner", :default) is intentionally rendered page-level here so fixed Sonner viewports are not clipped by preview cards. %>
+  <%= render Shadcn::SonnerComponent.new(id: "sonner-default-viewport", limit: 5, duration: 15_000) do %>
+    <div class="rounded-lg border bg-card p-6">
+      <div class="mb-4 space-y-1">
+        <h2 class="text-lg font-semibold">Recommended toast API</h2>
+        <p class="text-sm text-muted-foreground">Realistic app events using the page-level Sonner toaster.</p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <%= button_tag "Create invoice", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Invoice created", description: "Invoice #1042 was created for Acme Studio.", variant: "default", duration: 0 } %>
+        <%= button_tag "Save customer", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Customer saved", description: "Billing contact and tax ID were updated.", variant: "success", duration: 0 } %>
+        <%= button_tag "Simulate error", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Payment failed", description: "The card was declined. Ask the customer for another payment method.", variant: "destructive", duration: 0 } %>
+        <%= button_tag "Warn shipping", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Address needs review", description: "Shipping rates changed after the postal code update.", variant: "warning", duration: 0 } %>
+        <%= button_tag "Show audit note", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Audit log updated", description: "Maya Chen added a note to the customer timeline.", variant: "info", duration: 0 } %>
+      </div>
+    </div>
+  <% end %>
 
   <div id="installation" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
@@ -70,19 +87,35 @@
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Positions</h3>
       <p class="text-sm text-muted-foreground">Choose where the viewport is pinned.</p>
-      <%= showcase("sonner", :top_center) %>
+      <%= render Shadcn::SonnerComponent.new(id: "sonner-top-center-viewport", position: :top_center, duration: 5000) do %>
+        <div class="rounded-lg border bg-card p-6">
+          <%= button_tag "Publish post", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Post published", description: "The changelog is live and subscribers were notified.", variant: "info" } %>
+        </div>
+      <% end %>
     </div>
 
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Stack limit</h3>
       <p class="text-sm text-muted-foreground">Keep the visible stack small by setting a limit.</p>
-      <%= showcase("sonner", :with_limit) %>
+      <%= render Shadcn::SonnerComponent.new(id: "sonner-limit-viewport", limit: 2, duration: 8000) do %>
+        <div class="rounded-lg border bg-card p-6">
+          <div class="flex flex-wrap gap-2">
+            <%= button_tag "Create draft", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Draft created", description: "Proposal #918 is ready for review.", variant: "default" } %>
+            <%= button_tag "Save edits", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Proposal saved", description: "Line items and delivery terms were updated.", variant: "success" } %>
+            <%= button_tag "Show error", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Sync failed", description: "CRM sync timed out. Retry from the activity feed.", variant: "destructive" } %>
+          </div>
+        </div>
+      <% end %>
     </div>
 
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Persistent toast</h3>
       <p class="text-sm text-muted-foreground">Set duration to 0 for a toast that only closes when dismissed.</p>
-      <%= showcase("sonner", :no_auto_dismiss) %>
+      <%= render Shadcn::ToasterComponent.new(id: "sonner-persistent-viewport", duration: 0) do %>
+        <div class="rounded-lg border bg-card p-6">
+          <%= button_tag "Save profile", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Profile saved", description: "Avatar, display name, and notification settings were saved.", variant: "success", duration: 0 } %>
+        </div>
+      <% end %>
     </div>
   </div>
 

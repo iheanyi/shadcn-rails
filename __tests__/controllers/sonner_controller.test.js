@@ -52,7 +52,7 @@ describe("SonnerController", () => {
     const removeId = toast("Remove", { duration: 0 })
 
     toast.dismiss(removeId)
-    jest.advanceTimersByTime(250)
+    jest.advanceTimersByTime(450)
 
     expect(document.querySelector(`[data-shadcn-sonner-toast-id="${keepId}"]`)).not.toBeNull()
     expect(document.querySelector(`[data-shadcn-sonner-toast-id="${removeId}"]`)).toBeNull()
@@ -70,7 +70,7 @@ describe("SonnerController", () => {
     expect(closeButton.dataset.sonnerCloseBound).toBeUndefined()
     closeIconPath.dispatchEvent(new PointerEventConstructor("pointerdown", { bubbles: true }))
     click(closeIconPath)
-    jest.advanceTimersByTime(250)
+    jest.advanceTimersByTime(450)
 
     expect(document.querySelector(`[data-shadcn-sonner-toast-id="${id}"]`)).toBeNull()
   })
@@ -99,14 +99,14 @@ describe("SonnerController", () => {
     controller.disconnect()
     controller.connect()
 
-    jest.advanceTimersByTime(350)
+    jest.advanceTimersByTime(550)
 
     expect(document.querySelector(`[data-shadcn-sonner-toast-id="${autoDismissId}"]`)).toBeNull()
     expect(document.querySelector(`[data-shadcn-sonner-toast-id="${manualDismissId}"]`)).not.toBeNull()
 
     const closeButton = manualToast.querySelector("[data-sonner-close]")
     click(closeButton)
-    jest.advanceTimersByTime(250)
+    jest.advanceTimersByTime(450)
 
     expect(document.querySelector(`[data-shadcn-sonner-toast-id="${manualDismissId}"]`)).toBeNull()
   })
@@ -121,7 +121,7 @@ describe("SonnerController", () => {
     const firstId = toast("First", { duration: 0 })
     toast("Second", { duration: 0 })
     toast("Third", { duration: 0 })
-    jest.advanceTimersByTime(250)
+    jest.advanceTimersByTime(450)
 
     const toastElements = Array.from(document.querySelectorAll("[data-shadcn-sonner-toast-id]"))
     expect(document.querySelector(`[data-shadcn-sonner-toast-id="${firstId}"]`)).toBeNull()
@@ -142,7 +142,7 @@ describe("SonnerController", () => {
 
     toast.dismiss(secondId)
     toast("Third live toast", { duration: 0 })
-    jest.advanceTimersByTime(250)
+    jest.advanceTimersByTime(450)
 
     expect(document.querySelector(`[data-shadcn-sonner-toast-id="${firstId}"]`)).not.toBeNull()
     expect(document.querySelector(`[data-shadcn-sonner-toast-id="${secondId}"]`)).toBeNull()
@@ -155,7 +155,7 @@ describe("SonnerController", () => {
 
     toast.dismiss(id)
     toast({ id, title: "Customer saved", description: "Billing contact updated.", variant: "success", duration: 0 })
-    jest.advanceTimersByTime(250)
+    jest.advanceTimersByTime(450)
 
     const toastElement = document.querySelector(`[data-shadcn-sonner-toast-id="${id}"]`)
     expect(toastElement).not.toBeNull()
@@ -176,7 +176,7 @@ describe("SonnerController", () => {
     expect(document.querySelector(`[data-shadcn-sonner-toast-id="${id}"]`)).not.toBeNull()
 
     toastElement.dispatchEvent(new MouseEvent("mouseleave", { bubbles: true }))
-    jest.advanceTimersByTime(300)
+    jest.advanceTimersByTime(500)
 
     expect(document.querySelector(`[data-shadcn-sonner-toast-id="${id}"]`)).toBeNull()
   })

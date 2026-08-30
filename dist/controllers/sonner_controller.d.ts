@@ -107,8 +107,11 @@ export default class SonnerController extends Controller<HTMLElement> {
     private toastActions;
     private placeToastAtOrigin;
     private reopenToast;
+    private mountToast;
     private exitTransform;
     private resetSwipeState;
+    private motionDuration;
+    private prefersReducedMotion;
 }
 export {};
 //# sourceMappingURL=sonner_controller.d.ts.map

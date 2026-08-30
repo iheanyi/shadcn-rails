@@ -53,12 +53,7 @@ const TOAST_BASE_CLASSES = [
   "border",
   "p-4",
   "pr-8",
-  "shadow-lg",
-  "transition-all",
-  "data-[state=open]:animate-in",
-  "data-[state=closed]:animate-out",
-  "data-[state=open]:fade-in-0",
-  "data-[state=closed]:fade-out-0"
+  "shadow-lg"
 ].join(" ")
 
 const TOAST_VARIANT_CLASSES: Record<ToastVariant, string> = {
@@ -77,6 +72,9 @@ const TOAST_ACTIONS = [
   "pointerup->shadcn--sonner#endSwipe",
   "pointercancel->shadcn--sonner#cancelSwipe"
 ].join(" ")
+
+const TOAST_REMOVE_DELAY = 400
+const TOAST_SWIPE_REMOVE_DELAY = 200
 
 const controllers = new Set<SonnerController>()
 const pendingToasts: ToastOptions[] = []
@@ -411,6 +409,8 @@ export default class SonnerController extends Controller<HTMLElement> {
 
     toastElement.dataset.shadcnSonnerBound = "true"
     toastElement.dataset.state = "open"
+    toastElement.dataset.mounted = "false"
+    toastElement.dataset.position = this.positionValue
     toastElement.dataset.variant = variant
     toastElement.setAttribute("role", toastElement.getAttribute("role") || "status")
     toastElement.setAttribute("aria-live", toastElement.getAttribute("aria-live") || "polite")
@@ -419,6 +419,7 @@ export default class SonnerController extends Controller<HTMLElement> {
 
     this.placeToastAtOrigin(toastElement)
     this.ensureCloseButton(toastElement)
+    this.mountToast(toastElement)
     this.startTimer(toastElement, duration)
     this.dispatch("show", { detail: { id } })
   }
@@ -431,6 +432,7 @@ export default class SonnerController extends Controller<HTMLElement> {
     toastElement.dataset.shadcnSonnerToastId = id
     toastElement.dataset.sonnerToast = "true"
     toastElement.dataset.variant = variant
+    toastElement.dataset.position = this.positionValue
     toastElement.dataset.duration = String(normalizeDuration(options.duration, this.durationValue))
     toastElement.className = this.toastClassName(variant)
     toastElement.setAttribute("role", "status")
@@ -485,6 +487,7 @@ export default class SonnerController extends Controller<HTMLElement> {
   private updateToastElement(toastElement: HTMLElement, options: ToastOptions): void {
     const variant = normalizeVariant(options.variant ?? toastElement.dataset.variant)
     toastElement.dataset.variant = variant
+    toastElement.dataset.position = this.positionValue
     toastElement.className = this.toastClassName(variant)
 
     const bodyElement = toastElement.querySelector<HTMLElement>("[data-sonner-body]") ?? toastElement.firstElementChild
@@ -554,16 +557,18 @@ export default class SonnerController extends Controller<HTMLElement> {
     this.timers.delete(id)
 
     toastElement.dataset.state = "closed"
+    toastElement.dataset.mounted = "false"
     toastElement.style.pointerEvents = "none"
-    toastElement.style.opacity = "0"
-    toastElement.style.transform = this.exitTransform()
+    toastElement.style.removeProperty("opacity")
+    toastElement.style.removeProperty("transform")
+    toastElement.style.setProperty("--shadcn-toast-exit-transform", this.exitTransform())
 
     const removeTimeout = window.setTimeout(() => {
       toastElement.remove()
       this.removeTimeouts.delete(id)
       this.actionHandlers.delete(id)
       this.dispatch("dismiss", { detail: { id } })
-    }, 200)
+    }, this.motionDuration(toastElement.dataset.swipe === "end" ? TOAST_SWIPE_REMOVE_DELAY : TOAST_REMOVE_DELAY))
 
     this.removeTimeouts.set(id, removeTimeout)
   }
@@ -682,9 +687,24 @@ export default class SonnerController extends Controller<HTMLElement> {
     }
 
     toastElement.dataset.state = "open"
+    toastElement.dataset.mounted = "true"
     toastElement.style.pointerEvents = ""
-    toastElement.style.opacity = ""
-    toastElement.style.transform = ""
+    toastElement.style.removeProperty("opacity")
+    toastElement.style.removeProperty("transform")
+    toastElement.style.removeProperty("--shadcn-toast-exit-transform")
+  }
+
+  private mountToast(toastElement: HTMLElement): void {
+    if (this.prefersReducedMotion()) {
+      toastElement.dataset.mounted = "true"
+      return
+    }
+
+    window.requestAnimationFrame(() => {
+      if (toastElement.dataset.state === "open") {
+        toastElement.dataset.mounted = "true"
+      }
+    })
   }
 
   private exitTransform(): string {
@@ -700,5 +720,13 @@ export default class SonnerController extends Controller<HTMLElement> {
     this.swipeToast = null
     this.swipeStartX = 0
     this.swipeDeltaX = 0
+  }
+
+  private motionDuration(duration: number): number {
+    return this.prefersReducedMotion() ? 0 : duration
+  }
+
+  private prefersReducedMotion(): boolean {
+    return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false
   }
 }

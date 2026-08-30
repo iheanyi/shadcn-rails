@@ -20,5 +20,6 @@ export default class extends Controller<HTMLElement> {
     clearDismissTimer(): void;
     pause(): void;
     resume(): void;
+    prefersReducedMotion(): boolean;
 }
 //# sourceMappingURL=toast_controller.d.ts.map
