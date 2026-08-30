@@ -71,8 +71,7 @@
           <% end %>
           <% card.with_card_content do %>
             <div class="flex justify-between space-x-4">
-              <%= render Shadcn::AvatarComponent.new do |avatar| %>
-                <% avatar.with_image(src: "https://github.com/vercel.png", alt: "@nextjs") %>
+              <%= render Shadcn::AvatarComponent.new(src: "https://github.com/vercel.png", alt: "@nextjs") do |avatar| %>
                 <% avatar.with_fallback { "VR" } %>
               <% end %>
               <div class="space-y-1">
