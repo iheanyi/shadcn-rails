@@ -18,16 +18,22 @@ module Shadcn
     LEGEND_CLASSES = "flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground"
     FALLBACK_CLASSES = "sr-only"
 
-    attr_reader :type, :data, :series_config, :aria_label
+    attr_reader :type, :chart_data, :series_config, :aria_label
 
     # @param type [Symbol, String] Chart type: :bar, :line, :area, :pie, or :donut
     # @param data [Hash] Chart.js-compatible data hash
+    # @param chart_data [Hash, nil] Chart.js-compatible data hash when data: is used for host HTML data attributes
     # @param config [Hash] Series configuration keyed by dataset key or label
     # @param aria_label [String] Accessible label for the chart image region
-    def initialize(type:, data:, config: {}, aria_label: "Chart", **options)
-      super(**options)
+    def initialize(type:, data: nil, chart_data: nil, config: {}, aria_label: "Chart", **options)
+      payload = chart_data || data
+      host_data = chart_data ? (data || {}) : {}
+
+      raise ArgumentError, "Chart data is required" unless payload
+
+      super(data: host_data, **options)
       @type = normalize_type(type)
-      @data = data
+      @chart_data = payload
       @series_config = config
       @aria_label = aria_label
     end
@@ -54,15 +60,13 @@ module Shadcn
     def chart_attributes
       attrs = merge_html_attributes(
         {
-          role: "img",
-          "aria-label": aria_label,
           style: style_attribute
         },
         stimulus_data(
           controller: "shadcn--chart",
           values: {
             type: type.to_s,
-            data: json_value(data),
+            data: json_value(chart_data),
             config: json_value(normalized_config)
           }
         )
@@ -73,7 +77,7 @@ module Shadcn
     end
 
     def canvas_wrap
-      content_tag(:div, class: CANVAS_WRAP_CLASSES) do
+      content_tag(:div, class: CANVAS_WRAP_CLASSES, role: "img", "aria-label": aria_label) do
         safe_join([
           tag.canvas(
             class: CANVAS_CLASSES,

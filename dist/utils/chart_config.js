@@ -106,7 +106,7 @@ export function buildChartData(element, type, data, config) {
                 ...dataset,
                 label,
                 borderColor: color,
-                backgroundColor: type === "area" ? color : dataset.backgroundColor || color,
+                backgroundColor: type === "area" ? translucentColor(color) : dataset.backgroundColor || color,
                 pointBackgroundColor: color,
                 pointBorderColor: color,
                 fill: type === "area" ? true : dataset.fill,
@@ -174,5 +174,11 @@ function cssColorValue(value, alpha) {
 }
 function isHslComponentToken(value) {
     return /^-?\d+(?:\.\d+)?(?:deg|rad|turn)?\s+-?\d+(?:\.\d+)?%\s+-?\d+(?:\.\d+)?%$/.test(value);
+}
+function translucentColor(color) {
+    const hslMatch = color.match(/^hsl\(\s*(.+?)(?:\s*\/\s*[\d.]+%?)?\s*\)$/);
+    if (!hslMatch)
+        return color;
+    return `hsl(${hslMatch[1].trim()} / 0.25)`;
 }
 //# sourceMappingURL=chart_config.js.map

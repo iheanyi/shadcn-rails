@@ -96,7 +96,7 @@ module Shadcn
           say "Chart requires Chart.js as an optional peer dependency:", :cyan
           say "  npm install chart.js@^4.5.1"
           say "  ./bin/importmap pin chart.js/auto"
-          say "Pin chart.js in package.json or importmap so the Stimulus controller can dynamic-import chart.js/auto.", :cyan
+          say "If you register the all-in-one shadcn controller entry, Chart.js must be installed or pinned so chart.js/auto resolves.", :cyan
           say ""
         end
       end

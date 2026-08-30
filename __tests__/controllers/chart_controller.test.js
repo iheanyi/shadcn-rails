@@ -5,6 +5,7 @@ import {
   cssVariableName,
   normalizeChartType
 } from "../../app/assets/javascripts/shadcn/utils/chart_config.ts"
+import ChartController from "../../app/assets/javascripts/shadcn/controllers/chart_controller.ts"
 
 describe("chart config builders", () => {
   const data = {
@@ -74,7 +75,8 @@ describe("chart config builders", () => {
 
     expect(chartData.datasets[0]).toMatchObject({
       fill: true,
-      backgroundColor: "hsl(12 76% 61%)"
+      borderColor: "hsl(12 76% 61%)",
+      backgroundColor: "hsl(12 76% 61% / 0.25)"
     })
   })
 
@@ -154,5 +156,81 @@ describe("chart config builders", () => {
 
     expect(buildChartOptions({ element, type: "pie", renderTooltip }).scales).toBeUndefined()
     expect(buildChartOptions({ element, type: "donut", renderTooltip }).scales).toBeUndefined()
+  })
+})
+
+describe("ChartController DOM rendering", () => {
+  const setupControllerObject = () => {
+    const controller = Object.create(ChartController.prototype)
+    controller.tooltipTarget = document.createElement("div")
+    controller.legendTarget = document.createElement("div")
+    controller.renderToken = 0
+    controller.connected = true
+    controller.chart = null
+    controller.themeObserver = null
+    controller.boundBeforeCache = () => {}
+    return controller
+  }
+
+  afterEach(() => {
+    document.body.innerHTML = ""
+  })
+
+  test("renders legend swatches without interpolating colors into HTML", () => {
+    const controller = setupControllerObject()
+
+    controller.renderLegend([
+      { label: "<Desktop>", color: "red; background-image: url(javascript:alert(1))", datasetIndex: 0 }
+    ])
+
+    expect(controller.legendTarget.textContent).toContain("<Desktop>")
+    expect(controller.legendTarget.innerHTML).not.toContain("javascript:alert")
+    expect(controller.legendTarget.querySelector("span").style.backgroundColor).toBe("")
+  })
+
+  test("renders tooltip swatches with style property assignment", () => {
+    const controller = setupControllerObject()
+
+    controller.renderTooltip({
+      chart: { canvas: document.createElement("canvas") },
+      tooltip: {
+        opacity: 1,
+        caretX: 20,
+        caretY: 30,
+        title: ["February"],
+        body: [{ lines: ["Desktop: 305"] }],
+        labelColors: [{ backgroundColor: "hsl(12 76% 61%)", borderColor: "hsl(12 76% 61%)" }]
+      }
+    })
+
+    expect(controller.tooltipTarget.textContent).toContain("February")
+    expect(controller.tooltipTarget.textContent).toContain("Desktop: 305")
+    expect(controller.tooltipTarget.querySelector("span").style.backgroundColor).toMatch(/^rgb\(/)
+  })
+
+  test("disconnect invalidates in-flight renders", () => {
+    const controller = setupControllerObject()
+    const destroy = jest.fn()
+    controller.chart = { destroy }
+
+    controller.disconnect()
+
+    expect(controller.connected).toBe(false)
+    expect(controller.renderToken).toBe(1)
+    expect(destroy).toHaveBeenCalled()
+  })
+
+  test("value changes rerender only after connect", () => {
+    const controller = setupControllerObject()
+    controller.renderChart = jest.fn()
+
+    controller.connected = false
+    controller.dataValueChanged()
+    expect(controller.renderChart).not.toHaveBeenCalled()
+
+    controller.connected = true
+    controller.typeValueChanged()
+    controller.configValueChanged()
+    expect(controller.renderChart).toHaveBeenCalledTimes(2)
   })
 })

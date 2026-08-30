@@ -21,12 +21,17 @@ export default class extends Controller<HTMLElement> {
     readonly configValue: ChartConfig;
     chart: ChartInstance | null;
     renderToken: number;
+    connected: boolean;
     themeObserver: MutationObserver | null;
     boundBeforeCache: () => void;
     connect(): void;
     disconnect(): void;
+    typeValueChanged(): void;
+    dataValueChanged(): void;
+    configValueChanged(): void;
     renderChart(): Promise<void>;
     destroyChart(): void;
+    invalidateRender(): void;
     renderTooltip(context: {
         chart: {
             canvas: HTMLCanvasElement;
@@ -48,6 +53,9 @@ export default class extends Controller<HTMLElement> {
     renderLegend(items: LegendItem[]): void;
     showMessage(message: string): void;
     clearMessage(): void;
+    renderWhenConnected(): void;
+    colorSwatch(color: string): HTMLSpanElement;
+    textNode(text: string, className?: string): HTMLSpanElement;
 }
 export {};
 //# sourceMappingURL=chart_controller.d.ts.map

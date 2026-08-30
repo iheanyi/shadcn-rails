@@ -20,6 +20,7 @@ class ChartComponentTest < ViewComponent::TestCase
     render_inline(Shadcn::ChartComponent.new(type: :bar, data: DATA, config: CONFIG, aria_label: "Visitors by device"))
 
     assert_selector "[data-controller='shadcn--chart']"
+    assert_selector "[data-controller='shadcn--chart']:not([role='img'])"
     assert_selector "[role='img'][aria-label='Visitors by device']"
     assert_selector "canvas[data-shadcn--chart-target='canvas'][aria-hidden='true']"
     assert_selector "[data-shadcn--chart-target='tooltip']"
@@ -36,6 +37,28 @@ class ChartComponentTest < ViewComponent::TestCase
     assert_includes root["data-shadcn--chart-data-value"], "\"key\":\"desktop\""
     assert_includes root["data-shadcn--chart-config-value"], "\"desktop\""
     assert_includes root["data-shadcn--chart-config-value"], "\"label\":\"Desktop\""
+  end
+
+  def test_chart_payload_does_not_emit_host_data_attributes
+    render_inline(Shadcn::ChartComponent.new(type: :line, data: DATA, config: CONFIG))
+
+    assert_no_selector "[data-labels]"
+    assert_no_selector "[data-datasets]"
+  end
+
+  def test_appends_host_data_when_using_chart_data_alias
+    render_inline(Shadcn::ChartComponent.new(
+      type: :line,
+      chart_data: DATA,
+      data: { testid: "traffic-chart", controller: "analytics" },
+      config: CONFIG
+    ))
+
+    root = page.find("[data-testid='traffic-chart']")
+
+    assert_includes root["data-controller"], "shadcn--chart"
+    assert_includes root["data-controller"], "analytics"
+    assert_includes root["data-shadcn--chart-data-value"], "\"labels\":[\"January\",\"February\"]"
   end
 
   def test_sets_series_css_variables
@@ -69,6 +92,7 @@ class ChartComponentTest < ViewComponent::TestCase
 
     assert_selector ".sr-only table"
     assert_selector ".sr-only caption", text: "Visitors"
+    assert_no_selector "[role='img'] table"
   end
 
   def test_merges_custom_class

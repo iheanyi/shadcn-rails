@@ -30,6 +30,7 @@
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
     <p class="leading-7">Add the component and install the Chart.js peer dependency:</p>
     <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:add chart\nnpm install chart.js@^4.5.1\n# importmap apps can pin the dynamic import instead:\n./bin/importmap pin chart.js/auto" %>
+    <p class="text-sm text-muted-foreground">If you register the all-in-one Stimulus entry with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">registerShadcnControllers</code>, Chart.js must be installed or pinned so <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">chart.js/auto</code> resolves at build time.</p>
   </div>
 
   <div id="usage" class="space-y-4">
