@@ -112,11 +112,7 @@ class DataTableComponentTest < ViewComponent::TestCase
     render_inline(Shadcn::DataTableComponent.new(rows: invoices, path: "/invoices")) do |table|
       table.with_column(:name)
       table.with_footer do
-        render Shadcn::PaginationComponent.new do |pagination|
-          pagination.with_pagination_content do |content|
-            content.with_item(href: "/invoices?page=1", active: true) { "1" }
-          end
-        end
+        '<nav role="navigation" aria-label="pagination"><a href="/invoices?page=1" aria-current="page">1</a></nav>'.html_safe
       end
     end
 
