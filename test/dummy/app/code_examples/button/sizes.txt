@@ -1,0 +1,5 @@
+<div class="flex items-center gap-4">
+  <%= render Shadcn::ButtonComponent.new(size: :sm) do %>Small<% end %>
+  <%= render Shadcn::ButtonComponent.new do %>Default<% end %>
+  <%= render Shadcn::ButtonComponent.new(size: :lg) do %>Large<% end %>
+</div>

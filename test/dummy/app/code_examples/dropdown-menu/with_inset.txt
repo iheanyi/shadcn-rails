@@ -1,0 +1,12 @@
+<%= render(Shadcn::DropdownMenuComponent.new) do |menu| %>
+  <% menu.with_trigger do %>
+    <% button_html(:outline, "View Options") %>
+  <% end %>
+  <% menu.with_menu do |content| %>
+    <% content.with_label(inset: true) { "View" } %>
+    <% content.with_separator %>
+    <% content.with_item(inset: true, href: "#") { "Show Sidebar" } %>
+    <% content.with_item(inset: true, href: "#") { "Show Toolbar" } %>
+    <% content.with_item(inset: true, href: "#") { "Show Status Bar" } %>
+  <% end %>
+<% end %>

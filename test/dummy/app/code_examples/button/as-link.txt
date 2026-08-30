@@ -1,0 +1,1 @@
+<%= render Shadcn::ButtonComponent.new(href: "#", variant: :outline) do %>Go to page<% end %>

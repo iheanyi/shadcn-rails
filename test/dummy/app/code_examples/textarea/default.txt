@@ -1,0 +1,1 @@
+<%= render Shadcn::TextareaComponent.new(placeholder: "Enter your text...") %>

@@ -1,0 +1,5 @@
+<%= render Shadcn::ComboboxComponent.new(
+  items: frameworks,
+  value: "rails",
+  placeholder: "Select framework..."
+) %>

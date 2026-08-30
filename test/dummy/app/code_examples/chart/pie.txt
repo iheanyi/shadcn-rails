@@ -1,0 +1,6 @@
+render Shadcn::ChartComponent.new(
+  type: :pie,
+  data: REVENUE_MIX_DATA,
+  config: REVENUE_MIX_CONFIG,
+  aria_label: "Revenue mix by product line"
+)

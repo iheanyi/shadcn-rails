@@ -1,0 +1,25 @@
+<div class="w-full max-w-lg mx-auto px-12">
+  <%= render Shadcn::CarouselComponent.new do |carousel| %>
+    <% carousel.with_slides do |slides| %>
+      <% [
+        { title: "Getting Started", desc: "Learn the basics of the framework" },
+        { title: "Components", desc: "Explore our component library" },
+        { title: "Theming", desc: "Customize colors and styles" }
+      ].each do |card| %>
+        <% slides.with_item do %>
+          <%= render Shadcn::CardComponent.new do |c| %>
+            <% c.with_header do |header| %>
+              <% header.with_title { card[:title] } %>
+              <% header.with_description { card[:desc] } %>
+            <% end %>
+            <% c.with_content do %>
+              <div class="h-24 bg-muted rounded flex items-center justify-center">
+                Content goes here
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <% carousel.with_previous %>
+    <% carousel.with_next %>

@@ -34,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/date-picker/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -48,13 +48,13 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::DatePickerComponent.new(selected: Date.today) %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/date-picker/pre-selected-date.txt")) %>
     </div>
 
     <!-- Form Integration -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Form Integration</h3>
-      <p class="text-sm text-muted-foreground">Use the <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">name</code> prop to enable form submission.</p>
+      <p class="text-sm text-muted-foreground">Use the <code class="rounded bg-muted px-1 py-0.5 font-mono text-xs">name</code> prop inside a Rails form to enable form submission.</p>
       <%= render "docs/demo_card" do %>
         <div class="space-y-4">
           <%= render Shadcn::LabelComponent.new { "Event Date" } %>
@@ -65,7 +65,7 @@
           ) %>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/date-picker/form-integration.txt")) %>
     </div>
 
     <!-- Date Formats -->
@@ -88,7 +88,7 @@
           </div>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/date-picker/date-formats.txt")) %>
     </div>
 
     <!-- Date Constraints -->
@@ -102,7 +102,25 @@
           placeholder: "Select date (next 30 days)"
         ) %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/date-picker/date-constraints.txt")) %>
+    </div>
+
+    <!-- Disabled Dates -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled Dates</h3>
+      <p class="text-sm text-muted-foreground">Pass specific dates that should not be selectable.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::DatePickerComponent.new(
+          selected: Date.today + 1.day,
+          disabled_dates: [
+            Date.today,
+            Date.today + 2.days,
+            Date.today + 5.days
+          ],
+          placeholder: "Select an available date"
+        ) %>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/date-picker/disabled-dates.txt")) %>
     </div>
 
     <!-- Disabled State -->
@@ -112,6 +130,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::DatePickerComponent.new(disabled: true) %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/date-picker/disabled.txt")) %>
     </div>
   </div>
 

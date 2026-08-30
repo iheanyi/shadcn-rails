@@ -1,0 +1,83 @@
+  <%= render(Shadcn::ToggleComponent.new( %>
+    variant: variant.to_sym,
+    size: size.to_sym,
+    pressed: pressed,
+    disabled: disabled,
+    aria_label: "Toggle"
+  )) do
+    <% content_tag(:div, class: "flex items-center gap-2") do %>
+      bold_icon +
+      <% content_tag(:span, "Toggle") %>
+    <% end %>
+  <% end %>
+<% end %>
+
+private
+
+def bold_icon
+  <<~SVG.html_safe
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/>
+      <path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/>
+    </svg>
+  SVG
+<% end %>
+
+def italic_icon
+  <<~SVG.html_safe
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="19" y1="4" x2="10" y2="4"/>
+      <line x1="14" y1="20" x2="5" y2="20"/>
+      <line x1="15" y1="4" x2="9" y2="20"/>
+    </svg>
+  SVG
+<% end %>
+
+def underline_icon
+  <<~SVG.html_safe
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 4v6a6 6 0 0 0 12 0V4"/>
+      <line x1="4" y1="20" x2="20" y2="20"/>
+    </svg>
+  SVG
+<% end %>
+
+def strikethrough_icon
+  <<~SVG.html_safe
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16 4H9a3 3 0 0 0-2.83 4"/>
+      <path d="M14 12a4 4 0 0 1 0 8H6"/>
+      <line x1="4" y1="12" x2="20" y2="12"/>
+    </svg>
+  SVG
+<% end %>
+
+def align_left_icon
+  <<~SVG.html_safe
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="21" y1="6" x2="3" y2="6"/>
+      <line x1="15" y1="12" x2="3" y2="12"/>
+      <line x1="17" y1="18" x2="3" y2="18"/>
+    </svg>
+  SVG
+<% end %>
+
+def align_center_icon
+  <<~SVG.html_safe
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="21" y1="6" x2="3" y2="6"/>
+      <line x1="17" y1="12" x2="7" y2="12"/>
+      <line x1="19" y1="18" x2="5" y2="18"/>
+    </svg>
+  SVG
+<% end %>
+
+def align_right_icon
+  <<~SVG.html_safe
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="21" y1="6" x2="3" y2="6"/>
+      <line x1="21" y1="12" x2="9" y2="12"/>
+      <line x1="21" y1="18" x2="7" y2="18"/>
+    </svg>
+  SVG
+<% end %>

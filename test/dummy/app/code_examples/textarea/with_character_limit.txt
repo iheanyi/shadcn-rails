@@ -1,0 +1,1 @@
+<%= render Shadcn::TextareaComponent.new( name: "limited_text", placeholder: "Maximum 280 characters...", maxlength: 280 ) %>

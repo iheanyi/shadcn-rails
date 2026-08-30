@@ -1,0 +1,10 @@
+<%= render Shadcn::DropdownMenuComponent.new do |menu| %>
+  <% menu.with_trigger do %>
+    <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Options" } %>
+  <% end %>
+  <% menu.with_menu do |content| %>
+    <% content.with_item(href: "#") { "Edit" } %>
+    <% content.with_item(href: "#") { "Duplicate" } %>
+    <% content.with_item(href: "#") { "Archive" } %>
+  <% end %>
+<% end %>

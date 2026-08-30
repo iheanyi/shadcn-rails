@@ -1,0 +1,22 @@
+<div class="flex items-center gap-4">
+  <%= render Shadcn::AvatarComponent.new(
+    src: "https://github.com/shadcn.png",
+    alt: "Small",
+    size: :sm
+  ) %>
+  <%= render Shadcn::AvatarComponent.new(
+    src: "https://github.com/shadcn.png",
+    alt: "Default",
+    size: :default
+  ) %>
+  <%= render Shadcn::AvatarComponent.new(
+    src: "https://github.com/shadcn.png",
+    alt: "Large",
+    size: :lg
+  ) %>
+  <%= render Shadcn::AvatarComponent.new(
+    src: "https://github.com/shadcn.png",
+    alt: "Extra Large",
+    size: :xl
+  ) %>
+</div>

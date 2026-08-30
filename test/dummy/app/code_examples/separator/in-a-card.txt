@@ -1,0 +1,24 @@
+<%= render Shadcn::CardComponent.new(class_name: "w-full max-w-md") do |card| %>
+  <% card.with_header do |header| %>
+    <% header.with_title { "Account Settings" } %>
+    <% header.with_description { "Manage your account preferences" } %>
+  <% end %>
+  <% card.with_content do %>
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <span class="text-sm">Email notifications</span>
+        <%= render Shadcn::SwitchComponent.new %>
+      </div>
+      <%= render Shadcn::SeparatorComponent.new %>
+      <div class="flex items-center justify-between">
+        <span class="text-sm">SMS notifications</span>
+        <%= render Shadcn::SwitchComponent.new %>
+      </div>
+      <%= render Shadcn::SeparatorComponent.new %>
+      <div class="flex items-center justify-between">
+        <span class="text-sm">Push notifications</span>
+        <%= render Shadcn::SwitchComponent.new %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

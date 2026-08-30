@@ -1,0 +1,4 @@
+<%= render(Shadcn::ButtonGroupComponent.new) do |group| %>
+  <% group.with_button(variant: :outline, size: :icon) { icon("M15 6l-6 6 6 6") } %>
+  <% group.with_button(variant: :outline, size: :icon) { icon("M9 18l6-6-6-6") } %>
+<% end %>

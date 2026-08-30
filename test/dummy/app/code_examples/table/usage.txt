@@ -1,0 +1,20 @@
+<%= render(Shadcn::TableComponent.new) do |table| %>
+  <% table.with_header do |header| %>
+    <% header.with_row do |row| %>
+      <% row.with_head { "Name" } %>
+      <% row.with_head { "Email" } %>
+      <% row.with_head { "Role" } %>
+      <% row.with_head { "Status" } %>
+    <% end %>
+  <% end %>
+  <% table.with_body do |body| %>
+    users.each do |user|
+      <% body.with_row do |row| %>
+        <% row.with_cell { user[:name] } %>
+        <% row.with_cell { user[:email] } %>
+        <% row.with_cell { user[:role] } %>
+        <% row.with_cell { badge_html(user[:status]) } %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

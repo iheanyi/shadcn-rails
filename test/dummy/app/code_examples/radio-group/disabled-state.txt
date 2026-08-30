@@ -1,0 +1,6 @@
+<div class="flex justify-center">
+  <%= render Shadcn::RadioGroupComponent.new(name: "disabled-example", value: "comfortable") do |group| %>
+    <% group.with_item(value: "comfortable", label: "Comfortable") %>
+    <% group.with_item(value: "compact", label: "Compact (Disabled)", disabled: true) %>
+  <% end %>
+</div>

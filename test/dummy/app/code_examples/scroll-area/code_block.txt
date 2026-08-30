@@ -1,0 +1,21 @@
+    <%= render(Shadcn::ScrollAreaComponent.new(class_name: "h-64 w-full max-w-md rounded-md border")) do %>
+      '<pre class="p-4 text-sm"><code>import { ScrollArea } from "@/components/ui/scroll-area"
+
+export function ScrollAreaDemo() {
+  return (
+    &lt;ScrollArea className="h-72 w-48 rounded-md border"&gt;
+      &lt;div className="p-4"&gt;
+        &lt;h4 className="mb-4 text-sm font-medium leading-none"&gt;
+          Tags
+        &lt;/h4&gt;
+        {Array.from({ length: 50 }).map((_, i) =&gt; (
+          &lt;div key={i} className="text-sm"&gt;
+            v1.2.0-beta.{i}
+          &lt;/div&gt;
+        ))}
+      &lt;/div&gt;
+    &lt;/ScrollArea&gt;
+  )
+}</code></pre>'.html_safe
+    <% end %>
+  <% end %>

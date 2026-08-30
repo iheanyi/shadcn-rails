@@ -1,0 +1,5 @@
+<%= render(Shadcn::FieldComponent.new(name: "password")) do |field| %>
+  <% field.with_label { "Password" } %>
+  <% field.with_error { "Password is required." } %>
+  <% field.with_input(type: :password) %>
+<% end %>

@@ -1,0 +1,14 @@
+<div class="flex flex-wrap gap-4">
+  <div class="space-y-2">
+    <p class="text-xs text-muted-foreground">Short</p>
+    <%= render Shadcn::DatePickerComponent.new(selected: Date.today, format: :short) %>
+  </div>
+  <div class="space-y-2">
+    <p class="text-xs text-muted-foreground">Medium (default)</p>
+    <%= render Shadcn::DatePickerComponent.new(selected: Date.today, format: :medium) %>
+  </div>
+  <div class="space-y-2">
+    <p class="text-xs text-muted-foreground">Long</p>
+    <%= render Shadcn::DatePickerComponent.new(selected: Date.today, format: :long) %>
+  </div>
+</div>

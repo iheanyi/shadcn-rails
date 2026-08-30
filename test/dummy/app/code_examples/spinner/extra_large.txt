@@ -1,0 +1,1 @@
+<%= render Shadcn::SpinnerComponent.new(size: :xl) %>

@@ -1,0 +1,5 @@
+<div class="flex items-center gap-4">
+  <%= render Shadcn::AvatarComponent.new(alt: "John Doe", fallback: "JD") %>
+  <%= render Shadcn::AvatarComponent.new(alt: "Jane Smith") %>
+  <%= render Shadcn::AvatarComponent.new(fallback: "AB") %>
+</div>

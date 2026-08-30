@@ -1,0 +1,37 @@
+<div class="flex flex-wrap items-center justify-center gap-4">
+  <%= render Shadcn::PopoverComponent.new(side: :top) do |popover| %>
+    <% popover.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Top" } %>
+    <% end %>
+    <% popover.with_body do %>
+      <p class="text-sm">Top positioned popover</p>
+    <% end %>
+  <% end %>
+
+  <%= render Shadcn::PopoverComponent.new(side: :right) do |popover| %>
+    <% popover.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Right" } %>
+    <% end %>
+    <% popover.with_body do %>
+      <p class="text-sm">Right positioned popover</p>
+    <% end %>
+  <% end %>
+
+  <%= render Shadcn::PopoverComponent.new(side: :bottom) do |popover| %>
+    <% popover.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Bottom" } %>
+    <% end %>
+    <% popover.with_body do %>
+      <p class="text-sm">Bottom positioned popover</p>
+    <% end %>
+  <% end %>
+
+  <%= render Shadcn::PopoverComponent.new(side: :left) do |popover| %>
+    <% popover.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Left" } %>
+    <% end %>
+    <% popover.with_body do %>
+      <p class="text-sm">Left positioned popover</p>
+    <% end %>
+  <% end %>
+</div>

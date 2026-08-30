@@ -1,0 +1,1 @@
+<%= render(Shadcn::BadgeComponent.new(variant: variant.to_sym)) { variant.to_s.titleize } %>

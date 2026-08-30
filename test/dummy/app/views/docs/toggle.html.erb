@@ -34,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/toggle/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -49,6 +49,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" x2="10" y1="4" y2="4"/><line x1="14" x2="5" y1="20" y2="20"/><line x1="15" x2="9" y1="4" y2="20"/></svg>
         <% end %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/toggle/default.txt")) %>
     </div>
 
     <!-- Outline -->
@@ -59,7 +60,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" x2="10" y1="4" y2="4"/><line x1="14" x2="5" y1="20" y2="20"/><line x1="15" x2="9" y1="4" y2="20"/></svg>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/toggle/outline.txt")) %>
     </div>
 
     <!-- With Text -->
@@ -71,7 +72,7 @@
           Italic
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/toggle/with-text.txt")) %>
     </div>
 
     <!-- Sizes -->
@@ -90,7 +91,7 @@
           <% end %>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/toggle/sizes.txt")) %>
     </div>
 
     <!-- Pressed -->
@@ -102,7 +103,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" x2="10" y1="4" y2="4"/><line x1="14" x2="5" y1="20" y2="20"/><line x1="15" x2="9" y1="4" y2="20"/></svg>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/toggle/pressed-default-on.txt")) %>
     </div>
 
     <!-- Disabled -->
@@ -113,9 +114,57 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" x2="10" y1="4" y2="4"/><line x1="14" x2="5" y1="20" y2="20"/><line x1="15" x2="9" y1="4" y2="20"/></svg>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/toggle/disabled.txt")) %>
     </div>
   </div>
+
+    <!-- All Variants -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">All Variants</h3>
+      <%= showcase("toggle", :variants) %>
+    </div>
+
+    <!-- Small Size -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Small Size</h3>
+      <%= showcase("toggle", :small) %>
+    </div>
+
+    <!-- Large Size -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Large Size</h3>
+      <%= showcase("toggle", :large) %>
+    </div>
+
+    <!-- Text Formatting -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Text Formatting</h3>
+      <%= showcase("toggle", :text_formatting) %>
+    </div>
+
+    <!-- Text Alignment -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Text Alignment</h3>
+      <%= showcase("toggle", :text_alignment) %>
+    </div>
+
+    <!-- With Labels -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Labels</h3>
+      <%= showcase("toggle", :with_labels) %>
+    </div>
+
+    <!-- Disabled State -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled State</h3>
+      <%= showcase("toggle", :disabled_state) %>
+    </div>
+
+    <!-- Interactive Example -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Interactive Example</h3>
+      <%= showcase("toggle", :interactive) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">

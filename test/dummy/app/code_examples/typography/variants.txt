@@ -1,0 +1,10 @@
+  <%= render(Shadcn::TypographyComponent.new(variant: variant.to_sym)) { "Sample text for #{variant}" } %>
+<% end %>
+
+# @label Demo Page
+# Full typography demonstration
+def demo
+  <% render(Shadcn::TypographyComponent.new(variant: :p)) do %>
+    "Typography examples cover headings, paragraphs, lists, quotes, and inline code styles."
+  <% end %>
+<% end %>

@@ -1,0 +1,6 @@
+<%= render(Shadcn::SelectComponent.new(name: "plan", placeholder: "Select a plan")) do |select| %>
+  <% select.with_item(value: "free") { "Free" } %>
+  <% select.with_item(value: "starter") { "Starter" } %>
+  <% select.with_item(value: "pro") { "Pro" } %>
+  <% select.with_item(value: "enterprise", disabled: true) { "Enterprise (Coming Soon)" } %>
+<% end %>

@@ -1,0 +1,4 @@
+<div class="grid w-full gap-2">
+  <%= render Shadcn::TextareaComponent.new(placeholder: "Type your message here.") %>
+  <%= render Shadcn::ButtonComponent.new do %>Send message<% end %>
+</div>

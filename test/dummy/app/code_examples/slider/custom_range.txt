@@ -1,0 +1,1 @@
+<%= render Shadcn::SliderComponent.new( name: "custom", value: value, min: min, max: max, step: step ) %>

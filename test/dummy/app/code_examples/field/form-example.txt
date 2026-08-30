@@ -1,0 +1,13 @@
+<div class="max-w-sm space-y-4">
+  <%= render Shadcn::FieldComponent.new(name: "user[email]") do |field| %>
+    <% field.with_label { "Email" } %>
+    <% field.with_input(type: :email, placeholder: "you@example.com") %>
+  <% end %>
+
+  <%= render Shadcn::FieldComponent.new(name: "user[password]") do |field| %>
+    <% field.with_label { "Password" } %>
+    <% field.with_input(type: :password) %>
+  <% end %>
+
+  <%= render Shadcn::ButtonComponent.new(class_name: "w-full") { "Submit" } %>
+</div>

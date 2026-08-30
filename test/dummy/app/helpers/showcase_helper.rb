@@ -15,11 +15,23 @@ module ShowcaseHelper
       render("docs/demo_card", title: title, description: description, class_name: class_name) do
         render_preview_example(preview_class, example)
       end,
-      render("docs/code_example", language: "ruby", code: preview_method_source(preview_class, example), title: "#{preview_class.name}##{example}")
+      render(
+        "docs/code_example",
+        language: "erb",
+        code: showcase_example_source(component_name, preview_class, example),
+        title: "#{preview_class.name}##{example}"
+      )
     ])
   end
 
   private
+
+  def showcase_example_source(component_name, preview_class, example)
+    example_path = Rails.root.join("app/code_examples/#{component_name}/#{example}.txt")
+    return File.read(example_path) if File.exist?(example_path)
+
+    erb_preview_method_source(preview_class, example)
+  end
 
   def preview_class_for(component_name)
     normalized = component_name.to_s.tr("-", "_")
@@ -58,6 +70,17 @@ module ShowcaseHelper
 
     method_lines = source_lines[(line - 1)..(end_line - 1)]
     strip_preview_source_indentation(method_lines.join)
+  end
+
+  def erb_preview_method_source(preview_class, example)
+    source = preview_method_source(preview_class, example)
+    lines = source.lines
+    lines = lines[1..-2] if lines.first&.match?(/\A\s*def\b/) && lines.last&.match?(/\A\s*end\s*\z/)
+
+    strip_preview_source_indentation(lines.join)
+      .sub(/\Arender\(/, "<%= render(")
+      .sub(/\Arender\b/, "<%= render")
+      .then { |code| code.start_with?("<%=") ? "#{code.chomp} %>\n" : code }
   end
 
   def ruby_method_end_line(source, method_name, start_line)

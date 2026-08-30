@@ -1,0 +1,16 @@
+<%= render Shadcn::TabsComponent.new(default_value: "active", class_name: "w-[400px]") do |tabs| %>
+  <% tabs.with_list do |list| %>
+    <% list.with_trigger(value: "active") { "Active" } %>
+    <% list.with_trigger(value: "disabled", disabled: true) { "Disabled" } %>
+    <% list.with_trigger(value: "another") { "Another" } %>
+  <% end %>
+  <% tabs.with_panel(value: "active") do %>
+    <div class="p-4">Active tab content</div>
+  <% end %>
+  <% tabs.with_panel(value: "disabled") do %>
+    <div class="p-4">Disabled tab content</div>
+  <% end %>
+  <% tabs.with_panel(value: "another") do %>
+    <div class="p-4">Another tab content</div>
+  <% end %>
+<% end %>

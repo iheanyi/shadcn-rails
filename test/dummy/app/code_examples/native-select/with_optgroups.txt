@@ -1,0 +1,10 @@
+<%= render(Shadcn::NativeSelectComponent.new(name: "car")) do |select| %>
+  <% select.with_optgroup(label: "Frameworks") do |group| %>
+    <% group.with_option(value: "rails") { "Ruby on Rails" } %>
+    <% group.with_option(value: "stimulus") { "Stimulus" } %>
+  <% end %>
+  <% select.with_optgroup(label: "Languages") do |group| %>
+    <% group.with_option(value: "ruby") { "Ruby" } %>
+    <% group.with_option(value: "javascript") { "JavaScript" } %>
+  <% end %>
+<% end %>

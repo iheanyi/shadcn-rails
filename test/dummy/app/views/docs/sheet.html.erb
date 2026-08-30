@@ -35,7 +35,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/sheet/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -115,6 +115,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/sheet/sides.txt")) %>
     </div>
 
     <!-- Top -->
@@ -136,7 +137,7 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/sheet/top.txt")) %>
     </div>
 
     <!-- Right (Default) -->
@@ -158,7 +159,7 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/sheet/right-default.txt")) %>
     </div>
 
     <!-- Bottom -->
@@ -180,7 +181,7 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/sheet/bottom.txt")) %>
     </div>
 
     <!-- Left -->
@@ -206,7 +207,7 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/sheet/left.txt")) %>
     </div>
 
     <!-- With Form -->
@@ -248,9 +249,33 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/sheet/with-form.txt")) %>
     </div>
   </div>
+
+    <!-- Left Side -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Left Side</h3>
+      <%= showcase("sheet", :left_side) %>
+    </div>
+
+    <!-- Top Side -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Top Side</h3>
+      <%= showcase("sheet", :top_side) %>
+    </div>
+
+    <!-- Bottom Side -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Bottom Side</h3>
+      <%= showcase("sheet", :bottom_side) %>
+    </div>
+
+    <!-- Simple Content -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Simple Content</h3>
+      <%= showcase("sheet", :simple) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">

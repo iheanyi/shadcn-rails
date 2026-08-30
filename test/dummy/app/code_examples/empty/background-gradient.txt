@@ -1,0 +1,14 @@
+<%= render Shadcn::EmptyComponent.new(class_name: "bg-gradient-to-b from-muted/50 to-background from-30% rounded-lg") do |empty| %>
+  <% empty.with_header do |header| %>
+    <% header.with_media(variant: :icon) do %>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+    <% end %>
+    <% header.with_title { "No Notifications" } %>
+    <% header.with_description { "You're all caught up. New notifications will appear here." } %>
+  <% end %>
+  <% empty.with_content do %>
+    <%= render Shadcn::ButtonComponent.new(variant: :outline, size: :sm) do %>
+      <svg class="mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+      Refresh
+    <% end %>
+  <% end %>

@@ -35,7 +35,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/tabs/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -63,7 +63,7 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/tabs/basic.txt")) %>
     </div>
 
     <!-- URL Sync -->
@@ -73,7 +73,6 @@
         Sync the active tab with the URL using the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">url_param</code> option.
         This is useful for shareable links and browser back/forward navigation.
       </p>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Disabled Tab -->
@@ -97,9 +96,15 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/tabs/disabled-tab.txt")) %>
     </div>
   </div>
+
+    <!-- With Cards -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Cards</h3>
+      <%= showcase("tabs", :with_cards) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">

@@ -1,0 +1,65 @@
+<div class="grid grid-cols-2 gap-4">
+  <%= render Shadcn::SheetComponent.new(side: :top) do |sheet| %>
+    <% sheet.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Top<% end %>
+    <% end %>
+    <% sheet.with_body do |content| %>
+      <% content.with_header do |header| %>
+        <% header.with_title { "Notifications" } %>
+        <% header.with_description { "View your recent notifications." } %>
+      <% end %>
+      <div class="py-4">
+        <p class="text-sm">No new notifications.</p>
+      </div>
+    <% end %>
+  <% end %>
+
+  <%= render Shadcn::SheetComponent.new(side: :right) do |sheet| %>
+    <% sheet.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Right<% end %>
+    <% end %>
+    <% sheet.with_body do |content| %>
+      <% content.with_header do |header| %>
+        <% header.with_title { "Settings" } %>
+        <% header.with_description { "Configure your preferences." } %>
+      <% end %>
+      <div class="py-4">
+        <p class="text-sm">Settings panel content.</p>
+      </div>
+    <% end %>
+  <% end %>
+
+  <%= render Shadcn::SheetComponent.new(side: :bottom) do |sheet| %>
+    <% sheet.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Bottom<% end %>
+    <% end %>
+    <% sheet.with_body do |content| %>
+      <% content.with_header do |header| %>
+        <% header.with_title { "Details" } %>
+        <% header.with_description { "Additional information." } %>
+      <% end %>
+      <div class="py-4">
+        <p class="text-sm">Details panel content.</p>
+      </div>
+    <% end %>
+  <% end %>
+
+  <%= render Shadcn::SheetComponent.new(side: :left) do |sheet| %>
+    <% sheet.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Left<% end %>
+    <% end %>
+    <% sheet.with_body do |content| %>
+      <% content.with_header do |header| %>
+        <% header.with_title { "Navigation" } %>
+        <% header.with_description { "Browse sections." } %>
+      <% end %>
+      <div class="py-4">
+        <nav class="flex flex-col gap-2">
+          <a href="#" class="text-sm hover:underline">Home</a>
+          <a href="#" class="text-sm hover:underline">About</a>
+          <a href="#" class="text-sm hover:underline">Contact</a>
+        </nav>
+      </div>
+    <% end %>
+  <% end %>
+</div>

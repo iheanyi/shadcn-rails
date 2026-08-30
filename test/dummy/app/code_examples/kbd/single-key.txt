@@ -1,0 +1,1 @@
+<%= render Shadcn::KbdComponent.new { "K" } %>

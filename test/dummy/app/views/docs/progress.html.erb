@@ -34,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/progress/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -78,6 +78,7 @@
           </div>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/progress/different-values.txt")) %>
     </div>
 
     <!-- Custom Max -->
@@ -95,6 +96,7 @@
           </div>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/progress/custom-max-value.txt")) %>
     </div>
 
     <!-- With Label -->
@@ -111,6 +113,7 @@
           </div>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/progress/with-label.txt")) %>
     </div>
 
     <!-- In a Card -->
@@ -130,8 +133,69 @@
           <% end %>
         <% end %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/progress/in-a-card.txt")) %>
     </div>
   </div>
+
+    <!-- All Values -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">All Values</h3>
+      <%= showcase("progress", :values) %>
+    </div>
+
+    <!-- Zero Percent -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Zero Percent</h3>
+      <%= showcase("progress", :zero) %>
+    </div>
+
+    <!-- Twenty Five Percent -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Twenty Five Percent</h3>
+      <%= showcase("progress", :twenty_five) %>
+    </div>
+
+    <!-- Fifty Percent -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Fifty Percent</h3>
+      <%= showcase("progress", :fifty) %>
+    </div>
+
+    <!-- Seventy Five Percent -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Seventy Five Percent</h3>
+      <%= showcase("progress", :seventy_five) %>
+    </div>
+
+    <!-- Complete -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Complete</h3>
+      <%= showcase("progress", :complete) %>
+    </div>
+
+    <!-- Indeterminate -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Indeterminate</h3>
+      <%= showcase("progress", :indeterminate) %>
+    </div>
+
+    <!-- Multiple Steps -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Multiple Steps</h3>
+      <%= showcase("progress", :multiple_steps) %>
+    </div>
+
+    <!-- File Upload -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">File Upload</h3>
+      <%= showcase("progress", :file_upload) %>
+    </div>
+
+    <!-- Loading State -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Loading State</h3>
+      <%= showcase("progress", :loading) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">

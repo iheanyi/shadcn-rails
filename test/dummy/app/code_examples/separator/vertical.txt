@@ -1,0 +1,9 @@
+<div class="flex h-5 items-center space-x-4 text-sm">
+  <div>Home</div>
+  <%= render Shadcn::SeparatorComponent.new(orientation: :vertical) %>
+  <div>Products</div>
+  <%= render Shadcn::SeparatorComponent.new(orientation: :vertical) %>
+  <div>About</div>
+  <%= render Shadcn::SeparatorComponent.new(orientation: :vertical) %>
+  <div>Contact</div>
+</div>

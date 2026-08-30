@@ -1,0 +1,21 @@
+<%= render Shadcn::CardComponent.new(class_name: "w-[350px]") do |card| %>
+  <% card.with_header do |header| %>
+    <% header.with_title { "Notifications" } %>
+    <% header.with_description { "You have 3 unread messages." } %>
+  <% end %>
+  <% card.with_content do %>
+    <div class="space-y-4">
+      <div class="flex items-center gap-4">
+        <span class="flex h-2 w-2 rounded-full bg-sky-500"></span>
+        <div class="flex-1 space-y-1">
+          <p class="text-sm font-medium">Push Notifications</p>
+          <p class="text-sm text-muted-foreground">Send notifications to device.</p>
+        </div>
+        <%= render Shadcn::SwitchComponent.new(checked: true) %>
+      </div>
+    </div>
+  <% end %>
+  <% card.with_footer do %>
+    <%= render Shadcn::ButtonComponent.new(class_name: "w-full") { "Mark all as read" } %>
+  <% end %>
+<% end %>

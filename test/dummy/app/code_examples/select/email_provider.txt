@@ -1,0 +1,13 @@
+<%= render(Shadcn::SelectComponent.new(name: "email", value: "gmail", placeholder: "Select email")) do |select| %>
+  <% select.with_group(label: "Personal") do |group| %>
+    <% group.with_item(value: "gmail") { "Gmail" } %>
+    <% group.with_item(value: "yahoo") { "Yahoo Mail" } %>
+    <% group.with_item(value: "outlook") { "Outlook" } %>
+    <% group.with_item(value: "icloud") { "iCloud Mail" } %>
+  <% end %>
+  <% select.with_group(label: "Business") do |group| %>
+    <% group.with_item(value: "gsuite") { "Google Workspace" } %>
+    <% group.with_item(value: "office365") { "Microsoft 365" } %>
+    <% group.with_item(value: "zoho") { "Zoho Mail" } %>
+  <% end %>
+<% end %>

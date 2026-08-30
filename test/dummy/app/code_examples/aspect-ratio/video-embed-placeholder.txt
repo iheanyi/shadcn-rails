@@ -1,0 +1,10 @@
+<div class="w-full max-w-lg">
+  <%= render Shadcn::AspectRatioComponent.new(ratio: 16.0/9.0, class_name: "bg-muted rounded-md") do %>
+    <div class="flex h-full w-full items-center justify-center">
+      <div class="text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-muted-foreground"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <p class="text-sm text-muted-foreground mt-2">Video Player</p>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,6 @@
+render Shadcn::ChartComponent.new(
+  type: :area,
+  data: ACQUISITION_DATA,
+  config: ACQUISITION_CONFIG,
+  aria_label: "Monthly acquisition volume by channel"
+)

@@ -34,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/empty/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -59,7 +59,7 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/empty/outline-style.txt")) %>
     </div>
 
     <!-- Background Gradient -->
@@ -82,8 +82,8 @@
             <% end %>
           <% end %>
         <% end %>
+        <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/empty/background-gradient.txt")) %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Avatar -->
@@ -109,7 +109,7 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/empty/with-avatar.txt")) %>
     </div>
 
     <!-- 404 Page -->
@@ -137,6 +137,7 @@
           <% end %>
         <% end %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/empty/404-page.txt")) %>
     </div>
   </div>
 

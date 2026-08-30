@@ -1,0 +1,6 @@
+render Shadcn::ChartComponent.new(
+  type: :line,
+  data: MONTHLY_DATA,
+  config: MONTHLY_CONFIG,
+  aria_label: "Monthly visitor trends by device"
+)

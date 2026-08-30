@@ -1,0 +1,23 @@
+<div class="w-full max-w-lg mx-auto px-12">
+  <%= render Shadcn::CarouselComponent.new do |carousel| %>
+    <% carousel.with_slides do |slides| %>
+      <% slides.with_item do %>
+        <div class="aspect-video bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white text-xl font-bold">
+          Image 1
+        </div>
+      <% end %>
+      <% slides.with_item do %>
+        <div class="aspect-video bg-gradient-to-br from-green-500 to-teal-600 rounded-lg flex items-center justify-center text-white text-xl font-bold">
+          Image 2
+        </div>
+      <% end %>
+      <% slides.with_item do %>
+        <div class="aspect-video bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center text-white text-xl font-bold">
+          Image 3
+        </div>
+      <% end %>
+    <% end %>
+    <% carousel.with_previous %>
+    <% carousel.with_next %>
+  <% end %>
+</div>

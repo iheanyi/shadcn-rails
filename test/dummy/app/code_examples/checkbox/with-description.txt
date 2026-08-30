@@ -1,0 +1,7 @@
+<div class="items-top flex space-x-2">
+  <%= render Shadcn::CheckboxComponent.new(id: "terms-desc") %>
+  <div class="grid gap-1.5 leading-none">
+    <%= render Shadcn::LabelComponent.new(for: "terms-desc") { "Accept terms and conditions" } %>
+    <p class="text-sm text-muted-foreground">You agree to our Terms of Service and Privacy Policy.</p>
+  </div>
+</div>

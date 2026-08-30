@@ -39,7 +39,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/radio-group/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -63,9 +63,9 @@
             <% group.with_item(value: "grid", label: "Grid") %>
             <% group.with_item(value: "table", label: "Table") %>
           <% end %>
+          <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/radio-group/horizontal-layout.txt")) %>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Description -->
@@ -83,7 +83,7 @@
           </div>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/radio-group/with-description.txt")) %>
     </div>
 
     <!-- Disabled State -->
@@ -98,7 +98,7 @@
           <% end %>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/radio-group/disabled-state.txt")) %>
     </div>
 
     <!-- Form Integration -->
@@ -107,9 +107,38 @@
       <p class="text-sm text-muted-foreground">
         The radio group works seamlessly with Rails forms. The <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">name</code> attribute determines the form parameter name.
       </p>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
   </div>
+
+    <!-- With Descriptions -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Descriptions</h3>
+      <%= showcase("radio-group", :with_descriptions) %>
+    </div>
+
+    <!-- Card Layout -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Card Layout</h3>
+      <%= showcase("radio-group", :card_layout) %>
+    </div>
+
+    <!-- Required Field -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Required Field</h3>
+      <%= showcase("radio-group", :required) %>
+    </div>
+
+    <!-- Color Picker -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Color Picker</h3>
+      <%= showcase("radio-group", :color_picker) %>
+    </div>
+
+    <!-- Form Example -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Form Example</h3>
+      <%= showcase("radio-group", :form_example) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">

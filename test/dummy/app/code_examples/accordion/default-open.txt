@@ -1,0 +1,12 @@
+<div class="w-full max-w-md">
+  <%= render Shadcn::AccordionComponent.new(type: :single, collapsible: true, default_value: "default-2") do |accordion| %>
+    <% accordion.with_item(value: "default-1") do |item| %>
+      <% item.with_trigger { "First Item" } %>
+      <% item.with_body { "This item starts collapsed." } %>
+    <% end %>
+    <% accordion.with_item(value: "default-2") do |item| %>
+      <% item.with_trigger { "Second Item (Default Open)" } %>
+      <% item.with_body { "This item starts expanded because it's set as the default value." } %>
+    <% end %>
+  <% end %>
+</div>

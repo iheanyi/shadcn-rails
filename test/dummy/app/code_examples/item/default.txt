@@ -1,0 +1,13 @@
+  <%= render(Shadcn::ItemComponent.new(variant: :outline, class_name: "w-[360px]")) do |item| %>
+    <% item.with_media(variant: :icon) do %>
+      <%# Inline HTML omitted for brevity; see the live preview for the rendered markup. %>
+    <% end %>
+    <% item.with_content do |content| %>
+      <% content.with_title { "Project brief" } %>
+      <% content.with_description { "Updated just now" } %>
+    <% end %>
+    <% item.with_actions do %>
+      <%# Inline HTML omitted for brevity; see the live preview for the rendered markup. %>
+    <% end %>
+  <% end %>
+<% end %>

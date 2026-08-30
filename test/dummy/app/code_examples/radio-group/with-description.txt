@@ -1,0 +1,9 @@
+<div class="flex justify-center">
+  <div class="max-w-md w-full">
+    <%= render Shadcn::RadioGroupComponent.new(name: "plan", value: "pro") do |group| %>
+      <% group.with_item(value: "free", label: "Free", description: "For individuals just getting started") %>
+      <% group.with_item(value: "pro", label: "Pro", description: "For professional developers and small teams") %>
+      <% group.with_item(value: "enterprise", label: "Enterprise", description: "For large organizations with advanced needs") %>
+    <% end %>
+  </div>
+</div>

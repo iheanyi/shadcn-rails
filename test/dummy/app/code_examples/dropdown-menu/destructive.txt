@@ -1,0 +1,12 @@
+<%= render(Shadcn::DropdownMenuComponent.new) do |menu| %>
+  <% menu.with_trigger do %>
+    <% button_html(:outline, "More Options") %>
+  <% end %>
+  <% menu.with_menu do |content| %>
+    <% content.with_item(href: "#edit") { "Edit" } %>
+    <% content.with_item(href: "#duplicate") { "Duplicate" } %>
+    <% content.with_separator %>
+    <% content.with_item(variant: :destructive, href: "#delete") { "Delete" } %>
+    <% content.with_item(variant: :destructive, href: "#archive") { "Archive" } %>
+  <% end %>
+<% end %>

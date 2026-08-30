@@ -59,7 +59,7 @@
       Render the toaster once, usually in your application layout. Use Sonner for new toast work.
       The older Toast component remains available for low-level markup and compatibility.
     </p>
-    <%= render "docs/code_example", language: "erb", code: "<" + "%= render Shadcn::SonnerComponent.new %" + ">" %>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/sonner/usage.txt")) %>
     <%= render "docs/code_example", language: "javascript", code: <<~JS.strip
       import { toast } from "shadcn-rails-stimulus"
 
@@ -118,6 +118,7 @@
           <%= button_tag "Publish post", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Post published", description: "The changelog is live and subscribers were notified.", variant: "info" } %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/sonner/top_center.txt")) %>
     </div>
 
     <div class="space-y-4">
@@ -132,6 +133,7 @@
           </div>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/sonner/with_limit.txt")) %>
     </div>
 
     <div class="space-y-4">
@@ -142,6 +144,7 @@
           <%= button_tag "Save profile", type: "button", class: sonner_button_classes, data: { action: "click->shadcn--sonner#demo", title: "Profile saved", description: "Avatar, display name, and notification settings were saved.", variant: "success", duration: 0 } %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/sonner/no_auto_dismiss.txt")) %>
     </div>
   </div>
 
@@ -151,15 +154,7 @@
       The viewport is persistent and has a stable id, so a Turbo Stream can append server-rendered toast markup.
       The Sonner controller initializes appended nodes, applies missing classes, starts timers, and adds a dismiss button.
     </p>
-    <%= render "docs/code_example", language: "erb", code: [
-      "<" + "%= turbo_stream.append \"shadcn-sonner-viewport\" do %" + ">",
-      "  <li data-sonner-toast=\"true\"",
-      "      data-variant=\"destructive\"",
-      "      data-duration=\"8000\">",
-      "    Failed to save changes.",
-      "  </li>",
-      "<" + "% end %" + ">"
-    ].join("\n") %>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/sonner/turbo-stream.txt")) %>
   </div>
 
   <div id="api-reference" class="space-y-6">
@@ -200,4 +195,22 @@
       <li>Toasts can be dismissed with the close button or by swiping horizontally.</li>
     </ul>
   </div>
+
+    <!-- Top Center -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Top Center</h3>
+      <%= showcase("sonner", :top_center) %>
+    </div>
+
+    <!-- With Limit -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Limit</h3>
+      <%= showcase("sonner", :with_limit) %>
+    </div>
+
+    <!-- No Auto Dismiss -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">No Auto Dismiss</h3>
+      <%= showcase("sonner", :no_auto_dismiss) %>
+    </div>
 </div>

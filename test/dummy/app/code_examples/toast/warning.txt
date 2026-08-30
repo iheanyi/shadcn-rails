@@ -1,0 +1,7 @@
+<%= render(Shadcn::ToastComponent.new) do |toast| %>
+  <% toast.with_title { "Warning" } %>
+  <% toast.with_description { "Your session will expire in 5 minutes." } %>
+  <% toast.with_action(alt_text: "Extend session") do %>
+    <% button_html(:outline, "Extend", "h-8 px-3 text-xs") %>
+  <% end %>
+<% end %>

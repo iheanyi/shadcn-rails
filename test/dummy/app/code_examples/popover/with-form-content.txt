@@ -1,0 +1,30 @@
+<%= render Shadcn::PopoverComponent.new do |popover| %>
+  <% popover.with_trigger do %>
+    <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Settings" } %>
+  <% end %>
+  <% popover.with_body do %>
+    <div class="grid gap-4">
+      <div class="space-y-2">
+        <h4 class="font-medium leading-none">Settings</h4>
+        <p class="text-sm text-muted-foreground">
+          Configure your preferences.
+        </p>
+      </div>
+      <div class="grid gap-3">
+        <div class="grid gap-2">
+          <%= render Shadcn::LabelComponent.new(for: "name") { "Name" } %>
+          <%= render Shadcn::InputComponent.new(id: "name", placeholder: "Enter your name") %>
+        </div>
+        <div class="grid gap-2">
+          <%= render Shadcn::LabelComponent.new(for: "email") { "Email" } %>
+          <%= render Shadcn::InputComponent.new(id: "email", type: "email", placeholder: "Enter your email") %>
+        </div>
+        <div class="flex items-center gap-2">
+          <%= render Shadcn::CheckboxComponent.new(id: "notifications") %>
+          <%= render Shadcn::LabelComponent.new(for: "notifications") { "Enable notifications" } %>
+        </div>
+        <%= render Shadcn::ButtonComponent.new(size: :sm, class: "mt-2") { "Save changes" } %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

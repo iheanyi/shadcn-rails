@@ -90,6 +90,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/alert/multiple-alerts.txt")) %>
     </div>
   </div>
 

@@ -1,0 +1,1 @@
+<%= render Shadcn::ButtonComponent.new(disabled: true) do %>Disabled<% end %>

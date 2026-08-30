@@ -1,0 +1,18 @@
+<div class="grid gap-4 max-w-sm">
+  <div class="grid gap-1.5">
+    <%= render Shadcn::LabelComponent.new(for: "text-demo") { "Text" } %>
+    <%= render Shadcn::InputComponent.new(type: "text", id: "text-demo", placeholder: "Enter text") %>
+  </div>
+  <div class="grid gap-1.5">
+    <%= render Shadcn::LabelComponent.new(for: "password-demo") { "Password" } %>
+    <%= render Shadcn::InputComponent.new(type: "password", id: "password-demo", placeholder: "Enter password") %>
+  </div>
+  <div class="grid gap-1.5">
+    <%= render Shadcn::LabelComponent.new(for: "number-demo") { "Number" } %>
+    <%= render Shadcn::InputComponent.new(type: "number", id: "number-demo", placeholder: "0") %>
+  </div>
+  <div class="grid gap-1.5">
+    <%= render Shadcn::LabelComponent.new(for: "date-demo") { "Date" } %>
+    <%= render Shadcn::InputComponent.new(type: "date", id: "date-demo") %>
+  </div>
+</div>

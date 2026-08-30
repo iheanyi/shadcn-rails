@@ -1,0 +1,15 @@
+<%= render(Shadcn::AlertDialogComponent.new) do |dialog| %>
+  <% dialog.with_trigger do %>
+    <% button_html(:outline, "Show Dialog") %>
+  <% end %>
+  <% dialog.with_body do |body| %>
+    <% body.with_header do |header| %>
+      <% header.with_title { "Are you absolutely sure?" } %>
+      <% header.with_description { "This action cannot be undone. This will permanently delete your account and remove your data from our servers." } %>
+    <% end %>
+    <% body.with_footer do |footer| %>
+      <% footer.with_cancel { "Cancel" } %>
+      <% footer.with_action { "Continue" } %>
+    <% end %>
+  <% end %>
+<% end %>

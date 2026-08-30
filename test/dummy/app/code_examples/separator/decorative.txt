@@ -1,0 +1,5 @@
+<div class="space-y-4 w-full max-w-md">
+  <p class="text-sm">This separator is decorative and won't be announced by screen readers.</p>
+  <%= render Shadcn::SeparatorComponent.new(decorative: true) %>
+  <p class="text-sm">Content continues...</p>
+</div>

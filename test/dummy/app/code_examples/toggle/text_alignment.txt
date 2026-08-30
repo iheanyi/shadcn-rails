@@ -1,0 +1,3 @@
+<%= render(Shadcn::ToggleComponent.new(variant: :outline, aria_label: "Align left", pressed: true)) do %>
+  align_left_icon
+<% end %>

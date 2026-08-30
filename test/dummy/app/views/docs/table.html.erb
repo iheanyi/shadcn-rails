@@ -36,7 +36,7 @@
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
     <p class="leading-7">The Table component uses a slot-based API with nested components for header, body, footer, and caption.</p>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/table/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -71,7 +71,7 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/table/with-caption.txt")) %>
     </div>
 
     <!-- With Footer -->
@@ -108,7 +108,7 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/table/with-footer.txt")) %>
     </div>
 
     <!-- Invoices Example -->
@@ -154,7 +154,7 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/table/invoices-table.txt")) %>
     </div>
 
     <!-- Selected Row -->
@@ -185,9 +185,33 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/table/selected-row.txt")) %>
     </div>
   </div>
+
+    <!-- Striped Rows -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Striped Rows</h3>
+      <%= showcase("table", :striped) %>
+    </div>
+
+    <!-- With Actions -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Actions</h3>
+      <%= showcase("table", :with_actions) %>
+    </div>
+
+    <!-- Selectable Rows -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Selectable Rows</h3>
+      <%= showcase("table", :selectable) %>
+    </div>
+
+    <!-- Empty State -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Empty State</h3>
+      <%= showcase("table", :empty_state) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">

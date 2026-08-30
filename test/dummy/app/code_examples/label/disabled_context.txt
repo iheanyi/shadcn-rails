@@ -1,0 +1,2 @@
+  <%= render(Shadcn::LabelComponent.new(for: "disabled", class_name: "opacity-50")) { "Disabled Field" } %>
+<% end %>

@@ -1,0 +1,8 @@
+<%= render Shadcn::ScrollAreaComponent.new(orientation: :horizontal, class_name: "w-96 whitespace-nowrap rounded-md border") do %>
+  <div class="flex w-max space-x-4 p-4">
+    <% image_urls = (1..10).map { |i| "https://picsum.photos/300/200?random=#{i}" } %>
+    <% image_urls.each do |url| %>
+      <%= image_tag url, class: "h-[200px] w-[300px] rounded-md object-cover" %>
+    <% end %>
+  </div>
+<% end %>

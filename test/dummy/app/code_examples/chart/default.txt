@@ -1,0 +1,8 @@
+render Shadcn::ChartComponent.new(
+  type: :bar,
+  data: MONTHLY_DATA,
+  config: MONTHLY_CONFIG,
+  aria_label: "Monthly visitors by device"
+) do |chart|
+  <% chart.with_fallback { fallback_table("Monthly visitors", MONTHLY_DATA) } %>
+<% end %>

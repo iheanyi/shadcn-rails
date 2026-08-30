@@ -1,0 +1,29 @@
+<%= render(Shadcn::SelectComponent.new(name: "timezone", placeholder: "Select a timezone")) do |select| %>
+  <% select.with_group(label: "North America") do |group| %>
+    <% group.with_item(value: "est") { "Eastern Standard Time" } %>
+    <% group.with_item(value: "cst") { "Central Standard Time" } %>
+    <% group.with_item(value: "mst") { "Mountain Standard Time" } %>
+    <% group.with_item(value: "pst") { "Pacific Standard Time" } %>
+  <% end %>
+  <% select.with_group(label: "Europe & Africa") do |group| %>
+    <% group.with_item(value: "gmt") { "Greenwich Mean Time" } %>
+    <% group.with_item(value: "cet") { "Central European Time" } %>
+    <% group.with_item(value: "eet") { "Eastern European Time" } %>
+    <% group.with_item(value: "west") { "Western European Summer Time" } %>
+    <% group.with_item(value: "cat") { "Central Africa Time" } %>
+    <% group.with_item(value: "eat") { "East Africa Time" } %>
+  <% end %>
+  <% select.with_group(label: "Asia") do |group| %>
+    <% group.with_item(value: "msk") { "Moscow Time" } %>
+    <% group.with_item(value: "ist") { "India Standard Time" } %>
+    <% group.with_item(value: "cst_china") { "China Standard Time" } %>
+    <% group.with_item(value: "jst") { "Japan Standard Time" } %>
+    <% group.with_item(value: "kst") { "Korea Standard Time" } %>
+  <% end %>
+  <% select.with_group(label: "Australia & Pacific") do |group| %>
+    <% group.with_item(value: "awst") { "Australian Western Standard Time" } %>
+    <% group.with_item(value: "acst") { "Australian Central Standard Time" } %>
+    <% group.with_item(value: "aest") { "Australian Eastern Standard Time" } %>
+    <% group.with_item(value: "nzst") { "New Zealand Standard Time" } %>
+  <% end %>
+<% end %>

@@ -1,0 +1,10 @@
+<div class="flex flex-col gap-4">
+  <div class="flex items-center space-x-2">
+    <%= render Shadcn::SwitchComponent.new(id: "disabled-off", disabled: true) %>
+    <%= render Shadcn::LabelComponent.new(for: "disabled-off") { "Disabled (off)" } %>
+  </div>
+  <div class="flex items-center space-x-2">
+    <%= render Shadcn::SwitchComponent.new(id: "disabled-on", disabled: true, checked: true) %>
+    <%= render Shadcn::LabelComponent.new(for: "disabled-on") { "Disabled (on)" } %>
+  </div>
+</div>

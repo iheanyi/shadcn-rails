@@ -1,0 +1,7 @@
+<%= render(Shadcn::AlertComponent.new(class_name: "border-green-500/50 text-green-700 [&>svg]:text-green-700")) do |alert| %>
+  <% alert.with_icon do %>
+    <%# Inline HTML omitted for brevity; see the live preview for the rendered markup. %>
+  <% end %>
+  <% alert.with_title { "Success" } %>
+  <% alert.with_description { "Your changes have been saved successfully." } %>
+<% end %>

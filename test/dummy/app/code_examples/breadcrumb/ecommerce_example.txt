@@ -1,0 +1,7 @@
+<%= render(Shadcn::BreadcrumbComponent.new) do |breadcrumb| %>
+  <% breadcrumb.with_item(href: "/") { "Home" } %>
+  <% breadcrumb.with_item(href: "/shop") { "Shop" } %>
+  <% breadcrumb.with_item(href: "/shop/clothing") { "Clothing" } %>
+  <% breadcrumb.with_item(href: "/shop/clothing/mens") { "Men's" } %>
+  <% breadcrumb.with_item(current: true) { "Classic T-Shirt" } %>
+<% end %>

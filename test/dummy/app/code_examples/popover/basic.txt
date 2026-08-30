@@ -1,0 +1,13 @@
+<%= render Shadcn::PopoverComponent.new do |popover| %>
+  <% popover.with_trigger do %>
+    <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Click me" } %>
+  <% end %>
+  <% popover.with_body do %>
+    <div class="grid gap-4">
+      <h4 class="font-medium leading-none">Basic Popover</h4>
+      <p class="text-sm text-muted-foreground">
+        This is a simple popover with some text content.
+      </p>
+    </div>
+  <% end %>
+<% end %>

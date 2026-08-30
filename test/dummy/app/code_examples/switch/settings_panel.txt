@@ -1,0 +1,1 @@
+<%= render Shadcn::SwitchComponent.new(name: "email_notifications", id: "email_notifications", checked: true) %>

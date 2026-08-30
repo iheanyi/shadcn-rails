@@ -1,0 +1,17 @@
+<div class="w-full max-w-lg space-y-3">
+  <div class="flex space-x-4">
+    <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-1/4") %>
+    <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-1/4") %>
+    <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-1/4") %>
+    <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-1/4") %>
+  </div>
+  <%= render Shadcn::SeparatorComponent.new %>
+  <% 4.times do %>
+    <div class="flex space-x-4">
+      <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-1/4") %>
+      <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-1/4") %>
+      <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-1/4") %>
+      <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-1/4") %>
+    </div>
+  <% end %>
+</div>

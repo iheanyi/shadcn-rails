@@ -34,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/sidebar/usage.txt")) %>
   </div>
 
   <!-- Structure -->
@@ -161,7 +161,6 @@
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Keyboard Shortcut</h3>
       <p class="text-sm text-muted-foreground">Toggle the sidebar with <kbd class="rounded bg-muted px-2 py-1 font-mono text-sm">Cmd/Ctrl + B</kbd>. The shortcut key is customizable:</p>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
   </div>
 

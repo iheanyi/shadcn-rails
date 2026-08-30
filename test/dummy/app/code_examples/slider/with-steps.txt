@@ -1,0 +1,14 @@
+<div class="space-y-4 w-full max-w-md">
+  <div class="flex justify-between">
+    <%= render Shadcn::LabelComponent.new { "Rating" } %>
+    <span id="rating-label" class="text-sm text-muted-foreground">3 stars</span>
+  </div>
+  <%= render Shadcn::SliderComponent.new(value: 3, min: 1, max: 5, step: 1, data: { "output-target": "rating-label", "output-format": "{value} stars" }) %>
+  <div class="flex justify-between text-xs text-muted-foreground">
+    <span>1</span>
+    <span>2</span>
+    <span>3</span>
+    <span>4</span>
+    <span>5</span>
+  </div>
+</div>

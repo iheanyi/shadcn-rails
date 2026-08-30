@@ -1,0 +1,8 @@
+<div class="max-w-sm">
+  <%= render Shadcn::NativeSelectComponent.new(name: "priority", required: true) do |select| %>
+    <% select.with_option(value: "", disabled: true, selected: true) { "Select priority" } %>
+    <% select.with_option(value: "low") { "Low" } %>
+    <% select.with_option(value: "medium") { "Medium" } %>
+    <% select.with_option(value: "high") { "High" } %>
+  <% end %>
+</div>

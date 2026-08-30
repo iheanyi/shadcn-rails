@@ -1,0 +1,14 @@
+<div class="space-y-4 max-w-md">
+  <div class="flex items-center space-x-2">
+    <%= render Shadcn::CheckboxComponent.new(id: "marketing", name: "preferences[marketing]") %>
+    <%= render Shadcn::LabelComponent.new(for: "marketing") { "Receive marketing emails" } %>
+  </div>
+  <div class="flex items-center space-x-2">
+    <%= render Shadcn::CheckboxComponent.new(id: "updates", name: "preferences[updates]", checked: true) %>
+    <%= render Shadcn::LabelComponent.new(for: "updates") { "Receive product updates" } %>
+  </div>
+  <div class="flex items-center space-x-2">
+    <%= render Shadcn::CheckboxComponent.new(id: "security", name: "preferences[security]", checked: true) %>
+    <%= render Shadcn::LabelComponent.new(for: "security") { "Receive security alerts" } %>
+  </div>
+</div>

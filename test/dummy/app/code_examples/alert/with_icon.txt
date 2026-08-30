@@ -1,0 +1,7 @@
+<%= render(Shadcn::AlertComponent.new) do |alert| %>
+  <% alert.with_icon do %>
+    <%# Inline HTML omitted for brevity; see the live preview for the rendered markup. %>
+  <% end %>
+  <% alert.with_title { "Information" } %>
+  <% alert.with_description { "This is an informational message about an important update." } %>
+<% end %>

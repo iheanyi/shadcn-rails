@@ -1,0 +1,4 @@
+<%= render(Shadcn::ToastComponent.new(variant: variant.to_sym)) do |toast| %>
+  <% toast.with_title { variant == :destructive ? "Error" : "Success" } %>
+  <% toast.with_description { variant == :destructive ? "Something went wrong." : "Your changes have been saved." } %>
+<% end %>

@@ -1,0 +1,1 @@
+<%= render Shadcn::SkeletonComponent.new(class_name: "h-[125px] w-[250px] rounded-xl") %>

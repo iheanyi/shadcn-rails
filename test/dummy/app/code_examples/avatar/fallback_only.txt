@@ -1,0 +1,1 @@
+<%= render Shadcn::AvatarComponent.new( alt: "Jane Smith" ) %>

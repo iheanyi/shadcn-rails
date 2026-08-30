@@ -49,7 +49,7 @@
       which provides the recommended <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">toast()</code> API,
       stacking, positions, swipe dismissal, and Turbo Stream support.
     </p>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/toast/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -60,14 +60,12 @@
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Simple</h3>
       <p class="text-sm text-muted-foreground">A minimal toast with just a description.</p>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Title -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">With Title</h3>
       <p class="text-sm text-muted-foreground">Include both a title and description for more context.</p>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- With Action -->
@@ -78,14 +76,12 @@
         The <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">alt_text</code> parameter
         is required for accessibility.
       </p>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Destructive -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Destructive</h3>
       <p class="text-sm text-muted-foreground">Use the destructive variant for error messages or critical notifications.</p>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Custom Duration -->
@@ -95,7 +91,6 @@
         Control how long the toast is displayed before auto-dismissing.
         Duration is specified in milliseconds.
       </p>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- No Auto-dismiss -->
@@ -105,9 +100,56 @@
         Set <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">duration: 0</code>
         to prevent automatic dismissal. The user must manually close the toast.
       </p>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
   </div>
+
+    <!-- All Variants -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">All Variants</h3>
+      <%= showcase("toast", :variants) %>
+    </div>
+
+    <!-- With Description -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Description</h3>
+      <%= showcase("toast", :with_description) %>
+    </div>
+
+    <!-- Destructive with Action -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Destructive with Action</h3>
+      <%= showcase("toast", :destructive_with_action) %>
+    </div>
+
+    <!-- Success -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Success</h3>
+      <%= showcase("toast", :success) %>
+    </div>
+
+    <!-- Warning -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Warning</h3>
+      <%= showcase("toast", :warning) %>
+    </div>
+
+    <!-- Long Duration -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Long Duration</h3>
+      <%= showcase("toast", :long_duration) %>
+    </div>
+
+    <!-- No Auto Dismiss -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">No Auto Dismiss</h3>
+      <%= showcase("toast", :no_auto_dismiss) %>
+    </div>
+
+    <!-- Multiple Toasts -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Multiple Toasts</h3>
+      <%= showcase("toast", :multiple) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">

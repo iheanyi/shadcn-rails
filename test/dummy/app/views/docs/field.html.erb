@@ -34,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/field/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -53,7 +53,7 @@
           <% end %>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/field/with-description.txt")) %>
     </div>
 
     <!-- With Error -->
@@ -68,7 +68,7 @@
           <% end %>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/field/with-error.txt")) %>
     </div>
 
     <!-- Required Field -->
@@ -82,6 +82,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/field/required-field.txt")) %>
     </div>
 
     <!-- With Custom Control -->
@@ -98,7 +99,7 @@
           <% end %>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/field/with-custom-control-textarea.txt")) %>
     </div>
 
     <!-- Form Example -->
@@ -119,8 +120,15 @@
           <%= render Shadcn::ButtonComponent.new(class_name: "w-full") { "Submit" } %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/field/form-example.txt")) %>
     </div>
   </div>
+
+    <!-- Email Field -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Email Field</h3>
+      <%= showcase("field", :email) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">

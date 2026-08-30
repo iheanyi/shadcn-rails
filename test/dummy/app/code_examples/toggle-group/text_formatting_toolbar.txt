@@ -1,0 +1,14 @@
+<%= render(Shadcn::ToggleGroupComponent.new(type: :multiple, variant: :outline, name: "formatting")) do |group| %>
+  <% group.with_item(value: "bold", aria_label: "Toggle bold") do %>
+    bold_icon
+  <% end %>
+  <% group.with_item(value: "italic", aria_label: "Toggle italic") do %>
+    italic_icon
+  <% end %>
+  <% group.with_item(value: "underline", aria_label: "Toggle underline") do %>
+    underline_icon
+  <% end %>
+  <% group.with_item(value: "strikethrough", aria_label: "Toggle strikethrough") do %>
+    strikethrough_icon
+  <% end %>
+<% end %>

@@ -1,0 +1,5 @@
+<div class="w-[200px]">
+  <%= render Shadcn::AspectRatioComponent.new(ratio: 1, class_name: "bg-muted rounded-md") do %>
+    <div class="flex h-full w-full items-center justify-center text-muted-foreground">1:1</div>
+  <% end %>
+</div>

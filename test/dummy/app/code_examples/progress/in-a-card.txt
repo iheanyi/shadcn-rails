@@ -1,0 +1,12 @@
+<%= render Shadcn::CardComponent.new(class_name: "w-full max-w-md") do |card| %>
+  <% card.with_header do |header| %>
+    <% header.with_title { "Storage Usage" } %>
+    <% header.with_description { "You're using 7.2 GB of 10 GB" } %>
+  <% end %>
+  <% card.with_content do %>
+    <%= render Shadcn::ProgressComponent.new(value: 72) %>
+  <% end %>
+  <% card.with_footer do %>
+    <p class="text-sm text-muted-foreground">2.8 GB available</p>
+  <% end %>
+<% end %>

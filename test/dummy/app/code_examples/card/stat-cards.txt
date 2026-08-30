@@ -1,0 +1,31 @@
+<div class="grid gap-4 md:grid-cols-3">
+  <%= render Shadcn::CardComponent.new do |card| %>
+    <% card.with_header do |header| %>
+      <% header.with_description { "Total Revenue" } %>
+      <% header.with_title { "$45,231.89" } %>
+    <% end %>
+    <% card.with_content do %>
+      <p class="text-xs text-muted-foreground">+20.1% from last month</p>
+    <% end %>
+  <% end %>
+
+  <%= render Shadcn::CardComponent.new do |card| %>
+    <% card.with_header do |header| %>
+      <% header.with_description { "Subscriptions" } %>
+      <% header.with_title { "+2350" } %>
+    <% end %>
+    <% card.with_content do %>
+      <p class="text-xs text-muted-foreground">+180.1% from last month</p>
+    <% end %>
+  <% end %>
+
+  <%= render Shadcn::CardComponent.new do |card| %>
+    <% card.with_header do |header| %>
+      <% header.with_description { "Active Now" } %>
+      <% header.with_title { "+573" } %>
+    <% end %>
+    <% card.with_content do %>
+      <p class="text-xs text-muted-foreground">+201 since last hour</p>
+    <% end %>
+  <% end %>
+</div>

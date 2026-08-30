@@ -1,0 +1,5 @@
+<%= render(Shadcn::ButtonGroupComponent.new) do |group| %>
+  <% group.with_button(variant: :outline) { "Bold" } %>
+  <% group.with_button(variant: :outline) { "Italic" } %>
+  <% group.with_button(variant: :outline) { "Underline" } %>
+<% end %>

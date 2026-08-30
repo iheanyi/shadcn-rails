@@ -1,0 +1,3 @@
+<%= render Shadcn::ButtonComponent.new(variant: variant.to_sym) do %>
+  Button
+<% end %>

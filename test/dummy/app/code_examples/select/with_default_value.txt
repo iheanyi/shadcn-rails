@@ -1,0 +1,6 @@
+<%= render(Shadcn::SelectComponent.new(name: "timezone", value: "est", placeholder: "Select a timezone")) do |select| %>
+  <% select.with_item(value: "est") { "Eastern Standard Time (EST)" } %>
+  <% select.with_item(value: "cst") { "Central Standard Time (CST)" } %>
+  <% select.with_item(value: "mst") { "Mountain Standard Time (MST)" } %>
+  <% select.with_item(value: "pst") { "Pacific Standard Time (PST)" } %>
+<% end %>

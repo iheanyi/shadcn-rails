@@ -1,0 +1,19 @@
+<%= render Shadcn::EmptyComponent.new do |empty| %>
+  <% empty.with_header do |header| %>
+    <% header.with_title { "404 - Not Found" } %>
+    <% header.with_description { "The page you're looking for doesn't exist. Try searching below." } %>
+  <% end %>
+  <% empty.with_content do %>
+    <div class="w-full max-w-sm">
+      <%= render Shadcn::InputGroupComponent.new do |group| %>
+        <% group.with_input(placeholder: "Try searching for pages...") %>
+        <% group.with_addon do %>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <% end %>
+      <% end %>
+    </div>
+    <p class="text-sm text-muted-foreground">
+      Need help? <a href="#" class="text-primary underline-offset-4 hover:underline">Contact support</a>
+    </p>
+  <% end %>
+<% end %>

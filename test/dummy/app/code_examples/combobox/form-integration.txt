@@ -1,0 +1,8 @@
+<div class="space-y-4">
+  <%= render Shadcn::LabelComponent.new { "Framework" } %>
+  <%= render Shadcn::ComboboxComponent.new(
+    items: frameworks,
+    name: "project[framework]",
+    placeholder: "Select framework..."
+  ) %>
+</div>

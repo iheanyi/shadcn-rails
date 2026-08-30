@@ -1,0 +1,3 @@
+<%= render(Shadcn::TooltipComponent.new(text: "Add to library")) do %>
+  <% button_html(:outline, "+", "h-10 w-10 p-0") %>
+<% end %>

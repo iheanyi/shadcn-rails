@@ -1,0 +1,33 @@
+<%= render Shadcn::CardComponent.new(class_name: "w-full max-w-md") do |card| %>
+  <% card.with_header do |header| %>
+    <% header.with_title { "Notifications" } %>
+    <% header.with_description { "Configure how you receive notifications." } %>
+  <% end %>
+  <% card.with_content do %>
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="space-y-0.5">
+          <%= render Shadcn::LabelComponent.new(for: "email-notif") { "Email" } %>
+          <p class="text-sm text-muted-foreground">Receive notifications via email.</p>
+        </div>
+        <%= render Shadcn::SwitchComponent.new(id: "email-notif", name: "notifications[email]", checked: true) %>
+      </div>
+      <%= render Shadcn::SeparatorComponent.new %>
+      <div class="flex items-center justify-between">
+        <div class="space-y-0.5">
+          <%= render Shadcn::LabelComponent.new(for: "push-notif") { "Push" } %>
+          <p class="text-sm text-muted-foreground">Receive push notifications.</p>
+        </div>
+        <%= render Shadcn::SwitchComponent.new(id: "push-notif", name: "notifications[push]") %>
+      </div>
+      <%= render Shadcn::SeparatorComponent.new %>
+      <div class="flex items-center justify-between">
+        <div class="space-y-0.5">
+          <%= render Shadcn::LabelComponent.new(for: "sms-notif") { "SMS" } %>
+          <p class="text-sm text-muted-foreground">Receive notifications via SMS.</p>
+        </div>
+        <%= render Shadcn::SwitchComponent.new(id: "sms-notif", name: "notifications[sms]") %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,7 @@
+<%= turbo_stream.append "shadcn-sonner-viewport" do %>
+  <li data-sonner-toast="true"
+      data-variant="destructive"
+      data-duration="8000">
+    Failed to save changes.
+  </li>
+<% end %>

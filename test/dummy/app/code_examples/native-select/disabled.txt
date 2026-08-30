@@ -1,0 +1,6 @@
+<div class="max-w-sm">
+  <%= render Shadcn::NativeSelectComponent.new(name: "status", disabled: true) do |select| %>
+    <% select.with_option(value: "active", selected: true) { "Active" } %>
+    <% select.with_option(value: "inactive") { "Inactive" } %>
+  <% end %>
+</div>

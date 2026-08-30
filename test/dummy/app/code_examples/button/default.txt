@@ -1,0 +1,1 @@
+<%= render Shadcn::ButtonComponent.new do %>Default<% end %>

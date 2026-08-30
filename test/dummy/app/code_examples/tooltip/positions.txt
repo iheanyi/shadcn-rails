@@ -1,0 +1,14 @@
+<div class="flex items-center gap-4">
+  <%= render Shadcn::TooltipComponent.new(text: "Top tooltip", side: :top) do %>
+    <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Top" } %>
+  <% end %>
+  <%= render Shadcn::TooltipComponent.new(text: "Right tooltip", side: :right) do %>
+    <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Right" } %>
+  <% end %>
+  <%= render Shadcn::TooltipComponent.new(text: "Bottom tooltip", side: :bottom) do %>
+    <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Bottom" } %>
+  <% end %>
+  <%= render Shadcn::TooltipComponent.new(text: "Left tooltip", side: :left) do %>
+    <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Left" } %>
+  <% end %>
+</div>

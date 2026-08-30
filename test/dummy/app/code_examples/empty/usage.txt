@@ -1,0 +1,12 @@
+<%= render(Shadcn::EmptyComponent.new(class_name: "w-full rounded-lg border border-dashed")) do |empty| %>
+  <% empty.with_header do |header| %>
+    <% header.with_media(variant: :icon) do %>
+      <% icon_svg("M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", "M7 10l5 5 5-5", "M12 15V3") %>
+    <% end %>
+    <% header.with_title { "No documents found" } %>
+    <% header.with_description { "Upload a document to get started." } %>
+  <% end %>
+  <% empty.with_content do %>
+    <% button_html("Upload document") %>
+  <% end %>
+<% end %>

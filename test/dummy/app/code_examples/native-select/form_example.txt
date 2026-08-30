@@ -1,0 +1,5 @@
+<%= render(Shadcn::NativeSelectComponent.new(name: "user[timezone]", id: "user_timezone")) do |select| %>
+  <% select.with_option(value: "utc", selected: true) { "UTC" } %>
+  <% select.with_option(value: "est") { "Eastern Time" } %>
+  <% select.with_option(value: "pst") { "Pacific Time" } %>
+<% end %>

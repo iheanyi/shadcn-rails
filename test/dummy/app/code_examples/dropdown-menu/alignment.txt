@@ -1,0 +1,31 @@
+<div class="flex gap-4 justify-between">
+  <%= render Shadcn::DropdownMenuComponent.new(align: :start) do |menu| %>
+    <% menu.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Align Start" } %>
+    <% end %>
+    <% menu.with_menu do |content| %>
+      <% content.with_item(href: "#") { "Item 1" } %>
+      <% content.with_item(href: "#") { "Item 2" } %>
+    <% end %>
+  <% end %>
+
+  <%= render Shadcn::DropdownMenuComponent.new(align: :center) do |menu| %>
+    <% menu.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Align Center" } %>
+    <% end %>
+    <% menu.with_menu do |content| %>
+      <% content.with_item(href: "#") { "Item 1" } %>
+      <% content.with_item(href: "#") { "Item 2" } %>
+    <% end %>
+  <% end %>
+
+  <%= render Shadcn::DropdownMenuComponent.new(align: :end) do |menu| %>
+    <% menu.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Align End" } %>
+    <% end %>
+    <% menu.with_menu do |content| %>
+      <% content.with_item(href: "#") { "Item 1" } %>
+      <% content.with_item(href: "#") { "Item 2" } %>
+    <% end %>
+  <% end %>
+</div>

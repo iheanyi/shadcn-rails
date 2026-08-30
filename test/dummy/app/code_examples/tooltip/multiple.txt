@@ -1,0 +1,7 @@
+<<~HTML.html_safe
+  <div class="flex gap-2">
+    #{render(Shadcn::TooltipComponent.new(text: "Edit")) do
+      <% button_html(:ghost, "Edit", "h-10 w-10 p-0") %>
+    end}
+    #{render(Shadcn::TooltipComponent.new(text: "Delete")) do
+      <% button_html(:ghost, "Delete", "h-10 w-10 p-0") %>

@@ -34,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/label/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -50,6 +50,7 @@
           <%= render Shadcn::InputComponent.new(type: "email", id: "email-example", placeholder: "Email") %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/label/with-input.txt")) %>
     </div>
 
     <!-- Required -->
@@ -62,7 +63,7 @@
           <%= render Shadcn::InputComponent.new(id: "name-required", required: true, placeholder: "Enter your name") %>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/label/required.txt")) %>
     </div>
 
     <!-- With Checkbox -->
@@ -74,6 +75,7 @@
           <%= render Shadcn::LabelComponent.new(for: "terms-checkbox") { "Accept terms and conditions" } %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/label/with-checkbox.txt")) %>
     </div>
 
     <!-- Disabled State -->
@@ -86,8 +88,45 @@
           <%= render Shadcn::InputComponent.new(id: "disabled-input", disabled: true, value: "Cannot edit", class_name: "peer") %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/label/disabled-state.txt")) %>
     </div>
   </div>
+
+    <!-- Required Field -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Required Field</h3>
+      <%= showcase("label", :required_field) %>
+    </div>
+
+    <!-- Optional Field -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Optional Field</h3>
+      <%= showcase("label", :optional_field) %>
+    </div>
+
+    <!-- Custom Styling -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Custom Styling</h3>
+      <%= showcase("label", :custom_styling) %>
+    </div>
+
+    <!-- Form Example -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Form Example</h3>
+      <%= showcase("label", :form_example) %>
+    </div>
+
+    <!-- Without For -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Without For</h3>
+      <%= showcase("label", :without_for) %>
+    </div>
+
+    <!-- Disabled Context -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled Context</h3>
+      <%= showcase("label", :disabled_context) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">

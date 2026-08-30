@@ -1,0 +1,8 @@
+<%= render(Shadcn::CollapsibleComponent.new(open: true, class_name: "w-full max-w-md")) do |collapsible| %>
+  <% collapsible.with_trigger do %>
+    <% section_trigger("@shadcn followed 5 users") %>
+  <% end %>
+  <% collapsible.with_body do %>
+    <% section_content(["@vercel", "@nextjs", "@tailwindcss", "@radix-ui", "@remix-run"]) %>
+  <% end %>
+<% end %>

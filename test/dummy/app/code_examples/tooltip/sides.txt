@@ -1,0 +1,3 @@
+<%= render(Shadcn::TooltipComponent.new(text: "Tooltip content", side: side.to_sym)) do %>
+  <% button_html(:outline, "Hover me") %>
+<% end %>
