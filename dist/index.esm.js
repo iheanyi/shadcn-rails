@@ -6319,6 +6319,14 @@ const TOAST_VARIANT_CLASSES = {
     warning: "border-yellow-500/40 bg-background text-foreground",
     info: "border-blue-500/40 bg-background text-foreground"
 };
+const TOAST_ACTIONS = [
+    "mouseenter->shadcn--sonner#pause",
+    "mouseleave->shadcn--sonner#resume",
+    "pointerdown->shadcn--sonner#startSwipe",
+    "pointermove->shadcn--sonner#moveSwipe",
+    "pointerup->shadcn--sonner#endSwipe",
+    "pointercancel->shadcn--sonner#cancelSwipe"
+].join(" ");
 const controllers$1 = new Set();
 const pendingToasts = [];
 let idSequence = 0;
@@ -6383,7 +6391,20 @@ function createToast(input, options = {}) {
     return id;
 }
 function dismissToast(id) {
+    removePendingToasts(id);
     connectedControllers().forEach((controller) => controller.dismiss(id));
+}
+function removePendingToasts(id) {
+    if (id === undefined) {
+        pendingToasts.splice(0, pendingToasts.length);
+        return;
+    }
+    const idString = String(id);
+    for (let index = pendingToasts.length - 1; index >= 0; index -= 1) {
+        if (String(pendingToasts[index].id) === idString) {
+            pendingToasts.splice(index, 1);
+        }
+    }
 }
 const toast = Object.assign(createToast, { dismiss: dismissToast });
 const dismiss = dismissToast;
@@ -6429,16 +6450,18 @@ class SonnerController extends Controller {
             return id;
         }
         const element = this.buildToastElement({ ...options, id });
-        this.viewportTarget.appendChild(element);
+        this.viewportTarget.prepend(element);
         this.initializeToastElement(element);
         this.enforceLimit();
         return id;
     }
     dismiss(id) {
         if (id === undefined) {
+            removePendingToasts();
             this.toastElements().forEach((toastElement) => this.closeToast(toastElement));
             return;
         }
+        removePendingToasts(id);
         const toastElement = this.findToastElement(String(id));
         if (toastElement) {
             this.closeToast(toastElement);
@@ -6579,9 +6602,10 @@ class SonnerController extends Controller {
         toastElement.dataset.variant = variant;
         toastElement.setAttribute("role", toastElement.getAttribute("role") || "status");
         toastElement.setAttribute("aria-live", toastElement.getAttribute("aria-live") || "polite");
+        toastElement.setAttribute("data-action", this.toastActions(toastElement.getAttribute("data-action")));
         toastElement.className = this.toastClassName(variant, toastElement.className);
+        this.placeToastAtOrigin(toastElement);
         this.ensureCloseButton(toastElement);
-        this.bindCloseButtons(toastElement);
         this.startTimer(toastElement, duration);
         this.dispatch("show", { detail: { id } });
     }
@@ -6596,14 +6620,7 @@ class SonnerController extends Controller {
         toastElement.className = this.toastClassName(variant);
         toastElement.setAttribute("role", "status");
         toastElement.setAttribute("aria-live", "polite");
-        toastElement.setAttribute("data-action", [
-            "mouseenter->shadcn--sonner#pause",
-            "mouseleave->shadcn--sonner#resume",
-            "pointerdown->shadcn--sonner#startSwipe",
-            "pointermove->shadcn--sonner#moveSwipe",
-            "pointerup->shadcn--sonner#endSwipe",
-            "pointercancel->shadcn--sonner#cancelSwipe"
-        ].join(" "));
+        toastElement.setAttribute("data-action", TOAST_ACTIONS);
         const bodyElement = document.createElement("div");
         bodyElement.className = "grid gap-1";
         bodyElement.dataset.sonnerBody = "true";
@@ -6692,14 +6709,6 @@ class SonnerController extends Controller {
         button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" class="h-4 w-4"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>';
         return button;
     }
-    bindCloseButtons(toastElement) {
-        toastElement.querySelectorAll("[data-sonner-close]").forEach((button) => {
-            if (button.dataset.sonnerCloseBound === "true")
-                return;
-            button.dataset.sonnerCloseBound = "true";
-            button.addEventListener("click", () => this.closeToast(toastElement));
-        });
-    }
     closeToast(toastElement) {
         const id = toastElement.dataset.shadcnSonnerToastId;
         if (toastElement.dataset.state === "closed")
@@ -6726,7 +6735,7 @@ class SonnerController extends Controller {
         const overflowCount = toasts.length - limit;
         if (overflowCount <= 0)
             return;
-        toasts.slice(0, overflowCount).forEach((toastElement) => this.closeToast(toastElement));
+        toasts.slice(limit).forEach((toastElement) => this.closeToast(toastElement));
     }
     startTimer(toastElement, duration) {
         const id = this.ensureToastId(toastElement);
@@ -6792,6 +6801,16 @@ class SonnerController extends Controller {
         if (!(target instanceof Element))
             return false;
         return target.closest("button, a, input, select, textarea, [role='button']") !== null;
+    }
+    toastActions(existingActions) {
+        const actions = new Set(`${TOAST_ACTIONS} ${existingActions ?? ""}`.split(/\s+/).filter(Boolean));
+        return Array.from(actions).join(" ");
+    }
+    placeToastAtOrigin(toastElement) {
+        if (toastElement.parentElement !== this.viewportTarget || this.viewportTarget.firstElementChild === toastElement) {
+            return;
+        }
+        this.viewportTarget.prepend(toastElement);
     }
     exitTransform() {
         if (this.positionValue.includes("left"))

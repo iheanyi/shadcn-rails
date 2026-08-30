@@ -91,7 +91,6 @@ export default class SonnerController extends Controller<HTMLElement> {
     private toastClassName;
     private ensureCloseButton;
     private buildCloseButton;
-    private bindCloseButtons;
     private closeToast;
     private enforceLimit;
     private startTimer;
@@ -103,6 +102,8 @@ export default class SonnerController extends Controller<HTMLElement> {
     private isToastElement;
     private eventToastElement;
     private isInteractiveEventTarget;
+    private toastActions;
+    private placeToastAtOrigin;
     private exitTransform;
     private resetSwipeState;
 }

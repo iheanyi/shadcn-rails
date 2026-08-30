@@ -6,12 +6,12 @@ class SonnerComponentPreview < ViewComponent::Preview
   # @label Default
   # Recommended toast API with a persistent toaster viewport
   def default
-    render(Shadcn::SonnerComponent.new(duration: 5000)) do
+    render(Shadcn::SonnerComponent.new(id: "sonner-default-viewport", duration: 5000)) do
       <<~HTML.html_safe
         <div class="flex flex-wrap gap-2">
-          #{demo_button("Show toast", "Event has been created", "Friday, February 10, 2023 at 5:57 PM")}
-          #{demo_button("Show success", "Saved", "Your changes were saved.", "success")}
-          #{demo_button("Show error", "Uh oh! Something went wrong.", "There was a problem with your request.", "destructive")}
+          #{demo_button("Create invoice", "Invoice created", "Invoice #1042 was created for Acme Studio.")}
+          #{demo_button("Save customer", "Customer saved", "Billing contact and tax ID were updated.", "success")}
+          #{demo_button("Simulate error", "Payment failed", "The card was declined. Ask the customer for another payment method.", "destructive")}
         </div>
       HTML
     end
@@ -20,20 +20,20 @@ class SonnerComponentPreview < ViewComponent::Preview
   # @label Top Center
   # A toaster positioned at the top center
   def top_center
-    render(Shadcn::SonnerComponent.new(position: :top_center, duration: 5000)) do
-      demo_button("Show top toast", "Heads up", "This toast appears from the top.", "info")
+    render(Shadcn::SonnerComponent.new(id: "sonner-top-center-viewport", position: :top_center, duration: 5000)) do
+      demo_button("Publish post", "Post published", "The changelog is live and subscribers were notified.", "info")
     end
   end
 
   # @label With Limit
   # Limits the stack to two visible notifications
   def with_limit
-    render(Shadcn::SonnerComponent.new(limit: 2, duration: 8000)) do
+    render(Shadcn::SonnerComponent.new(id: "sonner-limit-viewport", limit: 2, duration: 8000)) do
       <<~HTML.html_safe
         <div class="flex flex-wrap gap-2">
-          #{demo_button("First", "First toast", "Older toasts leave when the stack is full.")}
-          #{demo_button("Second", "Second toast", "The limit for this preview is two.")}
-          #{demo_button("Third", "Third toast", "Click all three to see the oldest dismiss.")}
+          #{demo_button("Create draft", "Draft created", "Proposal #918 is ready for review.")}
+          #{demo_button("Save edits", "Proposal saved", "Line items and delivery terms were updated.", "success")}
+          #{demo_button("Show error", "Sync failed", "CRM sync timed out. Retry from the activity feed.", "destructive")}
         </div>
       HTML
     end
@@ -42,8 +42,8 @@ class SonnerComponentPreview < ViewComponent::Preview
   # @label No Auto Dismiss
   # Toasts can stay open until dismissed
   def no_auto_dismiss
-    render(Shadcn::ToasterComponent.new(duration: 0)) do
-      demo_button("Show persistent toast", "Manual dismiss required", "This toast remains until you close it.", "warning", 0)
+    render(Shadcn::ToasterComponent.new(id: "sonner-persistent-viewport", duration: 0)) do
+      demo_button("Save profile", "Profile saved", "Avatar, display name, and notification settings were saved.", "success", 0)
     end
   end
 

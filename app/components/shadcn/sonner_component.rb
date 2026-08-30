@@ -24,13 +24,15 @@ module Shadcn
     # @param limit [Integer] Maximum visible toasts.
     # @param duration [Integer] Default auto-dismiss duration in milliseconds.
     # @param id [String] Viewport id for Turbo Stream append targets.
+    # @param root_id [String, nil] Controller root id used with data-turbo-permanent.
     # @param viewport_class_name [String, nil] Extra classes for the viewport.
-    # @param persistent [Boolean] Adds data-turbo-permanent to the viewport.
+    # @param persistent [Boolean] Adds data-turbo-permanent to the controller root.
     def initialize(
       position: :bottom_right,
       limit: 3,
       duration: 4000,
       id: "shadcn-sonner-viewport",
+      root_id: nil,
       viewport_class_name: nil,
       persistent: true,
       **options
@@ -40,6 +42,7 @@ module Shadcn
       @limit = limit
       @duration = duration
       @id = id
+      @root_id = root_id || "#{id}-root"
       @viewport_class_name = viewport_class_name
       @persistent = persistent
     end
@@ -55,7 +58,7 @@ module Shadcn
     end
 
     def root_attributes
-      merge_html_attributes(
+      attrs = merge_html_attributes(
         { class: merge_classes(ROOT_CLASSES) },
         {
           controller: "shadcn--sonner",
@@ -64,6 +67,10 @@ module Shadcn
           "shadcn--sonner-duration-value": @duration
         }
       )
+
+      attrs[:id] = @root_id unless attrs.key?(:id) || attrs.key?("id")
+      attrs["data-turbo-permanent"] = "" if @persistent
+      attrs
     end
 
     def viewport
@@ -80,7 +87,6 @@ module Shadcn
         "data-shadcn--sonner-target": "viewport"
       }
 
-      attrs["data-turbo-permanent"] = "" if @persistent
       attrs
     end
 

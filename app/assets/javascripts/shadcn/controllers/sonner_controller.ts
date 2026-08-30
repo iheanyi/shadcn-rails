@@ -69,6 +69,15 @@ const TOAST_VARIANT_CLASSES: Record<ToastVariant, string> = {
   info: "border-blue-500/40 bg-background text-foreground"
 }
 
+const TOAST_ACTIONS = [
+  "mouseenter->shadcn--sonner#pause",
+  "mouseleave->shadcn--sonner#resume",
+  "pointerdown->shadcn--sonner#startSwipe",
+  "pointermove->shadcn--sonner#moveSwipe",
+  "pointerup->shadcn--sonner#endSwipe",
+  "pointercancel->shadcn--sonner#cancelSwipe"
+].join(" ")
+
 const controllers = new Set<SonnerController>()
 const pendingToasts: ToastOptions[] = []
 
@@ -147,7 +156,22 @@ function createToast(input: ToastInput, options: ToastOptions = {}): string {
 }
 
 function dismissToast(id?: ToastId): void {
+  removePendingToasts(id)
   connectedControllers().forEach((controller) => controller.dismiss(id))
+}
+
+function removePendingToasts(id?: ToastId): void {
+  if (id === undefined) {
+    pendingToasts.splice(0, pendingToasts.length)
+    return
+  }
+
+  const idString = String(id)
+  for (let index = pendingToasts.length - 1; index >= 0; index -= 1) {
+    if (String(pendingToasts[index].id) === idString) {
+      pendingToasts.splice(index, 1)
+    }
+  }
 }
 
 export const toast = Object.assign(createToast, { dismiss: dismissToast }) satisfies ToastFunction
@@ -213,7 +237,7 @@ export default class SonnerController extends Controller<HTMLElement> {
     }
 
     const element = this.buildToastElement({ ...options, id })
-    this.viewportTarget.appendChild(element)
+    this.viewportTarget.prepend(element)
     this.initializeToastElement(element)
     this.enforceLimit()
 
@@ -222,10 +246,12 @@ export default class SonnerController extends Controller<HTMLElement> {
 
   dismiss(id?: ToastId): void {
     if (id === undefined) {
+      removePendingToasts()
       this.toastElements().forEach((toastElement) => this.closeToast(toastElement))
       return
     }
 
+    removePendingToasts(id)
     const toastElement = this.findToastElement(String(id))
     if (toastElement) {
       this.closeToast(toastElement)
@@ -387,10 +413,11 @@ export default class SonnerController extends Controller<HTMLElement> {
     toastElement.dataset.variant = variant
     toastElement.setAttribute("role", toastElement.getAttribute("role") || "status")
     toastElement.setAttribute("aria-live", toastElement.getAttribute("aria-live") || "polite")
+    toastElement.setAttribute("data-action", this.toastActions(toastElement.getAttribute("data-action")))
     toastElement.className = this.toastClassName(variant, toastElement.className)
 
+    this.placeToastAtOrigin(toastElement)
     this.ensureCloseButton(toastElement)
-    this.bindCloseButtons(toastElement)
     this.startTimer(toastElement, duration)
     this.dispatch("show", { detail: { id } })
   }
@@ -407,14 +434,7 @@ export default class SonnerController extends Controller<HTMLElement> {
     toastElement.className = this.toastClassName(variant)
     toastElement.setAttribute("role", "status")
     toastElement.setAttribute("aria-live", "polite")
-    toastElement.setAttribute("data-action", [
-      "mouseenter->shadcn--sonner#pause",
-      "mouseleave->shadcn--sonner#resume",
-      "pointerdown->shadcn--sonner#startSwipe",
-      "pointermove->shadcn--sonner#moveSwipe",
-      "pointerup->shadcn--sonner#endSwipe",
-      "pointercancel->shadcn--sonner#cancelSwipe"
-    ].join(" "))
+    toastElement.setAttribute("data-action", TOAST_ACTIONS)
 
     const bodyElement = document.createElement("div")
     bodyElement.className = "grid gap-1"
@@ -524,15 +544,6 @@ export default class SonnerController extends Controller<HTMLElement> {
     return button
   }
 
-  private bindCloseButtons(toastElement: HTMLElement): void {
-    toastElement.querySelectorAll<HTMLButtonElement>("[data-sonner-close]").forEach((button) => {
-      if (button.dataset.sonnerCloseBound === "true") return
-
-      button.dataset.sonnerCloseBound = "true"
-      button.addEventListener("click", () => this.closeToast(toastElement))
-    })
-  }
-
   private closeToast(toastElement: HTMLElement): void {
     const id = toastElement.dataset.shadcnSonnerToastId
     if (toastElement.dataset.state === "closed") return
@@ -562,7 +573,7 @@ export default class SonnerController extends Controller<HTMLElement> {
 
     if (overflowCount <= 0) return
 
-    toasts.slice(0, overflowCount).forEach((toastElement) => this.closeToast(toastElement))
+    toasts.slice(limit).forEach((toastElement) => this.closeToast(toastElement))
   }
 
   private startTimer(toastElement: HTMLElement, duration: number): void {
@@ -641,6 +652,19 @@ export default class SonnerController extends Controller<HTMLElement> {
     if (!(target instanceof Element)) return false
 
     return target.closest("button, a, input, select, textarea, [role='button']") !== null
+  }
+
+  private toastActions(existingActions: string | null): string {
+    const actions = new Set(`${TOAST_ACTIONS} ${existingActions ?? ""}`.split(/\s+/).filter(Boolean))
+    return Array.from(actions).join(" ")
+  }
+
+  private placeToastAtOrigin(toastElement: HTMLElement): void {
+    if (toastElement.parentElement !== this.viewportTarget || this.viewportTarget.firstElementChild === toastElement) {
+      return
+    }
+
+    this.viewportTarget.prepend(toastElement)
   }
 
   private exitTransform(): string {

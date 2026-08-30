@@ -43,17 +43,23 @@
     <%= render "docs/code_example", language: "javascript", code: <<~JS.strip
       import { toast } from "shadcn-rails-stimulus"
 
-      toast("Event has been created", {
-        description: "Friday, February 10, 2023 at 5:57 PM",
+      toast("Invoice created", {
+        description: "Invoice #1042 was created for Acme Studio.",
         variant: "success",
         action: {
           label: "Undo",
-          onClick: () => undoCreate()
+          onClick: () => rollbackInvoice()
         }
       })
 
-      const id = toast("Uploading file", { duration: 0 })
-      toast.dismiss(id)
+      toast("Payment failed", {
+        description: "The card was declined. Ask the customer for another payment method.",
+        variant: "destructive",
+        duration: 8000
+      })
+
+      const savingId = toast("Saving customer", { description: "Updating billing contact...", duration: 0 })
+      submitCustomerForm().then(() => toast.dismiss(savingId))
     JS
     %>
   </div>
@@ -108,7 +114,7 @@
         { name: "duration", type: "Integer", default: "4000", description: "Default auto-dismiss duration in milliseconds. Use 0 to disable auto-dismiss" },
         { name: "id", type: "String", default: "shadcn-sonner-viewport", description: "Viewport id used by Turbo Stream append actions" },
         { name: "viewport_class_name", type: "String", default: "nil", description: "Additional classes for the fixed viewport" },
-        { name: "persistent", type: "Boolean", default: "true", description: "Adds data-turbo-permanent to the viewport" }
+        { name: "persistent", type: "Boolean", default: "true", description: "Adds data-turbo-permanent to the controller root" }
       ] %>
     </div>
 
