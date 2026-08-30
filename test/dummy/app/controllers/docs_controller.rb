@@ -13,6 +13,26 @@ class DocsController < ApplicationController
     end
   end
 
+  PaginationDemoPagy = Struct.new(:page, :pages, keyword_init: true) do
+    def prev
+      page > 1 ? page - 1 : nil
+    end
+
+    def next
+      page < pages ? page + 1 : nil
+    end
+  end
+
+  PaginationDemoWillPaginate = Struct.new(:current_page, :total_pages, keyword_init: true) do
+    def previous_page
+      current_page > 1 ? current_page - 1 : nil
+    end
+
+    def next_page
+      current_page < total_pages ? current_page + 1 : nil
+    end
+  end
+
   # Complete list of all shadcn-rails components with metadata
   COMPONENTS = {
     # Buttons & Actions
@@ -476,6 +496,7 @@ class DocsController < ApplicationController
     end
 
     prepare_data_table_demo if @slug == "data-table"
+    prepare_pagination_demo if @slug == "pagination"
 
     # Try to render a specific template, fall back to a generic show template
     render @slug
@@ -566,5 +587,18 @@ class DocsController < ApplicationController
       { name: "Amelia Brown", email: "amelia@example.com", status: "Failed", amount: 750 },
       { name: "Lucas Miller", email: "lucas@example.com", status: "Processing", amount: 1200 }
     ]
+  end
+
+  def prepare_pagination_demo
+    records = Array.new(50) { |index| "Demo post #{index + 1}" }
+    per_page = 5
+    current_page = [params[:page].to_i, 1].max
+    total_pages = [(records.length.to_f / per_page).ceil, 1].max
+    current_page = [current_page, total_pages].min
+
+    @pagination_items = records[((current_page - 1) * per_page), per_page] || []
+    @pagination_page = DataTablePage.new(current_page: current_page, total_pages: total_pages)
+    @pagination_pagy = PaginationDemoPagy.new(page: current_page, pages: total_pages)
+    @pagination_will_paginate = PaginationDemoWillPaginate.new(current_page: current_page, total_pages: total_pages)
   end
 end
