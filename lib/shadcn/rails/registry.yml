@@ -209,6 +209,7 @@ data_table:
   css_sidecars: []
   depends_on:
     - table
+    - empty
 date_picker:
   name: date_picker
   ruby_files:

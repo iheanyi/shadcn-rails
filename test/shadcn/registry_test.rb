@@ -29,6 +29,7 @@ class ShadcnRegistryTest < Minitest::Test
     assert_includes unit.ruby_files, "app/components/shadcn/data_table_column_component.rb"
     assert_includes unit.templates, "app/components/shadcn/data_table_component.html.erb"
     assert_includes unit.depends_on, "table"
+    assert_includes unit.depends_on, "empty"
   end
 
   def test_registry_normalizes_hyphenated_names

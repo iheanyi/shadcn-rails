@@ -106,6 +106,13 @@ class ShadcnAddGeneratorTest < Rails::Generators::TestCase
     assert_file "app/components/shadcn/table_head_component.rb"
     assert_file "app/components/shadcn/table_header_component.rb"
     assert_file "app/components/shadcn/table_row_component.rb"
+
+    assert_file "app/components/shadcn/empty_component.rb"
+    assert_file "app/components/shadcn/empty_content_component.rb"
+    assert_file "app/components/shadcn/empty_description_component.rb"
+    assert_file "app/components/shadcn/empty_header_component.rb"
+    assert_file "app/components/shadcn/empty_media_component.rb"
+    assert_file "app/components/shadcn/empty_title_component.rb"
   end
 
   def test_dialog_source_location_is_app_after_add
