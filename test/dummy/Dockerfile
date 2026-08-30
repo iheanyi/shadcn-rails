@@ -31,6 +31,11 @@ WORKDIR /rails
 # Copy dummy app
 COPY test/dummy/ .
 
+# The dummy app's host symlink is relative to test/dummy, but Docker copies
+# the app to /rails. Repoint it at the gem CSS tree copied above.
+RUN rm -f app/assets/tailwind/shadcn && \
+    ln -s /shadcn-rails/app/assets/stylesheets/shadcn app/assets/tailwind/shadcn
+
 # Set production environment
 ENV RAILS_ENV="production" \
     BUNDLE_PATH="/usr/local/bundle" \
