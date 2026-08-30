@@ -5,6 +5,7 @@
     <a href="#live-demo" class="text-muted-foreground hover:text-foreground">Live Demo</a>
     <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
     <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#live-refresh" class="text-muted-foreground hover:text-foreground">Live Refresh Example</a>
     <a href="#controller-recipe" class="text-muted-foreground hover:text-foreground">Controller Recipe</a>
     <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
     <a href="#accessibility" class="text-muted-foreground hover:text-foreground">Accessibility</a>
@@ -30,8 +31,40 @@
     <p class="text-sm text-muted-foreground">
       This table is backed by <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">GET</code> params:
       search, the native status select, sort header links, and pagination all round-trip through the controller.
-      Changing status submits the Turbo frame immediately.
+      A dummy-only host Stimulus controller progressively enhances the toolbar so search and status changes refresh
+      the results frame while the focused controls stay mounted; Apply and Reset remain the no-JavaScript path.
     </p>
+
+    <%= form_with url: docs_component_path(slug: "data-table"), method: :get, data: { controller: "docs--live-filter", turbo_frame: "data-table-demo" }, class: "flex flex-col gap-3 sm:flex-row sm:items-end" do %>
+      <%= hidden_field_tag :sort, @data_table_sort if @data_table_sort.present? %>
+      <%= hidden_field_tag :dir, @data_table_dir if @data_table_dir.present? %>
+
+      <div class="w-full sm:max-w-xs">
+        <%= render Shadcn::FieldComponent.new(name: "q", id: "data-table-search") do |field| %>
+          <% field.with_label { "Search" } %>
+          <% field.with_input(value: @data_table_search, placeholder: "Search invoices...", data: { action: "input->docs--live-filter#submitLater" }) %>
+        <% end %>
+      </div>
+
+      <div class="w-full sm:max-w-[180px]">
+        <%= render Shadcn::FieldComponent.new(name: "status", id: "data-table-status") do |field| %>
+          <% field.with_label { "Status" } %>
+          <% field.with_control do %>
+            <%= render Shadcn::NativeSelectComponent.new(name: "status", id: "data-table-status", data: { action: "change->docs--live-filter#submitNow" }) do |select| %>
+              <% select.with_option(value: "", selected: @data_table_status.blank?) { "All statuses" } %>
+              <% %w[Paid Processing Pending Failed].each do |status| %>
+                <% select.with_option(value: status, selected: @data_table_status == status) { status } %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+
+      <div class="flex gap-2">
+        <%= render Shadcn::ButtonComponent.new(type: "submit") { "Apply" } %>
+        <%= render Shadcn::ButtonComponent.new(href: docs_component_path(slug: "data-table"), variant: :outline) { "Reset" } %>
+      </div>
+    <% end %>
 
     <%= turbo_frame_tag "data-table-demo" do %>
       <%= render Shadcn::DataTableComponent.new(
@@ -42,39 +75,6 @@
         path: docs_component_path(slug: "data-table"),
         caption: "#{pluralize(@data_table_total_count, 'invoice')} found"
       ) do |table| %>
-        <% table.with_toolbar do %>
-          <%= form_with url: docs_component_path(slug: "data-table"), method: :get, data: { turbo_frame: "data-table-demo" }, class: "flex flex-col gap-3 sm:flex-row sm:items-end" do %>
-            <%= hidden_field_tag :sort, @data_table_sort if @data_table_sort.present? %>
-            <%= hidden_field_tag :dir, @data_table_dir if @data_table_dir.present? %>
-
-            <div class="w-full sm:max-w-xs">
-              <%= render Shadcn::FieldComponent.new(name: "q", id: "data-table-search") do |field| %>
-                <% field.with_label { "Search" } %>
-                <% field.with_input(value: @data_table_search, placeholder: "Search invoices...") %>
-              <% end %>
-            </div>
-
-            <div class="w-full sm:max-w-[180px]">
-              <%= render Shadcn::FieldComponent.new(name: "status", id: "data-table-status") do |field| %>
-                <% field.with_label { "Status" } %>
-                <% field.with_control do %>
-                  <%= render Shadcn::NativeSelectComponent.new(name: "status", id: "data-table-status", onchange: "this.form.requestSubmit()") do |select| %>
-                    <% select.with_option(value: "", selected: @data_table_status.blank?) { "All statuses" } %>
-                    <% %w[Paid Processing Pending Failed].each do |status| %>
-                      <% select.with_option(value: status, selected: @data_table_status == status) { status } %>
-                    <% end %>
-                  <% end %>
-                <% end %>
-              <% end %>
-            </div>
-
-            <div class="flex gap-2">
-              <%= render Shadcn::ButtonComponent.new(type: "submit") { "Apply" } %>
-              <%= render Shadcn::ButtonComponent.new(href: docs_component_path(slug: "data-table"), variant: :outline) { "Reset" } %>
-            </div>
-          <% end %>
-        <% end %>
-
         <% table.with_column(:name, label: "Customer", sortable: true) %>
         <% table.with_column(:email, sortable: true) %>
         <% table.with_column(:status, sortable: true) do |invoice| %>
@@ -125,6 +125,19 @@
       and pagination from URL params.
     </p>
     <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/data-table/default.txt")) %>
+  </div>
+
+  <div id="live-refresh" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Live Refresh Example</h2>
+    <p class="leading-7">
+      Data Table does not ship a Stimulus controller. If your host app wants live filtering, attach your own controller
+      to the GET form and append actions to leaf controls such as Input and NativeSelect.
+    </p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/data-table/live_refresh.txt")) %>
+    <%= render "docs/code_example",
+      language: "javascript",
+      title: "app/javascript/controllers/docs_live_filter_controller.js",
+      code: File.read(Rails.root.join("app/code_examples/data-table/live_refresh_controller.txt")) %>
   </div>
 
   <%= showcase("data-table", :default) %>
