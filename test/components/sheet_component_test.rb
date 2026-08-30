@@ -106,7 +106,7 @@ class SheetComponentTest < ViewComponent::TestCase
     end
 
     html = result.to_html
-    close_button_match = html.match(/<button[^>]*aria-label="Close"[^>]*>/)
+    close_button_match = html.match(/<button.*?aria-label="Close".*?>/m)
     assert close_button_match
 
     close_classes = close_button_match[0][/class="([^"]*)"/, 1].split
