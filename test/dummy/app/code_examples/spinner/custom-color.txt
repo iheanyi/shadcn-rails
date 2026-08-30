@@ -1,0 +1,5 @@
+<div class="flex items-center gap-4">
+  <%= render Shadcn::SpinnerComponent.new(class_name: "text-primary") %>
+  <%= render Shadcn::SpinnerComponent.new(class_name: "text-destructive") %>
+  <%= render Shadcn::SpinnerComponent.new(class_name: "text-blue-500") %>
+</div>

@@ -34,7 +34,11 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+<<<<<<< HEAD
     <%= erb_example("kbd/default") %>
+=======
+    <%= render "docs/code_example", language: "erb", code: '<%%= render Shadcn::KbdComponent.new { "K" } %>' %>
+>>>>>>> bad61ac (Remove remaining dummy docs placeholders)
   </div>
 
   <!-- Examples -->
@@ -47,7 +51,6 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::KbdComponent.new { "K" } %>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/kbd/single-key.txt")) %>
     </div>
 
     <!-- Key Combination -->
@@ -59,7 +62,7 @@
           <%= render Shadcn::KbdComponent.new { "S" } %>
         </div>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/kbd/key-combination.txt")) %>
+    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
     </div>
 
     <!-- Common Shortcuts -->
@@ -90,7 +93,6 @@
           </div>
         </div>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/kbd/common-shortcuts.txt")) %>
     </div>
 
     <!-- Windows/Linux Keys -->
@@ -103,27 +105,8 @@
           <%= render Shadcn::KbdComponent.new { "P" } %>
         </div>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/kbd/windows-linux-keys.txt")) %>
     </div>
   </div>
-
-    <!-- Shortcut Combination -->
-    <div class="space-y-4">
-      <h3 class="text-lg font-semibold">Shortcut Combination</h3>
-      <%= showcase("kbd", :combination) %>
-    </div>
-
-    <!-- Command Key -->
-    <div class="space-y-4">
-      <h3 class="text-lg font-semibold">Command Key</h3>
-      <%= showcase("kbd", :command_key) %>
-    </div>
-
-    <!-- Full Shortcut -->
-    <div class="space-y-4">
-      <h3 class="text-lg font-semibold">Full Shortcut</h3>
-      <%= showcase("kbd", :shortcuts) %>
-    </div>
 
   <!-- API Reference -->
   <div id="api-reference">

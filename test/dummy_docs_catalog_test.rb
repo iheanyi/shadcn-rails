@@ -5,16 +5,9 @@ require "cgi"
 
 class DummyDocsCatalogTest < ActionDispatch::IntegrationTest
   PLACEHOLDER = "This example now renders from the component preview source shown by the showcase block on this page."
-  PROTECTED_DOC_VIEWS = %w[
-    collapsible.html.erb
-    pagination.html.erb
-    spinner.html.erb
-  ].freeze
 
-  def test_editable_docs_pages_do_not_contain_placeholder_copy
+  def test_docs_pages_do_not_contain_placeholder_copy
     docs_views.each do |view|
-      next if PROTECTED_DOC_VIEWS.include?(view.basename.to_s)
-
       refute_includes File.read(view), PLACEHOLDER, "Remove placeholder copy from #{view.basename}"
     end
   end
@@ -40,8 +33,6 @@ class DummyDocsCatalogTest < ActionDispatch::IntegrationTest
   end
 
   def editable_component_slugs
-    DocsController::COMPONENTS.keys.reject do |slug|
-      PROTECTED_DOC_VIEWS.include?("#{slug}.html.erb")
-    end
+    DocsController::COMPONENTS.keys
   end
 end

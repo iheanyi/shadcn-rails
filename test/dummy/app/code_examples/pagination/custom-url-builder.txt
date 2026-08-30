@@ -1,0 +1,4 @@
+<%= render Shadcn::PaginationComponent.new(
+  collection: @posts,
+  url_builder: ->(page) { search_posts_path(q: params[:q], page: page) }
+) %>

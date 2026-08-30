@@ -1,0 +1,4 @@
+<%= render Shadcn::PaginationComponent.new(
+  collection: @posts,
+  window: 1
+) %>

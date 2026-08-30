@@ -34,7 +34,11 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+<<<<<<< HEAD
     <%= erb_example("typography/default") %>
+=======
+    <%= render "docs/code_example", language: "erb", code: '<%%= render Shadcn::TypographyComponent.new(variant: :h1) { "Heading" } %>' %>
+>>>>>>> bad61ac (Remove remaining dummy docs placeholders)
   </div>
 
   <!-- Examples -->
@@ -52,7 +56,17 @@
           <%= render Shadcn::TypographyComponent.new(variant: :h4) { "Heading 4" } %>
         </div>
       <% end %>
+<<<<<<< HEAD
       <%= erb_example("typography/headings") %>
+=======
+      <%= render "docs/code_example", language: "erb", code: <<~ERB
+<%%= render Shadcn::TypographyComponent.new(variant: :h1) { "Heading 1" } %>
+<%%= render Shadcn::TypographyComponent.new(variant: :h2) { "Heading 2" } %>
+<%%= render Shadcn::TypographyComponent.new(variant: :h3) { "Heading 3" } %>
+<%%= render Shadcn::TypographyComponent.new(variant: :h4) { "Heading 4" } %>
+ERB
+      %>
+>>>>>>> bad61ac (Remove remaining dummy docs placeholders)
     </div>
 
     <!-- Paragraph -->
@@ -63,7 +77,6 @@
           The king, seeing how much happier his subjects were, realized the error of his ways and repealed the joke tax.
         <% end %>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/typography/paragraph.txt")) %>
     </div>
 
     <!-- Lead -->
@@ -74,7 +87,6 @@
           A modal dialog that interrupts the user with important content and expects a response.
         <% end %>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/typography/lead.txt")) %>
     </div>
 
     <!-- Large -->
@@ -83,7 +95,6 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::TypographyComponent.new(variant: :large) { "Are you absolutely sure?" } %>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/typography/large.txt")) %>
     </div>
 
     <!-- Small -->
@@ -92,7 +103,6 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::TypographyComponent.new(variant: :small) { "Email address" } %>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/typography/small.txt")) %>
     </div>
 
     <!-- Muted -->
@@ -101,7 +111,6 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::TypographyComponent.new(variant: :muted) { "Enter your email address." } %>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/typography/muted.txt")) %>
     </div>
 
     <!-- Blockquote -->
@@ -112,7 +121,6 @@
           "After all, everyone enjoys a good laugh, and the people of the kingdom were no exception."
         <% end %>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/typography/blockquote.txt")) %>
     </div>
 
     <!-- Inline Code -->
@@ -121,45 +129,8 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::TypographyComponent.new(variant: :code) { "@radix-ui/react-alert-dialog" } %>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/typography/inline-code.txt")) %>
     </div>
   </div>
-
-    <!-- Heading 1 -->
-    <div class="space-y-4">
-      <h3 class="text-lg font-semibold">Heading 1</h3>
-      <%= showcase("typography", :h1) %>
-    </div>
-
-    <!-- Heading 2 -->
-    <div class="space-y-4">
-      <h3 class="text-lg font-semibold">Heading 2</h3>
-      <%= showcase("typography", :h2) %>
-    </div>
-
-    <!-- Heading 3 -->
-    <div class="space-y-4">
-      <h3 class="text-lg font-semibold">Heading 3</h3>
-      <%= showcase("typography", :h3) %>
-    </div>
-
-    <!-- Heading 4 -->
-    <div class="space-y-4">
-      <h3 class="text-lg font-semibold">Heading 4</h3>
-      <%= showcase("typography", :h4) %>
-    </div>
-
-    <!-- All Variants -->
-    <div class="space-y-4">
-      <h3 class="text-lg font-semibold">All Variants</h3>
-      <%= showcase("typography", :variants) %>
-    </div>
-
-    <!-- Demo Page -->
-    <div class="space-y-4">
-      <h3 class="text-lg font-semibold">Demo Page</h3>
-      <%= showcase("typography", :demo) %>
-    </div>
 
   <!-- API Reference -->
   <div id="api-reference">
