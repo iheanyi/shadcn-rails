@@ -49,14 +49,16 @@ type TooltipContext = {
 type TooltipRenderer = (context: TooltipContext) => void;
 export declare function normalizeChartType(type: string): ChartJsKind;
 export declare function cssVariableName(key: string): string;
-export declare function defaultChartColor(index: number): string;
+export declare function defaultChartColor(element: HTMLElement, index: number): string;
 export declare function resolveCssColor(element: HTMLElement, value: string): string;
 export declare function seriesKey(dataset: ChartDataset, index: number): string;
 export declare function seriesLabel(dataset: ChartDataset, config: ChartConfig, index: number): string;
 export declare function seriesColor(element: HTMLElement, dataset: ChartDataset, config: ChartConfig, index: number): string;
 export declare function buildLegendItems(element: HTMLElement, type: ChartKind, data: ChartData, config: ChartConfig): LegendItem[];
 export declare function buildChartData(element: HTMLElement, type: ChartKind, data: ChartData, config: ChartConfig): ChartData;
-export declare function buildChartOptions({ renderTooltip }: {
+export declare function buildChartOptions({ element, type, renderTooltip }: {
+    element: HTMLElement;
+    type: ChartKind;
     renderTooltip: TooltipRenderer;
 }): Record<string, unknown>;
 export {};

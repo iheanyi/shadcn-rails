@@ -77,17 +77,27 @@ export function cssVariableName(key: string): string {
   return normalized || "series"
 }
 
-export function defaultChartColor(index: number): string {
-  return `hsl(var(--chart-${(index % DEFAULT_SERIES_COUNT) + 1}))`
+export function defaultChartColor(element: HTMLElement, index: number): string {
+  return resolveCssColor(element, `hsl(var(--chart-${(index % DEFAULT_SERIES_COUNT) + 1}))`)
 }
 
 export function resolveCssColor(element: HTMLElement, value: string): string {
   const trimmed = value.trim()
-  const variableMatch = trimmed.match(/^var\((--[^)]+)\)$/)
-  if (!variableMatch) return trimmed
+  const hslVariableMatch = trimmed.match(/^hsla?\(\s*var\((--[^)]+)\)\s*(?:\/\s*([^)]+))?\)$/)
+  if (hslVariableMatch) {
+    const resolved = resolveCssVariable(element, hslVariableMatch[1])
+    if (!resolved) return trimmed
 
-  const resolved = getComputedStyle(element).getPropertyValue(variableMatch[1]).trim()
-  return resolved || trimmed
+    return cssColorValue(resolved, hslVariableMatch[2])
+  }
+
+  const variableMatch = trimmed.match(/^var\((--[^)]+)\)$/)
+  if (variableMatch) {
+    const resolved = resolveCssVariable(element, variableMatch[1])
+    return resolved ? cssColorValue(resolved) : trimmed
+  }
+
+  return trimmed
 }
 
 export function seriesKey(dataset: ChartDataset, index: number): string {
@@ -108,7 +118,7 @@ export function seriesColor(element: HTMLElement, dataset: ChartDataset, config:
   const configured = config[key]?.color || cssVariable
   const resolved = resolveCssColor(element, configured)
 
-  return resolved === cssVariable ? defaultChartColor(index) : resolved
+  return resolved === cssVariable ? defaultChartColor(element, index) : resolved
 }
 
 export function buildLegendItems(element: HTMLElement, type: ChartKind, data: ChartData, config: ChartConfig): LegendItem[] {
@@ -131,7 +141,7 @@ export function buildLegendItems(element: HTMLElement, type: ChartKind, data: Ch
 function resolveLegendColor(element: HTMLElement, color: string, index: number): string {
   const resolved = resolveCssColor(element, color)
 
-  return resolved === color && color.startsWith("var(") ? defaultChartColor(index) : resolved
+  return resolved === color && color.startsWith("var(") ? defaultChartColor(element, index) : resolved
 }
 
 export function buildChartData(element: HTMLElement, type: ChartKind, data: ChartData, config: ChartConfig): ChartData {
@@ -151,7 +161,7 @@ export function buildChartData(element: HTMLElement, type: ChartKind, data: Char
           const resolved = resolveCssColor(element, configured)
 
           return resolved === configured && configured.startsWith("var(")
-            ? defaultChartColor(labelIndex)
+            ? defaultChartColor(element, labelIndex)
             : resolved
         })
 
@@ -159,7 +169,7 @@ export function buildChartData(element: HTMLElement, type: ChartKind, data: Char
           ...dataset,
           label,
           backgroundColor: colors.length > 0 ? colors : color,
-          borderColor: "hsl(var(--background))"
+          borderColor: resolveCssColor(element, "hsl(var(--background))")
         }
       }
 
@@ -178,11 +188,15 @@ export function buildChartData(element: HTMLElement, type: ChartKind, data: Char
 }
 
 export function buildChartOptions({
+  element,
+  type,
   renderTooltip
 }: {
+  element: HTMLElement
+  type: ChartKind
   renderTooltip: TooltipRenderer
 }): Record<string, unknown> {
-  return {
+  const options: Record<string, unknown> = {
     responsive: true,
     maintainAspectRatio: false,
     interaction: {
@@ -198,30 +212,52 @@ export function buildChartOptions({
         external: renderTooltip
       }
     },
-    scales: {
-      x: {
-        border: {
-          display: false
-        },
-        grid: {
-          display: false
-        },
-        ticks: {
-          color: "hsl(var(--muted-foreground))"
-        }
-      },
-      y: {
-        border: {
-          display: false
-        },
-        grid: {
-          color: "hsl(var(--border))"
-        },
-        ticks: {
-          color: "hsl(var(--muted-foreground))"
-        }
-      }
-    },
     animation: {}
   }
+
+  if (type === "pie" || type === "donut") return options
+
+  options.scales = {
+    x: {
+      border: {
+        display: false
+      },
+      grid: {
+        display: false
+      },
+      ticks: {
+        color: resolveCssColor(element, "hsl(var(--muted-foreground))")
+      }
+    },
+    y: {
+      border: {
+        display: false
+      },
+      grid: {
+        color: resolveCssColor(element, "hsl(var(--border))")
+      },
+      ticks: {
+        color: resolveCssColor(element, "hsl(var(--muted-foreground))")
+      }
+    }
+  }
+
+  return options
+}
+
+function resolveCssVariable(element: HTMLElement, name: string): string {
+  return getComputedStyle(element).getPropertyValue(name).trim()
+}
+
+function cssColorValue(value: string, alpha?: string): string {
+  const trimmed = value.trim()
+  if (isHslComponentToken(trimmed)) {
+    return alpha ? `hsl(${trimmed} / ${alpha.trim()})` : `hsl(${trimmed})`
+  }
+
+  return trimmed
+}
+
+function isHslComponentToken(value: string): boolean {
+  return /^-?\d+(?:\.\d+)?(?:deg|rad|turn)?\s+-?\d+(?:\.\d+)?%\s+-?\d+(?:\.\d+)?%$/.test(value)
 }

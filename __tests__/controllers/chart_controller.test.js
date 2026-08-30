@@ -22,8 +22,12 @@ describe("chart config builders", () => {
 
   const setupElement = () => {
     const element = document.createElement("div")
-    element.style.setProperty("--color-desktop", "hsl(12 76% 61%)")
+    element.style.setProperty("--color-desktop", "12 76% 61%")
     element.style.setProperty("--color-mobile", "hsl(173 58% 39%)")
+    element.style.setProperty("--chart-1", "12 76% 61%")
+    element.style.setProperty("--background", "0 0% 100%")
+    element.style.setProperty("--border", "0 0% 89.8%")
+    element.style.setProperty("--muted-foreground", "0 0% 45.1%")
     document.body.appendChild(element)
     return element
   }
@@ -76,8 +80,8 @@ describe("chart config builders", () => {
 
   test("builds circular data with per-label colors", () => {
     const element = setupElement()
-    element.style.setProperty("--color-january", "hsl(220 70% 50%)")
-    element.style.setProperty("--color-february", "hsl(160 60% 45%)")
+    element.style.setProperty("--color-january", "220 70% 50%")
+    element.style.setProperty("--color-february", "160 60% 45%")
 
     const chartData = buildChartData(element, "donut", {
       labels: ["January", "February"],
@@ -90,8 +94,21 @@ describe("chart config builders", () => {
     expect(chartData.datasets[0]).toMatchObject({
       label: "Visitors",
       backgroundColor: ["hsl(220 70% 50%)", "hsl(160 60% 45%)"],
-      borderColor: "hsl(var(--background))"
+      borderColor: "hsl(0 0% 100%)"
     })
+  })
+
+  test("resolves hsl var colors to canvas-safe hsl values", () => {
+    const element = setupElement()
+    const chartData = buildChartData(element, "bar", {
+      labels: ["January"],
+      datasets: [{ key: "desktop", data: [186] }]
+    }, {
+      desktop: { color: "hsl(var(--color-desktop))" }
+    })
+
+    expect(chartData.datasets[0].backgroundColor).toBe("hsl(12 76% 61%)")
+    expect(chartData.datasets[0].borderColor).toBe("hsl(12 76% 61%)")
   })
 
   test("builds external legend items for cartesian charts", () => {
@@ -105,7 +122,7 @@ describe("chart config builders", () => {
 
   test("builds external legend items for circular charts", () => {
     const element = setupElement()
-    element.style.setProperty("--color-january", "hsl(220 70% 50%)")
+    element.style.setProperty("--color-january", "220 70% 50%")
 
     const legendItems = buildLegendItems(element, "pie", {
       labels: ["January"],
@@ -120,11 +137,22 @@ describe("chart config builders", () => {
   })
 
   test("builds options with Chart.js legend and tooltip disabled", () => {
+    const element = setupElement()
     const renderTooltip = jest.fn()
-    const options = buildChartOptions({ renderTooltip })
+    const options = buildChartOptions({ element, type: "bar", renderTooltip })
 
     expect(options.plugins.legend.display).toBe(false)
     expect(options.plugins.tooltip.enabled).toBe(false)
     expect(options.plugins.tooltip.external).toBe(renderTooltip)
+    expect(options.scales.x.ticks.color).toBe("hsl(0 0% 45.1%)")
+    expect(options.scales.y.grid.color).toBe("hsl(0 0% 89.8%)")
+  })
+
+  test("omits cartesian scales for circular charts", () => {
+    const element = setupElement()
+    const renderTooltip = jest.fn()
+
+    expect(buildChartOptions({ element, type: "pie", renderTooltip }).scales).toBeUndefined()
+    expect(buildChartOptions({ element, type: "donut", renderTooltip }).scales).toBeUndefined()
   })
 })

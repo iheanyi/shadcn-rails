@@ -47,6 +47,8 @@ export default class default_1 extends Controller {
             }
             const chartData = buildChartData(this.element, this.typeValue, this.dataValue, this.configValue);
             const options = buildChartOptions({
+                element: this.element,
+                type: this.typeValue,
                 renderTooltip: this.renderTooltip.bind(this)
             });
             this.chart = new chartJs.default(context, {

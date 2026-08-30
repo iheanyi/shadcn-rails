@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --public-path=/assets --loader:.js=jsx --alias:shadcn-rails-stimulus=../../dist/index.esm.js",
+    "build": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --public-path=/assets --loader:.js=jsx --alias:shadcn-rails-stimulus=../../dist/index.esm.js --alias:chart.js/auto=./node_modules/chart.js/auto/auto.js",
     "build:watch": "node esbuild.config.mjs"
   },
   "devDependencies": {

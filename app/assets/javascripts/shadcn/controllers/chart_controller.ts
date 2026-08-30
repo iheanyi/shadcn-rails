@@ -84,6 +84,8 @@ export default class extends Controller<HTMLElement> {
 
       const chartData = buildChartData(this.element, this.typeValue, this.dataValue, this.configValue)
       const options = buildChartOptions({
+        element: this.element,
+        type: this.typeValue,
         renderTooltip: this.renderTooltip.bind(this)
       })
 

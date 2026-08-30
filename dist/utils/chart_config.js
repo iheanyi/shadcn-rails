@@ -22,16 +22,24 @@ export function cssVariableName(key) {
         .replace(/^-+|-+$/g, "");
     return normalized || "series";
 }
-export function defaultChartColor(index) {
-    return `hsl(var(--chart-${(index % DEFAULT_SERIES_COUNT) + 1}))`;
+export function defaultChartColor(element, index) {
+    return resolveCssColor(element, `hsl(var(--chart-${(index % DEFAULT_SERIES_COUNT) + 1}))`);
 }
 export function resolveCssColor(element, value) {
     const trimmed = value.trim();
+    const hslVariableMatch = trimmed.match(/^hsla?\(\s*var\((--[^)]+)\)\s*(?:\/\s*([^)]+))?\)$/);
+    if (hslVariableMatch) {
+        const resolved = resolveCssVariable(element, hslVariableMatch[1]);
+        if (!resolved)
+            return trimmed;
+        return cssColorValue(resolved, hslVariableMatch[2]);
+    }
     const variableMatch = trimmed.match(/^var\((--[^)]+)\)$/);
-    if (!variableMatch)
-        return trimmed;
-    const resolved = getComputedStyle(element).getPropertyValue(variableMatch[1]).trim();
-    return resolved || trimmed;
+    if (variableMatch) {
+        const resolved = resolveCssVariable(element, variableMatch[1]);
+        return resolved ? cssColorValue(resolved) : trimmed;
+    }
+    return trimmed;
 }
 export function seriesKey(dataset, index) {
     if (typeof dataset.key === "string" && dataset.key.length > 0)
@@ -49,7 +57,7 @@ export function seriesColor(element, dataset, config, index) {
     const cssVariable = `var(--color-${cssVariableName(key)})`;
     const configured = config[key]?.color || cssVariable;
     const resolved = resolveCssColor(element, configured);
-    return resolved === cssVariable ? defaultChartColor(index) : resolved;
+    return resolved === cssVariable ? defaultChartColor(element, index) : resolved;
 }
 export function buildLegendItems(element, type, data, config) {
     if (type === "pie" || type === "donut") {
@@ -68,7 +76,7 @@ export function buildLegendItems(element, type, data, config) {
 }
 function resolveLegendColor(element, color, index) {
     const resolved = resolveCssColor(element, color);
-    return resolved === color && color.startsWith("var(") ? defaultChartColor(index) : resolved;
+    return resolved === color && color.startsWith("var(") ? defaultChartColor(element, index) : resolved;
 }
 export function buildChartData(element, type, data, config) {
     const isCircular = type === "pie" || type === "donut";
@@ -84,14 +92,14 @@ export function buildChartData(element, type, data, config) {
                     const configured = labelConfig?.color || `var(--color-${cssVariableName(labelKey)})`;
                     const resolved = resolveCssColor(element, configured);
                     return resolved === configured && configured.startsWith("var(")
-                        ? defaultChartColor(labelIndex)
+                        ? defaultChartColor(element, labelIndex)
                         : resolved;
                 });
                 return {
                     ...dataset,
                     label,
                     backgroundColor: colors.length > 0 ? colors : color,
-                    borderColor: "hsl(var(--background))"
+                    borderColor: resolveCssColor(element, "hsl(var(--background))")
                 };
             }
             return {
@@ -107,8 +115,8 @@ export function buildChartData(element, type, data, config) {
         })
     };
 }
-export function buildChartOptions({ renderTooltip }) {
-    return {
+export function buildChartOptions({ element, type, renderTooltip }) {
+    const options = {
         responsive: true,
         maintainAspectRatio: false,
         interaction: {
@@ -124,31 +132,47 @@ export function buildChartOptions({ renderTooltip }) {
                 external: renderTooltip
             }
         },
-        scales: {
-            x: {
-                border: {
-                    display: false
-                },
-                grid: {
-                    display: false
-                },
-                ticks: {
-                    color: "hsl(var(--muted-foreground))"
-                }
-            },
-            y: {
-                border: {
-                    display: false
-                },
-                grid: {
-                    color: "hsl(var(--border))"
-                },
-                ticks: {
-                    color: "hsl(var(--muted-foreground))"
-                }
-            }
-        },
         animation: {}
     };
+    if (type === "pie" || type === "donut")
+        return options;
+    options.scales = {
+        x: {
+            border: {
+                display: false
+            },
+            grid: {
+                display: false
+            },
+            ticks: {
+                color: resolveCssColor(element, "hsl(var(--muted-foreground))")
+            }
+        },
+        y: {
+            border: {
+                display: false
+            },
+            grid: {
+                color: resolveCssColor(element, "hsl(var(--border))")
+            },
+            ticks: {
+                color: resolveCssColor(element, "hsl(var(--muted-foreground))")
+            }
+        }
+    };
+    return options;
+}
+function resolveCssVariable(element, name) {
+    return getComputedStyle(element).getPropertyValue(name).trim();
+}
+function cssColorValue(value, alpha) {
+    const trimmed = value.trim();
+    if (isHslComponentToken(trimmed)) {
+        return alpha ? `hsl(${trimmed} / ${alpha.trim()})` : `hsl(${trimmed})`;
+    }
+    return trimmed;
+}
+function isHslComponentToken(value) {
+    return /^-?\d+(?:\.\d+)?(?:deg|rad|turn)?\s+-?\d+(?:\.\d+)?%\s+-?\d+(?:\.\d+)?%$/.test(value);
 }
 //# sourceMappingURL=chart_config.js.map
