@@ -16,8 +16,10 @@ registerShadcnChartController(application)
 
 // Import local controllers
 import ClipboardController from "./controllers/clipboard_controller"
+import DocsLiveFilterController from "./controllers/docs_live_filter_controller"
 import EditorController from "./controllers/editor_controller"
 application.register("clipboard", ClipboardController)
+application.register("docs--live-filter", DocsLiveFilterController)
 application.register("editor", EditorController)
 
 export { application }
