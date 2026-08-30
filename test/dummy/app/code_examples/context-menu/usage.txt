@@ -1,13 +1,14 @@
-  <%= render(Shadcn::ContextMenuComponent.new) do |menu| %>
-    <% menu.with_trigger do %>
-      <%# Inline HTML omitted for brevity; see the live preview for the rendered markup. %>
-    <% end %>
-    <% menu.with_menu do |content| %>
-      <% content.with_item(href: "#back") { "Back" } %>
-      <% content.with_item(href: "#forward", disabled: true) { "Forward" } %>
-      <% content.with_item(href: "#reload") { "Reload" } %>
-      <% content.with_separator %>
-      <% content.with_item(href: "#print") { "Print" } %>
-    <% end %>
+<%= render Shadcn::ContextMenu.new do |menu| %>
+  <% menu.with_trigger do %>
+    <div class="flex h-[100px] w-[200px] items-center justify-center rounded-md border border-dashed text-sm">
+      Right click
+    </div>
+  <% end %>
+  <% menu.with_menu do |content| %>
+    <% content.with_item(href: "#back") { "Back" } %>
+    <% content.with_item(href: "#forward", disabled: true) { "Forward" } %>
+    <% content.with_item(href: "#reload") { "Reload" } %>
+    <% content.with_separator %>
+    <% content.with_item(href: "#print") { "Print" } %>
   <% end %>
 <% end %>

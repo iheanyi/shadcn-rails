@@ -1,6 +1,6 @@
-<%= render(Shadcn::DropdownMenuComponent.new) do |menu| %>
+<%= render(Shadcn::DropdownMenu.new) do |menu| %>
   <% menu.with_trigger do %>
-    <% button_html(:outline, "Actions") %>
+    <%= render Shadcn::Button.new(variant: :outline) { "Actions" } %>
   <% end %>
   <% menu.with_menu do |content| %>
     <% content.with_label { "Actions" } %>

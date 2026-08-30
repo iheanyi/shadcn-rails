@@ -1,3 +1,3 @@
-<%= render(Shadcn::TooltipComponent.new(text: "This is a helpful tooltip", side: :top)) do %>
-  <% button_html(:secondary, "Top") %>
+<%= render Shadcn::Tooltip.new(text: "This is a helpful tooltip", side: :top) do %>
+  <%= render Shadcn::Button.new(variant: :secondary) { "Top" } %>
 <% end %>

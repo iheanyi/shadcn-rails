@@ -27,8 +27,10 @@ module ShowcaseHelper
   private
 
   def showcase_example_source(component_name, preview_class, example)
-    example_path = Rails.root.join("app/code_examples/#{component_name}/#{example}.txt")
-    return File.read(example_path) if File.exist?(example_path)
+    [example.to_s, example.to_s.tr("_", "-")].each do |example_name|
+      example_path = Rails.root.join("app/code_examples/#{component_name}/#{example_name}.txt")
+      return File.read(example_path) if File.exist?(example_path)
+    end
 
     erb_preview_method_source(preview_class, example)
   end

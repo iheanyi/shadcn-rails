@@ -1,4 +1,4 @@
-<%= render(Shadcn::TableComponent.new) do |table| %>
+<%= render Shadcn::Table.new do |table| %>
   <% table.with_header do |header| %>
     <% header.with_row do |row| %>
       <% row.with_head { "Name" } %>
@@ -8,12 +8,20 @@
     <% end %>
   <% end %>
   <% table.with_body do |body| %>
-    users.each do |user|
-      <% body.with_row do |row| %>
-        <% row.with_cell { user[:name] } %>
-        <% row.with_cell { user[:email] } %>
-        <% row.with_cell { user[:role] } %>
-        <% row.with_cell { badge_html(user[:status]) } %>
+    <% body.with_row do |row| %>
+      <% row.with_cell { "Olivia Martin" } %>
+      <% row.with_cell { "olivia@example.com" } %>
+      <% row.with_cell { "Owner" } %>
+      <% row.with_cell do %>
+        <%= render Shadcn::Badge.new { "Active" } %>
+      <% end %>
+    <% end %>
+    <% body.with_row do |row| %>
+      <% row.with_cell { "Jackson Lee" } %>
+      <% row.with_cell { "jackson@example.com" } %>
+      <% row.with_cell { "Member" } %>
+      <% row.with_cell do %>
+        <%= render Shadcn::Badge.new(variant: :secondary) { "Invited" } %>
       <% end %>
     <% end %>
   <% end %>

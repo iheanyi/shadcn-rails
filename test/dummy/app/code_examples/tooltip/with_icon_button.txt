@@ -1,3 +1,5 @@
-<%= render(Shadcn::TooltipComponent.new(text: "Add to library")) do %>
-  <% button_html(:outline, "+", "h-10 w-10 p-0") %>
+<%= render Shadcn::Tooltip.new(text: "Add to library") do %>
+  <%= render Shadcn::Button.new(variant: :outline, class_name: "h-10 w-10 p-0", aria: { label: "Add" }) do %>
+    +
+  <% end %>
 <% end %>

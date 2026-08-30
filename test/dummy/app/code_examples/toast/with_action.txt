@@ -1,7 +1,7 @@
-<%= render(Shadcn::ToastComponent.new) do |toast| %>
-  <% toast.with_title { "Uh oh! Something went wrong." } %>
+<%= render Shadcn::Toast.new do |toast| %>
+  <% toast.with_title { "Error" } %>
   <% toast.with_description { "There was a problem with your request." } %>
   <% toast.with_action(alt_text: "Try again") do %>
-    <% button_html(:outline, "Try again", "h-8 px-3 text-xs") %>
+    <%= render Shadcn::Button.new(variant: :outline, class_name: "h-8 px-3 text-xs") { "Try again" } %>
   <% end %>
 <% end %>

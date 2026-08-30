@@ -5,10 +5,27 @@ require "cgi"
 
 class DummyDocsCatalogTest < ActionDispatch::IntegrationTest
   PLACEHOLDER = "This example now renders from the component preview source shown by the showcase block on this page."
+  FORBIDDEN_CODE_EXAMPLE_PATTERNS = [
+    "button_html",
+    "omitted for brevity",
+    "def default",
+    "variant.to_sym",
+    "variant.to_s"
+  ].freeze
 
   def test_docs_pages_do_not_contain_placeholder_copy
     docs_views.each do |view|
       refute_includes File.read(view), PLACEHOLDER, "Remove placeholder copy from #{view.basename}"
+    end
+  end
+
+  def test_code_examples_do_not_leak_lookbook_preview_internals
+    code_example_files.each do |example|
+      code = File.read(example)
+
+      FORBIDDEN_CODE_EXAMPLE_PATTERNS.each do |pattern|
+        refute_includes code, pattern, "#{example.relative_path_from(Rails.root)} should be copy-pasteable ERB"
+      end
     end
   end
 
@@ -30,6 +47,10 @@ class DummyDocsCatalogTest < ActionDispatch::IntegrationTest
 
   def docs_views
     Rails.root.join("app/views/docs").glob("*.html.erb").reject { |view| view.basename.to_s.start_with?("_") }
+  end
+
+  def code_example_files
+    Rails.root.join("app/code_examples").glob("**/*.txt")
   end
 
   def editable_component_slugs

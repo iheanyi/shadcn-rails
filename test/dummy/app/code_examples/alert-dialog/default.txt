@@ -1,6 +1,6 @@
-<%= render(Shadcn::AlertDialogComponent.new) do |dialog| %>
+<%= render Shadcn::AlertDialog.new do |dialog| %>
   <% dialog.with_trigger do %>
-    <% button_html(:outline, "Show Dialog") %>
+    <%= render Shadcn::Button.new(variant: :outline) { "Show Dialog" } %>
   <% end %>
   <% dialog.with_body do |body| %>
     <% body.with_header do |header| %>

@@ -1,1 +1,0 @@
-<%= render Shadcn::TextareaComponent.new( name: "message", rows: rows.to_i, placeholder: "Type your message here..." ) %>

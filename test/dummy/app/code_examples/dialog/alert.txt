@@ -1,6 +1,6 @@
-<%= render(Shadcn::DialogComponent.new) do |dialog| %>
+<%= render Shadcn::Dialog.new do |dialog| %>
   <% dialog.with_trigger do %>
-    <% button_html(:destructive, "Delete Account") %>
+    <%= render Shadcn::Button.new(variant: :destructive) { "Delete Account" } %>
   <% end %>
   <% dialog.with_body do |body| %>
     <% body.with_header do |header| %>
@@ -8,10 +8,8 @@
       <% header.with_description { "This action cannot be undone. This will permanently delete your account and remove your data from our servers." } %>
     <% end %>
     <% body.with_footer do %>
-      <<~HTML.html_safe
-        #{button_html(:outline, "Cancel", "mr-2")}
-        #{button_html(:destructive, "Delete Account")}
-      HTML
+      <%= render Shadcn::Button.new(variant: :outline, class_name: "mr-2") { "Cancel" } %>
+      <%= render Shadcn::Button.new(variant: :destructive) { "Delete Account" } %>
     <% end %>
   <% end %>
 <% end %>

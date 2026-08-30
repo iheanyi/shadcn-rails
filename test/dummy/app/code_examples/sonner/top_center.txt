@@ -1,3 +1,3 @@
-<%= render(Shadcn::SonnerComponent.new(id: "sonner-top-center-viewport", position: :top_center, duration: 5000)) do %>
-  <% demo_button("Publish post", "Post published", "The changelog is live and subscribers were notified.", "info") %>
+<%= render Shadcn::Sonner.new(id: "sonner-top-center-viewport", position: :top_center, duration: 5000) do %>
+  <%= button_tag "Publish post", type: "button", data: { action: "click->shadcn--sonner#demo", title: "Post published", description: "The changelog is live and subscribers were notified.", variant: "info" } %>
 <% end %>

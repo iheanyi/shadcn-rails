@@ -1,6 +1,6 @@
-<%= render(Shadcn::AlertDialogComponent.new) do |dialog| %>
+<%= render Shadcn::AlertDialog.new do |dialog| %>
   <% dialog.with_trigger do %>
-    <% button_html(:destructive, "Delete Account") %>
+    <%= render Shadcn::Button.new(variant: :destructive) { "Delete Account" } %>
   <% end %>
   <% dialog.with_body do |body| %>
     <% body.with_header do |header| %>

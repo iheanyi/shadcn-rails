@@ -1,1 +1,0 @@
-<%= render Shadcn::CheckboxComponent.new(name: "mobile", id: "mobile") %>

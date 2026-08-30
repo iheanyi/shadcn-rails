@@ -1,11 +1,11 @@
-<%= render(Shadcn::ToggleGroupComponent.new(type: :single, variant: variant.to_sym)) do |group| %>
-  <% group.with_item(value: "left", aria_label: "Align left") do %>
-    align_left_icon
+<div class="flex flex-wrap gap-4">
+  <%= render Shadcn::ToggleGroup.new(type: :single, variant: :default) do |group| %>
+    <% group.with_item(value: "left", aria_label: "Align left") { "Left" } %>
+    <% group.with_item(value: "center", aria_label: "Align center") { "Center" } %>
   <% end %>
-  <% group.with_item(value: "center", aria_label: "Align center") do %>
-    align_center_icon
+
+  <%= render Shadcn::ToggleGroup.new(type: :single, variant: :outline) do |group| %>
+    <% group.with_item(value: "left", aria_label: "Align left") { "Left" } %>
+    <% group.with_item(value: "center", aria_label: "Align center") { "Center" } %>
   <% end %>
-  <% group.with_item(value: "right", aria_label: "Align right") do %>
-    align_right_icon
-  <% end %>
-<% end %>
+</div>

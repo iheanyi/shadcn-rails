@@ -1,3 +1,3 @@
-<%= render(Shadcn::ToasterComponent.new(id: "sonner-persistent-viewport", duration: 0)) do %>
-  <% demo_button("Save profile", "Profile saved", "Avatar, display name, and notification settings were saved.", "success", 0) %>
+<%= render Shadcn::Toaster.new(id: "sonner-persistent-viewport", duration: 0) do %>
+  <%= button_tag "Save profile", type: "button", data: { action: "click->shadcn--sonner#demo", title: "Profile saved", description: "Avatar, display name, and notification settings were saved.", variant: "success", duration: 0 } %>
 <% end %>

@@ -1,10 +1,12 @@
-  <%= render(Shadcn::TypographyComponent.new(variant: variant.to_sym)) { "Sample text for #{variant}" } %>
-<% end %>
-
-# @label Demo Page
-# Full typography demonstration
-def demo
-  <% render(Shadcn::TypographyComponent.new(variant: :p)) do %>
-    "Typography examples cover headings, paragraphs, lists, quotes, and inline code styles."
-  <% end %>
-<% end %>
+<div class="space-y-4">
+  <%= render Shadcn::Typography.new(variant: :h1) { "Heading 1" } %>
+  <%= render Shadcn::Typography.new(variant: :h2) { "Heading 2" } %>
+  <%= render Shadcn::Typography.new(variant: :h3) { "Heading 3" } %>
+  <%= render Shadcn::Typography.new(variant: :h4) { "Heading 4" } %>
+  <%= render Shadcn::Typography.new(variant: :p) { "A paragraph of body copy." } %>
+  <%= render Shadcn::Typography.new(variant: :lead) { "A lead paragraph." } %>
+  <%= render Shadcn::Typography.new(variant: :large) { "Large text" } %>
+  <%= render Shadcn::Typography.new(variant: :small) { "Small text" } %>
+  <%= render Shadcn::Typography.new(variant: :muted) { "Muted text" } %>
+  <%= render Shadcn::Typography.new(variant: :code) { "inline_code" } %>
+</div>
