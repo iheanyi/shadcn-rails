@@ -19,6 +19,7 @@ import AccordionController from "./controllers/accordion_controller";
 import AvatarController from "./controllers/avatar_controller";
 import CalendarController from "./controllers/calendar_controller";
 import CarouselController from "./controllers/carousel_controller";
+import ChartController from "./controllers/chart_controller";
 import DatePickerController from "./controllers/date_picker_controller";
 import CheckboxController from "./controllers/checkbox_controller";
 import CollapsibleController from "./controllers/collapsible_controller";
@@ -49,7 +50,7 @@ import InputOtpController from "./controllers/input_otp_controller";
 import SidebarController from "./controllers/sidebar_controller";
 import { positionFloating, positionAtPoint } from "./utils/floating";
 export type { ShadcnControllerIdentifier, ShadcnControllerMap, ShadcnStimulusEvent, StimulusControllerConstructor } from "./stimulus";
-export { BaseMenuController, AccordionController, AvatarController, CalendarController, CarouselController, DatePickerController, CheckboxController, CollapsibleController, ComboboxController, CommandController, CommandDialogController, ContextMenuController, DialogController, DrawerController, DropdownController, HoverCardController, InputOtpController, MenubarController, NavigationMenuController, PopoverController, RadioGroupController, ResizableController, ScrollAreaController, SelectController, SheetController, SliderController, SwitchController, TabsController, ToastController, ToggleController, ToggleGroupController, TooltipController, SidebarController, positionFloating, positionAtPoint };
+export { BaseMenuController, AccordionController, AvatarController, CalendarController, CarouselController, ChartController, DatePickerController, CheckboxController, CollapsibleController, ComboboxController, CommandController, CommandDialogController, ContextMenuController, DialogController, DrawerController, DropdownController, HoverCardController, InputOtpController, MenubarController, NavigationMenuController, PopoverController, RadioGroupController, ResizableController, ScrollAreaController, SelectController, SheetController, SliderController, SwitchController, TabsController, ToastController, ToggleController, ToggleGroupController, TooltipController, SidebarController, positionFloating, positionAtPoint };
 export declare const controllers: ShadcnControllerMap;
 /**
  * Register all shadcn controllers with a Stimulus application

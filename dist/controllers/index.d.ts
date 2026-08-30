@@ -3,6 +3,7 @@ export { default as AccordionController } from "./accordion_controller";
 export { default as AvatarController } from "./avatar_controller";
 export { default as CalendarController } from "./calendar_controller";
 export { default as CarouselController } from "./carousel_controller";
+export { default as ChartController } from "./chart_controller";
 export { default as DatePickerController } from "./date_picker_controller";
 export { default as CheckboxController } from "./checkbox_controller";
 export { default as CollapsibleController } from "./collapsible_controller";
