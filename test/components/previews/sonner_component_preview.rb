@@ -12,6 +12,8 @@ class SonnerComponentPreview < ViewComponent::Preview
           #{demo_button("Create invoice", "Invoice created", "Invoice #1042 was created for Acme Studio.")}
           #{demo_button("Save customer", "Customer saved", "Billing contact and tax ID were updated.", "success")}
           #{demo_button("Simulate error", "Payment failed", "The card was declined. Ask the customer for another payment method.", "destructive")}
+          #{demo_button("Warn shipping", "Address needs review", "Shipping rates changed after the postal code update.", "warning")}
+          #{demo_button("Show audit note", "Audit log updated", "Maya Chen added a note to the customer timeline.", "info")}
         </div>
       HTML
     end

@@ -54,6 +54,12 @@ class SonnerComponentTest < ViewComponent::TestCase
     assert_selector "ol#notifications[class*='bottom-0'][class*='left-1/2']"
   end
 
+  def test_supports_short_toaster_constant
+    render_inline(Shadcn::Toaster.new)
+
+    assert_selector "div[data-controller='shadcn--sonner']"
+  end
+
   def test_supports_short_sonner_constant
     render_inline(Shadcn::Sonner.new)
 

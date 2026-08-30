@@ -580,6 +580,7 @@ sonner:
   ruby_files:
     - app/components/shadcn/sonner.rb
     - app/components/shadcn/sonner_component.rb
+    - app/components/shadcn/toaster.rb
     - app/components/shadcn/toaster_component.rb
   templates: []
   controllers:
