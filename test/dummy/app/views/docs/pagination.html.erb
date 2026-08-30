@@ -40,6 +40,12 @@
     <h3 class="text-lg font-semibold mt-6">2. Collection-based API (Kaminari/will_paginate)</h3>
     <p class="text-sm text-muted-foreground">Pass a paginated collection that exposes Kaminari or will_paginate pagination methods.</p>
     <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/pagination/kaminari_view.txt")) %>
+    <p class="text-sm text-muted-foreground">
+      For a drop-in Kaminari view replacement, keep Kaminari in your controller and replace
+      <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">&lt;%= paginate @posts %&gt;</code>
+      with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">shadcn_paginate</code>.
+    </p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/pagination/shadcn_paginate.txt")) %>
 
     <h3 class="text-lg font-semibold mt-6">3. Pagy-based API</h3>
     <p class="text-sm text-muted-foreground">Pass a Pagy object, or a compatible object that responds to page, pages, prev, and next.</p>
@@ -109,18 +115,19 @@
   <div id="gem-integration" class="space-y-8">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Gem Integration</h2>
     <p class="leading-7">
-      The Pagination component accepts real pagination objects from Pagy, Kaminari, and will_paginate. The live demos below
-      use tiny duck-typed objects in the dummy app, but the snippets show the code you would put in a Rails view with each gem.
+      The Pagination component accepts pagination objects from Pagy, Kaminari, and will_paginate. The Kaminari demo below
+      uses a real Kaminari collection; the Pagy and will_paginate demos use tiny stand-ins that expose the same methods the
+      component duck-types.
     </p>
     <p class="text-sm text-muted-foreground">
-      Demo data: showing page <%= @pagination_page.current_page %> of <%= @pagination_page.total_pages %> for a fake 50-post list.
+      Demo data: showing page <%= @pagination_kaminari.current_page %> of <%= @pagination_kaminari.total_pages %> for a fake 50-post list.
     </p>
 
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Pagy</h3>
       <p class="text-sm text-muted-foreground">
         <a href="https://github.com/ddnexus/pagy" target="_blank" class="underline hover:text-foreground">Pagy</a>
-        objects expose page, pages, prev, and next. Pass the Pagy object with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">pagy:</code>.
+        objects expose page, pages, prev, and next. This live demo uses a small Pagy-shaped stand-in; in your app, pass the real Pagy object with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">pagy:</code>.
       </p>
       <%= render "docs/demo_card" do %>
         <ol class="mb-4 grid gap-2 text-sm sm:grid-cols-2">
@@ -140,17 +147,30 @@
       <h3 class="text-lg font-semibold">Kaminari</h3>
       <p class="text-sm text-muted-foreground">
         <a href="https://github.com/kaminari/kaminari" target="_blank" class="underline hover:text-foreground">Kaminari</a>
-        collections expose current_page, total_pages, prev_page, and next_page. Pass the paginated collection with
-        <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">collection:</code>.
+        stays in your controller: use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">Post.page(params[:page])</code>
+        for ActiveRecord models, or <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">Kaminari.paginate_array(...).page(params[:page]).per(5)</code>
+        for arrays. In the view, replace Kaminari's <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">&lt;%= paginate @posts %&gt;</code>
+        helper with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">shadcn_paginate</code> or render
+        <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">Shadcn::Pagination</code> directly. This changes the rendered UI, not Kaminari's theme engine.
       </p>
+      <div class="grid gap-4 lg:grid-cols-2">
+        <div class="space-y-2">
+          <p class="text-sm font-medium">Controller</p>
+          <%= render "docs/code_example", language: "ruby", code: File.read(Rails.root.join("app/code_examples/pagination/kaminari_controller.txt")) %>
+        </div>
+        <div class="space-y-2">
+          <p class="text-sm font-medium">View</p>
+          <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/pagination/shadcn_paginate.txt")) %>
+        </div>
+      </div>
       <%= render "docs/demo_card" do %>
         <ol class="mb-4 grid gap-2 text-sm sm:grid-cols-2">
           <% @pagination_items.each do |item| %>
             <li class="rounded-md border bg-card px-3 py-2"><%= item %></li>
           <% end %>
         </ol>
-        <%= render Shadcn::PaginationComponent.new(
-          collection: @pagination_page,
+        <%= render Shadcn::Pagination.new(
+          collection: @pagination_kaminari,
           url_builder: ->(page) { docs_component_path(slug: "pagination", page: page) }
         ) %>
       <% end %>
@@ -161,7 +181,7 @@
       <h3 class="text-lg font-semibold">will_paginate</h3>
       <p class="text-sm text-muted-foreground">
         <a href="https://github.com/mislav/will_paginate" target="_blank" class="underline hover:text-foreground">will_paginate</a>
-        collections expose current_page, total_pages, previous_page, and next_page. Use the same
+        collections expose current_page, total_pages, previous_page, and next_page. This live demo uses a small will_paginate-shaped stand-in; in your app, use the same
         <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">collection:</code> option.
       </p>
       <%= render "docs/demo_card" do %>
@@ -191,7 +211,7 @@
           <% end %>
         </ol>
         <%= render Shadcn::PaginationComponent.new(
-          collection: @pagination_page,
+          collection: @pagination_kaminari,
           url_builder: ->(page) { docs_component_path(slug: "pagination", page: page, filter: "published") }
         ) %>
       <% end %>
@@ -205,7 +225,7 @@
       </p>
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::PaginationComponent.new(
-          collection: @pagination_page,
+          collection: @pagination_kaminari,
           window: 1,
           url_builder: ->(page) { docs_component_path(slug: "pagination", page: page) }
         ) %>

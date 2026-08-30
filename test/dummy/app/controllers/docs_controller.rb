@@ -592,13 +592,16 @@ class DocsController < ApplicationController
   def prepare_pagination_demo
     records = Array.new(50) { |index| "Demo post #{index + 1}" }
     per_page = 5
-    current_page = [params[:page].to_i, 1].max
-    total_pages = [(records.length.to_f / per_page).ceil, 1].max
-    current_page = [current_page, total_pages].min
 
-    @pagination_items = records[((current_page - 1) * per_page), per_page] || []
-    @pagination_page = DataTablePage.new(current_page: current_page, total_pages: total_pages)
-    @pagination_pagy = PaginationDemoPagy.new(page: current_page, pages: total_pages)
-    @pagination_will_paginate = PaginationDemoWillPaginate.new(current_page: current_page, total_pages: total_pages)
+    @pagination_kaminari = Kaminari.paginate_array(records).page(params[:page]).per(per_page)
+    @pagination_items = @pagination_kaminari.to_a
+    @pagination_pagy = PaginationDemoPagy.new(
+      page: @pagination_kaminari.current_page,
+      pages: @pagination_kaminari.total_pages
+    )
+    @pagination_will_paginate = PaginationDemoWillPaginate.new(
+      current_page: @pagination_kaminari.current_page,
+      total_pages: @pagination_kaminari.total_pages
+    )
   end
 end

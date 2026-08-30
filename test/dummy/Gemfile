@@ -15,6 +15,9 @@ gem "puma"
 gem "sentry-ruby"
 gem "sentry-rails"
 
+# Real Kaminari integration demos for the dummy docs app
+gem "kaminari", ">= 1.2.2"
+
 # ViewComponent
 gem "view_component", ">= 3.0"
 gem "lookbook", ">= 2.0"

@@ -16,6 +16,10 @@ class DummyPaginationDocsTest < ActionDispatch::IntegrationTest
     assert_select "h3", text: "Custom URL Builder"
     assert_select "a[href='/docs/components/pagination?page=2']", minimum: 1
     assert_includes response.body, "pagy: @pagy"
+    assert_includes response.body, "Post.page(params[:page])"
+    assert_includes response.body, "Kaminari.paginate_array"
+    assert_includes response.body, "shadcn_paginate @posts"
+    assert_includes response.body, "render Shadcn::Pagination.new"
     assert_includes response.body, "collection: @posts"
     assert_includes response.body, "url_builder:"
     assert_includes response.body, "content.with_item(href: posts_path(page: 2), active: true)"
@@ -26,7 +30,7 @@ class DummyPaginationDocsTest < ActionDispatch::IntegrationTest
   end
 
   def test_live_demo_uses_page_param_for_visible_records
-    get "/docs/components/pagination", params: { page: 2 }
+    get "/docs/components/pagination?page=2"
 
     assert_response :success
     assert_includes response.body, "showing page 2 of 10"

@@ -125,6 +125,18 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     json (2.16.0)
+    kaminari (1.2.2)
+      activesupport (>= 4.1.0)
+      kaminari-actionview (= 1.2.2)
+      kaminari-activerecord (= 1.2.2)
+      kaminari-core (= 1.2.2)
+    kaminari-actionview (1.2.2)
+      actionview
+      kaminari-core (= 1.2.2)
+    kaminari-activerecord (1.2.2)
+      activerecord
+      kaminari-core (= 1.2.2)
+    kaminari-core (1.2.2)
     listen (3.9.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -289,6 +301,7 @@ DEPENDENCIES
   debug
   hotwire-livereload
   importmap-rails
+  kaminari (>= 1.2.2)
   lookbook (>= 2.0)
   puma
   rails (>= 7.0)
