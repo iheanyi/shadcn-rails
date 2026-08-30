@@ -1,11 +1,5 @@
-<%= render(Shadcn::ToggleGroupComponent.new(type: :single, variant: :outline)) do |group| %>
-  <% group.with_item(value: "left") do %>
-    align_left_icon
-  <% end %>
-  <% group.with_item(value: "center") do %>
-    align_center_icon
-  <% end %>
-  <% group.with_item(value: "right") do %>
-    align_right_icon
-  <% end %>
+<%= render Shadcn::ToggleGroup.new(type: :single, variant: :outline) do |group| %>
+  <% group.with_item(value: "left", aria_label: "Left") { "Left" } %>
+  <% group.with_item(value: "center", aria_label: "Center") { "Center" } %>
+  <% group.with_item(value: "right", aria_label: "Right") { "Right" } %>
 <% end %>

@@ -1,5 +1,5 @@
-    <%= render(Shadcn::ScrollAreaComponent.new(class_name: "h-64 w-full max-w-md rounded-md border")) do %>
-      '<pre class="p-4 text-sm"><code>import { ScrollArea } from "@/components/ui/scroll-area"
+<%= render Shadcn::ScrollArea.new(class_name: "h-64 w-full max-w-md rounded-md border") do %>
+  <pre class="p-4 text-sm"><code>import { ScrollArea } from "@/components/ui/scroll-area"
 
 export function ScrollAreaDemo() {
   return (
@@ -16,6 +16,5 @@ export function ScrollAreaDemo() {
       &lt;/div&gt;
     &lt;/ScrollArea&gt;
   )
-}</code></pre>'.html_safe
-    <% end %>
-  <% end %>
+}</code></pre>
+<% end %>

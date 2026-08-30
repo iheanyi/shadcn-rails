@@ -1,3 +1,3 @@
-<%= render(Shadcn::ToggleComponent.new(aria_label: "Toggle bold", disabled: true)) do %>
-  bold_icon
+<%= render Shadcn::Toggle.new(variant: :default, size: :default, pressed: false, disabled: true, aria_label: "Toggle B") do %>
+  B
 <% end %>

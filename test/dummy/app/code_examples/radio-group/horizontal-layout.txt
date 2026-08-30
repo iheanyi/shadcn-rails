@@ -1,5 +1,5 @@
 <div class="flex justify-center">
-  <%= render Shadcn::RadioGroupComponent.new(
+  <%= render Shadcn::RadioGroup.new(
     name: "layout",
     value: "grid",
     orientation: :horizontal
@@ -7,3 +7,5 @@
     <% group.with_item(value: "list", label: "List") %>
     <% group.with_item(value: "grid", label: "Grid") %>
     <% group.with_item(value: "table", label: "Table") %>
+  <% end %>
+</div>

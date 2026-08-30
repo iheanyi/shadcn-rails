@@ -10,8 +10,22 @@ class DummyDocsCatalogTest < ActionDispatch::IntegrationTest
     "omitted for brevity",
     "def default",
     "variant.to_sym",
-    "variant.to_s"
+    "variant.to_s",
+    "with_image",
+    "with_addon",
+    "bold_icon",
+    "italic_icon",
+    "underline_icon",
+    "strikethrough_icon",
+    "align_left_icon",
+    "align_center_icon",
+    "align_right_icon",
+    "fallback_table",
+    "demo_button",
+    "icon_svg",
+    "badge_html"
   ].freeze
+  BARE_RUBY_LOOP_PATTERN = /(\b\d+\.times|\.each(?:_with_index)?|\)\.each)\s+do\b/
 
   def test_docs_pages_do_not_contain_placeholder_copy
     docs_views.each do |view|
@@ -26,6 +40,28 @@ class DummyDocsCatalogTest < ActionDispatch::IntegrationTest
       FORBIDDEN_CODE_EXAMPLE_PATTERNS.each do |pattern|
         refute_includes code, pattern, "#{example.relative_path_from(Rails.root)} should be copy-pasteable ERB"
       end
+    end
+  end
+
+  def test_code_examples_do_not_contain_bare_ruby_loops
+    code_example_files.each do |example|
+      File.readlines(example).each_with_index do |line, index|
+        next unless line.match?(BARE_RUBY_LOOP_PATTERN)
+
+        assert_includes line, "<%", "#{example.relative_path_from(Rails.root)}:#{index + 1} should wrap Ruby loops in ERB tags"
+      end
+    end
+  end
+
+  def test_code_examples_are_balanced_erb
+    code_example_files.each do |example|
+      code = File.read(example)
+      source = ActionView::Template::Handlers::ERB.erb_implementation.new(code, escape: false).src
+
+      RubyVM::InstructionSequence.compile(source)
+      assert true, "#{example.relative_path_from(Rails.root)} compiles as ERB"
+    rescue SyntaxError => error
+      flunk "#{example.relative_path_from(Rails.root)} should compile as ERB: #{error.message.lines.first}"
     end
   end
 

@@ -1,11 +1,13 @@
 <div class="flex flex-wrap gap-4">
   <%= render Shadcn::ToggleGroup.new(type: :single, variant: :default) do |group| %>
-    <% group.with_item(value: "left", aria_label: "Align left") { "Left" } %>
-    <% group.with_item(value: "center", aria_label: "Align center") { "Center" } %>
+    <% group.with_item(value: "left", aria_label: "Left") { "Left" } %>
+    <% group.with_item(value: "center", aria_label: "Center") { "Center" } %>
+    <% group.with_item(value: "right", aria_label: "Right") { "Right" } %>
   <% end %>
-
+  
   <%= render Shadcn::ToggleGroup.new(type: :single, variant: :outline) do |group| %>
-    <% group.with_item(value: "left", aria_label: "Align left") { "Left" } %>
-    <% group.with_item(value: "center", aria_label: "Align center") { "Center" } %>
+    <% group.with_item(value: "left", aria_label: "Left") { "Left" } %>
+    <% group.with_item(value: "center", aria_label: "Center") { "Center" } %>
+    <% group.with_item(value: "right", aria_label: "Right") { "Right" } %>
   <% end %>
 </div>

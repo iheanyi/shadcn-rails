@@ -1,5 +1,5 @@
-<%= render(Shadcn::SelectComponent.new(name: "number", placeholder: "Select a number")) do |select| %>
-  (1..50).each do |i|
+<%= render Shadcn::Select.new(name: "number", placeholder: "Select a number") do |select| %>
+  <% (1..50).each do |i| %>
     <% select.with_item(value: i.to_s) { "Option #{i}" } %>
   <% end %>
 <% end %>

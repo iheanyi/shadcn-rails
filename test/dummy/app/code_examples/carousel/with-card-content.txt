@@ -1,16 +1,18 @@
+<% cards = [
+  { title: "Getting Started", description: "Learn the basics of the framework" },
+  { title: "Components", description: "Explore our component library" },
+  { title: "Theming", description: "Customize colors and styles" }
+] %>
+
 <div class="w-full max-w-lg mx-auto px-12">
-  <%= render Shadcn::CarouselComponent.new do |carousel| %>
+  <%= render Shadcn::Carousel.new do |carousel| %>
     <% carousel.with_slides do |slides| %>
-      <% [
-        { title: "Getting Started", desc: "Learn the basics of the framework" },
-        { title: "Components", desc: "Explore our component library" },
-        { title: "Theming", desc: "Customize colors and styles" }
-      ].each do |card| %>
+      <% cards.each do |card| %>
         <% slides.with_item do %>
-          <%= render Shadcn::CardComponent.new do |c| %>
+          <%= render Shadcn::Card.new do |c| %>
             <% c.with_header do |header| %>
               <% header.with_title { card[:title] } %>
-              <% header.with_description { card[:desc] } %>
+              <% header.with_description { card[:description] } %>
             <% end %>
             <% c.with_content do %>
               <div class="h-24 bg-muted rounded flex items-center justify-center">
@@ -23,3 +25,5 @@
     <% end %>
     <% carousel.with_previous %>
     <% carousel.with_next %>
+  <% end %>
+</div>

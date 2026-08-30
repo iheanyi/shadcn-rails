@@ -1,14 +1,6 @@
-<%= render(Shadcn::ToggleGroupComponent.new(type: :multiple, value: ["bold", "italic"], variant: :outline)) do |group| %>
-  <% group.with_item(value: "bold", pressed: true, aria_label: "Toggle bold") do %>
-    bold_icon
-  <% end %>
-  <% group.with_item(value: "italic", pressed: true, aria_label: "Toggle italic") do %>
-    italic_icon
-  <% end %>
-  <% group.with_item(value: "underline", aria_label: "Toggle underline") do %>
-    underline_icon
-  <% end %>
-  <% group.with_item(value: "strikethrough", aria_label: "Toggle strikethrough") do %>
-    strikethrough_icon
-  <% end %>
+<%= render Shadcn::ToggleGroup.new(type: :multiple, value: %w[bold italic]) do |group| %>
+  <% group.with_item(value: "bold", aria_label: "B") { "B" } %>
+  <% group.with_item(value: "italic", aria_label: "I") { "I" } %>
+  <% group.with_item(value: "underline", aria_label: "U") { "U" } %>
+  <% group.with_item(value: "strikethrough", aria_label: "S") { "S" } %>
 <% end %>
