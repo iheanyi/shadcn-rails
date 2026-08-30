@@ -10,7 +10,15 @@
   <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
   <%= shadcn_theme %>
   <style>
-    <%= File.read(Shadcn::Rails::Registry.gem_path("app/assets/stylesheets/shadcn/components.css")) %>
+    <%= File.read(Shadcn::Rails::Registry.gem_path("app/assets/stylesheets/shadcn/components.css")).html_safe %>
+
+    @keyframes caret-blink {
+      0%, 70%, 100% { opacity: 1; }
+      20%, 50% { opacity: 0; }
+    }
+    .animate-caret-blink {
+      animation: caret-blink 1.2s ease-out infinite;
+    }
 
     /* Code block styling */
     .code-block {

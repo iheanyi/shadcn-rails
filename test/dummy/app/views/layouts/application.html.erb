@@ -778,7 +778,7 @@
   </script>
   <%= shadcn_theme %>
   <style>
-    <%= File.read(Shadcn::Rails::Registry.gem_path("app/assets/stylesheets/shadcn/components.css")) %>
+    <%= File.read(Shadcn::Rails::Registry.gem_path("app/assets/stylesheets/shadcn/components.css")).html_safe %>
 
     /* tailwindcss-animate utilities */
     @keyframes enter {

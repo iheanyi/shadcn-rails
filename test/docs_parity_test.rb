@@ -82,6 +82,8 @@ class DocsParityTest < ViewComponent::TestCase
     assert_includes layout, 'javascript_include_tag "application"'
     assert_includes layout, "shadcn_theme"
     refute_includes layout, "tailwind.config"
+    assert_includes layout, "@keyframes caret-blink"
+    assert_includes layout, ".animate-caret-blink"
   end
 
   def test_dummy_app_layouts_link_compiled_tailwind_stylesheet
@@ -116,7 +118,7 @@ class DocsParityTest < ViewComponent::TestCase
 
   def assert_compiled_tailwind_and_components_css(layout)
     assert_includes layout, 'stylesheet_link_tag "tailwind"'
-    assert_includes layout, "components.css"
+    assert_includes layout, 'File.read(Shadcn::Rails::Registry.gem_path("app/assets/stylesheets/shadcn/components.css")).html_safe'
     refute_includes layout, "cdn.tailwindcss.com"
   end
 
