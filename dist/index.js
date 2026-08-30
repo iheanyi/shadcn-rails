@@ -6771,7 +6771,7 @@ class SonnerController extends stimulus.Controller {
         if (!this.hasViewportTarget)
             return [];
         return Array.from(this.viewportTarget.children).filter((child) => {
-            return child instanceof HTMLElement && this.isToastElement(child);
+            return child instanceof HTMLElement && this.isToastElement(child) && child.dataset.state !== "closed";
         });
     }
     findToastElement(id) {

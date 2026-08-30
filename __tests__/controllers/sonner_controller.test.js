@@ -108,6 +108,39 @@ describe("SonnerController", () => {
     expect(toastElements[1]).toHaveTextContent("Second")
   })
 
+  test("does not count closing toasts toward the configured visible toast limit", async () => {
+    cleanupController(application)
+    const setup = await setupController(SonnerController, toasterHtml({ limit: 2 }), "shadcn--sonner")
+    application = setup.application
+    controller = setup.controller
+
+    jest.useFakeTimers()
+    const firstId = toast("First", { duration: 0 })
+    const secondId = toast("Second", { duration: 0 })
+
+    toast.dismiss(secondId)
+    const thirdId = toast("Third", { duration: 0 })
+    jest.advanceTimersByTime(250)
+
+    expect(document.querySelector(`[data-shadcn-sonner-toast-id="${firstId}"]`)).not.toBeNull()
+    expect(document.querySelector(`[data-shadcn-sonner-toast-id="${secondId}"]`)).toBeNull()
+    expect(document.querySelector(`[data-shadcn-sonner-toast-id="${thirdId}"]`)).not.toBeNull()
+  })
+
+  test("reusing an id creates a new toast when the previous toast is closing", () => {
+    jest.useFakeTimers()
+    const id = "replace-me"
+
+    toast("Original", { id, duration: 0 })
+    toast.dismiss(id)
+    toast("Replacement", { id, duration: 0 })
+    jest.advanceTimersByTime(250)
+
+    const toastElement = document.querySelector(`[data-shadcn-sonner-toast-id="${id}"]`)
+    expect(toastElement).not.toBeNull()
+    expect(toastElement).toHaveTextContent("Replacement")
+  })
+
   test("pauses and resumes auto-dismiss while hovered", () => {
     jest.useFakeTimers()
     const id = toast("Hover me", { duration: 100 })

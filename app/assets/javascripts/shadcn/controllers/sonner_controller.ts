@@ -611,7 +611,7 @@ export default class SonnerController extends Controller<HTMLElement> {
     if (!this.hasViewportTarget) return []
 
     return Array.from(this.viewportTarget.children).filter((child): child is HTMLElement => {
-      return child instanceof HTMLElement && this.isToastElement(child)
+      return child instanceof HTMLElement && this.isToastElement(child) && child.dataset.state !== "closed"
     })
   }
 
