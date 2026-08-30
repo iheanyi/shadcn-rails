@@ -93,6 +93,8 @@ export default class SonnerController extends Controller<HTMLElement> {
     private toastClassName;
     private ensureCloseButton;
     private ensureBodyElement;
+    private removeNonControlContent;
+    private isToastControlNode;
     private syncActionButton;
     private buildActionButton;
     private buildCloseButton;

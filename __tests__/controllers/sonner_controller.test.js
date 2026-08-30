@@ -149,6 +149,28 @@ describe("SonnerController", () => {
     expect(document.querySelectorAll("[data-shadcn-sonner-toast-id]")).toHaveLength(2)
   })
 
+  test("reopened existing toasts still enforce the visible limit", async () => {
+    cleanupController(application)
+    const setup = await setupController(SonnerController, toasterHtml({ limit: 1 }), "shadcn--sonner")
+    application = setup.application
+    controller = setup.controller
+
+    jest.useFakeTimers()
+    const firstId = toast("First", { duration: 0 })
+    const secondId = toast("Second", { duration: 0 })
+    jest.advanceTimersByTime(450)
+
+    expect(document.querySelector(`[data-shadcn-sonner-toast-id="${firstId}"]`)).toBeNull()
+    expect(document.querySelector(`[data-shadcn-sonner-toast-id="${secondId}"]`)).not.toBeNull()
+
+    toast({ id: firstId, title: "First reopened", duration: 0 })
+    jest.advanceTimersByTime(450)
+
+    expect(document.querySelector(`[data-shadcn-sonner-toast-id="${firstId}"]`)).not.toBeNull()
+    expect(document.querySelector(`[data-shadcn-sonner-toast-id="${secondId}"]`)).toBeNull()
+    expect(document.querySelectorAll("[data-shadcn-sonner-toast-id]")).toHaveLength(1)
+  })
+
   test("updating a closing toast cancels its pending removal", () => {
     jest.useFakeTimers()
     const id = toast("Saving customer", { duration: 0 })
@@ -193,13 +215,15 @@ describe("SonnerController", () => {
     expect(toastElement.querySelector("[data-sonner-close]")).not.toBeNull()
   })
 
-  test("updating server toast markup creates a body without replacing close button", async () => {
+  test("updating server toast markup creates a body without replacing close button or keeping stale text", async () => {
     const id = "server-toast"
     const toastElement = document.createElement("li")
     toastElement.dataset.sonnerToast = "true"
     toastElement.dataset.shadcnSonnerToastId = id
     toastElement.dataset.duration = "0"
-    toastElement.innerHTML = '<button type="button" data-sonner-close="true" data-action="click->shadcn--sonner#close">Close</button>'
+    toastElement.append("Failed to save changes.")
+    toastElement.insertAdjacentHTML("beforeend", "<span>Retry from the customer profile.</span>")
+    toastElement.insertAdjacentHTML("beforeend", '<button type="button" data-sonner-close="true" data-action="click->shadcn--sonner#close">Close</button>')
 
     controller.viewportTarget.appendChild(toastElement)
     await nextFrame()
@@ -214,6 +238,8 @@ describe("SonnerController", () => {
     expect(bodyElement).toHaveTextContent("Maya Chen was updated.")
     expect(closeButton).not.toBeNull()
     expect(closeButton).toHaveTextContent("Close")
+    expect(toastElement).not.toHaveTextContent("Failed to save changes.")
+    expect(toastElement).not.toHaveTextContent("Retry from the customer profile.")
   })
 
   test("pauses and resumes auto-dismiss while hovered", () => {

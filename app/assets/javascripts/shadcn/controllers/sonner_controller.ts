@@ -234,6 +234,7 @@ export default class SonnerController extends Controller<HTMLElement> {
       this.updateToastElement(existingToast, options)
       this.placeToastAtOrigin(existingToast)
       this.startTimer(existingToast, normalizeDuration(options.duration, this.durationValue))
+      this.enforceLimit()
       return id
     }
 
@@ -561,7 +562,21 @@ export default class SonnerController extends Controller<HTMLElement> {
       toastElement.prepend(bodyElement)
     }
 
+    this.removeNonControlContent(toastElement, bodyElement)
+
     return bodyElement
+  }
+
+  private removeNonControlContent(toastElement: HTMLElement, bodyElement: HTMLElement): void {
+    Array.from(toastElement.childNodes).forEach((node) => {
+      if (node === bodyElement || this.isToastControlNode(node)) return
+
+      node.remove()
+    })
+  }
+
+  private isToastControlNode(node: ChildNode): boolean {
+    return node instanceof Element && node.matches("[data-sonner-action], [data-sonner-close]")
   }
 
   private syncActionButton(toastElement: HTMLElement, id: string, actionOption: ToastAction | string | undefined): void {

@@ -6450,6 +6450,7 @@ class SonnerController extends stimulus.Controller {
             this.updateToastElement(existingToast, options);
             this.placeToastAtOrigin(existingToast);
             this.startTimer(existingToast, normalizeDuration(options.duration, this.durationValue));
+            this.enforceLimit();
             return id;
         }
         const element = this.buildToastElement({ ...options, id });
@@ -6729,7 +6730,18 @@ class SonnerController extends stimulus.Controller {
         else {
             toastElement.prepend(bodyElement);
         }
+        this.removeNonControlContent(toastElement, bodyElement);
         return bodyElement;
+    }
+    removeNonControlContent(toastElement, bodyElement) {
+        Array.from(toastElement.childNodes).forEach((node) => {
+            if (node === bodyElement || this.isToastControlNode(node))
+                return;
+            node.remove();
+        });
+    }
+    isToastControlNode(node) {
+        return node instanceof Element && node.matches("[data-sonner-action], [data-sonner-close]");
     }
     syncActionButton(toastElement, id, actionOption) {
         const existingAction = toastElement.querySelector("[data-sonner-action]");
