@@ -78,16 +78,20 @@ module Shadcn
         return @sort_url_builder.call(column.sort_key, next_direction)
       end
 
-      shadcn_data_table_sort_url(
-        column.sort_key,
+      options = {
         params: @params,
         path: @path,
         sort_param: @sort_param,
         dir_param: @dir_param,
         page_param: @page_param,
-        reset_page: @reset_page_on_sort,
-        current_sort: @sort,
-        current_dir: @dir
+        reset_page: @reset_page_on_sort
+      }
+      options[:current_sort] = @sort unless @sort.nil?
+      options[:current_dir] = @dir unless @dir.nil?
+
+      shadcn_data_table_sort_url(
+        column.sort_key,
+        **options
       )
     end
 

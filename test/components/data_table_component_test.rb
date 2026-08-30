@@ -94,6 +94,24 @@ class DataTableComponentTest < ViewComponent::TestCase
     assert_includes href, "dir=desc"
   end
 
+  def test_sortable_headers_cycle_from_params_when_component_sort_is_not_set
+    render_inline(
+      Shadcn::DataTableComponent.new(
+        rows: invoices,
+        params: { "q" => "paid", "sort" => "name", "dir" => "asc" },
+        path: "/invoices"
+      )
+    ) do |table|
+      table.with_column(:name, label: "Customer", sortable: true)
+    end
+
+    customer_header = page.find("th", text: "Customer")
+    href = customer_header.find("a")["href"]
+    assert_includes href, "q=paid"
+    assert_includes href, "sort=name"
+    assert_includes href, "dir=desc"
+  end
+
   def test_descending_sort_link_cycles_to_unsorted_url
     render_inline(
       Shadcn::DataTableComponent.new(
