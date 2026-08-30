@@ -233,7 +233,7 @@ export default class DatePickerController extends Controller<HTMLElement> {
         continue
       }
 
-      let classes = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center rounded-md focus:outline-none focus:ring-1 focus:ring-ring"
+      let classes = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center rounded-md outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
 
       if (isDisabled) {
         classes += " text-muted-foreground opacity-50 cursor-not-allowed"

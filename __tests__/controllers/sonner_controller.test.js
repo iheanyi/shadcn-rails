@@ -46,6 +46,24 @@ describe("SonnerController", () => {
     expect(toastElement.querySelector("[data-sonner-close]")).not.toBeNull()
   })
 
+  test("generated close button uses ghost hover and keyboard focus styles", () => {
+    const id = toast("Closable", { duration: 0 })
+    const toastElement = document.querySelector(`[data-shadcn-sonner-toast-id="${id}"]`)
+    const closeButton = toastElement.querySelector("[data-sonner-close]")
+
+    expect(closeButton.classList).toContain("border-0")
+    expect(closeButton.classList).toContain("bg-transparent")
+    expect(closeButton.classList).toContain("hover:bg-accent")
+    expect(closeButton.classList).toContain("hover:text-accent-foreground")
+    expect(closeButton.classList).toContain("focus-visible:ring-2")
+    expect(closeButton.classList).toContain("focus-visible:opacity-100")
+    expect(closeButton.classList).toContain("focus-visible:ring-ring")
+    expect(closeButton.classList).not.toContain("focus:ring-1")
+    expect(closeButton.classList).not.toContain("focus:outline-none")
+    expect(closeButton.classList).not.toContain("ring-offset-2")
+    expect(closeButton.classList).not.toContain("ring-offset-background")
+  })
+
   test("toast.dismiss(id) removes the selected toast", () => {
     jest.useFakeTimers()
     const keepId = toast("Keep", { duration: 0 })

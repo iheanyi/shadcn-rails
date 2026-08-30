@@ -71,6 +71,25 @@ class ToastComponentTest < ViewComponent::TestCase
     assert_selector "button[data-action='click->shadcn--toast#close']"
   end
 
+  def test_close_button_uses_ghost_hover_and_keyboard_focus_styles
+    render_inline(Shadcn::ToastComponent.new) do |toast|
+      toast.with_title { "Notice" }
+    end
+
+    classes = page.find("button[aria-label='Close']")["class"].split
+    assert_includes classes, "border-0"
+    assert_includes classes, "bg-transparent"
+    assert_includes classes, "hover:bg-accent"
+    assert_includes classes, "hover:text-accent-foreground"
+    assert_includes classes, "focus-visible:ring-2"
+    assert_includes classes, "focus-visible:opacity-100"
+    assert_includes classes, "focus-visible:ring-ring"
+    refute_includes classes, "focus:ring-1"
+    refute_includes classes, "focus:outline-none"
+    refute_includes classes, "ring-offset-2"
+    refute_includes classes, "ring-offset-background"
+  end
+
   def test_renders_with_duration_value
     render_inline(Shadcn::ToastComponent.new(duration: 3000)) do |toast|
       toast.with_title { "Quick" }

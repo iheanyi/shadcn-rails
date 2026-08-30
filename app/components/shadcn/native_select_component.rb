@@ -34,7 +34,7 @@ module Shadcn
     WRAPPER_CLASSES = "relative"
 
     # Native select element classes
-    SELECT_CLASSES = "h-9 w-full cursor-pointer appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+    SELECT_CLASSES = "h-9 w-full cursor-pointer appearance-none rounded-md border border-input bg-transparent pl-3 pr-8 text-sm shadow-sm transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50"
 
     # Chevron icon classes (positioned absolutely)
     CHEVRON_CLASSES = "pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"

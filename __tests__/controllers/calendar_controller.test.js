@@ -223,6 +223,18 @@ describe("CalendarController", () => {
       expect(dayButtons.length).toBeLessThanOrEqual(42)
     })
 
+    test("renders day buttons with focus-visible ring styles", () => {
+      controller.render()
+
+      const grid = element.querySelector('[data-calendar-target="grid"]')
+      const dayButton = grid.querySelector('button[data-date]')
+      expect(dayButton.classList).toContain("focus-visible:border-ring")
+      expect(dayButton.classList).toContain("focus-visible:ring-[3px]")
+      expect(dayButton.classList).toContain("focus-visible:ring-ring/50")
+      expect(dayButton.classList).not.toContain("focus:ring-1")
+      expect(dayButton.classList).not.toContain("focus:outline-none")
+    })
+
     test("marks today with special styling", () => {
       // Set current month to today's month
       const today = new Date()

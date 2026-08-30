@@ -252,7 +252,7 @@ module Shadcn
 
       return empty_day if is_outside && !@show_outside_days
 
-      classes = ["h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center rounded-md cursor-pointer hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-1 focus:ring-ring"]
+      classes = ["h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center rounded-md cursor-pointer hover:bg-accent hover:text-accent-foreground outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"]
       classes << "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground" if is_selected
       classes << "bg-accent text-accent-foreground" if is_today && !is_selected
       classes << "text-muted-foreground opacity-50" if is_outside

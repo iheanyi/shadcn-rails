@@ -84,6 +84,18 @@ class DialogComponentTest < ViewComponent::TestCase
     html = result.to_html
     assert html.include?("aria-label=\"Close\"")
     assert html.include?("click->shadcn--dialog#close")
+
+    close_button_match = html.match(/<button.*?aria-label="Close".*?>/m)
+    assert close_button_match
+
+    close_classes = close_button_match[0][/class="([^"]*)"/, 1].split
+    assert_includes close_classes, "hover:bg-accent"
+    assert_includes close_classes, "hover:text-accent-foreground"
+    assert_includes close_classes, "focus-visible:ring-2"
+    refute_includes close_classes, "focus:ring-2"
+    refute_includes close_classes, "ring-offset-2"
+    refute_includes close_classes, "ring-offset-background"
+    refute close_classes.any? { |class_name| class_name.start_with?("data-[state=open]:") }
   end
 
   def test_renders_header_with_title

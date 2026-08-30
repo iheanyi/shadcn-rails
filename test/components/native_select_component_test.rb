@@ -102,6 +102,19 @@ class NativeSelectComponentTest < ViewComponent::TestCase
     assert_selector "select.border"
   end
 
+  def test_select_uses_v4_focus_visible_ring_styles
+    render_inline(Shadcn::NativeSelectComponent.new(name: "test")) do |select|
+      select.with_option(value: "1") { "One" }
+    end
+
+    classes = page.find("select[name='test']")["class"].split
+    assert_includes classes, "focus-visible:border-ring"
+    assert_includes classes, "focus-visible:ring-[3px]"
+    assert_includes classes, "focus-visible:ring-ring/50"
+    refute_includes classes, "focus:ring-1"
+    refute_includes classes, "focus:ring-ring"
+  end
+
   def test_renders_with_custom_class
     render_inline(Shadcn::NativeSelectComponent.new(name: "test", class_name: "my-select")) do |select|
       select.with_option(value: "1") { "One" }
