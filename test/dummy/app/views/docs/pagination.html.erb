@@ -11,7 +11,6 @@
 <% end %>
 
 <div class="space-y-8">
-  <!-- Header -->
   <div class="space-y-2">
     <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Pagination</h1>
     <p class="text-xl text-muted-foreground">Pagination with page navigation, next and previous links.</p>
@@ -22,36 +21,34 @@
     </div>
   </div>
 
-  <!-- Preview -->
   <%= showcase("pagination", :default) %>
 
-  <!-- Installation -->
   <div id="installation" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
     <p class="leading-7">Add the component to your project:</p>
     <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:add pagination" %>
   </div>
 
-  <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="leading-7">There are three ways to use the Pagination component:</p>
+    <p class="leading-7">There are three ways to use the Pagination component.</p>
 
     <h3 class="text-lg font-semibold mt-4">1. Slot-based API (Full Control)</h3>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <p class="text-sm text-muted-foreground">Use slots when you want to decide every link and ellipsis yourself.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/pagination/slot_based.txt")) %>
 
     <h3 class="text-lg font-semibold mt-6">2. Collection-based API (Kaminari/will_paginate)</h3>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <p class="text-sm text-muted-foreground">Pass a paginated collection that exposes Kaminari or will_paginate pagination methods.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/pagination/kaminari_view.txt")) %>
 
     <h3 class="text-lg font-semibold mt-6">3. Pagy-based API</h3>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <p class="text-sm text-muted-foreground">Pass a Pagy object, or a compatible object that responds to page, pages, prev, and next.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/pagination/pagy_view.txt")) %>
   </div>
 
-  <!-- Examples -->
   <div id="examples" class="space-y-8">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
 
-    <!-- Basic Pagination -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Basic</h3>
       <%= render "docs/demo_card" do %>
@@ -65,9 +62,9 @@
           <% end %>
         <% end %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/pagination/basic.txt")) %>
     </div>
 
-    <!-- With Ellipsis -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">With Ellipsis</h3>
       <%= render "docs/demo_card" do %>
@@ -85,10 +82,9 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/pagination/with_ellipsis.txt")) %>
     </div>
 
-    <!-- Disabled Navigation -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Disabled Navigation</h3>
       <p class="text-sm text-muted-foreground">On the first or last page, disable the previous/next buttons:</p>
@@ -103,72 +99,121 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/pagination/disabled_navigation.txt")) %>
     </div>
+
+    <%= showcase("pagination", :with_pagy) %>
+    <%= showcase("pagination", :with_kaminari_collection) %>
   </div>
 
-  <!-- Gem Integration -->
   <div id="gem-integration" class="space-y-8">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Gem Integration</h2>
     <p class="leading-7">
-      The pagination component works seamlessly with popular pagination gems.
-      Just pass your paginated collection or Pagy object directly.
+      The Pagination component accepts real pagination objects from Pagy, Kaminari, and will_paginate. The live demos below
+      use tiny duck-typed objects in the dummy app, but the snippets show the code you would put in a Rails view with each gem.
+    </p>
+    <p class="text-sm text-muted-foreground">
+      Demo data: showing page <%= @pagination_page.current_page %> of <%= @pagination_page.total_pages %> for a fake 50-post list.
     </p>
 
-    <!-- Kaminari -->
-    <div class="space-y-4">
-      <h3 class="text-lg font-semibold">Kaminari</h3>
-      <p class="text-sm text-muted-foreground">
-        <a href="https://github.com/kaminari/kaminari" target="_blank" class="underline hover:text-foreground">Kaminari</a>
-        is the most popular pagination gem for Rails.
-      </p>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
-    </div>
-
-    <!-- will_paginate -->
-    <div class="space-y-4">
-      <h3 class="text-lg font-semibold">will_paginate</h3>
-      <p class="text-sm text-muted-foreground">
-        <a href="https://github.com/mislav/will_paginate" target="_blank" class="underline hover:text-foreground">will_paginate</a>
-        is a classic pagination library.
-      </p>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
-    </div>
-
-    <!-- Pagy -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Pagy</h3>
       <p class="text-sm text-muted-foreground">
         <a href="https://github.com/ddnexus/pagy" target="_blank" class="underline hover:text-foreground">Pagy</a>
-        is the fastest pagination gem with the smallest memory footprint.
+        objects expose page, pages, prev, and next. Pass the Pagy object with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">pagy:</code>.
       </p>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/demo_card" do %>
+        <ol class="mb-4 grid gap-2 text-sm sm:grid-cols-2">
+          <% @pagination_items.each do |item| %>
+            <li class="rounded-md border bg-card px-3 py-2"><%= item %></li>
+          <% end %>
+        </ol>
+        <%= render Shadcn::PaginationComponent.new(
+          pagy: @pagination_pagy,
+          url_builder: ->(page) { docs_component_path(slug: "pagination", page: page) }
+        ) %>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/pagination/pagy_view.txt")) %>
     </div>
 
-    <!-- Custom URL Builder -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Kaminari</h3>
+      <p class="text-sm text-muted-foreground">
+        <a href="https://github.com/kaminari/kaminari" target="_blank" class="underline hover:text-foreground">Kaminari</a>
+        collections expose current_page, total_pages, prev_page, and next_page. Pass the paginated collection with
+        <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">collection:</code>.
+      </p>
+      <%= render "docs/demo_card" do %>
+        <ol class="mb-4 grid gap-2 text-sm sm:grid-cols-2">
+          <% @pagination_items.each do |item| %>
+            <li class="rounded-md border bg-card px-3 py-2"><%= item %></li>
+          <% end %>
+        </ol>
+        <%= render Shadcn::PaginationComponent.new(
+          collection: @pagination_page,
+          url_builder: ->(page) { docs_component_path(slug: "pagination", page: page) }
+        ) %>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/pagination/kaminari_view.txt")) %>
+    </div>
+
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">will_paginate</h3>
+      <p class="text-sm text-muted-foreground">
+        <a href="https://github.com/mislav/will_paginate" target="_blank" class="underline hover:text-foreground">will_paginate</a>
+        collections expose current_page, total_pages, previous_page, and next_page. Use the same
+        <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">collection:</code> option.
+      </p>
+      <%= render "docs/demo_card" do %>
+        <ol class="mb-4 grid gap-2 text-sm sm:grid-cols-2">
+          <% @pagination_items.each do |item| %>
+            <li class="rounded-md border bg-card px-3 py-2"><%= item %></li>
+          <% end %>
+        </ol>
+        <%= render Shadcn::PaginationComponent.new(
+          collection: @pagination_will_paginate,
+          url_builder: ->(page) { docs_component_path(slug: "pagination", page: page) }
+        ) %>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/pagination/will_paginate_view.txt")) %>
+    </div>
+
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Custom URL Builder</h3>
       <p class="text-sm text-muted-foreground">
         The <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">url_builder</code> lambda receives the page number
-        and should return the URL for that page. This gives you full control over URL generation.
+        and should return the URL for that page. Use it to preserve filters, sorting, anchors, or nested resource paths.
       </p>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/demo_card" do %>
+        <ol class="mb-4 grid gap-2 text-sm sm:grid-cols-2">
+          <% @pagination_items.each do |item| %>
+            <li class="rounded-md border bg-card px-3 py-2"><%= item %></li>
+          <% end %>
+        </ol>
+        <%= render Shadcn::PaginationComponent.new(
+          collection: @pagination_page,
+          url_builder: ->(page) { docs_component_path(slug: "pagination", page: page, filter: "published") }
+        ) %>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/pagination/custom_url_builder.txt")) %>
     </div>
 
-    <!-- Window Size -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Window Size</h3>
       <p class="text-sm text-muted-foreground">
         Control how many pages are shown around the current page with the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">window</code> option.
       </p>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::PaginationComponent.new(
+          collection: @pagination_page,
+          window: 1,
+          url_builder: ->(page) { docs_component_path(slug: "pagination", page: page) }
+        ) %>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/pagination/window_size.txt")) %>
     </div>
   </div>
 
-  <!-- API Reference -->
   <div id="api-reference">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
 
@@ -216,7 +261,6 @@
     </div>
   </div>
 
-  <!-- Accessibility -->
   <div class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
     <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">

@@ -62,4 +62,48 @@ class PaginationComponentPreview < ViewComponent::Preview
       end
     end
   end
+
+  # @label With Pagy
+  # Pagy-style pagination object using the pagy: API.
+  def with_pagy
+    pagy = PreviewPagy.new(page: 3, pages: 10)
+
+    render(Shadcn::PaginationComponent.new(
+      pagy: pagy,
+      url_builder: ->(page) { "/docs/components/pagination?page=#{page}" }
+    ))
+  end
+
+  # @label With Kaminari Collection
+  # Kaminari/will_paginate-style collection using the collection: API.
+  def with_kaminari_collection
+    collection = PreviewCollection.new(current_page: 4, total_pages: 10)
+
+    render(Shadcn::PaginationComponent.new(
+      collection: collection,
+      url_builder: ->(page) { "/docs/components/pagination?page=#{page}" }
+    ))
+  end
+
+  private
+
+  PreviewPagy = Struct.new(:page, :pages, keyword_init: true) do
+    def prev
+      page > 1 ? page - 1 : nil
+    end
+
+    def next
+      page < pages ? page + 1 : nil
+    end
+  end
+
+  PreviewCollection = Struct.new(:current_page, :total_pages, keyword_init: true) do
+    def prev_page
+      current_page > 1 ? current_page - 1 : nil
+    end
+
+    def next_page
+      current_page < total_pages ? current_page + 1 : nil
+    end
+  end
 end
