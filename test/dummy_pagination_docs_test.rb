@@ -18,6 +18,10 @@ class DummyPaginationDocsTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "pagy: @pagy"
     assert_includes response.body, "collection: @posts"
     assert_includes response.body, "url_builder:"
+    assert_includes response.body, "content.with_item(href: posts_path(page: 2), active: true)"
+    assert_includes response.body, "content.with_ellipse"
+    assert_includes response.body, "content.with_previous(disabled: true)"
+    assert_includes response.body, "window: 1"
     refute_includes response.body, PLACEHOLDER_COPY
   end
 

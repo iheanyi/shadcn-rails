@@ -1,0 +1,13 @@
+<%= render Shadcn::PaginationComponent.new do |pagination| %>
+  <% pagination.with_pagination_content do |content| %>
+    <% content.with_previous(href: posts_path(page: 4)) %>
+    <% content.with_item(href: posts_path(page: 1)) { "1" } %>
+    <% content.with_ellipse %>
+    <% content.with_item(href: posts_path(page: 4)) { "4" } %>
+    <% content.with_item(href: posts_path(page: 5), active: true) { "5" } %>
+    <% content.with_item(href: posts_path(page: 6)) { "6" } %>
+    <% content.with_ellipse %>
+    <% content.with_item(href: posts_path(page: 10)) { "10" } %>
+    <% content.with_next_page(href: posts_path(page: 6)) %>
+  <% end %>
+<% end %>
