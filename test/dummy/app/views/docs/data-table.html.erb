@@ -127,6 +127,8 @@
     <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/data-table/default.txt")) %>
   </div>
 
+  <%= showcase("data-table", :default) %>
+
   <div id="controller-recipe" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Controller Recipe</h2>
     <p class="leading-7">
