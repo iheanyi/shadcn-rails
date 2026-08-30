@@ -256,9 +256,16 @@ class DocsController < ApplicationController
     "toast" => {
       name: "Toast",
       category: "Feedback",
-      description: "A succinct message that is displayed temporarily.",
+      description: "Low-level toast markup kept for compatibility.",
       has_stimulus: true,
       controller: "shadcn--toast"
+    },
+    "sonner" => {
+      name: "Sonner",
+      category: "Feedback",
+      description: "Recommended toast API with stacking, positions, swipe dismissal, and Turbo Stream support.",
+      has_stimulus: true,
+      controller: "shadcn--sonner"
     },
 
     # Overlays

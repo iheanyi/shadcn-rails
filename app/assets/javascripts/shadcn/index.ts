@@ -41,6 +41,7 @@ import ScrollAreaController from "./controllers/scroll_area_controller"
 import SelectController from "./controllers/select_controller"
 import SheetController from "./controllers/sheet_controller"
 import SliderController from "./controllers/slider_controller"
+import SonnerController, { dismiss, toast } from "./controllers/sonner_controller"
 import SwitchController from "./controllers/switch_controller"
 import TabsController from "./controllers/tabs_controller"
 import ToastController from "./controllers/toast_controller"
@@ -88,6 +89,7 @@ export {
   SelectController,
   SheetController,
   SliderController,
+  SonnerController,
   SwitchController,
   TabsController,
   ToastController,
@@ -95,6 +97,8 @@ export {
   ToggleGroupController,
   TooltipController,
   SidebarController,
+  toast,
+  dismiss,
   // Utilities
   positionFloating,
   positionAtPoint
@@ -127,6 +131,7 @@ export const controllers: ShadcnControllerMap = {
   "shadcn--select": SelectController,
   "shadcn--sheet": SheetController,
   "shadcn--slider": SliderController,
+  "shadcn--sonner": SonnerController,
   "shadcn--switch": SwitchController,
   "shadcn--tabs": TabsController,
   "shadcn--toast": ToastController,

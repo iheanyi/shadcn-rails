@@ -28,6 +28,7 @@ export type ShadcnControllerIdentifier =
   | "shadcn--select"
   | "shadcn--sheet"
   | "shadcn--slider"
+  | "shadcn--sonner"
   | "shadcn--switch"
   | "shadcn--tabs"
   | "shadcn--toast"

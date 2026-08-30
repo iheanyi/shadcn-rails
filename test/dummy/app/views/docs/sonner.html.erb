@@ -1,0 +1,142 @@
+<% content_for :title, "Sonner" %>
+
+<% content_for :toc do %>
+  <div class="flex flex-col space-y-2 text-sm">
+    <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
+    <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
+    <a href="#examples" class="text-muted-foreground hover:text-foreground">Examples</a>
+    <a href="#turbo-streams" class="text-muted-foreground hover:text-foreground">Turbo Streams</a>
+    <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
+    <a href="#accessibility" class="text-muted-foreground hover:text-foreground">Accessibility</a>
+  </div>
+<% end %>
+
+<div class="space-y-8">
+  <div class="space-y-2">
+    <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Sonner</h1>
+    <p class="text-xl text-muted-foreground">An opinionated toast manager for Rails apps.</p>
+    <div class="flex flex-wrap items-center gap-2 mt-4">
+      <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+        Recommended
+      </span>
+      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
+        Stimulus Controller
+      </span>
+    </div>
+  </div>
+
+  <%= showcase("sonner", :default) %>
+
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the Sonner unit to your app:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:add sonner" %>
+  </div>
+
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <p class="leading-7">
+      Render the toaster once, usually in your application layout. Use Sonner for new toast work.
+      The older Toast component remains available for low-level markup and compatibility.
+    </p>
+    <%= render "docs/code_example", language: "erb", code: <<~ERB.strip
+      <%= render Shadcn::SonnerComponent.new %>
+    ERB
+    %>
+    <%= render "docs/code_example", language: "javascript", code: <<~JS.strip
+      import { toast } from "shadcn-rails-stimulus"
+
+      toast("Event has been created", {
+        description: "Friday, February 10, 2023 at 5:57 PM",
+        variant: "success",
+        action: {
+          label: "Undo",
+          onClick: () => undoCreate()
+        }
+      })
+
+      const id = toast("Uploading file", { duration: 0 })
+      toast.dismiss(id)
+    JS
+    %>
+  </div>
+
+  <div id="examples" class="space-y-8">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Examples</h2>
+
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Positions</h3>
+      <p class="text-sm text-muted-foreground">Choose where the viewport is pinned.</p>
+      <%= showcase("sonner", :top_center) %>
+    </div>
+
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Stack limit</h3>
+      <p class="text-sm text-muted-foreground">Keep the visible stack small by setting a limit.</p>
+      <%= showcase("sonner", :with_limit) %>
+    </div>
+
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Persistent toast</h3>
+      <p class="text-sm text-muted-foreground">Set duration to 0 for a toast that only closes when dismissed.</p>
+      <%= showcase("sonner", :no_auto_dismiss) %>
+    </div>
+  </div>
+
+  <div id="turbo-streams" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Turbo Streams</h2>
+    <p class="leading-7">
+      The viewport is persistent and has a stable id, so a Turbo Stream can append server-rendered toast markup.
+      The Sonner controller initializes appended nodes, applies missing classes, starts timers, and adds a dismiss button.
+    </p>
+    <%= render "docs/code_example", language: "erb", code: <<~ERB.strip
+      <%= turbo_stream.append "shadcn-sonner-viewport" do %>
+        <li data-sonner-toast="true"
+            data-variant="destructive"
+            data-duration="8000">
+          Failed to save changes.
+        </li>
+      <% end %>
+    ERB
+    %>
+  </div>
+
+  <div id="api-reference" class="space-y-6">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">API Reference</h2>
+
+    <div>
+      <h3 class="text-lg font-semibold mb-3">SonnerComponent</h3>
+      <%= render "docs/props_table", title: nil, props: [
+        { name: "position", type: "Symbol, String", default: ":bottom_right", description: "Viewport position: top_left, top_center, top_right, bottom_left, bottom_center, bottom_right" },
+        { name: "limit", type: "Integer", default: "3", description: "Maximum number of visible toasts" },
+        { name: "duration", type: "Integer", default: "4000", description: "Default auto-dismiss duration in milliseconds. Use 0 to disable auto-dismiss" },
+        { name: "id", type: "String", default: "shadcn-sonner-viewport", description: "Viewport id used by Turbo Stream append actions" },
+        { name: "viewport_class_name", type: "String", default: "nil", description: "Additional classes for the fixed viewport" },
+        { name: "persistent", type: "Boolean", default: "true", description: "Adds data-turbo-permanent to the viewport" }
+      ] %>
+    </div>
+
+    <div>
+      <h3 class="text-lg font-semibold mb-3">toast(input, options)</h3>
+      <%= render "docs/props_table", title: nil, props: [
+        { name: "id", type: "String, Number", default: "generated", description: "Reuse an id to update an existing toast" },
+        { name: "title", type: "String", default: "nil", description: "Toast title. Passing a string as the first argument sets this value" },
+        { name: "description", type: "String", default: "nil", description: "Toast body text" },
+        { name: "variant", type: "String", default: "default", description: "default, success, destructive, warning, or info" },
+        { name: "duration", type: "Number", default: "toaster duration", description: "Per-toast auto-dismiss duration in milliseconds" },
+        { name: "action", type: "String, Object", default: "nil", description: "Action label or { label, onClick } object" },
+        { name: "position", type: "String", default: "toaster position", description: "Routes the toast to a toaster with the matching position when present" }
+      ] %>
+    </div>
+  </div>
+
+  <div id="accessibility" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
+    <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
+      <li>The viewport uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="region"</code> and an accessible label.</li>
+      <li>Each toast uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="status"</code> and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-live="polite"</code>.</li>
+      <li>Auto-dismiss pauses while the user hovers over a toast.</li>
+      <li>Toasts can be dismissed with the close button or by swiping horizontally.</li>
+    </ul>
+  </div>
+</div>

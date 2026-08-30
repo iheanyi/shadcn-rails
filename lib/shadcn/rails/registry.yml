@@ -565,6 +565,17 @@ slider:
     - app/assets/javascripts/shadcn/controllers/slider_controller.js
   css_sidecars: []
   depends_on: []
+sonner:
+  name: sonner
+  ruby_files:
+    - app/components/shadcn/sonner.rb
+    - app/components/shadcn/sonner_component.rb
+    - app/components/shadcn/toaster_component.rb
+  templates: []
+  controllers:
+    - app/assets/javascripts/shadcn/controllers/sonner_controller.js
+  css_sidecars: []
+  depends_on: []
 spinner:
   name: spinner
   ruby_files:
