@@ -10,7 +10,7 @@ module Shadcn
   #     <% menu.with_trigger do %>
   #       <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Open Menu" } %>
   #     <% end %>
-  #     <% menu.with_content do |content| %>
+  #     <% menu.with_menu do |content| %>
   #       <% content.with_label { "My Account" } %>
   #       <% content.with_separator %>
   #       <% content.with_item(href: "/profile") { "Profile" } %>

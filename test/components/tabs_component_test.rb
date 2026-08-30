@@ -12,7 +12,8 @@ class TabsComponentTest < ViewComponent::TestCase
   def test_renders_with_default_value
     render_inline(Shadcn::TabsComponent.new(default_value: "account"))
 
-    assert_selector "div[data-shadcn--tabs-default-value='account']"
+    assert_selector "div[data-shadcn--tabs-default-value-value='account']"
+    assert_no_selector "div[data-shadcn--tabs-default-value]"
   end
 
   def test_renders_with_horizontal_orientation

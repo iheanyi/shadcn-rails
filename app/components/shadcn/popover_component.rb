@@ -10,7 +10,7 @@ module Shadcn
   #     <% popover.with_trigger do %>
   #       <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Open popover" } %>
   #     <% end %>
-  #     <% popover.with_content do %>
+  #     <% popover.with_body do %>
   #       <div class="grid gap-4">
   #         <h4 class="font-medium leading-none">Dimensions</h4>
   #         <p class="text-sm text-muted-foreground">Set the dimensions for the layer.</p>

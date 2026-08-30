@@ -12,7 +12,7 @@ module Shadcn
   #         Toggle
   #       <% end %>
   #     <% end %>
-  #     <% collapsible.with_content do %>
+  #     <% collapsible.with_body do %>
   #       Hidden content here
   #     <% end %>
   #   <% end %>
