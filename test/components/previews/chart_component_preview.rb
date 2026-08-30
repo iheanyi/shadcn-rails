@@ -16,18 +16,31 @@ class ChartComponentPreview < ViewComponent::Preview
     mobile: { label: "Mobile", color: "hsl(var(--chart-2))" }
   }.freeze
 
-  DEVICE_DATA = {
-    labels: ["Desktop", "Mobile", "Tablet", "Other"],
+  REVENUE_MIX_DATA = {
+    labels: ["Subscriptions", "Usage", "Services", "Marketplace"],
     datasets: [
-      { label: "Visitors", data: [1260, 980, 420, 190] }
+      { label: "Revenue", data: [1260, 980, 420, 190] }
     ]
   }.freeze
 
-  DEVICE_CONFIG = {
-    "Desktop" => { label: "Desktop", color: "hsl(var(--chart-1))" },
-    "Mobile" => { label: "Mobile", color: "hsl(var(--chart-2))" },
-    "Tablet" => { label: "Tablet", color: "hsl(var(--chart-3))" },
-    "Other" => { label: "Other", color: "hsl(var(--chart-4))" }
+  REVENUE_MIX_CONFIG = {
+    "Subscriptions" => { label: "Subscriptions", color: "hsl(var(--chart-1))" },
+    "Usage" => { label: "Usage", color: "hsl(var(--chart-2))" },
+    "Services" => { label: "Services", color: "hsl(var(--chart-3))" },
+    "Marketplace" => { label: "Marketplace", color: "hsl(var(--chart-4))" }
+  }.freeze
+
+  ACQUISITION_DATA = {
+    labels: ["January", "February", "March", "April", "May", "June"],
+    datasets: [
+      { key: "organic", label: "Organic", data: [420, 510, 390, 610, 720, 680] },
+      { key: "paid", label: "Paid", data: [180, 260, 310, 280, 340, 390] }
+    ]
+  }.freeze
+
+  ACQUISITION_CONFIG = {
+    organic: { label: "Organic", color: "hsl(var(--chart-1))" },
+    paid: { label: "Paid", color: "hsl(var(--chart-2))" }
   }.freeze
 
   # @label Default
@@ -57,9 +70,9 @@ class ChartComponentPreview < ViewComponent::Preview
   def area
     render Shadcn::ChartComponent.new(
       type: :area,
-      data: MONTHLY_DATA,
-      config: MONTHLY_CONFIG,
-      aria_label: "Monthly visitor area chart by device"
+      data: ACQUISITION_DATA,
+      config: ACQUISITION_CONFIG,
+      aria_label: "Monthly acquisition volume by channel"
     )
   end
 
@@ -67,9 +80,9 @@ class ChartComponentPreview < ViewComponent::Preview
   def pie
     render Shadcn::ChartComponent.new(
       type: :pie,
-      data: DEVICE_DATA,
-      config: DEVICE_CONFIG,
-      aria_label: "Visitors by device category"
+      data: REVENUE_MIX_DATA,
+      config: REVENUE_MIX_CONFIG,
+      aria_label: "Revenue mix by product line"
     )
   end
 
@@ -77,9 +90,9 @@ class ChartComponentPreview < ViewComponent::Preview
   def donut
     render Shadcn::ChartComponent.new(
       type: :donut,
-      data: DEVICE_DATA,
-      config: DEVICE_CONFIG,
-      aria_label: "Visitors by device category as a donut chart"
+      data: REVENUE_MIX_DATA,
+      config: REVENUE_MIX_CONFIG,
+      aria_label: "Revenue mix by product line as a donut chart"
     )
   end
 
