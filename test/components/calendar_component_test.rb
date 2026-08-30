@@ -48,7 +48,7 @@ class CalendarComponentTest < ViewComponent::TestCase
   def test_day_buttons_use_v4_focus_visible_ring_styles
     render_inline(Shadcn::CalendarComponent.new(month: Date.new(2024, 6, 1)))
 
-    classes = page.find("button[data-shadcn--calendar-target='day']")["class"].split
+    classes = page.first("button[data-shadcn--calendar-target='day']")["class"].split
     assert_includes classes, "focus-visible:border-ring"
     assert_includes classes, "focus-visible:ring-[3px]"
     assert_includes classes, "focus-visible:ring-ring/50"
