@@ -1,0 +1,3 @@
+<%= render Shadcn::SpinnerComponent.new(class_name: "text-primary") %>
+<%= render Shadcn::SpinnerComponent.new(class_name: "text-destructive") %>
+<%= render Shadcn::SpinnerComponent.new(class_name: "text-blue-500") %>

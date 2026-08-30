@@ -34,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <%= render "docs/code_example", language: "erb", code: '<%%= render Shadcn::TypographyComponent.new(variant: :h1) { "Heading" } %>' %>
+    <%= erb_example("typography/default") %>
   </div>
 
   <!-- Examples -->
@@ -52,13 +52,7 @@
           <%= render Shadcn::TypographyComponent.new(variant: :h4) { "Heading 4" } %>
         </div>
       <% end %>
-      <%= render "docs/code_example", language: "erb", code: <<~ERB
-<%%= render Shadcn::TypographyComponent.new(variant: :h1) { "Heading 1" } %>
-<%%= render Shadcn::TypographyComponent.new(variant: :h2) { "Heading 2" } %>
-<%%= render Shadcn::TypographyComponent.new(variant: :h3) { "Heading 3" } %>
-<%%= render Shadcn::TypographyComponent.new(variant: :h4) { "Heading 4" } %>
-ERB
-      %>
+      <%= erb_example("typography/headings") %>
     </div>
 
     <!-- Paragraph -->
