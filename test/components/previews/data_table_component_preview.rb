@@ -8,16 +8,29 @@ class DataTableComponentPreview < ViewComponent::Preview
   def default
     render(Shadcn::DataTableComponent.new(
       rows: invoices,
-      sort: "name",
-      dir: "asc",
-      params: { "q" => "paid", "page" => "2", "sort" => "name", "dir" => "asc" },
-      path: "/docs/components/data-table"
+      params: { "status" => "Paid" },
+      path: "/docs/components/data-table",
+      caption: "3 invoices found"
     )) do |table|
       table.with_toolbar do
         <<~HTML.html_safe
-          <form action="/docs/components/data-table" method="get" class="flex gap-2">
-            <input type="search" name="q" value="paid" placeholder="Search invoices..." class="flex h-9 w-full max-w-xs rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm">
-            <button type="submit" class="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-xs">Search</button>
+          <form action="/docs/components/data-table" method="get" class="flex flex-col gap-3 sm:flex-row sm:items-end">
+            <label class="grid gap-2 text-sm font-medium">
+              Search
+              <input type="search" name="q" value="" placeholder="Search invoices..." class="flex h-9 w-full max-w-xs rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm">
+            </label>
+            <label class="grid gap-2 text-sm font-medium">
+              Status
+              <select name="status" onchange="this.form.requestSubmit()" class="h-9 w-full cursor-pointer appearance-none rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm">
+                <option value="">All statuses</option>
+                <option value="Paid" selected>Paid</option>
+                <option value="Processing">Processing</option>
+                <option value="Pending">Pending</option>
+                <option value="Failed">Failed</option>
+              </select>
+            </label>
+            <button type="submit" class="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-xs">Apply</button>
+            <a href="/docs/components/data-table" class="inline-flex h-9 items-center justify-center rounded-md border border-input px-4 py-2 text-sm font-medium shadow-xs">Reset</a>
           </form>
         HTML
       end

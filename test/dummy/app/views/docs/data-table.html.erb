@@ -2,9 +2,9 @@
 
 <% content_for :toc do %>
   <div class="flex flex-col space-y-2 text-sm">
+    <a href="#live-demo" class="text-muted-foreground hover:text-foreground">Live Demo</a>
     <a href="#installation" class="text-muted-foreground hover:text-foreground">Installation</a>
     <a href="#usage" class="text-muted-foreground hover:text-foreground">Usage</a>
-    <a href="#live-demo" class="text-muted-foreground hover:text-foreground">Live Demo</a>
     <a href="#controller-recipe" class="text-muted-foreground hover:text-foreground">Controller Recipe</a>
     <a href="#api-reference" class="text-muted-foreground hover:text-foreground">API Reference</a>
     <a href="#accessibility" class="text-muted-foreground hover:text-foreground">Accessibility</a>
@@ -25,28 +25,12 @@
     </div>
   </div>
 
-  <%= showcase("data-table", :default) %>
-
-  <div id="installation" class="space-y-4">
-    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
-    <p class="leading-7">Add the Data Table component and its Table and Empty dependencies to your project:</p>
-    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:add data_table" %>
-  </div>
-
-  <div id="usage" class="space-y-4">
-    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="leading-7">
-      Data Table is a Rails translation of the upstream shadcn/ui data-table recipe. It renders table structure,
-      sortable header links, toolbar and footer slots, while your controller owns filtering, safe-listed sorting,
-      and pagination from URL params.
-    </p>
-    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/data-table/default.txt")) %>
-  </div>
-
   <div id="live-demo" class="space-y-4">
-    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Live Demo</h2>
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Live Server Demo</h2>
     <p class="text-sm text-muted-foreground">
-      Search, filter, sort by a header, or move between pages. Turbo updates the frame with normal GET URLs.
+      This table is backed by <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">GET</code> params:
+      search, the native status select, sort header links, and pagination all round-trip through the controller.
+      Changing status submits the Turbo frame immediately.
     </p>
 
     <%= turbo_frame_tag "data-table-demo" do %>
@@ -66,7 +50,7 @@
             <div class="w-full sm:max-w-xs">
               <%= render Shadcn::FieldComponent.new(name: "q", id: "data-table-search") do |field| %>
                 <% field.with_label { "Search" } %>
-                <% field.with_input(value: @data_table_search, placeholder: "Search invoices..." ) %>
+                <% field.with_input(value: @data_table_search, placeholder: "Search invoices...") %>
               <% end %>
             </div>
 
@@ -74,7 +58,7 @@
               <%= render Shadcn::FieldComponent.new(name: "status", id: "data-table-status") do |field| %>
                 <% field.with_label { "Status" } %>
                 <% field.with_control do %>
-                  <%= render Shadcn::NativeSelectComponent.new(name: "status", id: "data-table-status") do |select| %>
+                  <%= render Shadcn::NativeSelectComponent.new(name: "status", id: "data-table-status", onchange: "this.form.requestSubmit()") do |select| %>
                     <% select.with_option(value: "", selected: @data_table_status.blank?) { "All statuses" } %>
                     <% %w[Paid Processing Pending Failed].each do |status| %>
                       <% select.with_option(value: status, selected: @data_table_status == status) { status } %>
@@ -125,6 +109,22 @@
         <% end %>
       <% end %>
     <% end %>
+  </div>
+
+  <div id="installation" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Installation</h2>
+    <p class="leading-7">Add the Data Table component and its Table and Empty dependencies to your project:</p>
+    <%= render "docs/code_example", language: "bash", code: "rails generate shadcn:add data_table" %>
+  </div>
+
+  <div id="usage" class="space-y-4">
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
+    <p class="leading-7">
+      Data Table is a Rails translation of the upstream shadcn/ui data-table recipe. It renders table structure,
+      sortable header links, toolbar and footer slots, while your controller owns filtering, safe-listed sorting,
+      and pagination from URL params.
+    </p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/data-table/default.txt")) %>
   </div>
 
   <div id="controller-recipe" class="space-y-4">
