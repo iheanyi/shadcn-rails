@@ -17,9 +17,25 @@ class SonnerComponentPreview < ViewComponent::Preview
           #{demo_button("Saving contact", "Saving contact...", "Syncing Nora Lee to HubSpot.", "default", 0)}
           #{demo_button("Save contact", "Contact saved", "Maya Chen's role and phone number were updated.", "success", 0)}
           #{demo_button("Send invite", "Invite sent", "Nora Lee received a workspace invitation by email.", "info", 0)}
-          #{demo_button("Invite with undo", "Invite sent to Jordan", "jordan@example.com was added to the billing workspace.", "success", 0, action_label: "Undo", action_title: "Invite canceled", action_description: "Jordan was removed from the pending invitation list.")}
         </div>
       HTML
+    end
+  end
+
+  # @label With Action
+  # A toast with an Undo action that triggers a follow-up toast
+  def with_action
+    render(Shadcn::SonnerComponent.new(id: "sonner-action-viewport", duration: 5000)) do
+      demo_button(
+        "Create event",
+        "Event has been created",
+        "Sunday, December 03, 2023 at 9:00 AM",
+        "default",
+        nil,
+        action_label: "Undo",
+        action_title: "Event restored",
+        action_description: "The event was restored to your calendar."
+      )
     end
   end
 
