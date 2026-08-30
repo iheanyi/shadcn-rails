@@ -25,19 +25,27 @@ class DummyDataTableDocsTest < ActionDispatch::IntegrationTest
     get "/docs/components/data-table", params: { q: "example.com", status: "Failed" }
 
     assert_response :success
-    assert_includes response.body, "2 invoices found"
-    assert_includes response.body, "Noah Garcia"
-    assert_includes response.body, "Amelia Brown"
-    refute_includes response.body, "Olivia Martin"
-    refute_includes response.body, "Lucas Miller"
+    assert_select "turbo-frame#data-table-demo" do |frames|
+      frame_html = frames.first.to_s
+
+      assert_includes frame_html, "2 invoices found"
+      assert_includes frame_html, "Noah Garcia"
+      assert_includes frame_html, "Amelia Brown"
+      refute_includes frame_html, "Olivia Martin"
+      refute_includes frame_html, "Lucas Miller"
+    end
   end
 
   def test_docs_controller_shows_empty_state_when_filters_match_nothing
     get "/docs/components/data-table", params: { q: "olivia", status: "Processing" }
 
     assert_response :success
-    assert_includes response.body, "0 invoices found"
-    assert_includes response.body, "No invoices found"
-    assert_includes response.body, "Try a different search term or status filter."
+    assert_select "turbo-frame#data-table-demo" do |frames|
+      frame_html = frames.first.to_s
+
+      assert_includes frame_html, "0 invoices found"
+      assert_includes frame_html, "No invoices found"
+      assert_includes frame_html, "Try a different search term or status filter."
+    end
   end
 end
