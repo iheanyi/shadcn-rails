@@ -1,16 +1,24 @@
 SORTS = {
-  "name" => "contacts.name",
-  "email" => "contacts.email",
-  "created_at" => "contacts.created_at"
+  "customer" => "invoices.customer",
+  "email" => "invoices.email",
+  "status" => "invoices.status",
+  "amount" => "invoices.amount"
 }.freeze
 
 def index
-  scope = Contact.all
-  scope = scope.where("name ILIKE ?", "%#{params[:q]}%") if params[:q].present?
+  scope = Invoice.all
+
+  if params[:q].present?
+    query = "%#{params[:q]}%"
+    scope = scope.where("customer ILIKE :query OR email ILIKE :query", query: query)
+  end
+
+  scope = scope.where(status: params[:status]) if params[:status].present?
 
   if SORTS.key?(params[:sort]) && %w[asc desc].include?(params[:dir])
     scope = scope.order(SORTS.fetch(params[:sort]) => params[:dir])
   end
 
-  @pagy, @contacts = pagy(scope)
+  @total_count = scope.count
+  @pagy, @invoices = pagy(scope)
 end

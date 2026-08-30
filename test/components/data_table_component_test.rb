@@ -59,6 +59,10 @@ class DataTableComponentTest < ViewComponent::TestCase
 
     assert_equal "ascending", customer_header["aria-sort"]
     assert_equal "none", email_header["aria-sort"]
+    assert_selector "th[aria-sort='ascending'] svg[data-sort-icon='arrow-up']"
+    assert_selector "th[aria-sort='none'] svg[data-sort-icon='chevrons-up-down']"
+    assert_no_text "asc"
+    assert_no_text "sort"
 
     customer_href = customer_header.find("a")["href"]
     email_href = email_header.find("a")["href"]
@@ -128,6 +132,8 @@ class DataTableComponentTest < ViewComponent::TestCase
 
     customer_header = page.find("th", text: "Customer")
     assert_equal "descending", customer_header["aria-sort"]
+    assert_selector "th[aria-sort='descending'] svg[data-sort-icon='arrow-down']"
+    assert_no_text "desc"
 
     href = customer_header.find("a")["href"]
     assert_equal "/invoices?q=paid", href
@@ -144,12 +150,16 @@ class DataTableComponentTest < ViewComponent::TestCase
 
     header_link = page.find("th", text: "Customer").find("a")
     indicator = header_link.find("span")
+    indicator_icon = indicator.find("svg")
 
     assert_includes header_link["class"].split, "tw-inline-flex"
     assert_includes header_link["class"].split, "tw-gap-1"
     assert_includes header_link["class"].split, "hover:tw-text-foreground"
     assert_includes header_link["class"].split, "focus-visible:tw-ring-1"
     assert_includes indicator["class"].split, "tw-text-muted-foreground"
+    assert_includes indicator["class"].split, "tw-opacity-50"
+    assert_includes indicator_icon["class"].split, "tw-h-4"
+    assert_includes indicator_icon["class"].split, "tw-w-4"
   end
 
   def test_end_aligned_columns_resolve_prefixed_table_alignment_conflicts

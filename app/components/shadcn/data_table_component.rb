@@ -7,7 +7,9 @@ module Shadcn
 
     BASE_CLASSES = "space-y-4"
     EMPTY_CELL_CLASSES = "h-32 p-0"
-    SORT_INDICATOR_CLASSES = "text-[0.65rem] font-medium uppercase tracking-wide text-muted-foreground"
+    SORT_INDICATOR_CLASSES = "ml-2 inline-flex shrink-0 text-foreground"
+    SORT_INDICATOR_MUTED_CLASSES = "text-muted-foreground opacity-50"
+    SORT_ICON_CLASSES = "h-4 w-4"
 
     renders_many :columns, lambda { |key, **options, &block|
       DataTableColumnComponent.new(key, **options, &block)
@@ -118,17 +120,53 @@ module Shadcn
     end
 
     def sort_indicator_for(column)
-      label =
-        case aria_sort_for(column)
+      sort_state = aria_sort_for(column)
+      icon_name, icon_paths, state_classes =
+        case sort_state
         when "ascending"
-          "asc"
+          ["arrow-up", arrow_up_icon_paths, nil]
         when "descending"
-          "desc"
+          ["arrow-down", arrow_down_icon_paths, nil]
         else
-          "sort"
+          ["chevrons-up-down", chevrons_up_down_icon_paths, SORT_INDICATOR_MUTED_CLASSES]
         end
 
-      content_tag(:span, label, class: prefix_classes(SORT_INDICATOR_CLASSES), "aria-hidden": true)
+      content_tag(
+        :span,
+        sort_icon(icon_name, icon_paths),
+        class: prefix_classes(cn(SORT_INDICATOR_CLASSES, state_classes)),
+        "aria-hidden": true
+      )
+    end
+
+    def sort_icon(name, paths)
+      content_tag(
+        :svg,
+        safe_join(paths.map { |path| tag.path(d: path) }),
+        xmlns: "http://www.w3.org/2000/svg",
+        width: "24",
+        height: "24",
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        "stroke-width": "2",
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round",
+        class: prefix_classes(SORT_ICON_CLASSES),
+        "data-sort-icon": name
+      )
+    end
+
+    def arrow_up_icon_paths
+      ["m5 12 7-7 7 7", "M12 19V5"]
+    end
+
+    def arrow_down_icon_paths
+      ["M12 5v14", "m19 12-7 7-7-7"]
+    end
+
+    def chevrons_up_down_icon_paths
+      ["m7 15 5 5 5-5", "m7 9 5-5 5 5"]
     end
 
     def render_empty_state
