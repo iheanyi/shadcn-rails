@@ -43,9 +43,12 @@ RUN sed -i 's|path: "../.."|path: "/shadcn-rails"|' Gemfile && \
     bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
 
-# Install npm dependencies and build JavaScript with the package script so
-# Docker stays in sync with local esbuild aliases.
-RUN npm ci && npm run build
+# Install npm dependencies and build JavaScript from the source dummy app so
+# package.json's relative aliases resolve to /shadcn-rails/dist in Docker.
+RUN npm ci --prefix /shadcn-rails/test/dummy && \
+    npm run build --prefix /shadcn-rails/test/dummy && \
+    mkdir -p app/assets/builds && \
+    cp -R /shadcn-rails/test/dummy/app/assets/builds/. app/assets/builds/
 
 # Precompile assets
 RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
