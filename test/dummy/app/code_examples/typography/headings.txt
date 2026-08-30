@@ -1,0 +1,4 @@
+<%= render Shadcn::TypographyComponent.new(variant: :h1) { "Heading 1" } %>
+<%= render Shadcn::TypographyComponent.new(variant: :h2) { "Heading 2" } %>
+<%= render Shadcn::TypographyComponent.new(variant: :h3) { "Heading 3" } %>
+<%= render Shadcn::TypographyComponent.new(variant: :h4) { "Heading 4" } %>

@@ -1,0 +1,4 @@
+<%= render Shadcn::SpinnerComponent.new(size: :sm) %>
+<%= render Shadcn::SpinnerComponent.new(size: :default) %>
+<%= render Shadcn::SpinnerComponent.new(size: :lg) %>
+<%= render Shadcn::SpinnerComponent.new(size: :xl) %>

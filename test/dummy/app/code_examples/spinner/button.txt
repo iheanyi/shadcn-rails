@@ -1,0 +1,4 @@
+<%= render Shadcn::ButtonComponent.new(disabled: true) do %>
+  <%= render Shadcn::SpinnerComponent.new(size: :sm, class_name: "mr-2") %>
+  Loading...
+<% end %>
