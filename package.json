@@ -12,10 +12,19 @@
       "import": "./dist/index.esm.js",
       "require": "./dist/index.js"
     },
+    "./chart": {
+      "types": "./dist/chart.d.ts",
+      "import": "./dist/chart.esm.js",
+      "require": "./dist/chart.js"
+    },
     "./controllers": {
       "types": "./dist/controllers/index.d.ts",
       "import": "./dist/controllers/index.esm.js",
       "require": "./dist/controllers/index.js"
+    },
+    "./controllers/chart": {
+      "types": "./dist/controllers/chart_controller.d.ts",
+      "import": "./dist/controllers/chart_controller.js"
     },
     "./controllers/*": {
       "types": "./dist/controllers/*.d.ts",

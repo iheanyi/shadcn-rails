@@ -37,7 +37,8 @@ export type ShadcnControllerIdentifier =
   | "shadcn--tooltip"
   | "shadcn--sidebar"
 
-export type ShadcnControllerMap = Record<ShadcnControllerIdentifier, StimulusControllerConstructor>
+export type ShadcnCoreControllerIdentifier = Exclude<ShadcnControllerIdentifier, "shadcn--chart">
+export type ShadcnControllerMap = Record<ShadcnCoreControllerIdentifier, StimulusControllerConstructor>
 
 export type ShadcnStimulusEvent<T extends EventTarget = HTMLElement> = Event & {
   currentTarget: T

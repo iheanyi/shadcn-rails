@@ -9,6 +9,11 @@ const builds = [
     cjs: "dist/index.js"
   },
   {
+    input: ".tsbuild/chart.js",
+    esm: "dist/chart.esm.js",
+    cjs: "dist/chart.js"
+  },
+  {
     input: ".tsbuild/controllers/index.js",
     esm: "dist/controllers/index.esm.js",
     cjs: "dist/controllers/index.js"

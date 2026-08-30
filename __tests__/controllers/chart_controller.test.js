@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs"
+import { resolve } from "node:path"
 import {
   buildChartData,
   buildChartOptions,
@@ -6,6 +8,22 @@ import {
   normalizeChartType
 } from "../../app/assets/javascripts/shadcn/utils/chart_config.ts"
 import ChartController from "../../app/assets/javascripts/shadcn/controllers/chart_controller.ts"
+
+describe("chart bundle isolation", () => {
+  test("base bundles do not statically reference chart.js", () => {
+    const bundledEntrypoints = [
+      "dist/index.esm.js",
+      "dist/index.js",
+      "dist/controllers/index.esm.js",
+      "dist/controllers/index.js"
+    ]
+
+    for (const entrypoint of bundledEntrypoints) {
+      const bundle = readFileSync(resolve(process.cwd(), entrypoint), "utf8")
+      expect(bundle).not.toContain("chart.js/auto")
+    }
+  })
+})
 
 describe("chart config builders", () => {
   const data = {

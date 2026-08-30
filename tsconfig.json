@@ -10,7 +10,9 @@
     "useDefineForClassFields": false,
     "paths": {
       "shadcn-rails-stimulus": ["./app/assets/javascripts/shadcn/index.ts"],
+      "shadcn-rails-stimulus/chart": ["./app/assets/javascripts/shadcn/chart.ts"],
       "shadcn-rails-stimulus/controllers": ["./app/assets/javascripts/shadcn/controllers/index.ts"],
+      "shadcn-rails-stimulus/controllers/chart": ["./app/assets/javascripts/shadcn/controllers/chart_controller.ts"],
       "shadcn-rails-stimulus/controllers/*": ["./app/assets/javascripts/shadcn/controllers/*.ts"]
     },
     "noEmit": true
