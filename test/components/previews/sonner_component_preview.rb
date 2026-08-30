@@ -6,7 +6,7 @@ class SonnerComponentPreview < ViewComponent::Preview
   # @label Default
   # Recommended toast API with a persistent toaster viewport
   def default
-    render(Shadcn::SonnerComponent.new(id: "sonner-default-viewport", limit: 5, duration: 5000)) do
+    render(Shadcn::SonnerComponent.new(id: "sonner-default-viewport", limit: 5, duration: 15_000)) do
       <<~HTML.html_safe
         <div class="flex flex-wrap gap-2">
           #{demo_button("Create invoice", "Invoice created", "Invoice #1042 was created for Acme Studio.")}
