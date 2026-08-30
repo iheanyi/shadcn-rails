@@ -18,6 +18,17 @@ jobs:
       - name: Set up flyctl
         uses: superfly/flyctl-actions/setup-flyctl@master
 
+      - name: Stage Sentry DSN
+        run: |
+          if [ -n "$SENTRY_DSN" ]; then
+            flyctl secrets set SENTRY_DSN="$SENTRY_DSN" --app shadcn-rails --stage
+          else
+            echo "SENTRY_DSN is not set; skipping Sentry secret staging."
+          fi
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+
       - name: Deploy docs app
         run: flyctl deploy --app shadcn-rails --remote-only
         env:

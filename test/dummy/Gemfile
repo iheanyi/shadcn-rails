@@ -11,6 +11,10 @@ gem "sqlite3", "~> 1.4", group: [:development, :test]
 gem "sprockets-rails"
 gem "puma"
 
+# Error monitoring for the docs app
+gem "sentry-ruby"
+gem "sentry-rails"
+
 # ViewComponent
 gem "view_component", ">= 3.0"
 gem "lookbook", ">= 2.0"
