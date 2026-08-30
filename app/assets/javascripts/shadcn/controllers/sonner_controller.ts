@@ -204,6 +204,7 @@ export default class SonnerController extends Controller<HTMLElement> {
 
   private observer: MutationObserver | null = null
   private timers = new Map<string, ToastTimer>()
+  private removeTimeouts = new Map<string, number>()
   private actionHandlers = new Map<string, (event: MouseEvent) => void>()
   private activePointerId: number | null = null
   private swipeToast: HTMLElement | null = null
@@ -221,17 +222,17 @@ export default class SonnerController extends Controller<HTMLElement> {
     controllers.delete(this)
     this.observer?.disconnect()
     this.observer = null
-    this.timers.forEach((timer) => this.clearTimer(timer))
-    this.timers.clear()
-    this.actionHandlers.clear()
+    this.resetSwipeState()
   }
 
   show(options: ToastOptions): string {
     const id = String(options.id ?? nextToastId())
-    const existingToast = this.findToastElement(id)
+    const existingToast = this.findToastElement(id, { includeClosed: true })
 
     if (existingToast) {
+      this.reopenToast(existingToast)
       this.updateToastElement(existingToast, options)
+      this.placeToastAtOrigin(existingToast)
       this.startTimer(existingToast, normalizeDuration(options.duration, this.durationValue))
       return id
     }
@@ -252,7 +253,7 @@ export default class SonnerController extends Controller<HTMLElement> {
     }
 
     removePendingToasts(id)
-    const toastElement = this.findToastElement(String(id))
+    const toastElement = this.findToastElement(String(id), { includeClosed: true })
     if (toastElement) {
       this.closeToast(toastElement)
     }
@@ -545,25 +546,26 @@ export default class SonnerController extends Controller<HTMLElement> {
   }
 
   private closeToast(toastElement: HTMLElement): void {
-    const id = toastElement.dataset.shadcnSonnerToastId
+    const id = this.ensureToastId(toastElement)
     if (toastElement.dataset.state === "closed") return
 
-    if (id) {
-      const timer = this.timers.get(id)
-      if (timer) this.clearTimer(timer)
-      this.timers.delete(id)
-      this.actionHandlers.delete(id)
-    }
+    const timer = this.timers.get(id)
+    if (timer) this.clearTimer(timer)
+    this.timers.delete(id)
 
     toastElement.dataset.state = "closed"
     toastElement.style.pointerEvents = "none"
     toastElement.style.opacity = "0"
     toastElement.style.transform = this.exitTransform()
 
-    window.setTimeout(() => {
+    const removeTimeout = window.setTimeout(() => {
       toastElement.remove()
+      this.removeTimeouts.delete(id)
+      this.actionHandlers.delete(id)
       this.dispatch("dismiss", { detail: { id } })
     }, 200)
+
+    this.removeTimeouts.set(id, removeTimeout)
   }
 
   private enforceLimit(): void {
@@ -608,6 +610,10 @@ export default class SonnerController extends Controller<HTMLElement> {
   }
 
   private toastElements(): HTMLElement[] {
+    return this.allToastElements().filter((toastElement) => toastElement.dataset.state !== "closed")
+  }
+
+  private allToastElements(): HTMLElement[] {
     if (!this.hasViewportTarget) return []
 
     return Array.from(this.viewportTarget.children).filter((child): child is HTMLElement => {
@@ -615,10 +621,9 @@ export default class SonnerController extends Controller<HTMLElement> {
     })
   }
 
-  private findToastElement(id: string): HTMLElement | null {
-    if (!this.hasViewportTarget) return null
-
-    return this.toastElements().find((toastElement) => toastElement.dataset.shadcnSonnerToastId === id) ?? null
+  private findToastElement(id: string, options: { includeClosed?: boolean } = {}): HTMLElement | null {
+    const toasts = options.includeClosed ? this.allToastElements() : this.toastElements()
+    return toasts.find((toastElement) => toastElement.dataset.shadcnSonnerToastId === id) ?? null
   }
 
   private ensureToastId(toastElement: HTMLElement): string {
@@ -665,6 +670,21 @@ export default class SonnerController extends Controller<HTMLElement> {
     }
 
     this.viewportTarget.prepend(toastElement)
+  }
+
+  private reopenToast(toastElement: HTMLElement): void {
+    const id = this.ensureToastId(toastElement)
+    const removeTimeout = this.removeTimeouts.get(id)
+
+    if (removeTimeout !== undefined) {
+      window.clearTimeout(removeTimeout)
+      this.removeTimeouts.delete(id)
+    }
+
+    toastElement.dataset.state = "open"
+    toastElement.style.pointerEvents = ""
+    toastElement.style.opacity = ""
+    toastElement.style.transform = ""
   }
 
   private exitTransform(): string {

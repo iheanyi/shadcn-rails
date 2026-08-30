@@ -63,6 +63,7 @@ export default class SonnerController extends Controller<HTMLElement> {
     readonly swipeThresholdValue: number;
     private observer;
     private timers;
+    private removeTimeouts;
     private actionHandlers;
     private activePointerId;
     private swipeToast;
@@ -97,6 +98,7 @@ export default class SonnerController extends Controller<HTMLElement> {
     private clearTimer;
     private timerFor;
     private toastElements;
+    private allToastElements;
     private findToastElement;
     private ensureToastId;
     private isToastElement;
@@ -104,6 +106,7 @@ export default class SonnerController extends Controller<HTMLElement> {
     private isInteractiveEventTarget;
     private toastActions;
     private placeToastAtOrigin;
+    private reopenToast;
     private exitTransform;
     private resetSwipeState;
 }

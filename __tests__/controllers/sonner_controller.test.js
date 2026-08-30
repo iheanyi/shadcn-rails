@@ -89,6 +89,28 @@ describe("SonnerController", () => {
     expect(document.querySelector(`[data-shadcn-sonner-toast-id="${id}"]`)).toBeNull()
   })
 
+  test("preserves auto-dismiss and close actions across controller reconnect", async () => {
+    jest.useFakeTimers()
+    const autoDismissId = toast("Saved before navigation", { duration: 100 })
+    const manualDismissId = toast("Close after navigation", { duration: 0 })
+    const manualToast = document.querySelector(`[data-shadcn-sonner-toast-id="${manualDismissId}"]`)
+
+    await Promise.resolve()
+    controller.disconnect()
+    controller.connect()
+
+    jest.advanceTimersByTime(350)
+
+    expect(document.querySelector(`[data-shadcn-sonner-toast-id="${autoDismissId}"]`)).toBeNull()
+    expect(document.querySelector(`[data-shadcn-sonner-toast-id="${manualDismissId}"]`)).not.toBeNull()
+
+    const closeButton = manualToast.querySelector("[data-sonner-close]")
+    click(closeButton)
+    jest.advanceTimersByTime(250)
+
+    expect(document.querySelector(`[data-shadcn-sonner-toast-id="${manualDismissId}"]`)).toBeNull()
+  })
+
   test("enforces the configured visible toast limit", async () => {
     cleanupController(application)
     const setup = await setupController(SonnerController, toasterHtml({ limit: 2 }), "shadcn--sonner")
@@ -106,6 +128,40 @@ describe("SonnerController", () => {
     expect(toastElements).toHaveLength(2)
     expect(toastElements[0]).toHaveTextContent("Third")
     expect(toastElements[1]).toHaveTextContent("Second")
+  })
+
+  test("closed toasts do not occupy limit slots while exiting", async () => {
+    cleanupController(application)
+    const setup = await setupController(SonnerController, toasterHtml({ limit: 2 }), "shadcn--sonner")
+    application = setup.application
+    controller = setup.controller
+
+    jest.useFakeTimers()
+    const firstId = toast("First live toast", { duration: 0 })
+    const secondId = toast("Second closing toast", { duration: 0 })
+
+    toast.dismiss(secondId)
+    toast("Third live toast", { duration: 0 })
+    jest.advanceTimersByTime(250)
+
+    expect(document.querySelector(`[data-shadcn-sonner-toast-id="${firstId}"]`)).not.toBeNull()
+    expect(document.querySelector(`[data-shadcn-sonner-toast-id="${secondId}"]`)).toBeNull()
+    expect(document.querySelectorAll("[data-shadcn-sonner-toast-id]")).toHaveLength(2)
+  })
+
+  test("updating a closing toast cancels its pending removal", () => {
+    jest.useFakeTimers()
+    const id = toast("Saving customer", { duration: 0 })
+
+    toast.dismiss(id)
+    toast({ id, title: "Customer saved", description: "Billing contact updated.", variant: "success", duration: 0 })
+    jest.advanceTimersByTime(250)
+
+    const toastElement = document.querySelector(`[data-shadcn-sonner-toast-id="${id}"]`)
+    expect(toastElement).not.toBeNull()
+    expect(toastElement).toHaveTextContent("Customer saved")
+    expect(toastElement).toHaveTextContent("Billing contact updated.")
+    expect(toastElement).toHaveAttribute("data-state", "open")
   })
 
   test("pauses and resumes auto-dismiss while hovered", () => {

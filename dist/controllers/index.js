@@ -6416,6 +6416,7 @@ class SonnerController extends stimulus.Controller {
         super(...arguments);
         this.observer = null;
         this.timers = new Map();
+        this.removeTimeouts = new Map();
         this.actionHandlers = new Map();
         this.activePointerId = null;
         this.swipeToast = null;
@@ -6439,15 +6440,15 @@ class SonnerController extends stimulus.Controller {
         controllers.delete(this);
         this.observer?.disconnect();
         this.observer = null;
-        this.timers.forEach((timer) => this.clearTimer(timer));
-        this.timers.clear();
-        this.actionHandlers.clear();
+        this.resetSwipeState();
     }
     show(options) {
         const id = String(options.id ?? nextToastId());
-        const existingToast = this.findToastElement(id);
+        const existingToast = this.findToastElement(id, { includeClosed: true });
         if (existingToast) {
+            this.reopenToast(existingToast);
             this.updateToastElement(existingToast, options);
+            this.placeToastAtOrigin(existingToast);
             this.startTimer(existingToast, normalizeDuration(options.duration, this.durationValue));
             return id;
         }
@@ -6464,7 +6465,7 @@ class SonnerController extends stimulus.Controller {
             return;
         }
         removePendingToasts(id);
-        const toastElement = this.findToastElement(String(id));
+        const toastElement = this.findToastElement(String(id), { includeClosed: true });
         if (toastElement) {
             this.closeToast(toastElement);
         }
@@ -6712,24 +6713,24 @@ class SonnerController extends stimulus.Controller {
         return button;
     }
     closeToast(toastElement) {
-        const id = toastElement.dataset.shadcnSonnerToastId;
+        const id = this.ensureToastId(toastElement);
         if (toastElement.dataset.state === "closed")
             return;
-        if (id) {
-            const timer = this.timers.get(id);
-            if (timer)
-                this.clearTimer(timer);
-            this.timers.delete(id);
-            this.actionHandlers.delete(id);
-        }
+        const timer = this.timers.get(id);
+        if (timer)
+            this.clearTimer(timer);
+        this.timers.delete(id);
         toastElement.dataset.state = "closed";
         toastElement.style.pointerEvents = "none";
         toastElement.style.opacity = "0";
         toastElement.style.transform = this.exitTransform();
-        window.setTimeout(() => {
+        const removeTimeout = window.setTimeout(() => {
             toastElement.remove();
+            this.removeTimeouts.delete(id);
+            this.actionHandlers.delete(id);
             this.dispatch("dismiss", { detail: { id } });
         }, 200);
+        this.removeTimeouts.set(id, removeTimeout);
     }
     enforceLimit() {
         const toasts = this.toastElements();
@@ -6766,16 +6767,18 @@ class SonnerController extends stimulus.Controller {
         return id ? this.timers.get(id) : undefined;
     }
     toastElements() {
+        return this.allToastElements().filter((toastElement) => toastElement.dataset.state !== "closed");
+    }
+    allToastElements() {
         if (!this.hasViewportTarget)
             return [];
         return Array.from(this.viewportTarget.children).filter((child) => {
             return child instanceof HTMLElement && this.isToastElement(child);
         });
     }
-    findToastElement(id) {
-        if (!this.hasViewportTarget)
-            return null;
-        return this.toastElements().find((toastElement) => toastElement.dataset.shadcnSonnerToastId === id) ?? null;
+    findToastElement(id, options = {}) {
+        const toasts = options.includeClosed ? this.allToastElements() : this.toastElements();
+        return toasts.find((toastElement) => toastElement.dataset.shadcnSonnerToastId === id) ?? null;
     }
     ensureToastId(toastElement) {
         const existingId = toastElement.dataset.shadcnSonnerToastId;
@@ -6813,6 +6816,18 @@ class SonnerController extends stimulus.Controller {
             return;
         }
         this.viewportTarget.prepend(toastElement);
+    }
+    reopenToast(toastElement) {
+        const id = this.ensureToastId(toastElement);
+        const removeTimeout = this.removeTimeouts.get(id);
+        if (removeTimeout !== undefined) {
+            window.clearTimeout(removeTimeout);
+            this.removeTimeouts.delete(id);
+        }
+        toastElement.dataset.state = "open";
+        toastElement.style.pointerEvents = "";
+        toastElement.style.opacity = "";
+        toastElement.style.transform = "";
     }
     exitTransform() {
         if (this.positionValue.includes("left"))
