@@ -1,3 +1,25 @@
+<%= form_with url: invoices_path, method: :get, data: { controller: "docs--live-filter", turbo_frame: "invoices" }, class: "flex gap-2" do %>
+  <%= hidden_field_tag :sort, params[:sort] if params[:sort].present? %>
+  <%= hidden_field_tag :dir, params[:dir] if params[:dir].present? %>
+  <%= render Shadcn::InputComponent.new(
+    name: "q",
+    value: params[:q],
+    placeholder: "Search invoices...",
+    data: { action: "input->docs--live-filter#submitLater" }
+  ) %>
+  <%= render Shadcn::NativeSelectComponent.new(
+    name: "status",
+    data: { action: "change->docs--live-filter#submitNow" }
+  ) do |select| %>
+    <% select.with_option(value: "", selected: params[:status].blank?) { "All statuses" } %>
+    <% %w[Paid Processing Pending Failed].each do |status| %>
+      <% select.with_option(value: status, selected: params[:status] == status) { status } %>
+    <% end %>
+  <% end %>
+  <%= render Shadcn::ButtonComponent.new(type: "submit") { "Apply" } %>
+  <%= render Shadcn::ButtonComponent.new(href: invoices_path, variant: :outline) { "Reset" } %>
+<% end %>
+
 <%= turbo_frame_tag "invoices" do %>
   <%= render Shadcn::DataTableComponent.new(
     rows: @invoices,
@@ -7,29 +29,6 @@
     path: invoices_path,
     caption: "#{pluralize(@total_count, 'invoice')} found"
   ) do |table| %>
-    <% table.with_toolbar do %>
-      <%= form_with url: invoices_path, method: :get, data: { controller: "docs--live-filter", turbo_frame: "invoices" }, class: "flex gap-2" do %>
-        <%= hidden_field_tag :sort, params[:sort] if params[:sort].present? %>
-        <%= hidden_field_tag :dir, params[:dir] if params[:dir].present? %>
-        <%= render Shadcn::InputComponent.new(
-          name: "q",
-          value: params[:q],
-          placeholder: "Search invoices...",
-          data: { action: "input->docs--live-filter#submitLater" }
-        ) %>
-        <%= render Shadcn::NativeSelectComponent.new(
-          name: "status",
-          data: { action: "change->docs--live-filter#submitNow" }
-        ) do |select| %>
-          <% select.with_option(value: "", selected: params[:status].blank?) { "All statuses" } %>
-          <% %w[Paid Processing Pending Failed].each do |status| %>
-            <% select.with_option(value: status, selected: params[:status] == status) { status } %>
-          <% end %>
-        <% end %>
-        <%= render Shadcn::ButtonComponent.new(type: "submit") { "Apply" } %>
-        <%= render Shadcn::ButtonComponent.new(href: invoices_path, variant: :outline) { "Reset" } %>
-      <% end %>
-    <% end %>
 
     <% table.with_column(:customer, sortable: true) %>
     <% table.with_column(:email, sortable: true) %>

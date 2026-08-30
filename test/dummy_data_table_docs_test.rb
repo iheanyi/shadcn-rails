@@ -12,13 +12,16 @@ class DummyDataTableDocsTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "turbo-frame#data-table-demo"
     assert_select "form[data-controller='docs--live-filter'][data-turbo-frame='data-table-demo'][method='get']"
+    assert_select "turbo-frame#data-table-demo form", false
+    assert_select "turbo-frame#data-table-demo input#data-table-search", false
+    assert_select "turbo-frame#data-table-demo select#data-table-status", false
     assert_select "input[name='sort'][type='hidden'][value='name']"
     assert_select "input[name='dir'][type='hidden'][value='desc']"
     assert_select "input#data-table-search[name='q'][data-action='input->docs--live-filter#submitLater']"
     assert_select "select#data-table-status[name='status'][data-action='change->docs--live-filter#submitNow']"
     assert_select "select#data-table-status[onchange]", false
-    assert_select "button[type='submit']", text: "Apply"
-    assert_select "a[href='/docs/components/data-table']", text: "Reset"
+    assert_select "form[data-controller='docs--live-filter'] button[type='submit']", text: "Apply"
+    assert_select "form[data-controller='docs--live-filter'] a[href='/docs/components/data-table']", text: "Reset"
   end
 
   def test_docs_controller_filters_data_table_by_search_and_status
