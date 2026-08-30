@@ -9,9 +9,6 @@ module Shadcn
     EMPTY_CELL_CLASSES = "h-32 p-0"
     SORT_INDICATOR_CLASSES = "text-[0.65rem] font-medium uppercase tracking-wide text-muted-foreground"
 
-    renders_many :columns, lambda { |key, **options, &block|
-      DataTableColumnComponent.new(key, **options, &block)
-    }
     renders_one :toolbar
     renders_one :empty_state
     renders_one :footer
@@ -46,6 +43,20 @@ module Shadcn
       @page_param = page_param
       @reset_page_on_sort = reset_page_on_sort
       @sort_url_builder = sort_url_builder
+    end
+
+    def with_column(key, **options, &block)
+      DataTableColumnComponent.new(key, **options, &block).tap do |column|
+        columns << column
+      end
+    end
+
+    def columns
+      @columns ||= []
+    end
+
+    def before_render
+      content
     end
 
     private
@@ -85,7 +96,9 @@ module Shadcn
         sort_param: @sort_param,
         dir_param: @dir_param,
         page_param: @page_param,
-        reset_page: @reset_page_on_sort
+        reset_page: @reset_page_on_sort,
+        sort: @sort,
+        dir: @dir
       )
     end
 

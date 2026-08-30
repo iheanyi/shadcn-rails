@@ -89,6 +89,28 @@ class DataTableComponentTest < ViewComponent::TestCase
     assert_equal "/invoices?q=paid", href
   end
 
+  def test_sortable_headers_cycle_from_component_sort_when_params_do_not_include_sort
+    render_inline(
+      Shadcn::DataTableComponent.new(
+        rows: invoices,
+        sort: "name",
+        dir: "asc",
+        params: { "q" => "paid" },
+        path: "/invoices"
+      )
+    ) do |table|
+      table.with_column(:name, label: "Customer", sortable: true)
+    end
+
+    customer_header = page.find("th", text: "Customer")
+    assert_equal "ascending", customer_header["aria-sort"]
+
+    href = customer_header.find("a")["href"]
+    assert_includes href, "q=paid"
+    assert_includes href, "sort=name"
+    assert_includes href, "dir=desc"
+  end
+
   def test_empty_state_slot_renders_with_column_colspan
     render_inline(Shadcn::DataTableComponent.new(rows: [], path: "/invoices")) do |table|
       table.with_column(:name)

@@ -10,6 +10,7 @@ module Shadcn
         SORT_ASCENDING = "asc"
         SORT_DESCENDING = "desc"
         SORT_DIRECTIONS = [SORT_ASCENDING, SORT_DESCENDING].freeze
+        UNSET_SORT_VALUE = Object.new.freeze
 
         def shadcn_data_table_sort_url(
           column,
@@ -18,14 +19,16 @@ module Shadcn
           sort_param: :sort,
           dir_param: :dir,
           page_param: :page,
-          reset_page: true
+          reset_page: true,
+          sort: UNSET_SORT_VALUE,
+          dir: UNSET_SORT_VALUE
         )
           query = shadcn_data_table_params_hash(params)
           sort_key = column.to_s
           next_direction = shadcn_data_table_next_sort_direction(
             sort_key,
-            sort: query[sort_param.to_s],
-            dir: query[dir_param.to_s]
+            sort: sort.equal?(UNSET_SORT_VALUE) ? query[sort_param.to_s] : sort,
+            dir: dir.equal?(UNSET_SORT_VALUE) ? query[dir_param.to_s] : dir
           )
 
           query.delete(page_param.to_s) if reset_page
