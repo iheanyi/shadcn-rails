@@ -18,7 +18,7 @@ module Shadcn
     LEGEND_CLASSES = "flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground"
     FALLBACK_CLASSES = "sr-only"
 
-    attr_reader :type, :data, :config, :aria_label
+    attr_reader :type, :data, :series_config, :aria_label
 
     # @param type [Symbol, String] Chart type: :bar, :line, :area, :pie, or :donut
     # @param data [Hash] Chart.js-compatible data hash
@@ -28,7 +28,7 @@ module Shadcn
       super(**options)
       @type = normalize_type(type)
       @data = data
-      @config = config
+      @series_config = config
       @aria_label = aria_label
     end
 
@@ -96,7 +96,7 @@ module Shadcn
     end
 
     def normalized_config
-      config.each_with_index.to_h do |(key, value), index|
+      series_config.each_with_index.to_h do |(key, value), index|
         [key, normalize_series_config(key, value, index)]
       end
     end

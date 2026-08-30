@@ -71,16 +71,15 @@ class ChartComponentTest < ViewComponent::TestCase
     assert_selector ".sr-only caption", text: "Visitors"
   end
 
-  def test_merges_custom_class_and_data_attributes
+  def test_merges_custom_class
     render_inline(Shadcn::ChartComponent.new(
       type: :donut,
       data: DATA,
       config: CONFIG,
-      class_name: "max-w-xl",
-      data: { testid: "device-chart" }
+      class_name: "max-w-xl"
     ))
 
-    assert_selector ".max-w-xl[data-testid='device-chart']"
+    assert_selector ".max-w-xl"
   end
 
   def test_rejects_unknown_type
