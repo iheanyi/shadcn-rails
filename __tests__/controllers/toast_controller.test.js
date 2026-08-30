@@ -28,7 +28,6 @@ describe("ToastController smoke", () => {
   })
 
   test("removes after shared toast motion duration", async () => {
-    jest.useFakeTimers()
     const setup = await setupController(ToastController, `
       <div data-controller="shadcn--toast"
            data-shadcn--toast-open-value="true"
@@ -41,6 +40,7 @@ describe("ToastController smoke", () => {
     application = setup.application
     controller = setup.controller
 
+    jest.useFakeTimers()
     controller.close()
     jest.advanceTimersByTime(399)
 
