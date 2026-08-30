@@ -44,11 +44,11 @@ module Shadcn
     end
 
     def header_classes
-      prefix_classes(cn(ALIGNMENT_CLASSES.fetch(@align, ""), @header_class_name))
+      cn(ALIGNMENT_CLASSES.fetch(@align, ""), @header_class_name)
     end
 
     def cell_classes
-      prefix_classes(cn(ALIGNMENT_CLASSES.fetch(@align, ""), @cell_class_name, class_name))
+      cn(ALIGNMENT_CLASSES.fetch(@align, ""), @cell_class_name, class_name)
     end
 
     def header_link_classes

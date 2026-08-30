@@ -151,6 +151,27 @@ class DataTableComponentTest < ViewComponent::TestCase
     assert_includes indicator["class"].split, "tw-text-muted-foreground"
   end
 
+  def test_alignment_classes_respect_tailwind_prefix
+    Shadcn::Rails.configure do |config|
+      config.tailwind_prefix = "tw-"
+    end
+
+    render_inline(Shadcn::DataTableComponent.new(rows: invoices, path: "/invoices")) do |table|
+      table.with_column(:name, label: "Customer", align: :center)
+      table.with_column(:amount, align: :end) { |invoice| "$#{invoice[:amount]}" }
+    end
+
+    center_header_classes = page.find("th", text: "Customer")["class"].split
+    end_header_classes = page.find("th", text: "Amount")["class"].split
+    end_cell_classes = page.find("td", text: "$1999")["class"].split
+
+    assert_includes center_header_classes, "tw-text-center"
+    refute_includes center_header_classes, "tw-text-left"
+    assert_includes end_header_classes, "tw-text-right"
+    refute_includes end_header_classes, "tw-text-left"
+    assert_includes end_cell_classes, "tw-text-right"
+  end
+
   def test_computed_method_column_wins_when_key_is_not_present_in_bracket_lookup
     row = Object.new
     attributes = { "first_name" => "Olivia", "last_name" => "Martin" }
