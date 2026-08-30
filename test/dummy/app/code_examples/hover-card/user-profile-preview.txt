@@ -4,10 +4,7 @@
   <% end %>
   <% card.with_card_content do %>
     <div class="flex justify-between space-x-4">
-      <%= render Shadcn::AvatarComponent.new do |avatar| %>
-        <% avatar.with_image(src: "https://github.com/vercel.png", alt: "@nextjs") %>
-        <% avatar.with_fallback { "VR" } %>
-      <% end %>
+      <%= render Shadcn::AvatarComponent.new(src: "https://github.com/vercel.png", alt: "@nextjs", fallback: "VR") %>
       <div class="space-y-1">
         <h4 class="text-sm font-semibold">@nextjs</h4>
         <p class="text-sm">The React Framework - created and maintained by @vercel.</p>
