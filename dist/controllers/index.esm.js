@@ -6355,12 +6355,21 @@ function normalizeDuration(value, fallback) {
     return fallback;
 }
 function findController(position) {
+    const activeControllers = connectedControllers();
     if (position) {
-        const positionedController = Array.from(controllers).find((controller) => controller.positionValue === position);
+        const positionedController = activeControllers.find((controller) => controller.positionValue === position);
         if (positionedController)
             return positionedController;
     }
-    return controllers.values().next().value;
+    return activeControllers[0];
+}
+function connectedControllers() {
+    return Array.from(controllers).filter((controller) => {
+        const isConnected = controller.element.isConnected;
+        if (!isConnected)
+            controllers.delete(controller);
+        return isConnected;
+    });
 }
 function createToast(input, options = {}) {
     const toastOptions = normalizeToast(input, options);
@@ -6374,7 +6383,7 @@ function createToast(input, options = {}) {
     return id;
 }
 function dismissToast(id) {
-    controllers.forEach((controller) => controller.dismiss(id));
+    connectedControllers().forEach((controller) => controller.dismiss(id));
 }
 const toast = Object.assign(createToast, { dismiss: dismissToast });
 const dismiss = dismissToast;
@@ -6474,6 +6483,8 @@ class SonnerController extends Controller {
         }
     }
     startSwipe(event) {
+        if (this.isInteractiveEventTarget(event))
+            return;
         const toastElement = this.eventToastElement(event);
         if (!toastElement)
             return;
@@ -6570,6 +6581,7 @@ class SonnerController extends Controller {
         toastElement.setAttribute("aria-live", toastElement.getAttribute("aria-live") || "polite");
         toastElement.className = this.toastClassName(variant, toastElement.className);
         this.ensureCloseButton(toastElement);
+        this.bindCloseButtons(toastElement);
         this.startTimer(toastElement, duration);
         this.dispatch("show", { detail: { id } });
     }
@@ -6680,6 +6692,14 @@ class SonnerController extends Controller {
         button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" class="h-4 w-4"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>';
         return button;
     }
+    bindCloseButtons(toastElement) {
+        toastElement.querySelectorAll("[data-sonner-close]").forEach((button) => {
+            if (button.dataset.sonnerCloseBound === "true")
+                return;
+            button.dataset.sonnerCloseBound = "true";
+            button.addEventListener("click", () => this.closeToast(toastElement));
+        });
+    }
     closeToast(toastElement) {
         const id = toastElement.dataset.shadcnSonnerToastId;
         if (toastElement.dataset.state === "closed")
@@ -6766,6 +6786,12 @@ class SonnerController extends Controller {
             return target.closest("[data-shadcn-sonner-toast-id], [data-sonner-toast]");
         }
         return null;
+    }
+    isInteractiveEventTarget(event) {
+        const target = event.target;
+        if (!(target instanceof Element))
+            return false;
+        return target.closest("button, a, input, select, textarea, [role='button']") !== null;
     }
     exitTransform() {
         if (this.positionValue.includes("left"))

@@ -58,6 +58,22 @@ describe("SonnerController", () => {
     expect(document.querySelector(`[data-shadcn-sonner-toast-id="${removeId}"]`)).toBeNull()
   })
 
+  test("generated close button dismisses without starting a swipe", async () => {
+    const id = toast("Closable", { duration: 0 })
+    const toastElement = document.querySelector(`[data-shadcn-sonner-toast-id="${id}"]`)
+    const closeButton = toastElement.querySelector("[data-sonner-close]")
+    const closeIconPath = closeButton.querySelector("path")
+    const PointerEventConstructor = window.PointerEvent ?? MouseEvent
+
+    await nextFrame()
+    jest.useFakeTimers()
+    closeIconPath.dispatchEvent(new PointerEventConstructor("pointerdown", { bubbles: true }))
+    click(closeIconPath)
+    jest.advanceTimersByTime(250)
+
+    expect(document.querySelector(`[data-shadcn-sonner-toast-id="${id}"]`)).toBeNull()
+  })
+
   test("enforces the configured visible toast limit", async () => {
     cleanupController(application)
     const setup = await setupController(SonnerController, toasterHtml({ limit: 2 }), "shadcn--sonner")
@@ -106,7 +122,7 @@ describe("SonnerController", () => {
     expect(toastElement.querySelector("[data-sonner-close]")).not.toBeNull()
   })
 
-  test("demo action reads data attributes from triggers", () => {
+  test("demo action reads data attributes from triggers", async () => {
     document.body.insertAdjacentHTML(
       "beforeend",
       '<button data-action="click->shadcn--sonner#demo" data-title="Demo" data-description="Triggered from data attributes" data-variant="info" data-duration="0">Show</button>'
@@ -114,6 +130,7 @@ describe("SonnerController", () => {
     const button = document.querySelector("button[data-title='Demo']")
 
     controller.element.appendChild(button)
+    await nextFrame()
     click(button)
 
     const toastElement = document.querySelector("[data-shadcn-sonner-toast-id]")

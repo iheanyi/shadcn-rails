@@ -114,12 +114,22 @@ function normalizeDuration(value: string | number | undefined, fallback: number)
 }
 
 function findController(position?: ToastPosition): SonnerController | undefined {
+  const activeControllers = connectedControllers()
+
   if (position) {
-    const positionedController = Array.from(controllers).find((controller) => controller.positionValue === position)
+    const positionedController = activeControllers.find((controller) => controller.positionValue === position)
     if (positionedController) return positionedController
   }
 
-  return controllers.values().next().value
+  return activeControllers[0]
+}
+
+function connectedControllers(): SonnerController[] {
+  return Array.from(controllers).filter((controller) => {
+    const isConnected = controller.element.isConnected
+    if (!isConnected) controllers.delete(controller)
+    return isConnected
+  })
 }
 
 function createToast(input: ToastInput, options: ToastOptions = {}): string {
@@ -137,7 +147,7 @@ function createToast(input: ToastInput, options: ToastOptions = {}): string {
 }
 
 function dismissToast(id?: ToastId): void {
-  controllers.forEach((controller) => controller.dismiss(id))
+  connectedControllers().forEach((controller) => controller.dismiss(id))
 }
 
 export const toast = Object.assign(createToast, { dismiss: dismissToast }) satisfies ToastFunction
@@ -265,6 +275,8 @@ export default class SonnerController extends Controller<HTMLElement> {
   }
 
   startSwipe(event: PointerEvent): void {
+    if (this.isInteractiveEventTarget(event)) return
+
     const toastElement = this.eventToastElement(event)
     if (!toastElement) return
 
@@ -378,6 +390,7 @@ export default class SonnerController extends Controller<HTMLElement> {
     toastElement.className = this.toastClassName(variant, toastElement.className)
 
     this.ensureCloseButton(toastElement)
+    this.bindCloseButtons(toastElement)
     this.startTimer(toastElement, duration)
     this.dispatch("show", { detail: { id } })
   }
@@ -511,6 +524,15 @@ export default class SonnerController extends Controller<HTMLElement> {
     return button
   }
 
+  private bindCloseButtons(toastElement: HTMLElement): void {
+    toastElement.querySelectorAll<HTMLButtonElement>("[data-sonner-close]").forEach((button) => {
+      if (button.dataset.sonnerCloseBound === "true") return
+
+      button.dataset.sonnerCloseBound = "true"
+      button.addEventListener("click", () => this.closeToast(toastElement))
+    })
+  }
+
   private closeToast(toastElement: HTMLElement): void {
     const id = toastElement.dataset.shadcnSonnerToastId
     if (toastElement.dataset.state === "closed") return
@@ -612,6 +634,13 @@ export default class SonnerController extends Controller<HTMLElement> {
     }
 
     return null
+  }
+
+  private isInteractiveEventTarget(event: Event): boolean {
+    const target = event.target
+    if (!(target instanceof Element)) return false
+
+    return target.closest("button, a, input, select, textarea, [role='button']") !== null
   }
 
   private exitTransform(): string {
