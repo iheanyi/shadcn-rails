@@ -113,7 +113,7 @@ module Shadcn
         name: @name,
         value: @selected&.iso8601,
         data: { "shadcn--calendar-target": "hiddenInput" }
-      end
+      )
     end
 
     def header
