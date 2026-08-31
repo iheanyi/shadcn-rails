@@ -173,6 +173,7 @@ class CarouselComponentTest < ViewComponent::TestCase
 
     button = page.find("button[data-slot='carousel-previous']")
     classes = button[:class]
+    class_tokens = classes.split
 
     assert_includes classes, "absolute"
     assert_includes classes, "size-8"
@@ -185,12 +186,12 @@ class CarouselComponentTest < ViewComponent::TestCase
     assert_includes classes, "focus-visible:ring-ring/50"
     assert_includes classes, "[&_svg:not([class*='size-'])]:size-4"
 
-    refute_includes classes, "h-8"
-    refute_includes classes, "w-8"
-    refute_includes classes, "focus-visible:outline-none"
-    refute_includes classes, "focus-visible:ring-2"
-    refute_includes classes, "focus-visible:ring-offset-2"
-    refute_includes classes, "border-input"
+    refute_includes class_tokens, "h-8"
+    refute_includes class_tokens, "w-8"
+    refute_includes class_tokens, "focus-visible:outline-none"
+    refute_includes class_tokens, "focus-visible:ring-2"
+    refute_includes class_tokens, "focus-visible:ring-offset-2"
+    refute_includes class_tokens, "border-input"
     refute_includes button.native.to_html, 'class="h-4 w-4"'
   end
 
@@ -225,6 +226,7 @@ class CarouselComponentTest < ViewComponent::TestCase
 
     button = page.find("button[data-slot='carousel-next']")
     classes = button[:class]
+    class_tokens = classes.split
 
     assert_includes classes, "absolute"
     assert_includes classes, "size-8"
@@ -237,12 +239,12 @@ class CarouselComponentTest < ViewComponent::TestCase
     assert_includes classes, "focus-visible:ring-ring/50"
     assert_includes classes, "[&_svg:not([class*='size-'])]:size-4"
 
-    refute_includes classes, "h-8"
-    refute_includes classes, "w-8"
-    refute_includes classes, "focus-visible:outline-none"
-    refute_includes classes, "focus-visible:ring-2"
-    refute_includes classes, "focus-visible:ring-offset-2"
-    refute_includes classes, "border-input"
+    refute_includes class_tokens, "h-8"
+    refute_includes class_tokens, "w-8"
+    refute_includes class_tokens, "focus-visible:outline-none"
+    refute_includes class_tokens, "focus-visible:ring-2"
+    refute_includes class_tokens, "focus-visible:ring-offset-2"
+    refute_includes class_tokens, "border-input"
     refute_includes button.native.to_html, 'class="h-4 w-4"'
   end
 
