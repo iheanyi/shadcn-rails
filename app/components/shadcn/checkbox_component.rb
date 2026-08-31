@@ -21,9 +21,10 @@ module Shadcn
   class CheckboxComponent < BaseComponent
     BASE_CLASSES = [
       "shadcn-checkbox",
-      "peer h-4 w-4 shrink-0 rounded-sm border border-primary",
-      "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1",
-      "disabled:cursor-not-allowed disabled:opacity-50",
+      "peer size-4 shrink-0 rounded-[4px] border border-input shadow-xs transition-shadow outline-none",
+      "focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50",
+      "disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20",
+      "checked:border-primary checked:bg-primary checked:text-primary-foreground dark:bg-input/30 dark:aria-invalid:ring-destructive/40 dark:checked:bg-primary",
       "cursor-pointer"
     ].join(" ")
 
@@ -74,7 +75,7 @@ module Shadcn
 
     def checkbox_attributes
       html_options
-        .merge(build_data)
+        .merge(build_data(slot: "checkbox"))
         .merge(
           type: "checkbox",
           name: @name,

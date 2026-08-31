@@ -147,19 +147,7 @@ input[type="range"].shadcn-slider:disabled::-moz-range-thumb {
 input[type="checkbox"].shadcn-checkbox {
   -webkit-appearance: none;
   appearance: none;
-  width: 1rem;
-  height: 1rem;
-  border: 1px solid hsl(var(--primary));
-  border-radius: calc(var(--radius) - 4px);
-  background-color: transparent;
-  cursor: pointer;
   position: relative;
-  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
-}
-
-input[type="checkbox"].shadcn-checkbox:checked {
-  background-color: hsl(var(--primary));
-  border-color: hsl(var(--primary));
 }
 
 /* Checkmark */
@@ -170,21 +158,9 @@ input[type="checkbox"].shadcn-checkbox:checked::after {
   top: 45%;
   width: 4px;
   height: 8px;
-  border: solid hsl(var(--primary-foreground));
+  border: solid currentColor;
   border-width: 0 2px 2px 0;
   transform: translate(-50%, -50%) rotate(45deg);
-}
-
-/* Focus state */
-input[type="checkbox"].shadcn-checkbox:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring));
-}
-
-/* Disabled state */
-input[type="checkbox"].shadcn-checkbox:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 
 /* ============================================
