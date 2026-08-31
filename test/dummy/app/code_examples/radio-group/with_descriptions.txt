@@ -1,1 +1,5 @@
-<%= render Shadcn::RadioGroupComponent.new(name: "notification", value: "all", items: notification_items) %>
+<%= render Shadcn::RadioGroup.new(name: "notification", value: "all") do |group| %>
+  <% group.with_item(value: "all", label: "All notifications", description: "Receive every update as it happens") %>
+  <% group.with_item(value: "mentions", label: "Mentions only", description: "Only notify me when someone mentions me") %>
+  <% group.with_item(value: "none", label: "No notifications", description: "Turn off all notifications") %>
+<% end %>

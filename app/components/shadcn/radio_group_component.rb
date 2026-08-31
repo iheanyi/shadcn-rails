@@ -77,6 +77,7 @@ module Shadcn
         {
           role: "radiogroup",
           class: group_classes,
+          "data-slot": "radio-group",
           "aria-required": @required || nil,
           "aria-disabled": @disabled || nil
         },

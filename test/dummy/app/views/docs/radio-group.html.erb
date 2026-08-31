@@ -54,7 +54,7 @@
       </p>
       <%= render "docs/demo_card" do %>
         <div class="flex justify-center">
-          <%= render Shadcn::RadioGroupComponent.new(
+          <%= render Shadcn::RadioGroup.new(
             name: "layout",
             value: "grid",
             orientation: :horizontal
@@ -75,7 +75,7 @@
       <%= render "docs/demo_card" do %>
         <div class="flex justify-center">
           <div class="max-w-md w-full">
-            <%= render Shadcn::RadioGroupComponent.new(name: "plan", value: "pro") do |group| %>
+            <%= render Shadcn::RadioGroup.new(name: "plan", value: "pro") do |group| %>
               <% group.with_item(value: "free", label: "Free", description: "For individuals just getting started") %>
               <% group.with_item(value: "pro", label: "Pro", description: "For professional developers and small teams") %>
               <% group.with_item(value: "enterprise", label: "Enterprise", description: "For large organizations with advanced needs") %>
@@ -92,7 +92,7 @@
       <p class="text-sm text-muted-foreground">Individual radio buttons can be disabled.</p>
       <%= render "docs/demo_card" do %>
         <div class="flex justify-center">
-          <%= render Shadcn::RadioGroupComponent.new(name: "disabled-example", value: "comfortable") do |group| %>
+          <%= render Shadcn::RadioGroup.new(name: "disabled-example", value: "comfortable") do |group| %>
             <% group.with_item(value: "comfortable", label: "Comfortable") %>
             <% group.with_item(value: "compact", label: "Compact (Disabled)", disabled: true) %>
           <% end %>
