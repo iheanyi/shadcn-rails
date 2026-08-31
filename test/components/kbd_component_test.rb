@@ -12,9 +12,21 @@ class KbdComponentTest < ViewComponent::TestCase
   def test_renders_with_base_styles
     render_inline(Shadcn::KbdComponent.new) { "Enter" }
 
-    assert_selector "kbd.rounded"
-    assert_selector "kbd.border"
-    assert_selector "kbd.font-mono"
+    kbd = page.find("kbd")
+    classes = kbd[:class]
+    class_tokens = classes.split
+
+    assert_equal "kbd", kbd["data-slot"]
+    assert_equal "pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-sm bg-muted px-1 font-sans text-xs font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3 [[data-slot=tooltip-content]_&]:bg-background/20 [[data-slot=tooltip-content]_&]:text-background dark:[[data-slot=tooltip-content]_&]:bg-background/10", classes
+    assert_includes class_tokens, "rounded-sm"
+    assert_includes class_tokens, "min-w-5"
+    assert_includes class_tokens, "font-sans"
+    assert_includes class_tokens, "text-xs"
+    assert_includes class_tokens, "px-1"
+    refute_includes class_tokens, "font-mono"
+    refute_includes class_tokens, "text-[10px]"
+    refute_includes class_tokens, "border"
+    refute_includes class_tokens, "opacity-100"
   end
 
   def test_renders_keyboard_shortcut
