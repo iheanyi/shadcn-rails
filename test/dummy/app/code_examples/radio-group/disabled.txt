@@ -1,1 +1,5 @@
-<%= render Shadcn::RadioGroupComponent.new(name: "subscription", value: "basic", items: subscription_items) %>
+<%= render Shadcn::RadioGroup.new(name: "subscription", value: "basic") do |group| %>
+  <% group.with_item(value: "basic", label: "Basic") %>
+  <% group.with_item(value: "premium", label: "Premium") %>
+  <% group.with_item(value: "ultimate", label: "Ultimate (Coming Soon)", disabled: true) %>
+<% end %>

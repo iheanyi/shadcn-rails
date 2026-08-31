@@ -21,21 +21,25 @@ module Shadcn
     # CSS classes for the native radio input styled as a custom circle
     ITEM_CLASSES = [
       # Reset native appearance
-      "appearance-none",
+      "shadcn-radio appearance-none",
       # Size and shape
-      "aspect-square h-4 w-4 shrink-0 rounded-full",
+      "aspect-square size-4 shrink-0 rounded-full",
       # Border and colors
-      "border border-primary",
+      "border border-input text-primary shadow-xs",
       # Ring focus style
-      "focus:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1",
+      "outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50",
       # Disabled state
       "disabled:cursor-not-allowed disabled:opacity-50",
+      # Invalid state
+      "aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40",
+      # Dark mode background
+      "dark:bg-input/30",
       # Custom checked indicator using CSS
       "relative",
       # Checked state - show inner circle
       "checked:bg-primary",
       # Transition for smooth state changes
-      "transition-colors"
+      "transition-[color,box-shadow]"
     ].join(" ")
 
     LABEL_CLASSES = "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -120,6 +124,7 @@ module Shadcn
         class: cn(ITEM_CLASSES, "peer", class_name),
         disabled: @disabled || nil,
         checked: @selected || nil,
+        "data-slot": "radio-group-item",
         "data-value": @value,
         "data-shadcn--radio-group-target": "item",
         "data-action": "change->shadcn--radio-group#select keydown->shadcn--radio-group#handleKeydown"

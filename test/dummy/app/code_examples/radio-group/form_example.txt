@@ -1,1 +1,5 @@
-<%= render Shadcn::RadioGroupComponent.new(name: "delivery", value: "standard", class_name: "mt-4", items: delivery_items) %>
+<%= render Shadcn::RadioGroup.new(name: "delivery", value: "standard", class_name: "mt-4") do |group| %>
+  <% group.with_item(value: "standard", label: "Standard Shipping - $5.00") %>
+  <% group.with_item(value: "express", label: "Express Shipping - $15.00") %>
+  <% group.with_item(value: "overnight", label: "Overnight Shipping - $25.00") %>
+<% end %>

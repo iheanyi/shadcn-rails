@@ -1,1 +1,4 @@
-<%= render Shadcn::RadioGroupComponent.new(name: "accept", required: true, items: accept_items) %>
+<%= render Shadcn::RadioGroup.new(name: "accept", required: true) do |group| %>
+  <% group.with_item(value: "yes", label: "I accept the terms and conditions") %>
+  <% group.with_item(value: "no", label: "I do not accept") %>
+<% end %>

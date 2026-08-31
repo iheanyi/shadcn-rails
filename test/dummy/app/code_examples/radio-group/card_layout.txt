@@ -1,1 +1,5 @@
-<%= render Shadcn::RadioGroupComponent.new(name: "pricing", value: "hobby", class_name: "gap-4", items: pricing_items) %>
+<%= render Shadcn::RadioGroup.new(name: "pricing", value: "hobby", class_name: "gap-4") do |group| %>
+  <% group.with_item(value: "hobby", label: "Hobby - $0/month") %>
+  <% group.with_item(value: "pro", label: "Pro - $29/month") %>
+  <% group.with_item(value: "team", label: "Team - $99/month") %>
+<% end %>

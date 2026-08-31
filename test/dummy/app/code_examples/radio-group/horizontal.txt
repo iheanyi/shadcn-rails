@@ -1,1 +1,5 @@
-<%= render Shadcn::RadioGroupComponent.new(name: "size", value: "medium", orientation: :horizontal, items: size_items) %>
+<%= render Shadcn::RadioGroup.new(name: "size", value: "medium", orientation: :horizontal) do |group| %>
+  <% group.with_item(value: "small", label: "Small") %>
+  <% group.with_item(value: "medium", label: "Medium") %>
+  <% group.with_item(value: "large", label: "Large") %>
+<% end %>

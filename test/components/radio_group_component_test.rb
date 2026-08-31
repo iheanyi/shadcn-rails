@@ -7,7 +7,25 @@ class RadioGroupComponentTest < ViewComponent::TestCase
   def test_renders_radio_group_container
     render_inline(Shadcn::RadioGroupComponent.new(name: "plan"))
 
-    assert_selector "div[role='radiogroup']"
+    assert_selector "div[role='radiogroup'][data-slot='radio-group']"
+  end
+
+  def test_renders_v4_native_radio_item_classes
+    render_inline(Shadcn::RadioGroupComponent.new(name: "plan")) do |group|
+      group.with_item(value: "free", id: "plan-free")
+    end
+
+    item = page.find("input[type='radio'][data-slot='radio-group-item']")
+    classes = item["class"].split
+
+    assert_includes classes, "size-4"
+    assert_includes classes, "border-input"
+    assert_includes classes, "focus-visible:ring-[3px]"
+    assert_includes classes, "shadow-xs"
+
+    refute_includes classes, "h-4"
+    refute_includes classes, "w-4"
+    refute_includes classes, "border-primary"
   end
 
   def test_renders_with_items_using_slot_dsl

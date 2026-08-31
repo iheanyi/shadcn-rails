@@ -1,1 +1,5 @@
-<%= render Shadcn::RadioGroupComponent.new(name: "plan", value: "pro", items: plan_items) %>
+<%= render Shadcn::RadioGroup.new(name: "plan", value: "pro") do |group| %>
+  <% group.with_item(value: "free", label: "Free") %>
+  <% group.with_item(value: "pro", label: "Pro") %>
+  <% group.with_item(value: "enterprise", label: "Enterprise") %>
+<% end %>
