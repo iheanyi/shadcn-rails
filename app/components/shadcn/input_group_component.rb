@@ -115,7 +115,7 @@ module Shadcn
       end
     end
 
-    class ButtonComponent < BaseComponent
+    class InputGroupButtonComponent < BaseComponent
       BASE_CLASSES = "flex items-center gap-2 text-sm shadow-none"
       SIZE_CLASSES = {
         xs: "h-6 gap-1 rounded-[calc(var(--radius)-5px)] px-2 has-[>svg]:px-2 [&>svg:not([class*='size-'])]:size-3.5",
@@ -150,7 +150,7 @@ module Shadcn
       end
     end
 
-    class TextComponent < BaseComponent
+    class InputGroupTextComponent < BaseComponent
       BASE_CLASSES = "flex items-center gap-2 text-sm text-muted-foreground [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4"
 
       def call

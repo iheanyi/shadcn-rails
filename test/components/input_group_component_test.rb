@@ -180,7 +180,7 @@ class InputGroupComponentTest < ViewComponent::TestCase
   end
 
   def test_text_component_uses_upstream_classes
-    render_inline(Shadcn::InputGroupComponent::TextComponent.new) { "USD" }
+    render_inline(Shadcn::InputGroupComponent::InputGroupTextComponent.new) { "USD" }
 
     classes = class_list("span")
     %w[
@@ -195,7 +195,7 @@ class InputGroupComponentTest < ViewComponent::TestCase
   end
 
   def test_button_component_uses_upstream_input_group_button_classes
-    render_inline(Shadcn::InputGroupComponent::ButtonComponent.new) { "Go" }
+    render_inline(Shadcn::InputGroupComponent::InputGroupButtonComponent.new) { "Go" }
 
     assert_selector "button[data-size='xs'][data-variant='ghost']", text: "Go"
     refute_selector "button[data-size='default']"
