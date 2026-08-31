@@ -16,13 +16,13 @@ module Shadcn
   #
   class SpinnerComponent < BaseComponent
     SIZES = {
-      sm: "h-4 w-4",
-      default: "h-6 w-6",
-      lg: "h-8 w-8",
-      xl: "h-12 w-12"
+      sm: "size-4",
+      default: "size-4",
+      lg: "size-8",
+      xl: "size-12"
     }.freeze
 
-    BASE_CLASSES = "animate-spin text-muted-foreground"
+    BASE_CLASSES = "size-4 animate-spin"
 
     # @param size [Symbol] Spinner size (:sm, :default, :lg, :xl)
     def initialize(size: :default, **options)
