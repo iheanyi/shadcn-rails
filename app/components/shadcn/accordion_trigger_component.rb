@@ -31,7 +31,7 @@ module Shadcn
         height: "16",
         viewBox: "0 0 24 24",
         fill: "none",
-        class: "size-4 shrink-0 text-muted-foreground transition-transform duration-200"
+        class: "pointer-events-none size-4 shrink-0 translate-y-0.5 text-muted-foreground transition-transform duration-200"
       )
     end
 
@@ -39,6 +39,7 @@ module Shadcn
       merge_html_attributes({
         type: "button",
         class: cn(TRIGGER_CLASSES, class_name),
+        "data-slot": "accordion-trigger",
         "data-shadcn--accordion-target": "trigger",
         "data-action": "click->shadcn--accordion#toggle",
         "data-state": "closed",

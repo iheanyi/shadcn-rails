@@ -31,6 +31,7 @@ module Shadcn
     def item_attributes
       {
         class: merge_classes(BASE_CLASSES),
+        "data-slot": "accordion-item",
         "data-shadcn--accordion-target": "item",
         "data-value": @value,
         "data-state": "closed"

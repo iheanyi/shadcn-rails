@@ -42,7 +42,8 @@ module Shadcn
     def accordion_attributes
       merge_html_attributes(
         {
-          class: accordion_classes
+          class: accordion_classes,
+          "data-slot": "accordion"
         },
         {
           controller: "shadcn--accordion",
