@@ -25,23 +25,86 @@ module Shadcn
   #   <% end %>
   #
   class ButtonGroupComponent < BaseComponent
+    BASE_CLASSES = "flex w-fit items-stretch has-[>[data-slot=button-group]]:gap-2 [&>*]:focus-visible:relative [&>*]:focus-visible:z-10 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-md [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1"
+
     ORIENTATIONS = {
-      horizontal: "flex-row",
-      vertical: "flex-col"
+      horizontal: "[&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:border-l-0 [&>*:not(:last-child)]:rounded-r-none",
+      vertical: "flex-col [&>*:not(:first-child)]:rounded-t-none [&>*:not(:first-child)]:border-t-0 [&>*:not(:last-child)]:rounded-b-none"
     }.freeze
 
-    BASE_CLASSES = "inline-flex"
-
-    # Button slot - renders Button components with adjusted border radius
-    renders_many :buttons, lambda { |**options, &block|
-      # Buttons in a group need special border radius handling
-      options[:class_name] = cn(
-        "rounded-none first:rounded-l-md last:rounded-r-md",
-        "-ml-px first:ml-0", # Collapse borders
-        options[:class_name]
-      )
-      Shadcn::ButtonComponent.new(**options, &block)
+    # Use polymorphic slots to preserve the order of buttons, text, and separators.
+    renders_many :items, types: {
+      button: {
+        renders: lambda { |**options, &block|
+          Shadcn::ButtonComponent.new(**options, &block)
+        },
+        as: :button
+      },
+      text: {
+        renders: lambda { |**options, &block|
+          ButtonGroupTextComponent.new(**options, &block)
+        },
+        as: :text
+      },
+      separator: {
+        renders: lambda { |**options|
+          ButtonGroupSeparatorComponent.new(**options)
+        },
+        as: :separator
+      }
     }
+
+    class ButtonGroupTextComponent < BaseComponent
+      BASE_CLASSES = "flex items-center gap-2 rounded-md border bg-muted px-4 text-sm font-medium shadow-xs [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4"
+
+      def call
+        tag.div(content, **merge_html_attributes({ class: text_classes }))
+      end
+
+      private
+
+      def text_classes
+        cn(BASE_CLASSES, class_name)
+      end
+    end
+
+    class ButtonGroupSeparatorComponent < BaseComponent
+      BASE_CLASSES = "relative m-0! self-stretch bg-input data-[orientation=vertical]:h-auto"
+
+      # @param orientation [Symbol] Separator orientation (:horizontal, :vertical)
+      # @param decorative [Boolean] Whether the separator is purely decorative
+      def initialize(orientation: :vertical, decorative: true, **options)
+        super(**options)
+        @orientation = orientation.to_sym
+        @decorative = decorative
+      end
+
+      def call
+        tag.div(**merge_html_attributes(separator_attributes, slot: "button-group-separator", orientation: @orientation))
+      end
+
+      private
+
+      def separator_attributes
+        {
+          class: separator_classes,
+          role: separator_role,
+          "aria-orientation": aria_orientation
+        }.compact
+      end
+
+      def separator_classes
+        cn(Shadcn::SeparatorComponent::BASE_CLASSES, BASE_CLASSES, class_name)
+      end
+
+      def separator_role
+        @decorative ? "none" : "separator"
+      end
+
+      def aria_orientation
+        @decorative ? nil : @orientation.to_s
+      end
+    end
 
     # @param orientation [Symbol] Layout orientation (:horizontal, :vertical)
     def initialize(orientation: :horizontal, **options)
@@ -50,18 +113,22 @@ module Shadcn
     end
 
     def call
-      tag.div(class: group_classes, role: "group", **html_options.merge(build_data)) do
-        safe_join(buttons)
-      end
+      tag.div(group_content, **merge_html_attributes({ class: group_classes, role: "group" }, slot: "button-group", orientation: @orientation))
     end
 
     private
+
+    def group_content
+      raw_content = content
+      return safe_join(items) if items.any?
+
+      raw_content
+    end
 
     def group_classes
       cn(
         BASE_CLASSES,
         ORIENTATIONS[@orientation],
-        @orientation == :vertical ? "first:[&>*]:rounded-t-md last:[&>*]:rounded-b-md [&>*]:rounded-none [&>*]:-mt-px [&>*]:first:mt-0" : "",
         class_name
       )
     end
