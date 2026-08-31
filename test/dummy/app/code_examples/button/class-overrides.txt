@@ -1,0 +1,6 @@
+<div class="flex flex-wrap items-center gap-4">
+  <%= render Shadcn::Button.new do %>Default padding<% end %>
+  <%= render Shadcn::Button.new(class: "p-0") do %>p-0<% end %>
+  <%= render Shadcn::Button.new(class: "px-8") do %>px-8<% end %>
+  <%= render Shadcn::Button.new(class: "h-12 w-auto") do %>h-12 w-auto<% end %>
+</div>
