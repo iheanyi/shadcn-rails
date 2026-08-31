@@ -20,12 +20,12 @@ module Shadcn
   #   </div>
   #
   class SkeletonComponent < BaseComponent
-    BASE_CLASSES = "animate-pulse rounded-md bg-primary/10"
+    BASE_CLASSES = "animate-pulse rounded-md bg-accent"
 
     private
 
-    def skeleton_classes
-      merge_classes(BASE_CLASSES)
+    def skeleton_attributes
+      merge_html_attributes({ class: merge_classes(BASE_CLASSES), "data-slot": "skeleton" })
     end
   end
 end
