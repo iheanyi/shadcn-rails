@@ -153,6 +153,7 @@ collapsible:
   name: collapsible
   ruby_files:
     - app/components/shadcn/collapsible_component.rb
+    - app/components/shadcn/collapsible_trigger_component.rb
     - app/components/shadcn/collapsible_content_component.rb
   templates:
     - app/components/shadcn/collapsible_component.html.erb

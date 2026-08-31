@@ -49,6 +49,10 @@ describe("CollapsibleController", () => {
       expect(controller.contentTarget.dataset.state).toBe("closed")
     })
 
+    test("sets aria-expanded false on trigger", () => {
+      expect(controller.triggerTarget.getAttribute("aria-expanded")).toBe("false")
+    })
+
     test("content is hidden initially", () => {
       expect(controller.contentTarget.hidden).toBe(true)
     })
@@ -102,6 +106,14 @@ describe("CollapsibleController", () => {
       await nextFrame()
 
       expect(controller.contentTarget.dataset.state).toBe("open")
+    })
+
+    test("updates trigger data-state and aria-expanded on toggle", async () => {
+      controller.toggle()
+      await nextFrame()
+
+      expect(controller.triggerTarget.dataset.state).toBe("open")
+      expect(controller.triggerTarget.getAttribute("aria-expanded")).toBe("true")
     })
 
     test("shows content when toggled open", async () => {
@@ -257,6 +269,10 @@ describe("CollapsibleController", () => {
 
     test("content is visible initially", () => {
       expect(controller.contentTarget.hidden).toBe(false)
+    })
+
+    test("does not replay open animation on connect", () => {
+      expect(controller.contentTarget.style.height).toBe("")
     })
   })
 

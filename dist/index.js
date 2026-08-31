@@ -1779,13 +1779,18 @@ let default_1$q = class default_1 extends stimulus.Controller {
  * Collapsible controller for expandable content
  */
 let default_1$p = class default_1 extends stimulus.Controller {
+    constructor() {
+        super(...arguments);
+        this.hasConnected = false;
+    }
     static { this.targets = ["trigger", "content"]; }
     static { this.values = {
         open: { type: Boolean, default: false },
         disabled: { type: Boolean, default: false }
     }; }
     connect() {
-        this.updateState();
+        this.hasConnected = true;
+        this.updateState({ animate: false });
     }
     toggle() {
         if (this.disabledValue)
@@ -1803,38 +1808,55 @@ let default_1$p = class default_1 extends stimulus.Controller {
         this.openValue = false;
         this.updateState();
     }
-    updateState() {
+    updateState({ animate = true } = {}) {
         const state = this.openValue ? "open" : "closed";
         this.element.dataset.state = state;
+        if (this.hasTriggerTarget) {
+            this.triggerTarget.dataset.state = state;
+            this.triggerTarget.setAttribute("aria-expanded", this.openValue.toString());
+        }
         if (this.hasContentTarget) {
             this.contentTarget.dataset.state = state;
             if (this.openValue) {
                 this.contentTarget.hidden = false;
-                // Animate open
-                const height = this.contentTarget.scrollHeight;
-                this.contentTarget.style.height = "0px";
-                requestAnimationFrame(() => {
-                    this.contentTarget.style.height = `${height}px`;
-                    setTimeout(() => {
-                        this.contentTarget.style.height = "";
-                    }, 200);
-                });
+                if (!animate) {
+                    this.contentTarget.style.height = "";
+                }
+                else {
+                    // Animate open
+                    const height = this.contentTarget.scrollHeight;
+                    this.contentTarget.style.height = "0px";
+                    requestAnimationFrame(() => {
+                        this.contentTarget.style.height = `${height}px`;
+                        setTimeout(() => {
+                            this.contentTarget.style.height = "";
+                        }, 200);
+                    });
+                }
             }
             else {
-                // Animate close
-                this.contentTarget.style.height = `${this.contentTarget.scrollHeight}px`;
-                requestAnimationFrame(() => {
-                    this.contentTarget.style.height = "0px";
-                    setTimeout(() => {
-                        this.contentTarget.hidden = true;
-                        this.contentTarget.style.height = "";
-                    }, 200);
-                });
+                if (!animate) {
+                    this.contentTarget.hidden = true;
+                    this.contentTarget.style.height = "";
+                }
+                else {
+                    // Animate close
+                    this.contentTarget.style.height = `${this.contentTarget.scrollHeight}px`;
+                    requestAnimationFrame(() => {
+                        this.contentTarget.style.height = "0px";
+                        setTimeout(() => {
+                            this.contentTarget.hidden = true;
+                            this.contentTarget.style.height = "";
+                        }, 200);
+                    });
+                }
             }
         }
         this.dispatch(this.openValue ? "opened" : "closed");
     }
     openValueChanged() {
+        if (!this.hasConnected)
+            return;
         this.updateState();
     }
 };

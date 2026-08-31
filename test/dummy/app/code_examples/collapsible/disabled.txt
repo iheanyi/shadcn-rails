@@ -1,9 +1,10 @@
 <div class="w-full max-w-md space-y-2">
-  <%= render Shadcn::CollapsibleComponent.new(disabled: true) do |collapsible| %>
-    <% collapsible.with_trigger do %>
-      <%= render Shadcn::ButtonComponent.new(variant: :ghost, disabled: true) do %>
-        Disabled Collapsible
-      <% end %>
+  <%= render Shadcn::Collapsible.new(disabled: true) do |collapsible| %>
+    <% collapsible.with_trigger(variant: :outline, class_name: "w-full justify-between") do %>
+      <span>Disabled Collapsible</span>
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="m6 9 6 6 6-6"></path>
+    </svg>
     <% end %>
     <% collapsible.with_body do %>
       <div class="rounded-md border px-4 py-3 text-sm">

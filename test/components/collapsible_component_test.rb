@@ -16,7 +16,7 @@ class CollapsibleComponentTest < ViewComponent::TestCase
       collapsible.with_trigger { "Toggle" }
     end
 
-    assert_selector "[data-shadcn--collapsible-target='trigger']", text: "Toggle"
+    assert_selector "button[data-shadcn--collapsible-target='trigger']", text: "Toggle"
   end
 
   def test_trigger_has_toggle_action
@@ -25,6 +25,22 @@ class CollapsibleComponentTest < ViewComponent::TestCase
     end
 
     assert_selector "[data-action='click->shadcn--collapsible#toggle']"
+  end
+
+  def test_trigger_has_aria_expanded
+    render_inline(Shadcn::CollapsibleComponent.new(open: true)) do |collapsible|
+      collapsible.with_trigger { "Click me" }
+    end
+
+    assert_selector "button[aria-expanded='true'][data-state='open']"
+  end
+
+  def test_trigger_renders_disabled_when_collapsible_disabled
+    render_inline(Shadcn::CollapsibleComponent.new(disabled: true)) do |collapsible|
+      collapsible.with_trigger { "Click me" }
+    end
+
+    assert_selector "button[disabled][data-shadcn--collapsible-target='trigger']"
   end
 
   # Body slot
@@ -50,6 +66,15 @@ class CollapsibleComponentTest < ViewComponent::TestCase
 
     assert_selector "[data-shadcn--collapsible-open-value='true']"
     assert_selector "[data-state='open']"
+  end
+
+  def test_body_inherits_open_state
+    render_inline(Shadcn::CollapsibleComponent.new(open: true)) do |collapsible|
+      collapsible.with_body { "Visible content" }
+    end
+
+    assert_selector "[data-shadcn--collapsible-target='content'][data-state='open']", text: "Visible content"
+    assert_no_selector "[data-shadcn--collapsible-target='content'][hidden]", visible: false
   end
 
   # Disabled state
