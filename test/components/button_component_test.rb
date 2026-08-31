@@ -9,6 +9,13 @@ class ButtonComponentTest < ViewComponent::TestCase
     assert_selector "button", text: "Click me"
     assert_selector "button[type='button']"
     assert_selector "button.bg-primary"
+    assert_selector "button[data-slot='button'][data-variant='default'][data-size='default']"
+
+    classes = page.find("button", text: "Click me")["class"].split
+    assert_includes classes, "focus-visible:ring-[3px]"
+    assert_includes classes, "has-[>svg]:px-3"
+    refute_includes classes, "focus-visible:ring-1"
+    refute_includes classes, "shadow-xs"
   end
 
   def test_renders_with_variants
@@ -19,6 +26,9 @@ class ButtonComponentTest < ViewComponent::TestCase
     # Destructive
     render_inline(Shadcn::ButtonComponent.new(variant: :destructive)) { "Delete" }
     assert_selector "button.bg-destructive"
+    destructive_classes = page.find("button", text: "Delete")["class"].split
+    assert_includes destructive_classes, "text-white"
+    refute_includes destructive_classes, "text-destructive-foreground"
 
     # Outline
     render_inline(Shadcn::ButtonComponent.new(variant: :outline)) { "Outline" }
@@ -49,10 +59,13 @@ class ButtonComponentTest < ViewComponent::TestCase
     # Large
     render_inline(Shadcn::ButtonComponent.new(size: :lg)) { "Large" }
     assert_selector "button.h-10"
+    large_classes = page.find("button", text: "Large")["class"].split
+    assert_includes large_classes, "px-6"
+    refute_includes large_classes, "px-8"
 
     # Icon
     render_inline(Shadcn::ButtonComponent.new(size: :icon)) { "+" }
-    assert_selector "button.w-9"
+    assert_selector "button.size-9"
   end
 
   def test_renders_as_link
@@ -60,6 +73,7 @@ class ButtonComponentTest < ViewComponent::TestCase
 
     assert_selector "a[href='/path']", text: "Go"
     assert_selector "a[role='button']"
+    assert_selector "a[data-slot='button'][data-variant='default'][data-size='default']"
   end
 
   def test_renders_disabled_state
