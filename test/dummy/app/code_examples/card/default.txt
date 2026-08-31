@@ -1,0 +1,21 @@
+<%= render Shadcn::CardComponent.new(class_name: "w-[350px]") do |card| %>
+  <% card.with_header do |header| %>
+    <div class="flex items-center gap-4">
+      <%= render Shadcn::AvatarComponent.new(
+        src: "https://github.com/shadcn.png",
+        alt: "Shadcn",
+        size: :lg
+      ) %>
+      <div>
+        <% header.with_title { "Shadcn" } %>
+        <% header.with_description { "@shadcn" } %>
+      </div>
+    </div>
+  <% end %>
+  <% card.with_content do %>
+    <p class="text-sm">Creator of shadcn/ui. Building in public at @shadcn.</p>
+  <% end %>
+  <% card.with_footer do %>
+    <%= render Shadcn::ButtonComponent.new(variant: :outline, class_name: "w-full") { "Follow" } %>
+  <% end %>
+<% end %>

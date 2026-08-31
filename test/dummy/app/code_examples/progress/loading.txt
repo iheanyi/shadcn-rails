@@ -1,0 +1,4 @@
+<div class="space-y-2">
+  <p class="text-sm text-muted-foreground">Loading your data...</p>
+  <%= render Shadcn::Progress.new(indeterminate: true) %>
+</div>

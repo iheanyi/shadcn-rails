@@ -23,7 +23,11 @@ class DummyDocsCatalogTest < ActionDispatch::IntegrationTest
     "fallback_table",
     "demo_button",
     "icon_svg",
-    "badge_html"
+    "badge_html",
+    "PreviewPagy",
+    "PreviewCollection",
+    "section_trigger",
+    "section_content"
   ].freeze
   REQUIRED_PASTEABLE_CODE_EXAMPLES = %w[
     carousel/default
@@ -76,6 +80,21 @@ class DummyDocsCatalogTest < ActionDispatch::IntegrationTest
     code_example_files.each do |example|
       assert_code_example_compiles(example)
     end
+  end
+
+  def test_each_docs_showcase_call_has_file_backed_snippet
+    showcase_calls.each do |view, slug, example|
+      assert code_example_path_for(slug, example),
+        "#{view.basename} showcase(\"#{slug}\", :#{example}) should have a matching app/code_examples/#{slug}/#{example}.txt file"
+    end
+  end
+
+  def test_showcase_helper_does_not_fall_back_to_preview_source
+    source = File.read(Rails.root.join("app/helpers/showcase_helper.rb"))
+
+    refute_includes source, "erb_preview_method_source"
+    refute_includes source, "preview_method_source"
+    assert_includes source, "Missing code example"
   end
 
   def test_no_go_code_examples_are_explicitly_pasteable_erb
@@ -153,6 +172,27 @@ class DummyDocsCatalogTest < ActionDispatch::IntegrationTest
 
   def code_example_files
     Rails.root.join("app/code_examples").glob("**/*.txt")
+  end
+
+  def showcase_calls
+    docs_views.flat_map do |view|
+      source = File.read(view)
+      explicit_examples = source.scan(/showcase\(["']([^"']+)["']\s*,\s*:([a-zA-Z0-9_]+)/).map do |slug, example|
+        [view, slug, example]
+      end
+      default_examples = source.scan(/showcase\(["']([^"']+)["']\)/).map do |slug|
+        [view, slug.first, "default"]
+      end
+
+      explicit_examples + default_examples
+    end
+  end
+
+  def code_example_path_for(slug, example)
+    [
+      Rails.root.join("app/code_examples/#{slug}/#{example}.txt"),
+      Rails.root.join("app/code_examples/#{slug}/#{example.tr('_', '-')}.txt")
+    ].find { |path| File.exist?(path) }
   end
 
   def assert_code_example_compiles(example)

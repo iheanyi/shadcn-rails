@@ -1,0 +1,28 @@
+<div class="flex flex-wrap items-center gap-4">
+  <%= render Shadcn::PopoverComponent.new(side: :bottom, align: :start) do |popover| %>
+    <% popover.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Align Start" } %>
+    <% end %>
+    <% popover.with_body do %>
+      <p class="text-sm">Aligned to the start of trigger</p>
+    <% end %>
+  <% end %>
+
+  <%= render Shadcn::PopoverComponent.new(side: :bottom, align: :center) do |popover| %>
+    <% popover.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Align Center" } %>
+    <% end %>
+    <% popover.with_body do %>
+      <p class="text-sm">Centered on trigger</p>
+    <% end %>
+  <% end %>
+
+  <%= render Shadcn::PopoverComponent.new(side: :bottom, align: :end) do |popover| %>
+    <% popover.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Align End" } %>
+    <% end %>
+    <% popover.with_body do %>
+      <p class="text-sm">Aligned to the end of trigger</p>
+    <% end %>
+  <% end %>
+</div>
