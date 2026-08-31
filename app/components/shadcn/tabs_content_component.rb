@@ -3,7 +3,7 @@
 module Shadcn
   # Tabs Content component
   class TabsContentComponent < BaseComponent
-    BASE_CLASSES = "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+    BASE_CLASSES = "flex-1 outline-none"
 
     # @param value [String] The value that identifies this tab panel
     def initialize(value:, **options)
@@ -21,6 +21,7 @@ module Shadcn
       {
         class: merge_classes(BASE_CLASSES),
         role: "tabpanel",
+        "data-slot": "tabs-content",
         "data-shadcn--tabs-target": "content",
         "data-value": @value,
         "data-state": "inactive",

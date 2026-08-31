@@ -3,11 +3,21 @@
 module Shadcn
   # Tabs List component
   class TabsListComponent < BaseComponent
-    BASE_CLASSES = "inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground"
+    BASE_CLASSES = "group/tabs-list inline-flex w-fit items-center justify-center rounded-lg p-[3px] text-muted-foreground group-data-[orientation=horizontal]/tabs:h-9 group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col data-[variant=line]:rounded-none"
+    VARIANTS = {
+      default: "bg-muted",
+      line: "gap-1 bg-transparent"
+    }.freeze
 
     renders_many :triggers, lambda { |value:, **options, &block|
       TabsTriggerComponent.new(value: value, **options, &block)
     }
+
+    # @param variant [Symbol] Visual style (:default, :line)
+    def initialize(variant: :default, **options)
+      super(**options)
+      @variant = variant.to_sym
+    end
 
     def call
       content_tag(:div, list_content, list_attributes)
@@ -21,8 +31,10 @@ module Shadcn
 
     def list_attributes
       {
-        class: merge_classes(BASE_CLASSES),
+        class: merge_classes(cn(BASE_CLASSES, VARIANTS.fetch(@variant, VARIANTS[:default]))),
         role: "tablist",
+        "data-slot": "tabs-list",
+        "data-variant": @variant,
         "data-shadcn--tabs-target": "list"
       }
     end
