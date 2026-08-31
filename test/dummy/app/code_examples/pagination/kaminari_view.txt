@@ -1,4 +1,8 @@
-<%= render Shadcn::Pagination.new(
-  collection: @posts,
-  url_builder: ->(page) { posts_path(page: page) }
-) %>
+<%= turbo_frame_tag "results" do %>
+  <%= render @posts %>
+
+  <%= render Shadcn::Pagination.new(
+    collection: @posts,
+    url_builder: ->(page) { posts_path(page: page, anchor: "results") }
+  ) %>
+<% end %>

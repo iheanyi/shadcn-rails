@@ -278,6 +278,14 @@ class PaginationComponentTest < ViewComponent::TestCase
     assert_selector "a", text: /Next/
   end
 
+  def test_disables_previous_on_first_page_with_pagy
+    pagy = MockPagy.new(page: 1, pages: 5)
+    render_inline(Shadcn::PaginationComponent.new(pagy: pagy))
+
+    assert_selector "span[aria-disabled='true']", text: /Previous/
+    assert_selector "a", text: /Next/
+  end
+
   def test_disables_next_on_last_page
     collection = MockKaminariCollection.new(current_page: 5, total_pages: 5)
     render_inline(Shadcn::PaginationComponent.new(collection: collection))
@@ -285,6 +293,14 @@ class PaginationComponentTest < ViewComponent::TestCase
     # Previous should be a link
     assert_selector "a", text: /Previous/
     # Next should be disabled on last page
+    assert_selector "span[aria-disabled='true']", text: /Next/
+  end
+
+  def test_disables_next_on_last_page_with_pagy
+    pagy = MockPagy.new(page: 5, pages: 5)
+    render_inline(Shadcn::PaginationComponent.new(pagy: pagy))
+
+    assert_selector "a", text: /Previous/
     assert_selector "span[aria-disabled='true']", text: /Next/
   end
 

@@ -1,4 +1,4 @@
 <%= render Shadcn::PaginationComponent.new(
   pagy: @pagy,
-  url_builder: ->(page) { posts_path(page: page) }
+  url_builder: ->(page) { posts_path(page: page, anchor: "results") }
 ) %>

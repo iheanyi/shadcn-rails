@@ -122,6 +122,12 @@
     <p class="text-sm text-muted-foreground">
       Demo data: showing page <%= @pagination_kaminari.current_page %> of <%= @pagination_kaminari.total_pages %> for a fake 50-post list.
     </p>
+    <p class="text-sm text-muted-foreground">
+      For live Rails pages, build pager URLs with an anchor such as
+      <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">posts_path(page: page, anchor: "results")</code>.
+      If the list should update in place, wrap the list and pager in an optional
+      <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">turbo_frame_tag "results"</code>.
+    </p>
 
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Pagy</h3>
@@ -130,15 +136,17 @@
         objects expose page, pages, prev, and next. This live demo uses a small Pagy-shaped stand-in; in your app, pass the real Pagy object with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">pagy:</code>.
       </p>
       <%= render "docs/demo_card" do %>
-        <ol class="mb-4 grid gap-2 text-sm sm:grid-cols-2">
-          <% @pagination_items.each do |item| %>
-            <li class="rounded-md border bg-card px-3 py-2"><%= item %></li>
-          <% end %>
-        </ol>
-        <%= render Shadcn::PaginationComponent.new(
-          pagy: @pagination_pagy,
-          url_builder: ->(page) { docs_component_path(slug: "pagination", page: page) }
-        ) %>
+        <%= turbo_frame_tag "pagy-demo", class: "block scroll-mt-24" do %>
+          <ol class="mb-4 grid gap-2 text-sm sm:grid-cols-2">
+            <% @pagination_items.each do |item| %>
+              <li class="rounded-md border bg-card px-3 py-2"><%= item %></li>
+            <% end %>
+          </ol>
+          <%= render Shadcn::PaginationComponent.new(
+            pagy: @pagination_pagy,
+            url_builder: ->(page) { docs_component_path(slug: "pagination", page: page, anchor: "pagy-demo") }
+          ) %>
+        <% end %>
       <% end %>
       <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/pagination/pagy_view.txt")) %>
     </div>
@@ -164,15 +172,17 @@
         </div>
       </div>
       <%= render "docs/demo_card" do %>
-        <ol class="mb-4 grid gap-2 text-sm sm:grid-cols-2">
-          <% @pagination_items.each do |item| %>
-            <li class="rounded-md border bg-card px-3 py-2"><%= item %></li>
-          <% end %>
-        </ol>
-        <%= render Shadcn::Pagination.new(
-          collection: @pagination_kaminari,
-          url_builder: ->(page) { docs_component_path(slug: "pagination", page: page) }
-        ) %>
+        <%= turbo_frame_tag "kaminari-demo", class: "block scroll-mt-24" do %>
+          <ol class="mb-4 grid gap-2 text-sm sm:grid-cols-2">
+            <% @pagination_items.each do |item| %>
+              <li class="rounded-md border bg-card px-3 py-2"><%= item %></li>
+            <% end %>
+          </ol>
+          <%= render Shadcn::Pagination.new(
+            collection: @pagination_kaminari,
+            url_builder: ->(page) { docs_component_path(slug: "pagination", page: page, anchor: "kaminari-demo") }
+          ) %>
+        <% end %>
       <% end %>
       <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/pagination/kaminari_view.txt")) %>
     </div>
@@ -185,15 +195,17 @@
         <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">collection:</code> option.
       </p>
       <%= render "docs/demo_card" do %>
-        <ol class="mb-4 grid gap-2 text-sm sm:grid-cols-2">
-          <% @pagination_items.each do |item| %>
-            <li class="rounded-md border bg-card px-3 py-2"><%= item %></li>
-          <% end %>
-        </ol>
-        <%= render Shadcn::PaginationComponent.new(
-          collection: @pagination_will_paginate,
-          url_builder: ->(page) { docs_component_path(slug: "pagination", page: page) }
-        ) %>
+        <%= turbo_frame_tag "will-paginate-demo", class: "block scroll-mt-24" do %>
+          <ol class="mb-4 grid gap-2 text-sm sm:grid-cols-2">
+            <% @pagination_items.each do |item| %>
+              <li class="rounded-md border bg-card px-3 py-2"><%= item %></li>
+            <% end %>
+          </ol>
+          <%= render Shadcn::PaginationComponent.new(
+            collection: @pagination_will_paginate,
+            url_builder: ->(page) { docs_component_path(slug: "pagination", page: page, anchor: "will-paginate-demo") }
+          ) %>
+        <% end %>
       <% end %>
       <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/pagination/will_paginate_view.txt")) %>
     </div>
@@ -205,15 +217,17 @@
         and should return the URL for that page. Use it to preserve filters, sorting, anchors, or nested resource paths.
       </p>
       <%= render "docs/demo_card" do %>
-        <ol class="mb-4 grid gap-2 text-sm sm:grid-cols-2">
-          <% @pagination_items.each do |item| %>
-            <li class="rounded-md border bg-card px-3 py-2"><%= item %></li>
-          <% end %>
-        </ol>
-        <%= render Shadcn::PaginationComponent.new(
-          collection: @pagination_kaminari,
-          url_builder: ->(page) { docs_component_path(slug: "pagination", page: page, filter: "published") }
-        ) %>
+        <%= turbo_frame_tag "custom-url-builder-demo", class: "block scroll-mt-24" do %>
+          <ol class="mb-4 grid gap-2 text-sm sm:grid-cols-2">
+            <% @pagination_items.each do |item| %>
+              <li class="rounded-md border bg-card px-3 py-2"><%= item %></li>
+            <% end %>
+          </ol>
+          <%= render Shadcn::PaginationComponent.new(
+            collection: @pagination_kaminari,
+            url_builder: ->(page) { docs_component_path(slug: "pagination", page: page, filter: "published", anchor: "custom-url-builder-demo") }
+          ) %>
+        <% end %>
       <% end %>
       <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/pagination/custom_url_builder.txt")) %>
     </div>
@@ -224,11 +238,13 @@
         Control how many pages are shown around the current page with the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">window</code> option.
       </p>
       <%= render "docs/demo_card" do %>
-        <%= render Shadcn::PaginationComponent.new(
-          collection: @pagination_kaminari,
-          window: 1,
-          url_builder: ->(page) { docs_component_path(slug: "pagination", page: page) }
-        ) %>
+        <%= turbo_frame_tag "window-size-demo", class: "block scroll-mt-24" do %>
+          <%= render Shadcn::PaginationComponent.new(
+            collection: @pagination_kaminari,
+            window: 1,
+            url_builder: ->(page) { docs_component_path(slug: "pagination", page: page, anchor: "window-size-demo") }
+          ) %>
+        <% end %>
       <% end %>
       <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/pagination/window_size.txt")) %>
     </div>

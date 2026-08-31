@@ -14,13 +14,24 @@ class DummyPaginationDocsTest < ActionDispatch::IntegrationTest
     assert_select "h3", text: "Kaminari"
     assert_select "h3", text: "will_paginate"
     assert_select "h3", text: "Custom URL Builder"
-    assert_select "a[href='/docs/components/pagination?page=2']", minimum: 1
+    assert_select "turbo-frame#pagy-demo.scroll-mt-24"
+    assert_select "turbo-frame#kaminari-demo.scroll-mt-24"
+    assert_select "turbo-frame#will-paginate-demo.scroll-mt-24"
+    assert_select "turbo-frame#custom-url-builder-demo.scroll-mt-24"
+    assert_select "turbo-frame#window-size-demo.scroll-mt-24"
+    assert_select "a[href='/docs/components/pagination?page=2#kaminari-demo']", minimum: 1
+    assert_select "a[href='/docs/components/pagination?page=2#pagy-demo']", minimum: 1
+    assert_match %r{/docs/components/pagination\?(?:page=2&amp;filter=published|filter=published&amp;page=2)#custom-url-builder-demo}, response.body
+    assert_select "turbo-frame#kaminari-demo span[aria-disabled='true']", text: /Previous/
+    assert_select "turbo-frame#pagy-demo span[aria-disabled='true']", text: /Previous/
     assert_includes response.body, "pagy: @pagy"
     assert_includes response.body, "Post.page(params[:page])"
     assert_includes response.body, "Kaminari.paginate_array"
     assert_includes response.body, "shadcn_paginate @posts"
     assert_includes response.body, "render Shadcn::Pagination.new"
     assert_includes response.body, "collection: @posts"
+    assert_includes response.body, "posts_path(page: page, anchor:"
+    assert_includes response.body, "turbo_frame_tag"
     assert_includes response.body, "url_builder:"
     assert_includes response.body, "content.with_item(href: posts_path(page: 2), active: true)"
     assert_includes response.body, "content.with_ellipse"
@@ -37,5 +48,14 @@ class DummyPaginationDocsTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Demo post 6"
     assert_includes response.body, "Demo post 10"
     assert_select "a[aria-current='page']", text: "2", minimum: 1
+  end
+
+  def test_live_demo_disables_next_on_last_page
+    get "/docs/components/pagination?page=10"
+
+    assert_response :success
+    assert_includes response.body, "showing page 10 of 10"
+    assert_select "turbo-frame#kaminari-demo span[aria-disabled='true']", text: /Next/
+    assert_select "turbo-frame#pagy-demo span[aria-disabled='true']", text: /Next/
   end
 end
