@@ -15,6 +15,7 @@ module Shadcn
       attrs = {
         type: "button",
         class: merge_classes(BASE_CLASSES),
+        "data-slot": "alert-dialog-action",
         "data-action": "click->shadcn--dialog#close"
       }
       attrs.merge!(html_options)

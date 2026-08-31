@@ -14,7 +14,7 @@ module Shadcn
     }
 
     def call
-      content_tag(:template, content_wrapper, { "data-shadcn--dialog-target": "template" })
+      content_tag(:template, content_wrapper, { "data-slot": "alert-dialog-portal", "data-shadcn--dialog-target": "template" })
     end
 
     private
@@ -29,6 +29,7 @@ module Shadcn
     def overlay
       content_tag(:div, "", {
         class: OVERLAY_CLASSES,
+        "data-slot": "alert-dialog-overlay",
         "data-shadcn--dialog-target": "overlay",
         "data-state": "closed",
         "aria-hidden": "true"
@@ -36,14 +37,15 @@ module Shadcn
     end
 
     def dialog_panel
-      content_tag(:div, panel_content, {
+      content_tag(:div, panel_content, merge_html_attributes({
         class: cn(CONTENT_CLASSES, class_name),
         role: "alertdialog",
         "aria-modal": "true",
+        "data-slot": "alert-dialog-content",
         "data-shadcn--dialog-target": "content",
         "data-state": "closed",
         tabindex: "-1"
-      })
+      }))
     end
 
     def panel_content

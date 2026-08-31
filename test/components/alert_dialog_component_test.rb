@@ -84,4 +84,35 @@ class AlertDialogComponentTest < ViewComponent::TestCase
 
     assert_selector "[data-testid='alert-dialog']"
   end
+
+  def test_header_uses_v4_gap_classes
+    result = render_inline(Shadcn::AlertDialogComponent.new) do |dialog|
+      dialog.with_body do |body|
+        body.with_header { "Header content" }
+      end
+    end
+
+    header_tag = result.to_html[/<[^>]*data-slot="alert-dialog-header"[^>]*>/m]
+    header_classes = header_tag[/class="([^"]*)"/, 1].split
+
+    assert_includes header_classes, "gap-2"
+    refute_includes header_classes, "space-y-2"
+  end
+
+  def test_title_uses_dialog_v4_typography_classes
+    result = render_inline(Shadcn::AlertDialogComponent.new) do |dialog|
+      dialog.with_body do |body|
+        body.with_header do |header|
+          header.with_title { "Alert Dialog Title" }
+        end
+      end
+    end
+
+    title_tag = result.to_html[/<[^>]*data-slot="alert-dialog-title"[^>]*>/m]
+    title_classes = title_tag[/class="([^"]*)"/, 1].split
+
+    assert_includes title_classes, "text-lg"
+    assert_includes title_classes, "leading-none"
+    assert_includes title_classes, "font-semibold"
+  end
 end

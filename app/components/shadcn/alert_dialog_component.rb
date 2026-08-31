@@ -47,5 +47,15 @@ module Shadcn
         "shadcn--dialog-modal-value": "true"
       }
     end
+
+    def alert_dialog_attributes
+      merge_html_attributes(
+        {
+          class: alert_dialog_classes,
+          "data-slot": "alert-dialog"
+        },
+        alert_dialog_data_attrs
+      )
+    end
   end
 end
