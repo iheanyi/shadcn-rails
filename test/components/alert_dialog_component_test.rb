@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "nokogiri"
 
 class AlertDialogComponentTest < ViewComponent::TestCase
   def test_renders_alert_dialog_container
@@ -120,7 +121,7 @@ class AlertDialogComponentTest < ViewComponent::TestCase
   end
 
   def test_action_and_cancel_use_button_component_classes
-    render_inline(Shadcn::AlertDialogComponent.new) do |dialog|
+    result = render_inline(Shadcn::AlertDialogComponent.new) do |dialog|
       dialog.with_body do |body|
         body.with_footer do |footer|
           footer.with_cancel { "Cancel" }
@@ -129,8 +130,9 @@ class AlertDialogComponentTest < ViewComponent::TestCase
       end
     end
 
-    action_classes = page.find("[data-slot='alert-dialog-action']", visible: :all)[:class].split
-    cancel_classes = page.find("[data-slot='alert-dialog-cancel']", visible: :all)[:class].split
+    fragment = Nokogiri::HTML.fragment(result.to_html)
+    action_classes = fragment.at_css("[data-slot='alert-dialog-action']")["class"].split
+    cancel_classes = fragment.at_css("[data-slot='alert-dialog-cancel']")["class"].split
 
     assert_includes action_classes, "focus-visible:ring-[3px]"
     assert_includes cancel_classes, "shadow-xs"
