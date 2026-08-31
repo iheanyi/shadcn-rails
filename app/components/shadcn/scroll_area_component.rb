@@ -20,7 +20,7 @@ module Shadcn
   #   <% end %>
   #
   class ScrollAreaComponent < BaseComponent
-    BASE_CLASSES = "relative"
+    BASE_CLASSES = "relative overflow-hidden"
     VIEWPORT_CLASSES = "size-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1"
     SCROLLBAR_CLASSES = "flex touch-none p-px transition-colors select-none"
     THUMB_CLASSES = "relative flex-1 rounded-full bg-border"
