@@ -5772,6 +5772,14 @@ let default_1$a = class default_1 extends stimulus.Controller {
     }
     selectByValue(value, dispatch = true) {
         this.valueValue = value;
+        if (this.hasTriggerTarget) {
+            if (value) {
+                this.triggerTarget.removeAttribute("data-placeholder");
+            }
+            else {
+                this.triggerTarget.setAttribute("data-placeholder", "");
+            }
+        }
         // Update hidden input
         if (this.hasInputTarget) {
             this.inputTarget.value = value;

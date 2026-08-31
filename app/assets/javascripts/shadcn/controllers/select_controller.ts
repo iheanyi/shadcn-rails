@@ -131,6 +131,14 @@ export default class extends Controller<HTMLElement> {
   selectByValue(value: string, dispatch = true) {
     this.valueValue = value
 
+    if (this.hasTriggerTarget) {
+      if (value) {
+        this.triggerTarget.removeAttribute("data-placeholder")
+      } else {
+        this.triggerTarget.setAttribute("data-placeholder", "")
+      }
+    }
+
     // Update hidden input
     if (this.hasInputTarget) {
       this.inputTarget.value = value

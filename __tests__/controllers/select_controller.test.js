@@ -159,6 +159,7 @@ describe("SelectController", () => {
       <div data-controller="shadcn--select"
            data-shadcn--select-value-value="">
         <button data-shadcn--select-target="trigger"
+                data-placeholder
                 data-action="click->shadcn--select#toggle">
           <span data-shadcn--select-target="display">Select...</span>
         </button>
@@ -210,6 +211,23 @@ describe("SelectController", () => {
       await nextFrame()
 
       expect(controller.inputTarget.value).toBe("banana")
+    })
+
+    test("removes placeholder state from trigger after selection", async () => {
+      controller.open()
+      const appleItem = controller.itemTargets[0]
+      click(appleItem)
+      await nextFrame()
+
+      expect(controller.triggerTarget.hasAttribute("data-placeholder")).toBe(false)
+    })
+
+    test("restores placeholder state when value is cleared", () => {
+      controller.triggerTarget.removeAttribute("data-placeholder")
+
+      controller.selectByValue("")
+
+      expect(controller.triggerTarget.hasAttribute("data-placeholder")).toBe(true)
     })
 
     test("closes dropdown after selection", async () => {

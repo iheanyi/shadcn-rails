@@ -180,6 +180,7 @@ class SelectComponentTest < ViewComponent::TestCase
     render_inline(Shadcn::SelectComponent.new)
 
     classes = page.find("[data-shadcn--select-target='content']", visible: false)["class"].split
+    assert_includes classes, "shadcn-select-content"
     assert_includes classes, "relative"
     assert_includes classes, "z-50"
     assert_includes classes, "max-h-(--radix-select-content-available-height)"
