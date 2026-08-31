@@ -115,9 +115,8 @@
   <div id="gem-integration" class="space-y-8">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Gem Integration</h2>
     <p class="leading-7">
-      The Pagination component accepts pagination objects from Pagy, Kaminari, and will_paginate. The Kaminari demo below
-      uses a real Kaminari collection; the Pagy and will_paginate demos use tiny stand-ins that expose the same methods the
-      component duck-types.
+      The Pagination component accepts real pagination objects from Pagy, Kaminari, and will_paginate. Each live demo below
+      builds the matching gem object from the same 50-post list and passes that object directly to the component.
     </p>
     <p class="text-sm text-muted-foreground">
       Demo data: showing page <%= @pagination_kaminari.current_page %> of <%= @pagination_kaminari.total_pages %> for a fake 50-post list.
@@ -133,12 +132,23 @@
       <h3 class="text-lg font-semibold">Pagy</h3>
       <p class="text-sm text-muted-foreground">
         <a href="https://github.com/ddnexus/pagy" target="_blank" class="underline hover:text-foreground">Pagy</a>
-        objects expose page, pages, prev, and next. This live demo uses a small Pagy-shaped stand-in; in your app, pass the real Pagy object with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">pagy:</code>.
+        objects expose page, pages, prev, and next. Include <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">Pagy::Backend</code>
+        in your controller, paginate your records there, then pass the real Pagy object with <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">pagy:</code>.
       </p>
+      <div class="grid gap-4 lg:grid-cols-2">
+        <div class="space-y-2">
+          <p class="text-sm font-medium">Controller</p>
+          <%= render "docs/code_example", language: "ruby", code: File.read(Rails.root.join("app/code_examples/pagination/pagy_controller.txt")) %>
+        </div>
+        <div class="space-y-2">
+          <p class="text-sm font-medium">View</p>
+          <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/pagination/pagy_view.txt")) %>
+        </div>
+      </div>
       <%= render "docs/demo_card" do %>
         <%= turbo_frame_tag "pagy-demo", class: "block scroll-mt-24" do %>
           <ol class="mb-4 grid gap-2 text-sm sm:grid-cols-2">
-            <% @pagination_items.each do |item| %>
+            <% @pagination_pagy_items.each do |item| %>
               <li class="rounded-md border bg-card px-3 py-2"><%= item %></li>
             <% end %>
           </ol>
@@ -174,7 +184,7 @@
       <%= render "docs/demo_card" do %>
         <%= turbo_frame_tag "kaminari-demo", class: "block scroll-mt-24" do %>
           <ol class="mb-4 grid gap-2 text-sm sm:grid-cols-2">
-            <% @pagination_items.each do |item| %>
+            <% @pagination_kaminari_items.each do |item| %>
               <li class="rounded-md border bg-card px-3 py-2"><%= item %></li>
             <% end %>
           </ol>
@@ -191,13 +201,25 @@
       <h3 class="text-lg font-semibold">will_paginate</h3>
       <p class="text-sm text-muted-foreground">
         <a href="https://github.com/mislav/will_paginate" target="_blank" class="underline hover:text-foreground">will_paginate</a>
-        collections expose current_page, total_pages, previous_page, and next_page. This live demo uses a small will_paginate-shaped stand-in; in your app, use the same
+        collections expose current_page, total_pages, previous_page, and next_page. Use
+        <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">Post.paginate(page: params[:page])</code>
+        in your controller, then pass the real will_paginate collection with the same
         <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">collection:</code> option.
       </p>
+      <div class="grid gap-4 lg:grid-cols-2">
+        <div class="space-y-2">
+          <p class="text-sm font-medium">Controller</p>
+          <%= render "docs/code_example", language: "ruby", code: File.read(Rails.root.join("app/code_examples/pagination/will_paginate_controller.txt")) %>
+        </div>
+        <div class="space-y-2">
+          <p class="text-sm font-medium">View</p>
+          <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/pagination/will_paginate_view.txt")) %>
+        </div>
+      </div>
       <%= render "docs/demo_card" do %>
         <%= turbo_frame_tag "will-paginate-demo", class: "block scroll-mt-24" do %>
           <ol class="mb-4 grid gap-2 text-sm sm:grid-cols-2">
-            <% @pagination_items.each do |item| %>
+            <% @pagination_will_paginate_items.each do |item| %>
               <li class="rounded-md border bg-card px-3 py-2"><%= item %></li>
             <% end %>
           </ol>
@@ -219,7 +241,7 @@
       <%= render "docs/demo_card" do %>
         <%= turbo_frame_tag "custom-url-builder-demo", class: "block scroll-mt-24" do %>
           <ol class="mb-4 grid gap-2 text-sm sm:grid-cols-2">
-            <% @pagination_items.each do |item| %>
+            <% @pagination_kaminari_items.each do |item| %>
               <li class="rounded-md border bg-card px-3 py-2"><%= item %></li>
             <% end %>
           </ol>

@@ -1,0 +1,7 @@
+class PostsController < ApplicationController
+  include Pagy::Backend
+
+  def index
+    @pagy, @posts = pagy(Post.all, page: params[:page], limit: 5)
+  end
+end

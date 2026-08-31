@@ -24,10 +24,21 @@ class DummyPaginationDocsTest < ActionDispatch::IntegrationTest
     assert_match %r{/docs/components/pagination\?(?:page=2&amp;filter=published|filter=published&amp;page=2)#custom-url-builder-demo}, response.body
     assert_select "turbo-frame#kaminari-demo span[aria-disabled='true']", text: /Previous/
     assert_select "turbo-frame#pagy-demo span[aria-disabled='true']", text: /Previous/
+    assert_select "turbo-frame#will-paginate-demo span[aria-disabled='true']", text: /Previous/
+    assert_kind_of Pagy, pagination_assign("pagination_pagy")
+    assert_equal 1, pagination_assign("pagination_pagy").page
+    assert_respond_to pagination_assign("pagination_kaminari"), :prev_page
+    refute_kind_of Struct, pagination_assign("pagination_kaminari")
+    assert_respond_to pagination_assign("pagination_will_paginate"), :previous_page
+    refute_kind_of Struct, pagination_assign("pagination_will_paginate")
     assert_includes response.body, "pagy: @pagy"
     assert_includes response.body, "Post.page(params[:page])"
+    assert_includes response.body, "Post.paginate(page: params[:page]"
+    assert_includes response.body, "Pagy::Backend"
+    assert_includes response.body, "pagy(Post.all"
     assert_includes response.body, "Kaminari.paginate_array"
     assert_includes response.body, "shadcn_paginate @posts"
+    assert_includes response.body, "shadcn_paginate @pagy"
     assert_includes response.body, "render Shadcn::Pagination.new"
     assert_includes response.body, "collection: @posts"
     assert_includes response.body, "posts_path(page: page, anchor:"
@@ -47,6 +58,11 @@ class DummyPaginationDocsTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "showing page 2 of 10"
     assert_includes response.body, "Demo post 6"
     assert_includes response.body, "Demo post 10"
+    assert_equal ["Demo post 6", "Demo post 7", "Demo post 8", "Demo post 9", "Demo post 10"], pagination_assign("pagination_kaminari_items")
+    assert_equal ["Demo post 6", "Demo post 7", "Demo post 8", "Demo post 9", "Demo post 10"], pagination_assign("pagination_pagy_items")
+    assert_equal ["Demo post 6", "Demo post 7", "Demo post 8", "Demo post 9", "Demo post 10"], pagination_assign("pagination_will_paginate_items")
+    assert_kind_of Pagy, pagination_assign("pagination_pagy")
+    assert_equal 2, pagination_assign("pagination_pagy").page
     assert_select "a[aria-current='page']", text: "2", minimum: 1
   end
 
@@ -57,5 +73,12 @@ class DummyPaginationDocsTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "showing page 10 of 10"
     assert_select "turbo-frame#kaminari-demo span[aria-disabled='true']", text: /Next/
     assert_select "turbo-frame#pagy-demo span[aria-disabled='true']", text: /Next/
+    assert_select "turbo-frame#will-paginate-demo span[aria-disabled='true']", text: /Next/
+  end
+
+  private
+
+  def pagination_assign(name)
+    @controller.view_assigns.fetch(name)
   end
 end

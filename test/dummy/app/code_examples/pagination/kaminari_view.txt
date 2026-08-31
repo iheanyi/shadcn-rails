@@ -6,3 +6,6 @@
     url_builder: ->(page) { posts_path(page: page, anchor: "results") }
   ) %>
 <% end %>
+
+<%# Drop-in replacement for Kaminari's paginate helper: %>
+<%= shadcn_paginate @posts, url_builder: ->(page) { posts_path(page: page, anchor: "results") } %>
