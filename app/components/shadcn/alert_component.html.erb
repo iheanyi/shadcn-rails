@@ -1,6 +1,10 @@
-<div role="alert" class="<%= alert_classes %>" <%= tag_attributes %>>
+<div data-slot="alert" role="alert" class="<%= alert_classes %>" <%= tag_attributes %>>
   <%= icon if icon? %>
   <%= title if title? %>
   <%= description if description? %>
-  <%= content %>
+  <% if !description? && content.present? %>
+    <%= render Shadcn::AlertDescriptionComponent.new do %>
+      <%= content %>
+    <% end %>
+  <% end %>
 </div>

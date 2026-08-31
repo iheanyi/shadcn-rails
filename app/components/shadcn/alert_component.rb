@@ -28,11 +28,11 @@ module Shadcn
   class AlertComponent < BaseComponent
     # Available alert variants
     VARIANTS = {
-      default: "bg-background text-foreground",
-      destructive: "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive"
+      default: "bg-card text-card-foreground",
+      destructive: "bg-card text-destructive *:data-[slot=alert-description]:text-destructive/90 [&>svg]:text-current"
     }.freeze
 
-    BASE_CLASSES = "relative w-full rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7"
+    BASE_CLASSES = "relative grid w-full grid-cols-[0_1fr] items-start gap-y-0.5 rounded-lg border px-4 py-3 text-sm has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] has-[>svg]:gap-x-3 [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current"
 
     renders_one :icon
     renders_one :title, lambda { |**options|
