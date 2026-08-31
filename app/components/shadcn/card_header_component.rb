@@ -13,7 +13,9 @@ module Shadcn
       CardDescriptionComponent.new(**options)
     }
 
-    renders_one :action, "CardActionComponent"
+    renders_one :action, lambda { |**options|
+      CardActionComponent.new(**options)
+    }
 
     def call
       content_tag(:div, **merge_html_attributes({ class: merge_classes(BASE_CLASSES), "data-slot": "card-header" })) do
