@@ -23,8 +23,23 @@ module Shadcn
 
     private
 
+    def breadcrumb_attributes
+      merge_html_attributes({
+        "aria-label": "breadcrumb",
+        class: breadcrumb_classes,
+        "data-slot": "breadcrumb"
+      })
+    end
+
     def breadcrumb_classes
       merge_classes("")
+    end
+
+    def breadcrumb_list_attributes
+      {
+        class: "flex flex-wrap items-center gap-1.5 text-sm break-words text-muted-foreground sm:gap-2.5",
+        "data-slot": "breadcrumb-list"
+      }
     end
 
     def breadcrumb_list_content
@@ -33,14 +48,14 @@ module Shadcn
 
     def items_with_separators
       items.each_with_index.flat_map do |item, index|
-        result = [content_tag(:li, class: "inline-flex items-center gap-1.5") { item.to_s }]
+        result = [content_tag(:li, class: "inline-flex items-center gap-1.5", data: { slot: "breadcrumb-item" }) { item.to_s }]
         result << separator unless index == items.length - 1
         result
       end
     end
 
     def separator
-      content_tag(:li, role: "presentation", "aria-hidden": "true", class: "text-muted-foreground") do
+      content_tag(:li, role: "presentation", "aria-hidden": "true", class: "[&>svg]:size-3.5", data: { slot: "breadcrumb-separator" }) do
         content_tag(:svg,
           content_tag(:path, nil, d: "m9 18 6-6-6-6"),
           xmlns: "http://www.w3.org/2000/svg",
@@ -51,8 +66,7 @@ module Shadcn
           stroke: "currentColor",
           "stroke-width": "2",
           "stroke-linecap": "round",
-          "stroke-linejoin": "round",
-          class: "h-3.5 w-3.5"
+          "stroke-linejoin": "round"
         )
       end
     end
