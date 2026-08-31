@@ -1,0 +1,6 @@
+<div class="max-w-sm">
+  <%= render Shadcn::InputGroupComponent.new do |group| %>
+    <% group.with_input(placeholder: "username") %>
+    <% group.with_suffix { "@example.com" } %>
+  <% end %>
+</div>

@@ -1,0 +1,25 @@
+<%= render Shadcn::SidebarComponent.new(collapsible: :icon) do |sidebar| %>
+  <% sidebar.with_header do %>
+    <div class="px-4 py-2 text-sm font-semibold">Acme Inc.</div>
+  <% end %>
+
+  <% sidebar.with_sidebar_content do |content| %>
+    <% content.with_group do |group| %>
+      <% group.with_label { "Platform" } %>
+      <% group.with_group_content do |group_content| %>
+        <% group_content.with_menu do |menu| %>
+          <% menu.with_item do |item| %>
+            <% item.with_button(href: "#dashboard", is_active: true) { "Dashboard" } %>
+          <% end %>
+          <% menu.with_item do |item| %>
+            <% item.with_button(href: "#settings") { "Settings" } %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% sidebar.with_footer do %>
+    <div class="px-4 py-2 text-xs text-muted-foreground">Signed in as demo@example.com</div>
+  <% end %>
+<% end %>

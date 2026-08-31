@@ -1,0 +1,28 @@
+<%= render Shadcn::Table.new do |table| %>
+  <% table.with_header do |header| %>
+    <% header.with_row do |row| %>
+      <% row.with_head { "Name" } %>
+      <% row.with_head { "Email" } %>
+      <% row.with_head { "Role" } %>
+      <% row.with_head { "Status" } %>
+    <% end %>
+  <% end %>
+  <% table.with_body do |body| %>
+    <% body.with_row do |row| %>
+      <% row.with_cell { "Olivia Martin" } %>
+      <% row.with_cell { "olivia@example.com" } %>
+      <% row.with_cell { "Owner" } %>
+      <% row.with_cell do %>
+        <%= render Shadcn::Badge.new { "Active" } %>
+      <% end %>
+    <% end %>
+    <% body.with_row do |row| %>
+      <% row.with_cell { "Jackson Lee" } %>
+      <% row.with_cell { "jackson@example.com" } %>
+      <% row.with_cell { "Member" } %>
+      <% row.with_cell do %>
+        <%= render Shadcn::Badge.new(variant: :secondary) { "Invited" } %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

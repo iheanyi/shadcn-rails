@@ -1,0 +1,4 @@
+<div class="grid w-full max-w-sm items-center gap-1.5 opacity-50">
+  <%= render Shadcn::Label.new(for: "disabled") { "Disabled Field" } %>
+  <%= render Shadcn::Input.new(id: "disabled", disabled: true, placeholder: "Disabled input") %>
+</div>

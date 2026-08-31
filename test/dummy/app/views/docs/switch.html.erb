@@ -34,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/switch/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -50,6 +50,7 @@
           <%= render Shadcn::LabelComponent.new(for: "default-switch") { "Enable notifications" } %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/switch/default.txt")) %>
     </div>
 
     <!-- Checked -->
@@ -62,7 +63,7 @@
           <%= render Shadcn::LabelComponent.new(for: "checked-switch-demo") { "Enabled by default" } %>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/switch/checked.txt")) %>
     </div>
 
     <!-- Disabled -->
@@ -80,7 +81,7 @@
           </div>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/switch/disabled.txt")) %>
     </div>
 
     <!-- Form Example -->
@@ -121,8 +122,45 @@
           <% end %>
         <% end %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/switch/in-a-form.txt")) %>
     </div>
   </div>
+
+    <!-- Disabled & Checked -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled & Checked</h3>
+      <%= showcase("switch", :disabled_checked) %>
+    </div>
+
+    <!-- With Description -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Description</h3>
+      <%= showcase("switch", :with_description) %>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Settings Panel</h3>
+      <%= showcase("switch", :settings_panel) %>
+    </div>
+
+    <!-- Privacy Settings -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Privacy Settings</h3>
+      <%= showcase("switch", :privacy_settings) %>
+    </div>
+
+    <!-- Required Switch -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Required Switch</h3>
+      <%= showcase("switch", :required) %>
+    </div>
+
+    <!-- Interactive States -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Interactive States</h3>
+      <%= showcase("switch", :interactive_states) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">
@@ -139,7 +177,7 @@
 
   <!-- Stimulus Controller -->
   <%= render "docs/stimulus_docs",
-    controller: "shadcn--switch",
+    controller_name: "shadcn--switch",
     description: "Handles switch toggle state and updates form values.",
     values: [
       { name: "checked", type: "Boolean", description: "Current checked state" },

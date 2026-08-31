@@ -1,0 +1,16 @@
+<%= render Shadcn::TabsComponent.new(default_value: "tab1", class_name: "w-[400px]") do |tabs| %>
+  <% tabs.with_list do |list| %>
+    <% list.with_trigger(value: "tab1") { "Tab 1" } %>
+    <% list.with_trigger(value: "tab2") { "Tab 2" } %>
+    <% list.with_trigger(value: "tab3") { "Tab 3" } %>
+  <% end %>
+  <% tabs.with_panel(value: "tab1") do %>
+    <div class="p-4">Content for Tab 1</div>
+  <% end %>
+  <% tabs.with_panel(value: "tab2") do %>
+    <div class="p-4">Content for Tab 2</div>
+  <% end %>
+  <% tabs.with_panel(value: "tab3") do %>
+    <div class="p-4">Content for Tab 3</div>
+  <% end %>
+<% end %>

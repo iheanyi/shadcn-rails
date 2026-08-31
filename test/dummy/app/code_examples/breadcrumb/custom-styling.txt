@@ -1,0 +1,5 @@
+<%= render Shadcn::BreadcrumbComponent.new do |breadcrumb| %>
+  <% breadcrumb.with_item(href: "/", class_name: "font-bold") { "Home" } %>
+  <% breadcrumb.with_item(href: "/docs", class_name: "italic") { "Docs" } %>
+  <% breadcrumb.with_item(current: true) { "Breadcrumb" } %>
+<% end %>

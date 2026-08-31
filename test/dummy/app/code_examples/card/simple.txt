@@ -1,0 +1,5 @@
+<%= render(Shadcn::CardComponent.new) do |card| %>
+  <% card.with_content_slot do %>
+    "A simple card with just content, no header or footer."
+  <% end %>
+<% end %>

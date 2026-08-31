@@ -1,0 +1,5 @@
+<div class="grid w-full gap-1.5">
+  <%= render Shadcn::LabelComponent.new(for: "bio-demo") { "Your bio" } %>
+  <%= render Shadcn::TextareaComponent.new(id: "bio-demo", placeholder: "Tell us a little bit about yourself") %>
+  <p class="text-sm text-muted-foreground">You can @mention other users and organizations.</p>
+</div>

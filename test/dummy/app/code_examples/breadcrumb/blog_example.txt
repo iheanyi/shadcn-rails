@@ -1,0 +1,6 @@
+<%= render(Shadcn::BreadcrumbComponent.new) do |breadcrumb| %>
+  <% breadcrumb.with_item(href: "/") { "Home" } %>
+  <% breadcrumb.with_item(href: "/blog") { "Blog" } %>
+  <% breadcrumb.with_item(href: "/blog/technology") { "Technology" } %>
+  <% breadcrumb.with_item(current: true) { "Getting Started with Rails 8" } %>
+<% end %>

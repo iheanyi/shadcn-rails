@@ -1,0 +1,19 @@
+<div class="flex -space-x-4">
+  <%= render Shadcn::AvatarComponent.new(
+    src: "https://github.com/shadcn.png",
+    alt: "User 1",
+    class_name: "border-2 border-background"
+  ) %>
+  <%= render Shadcn::AvatarComponent.new(
+    fallback: "JD",
+    class_name: "border-2 border-background"
+  ) %>
+  <%= render Shadcn::AvatarComponent.new(
+    fallback: "AB",
+    class_name: "border-2 border-background"
+  ) %>
+  <%= render Shadcn::AvatarComponent.new(
+    fallback: "+3",
+    class_name: "border-2 border-background"
+  ) %>
+</div>

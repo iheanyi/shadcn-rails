@@ -1,0 +1,4 @@
+<div class="grid gap-4 w-full max-w-md">
+  <%= render Shadcn::TextareaComponent.new(rows: 2, placeholder: "2 rows") %>
+  <%= render Shadcn::TextareaComponent.new(rows: 6, placeholder: "6 rows") %>
+</div>

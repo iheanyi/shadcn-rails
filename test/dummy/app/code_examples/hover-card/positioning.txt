@@ -1,0 +1,37 @@
+<div class="flex gap-4 flex-wrap">
+  <%= render Shadcn::HoverCardComponent.new do |card| %>
+    <% card.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Top" } %>
+    <% end %>
+    <% card.with_card_content(side: :top) do %>
+      <p class="text-sm">Appears on top</p>
+    <% end %>
+  <% end %>
+
+  <%= render Shadcn::HoverCardComponent.new do |card| %>
+    <% card.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Right" } %>
+    <% end %>
+    <% card.with_card_content(side: :right) do %>
+      <p class="text-sm">Appears on right</p>
+    <% end %>
+  <% end %>
+
+  <%= render Shadcn::HoverCardComponent.new do |card| %>
+    <% card.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Bottom" } %>
+    <% end %>
+    <% card.with_card_content(side: :bottom) do %>
+      <p class="text-sm">Appears on bottom</p>
+    <% end %>
+  <% end %>
+
+  <%= render Shadcn::HoverCardComponent.new do |card| %>
+    <% card.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Left" } %>
+    <% end %>
+    <% card.with_card_content(side: :left) do %>
+      <p class="text-sm">Appears on left</p>
+    <% end %>
+  <% end %>
+</div>

@@ -1,0 +1,5 @@
+<%= render Shadcn::ComboboxComponent.new(
+  items: timezones,
+  placeholder: "Select timezone...",
+  width: "w-[300px]"
+) %>

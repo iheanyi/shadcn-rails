@@ -1,0 +1,8 @@
+<%= render Shadcn::HoverCard.new do |card| %>
+  <% card.with_trigger do %>
+    <%= render Shadcn::Button.new(variant: :outline) { "Top" } %>
+  <% end %>
+  <% card.with_card_content(side: :top) do %>
+    <p class="text-sm">Appears on top</p>
+  <% end %>
+<% end %>

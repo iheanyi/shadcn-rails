@@ -1,0 +1,1 @@
+<%= render Shadcn::TypographyComponent.new(variant: :muted) { "Enter your email address." } %>

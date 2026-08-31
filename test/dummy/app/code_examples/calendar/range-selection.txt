@@ -1,0 +1,1 @@
+<%= render Shadcn::CalendarComponent.new(mode: :range) %>

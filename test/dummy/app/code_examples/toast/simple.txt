@@ -1,0 +1,3 @@
+<%= render(Shadcn::ToastComponent.new) do |toast| %>
+  <% toast.with_title { "Email sent successfully" } %>
+<% end %>

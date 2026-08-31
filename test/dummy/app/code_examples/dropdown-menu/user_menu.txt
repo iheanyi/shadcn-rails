@@ -1,0 +1,13 @@
+<%= render Shadcn::DropdownMenu.new do |menu| %>
+  <% menu.with_trigger do %>
+    <%= render Shadcn::Button.new(variant: :outline) { "Open Menu" } %>
+  <% end %>
+  <% menu.with_menu do |content| %>
+    <% content.with_label { "My Account" } %>
+    <% content.with_separator %>
+    <% content.with_item(href: "#profile") { "Profile" } %>
+    <% content.with_item(href: "#settings") { "Settings" } %>
+    <% content.with_separator %>
+    <% content.with_item { "Log out" } %>
+  <% end %>
+<% end %>

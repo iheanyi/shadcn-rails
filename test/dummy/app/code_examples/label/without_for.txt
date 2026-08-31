@@ -1,0 +1,3 @@
+<%= render Shadcn::LabelComponent.new do %>
+  Standalone Label
+<% end %>

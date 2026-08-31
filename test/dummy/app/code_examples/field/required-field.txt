@@ -1,0 +1,6 @@
+<div class="max-w-sm">
+  <%= render Shadcn::FieldComponent.new do |field| %>
+    <% field.with_label(required: true) { "Name" } %>
+    <% field.with_input(required: true, placeholder: "Your full name") %>
+  <% end %>
+</div>

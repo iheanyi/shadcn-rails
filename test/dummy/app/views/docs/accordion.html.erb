@@ -34,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/accordion/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -59,6 +59,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/accordion/single-collapsible.txt")) %>
     </div>
 
     <!-- Multiple -->
@@ -83,6 +84,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/accordion/multiple.txt")) %>
     </div>
 
     <!-- Default Open -->
@@ -103,6 +105,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/accordion/default-open.txt")) %>
     </div>
 
     <!-- FAQ Example -->
@@ -134,6 +137,24 @@
       <% end %>
     </div>
   </div>
+
+    <!-- Single (Always One Open) -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Single (Always One Open)</h3>
+      <%= showcase("accordion", :single_non_collapsible) %>
+    </div>
+
+    <!-- With Default Value -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Default Value</h3>
+      <%= showcase("accordion", :with_default_value) %>
+    </div>
+
+    <!-- Multiple With Default Values -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Multiple With Default Values</h3>
+      <%= showcase("accordion", :multiple_with_defaults) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">
@@ -176,7 +197,7 @@
 
   <!-- Stimulus Controller -->
   <%= render "docs/stimulus_docs",
-    controller: "shadcn--accordion",
+    controller_name: "shadcn--accordion",
     description: "Manages accordion state and handles expand/collapse animations.",
     values: [
       { name: "type", type: "String", description: "Accordion type (single or multiple)" },

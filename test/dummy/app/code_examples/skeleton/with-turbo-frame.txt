@@ -1,0 +1,11 @@
+<div class="p-4 border rounded-lg border-dashed">
+  <p class="text-xs text-muted-foreground mb-3 font-mono">&lt;turbo-frame id="user-profile"&gt;</p>
+  <div class="flex items-center space-x-4">
+    <%= render Shadcn::SkeletonComponent.new(class_name: "h-12 w-12 rounded-full") %>
+    <div class="space-y-2">
+      <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-[150px]") %>
+      <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-[100px]") %>
+    </div>
+  </div>
+  <p class="text-xs text-muted-foreground mt-3 font-mono">&lt;/turbo-frame&gt;</p>
+</div>

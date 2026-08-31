@@ -1,0 +1,15 @@
+<div class="w-full max-w-md mx-auto px-12">
+  <%= render Shadcn::CarouselComponent.new(autoplay: true, autoplay_interval: 3000, loop: true) do |carousel| %>
+    <% carousel.with_slides do |slides| %>
+      <% 5.times do |i| %>
+        <% slides.with_item do %>
+          <div class="flex aspect-square items-center justify-center p-6 bg-primary text-primary-foreground rounded-lg">
+            <span class="text-4xl font-semibold"><%= i + 1 %></span>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+    <% carousel.with_previous %>
+    <% carousel.with_next %>
+  <% end %>
+</div>

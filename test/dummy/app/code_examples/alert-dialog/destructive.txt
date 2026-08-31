@@ -1,0 +1,15 @@
+<%= render Shadcn::AlertDialog.new do |dialog| %>
+  <% dialog.with_trigger do %>
+    <%= render Shadcn::Button.new(variant: :destructive) { "Delete Account" } %>
+  <% end %>
+  <% dialog.with_body do |body| %>
+    <% body.with_header do |header| %>
+      <% header.with_title { "Delete Account" } %>
+      <% header.with_description { "Are you sure you want to delete your account? All of your data will be permanently removed. This action cannot be undone." } %>
+    <% end %>
+    <% body.with_footer do |footer| %>
+      <% footer.with_cancel { "Cancel" } %>
+      <% footer.with_action(variant: :destructive) { "Yes, delete account" } %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,20 @@
+<%= render Shadcn::HoverCardComponent.new do |card| %>
+  <% card.with_trigger do %>
+    <a href="#" class="underline">@nextjs</a>
+  <% end %>
+  <% card.with_card_content do %>
+    <div class="flex justify-between space-x-4">
+      <%= render Shadcn::AvatarComponent.new(src: "https://github.com/vercel.png", alt: "@nextjs", fallback: "VR") %>
+      <div class="space-y-1">
+        <h4 class="text-sm font-semibold">@nextjs</h4>
+        <p class="text-sm">The React Framework - created and maintained by @vercel.</p>
+        <div class="flex items-center pt-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 opacity-70" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+          </svg>
+          <span class="text-xs text-muted-foreground">Joined December 2021</span>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>

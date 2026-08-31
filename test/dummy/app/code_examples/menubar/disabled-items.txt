@@ -1,0 +1,13 @@
+<%= render Shadcn::MenubarComponent.new do |menubar| %>
+  <% menubar.with_menu do |menu| %>
+    <% menu.with_trigger { "Edit" } %>
+    <% menu.with_menu do |content| %>
+      <% content.with_item(href: "#") { "Undo" } %>
+      <% content.with_item(href: "#") { "Redo" } %>
+      <% content.with_separator %>
+      <% content.with_item(href: "#") { "Cut" } %>
+      <% content.with_item(href: "#") { "Copy" } %>
+      <% content.with_item(href: "#", disabled: true) { "Paste (empty clipboard)" } %>
+    <% end %>
+  <% end %>
+<% end %>

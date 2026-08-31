@@ -1,0 +1,1 @@
+<%= render Shadcn::TextareaComponent.new( name: "readonly_field", value: "This textarea is readonly. You can select and copy the text, but you cannot edit it.", readonly: true ) %>

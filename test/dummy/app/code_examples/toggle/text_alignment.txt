@@ -1,0 +1,3 @@
+<%= render Shadcn::Toggle.new(variant: :outline, size: :default, pressed: false, disabled: false, aria_label: "Toggle Left") do %>
+  Left
+<% end %>

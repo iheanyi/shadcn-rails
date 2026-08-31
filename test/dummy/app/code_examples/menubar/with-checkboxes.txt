@@ -1,0 +1,13 @@
+<%= render Shadcn::MenubarComponent.new do |menubar| %>
+  <% menubar.with_menu do |menu| %>
+    <% menu.with_trigger { "View" } %>
+    <% menu.with_menu do |content| %>
+      <% content.with_checkbox_item(checked: true) { "Show Toolbar" } %>
+      <% content.with_checkbox_item(checked: false) { "Show Sidebar" } %>
+      <% content.with_checkbox_item(checked: true) { "Show Status Bar" } %>
+      <% content.with_separator %>
+      <% content.with_item(href: "#") { "Zoom In" } %>
+      <% content.with_item(href: "#") { "Zoom Out" } %>
+    <% end %>
+  <% end %>
+<% end %>

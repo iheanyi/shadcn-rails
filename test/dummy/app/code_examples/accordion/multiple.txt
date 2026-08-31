@@ -1,0 +1,16 @@
+<div class="w-full max-w-md">
+  <%= render Shadcn::AccordionComponent.new(type: :multiple) do |accordion| %>
+    <% accordion.with_item(value: "multi-1") do |item| %>
+      <% item.with_trigger { "First Section" } %>
+      <% item.with_body { "Content for the first section. You can open multiple sections at once." } %>
+    <% end %>
+    <% accordion.with_item(value: "multi-2") do |item| %>
+      <% item.with_trigger { "Second Section" } %>
+      <% item.with_body { "Content for the second section. Try opening this while the first is open." } %>
+    <% end %>
+    <% accordion.with_item(value: "multi-3") do |item| %>
+      <% item.with_trigger { "Third Section" } %>
+      <% item.with_body { "Content for the third section. All can be open simultaneously." } %>
+    <% end %>
+  <% end %>
+</div>

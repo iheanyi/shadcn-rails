@@ -34,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/slider/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -53,6 +53,7 @@
           <%= render Shadcn::SliderComponent.new(value: 33, data: { "output-target": "default-slider-value", "output-format": "{value}" }) %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/slider/default.txt")) %>
     </div>
 
     <!-- With Synced Label -->
@@ -72,7 +73,7 @@
           ) %>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/slider/with-synced-label.txt")) %>
     </div>
 
     <!-- Two-Way Input Binding -->
@@ -104,7 +105,7 @@
           </p>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/slider/two-way-input-binding.txt")) %>
     </div>
 
     <!-- Custom Range -->
@@ -124,6 +125,7 @@
           </div>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/slider/custom-range.txt")) %>
     </div>
 
     <!-- With Steps -->
@@ -146,6 +148,7 @@
           </div>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/slider/with-steps.txt")) %>
     </div>
 
     <!-- Decimal Steps -->
@@ -166,7 +169,7 @@
           </div>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/slider/decimal-steps.txt")) %>
     </div>
 
     <!-- Disabled -->
@@ -178,6 +181,7 @@
           <%= render Shadcn::SliderComponent.new(value: 50, disabled: true) %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/slider/disabled.txt")) %>
     </div>
 
     <!-- In a Form -->
@@ -219,8 +223,33 @@
           <% end %>
         <% end %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/slider/in-a-form.txt")) %>
     </div>
   </div>
+
+    <!-- Rating -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Rating</h3>
+      <%= showcase("slider", :rating) %>
+    </div>
+
+    <!-- Volume Control -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Volume Control</h3>
+      <%= showcase("slider", :volume) %>
+    </div>
+
+    <!-- Temperature -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Temperature</h3>
+      <%= showcase("slider", :temperature) %>
+    </div>
+
+    <!-- With Label -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Label</h3>
+      <%= showcase("slider", :with_label) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">
@@ -238,7 +267,7 @@
 
   <!-- Stimulus Controller -->
   <%= render "docs/stimulus_docs",
-    controller: "shadcn--slider",
+    controller_name: "shadcn--slider",
     description: "Updates the slider's visual fill and supports one-way output sync and two-way input binding.",
     values: [
       { name: "outputFormat", type: "String", description: "Format string for output ({value} and {percent} placeholders)" }

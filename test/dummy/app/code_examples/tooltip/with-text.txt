@@ -1,0 +1,7 @@
+<p class="text-sm">
+  Hover over the
+  <%= render Shadcn::TooltipComponent.new(text: "This is additional information") do %>
+    <span class="underline decoration-dotted cursor-help">highlighted text</span>
+  <% end %>
+  to see more information.
+</p>

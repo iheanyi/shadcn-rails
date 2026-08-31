@@ -1,0 +1,4 @@
+<div class="flex items-center space-x-2">
+  <%= render Shadcn::CheckboxComponent.new(id: "default-check") %>
+  <%= render Shadcn::LabelComponent.new(for: "default-check") { "Default checkbox" } %>
+</div>

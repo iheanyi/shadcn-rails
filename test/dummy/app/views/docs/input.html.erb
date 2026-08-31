@@ -34,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/input/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -47,6 +47,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::InputComponent.new(placeholder: "Enter text...") %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/input/default.txt")) %>
     </div>
 
     <!-- With Label -->
@@ -58,7 +59,7 @@
           <%= render Shadcn::InputComponent.new(type: "email", id: "email-demo", placeholder: "Email") %>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/input/with-label.txt")) %>
     </div>
 
     <!-- Input Types -->
@@ -84,6 +85,7 @@
           </div>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/input/input-types.txt")) %>
     </div>
 
     <!-- File Input -->
@@ -95,7 +97,7 @@
           <%= render Shadcn::InputComponent.new(id: "picture-demo", type: "file") %>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/input/file.txt")) %>
     </div>
 
     <!-- Disabled -->
@@ -104,7 +106,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::InputComponent.new(disabled: true, placeholder: "Disabled") %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/input/disabled.txt")) %>
     </div>
 
     <!-- With Button -->
@@ -116,8 +118,39 @@
           <%= render Shadcn::ButtonComponent.new do %>Subscribe<% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/input/with-button.txt")) %>
     </div>
   </div>
+
+    <!-- Email -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Email</h3>
+      <%= showcase("input", :email) %>
+    </div>
+
+    <!-- Password -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Password</h3>
+      <%= showcase("input", :password) %>
+    </div>
+
+    <!-- Search -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Search</h3>
+      <%= showcase("input", :search) %>
+    </div>
+
+    <!-- Number -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Number</h3>
+      <%= showcase("input", :number) %>
+    </div>
+
+    <!-- With Validation -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Validation</h3>
+      <%= showcase("input", :with_validation) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">

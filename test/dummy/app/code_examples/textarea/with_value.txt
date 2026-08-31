@@ -1,0 +1,1 @@
+<%= render Shadcn::TextareaComponent.new( name: "description", value: "This is a pre-filled textarea with some initial content.", placeholder: "Enter description..." ) %>

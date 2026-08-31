@@ -1,0 +1,4 @@
+<div class="flex items-center space-x-2">
+  <%= render Shadcn::SwitchComponent.new(id: "checked-switch-demo", checked: true) %>
+  <%= render Shadcn::LabelComponent.new(for: "checked-switch-demo") { "Enabled by default" } %>
+</div>

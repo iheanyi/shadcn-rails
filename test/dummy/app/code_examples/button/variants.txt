@@ -1,0 +1,8 @@
+<div class="flex flex-wrap gap-2">
+  <%= render Shadcn::Button.new { "Default" } %>
+  <%= render Shadcn::Button.new(variant: :secondary) { "Secondary" } %>
+  <%= render Shadcn::Button.new(variant: :destructive) { "Destructive" } %>
+  <%= render Shadcn::Button.new(variant: :outline) { "Outline" } %>
+  <%= render Shadcn::Button.new(variant: :ghost) { "Ghost" } %>
+  <%= render Shadcn::Button.new(variant: :link) { "Link" } %>
+</div>

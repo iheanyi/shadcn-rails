@@ -1,0 +1,3 @@
+<%= render Shadcn::BadgeComponent.new(variant: :destructive) do %>
+  Destructive
+<% end %>

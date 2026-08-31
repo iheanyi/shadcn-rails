@@ -1,0 +1,4 @@
+<%= render Shadcn::ButtonGroupComponent.new do |group| %>
+  <% group.with_button { "Save" } %>
+  <% group.with_button(variant: :outline) { "Cancel" } %>
+<% end %>

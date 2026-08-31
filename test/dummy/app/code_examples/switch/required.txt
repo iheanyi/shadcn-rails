@@ -1,0 +1,1 @@
+<%= render Shadcn::SwitchComponent.new(name: "agreement", id: "agreement", required: true) %>

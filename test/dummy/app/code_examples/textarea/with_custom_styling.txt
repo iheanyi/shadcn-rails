@@ -1,0 +1,1 @@
+<%= render Shadcn::TextareaComponent.new( name: "custom_styled", placeholder: "Custom styled textarea", class_name: "font-mono text-xs resize-none" ) %>

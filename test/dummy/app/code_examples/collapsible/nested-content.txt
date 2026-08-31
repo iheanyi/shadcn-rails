@@ -1,0 +1,30 @@
+<div class="w-full max-w-md space-y-2">
+  <%= render Shadcn::CollapsibleComponent.new do |collapsible| %>
+    <% collapsible.with_trigger do %>
+      <div class="flex items-center justify-between space-x-4">
+        <h4 class="text-sm font-semibold">Project Files</h4>
+        <%= render Shadcn::ButtonComponent.new(variant: :ghost, size: :sm, class_name: "w-9 p-0") do %>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m6 9 6 6 6-6"></path>
+          </svg>
+        <% end %>
+      </div>
+    <% end %>
+    <% collapsible.with_body do %>
+      <div class="rounded-md border divide-y">
+        <div class="px-4 py-3 text-sm flex items-center justify-between">
+          <span class="font-mono">src/components/</span>
+          <%= render Shadcn::BadgeComponent.new(variant: :secondary) { "Directory" } %>
+        </div>
+        <div class="px-4 py-3 text-sm flex items-center justify-between">
+          <span class="font-mono">README.md</span>
+          <%= render Shadcn::BadgeComponent.new(variant: :outline) { "File" } %>
+        </div>
+        <div class="px-4 py-3 text-sm flex items-center justify-between">
+          <span class="font-mono">package.json</span>
+          <%= render Shadcn::BadgeComponent.new(variant: :outline) { "File" } %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</div>

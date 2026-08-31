@@ -27,12 +27,6 @@ class CheckboxComponentPreview < ViewComponent::Preview
     render(Shadcn::CheckboxComponent.new(name: "locked_checked", id: "locked_checked", checked: true, disabled: true))
   end
 
-  # @label Indeterminate
-  # Checkbox in indeterminate state (mixed)
-  def indeterminate
-    render(Shadcn::CheckboxComponent.new(name: "mixed", id: "mixed", indeterminate: true))
-  end
-
   # @label With Description
   # Checkbox with label and description
   def with_description

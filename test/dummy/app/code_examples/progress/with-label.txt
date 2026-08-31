@@ -1,0 +1,9 @@
+<div class="space-y-4 w-full max-w-md">
+  <div class="space-y-2">
+    <div class="flex justify-between text-sm font-medium">
+      <span>Upload Progress</span>
+      <span>73%</span>
+    </div>
+    <%= render Shadcn::ProgressComponent.new(value: 73) %>
+  </div>
+</div>

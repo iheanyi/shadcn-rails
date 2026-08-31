@@ -30,9 +30,9 @@ class CardComponentPreview < ViewComponent::Preview
     end
   end
 
-  # @label With Image
+  # @label Image Header
   # Card with an image header
-  def with_image
+  def image_header
     render(Shadcn::CardComponent.new(class_name: "overflow-hidden")) do |card|
       card.with_content_slot do
         '<img src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80" alt="Photo" class="w-full aspect-video object-cover -mt-6 -mx-6 mb-4 rounded-t-xl" />

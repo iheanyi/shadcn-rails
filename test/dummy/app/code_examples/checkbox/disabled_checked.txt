@@ -1,0 +1,1 @@
+<%= render Shadcn::CheckboxComponent.new(name: "locked_checked", id: "locked_checked", checked: true, disabled: true) %>

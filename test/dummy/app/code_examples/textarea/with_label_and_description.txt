@@ -1,0 +1,1 @@
+<%= render Shadcn::TextareaComponent.new( id: "bio", name: "bio", placeholder: "Tell us a little bit about yourself", rows: 4 ) %>

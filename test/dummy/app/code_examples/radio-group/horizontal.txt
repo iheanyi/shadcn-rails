@@ -1,0 +1,1 @@
+<%= render Shadcn::RadioGroupComponent.new(name: "size", value: "medium", orientation: :horizontal, items: size_items) %>

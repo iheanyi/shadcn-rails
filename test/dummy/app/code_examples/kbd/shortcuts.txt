@@ -1,0 +1,3 @@
+<%= render Shadcn::KbdComponent.new do %>
+  Ctrl + Shift + P
+<% end %>

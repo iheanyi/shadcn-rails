@@ -4,31 +4,6 @@ require "test_helper"
 
 Dir[Rails.root.join("../../test/components/previews/**/*_preview.rb")].sort.each { |file| require file }
 
-class ShowcaseSourceExtractionFixture
-  def label_kwargs
-    options = { for: "email", class: "text-sm font-medium" }
-    options
-  end
-
-  def postfix_if
-    "Visible source" if true
-  end
-
-  def dropdown_align_end
-    render(Shadcn::DropdownMenuComponent.new(align: :end)) do |menu|
-      menu.with_item { "Account" }
-    end
-  end
-
-  def tooltip_interpolation_end
-    "Tooltip #{value.end}"
-  end
-
-  def after_source_fixture
-    "not part of the extracted source"
-  end
-end
-
 class DocsParityTest < ViewComponent::TestCase
   include ShowcaseHelper
 
@@ -50,20 +25,6 @@ class DocsParityTest < ViewComponent::TestCase
         assert File.exist?(Rails.root.join("../../__tests__/controllers/#{test_name}")),
           "Expected Jest smoke or behavior test for #{controller_path}"
       end
-    end
-  end
-
-  def test_showcase_source_extraction_is_ruby_aware
-    {
-      label_kwargs: ["for:", "class:"],
-      postfix_if: ["if true"],
-      dropdown_align_end: ["align: :end"],
-      tooltip_interpolation_end: ['#{value.end}']
-    }.each do |method_name, expected_snippets|
-      source = send(:preview_method_source, ShowcaseSourceExtractionFixture, method_name)
-
-      expected_snippets.each { |snippet| assert_includes source, snippet }
-      refute_includes source, "after_source_fixture"
     end
   end
 

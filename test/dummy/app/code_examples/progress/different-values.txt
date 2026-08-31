@@ -1,0 +1,32 @@
+<div class="space-y-4 w-full max-w-md">
+  <div class="space-y-2">
+    <div class="flex justify-between text-sm">
+      <span>0%</span>
+    </div>
+    <%= render Shadcn::ProgressComponent.new(value: 0) %>
+  </div>
+  <div class="space-y-2">
+    <div class="flex justify-between text-sm">
+      <span>25%</span>
+    </div>
+    <%= render Shadcn::ProgressComponent.new(value: 25) %>
+  </div>
+  <div class="space-y-2">
+    <div class="flex justify-between text-sm">
+      <span>50%</span>
+    </div>
+    <%= render Shadcn::ProgressComponent.new(value: 50) %>
+  </div>
+  <div class="space-y-2">
+    <div class="flex justify-between text-sm">
+      <span>75%</span>
+    </div>
+    <%= render Shadcn::ProgressComponent.new(value: 75) %>
+  </div>
+  <div class="space-y-2">
+    <div class="flex justify-between text-sm">
+      <span>100%</span>
+    </div>
+    <%= render Shadcn::ProgressComponent.new(value: 100) %>
+  </div>
+</div>

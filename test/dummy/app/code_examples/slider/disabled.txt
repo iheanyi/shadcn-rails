@@ -1,0 +1,4 @@
+<div class="space-y-4 w-full max-w-md">
+  <%= render Shadcn::LabelComponent.new { "Disabled Slider" } %>
+  <%= render Shadcn::SliderComponent.new(value: 50, disabled: true) %>
+</div>

@@ -1,0 +1,7 @@
+<%= render(Shadcn::BreadcrumbComponent.new) do |breadcrumb| %>
+  <% breadcrumb.with_item(href: "/") { "Home" } %>
+  <% breadcrumb.with_item(href: "/products") { "Products" } %>
+  <% breadcrumb.with_item(href: "/products/electronics") { "Electronics" } %>
+  <% breadcrumb.with_item(href: "/products/electronics/laptops") { "Laptops" } %>
+  <% breadcrumb.with_item(current: true) { "MacBook Pro 16-inch" } %>
+<% end %>

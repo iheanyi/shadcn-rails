@@ -1,0 +1,1 @@
+<%= render Shadcn::SwitchComponent.new(name: "activity_status", id: "activity_status", checked: true) %>

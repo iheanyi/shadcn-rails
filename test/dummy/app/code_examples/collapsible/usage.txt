@@ -1,0 +1,14 @@
+<div class="w-full max-w-md space-y-2">
+  <%= render Shadcn::CollapsibleComponent.new do |collapsible| %>
+    <% collapsible.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>
+        Toggle
+      <% end %>
+    <% end %>
+    <% collapsible.with_body do %>
+      <div class="rounded-md border px-4 py-3 text-sm">
+        This is the collapsible content. Click the button above to toggle visibility.
+      </div>
+    <% end %>
+  <% end %>
+</div>

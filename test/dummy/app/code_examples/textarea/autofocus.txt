@@ -1,0 +1,1 @@
+<%= render Shadcn::TextareaComponent.new( name: "autofocus_field", placeholder: "This textarea will be focused on load", autofocus: true ) %>

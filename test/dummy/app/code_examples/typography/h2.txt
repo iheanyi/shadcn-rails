@@ -1,0 +1,3 @@
+<%= render Shadcn::TypographyComponent.new(variant: :h2) do %>
+  The People of the Kingdom
+<% end %>

@@ -1,0 +1,25 @@
+<div class="space-y-4 w-full max-w-md">
+  <div class="flex items-center gap-4">
+    <%= render Shadcn::AvatarComponent.new(src: "https://github.com/shadcn.png", alt: "Shadcn") %>
+    <div>
+      <p class="text-sm font-medium leading-none">Shadcn</p>
+      <p class="text-sm text-muted-foreground">shadcn@example.com</p>
+    </div>
+  </div>
+  <%= render Shadcn::SeparatorComponent.new %>
+  <div class="flex items-center gap-4">
+    <%= render Shadcn::AvatarComponent.new(alt: "John Doe", fallback: "JD") %>
+    <div>
+      <p class="text-sm font-medium leading-none">John Doe</p>
+      <p class="text-sm text-muted-foreground">john@example.com</p>
+    </div>
+  </div>
+  <%= render Shadcn::SeparatorComponent.new %>
+  <div class="flex items-center gap-4">
+    <%= render Shadcn::AvatarComponent.new(alt: "Jane Smith") %>
+    <div>
+      <p class="text-sm font-medium leading-none">Jane Smith</p>
+      <p class="text-sm text-muted-foreground">jane@example.com</p>
+    </div>
+  </div>
+</div>

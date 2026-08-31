@@ -1,0 +1,1 @@
+<%= render Shadcn::SliderComponent.new(name: "volume", value: 50, max: 100) %>

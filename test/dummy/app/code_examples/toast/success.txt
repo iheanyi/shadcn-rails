@@ -1,0 +1,4 @@
+<%= render(Shadcn::ToastComponent.new) do |toast| %>
+  <% toast.with_title { "Success!" } %>
+  <% toast.with_description { "Your changes have been saved successfully." } %>
+<% end %>

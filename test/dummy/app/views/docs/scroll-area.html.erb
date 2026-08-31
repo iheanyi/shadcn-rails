@@ -35,7 +35,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/scroll-area/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -57,7 +57,7 @@
           </div>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/scroll-area/vertical-scroll.txt")) %>
     </div>
 
     <!-- Horizontal Scroll -->
@@ -74,7 +74,7 @@
           </div>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/scroll-area/horizontal-scroll.txt")) %>
     </div>
 
     <!-- Tags List -->
@@ -94,7 +94,7 @@
           </div>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/scroll-area/tags-list.txt")) %>
     </div>
 
     <!-- Fixed Height Container -->
@@ -115,8 +115,39 @@
           </div>
         <% end %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/scroll-area/fixed-height-container.txt")) %>
     </div>
   </div>
+
+    <!-- Vertical -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Vertical</h3>
+      <%= showcase("scroll-area", :vertical) %>
+    </div>
+
+    <!-- Horizontal -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Horizontal</h3>
+      <%= showcase("scroll-area", :horizontal) %>
+    </div>
+
+    <!-- Both Directions -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Both Directions</h3>
+      <%= showcase("scroll-area", :both_directions) %>
+    </div>
+
+    <!-- Scrollbar Types -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Scrollbar Types</h3>
+      <%= showcase("scroll-area", :scrollbar_types) %>
+    </div>
+
+    <!-- Code Block -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Code Block</h3>
+      <%= showcase("scroll-area", :code_block) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">

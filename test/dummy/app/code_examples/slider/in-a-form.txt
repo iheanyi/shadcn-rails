@@ -1,0 +1,34 @@
+<%= render Shadcn::CardComponent.new(class_name: "w-full max-w-md") do |card| %>
+  <% card.with_header do |header| %>
+    <% header.with_title { "Audio Settings" } %>
+    <% header.with_description { "Adjust your audio preferences." } %>
+  <% end %>
+  <% card.with_content do %>
+    <div class="space-y-6">
+      <div class="space-y-2">
+        <div class="flex justify-between">
+          <%= render Shadcn::LabelComponent.new { "Master Volume" } %>
+          <span id="master-vol-label" class="text-sm text-muted-foreground">80%</span>
+        </div>
+        <%= render Shadcn::SliderComponent.new(name: "master_volume", value: 80, data: { "output-target": "master-vol-label", "output-format": "{value}%" }) %>
+      </div>
+      <div class="space-y-2">
+        <div class="flex justify-between">
+          <%= render Shadcn::LabelComponent.new { "Music" } %>
+          <span id="music-vol-label" class="text-sm text-muted-foreground">60%</span>
+        </div>
+        <%= render Shadcn::SliderComponent.new(name: "music_volume", value: 60, data: { "output-target": "music-vol-label", "output-format": "{value}%" }) %>
+      </div>
+      <div class="space-y-2">
+        <div class="flex justify-between">
+          <%= render Shadcn::LabelComponent.new { "Sound Effects" } %>
+          <span id="sfx-vol-label" class="text-sm text-muted-foreground">90%</span>
+        </div>
+        <%= render Shadcn::SliderComponent.new(name: "sfx_volume", value: 90, data: { "output-target": "sfx-vol-label", "output-format": "{value}%" }) %>
+      </div>
+    </div>
+  <% end %>
+  <% card.with_footer do %>
+    <%= render Shadcn::ButtonComponent.new { "Save Settings" } %>
+  <% end %>
+<% end %>

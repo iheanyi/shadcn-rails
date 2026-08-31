@@ -1,0 +1,5 @@
+<%= render(Shadcn::SelectComponent.new(name: "status", disabled: true, placeholder: "Select status")) do |select| %>
+  <% select.with_item(value: "active") { "Active" } %>
+  <% select.with_item(value: "inactive") { "Inactive" } %>
+  <% select.with_item(value: "pending") { "Pending" } %>
+<% end %>

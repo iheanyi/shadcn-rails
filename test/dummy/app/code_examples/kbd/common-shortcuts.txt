@@ -1,0 +1,23 @@
+<div class="space-y-3">
+  <div class="flex items-center justify-between">
+    <span class="text-sm text-muted-foreground">Save</span>
+    <div class="flex items-center gap-1">
+      <%= render Shadcn::KbdComponent.new { "⌘" } %>
+      <%= render Shadcn::KbdComponent.new { "S" } %>
+    </div>
+  </div>
+  <div class="flex items-center justify-between">
+    <span class="text-sm text-muted-foreground">Copy</span>
+    <div class="flex items-center gap-1">
+      <%= render Shadcn::KbdComponent.new { "⌘" } %>
+      <%= render Shadcn::KbdComponent.new { "C" } %>
+    </div>
+  </div>
+  <div class="flex items-center justify-between">
+    <span class="text-sm text-muted-foreground">Search</span>
+    <div class="flex items-center gap-1">
+      <%= render Shadcn::KbdComponent.new { "⌘" } %>
+      <%= render Shadcn::KbdComponent.new { "K" } %>
+    </div>
+  </div>
+</div>

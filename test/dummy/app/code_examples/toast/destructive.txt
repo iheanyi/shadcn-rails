@@ -1,0 +1,4 @@
+<%= render(Shadcn::ToastComponent.new(variant: :destructive)) do |toast| %>
+  <% toast.with_title { "Uh oh! Something went wrong." } %>
+  <% toast.with_description { "There was a problem with your request." } %>
+<% end %>

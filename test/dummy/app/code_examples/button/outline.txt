@@ -1,0 +1,1 @@
+<%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Outline<% end %>

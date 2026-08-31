@@ -1,0 +1,1 @@
+<%= render Shadcn::RadioGroupComponent.new(name: "color", value: "blue", orientation: :horizontal, items: color_items) %>

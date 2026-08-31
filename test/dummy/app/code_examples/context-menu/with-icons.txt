@@ -1,0 +1,21 @@
+<%= render Shadcn::ContextMenuComponent.new do |menu| %>
+  <% menu.with_trigger do %>
+    <div class="flex h-[100px] w-[200px] items-center justify-center rounded-md border border-dashed text-sm">
+      Right click
+    </div>
+  <% end %>
+  <% menu.with_menu do |content| %>
+    <% content.with_item(href: "#") do %>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+      Edit
+    <% end %>
+    <% content.with_item(href: "#") do %>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+      Copy
+    <% end %>
+    <% content.with_item(href: "#") do %>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+      Delete
+    <% end %>
+  <% end %>
+<% end %>

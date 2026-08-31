@@ -1,0 +1,5 @@
+<%= render(Shadcn::ButtonGroupComponent.new) do |group| %>
+  <% group.with_button(variant: :outline) { "Left" } %>
+  <% group.with_button(variant: :outline) { "Center" } %>
+  <% group.with_button(variant: :outline) { "Right" } %>
+<% end %>

@@ -34,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/tooltip/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -49,6 +49,7 @@
           <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Hover" } %>
         <% end %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/tooltip/default.txt")) %>
     </div>
 
     <!-- Positions -->
@@ -71,6 +72,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/tooltip/positions.txt")) %>
     </div>
 
     <!-- On Icons -->
@@ -96,6 +98,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/tooltip/on-icon-buttons.txt")) %>
     </div>
 
     <!-- With Text Links -->
@@ -110,6 +113,7 @@
           to see more information.
         </p>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/tooltip/with-text.txt")) %>
     </div>
 
     <!-- Custom Delay -->
@@ -129,8 +133,57 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/tooltip/custom-delay.txt")) %>
     </div>
   </div>
+
+    <!-- All Sides -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">All Sides</h3>
+      <%= showcase("tooltip", :sides) %>
+    </div>
+
+    <!-- With Icon Button -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Icon Button</h3>
+      <%= showcase("tooltip", :with_icon_button) %>
+    </div>
+
+    <!-- Top -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Top</h3>
+      <%= showcase("tooltip", :top) %>
+    </div>
+
+    <!-- Right -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Right</h3>
+      <%= showcase("tooltip", :right) %>
+    </div>
+
+    <!-- Bottom -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Bottom</h3>
+      <%= showcase("tooltip", :bottom) %>
+    </div>
+
+    <!-- Left -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Left</h3>
+      <%= showcase("tooltip", :left) %>
+    </div>
+
+    <!-- With Delay -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Delay</h3>
+      <%= showcase("tooltip", :with_delay) %>
+    </div>
+
+    <!-- Multiple Tooltips -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Multiple Tooltips</h3>
+      <%= showcase("tooltip", :multiple) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">
@@ -147,7 +200,7 @@
 
   <!-- Stimulus Controller -->
   <%= render "docs/stimulus_docs",
-    controller: "shadcn--tooltip",
+    controller_name: "shadcn--tooltip",
     description: "Handles tooltip show/hide with positioning and delays.",
     values: [
       { name: "side", type: "String", description: "Side to position tooltip" },

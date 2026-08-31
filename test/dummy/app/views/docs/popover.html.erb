@@ -34,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/popover/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -59,6 +59,7 @@
           <% end %>
         <% end %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/popover/basic.txt")) %>
     </div>
 
     <!-- Positions -->
@@ -104,6 +105,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/popover/positions.txt")) %>
     </div>
 
     <!-- Alignment -->
@@ -140,6 +142,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/popover/alignment.txt")) %>
     </div>
 
     <!-- With Form Content -->
@@ -178,6 +181,7 @@
           <% end %>
         <% end %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/popover/with-form-content.txt")) %>
     </div>
 
     <!-- Modal Mode -->
@@ -202,6 +206,7 @@
           <% end %>
         <% end %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/popover/modal-mode.txt")) %>
     </div>
 
     <!-- Initially Open -->
@@ -218,8 +223,51 @@
           <% end %>
         <% end %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/popover/initially-open.txt")) %>
     </div>
   </div>
+
+    <!-- All Sides -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">All Sides</h3>
+      <%= showcase("popover", :sides) %>
+    </div>
+
+    <!-- All Alignments -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">All Alignments</h3>
+      <%= showcase("popover", :alignments) %>
+    </div>
+
+    <!-- Simple Content -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Simple Content</h3>
+      <%= showcase("popover", :simple) %>
+    </div>
+
+    <!-- With Form -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Form</h3>
+      <%= showcase("popover", :with_form) %>
+    </div>
+
+    <!-- Top Position -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Top Position</h3>
+      <%= showcase("popover", :top) %>
+    </div>
+
+    <!-- Right Position -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Right Position</h3>
+      <%= showcase("popover", :right) %>
+    </div>
+
+    <!-- Left Position -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Left Position</h3>
+      <%= showcase("popover", :left) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">
@@ -243,7 +291,7 @@
 
   <!-- Stimulus Controller -->
   <%= render "docs/stimulus_docs",
-    controller: "shadcn--popover",
+    controller_name: "shadcn--popover",
     description: "Handles popover open/close state, positioning, and click-outside behavior.",
     values: [
       { name: "open", type: "Boolean", description: "Whether the popover is currently open" },

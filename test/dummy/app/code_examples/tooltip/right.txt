@@ -1,0 +1,3 @@
+<%= render Shadcn::Tooltip.new(text: "This is a helpful tooltip", side: :right) do %>
+  <%= render Shadcn::Button.new(variant: :secondary) { "Right" } %>
+<% end %>

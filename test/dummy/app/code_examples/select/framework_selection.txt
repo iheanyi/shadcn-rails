@@ -1,0 +1,8 @@
+<%= render(Shadcn::SelectComponent.new(name: "framework", placeholder: "Select a framework", class_name: "w-[280px]")) do |select| %>
+  <% select.with_item(value: "next") { "Next.js" } %>
+  <% select.with_item(value: "sveltekit") { "SvelteKit" } %>
+  <% select.with_item(value: "nuxt") { "Nuxt.js" } %>
+  <% select.with_item(value: "remix") { "Remix" } %>
+  <% select.with_item(value: "astro") { "Astro" } %>
+  <% select.with_item(value: "rails") { "Ruby on Rails" } %>
+<% end %>

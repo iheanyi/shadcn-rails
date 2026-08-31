@@ -1,0 +1,7 @@
+<div class="w-[60%] space-y-2">
+  <div class="flex justify-between">
+    <span class="text-sm font-medium">Value</span>
+    <span id="default-slider-value" class="text-sm text-muted-foreground">33</span>
+  </div>
+  <%= render Shadcn::SliderComponent.new(value: 33, data: { "output-target": "default-slider-value", "output-format": "{value}" }) %>
+</div>

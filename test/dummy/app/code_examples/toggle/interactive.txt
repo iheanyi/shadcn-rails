@@ -1,0 +1,9 @@
+<div class="flex flex-wrap gap-2">
+  <%= render Shadcn::Toggle.new(aria_label: "Toggle bold") do %>
+    B
+  <% end %>
+
+  <%= render Shadcn::Toggle.new(variant: :outline, pressed: true, aria_label: "Toggle italic") do %>
+    I
+  <% end %>
+</div>

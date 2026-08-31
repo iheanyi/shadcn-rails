@@ -1,0 +1,7 @@
+<div class="space-y-4">
+  <%= render Shadcn::LabelComponent.new { "Event Date" } %>
+  <%= render Shadcn::CalendarComponent.new(
+    name: "event[date]",
+    selected: Date.today
+  ) %>
+</div>

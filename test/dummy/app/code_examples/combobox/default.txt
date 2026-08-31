@@ -1,0 +1,1 @@
+<%= render Shadcn::ComboboxComponent.new( items: [ { value: "rails", label: "Ruby on Rails" }, { value: "stimulus", label: "Stimulus" }, { value: "turbo", label: "Turbo" } ], placeholder: "Select framework...", search_placeholder: "Search frameworks..." ) %>

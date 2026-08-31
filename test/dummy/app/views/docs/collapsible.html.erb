@@ -36,7 +36,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/collapsible/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -63,6 +63,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/collapsible/basic.txt")) %>
     </div>
 
     <!-- Initially Open -->
@@ -85,7 +86,7 @@
           <% end %>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/collapsible/initially-open.txt")) %>
     </div>
 
     <!-- Disabled -->
@@ -108,7 +109,7 @@
           <% end %>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/collapsible/disabled.txt")) %>
     </div>
 
     <!-- With Animation -->
@@ -139,6 +140,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/collapsible/with-smooth-animation.txt")) %>
     </div>
 
     <!-- Settings Panel Example -->
@@ -188,7 +190,7 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/collapsible/settings-panel.txt")) %>
     </div>
 
     <!-- Nested Content Example -->
@@ -227,6 +229,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/collapsible/nested-content.txt")) %>
     </div>
   </div>
 
@@ -266,7 +269,7 @@
 
   <!-- Stimulus Controller -->
   <%= render "docs/stimulus_docs",
-    controller: "shadcn--collapsible",
+    controller_name: "shadcn--collapsible",
     description: "Manages the collapsible state and handles smooth expand/collapse animations with automatic height calculation.",
     values: [
       { name: "open", type: "Boolean", description: "Current open/closed state of the collapsible" },

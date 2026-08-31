@@ -34,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/card/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -55,6 +55,7 @@
           <% end %>
         <% end %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/card/simple-card.txt")) %>
     </div>
 
     <!-- With Footer -->
@@ -83,6 +84,7 @@
           <% end %>
         <% end %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/card/with-footer.txt")) %>
     </div>
 
     <!-- Stat Cards -->
@@ -121,6 +123,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/card/stat-cards.txt")) %>
     </div>
 
     <!-- Profile Card -->
@@ -149,8 +152,33 @@
           <% end %>
         <% end %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/card/profile-card.txt")) %>
     </div>
   </div>
+
+    <!-- Simple -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Simple</h3>
+      <%= showcase("card", :simple) %>
+    </div>
+
+    <!-- Image Header -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Image Header</h3>
+      <%= showcase("card", :image_header) %>
+    </div>
+
+    <!-- Notification -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Notification</h3>
+      <%= showcase("card", :notification) %>
+    </div>
+
+    <!-- Form -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Form</h3>
+      <%= showcase("card", :form) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">

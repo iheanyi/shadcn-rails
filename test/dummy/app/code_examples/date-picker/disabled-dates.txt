@@ -1,0 +1,9 @@
+<%= render Shadcn::DatePickerComponent.new(
+  selected: Date.today + 1.day,
+  disabled_dates: [
+    Date.today,
+    Date.today + 2.days,
+    Date.today + 5.days
+  ],
+  placeholder: "Select an available date"
+) %>

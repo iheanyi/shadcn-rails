@@ -36,7 +36,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/select/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -61,7 +61,7 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/select/with-groups.txt")) %>
     </div>
 
     <!-- Preselected Value -->
@@ -80,7 +80,7 @@
           <% select.with_item(value: "orange") { "Orange" } %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/select/preselected-value.txt")) %>
     </div>
 
     <!-- Disabled State -->
@@ -94,7 +94,7 @@
           <% select.with_item(value: "orange") { "Orange" } %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/select/disabled-state.txt")) %>
     </div>
 
     <!-- Disabled Items -->
@@ -110,7 +110,7 @@
           <% select.with_item(value: "pineapple") { "Pineapple" } %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/select/disabled-items.txt")) %>
     </div>
 
     <!-- Form Integration -->
@@ -137,9 +137,57 @@
           <%= render Shadcn::ButtonComponent.new(type: :submit) { "Submit" } %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/select/form-integration.txt")) %>
     </div>
   </div>
+
+    <!-- With Default Value -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Default Value</h3>
+      <%= showcase("select", :with_default_value) %>
+    </div>
+
+    <!-- Disabled Options -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled Options</h3>
+      <%= showcase("select", :disabled_options) %>
+    </div>
+
+    <!-- Disabled Select -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled Select</h3>
+      <%= showcase("select", :disabled_select) %>
+    </div>
+
+    <!-- Required Field -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Required Field</h3>
+      <%= showcase("select", :required_field) %>
+    </div>
+
+    <!-- Framework Selection -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Framework Selection</h3>
+      <%= showcase("select", :framework_selection) %>
+    </div>
+
+    <!-- Email Provider -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Email Provider</h3>
+      <%= showcase("select", :email_provider) %>
+    </div>
+
+    <!-- Long List -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Long List</h3>
+      <%= showcase("select", :long_list) %>
+    </div>
+
+    <!-- In Form Layout -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">In Form Layout</h3>
+      <%= showcase("select", :in_form_layout) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">

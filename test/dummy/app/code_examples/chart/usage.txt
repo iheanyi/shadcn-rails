@@ -1,0 +1,40 @@
+<% data = {
+  labels: ["January", "February", "March"],
+  datasets: [
+    { key: :desktop, label: "Desktop", data: [186, 305, 237] },
+    { key: :mobile, label: "Mobile", data: [80, 200, 120] }
+  ]
+} %>
+<% config = {
+  desktop: { label: "Desktop", color: "hsl(var(--chart-1))" },
+  mobile: { label: "Mobile", color: "hsl(var(--chart-2))" }
+} %>
+
+<%= render Shadcn::Chart.new(
+  type: :bar,
+  data: data,
+  config: config,
+  aria_label: "Monthly visitors by device"
+) do |chart| %>
+  <% chart.with_fallback do %>
+    <table>
+      <caption>Monthly visitors by device</caption>
+      <thead>
+        <tr>
+          <th>Month</th>
+          <th>Desktop</th>
+          <th>Mobile</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% data[:labels].each_with_index do |month, index| %>
+          <tr>
+            <td><%= month %></td>
+            <td><%= data[:datasets][0][:data][index] %></td>
+            <td><%= data[:datasets][1][:data][index] %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+<% end %>

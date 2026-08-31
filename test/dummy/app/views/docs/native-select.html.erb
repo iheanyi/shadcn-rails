@@ -34,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/native-select/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -58,7 +58,7 @@
           <% end %>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/native-select/with-optgroups.txt")) %>
     </div>
 
     <!-- Disabled -->
@@ -72,7 +72,7 @@
           <% end %>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/native-select/disabled.txt")) %>
     </div>
 
     <!-- Required -->
@@ -88,6 +88,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/native-select/required.txt")) %>
     </div>
 
     <!-- In Form Field -->
@@ -109,8 +110,15 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/native-select/in-form-field.txt")) %>
     </div>
   </div>
+
+    <!-- Form Example -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Form Example</h3>
+      <%= showcase("native-select", :form_example) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">

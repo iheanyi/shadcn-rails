@@ -1,0 +1,15 @@
+<div class="flex items-center gap-4">
+  <%= render Shadcn::ButtonGroupComponent.new do |group| %>
+    <% group.with_button(variant: :outline, size: :sm) { "Bold" } %>
+    <% group.with_button(variant: :outline, size: :sm) { "Italic" } %>
+    <% group.with_button(variant: :outline, size: :sm) { "Underline" } %>
+  <% end %>
+
+  <%= render Shadcn::SeparatorComponent.new(orientation: :vertical, class_name: "h-6") %>
+
+  <%= render Shadcn::ButtonGroupComponent.new do |group| %>
+    <% group.with_button(variant: :outline, size: :sm) { "Left" } %>
+    <% group.with_button(variant: :outline, size: :sm) { "Center" } %>
+    <% group.with_button(variant: :outline, size: :sm) { "Right" } %>
+  <% end %>
+</div>

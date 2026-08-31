@@ -1,0 +1,40 @@
+<% data = {
+  labels: ["January", "February", "March", "April", "May", "June"],
+  datasets: [
+    { key: :organic, label: "Organic", data: [320, 401, 380, 520, 610, 750] },
+    { key: :paid, label: "Paid", data: [180, 230, 280, 310, 390, 420] }
+  ]
+} %>
+<% config = {
+  organic: { label: "Organic", color: "hsl(var(--chart-1))" },
+  paid: { label: "Paid", color: "hsl(var(--chart-2))" }
+} %>
+
+<%= render Shadcn::Chart.new(
+  type: :area,
+  data: data,
+  config: config,
+  aria_label: "Monthly acquisition volume by channel"
+) do |chart| %>
+  <% chart.with_fallback do %>
+    <table class="w-full text-sm">
+      <caption class="mb-2 font-medium">Monthly acquisition volume by channel</caption>
+      <thead>
+        <tr>
+          <th class="text-left">Month</th>
+          <th class="text-right">Organic</th>
+          <th class="text-right">Paid</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% data[:labels].each_with_index do |month, index| %>
+          <tr>
+            <td><%= month %></td>
+            <td class="text-right"><%= data[:datasets][0][:data][index] %></td>
+            <td class="text-right"><%= data[:datasets][1][:data][index] %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+<% end %>

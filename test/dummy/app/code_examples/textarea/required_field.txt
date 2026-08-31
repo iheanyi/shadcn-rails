@@ -1,0 +1,10 @@
+<form class="space-y-2">
+  <label for="comment" class="text-sm font-medium">Comment (required)</label>
+  <%= render Shadcn::Textarea.new(
+    id: "comment",
+    name: "comment",
+    placeholder: "Please enter at least 10 characters...",
+    required: true,
+    minlength: 10
+  ) %>
+</form>

@@ -1,0 +1,4 @@
+<div class="flex w-full max-w-sm items-center space-x-2">
+  <%= render Shadcn::InputComponent.new(type: "email", placeholder: "Email") %>
+  <%= render Shadcn::ButtonComponent.new do %>Subscribe<% end %>
+</div>

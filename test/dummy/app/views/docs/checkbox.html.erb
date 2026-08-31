@@ -15,8 +15,8 @@
     <h1 class="scroll-m-20 text-4xl font-bold tracking-tight">Checkbox</h1>
     <p class="text-xl text-muted-foreground">A control that allows the user to toggle between checked and not checked.</p>
     <div class="flex items-center gap-2 mt-4">
-      <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-700/10 dark:ring-blue-300/10">
-        Stimulus: shadcn--checkbox
+      <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-950 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-700/10 dark:ring-green-300/10">
+        No JavaScript Required
       </span>
     </div>
   </div>
@@ -34,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/checkbox/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -50,6 +50,7 @@
           <%= render Shadcn::LabelComponent.new(for: "default-check") { "Default checkbox" } %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/checkbox/default.txt")) %>
     </div>
 
     <!-- Checked -->
@@ -62,7 +63,7 @@
           <%= render Shadcn::LabelComponent.new(for: "checked-check") { "Checked by default" } %>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/checkbox/checked.txt")) %>
     </div>
 
     <!-- Disabled -->
@@ -80,19 +81,7 @@
           </div>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
-    </div>
-
-    <!-- Indeterminate -->
-    <div class="space-y-4">
-      <h3 class="text-lg font-semibold">Indeterminate</h3>
-      <p class="text-sm text-muted-foreground">Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">indeterminate: true</code> for a partial selection state.</p>
-      <%= render "docs/demo_card" do %>
-        <div class="flex items-center space-x-2">
-          <%= render Shadcn::CheckboxComponent.new(id: "indeterminate-check", indeterminate: true) %>
-          <%= render Shadcn::LabelComponent.new(for: "indeterminate-check") { "Select all (partial)" } %>
-        </div>
-      <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/checkbox/disabled.txt")) %>
     </div>
 
     <!-- With Description -->
@@ -107,6 +96,7 @@
           </div>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/checkbox/with-description.txt")) %>
     </div>
 
     <!-- Form Example -->
@@ -128,8 +118,21 @@
           </div>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/checkbox/in-a-form.txt")) %>
     </div>
   </div>
+
+    <!-- Disabled & Checked -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Disabled & Checked</h3>
+      <%= showcase("checkbox", :disabled_checked) %>
+    </div>
+
+    <!-- Multiple Checkboxes -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Multiple Checkboxes</h3>
+      <%= showcase("checkbox", :multiple) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">
@@ -141,30 +144,17 @@
       { name: "checked", type: "Boolean", default: "false", description: "Whether the checkbox is checked" },
       { name: "disabled", type: "Boolean", default: "false", description: "Whether the checkbox is disabled" },
       { name: "required", type: "Boolean", default: "false", description: "Whether the checkbox is required" },
-      { name: "indeterminate", type: "Boolean", default: "false", description: "Whether to show indeterminate (partial) state" }
+      { name: "unchecked_value", type: "String", default: '"0"', description: "Hidden value submitted when unchecked" },
+      { name: "include_hidden", type: "Boolean", default: "true", description: "Whether to render the hidden unchecked value input" }
     ] %>
   </div>
-
-  <!-- Stimulus Controller -->
-  <%= render "docs/stimulus_docs",
-    controller: "shadcn--checkbox",
-    description: "Handles checkbox toggle state and updates form values.",
-    values: [
-      { name: "checked", type: "Boolean", description: "Current checked state" },
-      { name: "name", type: "String", description: "Form input name for submission" }
-    ],
-    actions: [
-      { name: "toggle", description: "Toggles the checked state" }
-    ]
-  %>
 
   <!-- Accessibility -->
   <div class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Accessibility</h2>
     <ul class="ml-6 list-disc space-y-2 [&>li]:mt-2">
-      <li>Uses <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">role="checkbox"</code> for proper accessibility</li>
-      <li>Has <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-checked</code> attribute that reflects current state</li>
-      <li>Supports <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">aria-checked="mixed"</code> for indeterminate state</li>
+      <li>Renders a native <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">&lt;input type="checkbox"&gt;</code> for built-in keyboard and screen reader behavior</li>
+      <li>Supports standard HTML attributes like <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">checked</code>, <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">disabled</code>, and <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">required</code></li>
       <li>Always pair with a <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">LabelComponent</code> for accessibility</li>
       <li>Disabled state is properly announced to screen readers</li>
     </ul>

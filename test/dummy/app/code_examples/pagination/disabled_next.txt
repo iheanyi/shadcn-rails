@@ -1,0 +1,9 @@
+<%= render(Shadcn::PaginationComponent.new) do |pagination| %>
+  <% pagination.with_pagination_content do |content| %>
+    <% content.with_previous(href: "#") %>
+    <% content.with_item(href: "#") { "1" } %>
+    <% content.with_item(href: "#") { "2" } %>
+    <% content.with_item(href: "#", active: true) { "3" } %>
+    <% content.with_next_page(disabled: true) %>
+  <% end %>
+<% end %>

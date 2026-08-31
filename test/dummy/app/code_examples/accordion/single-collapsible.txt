@@ -1,0 +1,12 @@
+<div class="w-full max-w-md">
+  <%= render Shadcn::AccordionComponent.new(type: :single, collapsible: true) do |accordion| %>
+    <% accordion.with_item(value: "faq-1") do |item| %>
+      <% item.with_trigger { "What is ViewComponent?" } %>
+      <% item.with_body { "ViewComponent is a framework for building reusable, testable & encapsulated view components in Ruby on Rails." } %>
+    <% end %>
+    <% accordion.with_item(value: "faq-2") do |item| %>
+      <% item.with_trigger { "Why use shadcn-rails?" } %>
+      <% item.with_body { "shadcn-rails brings the beautiful shadcn/ui components to Rails applications, with full support for ViewComponent and Stimulus." } %>
+    <% end %>
+  <% end %>
+</div>

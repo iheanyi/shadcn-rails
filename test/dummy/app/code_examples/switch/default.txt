@@ -1,0 +1,4 @@
+<div class="flex items-center space-x-2">
+  <%= render Shadcn::SwitchComponent.new(id: "default-switch") %>
+  <%= render Shadcn::LabelComponent.new(for: "default-switch") { "Enable notifications" } %>
+</div>

@@ -1,0 +1,1 @@
+<%= render Shadcn::SwitchComponent.new( name: "interactive", id: "interactive", checked: checked, disabled: disabled ) %>

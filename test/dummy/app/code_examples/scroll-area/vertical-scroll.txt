@@ -1,0 +1,9 @@
+<%= render Shadcn::ScrollAreaComponent.new(orientation: :vertical, class_name: "h-72 w-48 rounded-md border") do %>
+  <div class="p-4">
+    <h4 class="mb-4 text-sm font-medium leading-none">Items</h4>
+    <% (1..30).each_with_index do |i, index| %>
+      <div class="text-sm">Item <%= i %></div>
+      <%= content_tag(:div, "", class: "my-2 h-px bg-border") unless index == 29 %>
+    <% end %>
+  </div>
+<% end %>

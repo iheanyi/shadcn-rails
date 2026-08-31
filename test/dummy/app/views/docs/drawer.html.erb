@@ -36,7 +36,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/drawer/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -65,7 +65,7 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/drawer/basic-drawer.txt")) %>
     </div>
 
     <!-- With Form -->
@@ -100,7 +100,7 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/drawer/with-form.txt")) %>
     </div>
 
     <!-- Different Directions -->
@@ -172,15 +172,13 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/drawer/different-directions.txt")) %>
       <div class="space-y-4">
         <h4 class="text-sm font-semibold">From Left</h4>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
 
         <h4 class="text-sm font-semibold">From Right</h4>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
 
         <h4 class="text-sm font-semibold">From Top</h4>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
       </div>
     </div>
 
@@ -192,6 +190,24 @@
       </p>
     </div>
   </div>
+
+    <!-- Right Side -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Right Side</h3>
+      <%= showcase("drawer", :right) %>
+    </div>
+
+    <!-- Left Side -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Left Side</h3>
+      <%= showcase("drawer", :left) %>
+    </div>
+
+    <!-- Top -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Top</h3>
+      <%= showcase("drawer", :top) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">

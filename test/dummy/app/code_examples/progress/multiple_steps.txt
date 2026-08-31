@@ -1,0 +1,23 @@
+<div class="space-y-4">
+  <div class="space-y-2">
+    <div class="flex justify-between text-sm">
+      <span class="text-muted-foreground">Step 1: Basic Information</span>
+      <span class="font-medium text-green-600">Complete</span>
+    </div>
+    <%= render Shadcn::Progress.new(value: 100) %>
+  </div>
+  <div class="space-y-2">
+    <div class="flex justify-between text-sm">
+      <span class="text-muted-foreground">Step 2: Contact Details</span>
+      <span class="font-medium">50%</span>
+    </div>
+    <%= render Shadcn::Progress.new(value: 50) %>
+  </div>
+  <div class="space-y-2">
+    <div class="flex justify-between text-sm">
+      <span class="text-muted-foreground">Step 3: Preferences</span>
+      <span class="font-medium text-gray-400">Not started</span>
+    </div>
+    <%= render Shadcn::Progress.new(value: 0) %>
+  </div>
+</div>

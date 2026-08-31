@@ -1,0 +1,8 @@
+<%= render Shadcn::PopoverComponent.new(open: true) do |popover| %>
+  <% popover.with_trigger do %>
+    <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Already open" } %>
+  <% end %>
+  <% popover.with_body do %>
+    <p class="text-sm">This popover is open by default</p>
+  <% end %>
+<% end %>

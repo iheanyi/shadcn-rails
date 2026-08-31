@@ -1,0 +1,23 @@
+<%= render Shadcn::Table.new do |table| %>
+  <% table.with_header do |header| %>
+    <% header.with_row do |row| %>
+      <% row.with_head { "User" } %>
+      <% row.with_head { "Email" } %>
+      <% row.with_head { "Role" } %>
+      <% row.with_head(class_name: "text-right") { "Actions" } %>
+    <% end %>
+  <% end %>
+  <% table.with_body do |body| %>
+    <% body.with_row do |row| %>
+      <% row.with_cell { "Olivia Martin" } %>
+      <% row.with_cell { "olivia@example.com" } %>
+      <% row.with_cell { "Owner" } %>
+      <% row.with_cell(class_name: "text-right") do %>
+        <div class="flex justify-end gap-2">
+          <%= render Shadcn::Button.new(variant: :ghost, class_name: "h-8 px-2 text-xs") { "Edit" } %>
+          <%= render Shadcn::Button.new(variant: :ghost, class_name: "h-8 px-2 text-xs text-destructive") { "Delete" } %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

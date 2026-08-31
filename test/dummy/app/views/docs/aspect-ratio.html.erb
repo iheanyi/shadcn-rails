@@ -34,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/aspect-ratio/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -52,6 +52,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/aspect-ratio/16-9-widescreen.txt")) %>
     </div>
 
     <!-- 4:3 -->
@@ -65,6 +66,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/aspect-ratio/4-3-standard.txt")) %>
     </div>
 
     <!-- 1:1 (Square) -->
@@ -78,6 +80,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/aspect-ratio/1-1-square.txt")) %>
     </div>
 
     <!-- Portrait -->
@@ -91,6 +94,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/aspect-ratio/2-3-portrait.txt")) %>
     </div>
 
     <!-- With Image -->
@@ -110,6 +114,7 @@
           </div>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/aspect-ratio/with-image.txt")) %>
     </div>
 
     <!-- Video Embed -->
@@ -128,6 +133,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/aspect-ratio/video-embed-placeholder.txt")) %>
     </div>
 
     <!-- Map Placeholder -->
@@ -145,8 +151,21 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/aspect-ratio/map-placeholder.txt")) %>
     </div>
   </div>
+
+    <!-- Square (1:1) -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Square (1:1)</h3>
+      <%= showcase("aspect-ratio", :square) %>
+    </div>
+
+    <!-- Portrait (3:4) -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Portrait (3:4)</h3>
+      <%= showcase("aspect-ratio", :portrait) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">

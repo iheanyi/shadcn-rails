@@ -1,0 +1,12 @@
+<%= form_with url: events_path, scope: :event, class: "space-y-4" do |form| %>
+  <div class="space-y-2">
+    <%= form.label :date, "Event Date" %>
+    <%= render Shadcn::DatePickerComponent.new(
+      name: "event[date]",
+      selected: Date.today,
+      placeholder: "Select event date"
+    ) %>
+  </div>
+
+  <%= form.submit "Save event" %>
+<% end %>

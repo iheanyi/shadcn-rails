@@ -1,0 +1,1 @@
+<%= render Shadcn::CalendarComponent.new(show_outside_days: false) %>

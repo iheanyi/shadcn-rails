@@ -1,0 +1,6 @@
+<%= render(Shadcn::SelectComponent.new(name: "country", required: true, placeholder: "Select a country")) do |select| %>
+  <% select.with_item(value: "us") { "United States" } %>
+  <% select.with_item(value: "ca") { "Canada" } %>
+  <% select.with_item(value: "uk") { "United Kingdom" } %>
+  <% select.with_item(value: "au") { "Australia" } %>
+<% end %>

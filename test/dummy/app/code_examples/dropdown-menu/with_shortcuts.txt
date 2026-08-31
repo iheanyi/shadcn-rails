@@ -1,0 +1,21 @@
+<%= render(Shadcn::DropdownMenu.new) do |menu| %>
+  <% menu.with_trigger do %>
+    <%= render Shadcn::Button.new(variant: :outline) { "Actions" } %>
+  <% end %>
+  <% menu.with_menu do |content| %>
+    <% content.with_label { "Actions" } %>
+    <% content.with_separator %>
+    <% content.with_item(href: "#new") do |item| %>
+      <% item.with_shortcut { "⌘N" } %>
+      "New File"
+    <% end %>
+    <% content.with_item(href: "#open") do |item| %>
+      <% item.with_shortcut { "⌘O" } %>
+      "Open File"
+    <% end %>
+    <% content.with_item(href: "#save") do |item| %>
+      <% item.with_shortcut { "⌘S" } %>
+      "Save"
+    <% end %>
+  <% end %>
+<% end %>

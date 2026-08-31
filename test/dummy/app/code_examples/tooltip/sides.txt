@@ -1,0 +1,14 @@
+<div class="flex flex-wrap gap-2">
+  <%= render Shadcn::Tooltip.new(text: "Appears above", side: :top) do %>
+    <%= render Shadcn::Button.new(variant: :outline) { "Top" } %>
+  <% end %>
+  <%= render Shadcn::Tooltip.new(text: "Appears to the right", side: :right) do %>
+    <%= render Shadcn::Button.new(variant: :outline) { "Right" } %>
+  <% end %>
+  <%= render Shadcn::Tooltip.new(text: "Appears below", side: :bottom) do %>
+    <%= render Shadcn::Button.new(variant: :outline) { "Bottom" } %>
+  <% end %>
+  <%= render Shadcn::Tooltip.new(text: "Appears to the left", side: :left) do %>
+    <%= render Shadcn::Button.new(variant: :outline) { "Left" } %>
+  <% end %>
+</div>

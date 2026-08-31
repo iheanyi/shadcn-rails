@@ -1,0 +1,4 @@
+<%= render(Shadcn::ToastComponent.new(duration: 0)) do |toast| %>
+  <% toast.with_title { "Manual dismiss required" } %>
+  <% toast.with_description { "This toast will not auto-dismiss. Click the X to close." } %>
+<% end %>

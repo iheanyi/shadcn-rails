@@ -1,0 +1,16 @@
+<%= render Shadcn::DropdownMenuComponent.new do |menu| %>
+  <% menu.with_trigger do %>
+    <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Settings" } %>
+  <% end %>
+  <% menu.with_menu do |content| %>
+    <% content.with_label { "Account" } %>
+    <% content.with_separator %>
+    <% content.with_item(href: "#") { "Profile" } %>
+    <% content.with_item(href: "#") { "Billing" } %>
+    <% content.with_item(href: "#") { "Notifications" } %>
+    <% content.with_separator %>
+    <% content.with_label { "Danger Zone" } %>
+    <% content.with_separator %>
+    <% content.with_item(variant: :destructive, href: "#") { "Delete Account" } %>
+  <% end %>
+<% end %>

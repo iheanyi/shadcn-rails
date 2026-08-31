@@ -1,0 +1,9 @@
+<div class="space-y-4 w-full max-w-md">
+  <div class="space-y-2">
+    <div class="flex justify-between text-sm">
+      <span>30 of 50 items</span>
+      <span>60%</span>
+    </div>
+    <%= render Shadcn::ProgressComponent.new(value: 30, max: 50) %>
+  </div>
+</div>

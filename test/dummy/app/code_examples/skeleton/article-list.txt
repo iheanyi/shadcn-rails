@@ -1,0 +1,26 @@
+<div class="space-y-6 w-full max-w-md">
+    <div class="flex space-x-4">
+      <%= render Shadcn::SkeletonComponent.new(class_name: "h-20 w-20 rounded-lg shrink-0") %>
+      <div class="flex-1 space-y-2 py-1">
+        <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-3/4") %>
+        <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-full") %>
+        <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-1/2") %>
+      </div>
+    </div>
+    <div class="flex space-x-4">
+      <%= render Shadcn::SkeletonComponent.new(class_name: "h-20 w-20 rounded-lg shrink-0") %>
+      <div class="flex-1 space-y-2 py-1">
+        <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-3/4") %>
+        <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-full") %>
+        <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-1/2") %>
+      </div>
+    </div>
+    <div class="flex space-x-4">
+      <%= render Shadcn::SkeletonComponent.new(class_name: "h-20 w-20 rounded-lg shrink-0") %>
+      <div class="flex-1 space-y-2 py-1">
+        <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-3/4") %>
+        <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-full") %>
+        <%= render Shadcn::SkeletonComponent.new(class_name: "h-4 w-1/2") %>
+      </div>
+    </div>
+</div>

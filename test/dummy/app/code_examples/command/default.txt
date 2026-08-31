@@ -1,0 +1,11 @@
+<%= render(Shadcn::CommandComponent.new(class_name: "w-[320px] rounded-lg border shadow-md")) do |command| %>
+  <% command.with_input(placeholder: "Type a command or search...") %>
+  <% command.with_list do |list| %>
+    <% list.with_empty { "No results found." } %>
+    <% list.with_group(heading: "Suggestions") do |group| %>
+      <% group.with_item(value: "calendar") { "Calendar" } %>
+      <% group.with_item(value: "search") { "Search" } %>
+      <% group.with_item(value: "settings") { "Settings" } %>
+    <% end %>
+  <% end %>
+<% end %>

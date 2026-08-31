@@ -47,6 +47,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::KbdComponent.new { "K" } %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/kbd/single-key.txt")) %>
     </div>
 
     <!-- Key Combination -->
@@ -58,7 +59,7 @@
           <%= render Shadcn::KbdComponent.new { "S" } %>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/kbd/key-combination.txt")) %>
     </div>
 
     <!-- Common Shortcuts -->
@@ -89,6 +90,7 @@
           </div>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/kbd/common-shortcuts.txt")) %>
     </div>
 
     <!-- Windows/Linux Keys -->
@@ -101,6 +103,7 @@
           <%= render Shadcn::KbdComponent.new { "P" } %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/kbd/windows-linux-keys.txt")) %>
     </div>
   </div>
 

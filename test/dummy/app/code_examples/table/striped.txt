@@ -1,0 +1,26 @@
+<% employees = [
+  { id: "EMP001", name: "Olivia Martin", department: "Engineering", salary: "$120,000" },
+  { id: "EMP002", name: "Jackson Lee", department: "Design", salary: "$98,000" },
+  { id: "EMP003", name: "Isabella Nguyen", department: "Product", salary: "$112,000" }
+] %>
+
+<%= render Shadcn::Table.new do |table| %>
+  <% table.with_header do |header| %>
+    <% header.with_row do |row| %>
+      <% row.with_head { "ID" } %>
+      <% row.with_head { "Name" } %>
+      <% row.with_head { "Department" } %>
+      <% row.with_head { "Salary" } %>
+    <% end %>
+  <% end %>
+  <% table.with_body do |body| %>
+    <% employees.each_with_index do |employee, index| %>
+      <% body.with_row(class_name: index.even? ? "bg-muted/50" : "") do |row| %>
+        <% row.with_cell { employee[:id] } %>
+        <% row.with_cell { employee[:name] } %>
+        <% row.with_cell { employee[:department] } %>
+        <% row.with_cell { employee[:salary] } %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

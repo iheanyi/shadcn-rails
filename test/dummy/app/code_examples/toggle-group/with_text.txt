@@ -1,0 +1,5 @@
+<%= render(Shadcn::ToggleGroupComponent.new(type: :single, variant: :outline)) do |group| %>
+  <% group.with_item(value: "a") { "A" } %>
+  <% group.with_item(value: "b") { "B" } %>
+  <% group.with_item(value: "c") { "C" } %>
+<% end %>

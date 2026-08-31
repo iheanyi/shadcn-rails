@@ -1,0 +1,7 @@
+<%= render Shadcn::Toast.new do |toast| %>
+  <% toast.with_title { "Warning" } %>
+  <% toast.with_description { "Your session will expire soon." } %>
+  <% toast.with_action(alt_text: "Extend session") do %>
+    <%= render Shadcn::Button.new(variant: :outline, class_name: "h-8 px-3 text-xs") { "Extend" } %>
+  <% end %>
+<% end %>

@@ -1,0 +1,5 @@
+<%= render Shadcn::ToggleGroup.new(type: :single, variant: :outline) do |group| %>
+  <% group.with_item(value: "left", aria_label: "Left") { "Left" } %>
+  <% group.with_item(value: "center", aria_label: "Center") { "Center" } %>
+  <% group.with_item(value: "right", aria_label: "Right") { "Right" } %>
+<% end %>

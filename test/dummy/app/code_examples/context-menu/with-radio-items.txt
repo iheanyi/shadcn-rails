@@ -1,0 +1,15 @@
+<%= render Shadcn::ContextMenuComponent.new do |menu| %>
+  <% menu.with_trigger do %>
+    <div class="flex h-[100px] w-[200px] items-center justify-center rounded-md border border-dashed text-sm">
+      Right click
+    </div>
+  <% end %>
+  <% menu.with_menu do |content| %>
+    <% content.with_label { "People" } %>
+    <% content.with_separator %>
+    <% content.with_radio_group(value: "pedro") do |group| %>
+      <% group.with_item(value: "pedro", checked: true) { "Pedro Duarte" } %>
+      <% group.with_item(value: "colm") { "Colm Tuite" } %>
+    <% end %>
+  <% end %>
+<% end %>

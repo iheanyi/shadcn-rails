@@ -1,0 +1,18 @@
+<%= form_with url: "#", method: :post, class: "flex flex-col gap-4" do |f| %>
+  <div class="flex flex-col gap-2">
+    <%= render Shadcn::Label.new(for: "country") { "Country" } %>
+    <%= render Shadcn::Select.new(
+      name: "country",
+      id: "country",
+      placeholder: "Select your country",
+      required: true,
+      class_name: "w-[200px]"
+    ) do |select| %>
+      <% select.with_item(value: "us") { "United States" } %>
+      <% select.with_item(value: "uk") { "United Kingdom" } %>
+      <% select.with_item(value: "ca") { "Canada" } %>
+      <% select.with_item(value: "au") { "Australia" } %>
+    <% end %>
+  </div>
+  <%= render Shadcn::Button.new(type: :submit) { "Submit" } %>
+<% end %>

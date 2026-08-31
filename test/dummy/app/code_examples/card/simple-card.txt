@@ -1,0 +1,9 @@
+<%= render Shadcn::CardComponent.new(class_name: "w-[350px]") do |card| %>
+  <% card.with_header do |header| %>
+    <% header.with_title { "Card Title" } %>
+    <% header.with_description { "Card Description" } %>
+  <% end %>
+  <% card.with_content do %>
+    <p>Card content goes here.</p>
+  <% end %>
+<% end %>

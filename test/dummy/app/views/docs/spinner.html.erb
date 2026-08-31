@@ -89,6 +89,7 @@
           <span class="text-sm text-muted-foreground">Loading content...</span>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/spinner/loading-state.txt")) %>
     </div>
   </div>
 

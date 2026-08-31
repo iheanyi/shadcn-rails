@@ -1,0 +1,11 @@
+<div class="space-y-3">
+  <%= render Shadcn::Toast.new do |toast| %>
+    <% toast.with_title { "Success" } %>
+    <% toast.with_description { "Your changes have been saved." } %>
+  <% end %>
+
+  <%= render Shadcn::Toast.new(variant: :destructive) do |toast| %>
+    <% toast.with_title { "Error" } %>
+    <% toast.with_description { "Something went wrong." } %>
+  <% end %>
+</div>

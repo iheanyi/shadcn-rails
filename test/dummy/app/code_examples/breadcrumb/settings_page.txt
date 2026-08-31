@@ -1,0 +1,5 @@
+<%= render(Shadcn::BreadcrumbComponent.new) do |breadcrumb| %>
+  <% breadcrumb.with_item(href: "/dashboard") { "Dashboard" } %>
+  <% breadcrumb.with_item(href: "/settings") { "Settings" } %>
+  <% breadcrumb.with_item(current: true) { "Profile" } %>
+<% end %>

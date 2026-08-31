@@ -1,0 +1,5 @@
+<div class="flex items-center gap-1">
+  <%= render Shadcn::KbdComponent.new { "Ctrl" } %>
+  <%= render Shadcn::KbdComponent.new { "Shift" } %>
+  <%= render Shadcn::KbdComponent.new { "P" } %>
+</div>

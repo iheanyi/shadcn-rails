@@ -1,0 +1,6 @@
+<%= render(Shadcn::SelectComponent.new(name: "role", placeholder: "Select a role")) do |select| %>
+  <% select.with_item(value: "developer") { "Developer" } %>
+  <% select.with_item(value: "designer") { "Designer" } %>
+  <% select.with_item(value: "manager") { "Manager" } %>
+  <% select.with_item(value: "owner") { "Owner" } %>
+<% end %>

@@ -1,0 +1,4 @@
+<%= render(Shadcn::AlertComponent.new) do |alert| %>
+  <% alert.with_title { "Heads up!" } %>
+  <% alert.with_description { "You can add components to your app using the cli." } %>
+<% end %>

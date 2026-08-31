@@ -1,0 +1,61 @@
+<div class="flex flex-wrap gap-2">
+  <%= render Shadcn::DrawerComponent.new(direction: :bottom) do |drawer| %>
+    <% drawer.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Bottom<% end %>
+    <% end %>
+    <% drawer.with_body(direction: :bottom) do |content| %>
+      <% content.with_header do |header| %>
+        <% header.with_title { "Bottom Drawer" } %>
+        <% header.with_description { "Content slides in from the bottom." } %>
+      <% end %>
+      <div class="p-4">
+        <p>Drawer content here.</p>
+      </div>
+    <% end %>
+  <% end %>
+
+  <%= render Shadcn::DrawerComponent.new(direction: :top) do |drawer| %>
+    <% drawer.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Top<% end %>
+    <% end %>
+    <% drawer.with_body(direction: :top) do |content| %>
+      <% content.with_header do |header| %>
+        <% header.with_title { "Top Drawer" } %>
+        <% header.with_description { "Content slides in from the top." } %>
+      <% end %>
+      <div class="p-4">
+        <p>Drawer content here.</p>
+      </div>
+    <% end %>
+  <% end %>
+
+  <%= render Shadcn::DrawerComponent.new(direction: :left) do |drawer| %>
+    <% drawer.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Left<% end %>
+    <% end %>
+    <% drawer.with_body(direction: :left) do |content| %>
+      <% content.with_header do |header| %>
+        <% header.with_title { "Left Drawer" } %>
+        <% header.with_description { "Content slides in from the left." } %>
+      <% end %>
+      <div class="p-4 flex-1">
+        <p>Drawer content here.</p>
+      </div>
+    <% end %>
+  <% end %>
+
+  <%= render Shadcn::DrawerComponent.new(direction: :right) do |drawer| %>
+    <% drawer.with_trigger do %>
+      <%= render Shadcn::ButtonComponent.new(variant: :outline) do %>Right<% end %>
+    <% end %>
+    <% drawer.with_body(direction: :right) do |content| %>
+      <% content.with_header do |header| %>
+        <% header.with_title { "Right Drawer" } %>
+        <% header.with_description { "Content slides in from the right." } %>
+      <% end %>
+      <div class="p-4 flex-1">
+        <p>Drawer content here.</p>
+      </div>
+    <% end %>
+  <% end %>
+</div>

@@ -1,0 +1,6 @@
+<div class="flex items-center gap-4">
+  <%= render Shadcn::AvatarComponent.new(fallback: "SM", size: :sm) %>
+  <%= render Shadcn::AvatarComponent.new(fallback: "DF", size: :default) %>
+  <%= render Shadcn::AvatarComponent.new(fallback: "LG", size: :lg) %>
+  <%= render Shadcn::AvatarComponent.new(fallback: "XL", size: :xl) %>
+</div>

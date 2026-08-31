@@ -1,0 +1,11 @@
+<div class="flex items-center gap-4">
+  <%= render Shadcn::TooltipComponent.new(text: "Instant (0ms)", delay_duration: 0) do %>
+    <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Instant" } %>
+  <% end %>
+  <%= render Shadcn::TooltipComponent.new(text: "Default (200ms)", delay_duration: 200) do %>
+    <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Default" } %>
+  <% end %>
+  <%= render Shadcn::TooltipComponent.new(text: "Slow (500ms)", delay_duration: 500) do %>
+    <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Slow" } %>
+  <% end %>
+</div>

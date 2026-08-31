@@ -39,7 +39,7 @@
       Use the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">with_item</code> method to add breadcrumb items.
       Set <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">current: true</code> on the last item to mark it as the current page.
     </p>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/breadcrumb/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -57,7 +57,7 @@
           <% breadcrumb.with_item(href: "/docs/components") { "Components" } %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/breadcrumb/basic.txt")) %>
     </div>
 
     <!-- With Current Page -->
@@ -74,7 +74,7 @@
           <% breadcrumb.with_item(current: true) { "Laptop" } %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/breadcrumb/with-current-page.txt")) %>
     </div>
 
     <!-- Custom Styling -->
@@ -90,7 +90,7 @@
           <% breadcrumb.with_item(current: true) { "Breadcrumb" } %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/breadcrumb/custom-styling.txt")) %>
     </div>
 
     <!-- Separator Note -->
@@ -103,6 +103,42 @@
       </p>
     </div>
   </div>
+
+    <!-- Two Levels -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Two Levels</h3>
+      <%= showcase("breadcrumb", :two_levels) %>
+    </div>
+
+    <!-- Deep Navigation -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Deep Navigation</h3>
+      <%= showcase("breadcrumb", :deep_navigation) %>
+    </div>
+
+    <!-- With Icons -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Icons</h3>
+      <%= showcase("breadcrumb", :with_icons) %>
+    </div>
+
+    <!-- E-commerce Example -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">E-commerce Example</h3>
+      <%= showcase("breadcrumb", :ecommerce_example) %>
+    </div>
+
+    <!-- Blog Example -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Blog Example</h3>
+      <%= showcase("breadcrumb", :blog_example) %>
+    </div>
+
+    <!-- Settings Page -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Settings Page</h3>
+      <%= showcase("breadcrumb", :settings_page) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference" class="space-y-6">

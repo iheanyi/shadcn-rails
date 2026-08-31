@@ -1,0 +1,1 @@
+<%= render Shadcn::RadioGroupComponent.new(name: "pricing", value: "hobby", class_name: "gap-4", items: pricing_items) %>

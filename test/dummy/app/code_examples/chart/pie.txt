@@ -1,0 +1,39 @@
+<% data = {
+  labels: ["Subscriptions", "Services", "Licensing", "Support"],
+  datasets: [
+    { label: "Revenue", data: [52, 26, 14, 8] }
+  ]
+} %>
+<% config = {
+  subscriptions: { label: "Subscriptions", color: "hsl(var(--chart-1))" },
+  services: { label: "Services", color: "hsl(var(--chart-2))" },
+  licensing: { label: "Licensing", color: "hsl(var(--chart-3))" },
+  support: { label: "Support", color: "hsl(var(--chart-4))" }
+} %>
+
+<%= render Shadcn::Chart.new(
+  type: :pie,
+  data: data,
+  config: config,
+  aria_label: "Revenue mix by product line"
+) do |chart| %>
+  <% chart.with_fallback do %>
+    <table class="w-full text-sm">
+      <caption class="mb-2 font-medium">Revenue mix by product line</caption>
+      <thead>
+        <tr>
+          <th class="text-left">Product line</th>
+          <th class="text-right">Revenue share</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% data[:labels].each_with_index do |label, index| %>
+          <tr>
+            <td><%= label %></td>
+            <td class="text-right"><%= data[:datasets][0][:data][index] %>%</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+<% end %>

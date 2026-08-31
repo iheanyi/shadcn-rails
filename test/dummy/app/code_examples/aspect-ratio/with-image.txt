@@ -1,0 +1,12 @@
+<div class="grid gap-4 grid-cols-2 max-w-xl">
+  <div>
+    <%= render Shadcn::AspectRatioComponent.new(ratio: 1, class_name: "overflow-hidden rounded-md") do %>
+      <img src="https://images.unsplash.com/photo-1535025183041-0991a977e25b?w=300&dpr=2&q=80" alt="Landscape" class="h-full w-full object-cover" />
+    <% end %>
+  </div>
+  <div>
+    <%= render Shadcn::AspectRatioComponent.new(ratio: 1, class_name: "overflow-hidden rounded-md") do %>
+      <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=300&dpr=2&q=80" alt="Dogs" class="h-full w-full object-cover" />
+    <% end %>
+  </div>
+</div>

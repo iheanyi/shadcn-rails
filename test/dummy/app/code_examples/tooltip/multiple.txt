@@ -1,0 +1,8 @@
+<div class="flex gap-2">
+  <%= render Shadcn::Tooltip.new(text: "Edit") do %>
+    <%= render Shadcn::Button.new(variant: :ghost, class_name: "h-10 w-10 p-0", aria: { label: "Edit" }) { "Edit" } %>
+  <% end %>
+  <%= render Shadcn::Tooltip.new(text: "Delete") do %>
+    <%= render Shadcn::Button.new(variant: :ghost, class_name: "h-10 w-10 p-0", aria: { label: "Delete" }) { "Delete" } %>
+  <% end %>
+</div>

@@ -1,0 +1,6 @@
+<%= render(Shadcn::NativeSelectComponent.new(name: "framework")) do |select| %>
+  <% select.with_option(value: "", disabled: true, selected: true) { "Select a framework" } %>
+  <% select.with_option(value: "rails") { "Ruby on Rails" } %>
+  <% select.with_option(value: "stimulus") { "Stimulus" } %>
+  <% select.with_option(value: "turbo") { "Turbo" } %>
+<% end %>

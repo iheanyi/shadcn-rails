@@ -63,6 +63,7 @@
           The king, seeing how much happier his subjects were, realized the error of his ways and repealed the joke tax.
         <% end %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/typography/paragraph.txt")) %>
     </div>
 
     <!-- Lead -->
@@ -73,6 +74,7 @@
           A modal dialog that interrupts the user with important content and expects a response.
         <% end %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/typography/lead.txt")) %>
     </div>
 
     <!-- Large -->
@@ -81,6 +83,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::TypographyComponent.new(variant: :large) { "Are you absolutely sure?" } %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/typography/large.txt")) %>
     </div>
 
     <!-- Small -->
@@ -89,6 +92,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::TypographyComponent.new(variant: :small) { "Email address" } %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/typography/small.txt")) %>
     </div>
 
     <!-- Muted -->
@@ -97,6 +101,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::TypographyComponent.new(variant: :muted) { "Enter your email address." } %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/typography/muted.txt")) %>
     </div>
 
     <!-- Blockquote -->
@@ -107,6 +112,7 @@
           "After all, everyone enjoys a good laugh, and the people of the kingdom were no exception."
         <% end %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/typography/blockquote.txt")) %>
     </div>
 
     <!-- Inline Code -->
@@ -115,6 +121,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::TypographyComponent.new(variant: :code) { "@radix-ui/react-alert-dialog" } %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/typography/inline-code.txt")) %>
     </div>
   </div>
 

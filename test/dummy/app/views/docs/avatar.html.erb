@@ -34,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/avatar/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -50,6 +50,7 @@
           alt: "Shadcn"
         ) %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/avatar/with-image.txt")) %>
     </div>
 
     <!-- Fallback -->
@@ -63,6 +64,7 @@
           <%= render Shadcn::AvatarComponent.new(fallback: "AB") %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/avatar/fallback.txt")) %>
     </div>
 
     <!-- Sizes -->
@@ -92,6 +94,7 @@
           ) %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/avatar/sizes.txt")) %>
     </div>
 
     <!-- Fallback Sizes -->
@@ -105,6 +108,7 @@
           <%= render Shadcn::AvatarComponent.new(fallback: "XL", size: :xl) %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/avatar/fallback-sizes.txt")) %>
     </div>
 
     <!-- User List -->
@@ -137,6 +141,7 @@
           </div>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/avatar/user-list.txt")) %>
     </div>
 
     <!-- Avatar Group -->
@@ -163,8 +168,33 @@
           ) %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/avatar/avatar-group.txt")) %>
     </div>
   </div>
+
+    <!-- With Fallback -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Fallback</h3>
+      <%= showcase("avatar", :with_fallback) %>
+    </div>
+
+    <!-- Fallback Only -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Fallback Only</h3>
+      <%= showcase("avatar", :fallback_only) %>
+    </div>
+
+    <!-- Custom Fallback with Slot -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Custom Fallback with Slot</h3>
+      <%= showcase("avatar", :custom_fallback_with_slot) %>
+    </div>
+
+    <!-- Multiple Avatars -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Multiple Avatars</h3>
+      <%= showcase("avatar", :multiple_avatars) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">
@@ -217,7 +247,7 @@
 
   <!-- Stimulus Controller -->
   <%= render "docs/stimulus_docs",
-    controller: "shadcn--avatar",
+    controller_name: "shadcn--avatar",
     description: "Handles image loading errors and shows fallback when image fails to load.",
     targets: [
       { name: "image", description: "The avatar image element" },

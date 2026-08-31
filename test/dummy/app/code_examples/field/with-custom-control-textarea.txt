@@ -1,0 +1,9 @@
+<div class="max-w-sm">
+  <%= render Shadcn::FieldComponent.new do |field| %>
+    <% field.with_label { "Bio" } %>
+    <% field.with_control do %>
+      <%= render Shadcn::TextareaComponent.new(placeholder: "Tell us about yourself", rows: 3) %>
+    <% end %>
+    <% field.with_description { "Write a short bio about yourself." } %>
+  <% end %>
+</div>

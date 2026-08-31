@@ -36,7 +36,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/dropdown-menu/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -58,7 +58,7 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/dropdown-menu/basic.txt")) %>
     </div>
 
     <!-- With Icons -->
@@ -86,7 +86,7 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/dropdown-menu/with-icons.txt")) %>
     </div>
 
     <!-- With Separators and Labels -->
@@ -111,7 +111,7 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/dropdown-menu/with-separators-and-labels.txt")) %>
     </div>
 
     <!-- With Keyboard Shortcuts -->
@@ -144,7 +144,7 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/dropdown-menu/with-keyboard-shortcuts.txt")) %>
     </div>
 
     <!-- Destructive Items -->
@@ -164,7 +164,7 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/dropdown-menu/destructive-items.txt")) %>
     </div>
 
     <!-- Disabled Items -->
@@ -183,7 +183,7 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/dropdown-menu/disabled-items.txt")) %>
     </div>
 
     <!-- Inset Items -->
@@ -206,7 +206,7 @@
           <% end %>
         <% end %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/dropdown-menu/inset-items.txt")) %>
     </div>
 
     <!-- Alignment -->
@@ -246,9 +246,33 @@
           <% end %>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/dropdown-menu/alignment.txt")) %>
     </div>
   </div>
+
+    <!-- With Shortcuts -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Shortcuts</h3>
+      <%= showcase("dropdown-menu", :with_shortcuts) %>
+    </div>
+
+    <!-- Destructive Actions -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Destructive Actions</h3>
+      <%= showcase("dropdown-menu", :destructive) %>
+    </div>
+
+    <!-- With Inset -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Inset</h3>
+      <%= showcase("dropdown-menu", :with_inset) %>
+    </div>
+
+    <!-- User Menu Example -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">User Menu Example</h3>
+      <%= showcase("dropdown-menu", :user_menu) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">

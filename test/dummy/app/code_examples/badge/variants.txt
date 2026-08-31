@@ -1,0 +1,6 @@
+<div class="flex flex-wrap gap-2">
+  <%= render Shadcn::Badge.new { "Default" } %>
+  <%= render Shadcn::Badge.new(variant: :secondary) { "Secondary" } %>
+  <%= render Shadcn::Badge.new(variant: :destructive) { "Destructive" } %>
+  <%= render Shadcn::Badge.new(variant: :outline) { "Outline" } %>
+</div>

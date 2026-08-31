@@ -1,0 +1,1 @@
+<%= render Shadcn::CheckboxComponent.new(name: "terms_of_service", id: "terms_of_service", required: true) %>

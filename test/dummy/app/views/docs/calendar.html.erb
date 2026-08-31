@@ -41,7 +41,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/calendar/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -55,7 +55,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::CalendarComponent.new(selected: Date.today) %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/calendar/selected-date.txt")) %>
     </div>
 
     <!-- Form Integration -->
@@ -71,7 +71,7 @@
           ) %>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/calendar/form-integration.txt")) %>
     </div>
 
     <!-- Min/Max Dates -->
@@ -84,7 +84,7 @@
           max_date: Date.today + 30.days
         ) %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/calendar/date-range-constraints.txt")) %>
     </div>
 
     <!-- Disabled Dates -->
@@ -94,7 +94,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::CalendarComponent.new(disabled_dates: weekends) %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/calendar/disabled-dates.txt")) %>
     </div>
 
     <!-- Hide Outside Days -->
@@ -104,6 +104,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::CalendarComponent.new(show_outside_days: false) %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/calendar/hide-outside-days.txt")) %>
     </div>
 
     <!-- Disabled Days of Week -->
@@ -113,7 +114,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::CalendarComponent.new(disabled_days_of_week: [0, 6]) %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/calendar/disabled-days-of-week.txt")) %>
     </div>
 
     <!-- Multiple Selection -->
@@ -123,7 +124,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::CalendarComponent.new(mode: :multiple) %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/calendar/multiple-selection.txt")) %>
     </div>
 
     <!-- Range Selection -->
@@ -133,7 +134,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::CalendarComponent.new(mode: :range) %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/calendar/range-selection.txt")) %>
     </div>
 
     <!-- Required Selection -->
@@ -143,7 +144,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::CalendarComponent.new(selected: Date.today, required: true) %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/calendar/required-selection.txt")) %>
     </div>
 
     <!-- Week Starts On -->
@@ -153,7 +154,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::CalendarComponent.new(week_starts_on: 1) %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/calendar/week-starts-on-monday.txt")) %>
     </div>
   </div>
 

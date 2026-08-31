@@ -1,0 +1,1 @@
+<%= render Shadcn::RadioGroupComponent.new(name: "delivery", value: "standard", class_name: "mt-4", items: delivery_items) %>

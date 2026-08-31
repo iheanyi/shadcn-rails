@@ -1,0 +1,21 @@
+<%= render Shadcn::Carousel.new(class_name: "w-[280px]") do |carousel| %>
+  <% carousel.with_slides do |slides| %>
+    <% slides.with_item do %>
+      <div class="flex aspect-square items-center justify-center rounded-md border bg-muted text-4xl font-semibold">
+        1
+      </div>
+    <% end %>
+    <% slides.with_item do %>
+      <div class="flex aspect-square items-center justify-center rounded-md border bg-muted text-4xl font-semibold">
+        2
+      </div>
+    <% end %>
+    <% slides.with_item do %>
+      <div class="flex aspect-square items-center justify-center rounded-md border bg-muted text-4xl font-semibold">
+        3
+      </div>
+    <% end %>
+  <% end %>
+  <% carousel.with_previous %>
+  <% carousel.with_next %>
+<% end %>

@@ -34,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/carousel/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -70,6 +70,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/carousel/with-images.txt")) %>
     </div>
 
     <!-- Sizes -->
@@ -93,6 +94,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/carousel/custom-item-sizes.txt")) %>
     </div>
 
     <!-- Vertical -->
@@ -116,6 +118,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/carousel/vertical-orientation.txt")) %>
     </div>
 
     <!-- Loop -->
@@ -139,6 +142,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/carousel/infinite-loop.txt")) %>
     </div>
 
     <!-- Autoplay -->
@@ -162,6 +166,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/carousel/autoplay.txt")) %>
     </div>
 
     <!-- Card Content -->
@@ -197,6 +202,7 @@
           <% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/carousel/with-card-content.txt")) %>
     </div>
   </div>
 
@@ -247,7 +253,7 @@
 
   <!-- Stimulus Controller -->
   <%= render "docs/stimulus_docs",
-    controller: "shadcn--carousel",
+    controller_name: "shadcn--carousel",
     description: "Manages carousel navigation, autoplay, keyboard navigation, and touch/swipe gestures.",
     values: [
       { name: "orientation", type: "String", description: "Direction (horizontal or vertical)" },

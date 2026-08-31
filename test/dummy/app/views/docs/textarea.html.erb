@@ -34,7 +34,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/textarea/usage.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -47,6 +47,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::TextareaComponent.new(placeholder: "Enter your text...") %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/textarea/default.txt")) %>
     </div>
 
     <!-- With Label -->
@@ -58,7 +59,7 @@
           <%= render Shadcn::TextareaComponent.new(id: "message-demo", placeholder: "Type your message here.") %>
         </div>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/textarea/with-label.txt")) %>
     </div>
 
     <!-- With Text -->
@@ -71,6 +72,7 @@
           <p class="text-sm text-muted-foreground">You can @mention other users and organizations.</p>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/textarea/with-helper-text.txt")) %>
     </div>
 
     <!-- Different Rows -->
@@ -83,6 +85,7 @@
           <%= render Shadcn::TextareaComponent.new(rows: 6, placeholder: "6 rows") %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/textarea/custom-rows.txt")) %>
     </div>
 
     <!-- Disabled -->
@@ -91,7 +94,7 @@
       <%= render "docs/demo_card" do %>
         <%= render Shadcn::TextareaComponent.new(disabled: true, placeholder: "Disabled textarea") %>
       <% end %>
-    <p class="text-sm text-muted-foreground">This example now renders from the component preview source shown by the showcase block on this page.</p>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/textarea/disabled.txt")) %>
     </div>
 
     <!-- With Button -->
@@ -103,8 +106,51 @@
           <%= render Shadcn::ButtonComponent.new do %>Send message<% end %>
         </div>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/textarea/with-button.txt")) %>
     </div>
   </div>
+
+    <!-- With Value -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Value</h3>
+      <%= showcase("textarea", :with_value) %>
+    </div>
+
+    <!-- Readonly -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Readonly</h3>
+      <%= showcase("textarea", :readonly) %>
+    </div>
+
+    <!-- With Character Limit -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Character Limit</h3>
+      <%= showcase("textarea", :with_character_limit) %>
+    </div>
+
+    <!-- Required Field -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Required Field</h3>
+      <%= showcase("textarea", :required_field) %>
+    </div>
+
+    <!-- With Label and Description -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Label and Description</h3>
+      <%= showcase("textarea", :with_label_and_description) %>
+    </div>
+
+    <!-- Autofocus -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Autofocus</h3>
+      <%= showcase("textarea", :autofocus) %>
+    </div>
+
+    <!-- With Custom Styling -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Custom Styling</h3>
+      <%= showcase("textarea", :with_custom_styling) %>
+    </div>
 
   <!-- API Reference -->
   <div id="api-reference">

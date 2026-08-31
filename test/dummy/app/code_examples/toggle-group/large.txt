@@ -1,0 +1,5 @@
+<%= render Shadcn::ToggleGroup.new(type: :multiple, size: :lg) do |group| %>
+  <% group.with_item(value: "bold", aria_label: "B") { "B" } %>
+  <% group.with_item(value: "italic", aria_label: "I") { "I" } %>
+  <% group.with_item(value: "underline", aria_label: "U") { "U" } %>
+<% end %>

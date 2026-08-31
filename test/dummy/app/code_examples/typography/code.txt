@@ -1,0 +1,3 @@
+<%= render Shadcn::TypographyComponent.new(variant: :code) do %>
+  @radix-ui/react-alert-dialog
+<% end %>
