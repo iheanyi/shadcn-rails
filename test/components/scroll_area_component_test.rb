@@ -6,28 +6,77 @@ class ScrollAreaComponentTest < ViewComponent::TestCase
   def test_renders_scroll_area_container
     render_inline(Shadcn::ScrollAreaComponent.new) { "Content" }
 
-    assert_selector "div[data-controller='shadcn--scroll-area']"
-    assert_selector "div.relative.overflow-hidden"
+    root = page.find("div[data-controller='shadcn--scroll-area']")
+    class_tokens = root["class"].split
+
+    assert_equal "scroll-area", root["data-slot"]
+    assert_equal ["relative"], class_tokens
+    refute_includes class_tokens, "overflow-hidden"
   end
 
   def test_renders_viewport
     render_inline(Shadcn::ScrollAreaComponent.new) { "Scrollable content" }
 
-    assert_selector "div[data-shadcn--scroll-area-target='viewport']"
+    viewport = page.find("div[data-shadcn--scroll-area-target='viewport']")
+    class_tokens = viewport["class"].split
+
+    assert_equal "scroll-area-viewport", viewport["data-slot"]
+    assert_equal [
+      "size-full",
+      "rounded-[inherit]",
+      "transition-[color,box-shadow]",
+      "outline-none",
+      "focus-visible:ring-[3px]",
+      "focus-visible:ring-ring/50",
+      "focus-visible:outline-1"
+    ], class_tokens
+    refute_includes class_tokens, "h-full"
+    refute_includes class_tokens, "w-full"
+    refute_includes class_tokens, "overflow-y-auto"
   end
 
   def test_renders_vertical_scrollbar_by_default
     render_inline(Shadcn::ScrollAreaComponent.new) { "Content" }
 
-    assert_selector "div[data-orientation='vertical']"
-    assert_selector "div[data-shadcn--scroll-area-target='scrollbar']"
+    scrollbar = page.find("div[data-orientation='vertical']")
+    class_tokens = scrollbar["class"].split
+
+    assert_equal "scroll-area-scrollbar", scrollbar["data-slot"]
+    assert_equal [
+      "flex",
+      "touch-none",
+      "p-px",
+      "transition-colors",
+      "select-none",
+      "h-full",
+      "w-2.5",
+      "border-l",
+      "border-l-transparent"
+    ], class_tokens
+    assert_equal "scrollbar", scrollbar["data-shadcn--scroll-area-target"]
+    refute_includes class_tokens, "p-[1px]"
   end
 
   def test_renders_horizontal_scrollbar
     render_inline(Shadcn::ScrollAreaComponent.new(orientation: :horizontal)) { "Content" }
 
-    assert_selector "div[data-orientation='horizontal']"
+    scrollbar = page.find("div[data-orientation='horizontal']")
+    class_tokens = scrollbar["class"].split
+
+    assert_equal "scroll-area-scrollbar", scrollbar["data-slot"]
+    assert_equal [
+      "flex",
+      "touch-none",
+      "p-px",
+      "transition-colors",
+      "select-none",
+      "h-2.5",
+      "flex-col",
+      "border-t",
+      "border-t-transparent"
+    ], class_tokens
     assert_selector "div[data-shadcn--scroll-area-orientation-value='horizontal']"
+    refute_includes class_tokens, "p-[1px]"
   end
 
   def test_renders_both_scrollbars
@@ -41,8 +90,15 @@ class ScrollAreaComponentTest < ViewComponent::TestCase
   def test_renders_scrollbar_thumb
     render_inline(Shadcn::ScrollAreaComponent.new) { "Content" }
 
-    assert_selector "div[data-shadcn--scroll-area-target='thumb']"
-    assert_selector "div.rounded-full.bg-border"
+    thumb = page.find("div[data-shadcn--scroll-area-target='thumb']")
+
+    assert_equal "scroll-area-thumb", thumb["data-slot"]
+    assert_equal [
+      "relative",
+      "flex-1",
+      "rounded-full",
+      "bg-border"
+    ], thumb["class"].split
   end
 
   def test_renders_with_hover_type_by_default
