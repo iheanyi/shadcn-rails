@@ -10,6 +10,24 @@ class LabelComponentTest < ViewComponent::TestCase
     assert_selector "label.text-sm.font-medium"
   end
 
+  def test_renders_new_york_v4_class_tokens_and_data_slot
+    render_inline(Shadcn::LabelComponent.new(for: "email")) { "Email" }
+
+    label = page.find("label[for='email']")
+    classes = label[:class].split
+
+    assert_equal "flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50", label[:class]
+    assert_equal "label", label["data-slot"]
+    assert_includes classes, "flex"
+    assert_includes classes, "items-center"
+    assert_includes classes, "gap-2"
+    assert_includes classes, "select-none"
+    assert_includes classes, "peer-disabled:opacity-50"
+    assert_includes classes, "group-data-[disabled=true]:pointer-events-none"
+    assert_includes classes, "group-data-[disabled=true]:opacity-50"
+    refute_includes classes, "peer-disabled:opacity-70"
+  end
+
   def test_renders_with_for_attribute
     render_inline(Shadcn::LabelComponent.new(for: "email")) { "Email" }
 

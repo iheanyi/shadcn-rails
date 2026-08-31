@@ -22,7 +22,9 @@
   </div>
 
   <!-- Preview -->
-  <%= showcase("label", :default) %>
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::Label.new(for: "email-preview") { "Email" } %>
+  <% end %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -46,7 +48,7 @@
       <h3 class="text-lg font-semibold">With Input</h3>
       <%= render "docs/demo_card" do %>
         <div class="grid w-full max-w-sm items-center gap-1.5">
-          <%= render Shadcn::LabelComponent.new(for: "email-example") { "Email" } %>
+          <%= render Shadcn::Label.new(for: "email-example") { "Email" } %>
           <%= render Shadcn::InputComponent.new(type: "email", id: "email-example", placeholder: "Email") %>
         </div>
       <% end %>
@@ -59,7 +61,7 @@
       <p class="text-sm text-muted-foreground">Set <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">required: true</code> to show a required indicator.</p>
       <%= render "docs/demo_card" do %>
         <div class="grid w-full max-w-sm items-center gap-1.5">
-          <%= render Shadcn::LabelComponent.new(for: "name-required", required: true) { "Full Name" } %>
+          <%= render Shadcn::Label.new(for: "name-required", required: true) { "Full Name" } %>
           <%= render Shadcn::InputComponent.new(id: "name-required", required: true, placeholder: "Enter your name") %>
         </div>
       <% end %>
@@ -72,7 +74,7 @@
       <%= render "docs/demo_card" do %>
         <div class="flex items-center space-x-2">
           <%= render Shadcn::CheckboxComponent.new(id: "terms-checkbox") %>
-          <%= render Shadcn::LabelComponent.new(for: "terms-checkbox") { "Accept terms and conditions" } %>
+          <%= render Shadcn::Label.new(for: "terms-checkbox") { "Accept terms and conditions" } %>
         </div>
       <% end %>
       <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/label/with-checkbox.txt")) %>
@@ -84,49 +86,79 @@
       <p class="text-sm text-muted-foreground">When the associated input is disabled, the label automatically adjusts its styling via the <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">peer-disabled</code> CSS classes.</p>
       <%= render "docs/demo_card" do %>
         <div class="grid w-full max-w-sm items-center gap-1.5">
-          <%= render Shadcn::LabelComponent.new(for: "disabled-input") { "Disabled Field" } %>
+          <%= render Shadcn::Label.new(for: "disabled-input") { "Disabled Field" } %>
           <%= render Shadcn::InputComponent.new(id: "disabled-input", disabled: true, value: "Cannot edit", class_name: "peer") %>
         </div>
       <% end %>
       <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/label/disabled-state.txt")) %>
     </div>
-  </div>
 
     <!-- Required Field -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Required Field</h3>
-      <%= showcase("label", :required_field) %>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::Label.new(for: "required-field", required: true) { "Name" } %>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/label/required_field.txt")) %>
     </div>
 
     <!-- Optional Field -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Optional Field</h3>
-      <%= showcase("label", :optional_field) %>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::Label.new(for: "optional-field") { "Phone Number" } %>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/label/optional_field.txt")) %>
     </div>
 
     <!-- Custom Styling -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Custom Styling</h3>
-      <%= showcase("label", :custom_styling) %>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::Label.new(for: "bio", class_name: "text-lg font-bold") { "Biography" } %>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/label/custom_styling.txt")) %>
     </div>
 
     <!-- Form Example -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Form Example</h3>
-      <%= showcase("label", :form_example) %>
+      <%= render "docs/demo_card" do %>
+        <div class="grid w-full max-w-sm gap-4">
+          <div class="grid gap-1.5">
+            <%= render Shadcn::Label.new(for: "form-name", required: true) { "Name" } %>
+            <%= render Shadcn::InputComponent.new(id: "form-name", placeholder: "Jane Doe") %>
+          </div>
+          <div class="grid gap-1.5">
+            <%= render Shadcn::Label.new(for: "form-email") { "Email" } %>
+            <%= render Shadcn::InputComponent.new(type: "email", id: "form-email", placeholder: "jane@example.com") %>
+          </div>
+        </div>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/label/form_example.txt")) %>
     </div>
 
     <!-- Without For -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Without For</h3>
-      <%= showcase("label", :without_for) %>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::Label.new { "Standalone Label" } %>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/label/without_for.txt")) %>
     </div>
 
     <!-- Disabled Context -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Disabled Context</h3>
-      <%= showcase("label", :disabled_context) %>
+      <%= render "docs/demo_card" do %>
+        <div class="grid w-full max-w-sm items-center gap-1.5 opacity-50">
+          <%= render Shadcn::Label.new(for: "disabled") { "Disabled Field" } %>
+          <%= render Shadcn::InputComponent.new(id: "disabled", disabled: true, placeholder: "Disabled input") %>
+        </div>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/label/disabled_context.txt")) %>
     </div>
+  </div>
 
   <!-- API Reference -->
   <div id="api-reference">
