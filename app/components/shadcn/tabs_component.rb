@@ -35,6 +35,8 @@ module Shadcn
   #   # URL will update to ?tab=account or ?tab=password when tabs are clicked
   #
   class TabsComponent < BaseComponent
+    BASE_CLASSES = "group/tabs flex gap-2 data-[orientation=horizontal]:flex-col"
+
     renders_one :list, lambda { |**options|
       TabsListComponent.new(**options)
     }
@@ -58,6 +60,7 @@ module Shadcn
       merge_html_attributes(
         {
           class: tabs_classes,
+          "data-slot": "tabs",
           "data-orientation": @orientation
         },
         {
@@ -69,7 +72,7 @@ module Shadcn
     end
 
     def tabs_classes
-      class_name
+      merge_classes(BASE_CLASSES)
     end
 
     def tabs_content
