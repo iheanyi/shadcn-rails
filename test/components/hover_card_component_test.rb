@@ -40,6 +40,16 @@ class HoverCardComponentTest < ViewComponent::TestCase
     assert_selector "[role='tooltip']", visible: :all
   end
 
+  def test_content_uses_new_york_v4_outline_class
+    render_inline(Shadcn::HoverCardComponent.new) do |card|
+      card.with_card_content { "Info" }
+    end
+
+    classes = page.find("[data-shadcn--hover-card-target='content']", visible: :all)[:class].split
+    assert_includes classes, "outline-hidden"
+    refute_includes classes, "outline-none"
+  end
+
   def test_renders_content_hidden_by_default
     render_inline(Shadcn::HoverCardComponent.new) do |card|
       card.with_card_content { "Hidden content" }
