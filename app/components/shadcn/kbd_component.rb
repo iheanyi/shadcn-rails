@@ -18,12 +18,17 @@ module Shadcn
   #   </span>
   #
   class KbdComponent < BaseComponent
-    BASE_CLASSES = 'pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100'
+    BASE_CLASSES = "pointer-events-none inline-flex h-5 w-fit min-w-5 items-center justify-center gap-1 rounded-sm bg-muted px-1 font-sans text-xs font-medium text-muted-foreground select-none [&_svg:not([class*='size-'])]:size-3 [[data-slot=tooltip-content]_&]:bg-background/20 [[data-slot=tooltip-content]_&]:text-background dark:[[data-slot=tooltip-content]_&]:bg-background/10"
 
     private
 
     def kbd_classes
       merge_classes(BASE_CLASSES)
+    end
+
+    def tag_attributes
+      attrs = merge_html_attributes({}, slot: "kbd")
+      attrs.map { |key, value| "#{key}=\"#{ERB::Util.html_escape_once(value)}\"" if value }.compact.join(" ").html_safe
     end
   end
 end
