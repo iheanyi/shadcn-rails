@@ -35,10 +35,7 @@
   <!-- Usage -->
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
-    <p class="leading-7">
-      Dialog examples are defined once in <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">DialogComponentPreview</code>.
-      The showcase helper renders the same preview used by Lookbook and displays the preview method source.
-    </p>
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/dialog/default.txt")) %>
   </div>
 
   <!-- Examples -->
@@ -49,21 +46,21 @@
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Basic Dialog</h3>
       <%= showcase("dialog", :default) %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/dialog/default.txt")) %>
     </div>
 
     <!-- Custom Close Button -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Alert Dialog Style</h3>
-      <p class="text-sm text-muted-foreground">
-        Dialog examples can be specialized in preview methods and reused here without copying markup into the docs page.
-      </p>
       <%= showcase("dialog", :alert) %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/dialog/alert.txt")) %>
     </div>
 
     <!-- With Form -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">With Form</h3>
       <%= showcase("dialog", :with_form) %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/dialog/with_form.txt")) %>
     </div>
   </div>
 
