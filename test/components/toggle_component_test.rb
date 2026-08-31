@@ -8,6 +8,7 @@ class ToggleComponentTest < ViewComponent::TestCase
 
     assert_selector "button[type='button']", text: "Toggle"
     assert_selector "button[data-controller='shadcn--toggle']"
+    assert_selector "button[data-slot='toggle']"
   end
 
   def test_renders_with_unpressed_state_by_default
@@ -28,6 +29,24 @@ class ToggleComponentTest < ViewComponent::TestCase
     render_inline(Shadcn::ToggleComponent.new(variant: :outline)) { "Toggle" }
 
     assert_selector "button.border"
+  end
+
+  def test_default_classes_match_new_york_v4
+    render_inline(Shadcn::ToggleComponent.new) { "Toggle" }
+
+    assert_includes rendered_content, "gap-2"
+    assert_includes rendered_content, "focus-visible:ring-[3px]"
+    assert_includes rendered_content, "min-w-9"
+    assert_includes rendered_content, "px-2"
+    refute_includes rendered_content, "focus-visible:ring-1"
+    refute_includes rendered_content, "px-3"
+  end
+
+  def test_outline_variant_uses_new_york_v4_shadow
+    render_inline(Shadcn::ToggleComponent.new(variant: :outline)) { "Toggle" }
+
+    assert_includes rendered_content, "shadow-xs"
+    refute_includes rendered_content, "shadow-sm"
   end
 
   def test_renders_with_small_size
