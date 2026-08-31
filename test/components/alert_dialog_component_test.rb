@@ -120,7 +120,7 @@ class AlertDialogComponentTest < ViewComponent::TestCase
   end
 
   def test_action_and_cancel_use_button_component_classes
-    result = render_inline(Shadcn::AlertDialogComponent.new) do |dialog|
+    render_inline(Shadcn::AlertDialogComponent.new) do |dialog|
       dialog.with_body do |body|
         body.with_footer do |footer|
           footer.with_cancel { "Cancel" }
@@ -129,11 +129,8 @@ class AlertDialogComponentTest < ViewComponent::TestCase
       end
     end
 
-    html = result.to_html
-    action_tag = html[/<button[^>]*data-slot="alert-dialog-action"[^>]*>/m]
-    cancel_tag = html[/<button[^>]*data-slot="alert-dialog-cancel"[^>]*>/m]
-    action_classes = action_tag[/class="([^"]*)"/, 1].split
-    cancel_classes = cancel_tag[/class="([^"]*)"/, 1].split
+    action_classes = page.find("[data-slot='alert-dialog-action']", visible: :all)[:class].split
+    cancel_classes = page.find("[data-slot='alert-dialog-cancel']", visible: :all)[:class].split
 
     assert_includes action_classes, "focus-visible:ring-[3px]"
     assert_includes cancel_classes, "shadow-xs"
