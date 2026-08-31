@@ -3,6 +3,7 @@
         <%= "disabled" if @disabled %>
         aria-pressed="<%= @pressed %>"
         <%= "aria-label=\"#{ERB::Util.html_escape_once(@aria_label)}\"".html_safe if @aria_label %>
+        data-slot="toggle"
         data-state="<%= data_state %>"
         data-controller="shadcn--toggle"
         data-action="click->shadcn--toggle#toggle"

@@ -17,7 +17,7 @@ module ShowcaseHelper
         "docs/code_example",
         language: "erb",
         code: showcase_example_source(component_name, preview_class, example),
-        title: "#{preview_class.name}##{example}"
+        title: "#{component_name}/#{example}"
       )
     ])
   end

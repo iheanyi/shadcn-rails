@@ -61,6 +61,29 @@ class ToggleGroupComponentTest < ViewComponent::TestCase
     assert_selector "button.border"
   end
 
+  def test_item_classes_match_toggle_new_york_v4
+    render_inline(Shadcn::ToggleGroupComponent.new) do |group|
+      group.with_item(value: "test") { "Test" }
+    end
+
+    assert_selector "button[data-slot='toggle-group-item']"
+    assert_includes rendered_content, "gap-2"
+    assert_includes rendered_content, "focus-visible:ring-[3px]"
+    assert_includes rendered_content, "min-w-9"
+    assert_includes rendered_content, "px-2"
+    refute_includes rendered_content, "focus-visible:ring-1"
+    refute_includes rendered_content, "px-3"
+  end
+
+  def test_item_outline_variant_uses_toggle_new_york_v4_shadow
+    render_inline(Shadcn::ToggleGroupComponent.new(variant: :outline)) do |group|
+      group.with_item(value: "test") { "Test" }
+    end
+
+    assert_includes rendered_content, "shadow-xs"
+    refute_includes rendered_content, "shadow-sm"
+  end
+
   def test_renders_with_small_size
     render_inline(Shadcn::ToggleGroupComponent.new(size: :sm)) do |group|
       group.with_item(value: "test") { "T" }
