@@ -14,7 +14,7 @@ module Shadcn
   #   <%= render Shadcn::LabelComponent.new(for: "bio", class_name: "text-lg") { "Biography" } %>
   #
   class LabelComponent < BaseComponent
-    BASE_CLASSES = "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+    BASE_CLASSES = "flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
 
     # @param for [String, nil] The ID of the input this label is for
     # @param required [Boolean] Whether to show a required indicator

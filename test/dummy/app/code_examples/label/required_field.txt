@@ -1,4 +1,4 @@
 <div class="grid w-full max-w-sm items-center gap-1.5">
-  <%= render Shadcn::LabelComponent.new(for: "disabled-input") { "Disabled Field" } %>
-  <%= render Shadcn::InputComponent.new(id: "disabled-input", disabled: true, value: "Cannot edit", class_name: "peer") %>
+  <%= render Shadcn::Label.new(for: "required-field", required: true) { "Name" } %>
+  <%= render Shadcn::InputComponent.new(id: "required-field", required: true, placeholder: "Enter your name") %>
 </div>

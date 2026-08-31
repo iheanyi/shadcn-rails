@@ -1,4 +1,4 @@
 <div class="grid w-full max-w-sm items-center gap-1.5">
-  <%= render Shadcn::LabelComponent.new(for: "name-required", required: true) { "Full Name" } %>
+  <%= render Shadcn::Label.new(for: "name-required", required: true) { "Full Name" } %>
   <%= render Shadcn::InputComponent.new(id: "name-required", required: true, placeholder: "Enter your name") %>
 </div>
