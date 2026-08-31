@@ -7,15 +7,24 @@ class SeparatorComponentTest < ViewComponent::TestCase
     render_inline(Shadcn::SeparatorComponent.new)
 
     assert_selector "div[role='separator']"
-    assert_selector "div.h-\\[1px\\].w-full"
     assert_selector "div[aria-orientation='horizontal']"
+    assert_selector "div[data-orientation='horizontal']"
+    assert_selector "div[data-slot='separator']"
+
+    class_attribute = page.find("div")["class"]
+    assert_includes class_attribute, "data-[orientation=horizontal]:h-px"
+    refute_includes class_attribute, "h-[1px]"
   end
 
   def test_renders_vertical_separator
     render_inline(Shadcn::SeparatorComponent.new(orientation: :vertical))
 
-    assert_selector "div.h-full.w-\\[1px\\]"
     assert_selector "div[aria-orientation='vertical']"
+    assert_selector "div[data-orientation='vertical']"
+
+    class_attribute = page.find("div")["class"]
+    assert_includes class_attribute, "data-[orientation=vertical]:w-px"
+    refute_includes class_attribute, "w-[1px]"
   end
 
   def test_renders_decorative_separator
