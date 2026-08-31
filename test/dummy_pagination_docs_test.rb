@@ -52,7 +52,7 @@ class DummyPaginationDocsTest < ActionDispatch::IntegrationTest
   end
 
   def test_live_demo_uses_page_param_for_visible_records
-    get "/docs/components/pagination?page=2"
+    get "/docs/components/pagination", params: { page: 2 }
 
     assert_response :success
     assert_includes response.body, "showing page 2 of 10"
@@ -67,7 +67,7 @@ class DummyPaginationDocsTest < ActionDispatch::IntegrationTest
   end
 
   def test_live_demo_disables_next_on_last_page
-    get "/docs/components/pagination?page=10"
+    get "/docs/components/pagination", params: { page: 10 }
 
     assert_response :success
     assert_includes response.body, "showing page 10 of 10"
