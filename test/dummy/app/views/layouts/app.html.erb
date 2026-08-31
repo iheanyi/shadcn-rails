@@ -160,40 +160,6 @@
       }
     })
 
-    // Checkbox Controller
-    Stimulus.register("shadcn--checkbox", class extends Controller {
-      static values = { checked: { type: Boolean, default: false }, name: String }
-
-      connect() {
-        this.updateState()
-      }
-
-      toggle() {
-        this.checkedValue = !this.checkedValue
-        this.updateState()
-        this.updateHiddenInput()
-      }
-
-      updateState() {
-        const state = this.checkedValue ? "checked" : "unchecked"
-        this.element.dataset.state = state
-        this.element.setAttribute("aria-checked", this.checkedValue.toString())
-        const icon = this.element.querySelector("svg")
-        if (icon) {
-          icon.classList.toggle("opacity-0", !this.checkedValue)
-        }
-      }
-
-      updateHiddenInput() {
-        if (this.nameValue) {
-          const input = this.element.previousElementSibling
-          if (input && input.type === "hidden") {
-            input.value = this.checkedValue ? "1" : "0"
-          }
-        }
-      }
-    })
-
     // Slider Controller
     Stimulus.register("shadcn--slider", class extends Controller {
       connect() {

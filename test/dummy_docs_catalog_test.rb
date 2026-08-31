@@ -97,6 +97,9 @@ class DummyDocsCatalogTest < ActionDispatch::IntegrationTest
   def test_checkbox_docs_do_not_claim_unsupported_javascript_or_indeterminate_api
     sources = [
       Rails.root.join("app/views/docs/checkbox.html.erb"),
+      Rails.root.join("app/controllers/docs_controller.rb"),
+      Rails.root.join("app/views/layouts/app.html.erb"),
+      Rails.root.join("app/views/layouts/application.html.erb"),
       Rails.root.join("app/code_examples/checkbox/usage.txt"),
       *Rails.root.join("app/code_examples/checkbox").glob("*.txt"),
       Rails.root.join("../../test/components/previews/checkbox_component_preview.rb").expand_path

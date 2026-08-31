@@ -67,8 +67,7 @@ class DocsController < ApplicationController
       name: "Checkbox",
       category: "Form Inputs",
       description: "A control that allows the user to toggle between checked and unchecked.",
-      has_stimulus: true,
-      controller: "shadcn--checkbox"
+      has_stimulus: false
     },
     "switch" => {
       name: "Switch",
