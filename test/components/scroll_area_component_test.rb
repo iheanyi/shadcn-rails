@@ -10,8 +10,7 @@ class ScrollAreaComponentTest < ViewComponent::TestCase
     class_tokens = root["class"].split
 
     assert_equal "scroll-area", root["data-slot"]
-    assert_equal ["relative"], class_tokens
-    refute_includes class_tokens, "overflow-hidden"
+    assert_equal ["relative", "overflow-hidden"], class_tokens
   end
 
   def test_renders_viewport
