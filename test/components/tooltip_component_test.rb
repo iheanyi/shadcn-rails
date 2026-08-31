@@ -64,6 +64,39 @@ class TooltipComponentTest < ViewComponent::TestCase
     assert_selector "[data-state='closed']", visible: false
   end
 
+  def test_tooltip_content_uses_new_york_v4_classes
+    render_inline(Shadcn::TooltipComponent.new(text: "New York")) { "Trigger" }
+
+    content = page.find("[data-shadcn--tooltip-target='content']", visible: false)
+    classes = content[:class].split
+    expected_classes = "shadcn-tooltip z-50 w-fit origin-(--radix-tooltip-content-transform-origin) animate-in rounded-md bg-foreground px-3 py-1.5 text-xs text-balance text-background fade-in-0 zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95"
+
+    assert_equal expected_classes, content[:class]
+    assert_includes classes, "w-fit"
+    assert_includes classes, "bg-foreground"
+    assert_includes classes, "text-background"
+    assert_includes classes, "text-balance"
+    assert_includes classes, "animate-in"
+    assert_includes classes, "fade-in-0"
+    assert_includes classes, "zoom-in-95"
+    assert_includes classes, "data-[state=closed]:animate-out"
+    refute_includes classes, "bg-primary"
+    refute_includes classes, "text-primary-foreground"
+    assert classes.none? { |class_name| class_name.include?("data-[size=default]") }
+  end
+
+  def test_tooltip_renders_new_york_v4_arrow
+    render_inline(Shadcn::TooltipComponent.new(text: "Arrow")) { "Trigger" }
+
+    arrow = page.find("[data-slot='tooltip-arrow']", visible: false)
+    classes = arrow[:class].split
+
+    assert_includes classes, "size-2.5"
+    assert_includes classes, "rotate-45"
+    assert_includes classes, "bg-foreground"
+    assert_includes classes, "fill-foreground"
+  end
+
   # Side variants
   def test_renders_with_top_side_by_default
     render_inline(Shadcn::TooltipComponent.new(text: "Top")) { "Trigger" }
