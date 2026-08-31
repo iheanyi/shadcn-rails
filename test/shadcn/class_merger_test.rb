@@ -73,6 +73,17 @@ class ShadcnClassMergerTest < ActiveSupport::TestCase
     refute_includes classes, "hover:tw-px-4"
   end
 
+  def test_unprefixed_negative_and_important_classes_are_preserved_with_tailwind_prefix
+    Shadcn::Rails.configure do |config|
+      config.tailwind_prefix = "tw-"
+    end
+
+    classes = Shadcn::Rails::ClassMerger.merge("-mt-4 !hidden hover:-mt-2").split
+    assert_includes classes, "-mt-4"
+    assert_includes classes, "!hidden"
+    assert_includes classes, "hover:-mt-2"
+  end
+
   def test_focus_visible_ring_width_can_override_arbitrary_ring_width
     classes = Shadcn::Rails::ClassMerger.merge(
       "focus-visible:ring-ring/50 focus-visible:ring-[3px]",

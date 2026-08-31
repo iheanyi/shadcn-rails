@@ -83,7 +83,7 @@ module Shadcn
             split_at = index if char == ":" && bracket_depth.zero?
           end
 
-          return ["", class_name] unless split_at
+          return ["", class_name.dup] unless split_at
 
           [class_name[0..split_at], class_name[(split_at + 1)..]]
         end
