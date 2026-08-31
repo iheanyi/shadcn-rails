@@ -13,7 +13,7 @@ module Shadcn
     }
 
     def call
-      content_tag(:div, safe_join([cancel, action, content].compact), class: merge_classes(BASE_CLASSES))
+      content_tag(:div, safe_join([cancel, action, content].compact), **merge_html_attributes({ class: merge_classes(BASE_CLASSES), "data-slot": "alert-dialog-footer" }))
     end
   end
 end
