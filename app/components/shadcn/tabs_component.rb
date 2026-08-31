@@ -62,7 +62,7 @@ module Shadcn
         },
         {
           controller: "shadcn--tabs",
-          "shadcn--tabs-default-value": @default_value,
+          "shadcn--tabs-default-value-value": @default_value,
           "shadcn--tabs-url-param-value": @url_param
         }
       )

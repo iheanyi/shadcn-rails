@@ -10,7 +10,7 @@ module Shadcn
   #     <% nav.with_list do |list| %>
   #       <% list.with_item do |item| %>
   #         <% item.with_trigger { "Getting Started" } %>
-  #         <% item.with_content do %>
+  #         <% item.with_dropdown do %>
   #           <ul class="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
   #             <li class="row-span-3">Featured content</li>
   #             <li><a href="#">Introduction</a></li>

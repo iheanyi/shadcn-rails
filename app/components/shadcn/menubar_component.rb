@@ -9,7 +9,7 @@ module Shadcn
   #   <%= render Shadcn::MenubarComponent.new do |menubar| %>
   #     <% menubar.with_menu do |menu| %>
   #       <% menu.with_trigger { "File" } %>
-  #       <% menu.with_content do |content| %>
+  #       <% menu.with_menu do |content| %>
   #         <% content.with_item(href: "#") { "New Tab" } %>
   #         <% content.with_item(href: "#") { "New Window" } %>
   #         <% content.with_separator %>
@@ -18,7 +18,7 @@ module Shadcn
   #     <% end %>
   #     <% menubar.with_menu do |menu| %>
   #       <% menu.with_trigger { "Edit" } %>
-  #       <% menu.with_content do |content| %>
+  #       <% menu.with_menu do |content| %>
   #         <% content.with_item(href: "#") { "Undo" } %>
   #         <% content.with_item(href: "#") { "Redo" } %>
   #       <% end %>

@@ -10,7 +10,7 @@ module Shadcn
   #     <% sheet.with_trigger do %>
   #       <%= render Shadcn::ButtonComponent.new(variant: :outline) { "Open Sheet" } %>
   #     <% end %>
-  #     <% sheet.with_content do |content| %>
+  #     <% sheet.with_body do |content| %>
   #       <% content.with_header do %>
   #         <% content.with_title { "Edit Profile" } %>
   #         <% content.with_description { "Make changes to your profile." } %>
