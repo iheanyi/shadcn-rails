@@ -304,6 +304,18 @@ describe("DatePickerController", () => {
       expect(dayButtons.length).toBeLessThanOrEqual(42)
     })
 
+    test("renders days inside weekly flex rows", () => {
+      controller.render()
+
+      const grid = element.querySelector('[data-date-picker-target="grid"]')
+      const weeks = grid.querySelectorAll(":scope > div.mt-2.flex.w-full")
+
+      expect(weeks.length).toBeGreaterThan(0)
+      weeks.forEach((week) => {
+        expect(week.children.length).toBe(7)
+      })
+    })
+
     test("renders day buttons with focus-visible ring styles", () => {
       controller.render()
 
@@ -566,6 +578,8 @@ describe("DatePickerController", () => {
       // Empty divs should exist for October days
       const emptyDivs = grid.querySelectorAll('div.invisible:not([data-date])')
       expect(emptyDivs.length).toBeGreaterThan(0)
+      expect(emptyDivs[0].classList).toContain("min-w-(--cell-size)")
+      expect(emptyDivs[0].classList).toContain("w-full")
     })
 
     test("showOutsideDays persists after month navigation", async () => {

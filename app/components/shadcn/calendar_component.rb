@@ -34,6 +34,7 @@ module Shadcn
     DAY_TODAY_CLASSES = "bg-accent text-accent-foreground"
     DAY_OUTSIDE_CLASSES = "text-muted-foreground opacity-50"
     DAY_DISABLED_CLASSES = "text-muted-foreground opacity-50 pointer-events-none"
+    EMPTY_DAY_CLASSES = "invisible shrink-0 flex aspect-square size-auto w-full min-w-(--cell-size)"
 
     WEEKDAYS = %w[Su Mo Tu We Th Fr Sa].freeze
     # Mapping for Rails beginning_of_week symbols
@@ -265,7 +266,7 @@ module Shadcn
     end
 
     def empty_day
-      content_tag(:div, "", class: "invisible")
+      content_tag(:div, "", class: EMPTY_DAY_CLASSES)
     end
 
     def date_disabled?(date)

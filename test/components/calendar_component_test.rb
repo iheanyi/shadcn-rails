@@ -196,6 +196,9 @@ class CalendarComponentTest < ViewComponent::TestCase
     assert_no_selector "button[data-date='2024-05-26']"
     # Should have empty placeholders instead
     assert_selector "div.invisible"
+    classes = page.first("div.invisible")["class"].split
+    assert_includes classes, "min-w-(--cell-size)"
+    assert_includes classes, "w-full"
   end
 
   def test_passes_stimulus_data_attributes

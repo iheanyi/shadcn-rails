@@ -1,5 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 const DAY_BUTTON_CLASSES = "inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal p-0 text-center select-none group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground [&>span]:text-xs [&>span]:opacity-70";
+const EMPTY_DAY_CLASSES = "invisible shrink-0 flex aspect-square size-auto w-full min-w-(--cell-size)";
+const WEEK_ROW_CLASSES = "mt-2 flex w-full";
 /**
  * Date Picker controller
  * Handles opening/closing the calendar popover and date selection
@@ -190,6 +192,8 @@ export default class DatePickerController extends Controller {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         let html = "";
+        let weekHtml = "";
+        let dayIndex = 0;
         const currentDate = new Date(startDate);
         while (currentDate <= endDate) {
             const isOutside = currentDate.getMonth() !== month;
@@ -199,45 +203,52 @@ export default class DatePickerController extends Controller {
             const isDisabled = this.isDateDisabled(currentDate);
             // Use local date components to avoid timezone issues with toISOString()
             const dateStr = this.formatDateString(currentDate);
+            let dayHtml = "";
             // Skip outside days if showOutsideDays is false
             if (isOutside && !this.showOutsideDaysValue) {
-                html += '<div class="invisible"></div>';
-                currentDate.setDate(currentDate.getDate() + 1);
-                continue;
-            }
-            let classes = DAY_BUTTON_CLASSES;
-            if (isDisabled) {
-                classes += " text-muted-foreground opacity-50 cursor-not-allowed";
-            }
-            else if (isSelected) {
-                classes += " bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground cursor-pointer";
-            }
-            else if (isToday) {
-                classes += " bg-accent text-accent-foreground cursor-pointer hover:bg-accent hover:text-accent-foreground";
+                dayHtml = `<div class="${EMPTY_DAY_CLASSES}"></div>`;
             }
             else {
-                classes += " cursor-pointer hover:bg-accent hover:text-accent-foreground";
+                let classes = DAY_BUTTON_CLASSES;
+                if (isDisabled) {
+                    classes += " text-muted-foreground opacity-50 cursor-not-allowed";
+                }
+                else if (isSelected) {
+                    classes += " bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground cursor-pointer";
+                }
+                else if (isToday) {
+                    classes += " bg-accent text-accent-foreground cursor-pointer hover:bg-accent hover:text-accent-foreground";
+                }
+                else {
+                    classes += " cursor-pointer hover:bg-accent hover:text-accent-foreground";
+                }
+                if (isOutside && !isDisabled) {
+                    classes += " text-muted-foreground opacity-50";
+                }
+                const ariaAttrs = [];
+                if (isSelected)
+                    ariaAttrs.push('aria-selected="true"');
+                if (isDisabled) {
+                    ariaAttrs.push('aria-disabled="true"');
+                    ariaAttrs.push('disabled');
+                }
+                ariaAttrs.push('data-slot="button"');
+                ariaAttrs.push(`data-day="${dateStr}"`);
+                if (isSelected)
+                    ariaAttrs.push('data-selected-single="true"');
+                // Only add click action for non-disabled days
+                const dataAction = isDisabled
+                    ? ''
+                    : 'data-action="click->shadcn--date-picker#selectDay"';
+                dayHtml = `<button type="button" class="${classes}" data-date="${dateStr}" data-shadcn--date-picker-target="day" ${dataAction} ${ariaAttrs.join(" ")}>${currentDate.getDate()}</button>`;
             }
-            if (isOutside && !isDisabled) {
-                classes += " text-muted-foreground opacity-50";
-            }
-            const ariaAttrs = [];
-            if (isSelected)
-                ariaAttrs.push('aria-selected="true"');
-            if (isDisabled) {
-                ariaAttrs.push('aria-disabled="true"');
-                ariaAttrs.push('disabled');
-            }
-            ariaAttrs.push('data-slot="button"');
-            ariaAttrs.push(`data-day="${dateStr}"`);
-            if (isSelected)
-                ariaAttrs.push('data-selected-single="true"');
-            // Only add click action for non-disabled days
-            const dataAction = isDisabled
-                ? ''
-                : 'data-action="click->shadcn--date-picker#selectDay"';
-            html += `<button type="button" class="${classes}" data-date="${dateStr}" data-shadcn--date-picker-target="day" ${dataAction} ${ariaAttrs.join(" ")}>${currentDate.getDate()}</button>`;
+            weekHtml += dayHtml;
             currentDate.setDate(currentDate.getDate() + 1);
+            dayIndex += 1;
+            if (dayIndex % 7 === 0) {
+                html += `<div class="${WEEK_ROW_CLASSES}">${weekHtml}</div>`;
+                weekHtml = "";
+            }
         }
         return html;
     }

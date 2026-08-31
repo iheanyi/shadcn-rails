@@ -116,6 +116,19 @@ class DatePickerComponentTest < ViewComponent::TestCase
     assert_includes rendered_content, "data-date=\"2024-06-01\""
   end
 
+  def test_hides_outside_days_with_sized_placeholders
+    render_inline(Shadcn::DatePickerComponent.new(
+      month: Date.new(2024, 6, 1),
+      show_outside_days: false
+    ))
+
+    refute_includes rendered_content, 'data-date="2024-05-26"'
+    assert_selector "div.invisible"
+    classes = page.first("div.invisible")["class"].split
+    assert_includes classes, "min-w-(--cell-size)"
+    assert_includes classes, "w-full"
+  end
+
   def test_day_buttons_use_v4_focus_visible_ring_styles
     render_inline(Shadcn::DatePickerComponent.new(month: Date.new(2024, 6, 1)))
 

@@ -291,7 +291,7 @@ module Shadcn
     end
 
     def empty_day
-      content_tag(:div, "", class: "invisible")
+      content_tag(:div, "", class: CalendarComponent::EMPTY_DAY_CLASSES)
     end
 
     def date_disabled?(date)

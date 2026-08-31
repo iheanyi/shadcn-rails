@@ -223,6 +223,18 @@ describe("CalendarController", () => {
       expect(dayButtons.length).toBeLessThanOrEqual(42)
     })
 
+    test("renders days inside weekly flex rows", () => {
+      controller.render()
+
+      const grid = element.querySelector('[data-calendar-target="grid"]')
+      const weeks = grid.querySelectorAll(":scope > div.mt-2.flex.w-full")
+
+      expect(weeks.length).toBeGreaterThan(0)
+      weeks.forEach((week) => {
+        expect(week.children.length).toBe(7)
+      })
+    })
+
     test("renders day buttons with focus-visible ring styles", () => {
       controller.render()
 
@@ -938,6 +950,8 @@ describe("CalendarController", () => {
       // November 2024 starts on Friday, so first 5 cells should be empty divs
       const emptyDivs = grid.querySelectorAll('div.invisible:not([data-date])')
       expect(emptyDivs.length).toBeGreaterThan(0)
+      expect(emptyDivs[0].classList).toContain("min-w-(--cell-size)")
+      expect(emptyDivs[0].classList).toContain("w-full")
 
       // First day button should be November 1
       const firstButton = grid.querySelector('button[data-date]')
