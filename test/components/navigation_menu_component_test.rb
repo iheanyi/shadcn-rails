@@ -158,7 +158,7 @@ class NavigationMenuComponentTest < ViewComponent::TestCase
     refute_includes chevron_class_tokens, "w-3"
   end
 
-  def test_renders_link_with_upstream_v4_recipe_and_slot
+  def test_renders_link_with_trigger_recipe_and_slot
     render_navigation_menu(active: true)
 
     link = page.find("a[href='/']")
@@ -166,13 +166,17 @@ class NavigationMenuComponentTest < ViewComponent::TestCase
 
     assert_equal "navigation-menu-link", link["data-slot"]
     assert_equal "true", link["data-active"]
-    assert_includes class_tokens, "flex"
-    assert_includes class_tokens, "flex-col"
-    assert_includes class_tokens, "gap-1"
-    assert_includes class_tokens, "rounded-sm"
-    assert_includes class_tokens, "p-2"
+    assert_includes class_tokens, "group"
+    assert_includes class_tokens, "inline-flex"
+    assert_includes class_tokens, "h-9"
+    assert_includes class_tokens, "w-max"
+    assert_includes class_tokens, "rounded-md"
+    assert_includes class_tokens, "bg-background"
+    assert_includes class_tokens, "px-4"
+    assert_includes class_tokens, "py-2"
     assert_includes class_tokens, "text-sm"
-    assert_includes class_tokens, "transition-all"
+    assert_includes class_tokens, "font-medium"
+    assert_includes class_tokens, "transition-[color,box-shadow]"
     assert_includes class_tokens, "outline-none"
     assert_includes class_tokens, "focus-visible:ring-[3px]"
     assert_includes class_tokens, "focus-visible:ring-ring/50"
@@ -181,20 +185,18 @@ class NavigationMenuComponentTest < ViewComponent::TestCase
     assert_includes class_tokens, "data-[active=true]:text-accent-foreground"
     assert_includes class_tokens, "data-[active=true]:hover:bg-accent"
     assert_includes class_tokens, "data-[active=true]:focus:bg-accent"
-    assert_includes class_tokens, "[&_svg:not([class*='size-'])]:size-4"
-    assert_includes class_tokens, "[&_svg:not([class*='text-'])]:text-muted-foreground"
-    refute_includes class_tokens, "inline-flex"
-    refute_includes class_tokens, "h-9"
-    refute_includes class_tokens, "w-max"
-    refute_includes class_tokens, "rounded-md"
-    refute_includes class_tokens, "bg-background"
-    refute_includes class_tokens, "px-4"
-    refute_includes class_tokens, "py-2"
+    assert_includes class_tokens, "disabled:pointer-events-none"
+    assert_includes class_tokens, "disabled:opacity-50"
+    refute_includes class_tokens, "flex-col"
+    refute_includes class_tokens, "gap-1"
+    refute_includes class_tokens, "rounded-sm"
+    refute_includes class_tokens, "p-2"
+    refute_includes class_tokens, "transition-all"
     refute_includes class_tokens, "transition-colors"
     refute_includes class_tokens, "focus:outline-none"
   end
 
-  def test_renders_content_and_viewport_with_upstream_v4_classes_and_slots
+  def test_renders_content_and_viewport_without_viewport_padding_mismatch
     render_inline(Shadcn::NavigationMenuComponent.new) do |nav|
       nav.with_list do |list|
         list.with_item do |item|
@@ -214,9 +216,11 @@ class NavigationMenuComponentTest < ViewComponent::TestCase
     assert_includes content_class_tokens, "top-0"
     assert_includes content_class_tokens, "left-0"
     assert_includes content_class_tokens, "w-full"
-    assert_includes content_class_tokens, "p-2"
-    assert_includes content_class_tokens, "pr-2.5"
+    refute_includes content_class_tokens, "p-2"
+    refute_includes content_class_tokens, "pr-2.5"
     assert_includes content_class_tokens, "group-data-[viewport=false]/navigation-menu:top-full"
+    assert_includes content_class_tokens, "group-data-[viewport=false]/navigation-menu:p-2"
+    assert_includes content_class_tokens, "group-data-[viewport=false]/navigation-menu:pr-2.5"
     assert_includes content_class_tokens, "group-data-[viewport=false]/navigation-menu:rounded-md"
     assert_includes content_class_tokens, "**:data-[slot=navigation-menu-link]:focus:ring-0"
     assert_includes content_class_tokens, "**:data-[slot=navigation-menu-link]:focus:outline-none"
