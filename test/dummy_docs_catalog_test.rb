@@ -70,7 +70,9 @@ class DummyDocsCatalogTest < ActionDispatch::IntegrationTest
       source = File.read(view)
       next unless source.include?('render "docs/stimulus_docs"')
 
-      refute_match(/render "docs\/stimulus_docs"[\s\S]*?\bcontroller:/, source, "#{view.basename} should pass controller_name: to docs/stimulus_docs")
+      stimulus_docs_calls(source).each do |call_source|
+        refute_match(/\bcontroller:/, call_source, "#{view.basename} should pass controller_name: to docs/stimulus_docs")
+      end
     end
   end
 
@@ -112,6 +114,17 @@ class DummyDocsCatalogTest < ActionDispatch::IntegrationTest
 
   def code_example_files
     Rails.root.join("app/code_examples").glob("**/*.txt")
+  end
+
+  def stimulus_docs_calls(source)
+    source
+      .lines
+      .slice_before { |line| line.include?('render "docs/stimulus_docs"') }
+      .filter_map do |lines|
+        next unless lines.first&.include?('render "docs/stimulus_docs"')
+
+        lines.take_while.with_index { |line, index| index.zero? || !line.include?("%>") }.join
+      end
   end
 
   def editable_component_slugs
