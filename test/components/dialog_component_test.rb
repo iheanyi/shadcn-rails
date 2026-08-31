@@ -128,9 +128,9 @@ class DialogComponentTest < ViewComponent::TestCase
     assert_includes close_classes, "focus:outline-hidden"
     assert_includes close_classes, "data-[state=open]:bg-accent"
     assert_includes close_classes, "data-[state=open]:text-muted-foreground"
-    assert_includes close_classes, "[&_svg]:pointer-events-none"
-    assert_includes close_classes, "[&_svg]:shrink-0"
-    assert_includes close_classes, "[&_svg:not([class*='size-'])]:size-4"
+    assert_includes close_classes, "[&amp;_svg]:pointer-events-none"
+    assert_includes close_classes, "[&amp;_svg]:shrink-0"
+    assert_includes close_classes, "[&amp;_svg:not([class*='size-'])]:size-4"
     refute_includes close_classes, "focus-visible:ring-2"
   end
 
