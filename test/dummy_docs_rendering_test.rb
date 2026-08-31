@@ -46,4 +46,19 @@ class DummyDocsRenderingTest < ActionDispatch::IntegrationTest
     assert_match(/checked.*Boolean.*false.*Whether the switch is on/m, html)
     assert_match(/checked.*Boolean.*false.*Current checked state/m, html)
   end
+
+  def test_docs_code_examples_scroll_instead_of_clipping
+    get "/docs/components/switch"
+
+    assert_response :success
+    assert_select "div.relative.my-4.min-w-0.max-w-full div.code-block.max-w-full"
+
+    layout = Rails.root.join("app/views/layouts/docs.html.erb").read
+    assert_includes layout, "max-width: 100%;"
+    assert_includes layout, "min-width: max-content;"
+
+    html = CGI.unescapeHTML(response.body)
+    refute_includes html, ">Preview<"
+    refute_includes html, ">Code<"
+  end
 end

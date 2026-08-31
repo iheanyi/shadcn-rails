@@ -16,15 +16,17 @@ module Shadcn
   #
   class SwitchComponent < BaseComponent
     BASE_CLASSES = [
-      "peer inline-flex shrink-0 items-center rounded-full border border-transparent shadow-xs",
+      "peer group/switch inline-flex shrink-0 items-center rounded-full border border-transparent shadow-xs",
       "transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50",
-      "disabled:cursor-not-allowed disabled:opacity-50 h-[1.15rem] w-8 data-[state=checked]:bg-primary",
+      "disabled:cursor-not-allowed disabled:opacity-50 h-[1.15rem] w-8 data-[size=default]:h-[1.15rem] data-[size=default]:w-8",
+      "data-[state=checked]:bg-primary",
       "data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80"
     ].join(" ")
 
     THUMB_CLASSES = [
       "pointer-events-none block size-4 rounded-full bg-background ring-0 transition-transform",
-      "data-[state=checked]:translate-x-3.5 data-[state=unchecked]:translate-x-0",
+      "group-data-[size=default]/switch:size-4",
+      "data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0",
       "dark:data-[state=checked]:bg-primary-foreground dark:data-[state=unchecked]:bg-foreground"
     ].join(" ")
 
@@ -98,6 +100,7 @@ module Shadcn
           "aria-checked": @checked,
           "aria-required": @required || nil,
           "data-slot": "switch",
+          "data-size": "default",
           "data-state": state,
           "data-shadcn--switch-target": "button",
           "data-action": "click->shadcn--switch#toggle keydown->shadcn--switch#handleKeydown",

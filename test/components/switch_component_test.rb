@@ -9,16 +9,16 @@ class SwitchComponentTest < ViewComponent::TestCase
     assert_selector "button[role='switch']"
     assert_selector "button[data-state='unchecked']"
     assert_selector "button[aria-checked='false']"
-    assert_selector "button[data-slot='switch']"
-    assert_no_selector "button[data-size]"
+    assert_selector "button[data-slot='switch'][data-size='default']"
   end
 
-  def test_renders_v4_switch_track_classes_without_size_variant_selectors
+  def test_renders_v4_switch_track_classes_with_always_on_default_sizing
     render_inline(Shadcn::SwitchComponent.new)
 
     classes = page.find("button[role='switch']")["class"].split
 
     assert_includes classes, "peer"
+    assert_includes classes, "group/switch"
     assert_includes classes, "inline-flex"
     assert_includes classes, "shrink-0"
     assert_includes classes, "items-center"
@@ -35,13 +35,12 @@ class SwitchComponentTest < ViewComponent::TestCase
     assert_includes classes, "disabled:opacity-50"
     assert_includes classes, "h-[1.15rem]"
     assert_includes classes, "w-8"
+    assert_includes classes, "data-[size=default]:h-[1.15rem]"
+    assert_includes classes, "data-[size=default]:w-8"
     assert_includes classes, "data-[state=checked]:bg-primary"
     assert_includes classes, "data-[state=unchecked]:bg-input"
     assert_includes classes, "dark:data-[state=unchecked]:bg-input/80"
 
-    refute_includes classes, "group/switch"
-    refute_includes classes, "data-[size=default]:h-[1.15rem]"
-    refute_includes classes, "data-[size=default]:w-8"
     refute_includes classes, "data-[size=sm]:h-3.5"
     refute_includes classes, "data-[size=sm]:w-6"
     refute_includes classes, "h-5"
@@ -53,7 +52,7 @@ class SwitchComponentTest < ViewComponent::TestCase
     refute_includes classes, "focus-visible:ring-offset-background"
   end
 
-  def test_renders_v4_switch_thumb_classes_without_size_variant_selectors
+  def test_renders_v4_switch_thumb_classes_with_always_on_default_sizing
     render_inline(Shadcn::SwitchComponent.new)
 
     thumb = page.find("button[role='switch'] span[data-slot='switch-thumb']")
@@ -66,14 +65,13 @@ class SwitchComponentTest < ViewComponent::TestCase
     assert_includes classes, "bg-background"
     assert_includes classes, "ring-0"
     assert_includes classes, "transition-transform"
-    assert_includes classes, "data-[state=checked]:translate-x-3.5"
+    assert_includes classes, "group-data-[size=default]/switch:size-4"
+    assert_includes classes, "data-[state=checked]:translate-x-[calc(100%-2px)]"
     assert_includes classes, "data-[state=unchecked]:translate-x-0"
     assert_includes classes, "dark:data-[state=checked]:bg-primary-foreground"
     assert_includes classes, "dark:data-[state=unchecked]:bg-foreground"
 
-    refute_includes classes, "group-data-[size=default]/switch:size-4"
     refute_includes classes, "group-data-[size=sm]/switch:size-3"
-    refute_includes classes, "data-[state=checked]:translate-x-[calc(100%-2px)]"
     refute_includes classes, "shadow-lg"
     refute_includes classes, "duration-150"
     refute_includes classes, "data-[state=checked]:translate-x-4"
