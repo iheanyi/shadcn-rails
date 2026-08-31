@@ -3,7 +3,8 @@
 module Shadcn
   # SidebarGroupAction component - action button for a sidebar group
   class SidebarGroupActionComponent < BaseComponent
-    BASE_CLASSES = "absolute right-3 top-3.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-none ring-sidebar-ring transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0"
+    BASE_CLASSES = "absolute top-3.5 right-3 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground ring-sidebar-ring outline-hidden transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0"
+    HIT_AREA_CLASSES = "after:absolute after:-inset-2 md:after:hidden"
     COLLAPSED_CLASSES = "group-data-[collapsible=icon]:hidden"
 
     def call
@@ -15,8 +16,9 @@ module Shadcn
     def action_attributes
       attrs = {
         type: "button",
-        class: cn(BASE_CLASSES, COLLAPSED_CLASSES, class_name),
-        "data-sidebar": "group-action"
+        class: cn(BASE_CLASSES, HIT_AREA_CLASSES, COLLAPSED_CLASSES, class_name),
+        "data-sidebar": "group-action",
+        "data-slot": "sidebar-group-action"
       }
       attrs.merge!(html_options)
       attrs.merge!(build_data)

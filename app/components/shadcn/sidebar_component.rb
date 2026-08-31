@@ -109,8 +109,11 @@ module Shadcn
       {
         class: cn(
           "flex h-full w-full flex-col bg-sidebar",
+          "group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-sm",
           "group-data-[collapsible=icon]:overflow-hidden"
         ),
+        "data-sidebar": "sidebar",
+        "data-slot": "sidebar-inner",
         "data-shadcn--sidebar-target": "inner"
       }
     end
@@ -123,6 +126,7 @@ module Shadcn
         "data-variant": @variant.to_s,
         "data-collapsible": @collapsible.to_s,
         "data-state": @default_open ? "expanded" : "collapsed",
+        "data-slot": "sidebar",
         "data-shadcn--sidebar-open-value": @default_open.to_s,
         "data-shadcn--sidebar-side-value": @side.to_s,
         "data-shadcn--sidebar-variant-value": @variant.to_s,
@@ -144,12 +148,12 @@ module Shadcn
         @side == :left && "left-0",
         @side == :right && "right-0",
         # Width handling
-        "w-[--sidebar-width]",
+        "w-(--sidebar-width)",
         # Transition
         "transition-[left,right,width] duration-200 ease-linear",
         # Collapsed state styles
         "group-data-[collapsible=offcanvas]:w-0",
-        "group-data-[collapsible=icon]:w-[--sidebar-width-icon]",
+        "group-data-[collapsible=icon]:w-(--sidebar-width-icon)",
         # Variant-specific styles
         variant_classes,
         # Side-specific collapsed offset

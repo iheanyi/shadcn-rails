@@ -3,7 +3,7 @@
 module Shadcn
   # SidebarMenuSkeleton component - loading skeleton for menu item
   class SidebarMenuSkeletonComponent < BaseComponent
-    BASE_CLASSES = "rounded-md h-8 flex gap-2 px-2 items-center"
+    BASE_CLASSES = "flex h-8 items-center gap-2 rounded-md px-2"
 
     def initialize(show_icon: false, **options)
       super(**options)
@@ -36,7 +36,8 @@ module Shadcn
     def skeleton_attributes
       attrs = {
         class: cn(BASE_CLASSES, class_name),
-        "data-sidebar": "menu-skeleton"
+        "data-sidebar": "menu-skeleton",
+        "data-slot": "sidebar-menu-skeleton"
       }
       attrs.merge!(html_options)
       attrs.merge!(build_data)

@@ -3,6 +3,8 @@
 module Shadcn
   # SidebarMenuSubItem component - submenu item
   class SidebarMenuSubItemComponent < BaseComponent
+    BASE_CLASSES = "group/menu-sub-item relative"
+
     renders_one :button, lambda { |**options|
       SidebarMenuSubButtonComponent.new(**options)
     }
@@ -19,9 +21,10 @@ module Shadcn
 
     def item_attributes
       attrs = {
-        "data-sidebar": "menu-sub-item"
+        class: cn(BASE_CLASSES, class_name),
+        "data-sidebar": "menu-sub-item",
+        "data-slot": "sidebar-menu-sub-item"
       }
-      attrs[:class] = class_name if class_name.present?
       attrs.merge!(html_options)
       attrs.merge!(build_data)
       attrs.compact
