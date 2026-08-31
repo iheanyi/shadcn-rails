@@ -88,7 +88,8 @@ export default class extends Controller<HTMLElement> {
     const input = event.target
     const slot = input.closest("[data-shadcn--input-otp-target='slot']")
     if (slot) {
-      slot.classList.add("z-10", "ring-1", "ring-ring")
+      const activeSlot = slot as HTMLElement
+      activeSlot.dataset.active = "true"
     }
     this.updateCarets()
   }
@@ -97,7 +98,8 @@ export default class extends Controller<HTMLElement> {
     const input = event.target
     const slot = input.closest("[data-shadcn--input-otp-target='slot']")
     if (slot) {
-      slot.classList.remove("z-10", "ring-1", "ring-ring")
+      const activeSlot = slot as HTMLElement
+      activeSlot.dataset.active = "false"
     }
     this.updateCarets()
   }

@@ -75,7 +75,8 @@ export default class default_1 extends Controller {
         const input = event.target;
         const slot = input.closest("[data-shadcn--input-otp-target='slot']");
         if (slot) {
-            slot.classList.add("z-10", "ring-1", "ring-ring");
+            const activeSlot = slot;
+            activeSlot.dataset.active = "true";
         }
         this.updateCarets();
     }
@@ -83,7 +84,8 @@ export default class default_1 extends Controller {
         const input = event.target;
         const slot = input.closest("[data-shadcn--input-otp-target='slot']");
         if (slot) {
-            slot.classList.remove("z-10", "ring-1", "ring-ring");
+            const activeSlot = slot;
+            activeSlot.dataset.active = "false";
         }
         this.updateCarets();
     }
