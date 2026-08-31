@@ -3,7 +3,7 @@
 module Shadcn
   # Pagination Previous button
   class PaginationPreviousComponent < BaseComponent
-    BASE_CLASSES = "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 gap-1 pl-2.5"
+    EXTRA_CLASSES = "gap-1 px-2.5 sm:pl-2.5"
 
     def initialize(href: nil, disabled: false, **options)
       super(**options)
@@ -12,7 +12,7 @@ module Shadcn
     end
 
     def call
-      content_tag(:li) do
+      content_tag(:li, "data-slot": "pagination-item") do
         link_content
       end
     end
@@ -20,13 +20,38 @@ module Shadcn
     private
 
     def link_content
-      inner = safe_join([chevron_left, "Previous"])
+      inner = safe_join([chevron_left, content_tag(:span, "Previous", class: "hidden sm:block")])
 
       if @href && !@disabled
-        content_tag(:a, inner, href: @href, class: merge_classes(BASE_CLASSES), "aria-label": "Go to previous page")
+        content_tag(:a, inner, link_attributes)
       else
-        content_tag(:span, inner, class: cn(merge_classes(BASE_CLASSES), "pointer-events-none opacity-50"), "aria-disabled": "true")
+        content_tag(:span, inner, disabled_attributes)
       end
+    end
+
+    def link_attributes
+      merge_html_attributes({
+        href: @href,
+        class: link_classes,
+        "aria-label": "Go to previous page"
+      }, slot: "pagination-link").compact
+    end
+
+    def disabled_attributes
+      merge_html_attributes({
+        class: cn(link_classes, "pointer-events-none opacity-50"),
+        "aria-label": "Go to previous page",
+        "aria-disabled": "true"
+      }, slot: "pagination-link").compact
+    end
+
+    def link_classes
+      merge_classes(cn(
+        ButtonComponent::BASE_CLASSES,
+        ButtonComponent::VARIANTS.fetch(:ghost),
+        ButtonComponent::SIZES.fetch(:default),
+        EXTRA_CLASSES
+      ))
     end
 
     def chevron_left
@@ -41,7 +66,7 @@ module Shadcn
         "stroke-width": "2",
         "stroke-linecap": "round",
         "stroke-linejoin": "round",
-        class: "h-4 w-4"
+        class: "size-4"
       )
     end
   end

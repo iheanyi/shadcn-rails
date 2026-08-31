@@ -86,7 +86,7 @@ module Shadcn
       next_href = pagination_data[:next_page] ? @url_builder.call(pagination_data[:next_page]) : nil
       items_html << PaginationNextComponent.new(href: next_href, disabled: pagination_data[:next_page].nil?).render_in(view_context)
 
-      content_tag(:ul, safe_join(items_html), class: "flex flex-row items-center gap-1")
+      content_tag(:ul, safe_join(items_html), class: "flex flex-row items-center gap-1", "data-slot": "pagination-content")
     end
 
     def extract_pagination_data
@@ -186,6 +186,11 @@ module Shadcn
 
     def pagination_classes
       merge_classes(BASE_CLASSES)
+    end
+
+    def pagination_attributes
+      attrs = html_options.merge(build_data(slot: "pagination"))
+      attrs.map { |key, value| "#{key}=\"#{ERB::Util.html_escape_once(value)}\"" if value }.compact.join(" ").html_safe
     end
   end
 end

@@ -3,9 +3,6 @@
 module Shadcn
   # Pagination Item component - wrapper for links
   class PaginationItemComponent < BaseComponent
-    LINK_CLASSES = "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 w-9"
-    ACTIVE_CLASSES = "border border-input bg-background shadow-sm"
-
     def initialize(href: nil, active: false, disabled: false, **options)
       super(**options)
       @href = href
@@ -14,7 +11,7 @@ module Shadcn
     end
 
     def call
-      content_tag(:li) do
+      content_tag(:li, "data-slot": "pagination-item") do
         link_element
       end
     end
@@ -22,32 +19,46 @@ module Shadcn
     private
 
     def link_element
-      classes = cn(LINK_CLASSES, @active ? ACTIVE_CLASSES : "", class_name)
+      classes = link_classes
 
-      if @href
+      if @href && !@disabled
         content_tag(:a, content, link_attributes(classes))
       else
         content_tag(:span, content, span_attributes(classes))
       end
     end
 
+    def link_classes
+      variant = @active ? :outline : :ghost
+
+      merge_classes(cn(
+        ButtonComponent::BASE_CLASSES,
+        ButtonComponent::VARIANTS.fetch(variant),
+        ButtonComponent::SIZES.fetch(:icon)
+      ))
+    end
+
     def link_attributes(classes)
-      attrs = {
+      merge_html_attributes({
         href: @href,
         class: classes,
         "aria-current": @active ? "page" : nil
-      }
-      attrs.merge!(html_options)
-      attrs.compact
+      }, link_data).compact
     end
 
     def span_attributes(classes)
-      attrs = {
+      merge_html_attributes({
         class: classes,
-        "aria-current": @active ? "page" : nil
+        "aria-current": @active ? "page" : nil,
+        "aria-disabled": @disabled ? "true" : nil
+      }, link_data).compact
+    end
+
+    def link_data
+      {
+        slot: "pagination-link",
+        active: @active ? true : nil
       }
-      attrs.merge!(html_options)
-      attrs.compact
     end
   end
 end
