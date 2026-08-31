@@ -39,6 +39,10 @@ class DummyDocsCatalogTest < ActionDispatch::IntegrationTest
     scroll-area/usage
     scroll-area/code_block
     chart/default
+    chart/area
+    chart/line
+    chart/pie
+    chart/donut
   ].freeze
   BARE_RUBY_LOOP_PATTERN = /(\b\d+\.times|\.each(?:_with_index)?|\)\.each)\s+do\b/
 
@@ -111,6 +115,20 @@ class DummyDocsCatalogTest < ActionDispatch::IntegrationTest
       refute_includes source, "shadcn--checkbox", "#{path.relative_path_from(Rails.root)} should not document a checkbox Stimulus controller"
       refute_includes source, "indeterminate", "#{path.relative_path_from(Rails.root)} should not document unsupported checkbox indeterminate API"
     end
+  end
+
+  def test_chart_docs_show_file_backed_erb_for_each_chart_type
+    get "/docs/components/chart"
+
+    assert_response :success
+    html = CGI.unescapeHTML(response.body)
+
+    %w[line area pie donut].each do |chart_type|
+      assert_includes html, "type: :#{chart_type}", "Chart docs should show pasteable ERB for #{chart_type}"
+    end
+
+    assert_operator html.scan("<%= render Shadcn::Chart.new").size, :>=, 4
+    refute_includes html, "render Shadcn::ChartComponent.new(", "Chart docs should not expose Lookbook Ruby snippets"
   end
 
   def test_usage_snippets_do_not_show_preview_method_wrappers

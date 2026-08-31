@@ -37,27 +37,7 @@
   <div id="usage" class="space-y-4">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight">Usage</h2>
     <p class="leading-7">Pass Chart.js-style data plus a config hash keyed by dataset key, dataset label, or pie label.</p>
-    <%= render "docs/code_example", language: "ruby", code: <<~RUBY.strip %>
-      data = {
-        labels: ["January", "February", "March"],
-        datasets: [
-          { key: "desktop", label: "Desktop", data: [186, 305, 237] },
-          { key: "mobile", label: "Mobile", data: [80, 200, 120] }
-        ]
-      }
-
-      config = {
-        desktop: { label: "Desktop", color: "hsl(var(--chart-1))" },
-        mobile: { label: "Mobile", color: "hsl(var(--chart-2))" }
-      }
-
-      render Shadcn::ChartComponent.new(
-        type: :bar,
-        data: data,
-        config: config,
-        aria_label: "Monthly visitors by device"
-      )
-    RUBY
+    <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/chart/usage.txt")) %>
   </div>
 
   <div id="examples" class="space-y-8">
@@ -67,21 +47,25 @@
       <div class="space-y-4">
         <h3 class="text-lg font-semibold">Line</h3>
         <%= showcase("chart", :line) %>
+        <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/chart/line.txt")), title: "app/code_examples/chart/line.txt" %>
       </div>
 
       <div class="space-y-4">
         <h3 class="text-lg font-semibold">Area</h3>
         <%= showcase("chart", :area) %>
+        <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/chart/area.txt")), title: "app/code_examples/chart/area.txt" %>
       </div>
 
       <div class="space-y-4">
         <h3 class="text-lg font-semibold">Pie</h3>
         <%= showcase("chart", :pie) %>
+        <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/chart/pie.txt")), title: "app/code_examples/chart/pie.txt" %>
       </div>
 
       <div class="space-y-4">
         <h3 class="text-lg font-semibold">Donut</h3>
         <%= showcase("chart", :donut) %>
+        <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/chart/donut.txt")), title: "app/code_examples/chart/donut.txt" %>
       </div>
     </div>
   </div>

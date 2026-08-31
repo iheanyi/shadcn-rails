@@ -1,6 +1,40 @@
-render Shadcn::ChartComponent.new(
+<% data = {
+  labels: ["January", "February", "March", "April", "May", "June"],
+  datasets: [
+    { key: :desktop, label: "Desktop", data: [186, 305, 237, 73, 209, 214] },
+    { key: :mobile, label: "Mobile", data: [80, 200, 120, 190, 130, 140] }
+  ]
+} %>
+<% config = {
+  desktop: { label: "Desktop", color: "hsl(var(--chart-1))" },
+  mobile: { label: "Mobile", color: "hsl(var(--chart-2))" }
+} %>
+
+<%= render Shadcn::Chart.new(
   type: :line,
-  data: MONTHLY_DATA,
-  config: MONTHLY_CONFIG,
+  data: data,
+  config: config,
   aria_label: "Monthly visitor trends by device"
-)
+) do |chart| %>
+  <% chart.with_fallback do %>
+    <table class="w-full text-sm">
+      <caption class="mb-2 font-medium">Monthly visitor trends by device</caption>
+      <thead>
+        <tr>
+          <th class="text-left">Month</th>
+          <th class="text-right">Desktop</th>
+          <th class="text-right">Mobile</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% data[:labels].each_with_index do |month, index| %>
+          <tr>
+            <td><%= month %></td>
+            <td class="text-right"><%= data[:datasets][0][:data][index] %></td>
+            <td class="text-right"><%= data[:datasets][1][:data][index] %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+<% end %>
