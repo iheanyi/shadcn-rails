@@ -12,8 +12,10 @@ class DummyDocsPartialsTest < ActionView::TestCase
       ]
     }
 
-    assert_includes rendered, ">nil<"
-    assert_includes rendered, ">false<"
+    assert_includes rendered, ">name<"
+    assert_includes rendered, ">String<"
+    assert_match(/>\s*nil\s*</, rendered)
+    assert_match(/>\s*false\s*</, rendered)
     refute_includes rendered, ">API Reference<"
   end
 end
