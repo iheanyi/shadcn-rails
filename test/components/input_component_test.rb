@@ -7,7 +7,7 @@ class InputComponentTest < ViewComponent::TestCase
     render_inline(Shadcn::InputComponent.new)
 
     assert_selector "input[type='text']"
-    assert_selector "input.flex.h-9.w-full.rounded-md.border"
+    assert_selector "input.h-9.w-full.min-w-0.rounded-md.border[data-slot='input']"
   end
 
   def test_renders_with_type
@@ -90,5 +90,24 @@ class InputComponentTest < ViewComponent::TestCase
     assert_includes classes, "focus-visible:ring-[3px]"
     refute_includes classes, "focus-visible:ring-1"
     refute_includes classes, "focus-visible:outline-none"
+  end
+
+  def test_uses_new_york_v4_classes
+    render_inline(Shadcn::InputComponent.new)
+
+    classes = page.find("input")[:class]
+    assert_includes classes, "shadow-xs"
+    assert_includes classes, "dark:bg-input/30"
+    assert_includes classes, "aria-invalid:border-destructive"
+    assert_includes classes, "aria-invalid:ring-destructive/20"
+    assert_includes classes, "dark:aria-invalid:ring-destructive/40"
+    assert_includes classes, "transition-[color,box-shadow]"
+    assert_includes classes, "selection:bg-primary"
+    assert_includes classes, "selection:text-primary-foreground"
+    assert_includes classes, "file:inline-flex"
+    assert_includes classes, "file:h-7"
+    assert_includes classes, "disabled:pointer-events-none"
+    refute_includes classes, "shadow-sm"
+    refute_includes classes, "transition-colors"
   end
 end
