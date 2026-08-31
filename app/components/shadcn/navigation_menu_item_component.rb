@@ -32,6 +32,7 @@ module Shadcn
     def item_attributes
       {
         class: cn("relative", class_name),
+        "data-slot": "navigation-menu-item",
         "data-shadcn--navigation-menu-target": "item"
       }.merge(html_options).compact
     end
