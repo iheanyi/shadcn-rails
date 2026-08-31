@@ -16,16 +16,18 @@ module Shadcn
   #
   class SwitchComponent < BaseComponent
     BASE_CLASSES = [
-      "peer inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full",
-      "border-2 border-transparent shadow-sm transition-colors",
-      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-      "disabled:cursor-not-allowed disabled:opacity-50",
-      "data-[state=checked]:bg-primary data-[state=unchecked]:bg-input"
+      "peer group/switch inline-flex shrink-0 items-center rounded-full border border-transparent shadow-xs",
+      "transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50",
+      "disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-[1.15rem] data-[size=default]:w-8",
+      "data-[size=sm]:h-3.5 data-[size=sm]:w-6 data-[state=checked]:bg-primary",
+      "data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80"
     ].join(" ")
 
     THUMB_CLASSES = [
-      "pointer-events-none block h-4 w-4 rounded-full bg-background shadow-lg ring-0",
-      "transition-transform duration-150 data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0"
+      "pointer-events-none block rounded-full bg-background ring-0 transition-transform",
+      "group-data-[size=default]/switch:size-4 group-data-[size=sm]/switch:size-3",
+      "data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0",
+      "dark:data-[state=checked]:bg-primary-foreground dark:data-[state=unchecked]:bg-foreground"
     ].join(" ")
 
     # @param name [String, nil] Input name attribute
@@ -89,7 +91,7 @@ module Shadcn
     end
 
     def button_attributes
-      merge_html_attributes(
+      attrs = merge_html_attributes(
         {
           type: "button",
           role: "switch",
@@ -97,12 +99,33 @@ module Shadcn
           disabled: @disabled || nil,
           "aria-checked": @checked,
           "aria-required": @required || nil,
+          "data-slot": "switch",
+          "data-size": "default",
           "data-state": state,
           "data-shadcn--switch-target": "button",
           "data-action": "click->shadcn--switch#toggle keydown->shadcn--switch#handleKeydown",
           tabindex: "0"
         }
       )
+
+      attrs.except("data-controller")
+    end
+
+    def wrapper_attributes
+      {
+        class: "inline-flex items-center",
+        "data-controller": controller_tokens,
+        "data-shadcn--switch-checked-value": @checked
+      }
+    end
+
+    def thumb_attributes
+      {
+        class: THUMB_CLASSES,
+        "data-slot": "switch-thumb",
+        "data-state": state,
+        "data-shadcn--switch-target": "thumb"
+      }
     end
 
     def has_label?
@@ -115,6 +138,26 @@ module Shadcn
 
     def switch_classes
       cn(BASE_CLASSES, class_name)
+    end
+
+    def controller_tokens
+      (["shadcn--switch"] + host_controller_tokens).flat_map { |value| value.to_s.split }.uniq.join(" ")
+    end
+
+    def host_controller_tokens
+      data_controller_values(data) + data_controller_values(html_options)
+    end
+
+    def data_controller_values(attributes)
+      attributes.each_with_object([]) do |(key, value), values|
+        key_string = key.to_s
+
+        if key_string == "data"
+          values.concat(data_controller_values(value || {}))
+        elsif key_string.delete_prefix("data-") == "controller" && value.present?
+          values << value
+        end
+      end
     end
   end
 end

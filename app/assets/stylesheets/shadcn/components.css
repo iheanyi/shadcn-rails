@@ -15,38 +15,7 @@
    Switch Component
    ============================================ */
 
-/* Button-based Switch with data-state */
-button[role="switch"] {
-  background-color: hsl(var(--input));
-  transition: background-color 150ms ease-in-out;
-}
-
-button[role="switch"][data-state="checked"] {
-  background-color: hsl(var(--primary));
-}
-
-button[role="switch"][data-state="unchecked"] {
-  background-color: hsl(var(--input));
-}
-
-/* Switch thumb positioning */
-button[role="switch"] > span {
-  transition: transform 150ms ease-in-out;
-}
-
-button[role="switch"] > span[data-state="checked"] {
-  transform: translateX(1rem);
-}
-
-button[role="switch"] > span[data-state="unchecked"] {
-  transform: translateX(0);
-}
-
-/* Disabled switch */
-button[role="switch"]:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+/* Switch visuals are driven by Tailwind classes on data-state/data-size attributes. */
 
 /* ============================================
    Slider Component
