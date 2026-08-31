@@ -142,7 +142,7 @@ class ScrollAreaComponentTest < ViewComponent::TestCase
   def test_stylesheet_positions_scrollbars_as_overlays
     css = File.read(File.expand_path("../../app/assets/stylesheets/shadcn/components.css", __dir__))
 
-    assert_match %r{\[data-slot="scroll-area-scrollbar"\]\[data-orientation="vertical"\]\s*\{[^}]*position: absolute;[^}]*top: 0;[^}]*right: 0;}m, css
-    assert_match %r{\[data-slot="scroll-area-scrollbar"\]\[data-orientation="horizontal"\]\s*\{[^}]*position: absolute;[^}]*bottom: 0;[^}]*left: 0;[^}]*width: 100%;}m, css
+    assert_match %r!\[data-slot="scroll-area-scrollbar"\]\[data-orientation="vertical"\]\s*\{[^}]*position: absolute;[^}]*top: 0;[^}]*right: 0;!m, css
+    assert_match %r!\[data-slot="scroll-area-scrollbar"\]\[data-orientation="horizontal"\]\s*\{[^}]*position: absolute;[^}]*bottom: 0;[^}]*left: 0;[^}]*width: 100%;!m, css
   end
 end
