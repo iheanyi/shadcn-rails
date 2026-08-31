@@ -76,6 +76,36 @@ class DialogComponentTest < ViewComponent::TestCase
     assert html.include?("aria-modal=\"true\"")
   end
 
+  def test_dialog_overlay_uses_v4_background_opacity
+    result = render_inline(Shadcn::DialogComponent.new) do |dialog|
+      dialog.with_body
+    end
+
+    overlay_tag = result.to_html[/<[^>]*data-slot="dialog-overlay"[^>]*>/m]
+    overlay_classes = overlay_tag[/class="([^"]*)"/, 1].split
+    assert_includes overlay_classes, "bg-black/50"
+    refute_includes overlay_classes, "bg-black/80"
+  end
+
+  def test_dialog_content_uses_v4_zoom_without_center_slide_classes
+    result = render_inline(Shadcn::DialogComponent.new) do |dialog|
+      dialog.with_body
+    end
+
+    content_tag = result.to_html[/<[^>]*data-slot="dialog-content"[^>]*>/m]
+    content_classes = content_tag[/class="([^"]*)"/, 1].split
+    assert_includes content_classes, "max-w-[calc(100%-2rem)]"
+    assert_includes content_classes, "rounded-lg"
+    assert_includes content_classes, "sm:max-w-lg"
+    assert_includes content_classes, "outline-none"
+    assert_includes content_classes, "data-[state=closed]:zoom-out-95"
+    assert_includes content_classes, "data-[state=open]:zoom-in-95"
+    refute_includes content_classes, "data-[state=closed]:slide-out-to-left-1/2"
+    refute_includes content_classes, "data-[state=closed]:slide-out-to-top-[48%]"
+    refute_includes content_classes, "data-[state=open]:slide-in-from-left-1/2"
+    refute_includes content_classes, "data-[state=open]:slide-in-from-top-[48%]"
+  end
+
   def test_renders_close_button_in_template
     result = render_inline(Shadcn::DialogComponent.new) do |dialog|
       dialog.with_body
@@ -89,13 +119,19 @@ class DialogComponentTest < ViewComponent::TestCase
     assert close_button_match
 
     close_classes = close_button_match[0][/class="([^"]*)"/, 1].split
-    assert_includes close_classes, "hover:bg-accent"
-    assert_includes close_classes, "hover:text-accent-foreground"
-    assert_includes close_classes, "focus-visible:ring-2"
-    refute_includes close_classes, "focus:ring-2"
-    refute_includes close_classes, "ring-offset-2"
-    refute_includes close_classes, "ring-offset-background"
-    refute close_classes.any? { |class_name| class_name.start_with?("data-[state=open]:") }
+    assert_includes close_classes, "rounded-xs"
+    assert_includes close_classes, "ring-offset-background"
+    assert_includes close_classes, "hover:opacity-100"
+    assert_includes close_classes, "focus:ring-2"
+    assert_includes close_classes, "focus:ring-ring"
+    assert_includes close_classes, "focus:ring-offset-2"
+    assert_includes close_classes, "focus:outline-hidden"
+    assert_includes close_classes, "data-[state=open]:bg-accent"
+    assert_includes close_classes, "data-[state=open]:text-muted-foreground"
+    assert_includes close_classes, "[&_svg]:pointer-events-none"
+    assert_includes close_classes, "[&_svg]:shrink-0"
+    assert_includes close_classes, "[&_svg:not([class*='size-'])]:size-4"
+    refute_includes close_classes, "focus-visible:ring-2"
   end
 
   def test_renders_header_with_title
@@ -110,6 +146,19 @@ class DialogComponentTest < ViewComponent::TestCase
     html = result.to_html
     assert html.include?("<h2")
     assert html.include?("My Title")
+  end
+
+  def test_header_uses_v4_gap_classes
+    result = render_inline(Shadcn::DialogComponent.new) do |dialog|
+      dialog.with_body do |body|
+        body.with_header { "Header content" }
+      end
+    end
+
+    header_tag = result.to_html[/<[^>]*data-slot="dialog-header"[^>]*>/m]
+    header_classes = header_tag[/class="([^"]*)"/, 1].split
+    assert_includes header_classes, "gap-2"
+    refute_includes header_classes, "space-y-1.5"
   end
 
   def test_renders_header_with_description
@@ -135,6 +184,34 @@ class DialogComponentTest < ViewComponent::TestCase
 
     html = result.to_html
     assert html.include?("Footer content")
+  end
+
+  def test_footer_uses_v4_gap_classes
+    result = render_inline(Shadcn::DialogComponent.new) do |dialog|
+      dialog.with_body do |body|
+        body.with_footer { "Footer content" }
+      end
+    end
+
+    footer_tag = result.to_html[/<[^>]*data-slot="dialog-footer"[^>]*>/m]
+    footer_classes = footer_tag[/class="([^"]*)"/, 1].split
+    assert_includes footer_classes, "gap-2"
+    refute_includes footer_classes, "sm:space-x-2"
+  end
+
+  def test_title_uses_v4_typography_classes
+    result = render_inline(Shadcn::DialogComponent.new) do |dialog|
+      dialog.with_body do |body|
+        body.with_title { "Dialog Title" }
+      end
+    end
+
+    title_tag = result.to_html[/<[^>]*data-slot="dialog-title"[^>]*>/m]
+    title_classes = title_tag[/class="([^"]*)"/, 1].split
+    assert_includes title_classes, "text-lg"
+    assert_includes title_classes, "leading-none"
+    assert_includes title_classes, "font-semibold"
+    refute_includes title_classes, "tracking-tight"
   end
 
   def test_renders_with_custom_class

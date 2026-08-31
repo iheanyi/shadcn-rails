@@ -58,7 +58,8 @@ module Shadcn
       merge_html_attributes(
         {
           id: @id,
-          class: dialog_classes
+          class: dialog_classes,
+          "data-slot": "dialog"
         },
         dialog_data_attrs
       )

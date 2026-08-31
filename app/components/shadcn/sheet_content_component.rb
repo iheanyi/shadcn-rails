@@ -3,7 +3,7 @@
 module Shadcn
   # Sheet Content component
   class SheetContentComponent < BaseComponent
-    OVERLAY_CLASSES = "shadcn-overlay fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+    OVERLAY_CLASSES = "shadcn-overlay fixed inset-0 z-50 bg-black/50 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0"
     BASE_CONTENT_CLASSES = "shadcn-sheet-content fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=open]:animate-in data-[state=closed]:animate-out"
     CLOSE_CLASSES = "absolute right-4 top-4 inline-flex size-8 items-center justify-center rounded-sm border-0 bg-transparent p-0 opacity-70 transition-opacity hover:bg-accent hover:text-accent-foreground hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none"
 

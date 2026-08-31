@@ -3,10 +3,10 @@
 module Shadcn
   # Dialog Title component
   class DialogTitleComponent < BaseComponent
-    BASE_CLASSES = "text-lg font-semibold leading-none tracking-tight"
+    BASE_CLASSES = "text-lg leading-none font-semibold"
 
     def call
-      content_tag(:h2, content, class: merge_classes(BASE_CLASSES))
+      content_tag(:h2, content, **merge_html_attributes({ class: merge_classes(BASE_CLASSES), "data-slot": "dialog-title" }))
     end
   end
 end
