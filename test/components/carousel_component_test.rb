@@ -141,6 +141,19 @@ class CarouselComponentTest < ViewComponent::TestCase
     assert_includes classes, "pl-4"
   end
 
+  def test_custom_slide_item_basis_replaces_default_basis
+    render_inline(Shadcn::CarouselComponent.new) do |carousel|
+      carousel.with_slides do |slides|
+        slides.with_item(basis: "basis-1/3") { "Slide 1" }
+      end
+    end
+
+    class_tokens = page.find("[data-slot='carousel-item']")[:class].split
+
+    assert_includes class_tokens, "basis-1/3"
+    refute_includes class_tokens, "basis-full"
+  end
+
   # Navigation buttons
   def test_renders_with_previous_button
     render_inline(Shadcn::CarouselComponent.new) do |carousel|
@@ -164,6 +177,15 @@ class CarouselComponentTest < ViewComponent::TestCase
     end
 
     assert_selector "button[aria-label='Previous slide']"
+  end
+
+  def test_previous_button_ignores_href_option
+    render_inline(Shadcn::CarouselComponent.new) do |carousel|
+      carousel.with_previous(href: "/previous")
+    end
+
+    assert_selector "button[data-slot='carousel-previous']"
+    assert_no_selector "a[data-slot='carousel-previous']"
   end
 
   def test_previous_button_uses_new_york_v4_button_tokens
@@ -217,6 +239,15 @@ class CarouselComponentTest < ViewComponent::TestCase
     end
 
     assert_selector "button[aria-label='Next slide']"
+  end
+
+  def test_next_button_ignores_href_option
+    render_inline(Shadcn::CarouselComponent.new) do |carousel|
+      carousel.with_next(href: "/next")
+    end
+
+    assert_selector "button[data-slot='carousel-next']"
+    assert_no_selector "a[data-slot='carousel-next']"
   end
 
   def test_next_button_uses_new_york_v4_button_tokens

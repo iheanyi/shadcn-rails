@@ -155,9 +155,9 @@ module Shadcn
         role: "group",
         "aria-roledescription": "slide",
         class: cn(
-          "min-w-0 shrink-0 grow-0 basis-full",
+          "min-w-0 shrink-0 grow-0",
           @orientation == :horizontal ? "pl-4" : "pt-4",
-          @basis,
+          @basis || "basis-full",
           class_name
         ),
         "data-slot": "carousel-item",
@@ -182,7 +182,7 @@ module Shadcn
         class_name: button_classes,
         data: button_data,
         "aria-label": "Previous slide",
-        **html_options
+        **button_options
       ) do
         button_content
       end
@@ -227,6 +227,10 @@ module Shadcn
         data
       ).transform_keys { |key| key.delete_prefix("data-") }
     end
+
+    def button_options
+      html_options.except(:href, "href")
+    end
   end
 
   # Next button component
@@ -245,7 +249,7 @@ module Shadcn
         class_name: button_classes,
         data: button_data,
         "aria-label": "Next slide",
-        **html_options
+        **button_options
       ) do
         button_content
       end
@@ -289,6 +293,10 @@ module Shadcn
         { slot: "carousel-next", "shadcn--carousel-target": "nextButton", action: "click->shadcn--carousel#next" },
         data
       ).transform_keys { |key| key.delete_prefix("data-") }
+    end
+
+    def button_options
+      html_options.except(:href, "href")
     end
   end
 end
