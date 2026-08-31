@@ -73,6 +73,46 @@ class AccordionComponentTest < ViewComponent::TestCase
     assert_selector "button svg" # Chevron icon
   end
 
+  def test_uses_new_york_v4_classes
+    render_inline(Shadcn::AccordionComponent.new) do |accordion|
+      accordion.with_item(value: "item-1") do |item|
+        item.with_trigger { "Question" }
+        item.with_body { "Answer" }
+      end
+    end
+
+    root = page.find("div[data-controller='shadcn--accordion']")
+    item_classes = page.find("div[data-shadcn--accordion-target='item']")[:class].split
+    item = page.find("div[data-shadcn--accordion-target='item']")
+    trigger = page.find("button[data-shadcn--accordion-target='trigger']")
+    content = page.find("div[data-shadcn--accordion-target='content']", visible: :all)
+    chevron = page.find("button svg")
+    trigger_classes = trigger[:class].split
+
+    assert_equal "accordion", root["data-slot"]
+    assert_equal "accordion-item", item["data-slot"]
+    assert_equal "accordion-trigger", trigger["data-slot"]
+    assert_equal "accordion-content", content["data-slot"]
+    assert_includes item_classes, "border-b"
+    assert_includes item_classes, "last:border-b-0"
+    assert_includes trigger_classes, "items-start"
+    assert_includes trigger_classes, "gap-4"
+    assert_includes trigger_classes, "rounded-md"
+    assert_includes trigger_classes, "outline-none"
+    assert_includes trigger_classes, "focus-visible:border-ring"
+    assert_includes trigger_classes, "focus-visible:ring-[3px]"
+    assert_includes trigger_classes, "focus-visible:ring-ring/50"
+    assert_includes trigger_classes, "disabled:pointer-events-none"
+    assert_includes trigger_classes, "disabled:opacity-50"
+    assert_includes trigger_classes, "[&[data-state=open]>svg]:rotate-180"
+    assert_equal "pointer-events-none size-4 shrink-0 translate-y-0.5 text-muted-foreground transition-transform duration-200", chevron[:class]
+    refute_includes trigger_classes, "items-center"
+    refute_includes trigger_classes, "focus-visible:ring-2"
+    refute_includes trigger_classes, "data-[size=default]"
+    refute_includes page.native.to_html, "data-size"
+    refute_includes page.native.to_html, "size-4 shrink-0 text-muted-foreground transition-transform duration-200"
+  end
+
   def test_renders_trigger_with_aria_attributes
     render_inline(Shadcn::AccordionComponent.new) do |accordion|
       accordion.with_item(value: "item-1") do |item|

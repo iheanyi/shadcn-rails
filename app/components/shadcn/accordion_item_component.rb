@@ -3,7 +3,7 @@
 module Shadcn
   # Accordion Item component
   class AccordionItemComponent < BaseComponent
-    BASE_CLASSES = "border-b"
+    BASE_CLASSES = "border-b last:border-b-0"
 
     renders_one :trigger, lambda { |**options, &block|
       AccordionTriggerComponent.new(**options, &block)
@@ -31,6 +31,7 @@ module Shadcn
     def item_attributes
       {
         class: merge_classes(BASE_CLASSES),
+        "data-slot": "accordion-item",
         "data-shadcn--accordion-target": "item",
         "data-value": @value,
         "data-state": "closed"

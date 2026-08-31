@@ -20,6 +20,7 @@ module Shadcn
       {
         class: merge_classes(BASE_CLASSES),
         role: "region",
+        "data-slot": "accordion-content",
         "data-shadcn--accordion-target": "content",
         "data-state": "closed",
         hidden: true
