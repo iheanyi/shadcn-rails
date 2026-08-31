@@ -28,6 +28,7 @@ module Shadcn
     def sub_attributes
       attrs = {
         class: cn("relative", class_name),
+        "data-slot": "menubar-sub",
         "data-shadcn--menubar-target": "sub"
       }
       attrs.merge!(html_options)

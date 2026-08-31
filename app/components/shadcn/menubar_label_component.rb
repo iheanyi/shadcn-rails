@@ -4,7 +4,7 @@ module Shadcn
   # Menubar Label component
   # Label for grouping menu items
   class MenubarLabelComponent < BaseComponent
-    BASE_CLASSES = "px-2 py-1.5 text-sm font-semibold"
+    BASE_CLASSES = "px-2 py-1.5 text-sm font-medium data-[inset]:pl-8"
 
     # @param inset [Boolean] Whether to add left padding
     def initialize(inset: false, **options, &block)
@@ -20,8 +20,11 @@ module Shadcn
 
     def label_attributes
       {
-        class: cn(BASE_CLASSES, @inset ? "pl-8" : "", class_name)
+        class: cn(BASE_CLASSES, class_name),
+        "data-inset": @inset ? "" : nil,
+        "data-slot": "menubar-label"
       }
+        .compact
     end
   end
 end
