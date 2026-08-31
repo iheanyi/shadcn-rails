@@ -108,7 +108,7 @@ class FormBuilderTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "input[name='contact[email]'][aria-invalid='true'][aria-describedby='contact_email_error']"
     assert_select "select.status-select.border-destructive[name='contact[status]'][aria-invalid='true'][aria-describedby='contact_status_error']"
-    assert_select "p#contact_email_error[role='alert']", text: "Email can't be blank"
+    assert_select "div#contact_email_error[role='alert'][data-slot='field-error']", text: "Email can't be blank"
   end
 
   test "form select uses native select instead of overlay listbox markup" do
