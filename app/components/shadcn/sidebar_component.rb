@@ -153,7 +153,6 @@ module Shadcn
         "transition-[left,right,width] duration-200 ease-linear",
         # Collapsed state styles
         "group-data-[collapsible=offcanvas]:w-0",
-        "group-data-[collapsible=icon]:w-(--sidebar-width-icon)",
         # Variant-specific styles
         variant_classes,
         # Side-specific collapsed offset
@@ -163,12 +162,10 @@ module Shadcn
 
     def variant_classes
       case @variant
-      when :floating
-        "p-2"
-      when :inset
-        "border-r bg-transparent"
+      when :floating, :inset
+        "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]"
       else
-        "border-r"
+        "group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=right]:border-l"
       end
     end
 

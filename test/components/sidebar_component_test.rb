@@ -93,19 +93,41 @@ class SidebarComponentTest < ViewComponent::TestCase
   end
 
   def test_sidebar_uses_upstream_width_tokens_and_slots
-    render_inline(Shadcn::SidebarComponent.new(variant: :floating))
+    render_inline(Shadcn::SidebarComponent.new)
 
     sidebar = page.find("aside[data-slot='sidebar']", visible: :all)
     sidebar_classes = sidebar["class"].split
 
     assert_includes sidebar_classes, "w-(--sidebar-width)"
     assert_includes sidebar_classes, "group-data-[collapsible=icon]:w-(--sidebar-width-icon)"
+    assert_includes sidebar_classes, "group-data-[side=left]:border-r"
+    assert_includes sidebar_classes, "group-data-[side=right]:border-l"
     refute_includes sidebar_classes, "w-[--sidebar-width]"
     refute_includes sidebar_classes, "group-data-[collapsible=icon]:w-[--sidebar-width-icon]"
+    refute_includes sidebar_classes, "border-r"
 
     inner_classes = page.find("[data-slot='sidebar-inner']", visible: :all)["class"].split
     assert_includes inner_classes, "group-data-[variant=floating]:shadow-sm"
     assert_selector "[data-sidebar='sidebar'][data-slot='sidebar-inner']", visible: :all
+  end
+
+  def test_floating_and_inset_variants_use_upstream_padding_and_icon_width_calc
+    render_inline(Shadcn::SidebarComponent.new(variant: :floating))
+    floating_classes = page.find("aside[data-slot='sidebar']", visible: :all)["class"].split
+
+    assert_includes floating_classes, "p-2"
+    assert_includes floating_classes, "group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]"
+    refute_includes floating_classes, "group-data-[collapsible=icon]:w-(--sidebar-width-icon)"
+    refute_includes floating_classes, "border-r"
+
+    render_inline(Shadcn::SidebarComponent.new(variant: :inset))
+    inset_classes = page.find("aside[data-slot='sidebar']", visible: :all)["class"].split
+
+    assert_includes inset_classes, "p-2"
+    assert_includes inset_classes, "group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]"
+    refute_includes inset_classes, "group-data-[collapsible=icon]:w-(--sidebar-width-icon)"
+    refute_includes inset_classes, "border-r"
+    refute_includes inset_classes, "bg-transparent"
   end
 
   def test_trigger_uses_upstream_size_token_and_slot
@@ -208,6 +230,24 @@ class SidebarComponentTest < ViewComponent::TestCase
     assert_includes classes, "peer-data-[size=sm]/menu-button:top-1"
     assert_includes classes, "peer-data-[size=lg]/menu-button:top-2.5"
     refute_includes classes, "peer-data-[size=default]/menu-button:top-1.5"
+  end
+
+  def test_menu_skeleton_inners_use_skeleton_bg_and_variable_width_tokens
+    render_inline(Shadcn::SidebarMenuSkeletonComponent.new(show_icon: true))
+
+    skeleton = page.find("[data-sidebar='menu-skeleton'][data-slot='sidebar-menu-skeleton']")
+    assert_includes skeleton["class"].split, "flex"
+
+    icon_classes = page.find("[data-sidebar='menu-skeleton-icon'][data-slot='skeleton']")["class"].split
+    text = page.find("[data-sidebar='menu-skeleton-text'][data-slot='skeleton']")
+    text_classes = text["class"].split
+
+    assert_includes icon_classes, "bg-accent"
+    assert_includes text_classes, "bg-accent"
+    assert_includes text_classes, "max-w-(--skeleton-width)"
+    assert_includes text["style"], "--skeleton-width:"
+    refute_includes icon_classes, "bg-sidebar-accent"
+    refute_includes text_classes, "bg-sidebar-accent"
   end
 
   def test_submenu_components_use_upstream_slots_and_tokens
