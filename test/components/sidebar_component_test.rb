@@ -100,10 +100,12 @@ class SidebarComponentTest < ViewComponent::TestCase
 
     assert_includes sidebar_classes, "w-(--sidebar-width)"
     assert_includes sidebar_classes, "group-data-[collapsible=icon]:w-(--sidebar-width-icon)"
-    assert_includes sidebar_classes, "group-data-[side=left]:border-r"
-    assert_includes sidebar_classes, "group-data-[side=right]:border-l"
+    assert_includes sidebar_classes, "data-[side=left]:border-r"
+    assert_includes sidebar_classes, "data-[side=right]:border-l"
     refute_includes sidebar_classes, "w-[--sidebar-width]"
     refute_includes sidebar_classes, "group-data-[collapsible=icon]:w-[--sidebar-width-icon]"
+    refute_includes sidebar_classes, "group-data-[side=left]:border-r"
+    refute_includes sidebar_classes, "group-data-[side=right]:border-l"
     refute_includes sidebar_classes, "border-r"
 
     inner_classes = page.find("[data-slot='sidebar-inner']", visible: :all)["class"].split
@@ -179,15 +181,15 @@ class SidebarComponentTest < ViewComponent::TestCase
     assert_includes classes, "group-data-[collapsible=icon]:size-8!"
     assert_includes classes, "group-data-[collapsible=icon]:p-2!"
     assert_includes classes, "group-data-[collapsible=icon]:p-0!"
-    assert_includes classes, "shadow-[0_0_0_1px_var(--sidebar-border)]"
-    assert_includes classes, "hover:shadow-[0_0_0_1px_var(--sidebar-accent)]"
+    assert_includes classes, "shadow-[0_0_0_1px_hsl(var(--sidebar-border))]"
+    assert_includes classes, "hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]"
     refute_includes classes, "outline-none"
     refute_includes classes, "group-has-[[data-sidebar=menu-action]]/menu-item:pr-8"
     refute_includes classes, "group-data-[collapsible=icon]:!size-8"
     refute_includes classes, "group-data-[collapsible=icon]:!p-2"
     refute_includes classes, "group-data-[collapsible=icon]:!p-0"
-    refute_includes classes, "shadow-[0_0_0_1px_hsl(var(--sidebar-border))]"
-    refute_includes classes, "hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]"
+    refute_includes classes, "shadow-[0_0_0_1px_var(--sidebar-border)]"
+    refute_includes classes, "hover:shadow-[0_0_0_1px_var(--sidebar-accent)]"
   end
 
   def test_group_label_and_actions_use_upstream_outline_and_size_tokens
