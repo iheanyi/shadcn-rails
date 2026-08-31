@@ -36,13 +36,11 @@ module Shadcn
       "dark:bg-input/30",
       # Custom checked indicator using CSS
       "relative",
-      # Checked state - show inner circle
-      "checked:bg-primary",
       # Transition for smooth state changes
       "transition-[color,box-shadow]"
     ].join(" ")
 
-    LABEL_CLASSES = "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+    LABEL_CLASSES = "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
     DESCRIPTION_CLASSES = "text-sm text-muted-foreground"
 
     # @param value [String] The value for this radio option

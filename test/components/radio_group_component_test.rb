@@ -26,6 +26,7 @@ class RadioGroupComponentTest < ViewComponent::TestCase
     refute_includes classes, "h-4"
     refute_includes classes, "w-4"
     refute_includes classes, "border-primary"
+    refute_includes classes, "checked:bg-primary"
   end
 
   def test_renders_with_items_using_slot_dsl
