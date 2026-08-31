@@ -3,7 +3,7 @@
 module Shadcn
   # Alert Dialog Footer component
   class AlertDialogFooterComponent < BaseComponent
-    BASE_CLASSES = "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2"
+    BASE_CLASSES = "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"
 
     renders_one :cancel, lambda { |**options|
       AlertDialogCancelComponent.new(**options)
