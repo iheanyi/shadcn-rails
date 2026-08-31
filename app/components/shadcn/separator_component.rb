@@ -14,12 +14,7 @@ module Shadcn
   #   <%= render Shadcn::SeparatorComponent.new(decorative: true) %>
   #
   class SeparatorComponent < BaseComponent
-    ORIENTATIONS = {
-      horizontal: "h-[1px] w-full",
-      vertical: "h-full w-[1px]"
-    }.freeze
-
-    BASE_CLASSES = "shrink-0 bg-border"
+    BASE_CLASSES = "shrink-0 bg-border data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
 
     # @param orientation [Symbol] Separator orientation (:horizontal, :vertical)
     # @param decorative [Boolean] Whether the separator is purely decorative
@@ -32,7 +27,7 @@ module Shadcn
     private
 
     def separator_classes
-      cn(BASE_CLASSES, ORIENTATIONS[@orientation], class_name)
+      cn(BASE_CLASSES, class_name)
     end
 
     def separator_role
