@@ -73,6 +73,40 @@ class ShadcnClassMergerTest < ActiveSupport::TestCase
     refute_includes classes, "hover:tw-px-4"
   end
 
+  def test_unprefixed_negative_classes_are_not_mutated_with_tailwind_prefix
+    Shadcn::Rails.configure do |config|
+      config.tailwind_prefix = "tw-"
+    end
+
+    classes = Shadcn::Rails::ClassMerger.merge("-mx-1 my-1").split
+    assert_includes classes, "-mx-1"
+    assert_includes classes, "my-1"
+    refute_includes classes, "mx-1"
+  end
+
+  def test_unprefixed_important_classes_are_not_mutated_with_tailwind_prefix
+    Shadcn::Rails.configure do |config|
+      config.tailwind_prefix = "tw-"
+    end
+
+    classes = Shadcn::Rails::ClassMerger.merge("!hidden").split
+    assert_includes classes, "!hidden"
+    refute_includes classes, "hidden"
+  end
+
+  def test_separator_shaped_negative_classes_are_not_mutated_with_tailwind_prefix
+    Shadcn::Rails.configure do |config|
+      config.tailwind_prefix = "tw-"
+    end
+
+    classes = Shadcn::Rails::ClassMerger.merge("-mx-1 my-1 h-px bg-muted").split
+    assert_includes classes, "-mx-1"
+    assert_includes classes, "my-1"
+    assert_includes classes, "h-px"
+    assert_includes classes, "bg-muted"
+    refute_includes classes, "mx-1"
+  end
+
   def test_focus_visible_ring_width_can_override_arbitrary_ring_width
     classes = Shadcn::Rails::ClassMerger.merge(
       "focus-visible:ring-ring/50 focus-visible:ring-[3px]",

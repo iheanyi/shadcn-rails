@@ -49,8 +49,10 @@ module Shadcn
 
           classes.split.map do |class_name|
             variant_prefix, utility = split_variant_prefix(class_name)
-            important = utility.delete_prefix!("!") ? "!" : ""
-            negative = utility.delete_prefix!("-") ? "-" : ""
+            important = utility.start_with?("!") ? "!" : ""
+            utility = utility.delete_prefix("!")
+            negative = utility.start_with?("-") ? "-" : ""
+            utility = utility.delete_prefix("-")
 
             next class_name unless utility.start_with?(prefixed_class_prefix)
 
