@@ -128,6 +128,24 @@ class SwitchComponentTest < ViewComponent::TestCase
     assert_no_selector "button[data-controller='analytics']"
   end
 
+  def test_moves_host_controller_configuration_to_wrapper
+    render_inline(
+      Shadcn::SwitchComponent.new(
+        data: {
+          controller: "analytics",
+          analytics_id_value: "signup",
+          analytics_active_class: "active",
+          analytics_user_outlet: ".user"
+        }
+      )
+    )
+
+    assert_selector "span[data-controller='shadcn--switch analytics'][data-analytics-id-value='signup'][data-analytics-active-class='active'][data-analytics-user-outlet='.user']"
+    assert_no_selector "button[data-analytics-id-value]"
+    assert_no_selector "button[data-analytics-active-class]"
+    assert_no_selector "button[data-analytics-user-outlet]"
+  end
+
   def test_renders_thumb_element
     render_inline(Shadcn::SwitchComponent.new)
 

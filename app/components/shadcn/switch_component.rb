@@ -108,7 +108,7 @@ module Shadcn
         }
       )
 
-      attrs.except("data-controller")
+      attrs.except("data-controller", *host_controller_data_attributes.keys)
     end
 
     def wrapper_attributes
@@ -116,7 +116,7 @@ module Shadcn
         class: "inline-flex items-center",
         "data-controller": controller_tokens,
         "data-shadcn--switch-checked-value": @checked
-      }
+      }.merge(host_controller_data_attributes)
     end
 
     def thumb_attributes
@@ -157,6 +157,29 @@ module Shadcn
         elsif key_string.delete_prefix("data-") == "controller" && value.present?
           values << value
         end
+      end
+    end
+
+    def host_controller_data_attributes
+      @host_controller_data_attributes ||= begin
+        controllers = host_controller_tokens.flat_map { |value| value.to_s.split }.uniq
+        host_data_attributes.select do |key, _value|
+          controller_bound_data_attribute?(key, controllers)
+        end
+      end
+    end
+
+    def host_data_attributes
+      host_attrs = html_options.dup
+      host_data = data.merge(extract_data_attributes!(host_attrs))
+
+      merge_data_attributes({}, host_data)
+    end
+
+    def controller_bound_data_attribute?(key, controllers)
+      controllers.any? do |controller|
+        suffix = key.delete_prefix("data-#{controller}-")
+        suffix != key && (suffix.end_with?("-value") || suffix.end_with?("-class") || suffix.end_with?("-outlet"))
       end
     end
   end
