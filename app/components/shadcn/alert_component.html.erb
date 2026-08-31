@@ -2,5 +2,7 @@
   <%= icon if icon? %>
   <%= title if title? %>
   <%= description if description? %>
-  <%= content %>
+  <% if content.present? %>
+    <div class="col-start-2"><%= content %></div>
+  <% end %>
 </div>

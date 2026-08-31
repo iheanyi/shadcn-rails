@@ -38,6 +38,14 @@ class AlertComponentTest < ViewComponent::TestCase
     assert_selector "div[data-slot='alert-title']", text: "With Icon"
   end
 
+  def test_renders_unslotted_content_in_body_column
+    render_inline(Shadcn::AlertComponent.new) do
+      "Unslotted body text"
+    end
+
+    assert_selector "div[data-slot='alert'][role='alert'] > div.col-start-2", text: "Unslotted body text"
+  end
+
   def test_default_variant_uses_new_york_v4_classes
     render_inline(Shadcn::AlertComponent.new) do |alert|
       alert.with_title { "Title" }
