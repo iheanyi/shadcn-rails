@@ -69,7 +69,7 @@ module Shadcn
 
     def vertical_scrollbar
       content_tag(:div, scrollbar_thumb, {
-        class: "#{SCROLLBAR_CLASSES} absolute top-0 right-0 h-full w-2.5 border-l border-l-transparent",
+        class: "#{SCROLLBAR_CLASSES} h-full w-2.5 border-l border-l-transparent",
         "data-slot": "scroll-area-scrollbar",
         "data-orientation": "vertical",
         "data-shadcn--scroll-area-target": "scrollbar"
@@ -78,7 +78,7 @@ module Shadcn
 
     def horizontal_scrollbar
       content_tag(:div, scrollbar_thumb, {
-        class: "#{SCROLLBAR_CLASSES} absolute bottom-0 left-0 h-2.5 w-full flex-col border-t border-t-transparent",
+        class: "#{SCROLLBAR_CLASSES} h-2.5 flex-col border-t border-t-transparent",
         "data-slot": "scroll-area-scrollbar",
         "data-orientation": "horizontal",
         "data-shadcn--scroll-area-target": "scrollbar"

@@ -157,6 +157,23 @@ input[type="radio"].shadcn-radio:checked::after {
 }
 
 /* ============================================
+   Scroll Area Component
+   ============================================ */
+
+[data-slot="scroll-area-scrollbar"][data-orientation="vertical"] {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+[data-slot="scroll-area-scrollbar"][data-orientation="horizontal"] {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+/* ============================================
    Toggle Component
    ============================================ */
 

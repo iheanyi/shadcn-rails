@@ -48,15 +48,15 @@ class ScrollAreaComponentTest < ViewComponent::TestCase
       "p-px",
       "transition-colors",
       "select-none",
-      "absolute",
-      "top-0",
-      "right-0",
       "h-full",
       "w-2.5",
       "border-l",
       "border-l-transparent"
     ], class_tokens
     assert_equal "scrollbar", scrollbar["data-shadcn--scroll-area-target"]
+    refute_includes class_tokens, "absolute"
+    refute_includes class_tokens, "top-0"
+    refute_includes class_tokens, "right-0"
     refute_includes class_tokens, "p-[1px]"
   end
 
@@ -73,16 +73,16 @@ class ScrollAreaComponentTest < ViewComponent::TestCase
       "p-px",
       "transition-colors",
       "select-none",
-      "absolute",
-      "bottom-0",
-      "left-0",
       "h-2.5",
-      "w-full",
       "flex-col",
       "border-t",
       "border-t-transparent"
     ], class_tokens
     assert_selector "div[data-shadcn--scroll-area-orientation-value='horizontal']"
+    refute_includes class_tokens, "absolute"
+    refute_includes class_tokens, "bottom-0"
+    refute_includes class_tokens, "left-0"
+    refute_includes class_tokens, "w-full"
     refute_includes class_tokens, "p-[1px]"
   end
 
@@ -137,5 +137,12 @@ class ScrollAreaComponentTest < ViewComponent::TestCase
     render_inline(Shadcn::ScrollAreaComponent.new) { "Test content here" }
 
     assert_text "Test content here"
+  end
+
+  def test_stylesheet_positions_scrollbars_as_overlays
+    css = File.read(File.expand_path("../../app/assets/stylesheets/shadcn/components.css", __dir__))
+
+    assert_match %r{\[data-slot="scroll-area-scrollbar"\]\[data-orientation="vertical"\]\s*\{[^}]*position: absolute;[^}]*top: 0;[^}]*right: 0;}m, css
+    assert_match %r{\[data-slot="scroll-area-scrollbar"\]\[data-orientation="horizontal"\]\s*\{[^}]*position: absolute;[^}]*bottom: 0;[^}]*left: 0;[^}]*width: 100%;}m, css
   end
 end
