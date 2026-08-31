@@ -141,6 +141,19 @@ class CarouselComponentTest < ViewComponent::TestCase
     assert_includes classes, "pl-4"
   end
 
+  def test_slide_item_custom_basis_overrides_default_basis
+    render_inline(Shadcn::CarouselComponent.new) do |carousel|
+      carousel.with_slides do |slides|
+        slides.with_item(basis: "basis-1/3") { "Slide 1" }
+      end
+    end
+
+    class_tokens = page.find("[data-slot='carousel-item']")[:class].split
+
+    assert_includes class_tokens, "basis-1/3"
+    refute_includes class_tokens, "basis-full"
+  end
+
   # Navigation buttons
   def test_renders_with_previous_button
     render_inline(Shadcn::CarouselComponent.new) do |carousel|
