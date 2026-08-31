@@ -21,11 +21,10 @@ module Shadcn
   #   <%= render Shadcn::InputOtpComponent.new(length: 6, name: "otp", disabled: true) %>
   #
   class InputOtpComponent < BaseComponent
-    BASE_CLASSES = "flex items-center gap-2"
-    SLOT_CLASSES = "relative flex h-10 w-10 items-center justify-center border-y border-r border-input text-sm shadow-sm transition-all first:rounded-l-md first:border-l last:rounded-r-md"
-    SLOT_ACTIVE_CLASSES = "z-10 ring-1 ring-ring"
+    BASE_CLASSES = "flex items-center gap-2 has-disabled:opacity-50"
+    SLOT_CLASSES = "relative flex h-9 w-9 items-center justify-center border-y border-r border-input text-sm shadow-xs transition-all outline-none first:rounded-l-md first:border-l last:rounded-r-md aria-invalid:border-destructive data-[active=true]:z-10 data-[active=true]:border-ring data-[active=true]:ring-[3px] data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:border-destructive data-[active=true]:aria-invalid:ring-destructive/20 dark:bg-input/30 dark:data-[active=true]:aria-invalid:ring-destructive/40"
     CARET_CLASSES = "pointer-events-none absolute inset-0 flex items-center justify-center"
-    CARET_BLINK_CLASSES = "animate-caret-blink h-4 w-px bg-foreground duration-1000"
+    CARET_BLINK_CLASSES = "h-4 w-px animate-caret-blink bg-foreground duration-1000"
 
     # Groups for visual grouping of slots
     renders_many :groups, "GroupComponent"
@@ -63,7 +62,8 @@ module Shadcn
     def container_attributes
       merge_html_attributes(
         {
-          class: merge_classes(BASE_CLASSES)
+          class: merge_classes(BASE_CLASSES),
+          "data-slot": "input-otp"
         },
         {
           controller: "shadcn--input-otp",
@@ -94,7 +94,7 @@ module Shadcn
           slot
         end
 
-        parts << tag.div(class: "flex items-center") { safe_join(group_slots) }
+        parts << tag.div("data-slot": "input-otp-group", class: "flex items-center") { safe_join(group_slots) }
 
         # Add separator after group if there's another group
         if group_index < groups.size - 1
@@ -107,7 +107,7 @@ module Shadcn
     end
 
     def default_separator
-      tag.div(class: "flex items-center justify-center px-2", role: "separator") do
+      tag.div("data-slot": "input-otp-separator", class: "flex items-center justify-center px-2", role: "separator") do
         tag.span(class: "text-muted-foreground") { "-" }
       end
     end
@@ -118,7 +118,7 @@ module Shadcn
         render_slot(index)
       end
 
-      tag.div(class: "flex items-center") { safe_join(slots) }
+      tag.div("data-slot": "input-otp-group", class: "flex items-center") { safe_join(slots) }
     end
 
     def render_slot(index)
@@ -126,6 +126,8 @@ module Shadcn
         class: SLOT_CLASSES,
         data: {
           "shadcn--input-otp-target": "slot",
+          slot: "input-otp-slot",
+          active: false,
           index: index,
           action: "click->shadcn--input-otp#focusSlot"
         }
@@ -165,7 +167,7 @@ module Shadcn
       attr_reader :slots
 
       def call
-        tag.div(class: merge_classes(BASE_CLASSES), **html_options.merge(build_data)) do
+        tag.div(class: merge_classes(BASE_CLASSES), **html_options.merge(build_data(slot: "input-otp-group"))) do
           content
         end
       end
@@ -176,7 +178,7 @@ module Shadcn
       BASE_CLASSES = "flex items-center justify-center px-2"
 
       def call
-        tag.div(class: merge_classes(BASE_CLASSES), role: "separator", **html_options.merge(build_data)) do
+        tag.div(class: merge_classes(BASE_CLASSES), role: "separator", **html_options.merge(build_data(slot: "input-otp-separator"))) do
           content.presence || tag.span(class: "text-muted-foreground") { "-" }
         end
       end
