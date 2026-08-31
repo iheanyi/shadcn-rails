@@ -8,6 +8,39 @@ class CheckboxComponentTest < ViewComponent::TestCase
 
     assert_selector "input[type='checkbox']"
     assert_selector "input.shadcn-checkbox"
+    assert_selector "input[data-slot='checkbox']"
+  end
+
+  def test_renders_v4_checkbox_classes
+    render_inline(Shadcn::CheckboxComponent.new)
+
+    classes = page.find("input[type='checkbox']")["class"].split
+
+    assert_includes classes, "size-4"
+    assert_includes classes, "rounded-[4px]"
+    assert_includes classes, "border-input"
+    assert_includes classes, "shadow-xs"
+    assert_includes classes, "transition-shadow"
+    assert_includes classes, "outline-none"
+    assert_includes classes, "focus-visible:border-ring"
+    assert_includes classes, "focus-visible:ring-[3px]"
+    assert_includes classes, "focus-visible:ring-ring/50"
+    assert_includes classes, "aria-invalid:border-destructive"
+    assert_includes classes, "aria-invalid:ring-destructive/20"
+    assert_includes classes, "checked:border-primary"
+    assert_includes classes, "checked:bg-primary"
+    assert_includes classes, "checked:text-primary-foreground"
+    assert_includes classes, "dark:bg-input/30"
+    assert_includes classes, "dark:aria-invalid:ring-destructive/40"
+    assert_includes classes, "dark:checked:bg-primary"
+
+    refute_includes classes, "h-4"
+    refute_includes classes, "w-4"
+    refute_includes classes, "rounded-sm"
+    refute_includes classes, "border-primary"
+    refute_includes classes, "focus-visible:outline-none"
+    refute_includes classes, "focus-visible:ring-1"
+    refute_includes classes, "focus-visible:ring-offset-1"
   end
 
   def test_renders_with_name_and_id
