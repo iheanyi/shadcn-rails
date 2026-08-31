@@ -50,6 +50,7 @@ class PopoverComponentTest < ViewComponent::TestCase
 
     classes = page.find("[data-shadcn--popover-target='content']", visible: false)["class"].split
 
+    assert_includes classes, "shadcn-popover"
     assert_includes classes, "z-50"
     assert_includes classes, "w-72"
     assert_includes classes, "rounded-md"
@@ -73,7 +74,6 @@ class PopoverComponentTest < ViewComponent::TestCase
     refute_includes classes, "outline-none"
     refute_includes classes, "origin-(--radix-popover-content-transform-origin)"
     refute_includes classes, "data-[size=default]"
-    refute_includes classes, "shadcn-popover"
   end
 
   # Open state
