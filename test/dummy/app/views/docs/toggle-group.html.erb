@@ -248,8 +248,8 @@
     controller_name: "shadcn--toggle-group",
     description: "Manages selection state across toggle items, supporting single and multiple selection modes.",
     values: [
-      { name: "type", type: "String", description: "Selection mode ('single' or 'multiple')" },
-      { name: "value", type: "String", description: "Comma-separated list of selected values" }
+      { name: "type", type: "String", default: '"single"', description: "Selection mode ('single' or 'multiple')" },
+      { name: "value", type: "String", default: '""', description: "Comma-separated list of selected values" }
     ],
     targets: [
       { name: "item", description: "Toggle items in the group" },

@@ -22,7 +22,12 @@
   </div>
 
   <!-- Preview -->
-  <%= showcase("switch", :default) %>
+  <%= render "docs/demo_card" do %>
+    <div class="flex items-center space-x-2">
+      <%= render Shadcn::SwitchComponent.new(id: "preview-switch") %>
+      <%= render Shadcn::LabelComponent.new(for: "preview-switch") { "Enable notifications" } %>
+    </div>
+  <% end %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -84,6 +89,29 @@
       <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/switch/disabled.txt")) %>
     </div>
 
+    <!-- With Label -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">With Label</h3>
+      <p class="text-sm text-muted-foreground">Pass label text as the component block to render a clickable label around the switch.</p>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::SwitchComponent.new(name: "airplane_mode", id: "airplane_mode") { "Airplane mode" } %>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/switch/with-label.txt")) %>
+    </div>
+
+    <!-- Required -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">Required</h3>
+      <p class="text-sm text-muted-foreground">Use <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm">required: true</code> when a form requires this switch to be checked before submission.</p>
+      <%= render "docs/demo_card" do %>
+        <div class="flex items-center space-x-2">
+          <%= render Shadcn::SwitchComponent.new(name: "agreement", id: "agreement", required: true) %>
+          <%= render Shadcn::LabelComponent.new(for: "agreement") { "Accept terms and conditions" } %>
+        </div>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/switch/required.txt")) %>
+    </div>
+
     <!-- Form Example -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">In a Form</h3>
@@ -126,52 +154,18 @@
     </div>
   </div>
 
-    <!-- Disabled & Checked -->
-    <div class="space-y-4">
-      <h3 class="text-lg font-semibold">Disabled & Checked</h3>
-      <%= showcase("switch", :disabled_checked) %>
-    </div>
-
-    <!-- With Description -->
-    <div class="space-y-4">
-      <h3 class="text-lg font-semibold">With Description</h3>
-      <%= showcase("switch", :with_description) %>
-    </div>
-
-    <!-- Settings Panel -->
-    <div class="space-y-4">
-      <h3 class="text-lg font-semibold">Settings Panel</h3>
-      <%= showcase("switch", :settings_panel) %>
-    </div>
-
-    <!-- Privacy Settings -->
-    <div class="space-y-4">
-      <h3 class="text-lg font-semibold">Privacy Settings</h3>
-      <%= showcase("switch", :privacy_settings) %>
-    </div>
-
-    <!-- Required Switch -->
-    <div class="space-y-4">
-      <h3 class="text-lg font-semibold">Required Switch</h3>
-      <%= showcase("switch", :required) %>
-    </div>
-
-    <!-- Interactive States -->
-    <div class="space-y-4">
-      <h3 class="text-lg font-semibold">Interactive States</h3>
-      <%= showcase("switch", :interactive_states) %>
-    </div>
-
   <!-- API Reference -->
   <div id="api-reference">
     <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4">API Reference</h2>
-    <%= render "docs/props_table", props: [
+    <%= render "docs/props_table", title: nil, props: [
       { name: "name", type: "String", default: "nil", description: "Input name attribute" },
       { name: "id", type: "String", default: "nil", description: "Input id attribute" },
       { name: "value", type: "String", default: '"1"', description: "Value when checked" },
       { name: "checked", type: "Boolean", default: "false", description: "Whether the switch is on" },
       { name: "disabled", type: "Boolean", default: "false", description: "Whether the switch is disabled" },
-      { name: "required", type: "Boolean", default: "false", description: "Whether the switch is required" }
+      { name: "required", type: "Boolean", default: "false", description: "Whether the switch is required" },
+      { name: "unchecked_value", type: "String", default: '"0"', description: "Hidden value submitted when unchecked" },
+      { name: "include_hidden", type: "Boolean", default: "true", description: "Whether to render the hidden unchecked value input" }
     ] %>
   </div>
 
@@ -180,8 +174,7 @@
     controller_name: "shadcn--switch",
     description: "Handles switch toggle state and updates form values.",
     values: [
-      { name: "checked", type: "Boolean", description: "Current checked state" },
-      { name: "name", type: "String", description: "Form input name for submission" }
+      { name: "checked", type: "Boolean", default: "false", description: "Current checked state" }
     ],
     actions: [
       { name: "toggle", description: "Toggles the switch state" }

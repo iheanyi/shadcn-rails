@@ -221,9 +221,9 @@
     controller_name: "shadcn--sidebar",
     description: "Manages sidebar open/closed state, keyboard shortcuts, and responsive behavior.",
     values: [
-      { name: "open", type: "Boolean", description: "Whether sidebar is open (desktop)" },
-      { name: "openMobile", type: "Boolean", description: "Whether sidebar is open (mobile)" },
-      { name: "keyboardShortcut", type: "String", description: "Key for Cmd/Ctrl shortcut" }
+      { name: "open", type: "Boolean", default: "true", description: "Whether sidebar is open (desktop)" },
+      { name: "openMobile", type: "Boolean", default: "false", description: "Whether sidebar is open (mobile)" },
+      { name: "keyboardShortcut", type: "String", default: '"b"', description: "Key for Cmd/Ctrl shortcut" }
     ],
     actions: [
       { name: "toggle", description: "Toggle sidebar open/closed" },

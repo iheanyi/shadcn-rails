@@ -33,6 +33,8 @@ class SwitchComponentTest < ViewComponent::TestCase
     assert_includes classes, "focus-visible:ring-ring/50"
     assert_includes classes, "disabled:cursor-not-allowed"
     assert_includes classes, "disabled:opacity-50"
+    assert_includes classes, "h-[1.15rem]"
+    assert_includes classes, "w-8"
     assert_includes classes, "data-[size=default]:h-[1.15rem]"
     assert_includes classes, "data-[size=default]:w-8"
     assert_includes classes, "data-[state=checked]:bg-primary"
@@ -56,6 +58,7 @@ class SwitchComponentTest < ViewComponent::TestCase
 
     assert_includes classes, "pointer-events-none"
     assert_includes classes, "block"
+    assert_includes classes, "size-4"
     assert_includes classes, "rounded-full"
     assert_includes classes, "bg-background"
     assert_includes classes, "ring-0"
@@ -66,8 +69,6 @@ class SwitchComponentTest < ViewComponent::TestCase
     assert_includes classes, "dark:data-[state=checked]:bg-primary-foreground"
     assert_includes classes, "dark:data-[state=unchecked]:bg-foreground"
 
-    refute_includes classes, "h-4"
-    refute_includes classes, "w-4"
     refute_includes classes, "shadow-lg"
     refute_includes classes, "duration-150"
     refute_includes classes, "data-[state=checked]:translate-x-4"

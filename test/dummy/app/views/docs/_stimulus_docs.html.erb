@@ -209,10 +209,18 @@ CODE
           </thead>
           <tbody class="[&_tr:last-child]:border-0">
             <% values.each do |value| %>
+              <% has_default = value.key?(:default) || value.key?("default") %>
+              <% default_value = value.key?(:default) ? value[:default] : value["default"] %>
               <tr class="border-b transition-colors hover:bg-muted/50">
                 <td class="p-4 align-middle font-mono text-sm"><%= value[:name] %></td>
                 <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm"><%= value[:type] %></code></td>
-                <td class="p-4 align-middle"><code class="rounded bg-muted px-1 py-0.5 font-mono text-sm"><%= value[:default] %></code></td>
+                <td class="p-4 align-middle">
+                  <% if has_default %>
+                    <code class="rounded bg-muted px-1 py-0.5 font-mono text-sm"><%= default_value.nil? ? "nil" : default_value %></code>
+                  <% else %>
+                    <span class="text-muted-foreground">-</span>
+                  <% end %>
+                </td>
                 <td class="p-4 align-middle text-muted-foreground"><%= value[:description] %></td>
               </tr>
             <% end %>

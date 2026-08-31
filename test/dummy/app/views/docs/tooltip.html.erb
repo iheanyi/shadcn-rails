@@ -203,10 +203,10 @@
     controller_name: "shadcn--tooltip",
     description: "Handles tooltip show/hide with positioning and delays.",
     values: [
-      { name: "side", type: "String", description: "Side to position tooltip" },
-      { name: "align", type: "String", description: "Alignment relative to trigger" },
-      { name: "delay", type: "Number", description: "Show delay in milliseconds" },
-      { name: "skipDelay", type: "Number", description: "Delay when moving between triggers" }
+      { name: "side", type: "String", default: '"top"', description: "Side to position tooltip" },
+      { name: "align", type: "String", default: '"center"', description: "Alignment relative to trigger" },
+      { name: "delay", type: "Number", default: "200", description: "Show delay in milliseconds" },
+      { name: "skipDelay", type: "Number", default: "300", description: "Delay when moving between triggers" }
     ],
     targets: [
       { name: "trigger", description: "Element that triggers the tooltip" },

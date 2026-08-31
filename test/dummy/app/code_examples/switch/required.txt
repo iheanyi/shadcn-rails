@@ -1,1 +1,4 @@
-<%= render Shadcn::SwitchComponent.new(name: "agreement", id: "agreement", required: true) %>
+<div class="flex items-center space-x-2">
+  <%= render Shadcn::SwitchComponent.new(name: "agreement", id: "agreement", required: true) %>
+  <%= render Shadcn::LabelComponent.new(for: "agreement") { "Accept terms and conditions" } %>
+</div>
