@@ -1,4 +1,0 @@
-<div class="flex items-center space-x-2">
-  <%= render Shadcn::CheckboxComponent.new(id: "indeterminate-check", indeterminate: true) %>
-  <%= render Shadcn::LabelComponent.new(for: "indeterminate-check") { "Select all (partial)" } %>
-</div>

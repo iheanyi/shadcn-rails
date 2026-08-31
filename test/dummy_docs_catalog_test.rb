@@ -65,6 +65,31 @@ class DummyDocsCatalogTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_stimulus_docs_partial_uses_controller_name_local
+    docs_views.each do |view|
+      source = File.read(view)
+      next unless source.include?('render "docs/stimulus_docs"')
+
+      refute_match(/render "docs\/stimulus_docs"[\s\S]*?\bcontroller:/, source, "#{view.basename} should pass controller_name: to docs/stimulus_docs")
+    end
+  end
+
+  def test_checkbox_docs_do_not_claim_unsupported_javascript_or_indeterminate_api
+    sources = [
+      Rails.root.join("app/views/docs/checkbox.html.erb"),
+      Rails.root.join("app/code_examples/checkbox/usage.txt"),
+      *Rails.root.join("app/code_examples/checkbox").glob("*.txt"),
+      Rails.root.join("../../test/components/previews/checkbox_component_preview.rb").expand_path
+    ]
+
+    sources.each do |path|
+      source = File.read(path)
+
+      refute_includes source, "shadcn--checkbox", "#{path.relative_path_from(Rails.root)} should not document a checkbox Stimulus controller"
+      refute_includes source, "indeterminate", "#{path.relative_path_from(Rails.root)} should not document unsupported checkbox indeterminate API"
+    end
+  end
+
   def test_usage_snippets_do_not_show_preview_method_wrappers
     editable_component_slugs.each do |slug|
       get "/docs/components/#{slug}"
