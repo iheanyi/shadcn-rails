@@ -115,8 +115,8 @@ class DrawerComponentTest < ViewComponent::TestCase
       drawer.with_body { "Drawer content" }
     end
 
-    overlay_tag = tag_with_slot(result.to_html, "drawer-overlay")
-    overlay_classes = classes_from_tag(overlay_tag)
+    overlay_node = node_with_slot(result.to_html, "drawer-overlay")
+    overlay_classes = classes_from_node(overlay_node)
 
     assert_includes overlay_classes, "fixed"
     assert_includes overlay_classes, "inset-0"
@@ -128,9 +128,9 @@ class DrawerComponentTest < ViewComponent::TestCase
     assert_includes overlay_classes, "data-[state=open]:fade-in-0"
     refute_includes overlay_classes, "bg-black/80"
 
-    assert_includes overlay_tag, 'data-shadcn--drawer-target="overlay"'
-    assert_includes overlay_tag, 'data-action="click-&gt;shadcn--drawer#close"'
-    assert_includes overlay_tag, 'data-state="closed"'
+    assert_equal "overlay", overlay_node["data-shadcn--drawer-target"]
+    assert_equal "click->shadcn--drawer#close", overlay_node["data-action"]
+    assert_equal "closed", overlay_node["data-state"]
   end
 
   def test_content_uses_upstream_v4_direction_classes_and_keeps_motion_hooks
@@ -138,8 +138,8 @@ class DrawerComponentTest < ViewComponent::TestCase
       drawer.with_body { "Drawer content" }
     end
 
-    content_tag = tag_with_slot(result.to_html, "drawer-content")
-    content_classes = classes_from_tag(content_tag)
+    content_node = node_with_slot(result.to_html, "drawer-content")
+    content_classes = classes_from_node(content_node)
 
     assert_includes content_classes, "group/drawer-content"
     assert_includes content_classes, "fixed"
@@ -177,10 +177,10 @@ class DrawerComponentTest < ViewComponent::TestCase
     refute_includes content_classes, "max-w-sm"
     refute_includes content_classes, "data-[size=default]"
 
-    assert_includes content_tag, 'data-shadcn--drawer-target="content"'
-    assert_includes content_tag, 'data-state="closed"'
-    assert_includes content_tag, 'data-direction="bottom"'
-    assert_includes content_tag, 'data-vaul-drawer-direction="bottom"'
+    assert_equal "content", content_node["data-shadcn--drawer-target"]
+    assert_equal "closed", content_node["data-state"]
+    assert_equal "bottom", content_node["data-direction"]
+    assert_equal "bottom", content_node["data-vaul-drawer-direction"]
   end
 
   def test_header_uses_upstream_v4_classes
@@ -190,7 +190,7 @@ class DrawerComponentTest < ViewComponent::TestCase
       end
     end
 
-    header_classes = classes_from_tag(tag_with_slot(result.to_html, "drawer-header"))
+    header_classes = classes_from_node(node_with_slot(result.to_html, "drawer-header"))
     assert_includes header_classes, "flex"
     assert_includes header_classes, "flex-col"
     assert_includes header_classes, "gap-0.5"
@@ -214,7 +214,7 @@ class DrawerComponentTest < ViewComponent::TestCase
       end
     end
 
-    title_classes = classes_from_tag(tag_with_slot(result.to_html, "drawer-title"))
+    title_classes = classes_from_node(node_with_slot(result.to_html, "drawer-title"))
     assert_includes title_classes, "font-semibold"
     assert_includes title_classes, "text-foreground"
     refute_includes title_classes, "text-lg"
@@ -241,13 +241,13 @@ class DrawerComponentTest < ViewComponent::TestCase
 
   private
 
-  def tag_with_slot(html, slot)
-    html[/<[^>]*data-slot="#{slot}"[^>]*>/m].tap do |tag|
-      assert tag, "Expected tag with data-slot=#{slot}"
+  def node_with_slot(html, slot)
+    Nokogiri::HTML.fragment(html).at_css(%([data-slot="#{slot}"])).tap do |node|
+      assert node, "Expected tag with data-slot=#{slot}"
     end
   end
 
-  def classes_from_tag(tag)
-    tag[/class="([^"]*)"/, 1].split
+  def classes_from_node(node)
+    node["class"].split
   end
 end
