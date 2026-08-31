@@ -194,25 +194,65 @@ class InputGroupComponentTest < ViewComponent::TestCase
     ].each { |token| assert_includes classes, token }
   end
 
-  def test_button_component_uses_upstream_input_group_button_classes
-    render_inline(Shadcn::InputGroupComponent::InputGroupButtonComponent.new) { "Go" }
+  def test_button_component_uses_upstream_input_group_button_classes_for_all_sizes
+    expected_tokens_by_size = {
+      xs: %w[
+        flex
+        items-center
+        gap-1
+        text-sm
+        shadow-none
+        h-6
+        rounded-[calc(var(--radius)-5px)]
+        px-2
+        has-[>svg]:px-2
+        [&>svg:not([class*='size-'])]:size-3.5
+      ],
+      sm: %w[
+        flex
+        items-center
+        gap-1.5
+        text-sm
+        shadow-none
+        h-8
+        rounded-md
+        px-2.5
+        has-[>svg]:px-2.5
+      ],
+      icon_xs: %w[
+        flex
+        items-center
+        text-sm
+        shadow-none
+        size-6
+        rounded-[calc(var(--radius)-5px)]
+        p-0
+        has-[>svg]:p-0
+      ],
+      icon_sm: %w[
+        flex
+        items-center
+        text-sm
+        shadow-none
+        size-8
+        p-0
+        has-[>svg]:p-0
+      ]
+    }
 
-    assert_selector "button[data-size='xs'][data-variant='ghost']", text: "Go"
-    refute_selector "button[data-size='default']"
+    expected_tokens_by_size.each do |size, expected_tokens|
+      render_inline(Shadcn::InputGroupComponent::InputGroupButtonComponent.new(size: size)) { "Go" }
 
-    classes = class_list("button")
-    %w[
-      flex
-      items-center
-      gap-1
-      text-sm
-      shadow-none
-      h-6
-      rounded-[calc(var(--radius)-5px)]
-      px-2
-      has-[>svg]:px-2
-      [&>svg:not([class*='size-'])]:size-3.5
-    ].each { |token| assert_includes classes, token }
+      assert_selector "button[data-size='#{size.to_s.tr("_", "-")}'][data-variant='ghost']", text: "Go"
+      refute_selector "button[data-size='default']"
+
+      classes = class_list("button")
+      expected_tokens.each { |token| assert_includes classes, token }
+      refute_includes classes, "h-9"
+      refute_includes classes, "px-4"
+      refute_includes classes, "py-2"
+      refute_includes classes, "has-[>svg]:px-3"
+    end
   end
 
   def test_renders_with_custom_class

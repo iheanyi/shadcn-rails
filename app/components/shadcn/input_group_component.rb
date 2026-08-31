@@ -127,23 +127,31 @@ module Shadcn
       def initialize(type: "button", variant: :ghost, size: :xs, **options)
         super(**options)
         @type = type
-        @variant = variant
+        @variant = variant.to_sym
         @size = size.to_s.tr("-", "_").to_sym
       end
 
       def call
-        render ::Shadcn::ButtonComponent.new(
-          type: @type,
-          variant: @variant,
-          class_name: cn(BASE_CLASSES, SIZE_CLASSES.fetch(@size), class_name),
-          data: data.merge(size: data_size),
-          **html_options
-        ) do
-          content
-        end
+        tag.button(content, **button_attributes)
       end
 
       private
+
+      def button_attributes
+        html_options
+          .merge(build_data(slot: "button", variant: @variant, size: data_size))
+          .merge(type: @type, class: button_classes)
+          .compact
+      end
+
+      def button_classes
+        merge_classes(cn(
+          ::Shadcn::ButtonComponent::BASE_CLASSES,
+          ::Shadcn::ButtonComponent::VARIANTS.fetch(@variant),
+          BASE_CLASSES,
+          SIZE_CLASSES.fetch(@size)
+        ))
+      end
 
       def data_size
         @size.to_s.tr("_", "-")
