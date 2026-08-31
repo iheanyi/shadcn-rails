@@ -3,7 +3,7 @@
 module Shadcn
   # Table Row component
   class TableRowComponent < BaseComponent
-    BASE_CLASSES = "border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+    BASE_CLASSES = "border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted"
 
     renders_many :heads, lambda { |**options, &block|
       TableHeadComponent.new(**options, &block)

@@ -12,7 +12,13 @@ class TableComponentTest < ViewComponent::TestCase
       end
     end
 
-    assert_selector "div.relative.overflow-auto"
+    wrapper_classes = page.find("div")["class"].split
+
+    assert_includes wrapper_classes, "relative"
+    assert_includes wrapper_classes, "w-full"
+    assert_includes wrapper_classes, "overflow-x-auto"
+    refute_includes wrapper_classes, "overflow-auto"
+    refute_includes all_class_tokens, "data-[size=default]"
     assert_selector "table"
   end
 
@@ -28,6 +34,32 @@ class TableComponentTest < ViewComponent::TestCase
     assert_selector "table.w-full"
     assert_selector "table.caption-bottom"
     assert_selector "table.text-sm"
+  end
+
+  def test_renders_new_york_v4_row_head_and_cell_styles
+    render_inline(Shadcn::TableComponent.new) do |table|
+      table.with_header do |header|
+        header.with_row do |row|
+          row.with_head { "Name" }
+        end
+      end
+      table.with_body do |body|
+        body.with_row do |row|
+          row.with_cell { "Alice" }
+        end
+      end
+    end
+
+    row_classes = page.find("tbody tr")["class"].split
+    head_classes = page.find("th")["class"].split
+    cell_classes = page.find("td")["class"].split
+
+    assert_includes row_classes, "has-aria-expanded:bg-muted/50"
+    assert_includes head_classes, "whitespace-nowrap"
+    assert_includes head_classes, "text-foreground"
+    assert_includes cell_classes, "whitespace-nowrap"
+    refute_includes head_classes, "text-muted-foreground"
+    refute_includes all_class_tokens, "data-[size=default]"
   end
 
   def test_renders_table_header
@@ -174,5 +206,11 @@ class TableComponentTest < ViewComponent::TestCase
     end
 
     assert_selector "[data-testid='table']"
+  end
+
+  private
+
+  def all_class_tokens
+    page.all("[class]").flat_map { |node| node["class"].split }
   end
 end
