@@ -3,7 +3,7 @@
 module Shadcn
   # Card Title component
   class CardTitleComponent < BaseComponent
-    BASE_CLASSES = "font-semibold leading-none tracking-tight"
+    BASE_CLASSES = "leading-none font-semibold"
 
     # @param tag [Symbol] HTML tag to use (default: :h3)
     def initialize(tag: :h3, **options, &block)
@@ -12,7 +12,7 @@ module Shadcn
     end
 
     def call
-      content_tag(@tag, content, class: merge_classes(BASE_CLASSES), **html_options)
+      content_tag(@tag, content, **merge_html_attributes({ class: merge_classes(BASE_CLASSES), "data-slot": "card-title" }))
     end
   end
 end
