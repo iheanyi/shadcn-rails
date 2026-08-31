@@ -10,8 +10,8 @@ class ScrollAreaComponentTest < ViewComponent::TestCase
     class_tokens = root["class"].split
 
     assert_equal "scroll-area", root["data-slot"]
-    assert_equal ["relative", "overflow-hidden"], class_tokens
-    assert_includes class_tokens, "overflow-hidden"
+    assert_equal ["relative"], class_tokens
+    refute_includes class_tokens, "overflow-hidden"
   end
 
   def test_renders_viewport
@@ -48,6 +48,9 @@ class ScrollAreaComponentTest < ViewComponent::TestCase
       "p-px",
       "transition-colors",
       "select-none",
+      "absolute",
+      "top-0",
+      "right-0",
       "h-full",
       "w-2.5",
       "border-l",
@@ -70,7 +73,11 @@ class ScrollAreaComponentTest < ViewComponent::TestCase
       "p-px",
       "transition-colors",
       "select-none",
+      "absolute",
+      "bottom-0",
+      "left-0",
       "h-2.5",
+      "w-full",
       "flex-col",
       "border-t",
       "border-t-transparent"
