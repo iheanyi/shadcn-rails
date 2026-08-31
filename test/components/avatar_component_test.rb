@@ -43,8 +43,8 @@ class AvatarComponentTest < ViewComponent::TestCase
     render_inline(Shadcn::AvatarComponent.new(alt: "User", size: :default))
     assert_selector "span[data-slot='avatar'][data-size='default']"
     assert_includes rendered_content, "size-8"
-    assert_no_includes rendered_content, "h-10 w-10"
-    assert_no_includes rendered_content, "data-[size=default]"
+    refute_includes rendered_content, "h-10 w-10"
+    refute_includes rendered_content, "data-[size=default]"
 
     # Large
     render_inline(Shadcn::AvatarComponent.new(alt: "User", size: :lg))
@@ -62,8 +62,8 @@ class AvatarComponentTest < ViewComponent::TestCase
 
     assert_selector "span[data-slot='avatar'][data-size='default']"
     assert_includes rendered_content, "size-8"
-    assert_no_includes rendered_content, "h-10 w-10"
-    assert_no_includes rendered_content, "data-[size=default]"
+    refute_includes rendered_content, "h-10 w-10"
+    refute_includes rendered_content, "data-[size=default]"
   end
 
   def test_renders_new_york_v4_image_slot_and_size_class
