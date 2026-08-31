@@ -93,13 +93,15 @@ class AlertDialogComponentTest < ViewComponent::TestCase
     end
 
     header_tag = result.to_html[/<[^>]*data-slot="alert-dialog-header"[^>]*>/m]
-    header_classes = header_tag[/class="([^"]*)"/, 1].split
+    header_classes = header_tag[/class="([^"]*)"/, 1]
+    header_tokens = header_classes.split
 
-    assert_includes header_classes, "gap-2"
-    refute_includes header_classes, "space-y-2"
+    assert_includes header_tokens, "grid"
+    assert_includes header_tokens, "gap-1.5"
+    refute_includes header_classes, "flex flex-col gap-2"
   end
 
-  def test_title_uses_dialog_v4_typography_classes
+  def test_title_uses_alert_dialog_v4_typography_classes
     result = render_inline(Shadcn::AlertDialogComponent.new) do |dialog|
       dialog.with_body do |body|
         body.with_header do |header|
@@ -112,7 +114,48 @@ class AlertDialogComponentTest < ViewComponent::TestCase
     title_classes = title_tag[/class="([^"]*)"/, 1].split
 
     assert_includes title_classes, "text-lg"
-    assert_includes title_classes, "leading-none"
     assert_includes title_classes, "font-semibold"
+    assert_includes title_classes, "sm:group-has-data-[slot=alert-dialog-media]/alert-dialog-content:col-start-2"
+    refute_includes title_classes, "leading-none"
+  end
+
+  def test_action_and_cancel_use_button_component_classes
+    result = render_inline(Shadcn::AlertDialogComponent.new) do |dialog|
+      dialog.with_body do |body|
+        body.with_footer do |footer|
+          footer.with_cancel { "Cancel" }
+          footer.with_action { "Continue" }
+        end
+      end
+    end
+
+    html = result.to_html
+    action_tag = html[/<button[^>]*data-slot="alert-dialog-action"[^>]*>/m]
+    cancel_tag = html[/<button[^>]*data-slot="alert-dialog-cancel"[^>]*>/m]
+    action_classes = action_tag[/class="([^"]*)"/, 1].split
+    cancel_classes = cancel_tag[/class="([^"]*)"/, 1].split
+
+    assert_includes action_classes, "focus-visible:ring-[3px]"
+    assert_includes cancel_classes, "shadow-xs"
+    refute_includes action_classes, "focus-visible:ring-1"
+    refute_includes action_classes, "shadow-sm"
+    refute_includes cancel_classes, "focus-visible:ring-1"
+    refute_includes cancel_classes, "shadow-sm"
+  end
+
+  def test_content_uses_alert_dialog_group_without_size_variants
+    result = render_inline(Shadcn::AlertDialogComponent.new) do |dialog|
+      dialog.with_body { "Body content" }
+    end
+
+    content_tag = result.to_html[/<div[^>]*data-slot="alert-dialog-content"[^>]*>/m]
+    content_classes = content_tag[/class="([^"]*)"/, 1]
+    content_tokens = content_classes.split
+
+    assert_includes content_tokens, "group/alert-dialog-content"
+    assert_includes content_tokens, "sm:max-w-lg"
+    refute_includes content_classes, "data-[size=default]"
+    refute_includes content_classes, "data-[size=sm]"
+    refute_includes content_tokens, "outline-none"
   end
 end
