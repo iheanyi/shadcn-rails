@@ -1,5 +1,52 @@
 <%= render Shadcn::Select.new(name: "number", placeholder: "Select a number") do |select| %>
-  <% (1..50).each do |i| %>
-    <% select.with_item(value: i.to_s) { "Option #{i}" } %>
-  <% end %>
+  <% select.with_item(value: "1") { "Option 1" } %>
+  <% select.with_item(value: "2") { "Option 2" } %>
+  <% select.with_item(value: "3") { "Option 3" } %>
+  <% select.with_item(value: "4") { "Option 4" } %>
+  <% select.with_item(value: "5") { "Option 5" } %>
+  <% select.with_item(value: "6") { "Option 6" } %>
+  <% select.with_item(value: "7") { "Option 7" } %>
+  <% select.with_item(value: "8") { "Option 8" } %>
+  <% select.with_item(value: "9") { "Option 9" } %>
+  <% select.with_item(value: "10") { "Option 10" } %>
+  <% select.with_item(value: "11") { "Option 11" } %>
+  <% select.with_item(value: "12") { "Option 12" } %>
+  <% select.with_item(value: "13") { "Option 13" } %>
+  <% select.with_item(value: "14") { "Option 14" } %>
+  <% select.with_item(value: "15") { "Option 15" } %>
+  <% select.with_item(value: "16") { "Option 16" } %>
+  <% select.with_item(value: "17") { "Option 17" } %>
+  <% select.with_item(value: "18") { "Option 18" } %>
+  <% select.with_item(value: "19") { "Option 19" } %>
+  <% select.with_item(value: "20") { "Option 20" } %>
+  <% select.with_item(value: "21") { "Option 21" } %>
+  <% select.with_item(value: "22") { "Option 22" } %>
+  <% select.with_item(value: "23") { "Option 23" } %>
+  <% select.with_item(value: "24") { "Option 24" } %>
+  <% select.with_item(value: "25") { "Option 25" } %>
+  <% select.with_item(value: "26") { "Option 26" } %>
+  <% select.with_item(value: "27") { "Option 27" } %>
+  <% select.with_item(value: "28") { "Option 28" } %>
+  <% select.with_item(value: "29") { "Option 29" } %>
+  <% select.with_item(value: "30") { "Option 30" } %>
+  <% select.with_item(value: "31") { "Option 31" } %>
+  <% select.with_item(value: "32") { "Option 32" } %>
+  <% select.with_item(value: "33") { "Option 33" } %>
+  <% select.with_item(value: "34") { "Option 34" } %>
+  <% select.with_item(value: "35") { "Option 35" } %>
+  <% select.with_item(value: "36") { "Option 36" } %>
+  <% select.with_item(value: "37") { "Option 37" } %>
+  <% select.with_item(value: "38") { "Option 38" } %>
+  <% select.with_item(value: "39") { "Option 39" } %>
+  <% select.with_item(value: "40") { "Option 40" } %>
+  <% select.with_item(value: "41") { "Option 41" } %>
+  <% select.with_item(value: "42") { "Option 42" } %>
+  <% select.with_item(value: "43") { "Option 43" } %>
+  <% select.with_item(value: "44") { "Option 44" } %>
+  <% select.with_item(value: "45") { "Option 45" } %>
+  <% select.with_item(value: "46") { "Option 46" } %>
+  <% select.with_item(value: "47") { "Option 47" } %>
+  <% select.with_item(value: "48") { "Option 48" } %>
+  <% select.with_item(value: "49") { "Option 49" } %>
+  <% select.with_item(value: "50") { "Option 50" } %>
 <% end %>

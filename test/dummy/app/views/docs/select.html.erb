@@ -79,8 +79,8 @@
           <% select.with_item(value: "banana") { "Banana" } %>
           <% select.with_item(value: "orange") { "Orange" } %>
         <% end %>
-        <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/select/preselected-value.txt")) %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/select/preselected-value.txt")) %>
     </div>
 
     <!-- Disabled State -->
@@ -136,8 +136,8 @@
           </div>
           <%= render Shadcn::ButtonComponent.new(type: :submit) { "Submit" } %>
         <% end %>
-        <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/select/form-integration.txt")) %>
       <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/select/form-integration.txt")) %>
     </div>
   </div>
 
