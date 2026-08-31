@@ -19,25 +19,34 @@ class SpinnerComponentTest < ViewComponent::TestCase
   def test_renders_with_default_size
     render_inline(Shadcn::SpinnerComponent.new)
 
-    assert_selector "svg.h-6.w-6"
+    classes = page.find("svg")[:class].split
+
+    assert_includes classes, "size-4"
+    refute_includes classes, "h-4"
+    refute_includes classes, "w-4"
+    refute_includes classes, "text-muted-foreground"
   end
 
   def test_renders_with_small_size
     render_inline(Shadcn::SpinnerComponent.new(size: :sm))
 
-    assert_selector "svg.h-4.w-4"
+    classes = page.find("svg")[:class].split
+
+    assert_includes classes, "size-4"
+    refute_includes classes, "h-4"
+    refute_includes classes, "w-4"
   end
 
   def test_renders_with_large_size
     render_inline(Shadcn::SpinnerComponent.new(size: :lg))
 
-    assert_selector "svg.h-8.w-8"
+    assert_selector "svg.size-8"
   end
 
   def test_renders_with_xl_size
     render_inline(Shadcn::SpinnerComponent.new(size: :xl))
 
-    assert_selector "svg.h-12.w-12"
+    assert_selector "svg.size-12"
   end
 
   def test_renders_with_custom_class
