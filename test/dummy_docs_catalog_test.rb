@@ -25,6 +25,21 @@ class DummyDocsCatalogTest < ActionDispatch::IntegrationTest
     "icon_svg",
     "badge_html"
   ].freeze
+  REQUIRED_PASTEABLE_CODE_EXAMPLES = %w[
+    carousel/default
+    carousel/usage
+    carousel/with-card-content
+    empty/background-gradient
+    label/disabled_context
+    radio-group/horizontal-layout
+    select/preselected-value
+    select/form-integration
+    select/long_list
+    table/striped
+    scroll-area/usage
+    scroll-area/code_block
+    chart/default
+  ].freeze
   BARE_RUBY_LOOP_PATTERN = /(\b\d+\.times|\.each(?:_with_index)?|\)\.each)\s+do\b/
 
   def test_docs_pages_do_not_contain_placeholder_copy
@@ -55,13 +70,16 @@ class DummyDocsCatalogTest < ActionDispatch::IntegrationTest
 
   def test_code_examples_are_balanced_erb
     code_example_files.each do |example|
-      code = File.read(example)
-      source = ActionView::Template::Handlers::ERB.erb_implementation.new(code, escape: false).src
+      assert_code_example_compiles(example)
+    end
+  end
 
-      RubyVM::InstructionSequence.compile(source)
-      assert true, "#{example.relative_path_from(Rails.root)} compiles as ERB"
-    rescue SyntaxError => error
-      flunk "#{example.relative_path_from(Rails.root)} should compile as ERB: #{error.message.lines.first}"
+  def test_no_go_code_examples_are_explicitly_pasteable_erb
+    REQUIRED_PASTEABLE_CODE_EXAMPLES.each do |example_path|
+      example = Rails.root.join("app/code_examples/#{example_path}.txt")
+
+      assert_predicate example, :exist?, "#{example_path}.txt should exist"
+      assert_code_example_compiles(example)
     end
   end
 
@@ -114,6 +132,16 @@ class DummyDocsCatalogTest < ActionDispatch::IntegrationTest
 
   def code_example_files
     Rails.root.join("app/code_examples").glob("**/*.txt")
+  end
+
+  def assert_code_example_compiles(example)
+    code = File.read(example)
+    source = ActionView::Template::Handlers::ERB.erb_implementation.new(code, escape: false).src
+
+    RubyVM::InstructionSequence.compile(source)
+    assert true, "#{example.relative_path_from(Rails.root)} compiles as ERB"
+  rescue SyntaxError => error
+    flunk "#{example.relative_path_from(Rails.root)} should compile as ERB: #{error.message.lines.first}"
   end
 
   def stimulus_docs_calls(source)
