@@ -160,6 +160,15 @@ input[type="radio"].shadcn-radio:checked::after {
    Scroll Area Component
    ============================================ */
 
+[data-slot="scroll-area-viewport"] {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+[data-slot="scroll-area-viewport"]::-webkit-scrollbar {
+  display: none;
+}
+
 [data-slot="scroll-area-scrollbar"][data-orientation="vertical"] {
   position: absolute;
   top: 0;
