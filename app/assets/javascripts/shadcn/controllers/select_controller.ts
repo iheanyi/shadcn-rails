@@ -64,6 +64,7 @@ export default class extends Controller<HTMLElement> {
           placement: this.placementValue,
           minWidth: true,
           referenceWidthVariable: "--radix-select-trigger-width",
+          referenceHeightVariable: "--radix-select-trigger-height",
           maxHeight: 384 // max-h-96
         })
       }

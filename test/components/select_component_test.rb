@@ -184,7 +184,7 @@ class SelectComponentTest < ViewComponent::TestCase
     assert_includes classes, "relative"
     assert_includes classes, "z-50"
     assert_includes classes, "max-h-(--radix-select-content-available-height)"
-    assert_includes classes, "min-w-[var(--radix-select-trigger-width)]"
+    assert_includes classes, "min-w-[8rem]"
     assert_includes classes, "origin-(--radix-select-content-transform-origin)"
     assert_includes classes, "overflow-x-hidden"
     assert_includes classes, "overflow-y-auto"
@@ -198,8 +198,19 @@ class SelectComponentTest < ViewComponent::TestCase
     refute_includes classes, "top-full"
     refute_includes classes, "mt-1"
     refute_includes classes, "max-h-96"
-    refute_includes classes, "min-w-[8rem]"
+    refute_includes classes, "min-w-[var(--radix-select-trigger-width)]"
     refute_includes classes, "overflow-hidden"
+  end
+
+  def test_viewport_uses_new_york_v4_popper_class_tokens
+    render_inline(Shadcn::SelectComponent.new)
+
+    classes = page.find("[data-slot='select-viewport']", visible: false)["class"].split
+    assert_includes classes, "p-1"
+    assert_includes classes, "h-[var(--radix-select-trigger-height)]"
+    assert_includes classes, "w-full"
+    assert_includes classes, "min-w-[var(--radix-select-trigger-width)]"
+    assert_includes classes, "scroll-my-1"
   end
 
   # Items slot

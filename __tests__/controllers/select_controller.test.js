@@ -547,13 +547,15 @@ describe("SelectController", () => {
           <span data-shadcn--select-target="display">Orange</span>
         </button>
         <div data-shadcn--select-target="content"
-             class="shadcn-select-content min-w-[var(--radix-select-trigger-width)] overflow-hidden"
+             class="shadcn-select-content min-w-[8rem] overflow-hidden"
              hidden>
+          <div class="p-1 h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1">
           <div data-shadcn--select-target="item" data-value="apple">Apple</div>
           <div data-shadcn--select-target="item" data-value="banana">Banana</div>
           <div data-shadcn--select-target="item" data-value="orange">Orange</div>
           <div data-shadcn--select-target="item" data-value="grape">Grape</div>
           <div data-shadcn--select-target="item" data-value="strawberry">Strawberry</div>
+          </div>
         </div>
       </div>
     `
@@ -586,8 +588,10 @@ describe("SelectController", () => {
       expect(controller.contentTarget.innerHTML).toContain("Strawberry")
       expect(controller.contentTarget.style.position).toBe("absolute")
       expect(controller.contentTarget.className).toContain("shadcn-select-content")
-      expect(controller.contentTarget.className).toContain("min-w-[var(--radix-select-trigger-width)]")
+      expect(controller.contentTarget.className).toContain("min-w-[8rem]")
+      expect(controller.contentTarget.className).not.toContain("min-w-[var(--radix-select-trigger-width)]")
       expect(controller.contentTarget.style.getPropertyValue("--radix-select-trigger-width")).toBe("96px")
+      expect(controller.contentTarget.style.getPropertyValue("--radix-select-trigger-height")).toBe("40px")
       expect(controller.contentTarget.style.minWidth).toBe("96px")
       expect(controller.contentTarget.style.width).not.toBe("96px")
     })

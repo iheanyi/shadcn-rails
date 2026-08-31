@@ -14,6 +14,7 @@ export type FloatingOptions = {
     sameWidth?: boolean;
     minWidth?: boolean;
     referenceWidthVariable?: string | null;
+    referenceHeightVariable?: string | null;
     maxHeight?: number | null;
     onPositioned?: ((position: FloatingPosition) => void) | null;
 };
@@ -28,6 +29,7 @@ export type FloatingOptions = {
  * @param {boolean} options.sameWidth - Make floating element same width as reference
  * @param {boolean} options.minWidth - Make floating element at least as wide as reference while allowing growth
  * @param {string} options.referenceWidthVariable - CSS variable to populate with the reference width
+ * @param {string} options.referenceHeightVariable - CSS variable to populate with the reference height
  * @param {number} options.maxHeight - Maximum height for the floating element
  * @param {Function} options.onPositioned - Callback after positioning
  * @returns {Function} Cleanup function to stop auto-updates
