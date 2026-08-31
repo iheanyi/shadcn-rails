@@ -53,7 +53,7 @@ module Shadcn
     end
 
     def circle_svg
-      content_tag(:circle, "", cx: "12", cy: "12", r: "6")
+      content_tag(:circle, "", cx: "12", cy: "12", r: "10")
     end
 
     def item_attributes
