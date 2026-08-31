@@ -43,7 +43,24 @@ class AlertComponentTest < ViewComponent::TestCase
       "Unslotted body text"
     end
 
-    assert_selector "div[data-slot='alert'][role='alert'] > div.col-start-2", text: "Unslotted body text"
+    assert_selector "div[data-slot='alert'][role='alert'] > div[data-slot='alert-description'].col-start-2", text: "Unslotted body text"
+    assert_no_selector "div[data-slot='alert'][role='alert'] > div.col-start-2:not([data-slot])", text: "Unslotted body text"
+
+    classes = page.find("div[data-slot='alert-description']", text: "Unslotted body text")["class"].split
+    assert_includes classes, "grid"
+    assert_includes classes, "justify-items-start"
+    assert_includes classes, "gap-1"
+    assert_includes classes, "text-muted-foreground"
+  end
+
+  def test_does_not_render_unslotted_content_when_description_slot_is_present
+    render_inline(Shadcn::AlertComponent.new) do |alert|
+      alert.with_description { "Description slot" }
+      "Unslotted body text"
+    end
+
+    assert_selector "div[data-slot='alert-description']", text: "Description slot", count: 1
+    assert_no_text "Unslotted body text"
   end
 
   def test_default_variant_uses_new_york_v4_classes

@@ -2,7 +2,9 @@
   <%= icon if icon? %>
   <%= title if title? %>
   <%= description if description? %>
-  <% if content.present? %>
-    <div class="col-start-2"><%= content %></div>
+  <% if !description? && content.present? %>
+    <%= render Shadcn::AlertDescriptionComponent.new do %>
+      <%= content %>
+    <% end %>
   <% end %>
 </div>
