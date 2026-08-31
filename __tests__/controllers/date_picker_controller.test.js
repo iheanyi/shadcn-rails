@@ -302,6 +302,12 @@ describe("DatePickerController", () => {
       const dayButtons = grid.querySelectorAll('button[data-date]')
       expect(dayButtons.length).toBeGreaterThanOrEqual(28)
       expect(dayButtons.length).toBeLessThanOrEqual(42)
+
+      const weekRows = Array.from(grid.children)
+      expect(weekRows.length).toBeGreaterThan(0)
+      expect(weekRows.every(row => row.classList.contains("mt-2") && row.classList.contains("flex") && row.classList.contains("w-full"))).toBe(true)
+      expect(weekRows[0].children.length).toBe(7)
+      expect(weekRows.some(row => row.matches("button[data-date]"))).toBe(false)
     })
 
     test("renders day buttons with focus-visible ring styles", () => {
@@ -309,11 +315,19 @@ describe("DatePickerController", () => {
 
       const grid = element.querySelector('[data-date-picker-target="grid"]')
       const dayButton = grid.querySelector('button[data-date]')
+      expect(dayButton.classList).toContain("min-w-(--cell-size)")
+      expect(dayButton.classList).toContain("size-auto")
       expect(dayButton.classList).toContain("focus-visible:border-ring")
       expect(dayButton.classList).toContain("focus-visible:ring-[3px]")
       expect(dayButton.classList).toContain("focus-visible:ring-ring/50")
       expect(dayButton.classList).not.toContain("focus:ring-1")
       expect(dayButton.classList).not.toContain("focus:outline-none")
+      expect(dayButton.classList).not.toContain("h-8")
+      expect(dayButton.classList).not.toContain("w-8")
+      expect(dayButton.dataset.slot).toBe("button")
+      expect(dayButton.dataset.day).toBe(dayButton.dataset.date)
+      expect(dayButton.parentElement.classList).toContain("group/day")
+      expect(dayButton.parentElement.classList).toContain("flex-1")
     })
   })
 
@@ -376,6 +390,7 @@ describe("DatePickerController", () => {
       expect(controller.selectedDate.getDate()).toBe(15)
       expect(controller.selectedDate.getMonth()).toBe(10)
       expect(controller.selectedValue).toBe("2024-11-15")
+      expect(element.querySelector('[data-date-picker-target="trigger"]').dataset.empty).toBe("false")
     })
 
     test("initializing with a selected value preserves the correct day", async () => {
@@ -558,8 +573,11 @@ describe("DatePickerController", () => {
       expect(firstButton.dataset.date).toBe("2024-11-01")
 
       // Empty divs should exist for October days
-      const emptyDivs = grid.querySelectorAll('div.h-8.w-8:not([data-date])')
+      const emptyDivs = grid.querySelectorAll('div.invisible:not([data-date])')
       expect(emptyDivs.length).toBeGreaterThan(0)
+      expect(emptyDivs[0].classList).toContain("size-(--cell-size)")
+      expect(emptyDivs[0].classList).toContain("min-w-(--cell-size)")
+      expect(emptyDivs[0].classList).toContain("flex-1")
     })
 
     test("showOutsideDays persists after month navigation", async () => {

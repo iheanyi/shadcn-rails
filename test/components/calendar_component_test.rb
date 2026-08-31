@@ -9,6 +9,15 @@ class CalendarComponentTest < ViewComponent::TestCase
     assert_selector "[data-controller='shadcn--calendar']"
     assert_selector "[role='grid']"
     assert_selector "[aria-label='Calendar']"
+    assert_selector "[data-slot='calendar']"
+
+    classes = page.find("[data-slot='calendar']")["class"].split
+    assert_includes classes, "group/calendar"
+    assert_includes classes, "bg-background"
+    assert_includes classes, "p-3"
+    assert_includes classes, "[--cell-size:--spacing(8)]"
+    refute_includes classes, "rounded-md"
+    refute_includes classes, "border"
   end
 
   def test_renders_month_year_header
@@ -28,6 +37,14 @@ class CalendarComponentTest < ViewComponent::TestCase
     assert_selector "button[aria-label='Next month']"
     assert_selector "button[data-action='click->shadcn--calendar#previousMonth']"
     assert_selector "button[data-action='click->shadcn--calendar#nextMonth']"
+
+    classes = page.find("button[aria-label='Previous month']")["class"].split
+    assert_includes classes, "size-(--cell-size)"
+    assert_includes classes, "focus-visible:ring-[3px]"
+    refute_includes classes, "shadow-sm"
+    refute_includes classes, "h-7"
+    refute_includes classes, "w-7"
+    refute_includes classes, "focus-visible:ring-1"
   end
 
   def test_renders_weekday_headers
@@ -43,28 +60,47 @@ class CalendarComponentTest < ViewComponent::TestCase
 
     assert_selector "[data-shadcn--calendar-target='grid']"
     assert_selector "button[data-shadcn--calendar-target='day']", minimum: 28
+
+    classes = page.find("[data-shadcn--calendar-target='grid']")["class"].split
+    assert_includes classes, "w-full"
+    assert_includes classes, "border-collapse"
+    refute_includes classes, "grid"
+    refute_includes classes, "grid-cols-7"
+    refute_includes classes, "gap-1"
   end
 
   def test_day_buttons_use_v4_focus_visible_ring_styles
     render_inline(Shadcn::CalendarComponent.new(month: Date.new(2024, 6, 1)))
 
     classes = page.first("button[data-shadcn--calendar-target='day']")["class"].split
+    assert_includes classes, "min-w-(--cell-size)"
+    assert_includes classes, "size-auto"
     assert_includes classes, "focus-visible:border-ring"
     assert_includes classes, "focus-visible:ring-[3px]"
     assert_includes classes, "focus-visible:ring-ring/50"
     refute_includes classes, "focus:ring-1"
     refute_includes classes, "focus:outline-none"
+    refute_includes classes, "h-8"
+    refute_includes classes, "w-8"
+
+    assert_selector "button[data-slot='button'][data-day][data-shadcn--calendar-target='day']"
+    wrapper_classes = page.first("button[data-shadcn--calendar-target='day']").find(:xpath, "./parent::div")["class"].split
+    assert_includes wrapper_classes, "group/day"
+    assert_includes wrapper_classes, "flex-1"
   end
 
   def test_month_year_selects_use_focus_visible_ring_styles
     render_inline(Shadcn::CalendarComponent.new(month: Date.new(2024, 6, 1)))
 
     classes = page.find("select[data-shadcn--calendar-target='monthSelect']")["class"].split
+    assert_includes classes, "shadow-xs"
+    assert_includes classes, "has-focus:ring-[3px]"
     assert_includes classes, "focus-visible:border-ring"
     assert_includes classes, "focus-visible:ring-[3px]"
     assert_includes classes, "focus-visible:ring-ring/50"
     refute_includes classes, "focus:ring-1"
     refute_includes classes, "focus:outline-none"
+    refute_includes classes, "shadow-sm"
   end
 
   def test_renders_selected_date
@@ -162,7 +198,12 @@ class CalendarComponentTest < ViewComponent::TestCase
     # Should not render day buttons for May dates
     assert_no_selector "button[data-date='2024-05-26']"
     # Should have empty placeholders instead
-    assert_selector "div.h-8.w-8"
+    assert_selector "div.invisible"
+    classes = page.first("div.invisible")["class"].split
+    assert_includes classes, "size-(--cell-size)"
+    assert_includes classes, "min-w-(--cell-size)"
+    assert_includes classes, "flex-1"
+    refute_includes rendered_content, 'class="invisible"></div>'
   end
 
   def test_passes_stimulus_data_attributes
@@ -231,7 +272,7 @@ class CalendarComponentTest < ViewComponent::TestCase
   def test_renders_weekday_headers_starting_sunday_by_default
     render_inline(Shadcn::CalendarComponent.new)
 
-    weekday_divs = page.all(".text-center.text-xs.font-medium.text-muted-foreground")
+    weekday_divs = page.all("[class*='text-[0.8rem]']")
     weekday_texts = weekday_divs.map(&:text)
 
     assert_equal %w[Su Mo Tu We Th Fr Sa], weekday_texts
@@ -240,7 +281,7 @@ class CalendarComponentTest < ViewComponent::TestCase
   def test_renders_weekday_headers_starting_monday
     render_inline(Shadcn::CalendarComponent.new(week_starts_on: 1))
 
-    weekday_divs = page.all(".text-center.text-xs.font-medium.text-muted-foreground")
+    weekday_divs = page.all("[class*='text-[0.8rem]']")
     weekday_texts = weekday_divs.map(&:text)
 
     assert_equal %w[Mo Tu We Th Fr Sa Su], weekday_texts
@@ -249,7 +290,7 @@ class CalendarComponentTest < ViewComponent::TestCase
   def test_renders_weekday_headers_starting_saturday
     render_inline(Shadcn::CalendarComponent.new(week_starts_on: 6))
 
-    weekday_divs = page.all(".text-center.text-xs.font-medium.text-muted-foreground")
+    weekday_divs = page.all("[class*='text-[0.8rem]']")
     weekday_texts = weekday_divs.map(&:text)
 
     assert_equal %w[Sa Su Mo Tu We Th Fr], weekday_texts

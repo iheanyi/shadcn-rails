@@ -14,12 +14,23 @@ module Shadcn
   #   <%= render Shadcn::CalendarComponent.new(name: "event[date]") %>
   #
   class CalendarComponent < BaseComponent
-    CONTAINER_CLASSES = "p-3 rounded-md border bg-background"
-    HEADER_CLASSES = "flex items-center justify-between mb-4"
-    MONTH_YEAR_CLASSES = "text-sm font-medium"
-    NAV_BUTTON_CLASSES = "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-7 w-7"
-    WEEKDAY_CLASSES = "text-center text-xs font-medium text-muted-foreground"
-    DAY_CLASSES = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center rounded-md cursor-pointer hover:bg-accent hover:text-accent-foreground outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+    CONTAINER_CLASSES = "group/calendar bg-background p-3 [--cell-size:--spacing(8)] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent"
+    HEADER_CLASSES = "relative flex h-(--cell-size) w-full items-center justify-between gap-1"
+    MONTH_YEAR_CLASSES = "font-medium select-none text-sm"
+    NAV_BUTTON_CLASSES = [
+      Shadcn::ButtonComponent::BASE_CLASSES,
+      Shadcn::ButtonComponent::VARIANTS[:ghost],
+      "size-(--cell-size) p-0 select-none aria-disabled:opacity-50"
+    ].join(" ")
+    WEEKDAY_CLASSES = "flex-1 rounded-md text-[0.8rem] font-normal text-muted-foreground select-none"
+    DAY_WRAPPER_CLASSES = "group/day relative aspect-square h-full w-full flex-1 p-0 text-center select-none [&:last-child[data-selected=true]_button]:rounded-r-md [&:first-child[data-selected=true]_button]:rounded-l-md"
+    DAY_CLASSES = [
+      Shadcn::ButtonComponent::BASE_CLASSES,
+      Shadcn::ButtonComponent::VARIANTS[:ghost],
+      "flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal p-0 text-center select-none",
+      "group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50",
+      "dark:hover:text-accent-foreground [&>span]:text-xs [&>span]:opacity-70"
+    ].join(" ")
     DAY_SELECTED_CLASSES = "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground"
     DAY_TODAY_CLASSES = "bg-accent text-accent-foreground"
     DAY_OUTSIDE_CLASSES = "text-muted-foreground opacity-50"
@@ -136,7 +147,7 @@ module Shadcn
     end
 
     def month_year_selectors
-      content_tag(:div, class: "flex items-center gap-1") do
+      content_tag(:div, class: "flex h-(--cell-size) items-center justify-center gap-1.5 text-sm font-medium") do
         safe_join([
           month_select,
           year_select
@@ -147,8 +158,9 @@ module Shadcn
     def month_select
       content_tag(:select,
         class: cn(
-          "appearance-none bg-transparent text-sm font-medium cursor-pointer",
-          "hover:bg-accent hover:text-accent-foreground rounded px-2 py-1",
+          "relative rounded-md border border-input bg-background shadow-xs",
+          "has-focus:border-ring has-focus:ring-[3px] has-focus:ring-ring/50",
+          "font-medium select-none flex h-8 items-center gap-1 pr-1 pl-2 text-sm cursor-pointer",
           "outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
         ),
         data: {
@@ -169,8 +181,9 @@ module Shadcn
 
       content_tag(:select,
         class: cn(
-          "appearance-none bg-transparent text-sm font-medium cursor-pointer",
-          "hover:bg-accent hover:text-accent-foreground rounded px-2 py-1",
+          "relative rounded-md border border-input bg-background shadow-xs",
+          "has-focus:border-ring has-focus:ring-[3px] has-focus:ring-ring/50",
+          "font-medium select-none flex h-8 items-center gap-1 pr-1 pl-2 text-sm cursor-pointer",
           "outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
         ),
         data: {
@@ -185,7 +198,7 @@ module Shadcn
     end
 
     def weekday_header
-      content_tag(:div, class: "grid grid-cols-7 gap-1 mb-2") do
+      content_tag(:div, class: "flex") do
         safe_join(rotated_weekdays.map { |day| content_tag(:div, day, class: WEEKDAY_CLASSES) })
       end
     end
@@ -195,8 +208,12 @@ module Shadcn
     end
 
     def days_grid
-      content_tag(:div, class: "grid grid-cols-7 gap-1", data: { "shadcn--calendar-target": "grid" }) do
-        safe_join(calendar_days.map { |day| render_day(day) })
+      content_tag(:div, class: "w-full border-collapse", data: { "shadcn--calendar-target": "grid" }) do
+        safe_join(calendar_days.each_slice(7).map do |week|
+          content_tag(:div, class: "mt-2 flex w-full") do
+            safe_join(week.map { |day| render_day(day) })
+          end
+        end)
       end
     end
 
@@ -229,24 +246,29 @@ module Shadcn
       classes << DAY_OUTSIDE_CLASSES if is_outside
       classes << DAY_DISABLED_CLASSES if is_disabled
 
-      content_tag(:button,
-        date.day.to_s,
-        type: "button",
-        class: cn(*classes),
-        tabindex: is_disabled ? "-1" : "0",
-        "aria-selected": is_selected || nil,
-        "aria-disabled": is_disabled || nil,
-        disabled: is_disabled || nil,
-        data: {
-          date: date.iso8601,
-          "shadcn--calendar-target": "day",
-          action: is_disabled ? nil : "click->shadcn--calendar#selectDay"
-        }.compact
-      )
+      content_tag(:div, class: DAY_WRAPPER_CLASSES, data: { selected: is_selected || nil }) do
+        content_tag(:button,
+          date.day.to_s,
+          type: "button",
+          class: cn(*classes),
+          tabindex: is_disabled ? "-1" : "0",
+          "aria-selected": is_selected || nil,
+          "aria-disabled": is_disabled || nil,
+          disabled: is_disabled || nil,
+          data: {
+            slot: "button",
+            day: date.to_fs(:db),
+            date: date.iso8601,
+            selected_single: is_selected || nil,
+            "shadcn--calendar-target": "day",
+            action: is_disabled ? nil : "click->shadcn--calendar#selectDay"
+          }.compact
+        )
+      end
     end
 
     def empty_day
-      content_tag(:div, "", class: "h-8 w-8")
+      content_tag(:div, "", class: "invisible size-(--cell-size) min-w-(--cell-size) flex-1")
     end
 
     def date_disabled?(date)
@@ -295,6 +317,7 @@ module Shadcn
         class: cn(CONTAINER_CLASSES, class_name),
         role: "grid",
         "aria-label": "Calendar",
+        "data-slot": "calendar",
         data: stimulus_data
       }.merge(html_options).merge(build_data)
     end

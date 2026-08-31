@@ -701,6 +701,9 @@ let default_1$s = class default_1 extends stimulus.Controller {
     }
 };
 
+const DAY_BUTTON_CLASSES$1 = "inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal p-0 text-center select-none group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground [&>span]:text-xs [&>span]:opacity-70";
+const DAY_WRAPPER_CLASSES$1 = "group/day relative aspect-square h-full w-full flex-1 p-0 text-center select-none [&:last-child[data-selected=true]_button]:rounded-r-md [&:first-child[data-selected=true]_button]:rounded-l-md";
+const EMPTY_DAY_CLASSES$1 = "invisible size-(--cell-size) min-w-(--cell-size) flex-1";
 /**
  * Calendar controller for date picker
  * Handles month navigation, date selection, and rendering
@@ -1161,7 +1164,15 @@ class CalendarController extends stimulus.Controller {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         let html = "";
+        let weekCells = [];
         const currentDate = new Date(startDate);
+        const appendCell = (cellHtml) => {
+            weekCells.push(cellHtml);
+            if (weekCells.length === 7) {
+                html += `<div class="mt-2 flex w-full">${weekCells.join("")}</div>`;
+                weekCells = [];
+            }
+        };
         while (currentDate <= endDate) {
             const isOutside = currentDate.getMonth() !== month;
             const isToday = currentDate.getTime() === today.getTime();
@@ -1174,36 +1185,30 @@ class CalendarController extends stimulus.Controller {
             const dateStr = this.formatDateString(currentDate);
             // Skip outside days if showOutsideDays is false
             if (isOutside && !this.showOutsideDaysValue) {
-                html += '<div class="h-8 w-8"></div>';
+                appendCell(`<div class="${EMPTY_DAY_CLASSES$1}"></div>`);
                 currentDate.setDate(currentDate.getDate() + 1);
                 continue;
             }
-            let classes = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50";
+            let classes = DAY_BUTTON_CLASSES$1;
             // Range styling
             if (isInRange) {
-                classes += " bg-accent/50";
+                classes += " rounded-none bg-accent text-accent-foreground";
             }
             if (isRangeStart) {
-                classes += " rounded-l-md";
+                classes += " rounded-md rounded-l-md bg-primary text-primary-foreground";
             }
             if (isRangeEnd) {
-                classes += " rounded-r-md";
-            }
-            if (!isRangeStart && !isRangeEnd && !isInRange) {
-                classes += " rounded-md";
+                classes += " rounded-md rounded-r-md bg-primary text-primary-foreground";
             }
             // Selection and state styling
             if (isDisabled) {
                 classes += " text-muted-foreground opacity-50 cursor-not-allowed";
             }
-            else if (isSelected) {
+            else if (isSelected && !isRangeStart && !isRangeEnd && !isInRange) {
                 classes += " bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground cursor-pointer";
             }
             else if (isToday && !isInRange) {
-                classes += " bg-accent text-accent-foreground cursor-pointer hover:bg-accent hover:text-accent-foreground";
-            }
-            else if (!isInRange) {
-                classes += " cursor-pointer hover:bg-accent hover:text-accent-foreground";
+                classes += " rounded-md bg-accent text-accent-foreground cursor-pointer hover:bg-accent hover:text-accent-foreground";
             }
             else {
                 classes += " cursor-pointer hover:bg-accent hover:text-accent-foreground";
@@ -1222,12 +1227,30 @@ class CalendarController extends stimulus.Controller {
                 ariaAttrs.push('tabindex="0"');
             else
                 ariaAttrs.push('tabindex="-1"');
+            ariaAttrs.push('data-slot="button"');
+            ariaAttrs.push(`data-day="${dateStr}"`);
+            if (isSelected && !isRangeStart && !isRangeEnd && !isInRange)
+                ariaAttrs.push('data-selected-single="true"');
+            if (isRangeStart)
+                ariaAttrs.push('data-range-start="true"');
+            if (isRangeEnd)
+                ariaAttrs.push('data-range-end="true"');
+            if (isInRange)
+                ariaAttrs.push('data-range-middle="true"');
+            const wrapperAttrs = [];
+            if (isSelected)
+                wrapperAttrs.push('data-selected="true"');
+            if (isFocused)
+                wrapperAttrs.push('data-focused="true"');
             // Only add click action for non-disabled days
             const dataAction = isDisabled
                 ? 'data-action="focus->shadcn--calendar#enableKeyboard blur->shadcn--calendar#disableKeyboard"'
                 : 'data-action="click->shadcn--calendar#selectDay focus->shadcn--calendar#enableKeyboard blur->shadcn--calendar#disableKeyboard"';
-            html += `<button type="button" class="${classes}" data-date="${dateStr}" data-shadcn--calendar-target="day" ${dataAction} ${ariaAttrs.join(" ")}>${currentDate.getDate()}</button>`;
+            appendCell(`<div class="${DAY_WRAPPER_CLASSES$1}" ${wrapperAttrs.join(" ")}><button type="button" class="${classes}" data-date="${dateStr}" data-shadcn--calendar-target="day" ${dataAction} ${ariaAttrs.join(" ")}>${currentDate.getDate()}</button></div>`);
             currentDate.setDate(currentDate.getDate() + 1);
+        }
+        if (weekCells.length > 0) {
+            html += `<div class="mt-2 flex w-full">${weekCells.join("")}</div>`;
         }
         return html;
     }
@@ -1485,6 +1508,9 @@ let default_1$r = class default_1 extends stimulus.Controller {
     }
 };
 
+const DAY_BUTTON_CLASSES = "inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal p-0 text-center select-none group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground [&>span]:text-xs [&>span]:opacity-70";
+const DAY_WRAPPER_CLASSES = "group/day relative aspect-square h-full w-full flex-1 p-0 text-center select-none [&:last-child[data-selected=true]_button]:rounded-r-md [&:first-child[data-selected=true]_button]:rounded-l-md";
+const EMPTY_DAY_CLASSES = "invisible size-(--cell-size) min-w-(--cell-size) flex-1";
 /**
  * Date Picker controller
  * Handles opening/closing the calendar popover and date selection
@@ -1620,6 +1646,9 @@ class DatePickerController extends stimulus.Controller {
             this.displayValueTarget.textContent = this.formatDate(this.selectedDate);
             this.displayValueTarget.classList.remove("text-muted-foreground");
         }
+        if (this.hasTriggerTarget) {
+            this.triggerTarget.dataset.empty = "false";
+        }
         // Re-render calendar to update selection styling
         this.render();
         // Close the popover
@@ -1675,7 +1704,15 @@ class DatePickerController extends stimulus.Controller {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         let html = "";
+        let weekCells = [];
         const currentDate = new Date(startDate);
+        const appendCell = (cellHtml) => {
+            weekCells.push(cellHtml);
+            if (weekCells.length === 7) {
+                html += `<div class="mt-2 flex w-full">${weekCells.join("")}</div>`;
+                weekCells = [];
+            }
+        };
         while (currentDate <= endDate) {
             const isOutside = currentDate.getMonth() !== month;
             const isToday = currentDate.getTime() === today.getTime();
@@ -1686,11 +1723,11 @@ class DatePickerController extends stimulus.Controller {
             const dateStr = this.formatDateString(currentDate);
             // Skip outside days if showOutsideDays is false
             if (isOutside && !this.showOutsideDaysValue) {
-                html += '<div class="h-8 w-8"></div>';
+                appendCell(`<div class="${EMPTY_DAY_CLASSES}"></div>`);
                 currentDate.setDate(currentDate.getDate() + 1);
                 continue;
             }
-            let classes = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center rounded-md outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50";
+            let classes = DAY_BUTTON_CLASSES;
             if (isDisabled) {
                 classes += " text-muted-foreground opacity-50 cursor-not-allowed";
             }
@@ -1713,12 +1750,22 @@ class DatePickerController extends stimulus.Controller {
                 ariaAttrs.push('aria-disabled="true"');
                 ariaAttrs.push('disabled');
             }
+            ariaAttrs.push('data-slot="button"');
+            ariaAttrs.push(`data-day="${dateStr}"`);
+            if (isSelected)
+                ariaAttrs.push('data-selected-single="true"');
+            const wrapperAttrs = [];
+            if (isSelected)
+                wrapperAttrs.push('data-selected="true"');
             // Only add click action for non-disabled days
             const dataAction = isDisabled
                 ? ''
                 : 'data-action="click->shadcn--date-picker#selectDay"';
-            html += `<button type="button" class="${classes}" data-date="${dateStr}" data-shadcn--date-picker-target="day" ${dataAction} ${ariaAttrs.join(" ")}>${currentDate.getDate()}</button>`;
+            appendCell(`<div class="${DAY_WRAPPER_CLASSES}" ${wrapperAttrs.join(" ")}><button type="button" class="${classes}" data-date="${dateStr}" data-shadcn--date-picker-target="day" ${dataAction} ${ariaAttrs.join(" ")}>${currentDate.getDate()}</button></div>`);
             currentDate.setDate(currentDate.getDate() + 1);
+        }
+        if (weekCells.length > 0) {
+            html += `<div class="mt-2 flex w-full">${weekCells.join("")}</div>`;
         }
         return html;
     }
