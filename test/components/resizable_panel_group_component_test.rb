@@ -101,7 +101,7 @@ class ResizablePanelGroupComponentTest < ViewComponent::TestCase
     assert_selector "[data-max-size='50']"
   end
 
-  def test_panel_does_not_add_non_upstream_classes
+  def test_panel_preserves_overflow_clipping
     render_inline(Shadcn::ResizablePanelGroupComponent.new) do |group|
       group.with_panel(default_size: 30) { "Content" }
     end
@@ -110,7 +110,7 @@ class ResizablePanelGroupComponentTest < ViewComponent::TestCase
     classes = panel[:class].to_s.split
 
     refute_includes classes, "relative"
-    refute_includes classes, "overflow-hidden"
+    assert_includes classes, "overflow-hidden"
   end
 
   def test_panel_has_flex_basis_style
@@ -172,9 +172,21 @@ class ResizablePanelGroupComponentTest < ViewComponent::TestCase
     end
 
     refute_includes class_tokens, "focus-visible:outline-none"
+    assert_includes class_tokens, "cursor-col-resize"
     refute_includes class_tokens, "hover:bg-primary/50"
     refute_includes class_tokens, "transition-colors"
     refute_includes class_tokens, "[&[data-state=dragging]]:bg-primary"
+  end
+
+  def test_vertical_handle_uses_row_resize_cursor
+    render_inline(Shadcn::ResizablePanelGroupComponent.new(direction: :vertical)) do |group|
+      group.with_handle
+    end
+
+    handle = page.find("[data-panel-resize-handle]")
+    class_tokens = handle[:class].split
+
+    assert_includes class_tokens, "cursor-row-resize"
   end
 
   def test_handle_has_separator_role

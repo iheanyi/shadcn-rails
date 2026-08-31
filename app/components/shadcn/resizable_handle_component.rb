@@ -65,6 +65,7 @@ module Shadcn
     def class_names
       cn(
         BASE_CLASSES,
+        @direction == :horizontal ? "cursor-col-resize" : "cursor-row-resize",
         @class_name
       )
     end

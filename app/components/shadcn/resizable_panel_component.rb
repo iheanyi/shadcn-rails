@@ -45,7 +45,10 @@ module Shadcn
     end
 
     def class_names
-      @class_name
+      cn(
+        "overflow-hidden",
+        @class_name
+      )
     end
   end
 end
