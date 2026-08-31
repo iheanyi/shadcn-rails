@@ -1,10 +1,11 @@
 <div class="<%= drawer_classes %>"
+     data-slot="drawer"
      data-controller="<%= drawer_data_attrs[:controller] %>"
      data-shadcn--drawer-open-value="<%= drawer_data_attrs[:"shadcn--drawer-open-value"] %>"
      data-shadcn--drawer-direction-value="<%= drawer_data_attrs[:"shadcn--drawer-direction-value"] %>"
      <%= tag_attributes %>>
   <% if trigger? %>
-    <div data-shadcn--drawer-target="trigger" data-action="click->shadcn--drawer#open">
+    <div data-slot="drawer-trigger" data-shadcn--drawer-target="trigger" data-action="click->shadcn--drawer#open">
       <%= trigger %>
     </div>
   <% end %>

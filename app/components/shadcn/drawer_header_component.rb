@@ -3,7 +3,7 @@
 module Shadcn
   # Drawer Header component
   class DrawerHeaderComponent < BaseComponent
-    BASE_CLASSES = "grid gap-1.5 p-4 text-center sm:text-left"
+    BASE_CLASSES = "flex flex-col gap-0.5 p-4 group-data-[vaul-drawer-direction=bottom]/drawer-content:text-center group-data-[vaul-drawer-direction=top]/drawer-content:text-center md:gap-1.5 md:text-left"
 
     renders_one :title, lambda { |**options|
       DrawerTitleComponent.new(**options)
@@ -13,7 +13,7 @@ module Shadcn
     }
 
     def call
-      content_tag(:div, safe_join([title, description, content].compact), class: merge_classes(BASE_CLASSES))
+      content_tag(:div, safe_join([title, description, content].compact), **merge_html_attributes({ class: merge_classes(BASE_CLASSES), "data-slot": "drawer-header" }))
     end
   end
 end
