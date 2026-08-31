@@ -68,7 +68,7 @@ module Shadcn
     )
       super(**options)
       @variant = variant.to_sym
-      @size = size.to_sym
+      @size = size&.to_sym
       @href = href
       @type = type
       @disabled = disabled

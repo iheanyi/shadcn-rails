@@ -213,6 +213,34 @@ class InputGroupComponentTest < ViewComponent::TestCase
       has-[>svg]:px-2
       [&>svg:not([class*='size-'])]:size-3.5
     ].each { |token| assert_includes classes, token }
+
+    %w[
+      h-9
+      px-4
+      py-2
+      has-[>svg]:px-3
+    ].each { |token| refute_includes classes, token }
+  end
+
+  def test_icon_button_component_uses_input_group_size_without_default_button_size_classes
+    render_inline(Shadcn::InputGroupComponent::InputGroupButtonComponent.new(size: :icon_xs)) { "Icon" }
+
+    assert_selector "button[data-size='icon-xs'][data-variant='ghost']", text: "Icon"
+
+    classes = class_list("button")
+    %w[
+      size-6
+      rounded-[calc(var(--radius)-5px)]
+      p-0
+      has-[>svg]:p-0
+    ].each { |token| assert_includes classes, token }
+
+    %w[
+      h-9
+      px-4
+      py-2
+      has-[>svg]:px-3
+    ].each { |token| refute_includes classes, token }
   end
 
   def test_renders_with_custom_class

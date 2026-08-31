@@ -135,6 +135,7 @@ module Shadcn
         render ::Shadcn::ButtonComponent.new(
           type: @type,
           variant: @variant,
+          size: nil,
           class_name: cn(BASE_CLASSES, SIZE_CLASSES.fetch(@size), class_name),
           data: data.merge(size: data_size),
           **html_options
