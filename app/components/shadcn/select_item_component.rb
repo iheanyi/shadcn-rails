@@ -3,7 +3,7 @@
 module Shadcn
   # Select Item component
   class SelectItemComponent < BaseComponent
-    BASE_CLASSES = "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+    BASE_CLASSES = "relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2"
 
     # @param value [String] The value for this option
     # @param disabled [Boolean] Whether this option is disabled
@@ -27,7 +27,7 @@ module Shadcn
     end
 
     def check_indicator
-      content_tag(:span, check_icon, class: "absolute left-2 flex h-3.5 w-3.5 items-center justify-center")
+      content_tag(:span, check_icon, class: "absolute right-2 flex size-3.5 items-center justify-center")
     end
 
     def check_icon
@@ -48,6 +48,7 @@ module Shadcn
         class: merge_classes(BASE_CLASSES),
         role: "option",
         "aria-selected": "false",
+        "data-slot": "select-item",
         "data-shadcn--select-target": "item",
         "data-value": @value,
         "data-disabled": @disabled ? "" : nil,

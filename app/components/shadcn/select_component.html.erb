@@ -13,13 +13,14 @@
   <button type="button"
           class="<%= trigger_classes %>"
           role="combobox"
+          data-slot="select-trigger"
           <%= "disabled" if @disabled %>
           aria-expanded="false"
           aria-haspopup="listbox"
           data-shadcn--select-target="trigger"
           data-action="click->shadcn--select#toggle keydown->shadcn--select#handleKeydown"
-          data-placeholder="<%= @placeholder %>">
-    <span data-shadcn--select-target="display"><%= display_text %></span>
+          <%= "data-placeholder" if @value.blank? %>>
+    <span data-slot="select-value" data-shadcn--select-target="display"><%= display_text %></span>
     <svg xmlns="http://www.w3.org/2000/svg"
          width="16"
          height="16"
@@ -36,10 +37,11 @@
 
   <div class="<%= CONTENT_CLASSES %>"
        role="listbox"
+       data-slot="select-content"
        data-shadcn--select-target="content"
        data-state="closed"
        hidden>
-    <div class="<%= VIEWPORT_CLASSES %>">
+    <div class="<%= VIEWPORT_CLASSES %>" data-slot="select-viewport">
       <%= items_content %>
     </div>
   </div>
