@@ -10,6 +10,10 @@ require "action_cable/engine"
 require "sprockets/railtie"
 
 Bundler.require(*Rails.groups)
+require "kaminari"
+require "pagy"
+require "will_paginate"
+require "will_paginate/collection"
 
 # Load shadcn-rails from parent directory
 require "shadcn/rails"

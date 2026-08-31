@@ -2,29 +2,10 @@
 
 class DocsController < ApplicationController
   layout "docs"
+  include Pagy::Backend
 
   DataTablePage = Struct.new(:current_page, :total_pages, keyword_init: true) do
     def prev_page
-      current_page > 1 ? current_page - 1 : nil
-    end
-
-    def next_page
-      current_page < total_pages ? current_page + 1 : nil
-    end
-  end
-
-  PaginationDemoPagy = Struct.new(:page, :pages, keyword_init: true) do
-    def prev
-      page > 1 ? page - 1 : nil
-    end
-
-    def next
-      page < pages ? page + 1 : nil
-    end
-  end
-
-  PaginationDemoWillPaginate = Struct.new(:current_page, :total_pages, keyword_init: true) do
-    def previous_page
       current_page > 1 ? current_page - 1 : nil
     end
 
@@ -592,13 +573,18 @@ class DocsController < ApplicationController
   def prepare_pagination_demo
     records = Array.new(50) { |index| "Demo post #{index + 1}" }
     per_page = 5
-    current_page = [params[:page].to_i, 1].max
     total_pages = [(records.length.to_f / per_page).ceil, 1].max
-    current_page = [current_page, total_pages].min
+    current_page = [[params[:page].to_i, 1].max, total_pages].min
 
-    @pagination_items = records[((current_page - 1) * per_page), per_page] || []
-    @pagination_page = DataTablePage.new(current_page: current_page, total_pages: total_pages)
-    @pagination_pagy = PaginationDemoPagy.new(page: current_page, pages: total_pages)
-    @pagination_will_paginate = PaginationDemoWillPaginate.new(current_page: current_page, total_pages: total_pages)
+    @pagination_kaminari = Kaminari.paginate_array(records).page(current_page).per(per_page)
+    @pagination_kaminari_items = @pagination_kaminari.to_a
+
+    @pagination_pagy = Pagy.new(count: records.size, page: current_page, limit: per_page)
+    @pagination_pagy_items = records[@pagination_pagy.offset, @pagination_pagy.limit] || []
+
+    @pagination_will_paginate = WillPaginate::Collection.create(current_page, per_page, records.size) do |pager|
+      pager.replace(records[pager.offset, pager.per_page] || [])
+    end
+    @pagination_will_paginate_items = @pagination_will_paginate.to_a
   end
 end

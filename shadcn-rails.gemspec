@@ -54,6 +54,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "minitest-reporters", "~> 1.6"
   spec.add_development_dependency "capybara", "~> 3.0"
   spec.add_development_dependency "cuprite", "~> 0.15"
+  spec.add_development_dependency "kaminari", ">= 1.2.2"
   spec.add_development_dependency "lookbook", "~> 2.0"
+  spec.add_development_dependency "pagy", "~> 9.0"
   spec.add_development_dependency "tailwindcss-rails", "~> 4.0"
+  spec.add_development_dependency "will_paginate", ">= 4.0.1"
 end

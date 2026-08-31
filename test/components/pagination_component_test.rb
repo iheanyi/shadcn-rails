@@ -189,46 +189,12 @@ class PaginationComponentTest < ViewComponent::TestCase
   # Tests for Pagination Gem Integration
   # ============================================
 
-  # Mock class that mimics Kaminari's collection API
-  class MockKaminariCollection
-    attr_reader :current_page, :total_pages, :prev_page, :next_page
-
-    def initialize(current_page:, total_pages:)
-      @current_page = current_page
-      @total_pages = total_pages
-      @prev_page = current_page > 1 ? current_page - 1 : nil
-      @next_page = current_page < total_pages ? current_page + 1 : nil
-    end
-  end
-
-  # Mock class that mimics will_paginate's collection API
-  class MockWillPaginateCollection
-    attr_reader :current_page, :total_pages, :previous_page, :next_page
-
-    def initialize(current_page:, total_pages:)
-      @current_page = current_page
-      @total_pages = total_pages
-      @previous_page = current_page > 1 ? current_page - 1 : nil
-      @next_page = current_page < total_pages ? current_page + 1 : nil
-    end
-  end
-
-  # Mock class that mimics Pagy's API
-  class MockPagy
-    attr_reader :page, :pages, :prev, :next
-
-    def initialize(page:, pages:)
-      @page = page
-      @pages = pages
-      @prev = page > 1 ? page - 1 : nil
-      @next = page < pages ? page + 1 : nil
-    end
-  end
-
   def test_renders_with_kaminari_collection
-    collection = MockKaminariCollection.new(current_page: 3, total_pages: 10)
+    collection = kaminari_collection(page: 3)
     render_inline(Shadcn::PaginationComponent.new(collection: collection))
 
+    assert_respond_to collection, :prev_page
+    refute_kind_of Struct, collection
     assert_selector "nav[role='navigation']"
     assert_selector "ul"
     # Should have Previous, page numbers, Next
@@ -239,9 +205,11 @@ class PaginationComponentTest < ViewComponent::TestCase
   end
 
   def test_renders_with_will_paginate_collection
-    collection = MockWillPaginateCollection.new(current_page: 5, total_pages: 20)
+    collection = will_paginate_collection(page: 5, total: 100)
     render_inline(Shadcn::PaginationComponent.new(collection: collection))
 
+    assert_respond_to collection, :previous_page
+    refute_kind_of Struct, collection
     assert_selector "nav[role='navigation']"
     assert_selector "ul"
     assert_selector "a", text: /Previous/
@@ -250,9 +218,10 @@ class PaginationComponentTest < ViewComponent::TestCase
   end
 
   def test_renders_with_pagy_object
-    pagy = MockPagy.new(page: 2, pages: 5)
+    pagy = pagy_object(page: 2, total: 25)
     render_inline(Shadcn::PaginationComponent.new(pagy: pagy))
 
+    assert_instance_of Pagy, pagy
     assert_selector "nav[role='navigation']"
     assert_selector "ul"
     assert_selector "a", text: /Previous/
@@ -261,7 +230,7 @@ class PaginationComponentTest < ViewComponent::TestCase
   end
 
   def test_hides_pagination_with_single_page
-    collection = MockKaminariCollection.new(current_page: 1, total_pages: 1)
+    collection = kaminari_collection(page: 1, total: 5)
     render_inline(Shadcn::PaginationComponent.new(collection: collection))
 
     # Should render empty when only one page
@@ -269,27 +238,71 @@ class PaginationComponentTest < ViewComponent::TestCase
   end
 
   def test_disables_previous_on_first_page
-    collection = MockKaminariCollection.new(current_page: 1, total_pages: 5)
+    collection = kaminari_collection(page: 1)
     render_inline(Shadcn::PaginationComponent.new(collection: collection))
 
+    assert_nil collection.prev_page
     # Previous should be disabled on first page
     assert_selector "span[aria-disabled='true']", text: /Previous/
+    assert_no_selector "a", text: /Previous/
     # Next should be a link
     assert_selector "a", text: /Next/
   end
 
-  def test_disables_next_on_last_page
-    collection = MockKaminariCollection.new(current_page: 5, total_pages: 5)
+  def test_disables_previous_on_first_page_with_pagy
+    pagy = pagy_object(page: 1)
+    render_inline(Shadcn::PaginationComponent.new(pagy: pagy))
+
+    assert_nil pagy.prev
+    assert_selector "span[aria-disabled='true']", text: /Previous/
+    assert_no_selector "a", text: /Previous/
+    assert_selector "a", text: /Next/
+  end
+
+  def test_disables_previous_on_first_page_with_will_paginate
+    collection = will_paginate_collection(page: 1)
     render_inline(Shadcn::PaginationComponent.new(collection: collection))
 
+    assert_nil collection.previous_page
+    assert_selector "span[aria-disabled='true']", text: /Previous/
+    assert_no_selector "a", text: /Previous/
+    assert_selector "a", text: /Next/
+  end
+
+  def test_disables_next_on_last_page
+    collection = kaminari_collection(page: 10)
+    render_inline(Shadcn::PaginationComponent.new(collection: collection))
+
+    assert_nil collection.next_page
     # Previous should be a link
     assert_selector "a", text: /Previous/
     # Next should be disabled on last page
     assert_selector "span[aria-disabled='true']", text: /Next/
+    assert_no_selector "a", text: /Next/
+  end
+
+  def test_disables_next_on_last_page_with_pagy
+    pagy = pagy_object(page: 10)
+    render_inline(Shadcn::PaginationComponent.new(pagy: pagy))
+
+    assert_nil pagy.next
+    assert_selector "a", text: /Previous/
+    assert_selector "span[aria-disabled='true']", text: /Next/
+    assert_no_selector "a", text: /Next/
+  end
+
+  def test_disables_next_on_last_page_with_will_paginate
+    collection = will_paginate_collection(page: 10)
+    render_inline(Shadcn::PaginationComponent.new(collection: collection))
+
+    assert_nil collection.next_page
+    assert_selector "a", text: /Previous/
+    assert_selector "span[aria-disabled='true']", text: /Next/
+    assert_no_selector "a", text: /Next/
   end
 
   def test_uses_custom_url_builder
-    collection = MockKaminariCollection.new(current_page: 2, total_pages: 5)
+    collection = kaminari_collection(page: 2, total: 25)
     url_builder = ->(page) { "/posts?page=#{page}&sort=date" }
     render_inline(Shadcn::PaginationComponent.new(collection: collection, url_builder: url_builder))
 
@@ -299,7 +312,7 @@ class PaginationComponentTest < ViewComponent::TestCase
   end
 
   def test_renders_ellipsis_for_many_pages
-    collection = MockKaminariCollection.new(current_page: 10, total_pages: 100)
+    collection = kaminari_collection(page: 10, total: 500)
     render_inline(Shadcn::PaginationComponent.new(collection: collection))
 
     # Should have ellipsis for pages gap
@@ -310,7 +323,7 @@ class PaginationComponentTest < ViewComponent::TestCase
   end
 
   def test_page_series_with_window
-    collection = MockKaminariCollection.new(current_page: 5, total_pages: 10)
+    collection = kaminari_collection(page: 5)
     render_inline(Shadcn::PaginationComponent.new(collection: collection, window: 1))
 
     # With window: 1, should show pages around current page
@@ -336,5 +349,27 @@ class PaginationComponentTest < ViewComponent::TestCase
     render_inline(Shadcn::PaginationComponent.new(data: { testid: "pagination" }))
 
     assert_selector "[data-testid='pagination']"
+  end
+
+  private
+
+  def pagination_records(total = 50)
+    Array.new(total) { |index| "Post #{index + 1}" }
+  end
+
+  def kaminari_collection(page:, total: 50, per_page: 5)
+    Kaminari.paginate_array(pagination_records(total)).page(page).per(per_page)
+  end
+
+  def pagy_object(page:, total: 50, per_page: 5)
+    Pagy.new(count: total, page: page, limit: per_page)
+  end
+
+  def will_paginate_collection(page:, total: 50, per_page: 5)
+    records = pagination_records(total)
+
+    WillPaginate::Collection.create(page, per_page, records.size) do |pager|
+      pager.replace(records[pager.offset, pager.per_page] || [])
+    end
   end
 end

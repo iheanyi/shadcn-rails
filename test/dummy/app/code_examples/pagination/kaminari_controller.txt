@@ -1,0 +1,8 @@
+class PostsController < ApplicationController
+  def index
+    @posts = Post.page(params[:page])
+
+    # For non-ActiveRecord arrays:
+    # @posts = Kaminari.paginate_array(fake_posts).page(params[:page]).per(5)
+  end
+end

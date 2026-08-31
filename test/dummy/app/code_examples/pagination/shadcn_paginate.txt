@@ -1,0 +1,5 @@
+<%= turbo_frame_tag "results" do %>
+  <%= render @posts %>
+
+  <%= shadcn_paginate @posts, url_builder: ->(page) { posts_path(page: page, anchor: "results") } %>
+<% end %>

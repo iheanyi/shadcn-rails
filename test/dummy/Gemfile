@@ -15,6 +15,11 @@ gem "puma"
 gem "sentry-ruby"
 gem "sentry-rails"
 
+# Real pagination integration demos for the dummy docs app
+gem "kaminari", ">= 1.2.2"
+gem "pagy", "~> 9.0"
+gem "will_paginate", ">= 4.0.1"
+
 # ViewComponent
 gem "view_component", ">= 3.0"
 gem "lookbook", ">= 2.0"
