@@ -93,7 +93,7 @@
 
           <div class="flex gap-2">
             <%= render Shadcn::Button.new(type: "submit", class: "px-8") { "Apply" } %>
-            <%= render Shadcn::Button.new(href: app_dashboard_path, variant: :outline, class: "p-0") { "Reset" } %>
+            <%= render Shadcn::Button.new(href: app_dashboard_path, variant: :outline) { "Reset" } %>
           </div>
         <% end %>
 
