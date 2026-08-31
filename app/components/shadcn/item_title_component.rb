@@ -3,10 +3,10 @@
 module Shadcn
   # Item Title component
   class ItemTitleComponent < BaseComponent
-    BASE_CLASSES = "text-sm font-medium leading-none"
+    BASE_CLASSES = "flex w-fit items-center gap-2 text-sm leading-snug font-medium"
 
     def call
-      content_tag(:div, content, class: merge_classes(BASE_CLASSES), **html_options.merge(build_data))
+      content_tag(:div, content, class: merge_classes(BASE_CLASSES), **merge_html_attributes({}, slot: "item-title"))
     end
   end
 end

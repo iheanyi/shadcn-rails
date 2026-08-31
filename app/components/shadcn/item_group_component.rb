@@ -3,7 +3,7 @@
 module Shadcn
   # Item Group component - container for grouping related items
   class ItemGroupComponent < BaseComponent
-    BASE_CLASSES = "flex flex-col"
+    BASE_CLASSES = "group/item-group flex flex-col"
 
     # Items in the group
     renders_many :items, lambda { |variant: :default, size: :default, **options|
@@ -16,9 +16,21 @@ module Shadcn
     }
 
     def call
-      content_tag(:div, class: merge_classes(BASE_CLASSES), **html_options.merge(build_data)) do
+      content_tag(:div, **group_attributes) do
         safe_join([items, separators, content].flatten.compact)
       end
+    end
+
+    private
+
+    def group_attributes
+      merge_html_attributes(
+        {
+          class: merge_classes(BASE_CLASSES),
+          role: "list"
+        },
+        slot: "item-group"
+      )
     end
   end
 end

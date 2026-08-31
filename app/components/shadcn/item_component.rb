@@ -26,16 +26,16 @@ module Shadcn
   class ItemComponent < BaseComponent
     VARIANTS = {
       default: "bg-transparent",
-      outline: "border border-border rounded-lg",
-      muted: "bg-muted/50 rounded-lg"
+      outline: "border-border",
+      muted: "bg-muted/50"
     }.freeze
 
     SIZES = {
       default: "p-4 gap-4",
-      sm: "p-3 gap-3"
+      sm: "gap-2.5 px-4 py-3"
     }.freeze
 
-    BASE_CLASSES = "flex items-start"
+    BASE_CLASSES = "group/item flex flex-wrap items-center rounded-md border border-transparent text-sm transition-colors duration-100 outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-accent/50"
 
     # Media slot for icons, images, or avatars
     renders_one :media, lambda { |variant: :default, **options|
@@ -89,10 +89,10 @@ module Shadcn
 
     def item_attributes
       attrs = {
-        class: cn(BASE_CLASSES, VARIANTS[@variant], SIZES[@size], class_name)
-      }
-      attrs[:href] = @href if @href
-      attrs.merge(html_options).merge(build_data)
+        class: merge_classes(cn(BASE_CLASSES, VARIANTS[@variant], SIZES[@size])),
+        href: @href
+      }.compact
+      merge_html_attributes(attrs, slot: "item", variant: @variant, size: @size)
     end
   end
 end

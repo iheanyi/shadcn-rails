@@ -3,10 +3,22 @@
 module Shadcn
   # Item Separator component - visual divider between items
   class ItemSeparatorComponent < BaseComponent
-    BASE_CLASSES = "shrink-0 bg-border h-[1px] w-full"
+    # ItemSeparator shares Separator's orientation-aware v4 classes.
+    BASE_CLASSES = "my-0"
+
+    def initialize(decorative: false, **options)
+      super(**options)
+      @decorative = decorative
+    end
 
     def call
-      content_tag(:div, "", class: merge_classes(BASE_CLASSES), role: "separator", **html_options.merge(build_data))
+      SeparatorComponent.new(
+        orientation: :horizontal,
+        decorative: @decorative,
+        class_name: cn(BASE_CLASSES, class_name),
+        data: data,
+        **html_options
+      ).render_in(view_context)
     end
   end
 end
