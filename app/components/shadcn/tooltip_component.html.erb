@@ -16,5 +16,6 @@
        data-state="closed"
        hidden>
     <%= ERB::Util.html_escape_once(@tooltip_content) %>
+    <div class="<%= tooltip_arrow_classes %>" aria-hidden="true" data-slot="tooltip-arrow"></div>
   </div>
 </span>
