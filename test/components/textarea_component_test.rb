@@ -7,7 +7,7 @@ class TextareaComponentTest < ViewComponent::TestCase
     render_inline(Shadcn::TextareaComponent.new)
 
     assert_selector "textarea"
-    assert_selector "textarea.flex.min-h-\\[60px\\].w-full.rounded-md"
+    assert_selector "textarea.flex.field-sizing-content.min-h-16.w-full.rounded-md[data-slot='textarea']"
   end
 
   def test_renders_with_placeholder
@@ -75,5 +75,21 @@ class TextareaComponentTest < ViewComponent::TestCase
     assert_includes classes, "focus-visible:ring-[3px]"
     refute_includes classes, "focus-visible:ring-1"
     refute_includes classes, "focus-visible:outline-none"
+  end
+
+  def test_uses_new_york_v4_classes
+    render_inline(Shadcn::TextareaComponent.new)
+
+    classes = page.find("textarea")[:class]
+    assert_includes classes, "field-sizing-content"
+    assert_includes classes, "min-h-16"
+    assert_includes classes, "shadow-xs"
+    assert_includes classes, "dark:bg-input/30"
+    assert_includes classes, "aria-invalid:border-destructive"
+    assert_includes classes, "aria-invalid:ring-destructive/20"
+    assert_includes classes, "dark:aria-invalid:ring-destructive/40"
+    assert_includes classes, "transition-[color,box-shadow]"
+    refute_includes classes, "min-h-[60px]"
+    refute_includes classes, "shadow-sm"
   end
 end

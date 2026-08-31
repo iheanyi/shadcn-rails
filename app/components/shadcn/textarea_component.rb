@@ -11,7 +11,7 @@ module Shadcn
   #   <%= render Shadcn::TextareaComponent.new(name: "message", rows: 6) %>
   #
   class TextareaComponent < BaseComponent
-    BASE_CLASSES = "flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+    BASE_CLASSES = "flex field-sizing-content min-h-16 w-full rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:aria-invalid:ring-destructive/40"
 
     # @param name [String, nil] Textarea name attribute
     # @param id [String, nil] Textarea id attribute
@@ -59,7 +59,7 @@ module Shadcn
 
     def textarea_attributes
       html_options
-        .merge(build_data)
+        .merge(build_data(slot: "textarea"))
         .merge(
           name: @name,
           id: @id,
