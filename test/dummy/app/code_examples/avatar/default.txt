@@ -1,1 +1,4 @@
-<%= render Shadcn::AvatarComponent.new( src: "https://github.com/shadcn.png", alt: "shadcn" ) %>
+<%= render Shadcn::AvatarComponent.new(
+  src: "https://github.com/shadcn.png",
+  alt: "shadcn"
+) %>

@@ -24,15 +24,15 @@ module Shadcn
       AvatarFallbackComponent.new(class: binding.local_variable_get(:class), **options, &block)
     }
     SIZES = {
-      sm: "h-8 w-8 text-xs",
-      default: "h-10 w-10 text-sm",
-      lg: "h-12 w-12 text-base",
-      xl: "h-16 w-16 text-lg"
+      sm: nil,
+      default: nil,
+      lg: nil,
+      xl: "size-16"
     }.freeze
 
-    BASE_CLASSES = "relative flex shrink-0 overflow-hidden rounded-full"
-    IMAGE_CLASSES = "aspect-square h-full w-full"
-    FALLBACK_CLASSES = "flex h-full w-full items-center justify-center rounded-full bg-muted"
+    BASE_CLASSES = "group/avatar relative flex size-8 shrink-0 overflow-hidden rounded-full select-none data-[size=lg]:size-10 data-[size=sm]:size-6"
+    IMAGE_CLASSES = "aspect-square size-full"
+    FALLBACK_CLASSES = "flex size-full items-center justify-center rounded-full bg-muted text-sm text-muted-foreground group-data-[size=sm]/avatar:text-xs"
 
     # @param src [String, nil] Image URL
     # @param alt [String] Alt text for the image
