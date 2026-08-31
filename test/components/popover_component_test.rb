@@ -43,6 +43,39 @@ class PopoverComponentTest < ViewComponent::TestCase
     assert_selector "[data-shadcn--popover-target='content']", visible: false
   end
 
+  def test_renders_new_york_v4_content_classes
+    render_inline(Shadcn::PopoverComponent.new) do |popover|
+      popover.with_body { "Popover content" }
+    end
+
+    classes = page.find("[data-shadcn--popover-target='content']", visible: false)["class"].split
+
+    assert_includes classes, "z-50"
+    assert_includes classes, "w-72"
+    assert_includes classes, "rounded-md"
+    assert_includes classes, "border"
+    assert_includes classes, "bg-popover"
+    assert_includes classes, "p-4"
+    assert_includes classes, "text-popover-foreground"
+    assert_includes classes, "shadow-md"
+    assert_includes classes, "outline-hidden"
+    assert_includes classes, "data-[side=bottom]:slide-in-from-top-2"
+    assert_includes classes, "data-[side=left]:slide-in-from-right-2"
+    assert_includes classes, "data-[side=right]:slide-in-from-left-2"
+    assert_includes classes, "data-[side=top]:slide-in-from-bottom-2"
+    assert_includes classes, "data-[state=closed]:animate-out"
+    assert_includes classes, "data-[state=closed]:fade-out-0"
+    assert_includes classes, "data-[state=closed]:zoom-out-95"
+    assert_includes classes, "data-[state=open]:animate-in"
+    assert_includes classes, "data-[state=open]:fade-in-0"
+    assert_includes classes, "data-[state=open]:zoom-in-95"
+
+    refute_includes classes, "outline-none"
+    refute_includes classes, "origin-(--radix-popover-content-transform-origin)"
+    refute_includes classes, "data-[size=default]"
+    refute_includes classes, "shadcn-popover"
+  end
+
   # Open state
   def test_renders_closed_by_default
     render_inline(Shadcn::PopoverComponent.new)
