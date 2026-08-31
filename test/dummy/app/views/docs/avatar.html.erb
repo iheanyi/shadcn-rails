@@ -22,7 +22,13 @@
   </div>
 
   <!-- Preview -->
-  <%= showcase("avatar", :default) %>
+  <%= render "docs/demo_card" do %>
+    <%= render Shadcn::AvatarComponent.new(
+      src: "https://github.com/shadcn.png",
+      alt: "shadcn"
+    ) %>
+  <% end %>
+  <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/avatar/default.txt")) %>
 
   <!-- Installation -->
   <div id="installation" class="space-y-4">
@@ -175,25 +181,62 @@
     <!-- With Fallback -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">With Fallback</h3>
-      <%= showcase("avatar", :with_fallback) %>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::AvatarComponent.new(
+          src: "https://invalid-url-for-demo.png",
+          alt: "John Doe",
+          fallback: "JD"
+        ) %>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/avatar/with_fallback.txt")) %>
     </div>
 
     <!-- Fallback Only -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Fallback Only</h3>
-      <%= showcase("avatar", :fallback_only) %>
+      <%= render "docs/demo_card" do %>
+        <%= render Shadcn::AvatarComponent.new(alt: "Jane Smith") %>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/avatar/fallback_only.txt")) %>
     </div>
 
     <!-- Custom Fallback with Slot -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Custom Fallback with Slot</h3>
-      <%= showcase("avatar", :custom_fallback_with_slot) %>
+      <%= render "docs/demo_card" do %>
+        <%= render(Shadcn::AvatarComponent.new(size: :lg)) do |avatar| %>
+          <% avatar.with_fallback { "CN" } %>
+        <% end %>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/avatar/custom_fallback_with_slot.txt")) %>
     </div>
 
     <!-- Multiple Avatars -->
     <div class="space-y-4">
       <h3 class="text-lg font-semibold">Multiple Avatars</h3>
-      <%= showcase("avatar", :multiple_avatars) %>
+      <%= render "docs/demo_card" do %>
+        <div class="flex items-center gap-4">
+          <%= render Shadcn::AvatarComponent.new(
+            src: "https://github.com/shadcn.png",
+            alt: "shadcn",
+            size: :sm
+          ) %>
+          <%= render Shadcn::AvatarComponent.new(
+            src: "https://github.com/vercel.png",
+            alt: "vercel",
+            size: :default
+          ) %>
+          <%= render Shadcn::AvatarComponent.new(
+            alt: "Jane Doe",
+            size: :lg
+          ) %>
+          <%= render Shadcn::AvatarComponent.new(
+            alt: "Alex Smith",
+            size: :xl
+          ) %>
+        </div>
+      <% end %>
+      <%= render "docs/code_example", language: "erb", code: File.read(Rails.root.join("app/code_examples/avatar/multiple_avatars.txt")) %>
     </div>
 
   <!-- API Reference -->
@@ -221,23 +264,23 @@
           <tbody>
             <tr class="border-b">
               <td class="p-3 text-sm font-mono">:sm</td>
-              <td class="p-3 text-sm">32x32px (h-8 w-8)</td>
-              <td class="p-3 text-sm">text-xs</td>
+              <td class="p-3 text-sm">24x24px (size-6)</td>
+              <td class="p-3 text-sm">text-xs via fallback group data</td>
             </tr>
             <tr class="border-b">
               <td class="p-3 text-sm font-mono">:default</td>
-              <td class="p-3 text-sm">40x40px (h-10 w-10)</td>
+              <td class="p-3 text-sm">32x32px (size-8)</td>
               <td class="p-3 text-sm">text-sm</td>
             </tr>
             <tr class="border-b">
               <td class="p-3 text-sm font-mono">:lg</td>
-              <td class="p-3 text-sm">48x48px (h-12 w-12)</td>
-              <td class="p-3 text-sm">text-base</td>
+              <td class="p-3 text-sm">40x40px (size-10)</td>
+              <td class="p-3 text-sm">text-sm</td>
             </tr>
             <tr>
               <td class="p-3 text-sm font-mono">:xl</td>
-              <td class="p-3 text-sm">64x64px (h-16 w-16)</td>
-              <td class="p-3 text-sm">text-lg</td>
+              <td class="p-3 text-sm">64x64px (size-16)</td>
+              <td class="p-3 text-sm">text-sm</td>
             </tr>
           </tbody>
         </table>

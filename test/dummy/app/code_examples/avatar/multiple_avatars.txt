@@ -1,19 +1,20 @@
-<div class="flex -space-x-4">
+<div class="flex items-center gap-4">
   <%= render Shadcn::AvatarComponent.new(
     src: "https://github.com/shadcn.png",
-    alt: "User 1",
-    class_name: "border-2 border-background"
+    alt: "shadcn",
+    size: :sm
   ) %>
   <%= render Shadcn::AvatarComponent.new(
-    fallback: "JD",
-    class_name: "border-2 border-background"
+    src: "https://github.com/vercel.png",
+    alt: "vercel",
+    size: :default
   ) %>
   <%= render Shadcn::AvatarComponent.new(
-    fallback: "AB",
-    class_name: "border-2 border-background"
+    alt: "Jane Doe",
+    size: :lg
   ) %>
   <%= render Shadcn::AvatarComponent.new(
-    fallback: "+3",
-    class_name: "border-2 border-background"
+    alt: "Alex Smith",
+    size: :xl
   ) %>
 </div>
