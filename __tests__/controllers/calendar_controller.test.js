@@ -228,11 +228,17 @@ describe("CalendarController", () => {
 
       const grid = element.querySelector('[data-calendar-target="grid"]')
       const dayButton = grid.querySelector('button[data-date]')
+      expect(dayButton.classList).toContain("min-w-(--cell-size)")
+      expect(dayButton.classList).toContain("size-auto")
       expect(dayButton.classList).toContain("focus-visible:border-ring")
       expect(dayButton.classList).toContain("focus-visible:ring-[3px]")
       expect(dayButton.classList).toContain("focus-visible:ring-ring/50")
       expect(dayButton.classList).not.toContain("focus:ring-1")
       expect(dayButton.classList).not.toContain("focus:outline-none")
+      expect(dayButton.classList).not.toContain("h-8")
+      expect(dayButton.classList).not.toContain("w-8")
+      expect(dayButton.dataset.slot).toBe("button")
+      expect(dayButton.dataset.day).toBe(dayButton.dataset.date)
     })
 
     test("marks today with special styling", () => {
@@ -930,7 +936,7 @@ describe("CalendarController", () => {
       const grid = element.querySelector('[data-calendar-target="grid"]')
 
       // November 2024 starts on Friday, so first 5 cells should be empty divs
-      const emptyDivs = grid.querySelectorAll('div.h-8.w-8:not([data-date])')
+      const emptyDivs = grid.querySelectorAll('div.invisible:not([data-date])')
       expect(emptyDivs.length).toBeGreaterThan(0)
 
       // First day button should be November 1
@@ -975,7 +981,7 @@ describe("CalendarController", () => {
       expect(firstButton.dataset.date).toBe("2024-11-01")
 
       // Verify empty divs are still present
-      const emptyDivs = grid.querySelectorAll('div.h-8.w-8:not([data-date])')
+      const emptyDivs = grid.querySelectorAll('div.invisible:not([data-date])')
       expect(emptyDivs.length).toBeGreaterThan(0)
     })
 
@@ -1360,14 +1366,16 @@ describe("CalendarController", () => {
       expect(endButton.classList.contains("rounded-r-md")).toBe(true)
     })
 
-    test("dates in range have accent background", () => {
+    test("dates in range have upstream accent background", () => {
       controller.rangeStart = new Date(2024, 10, 10)
       controller.rangeEnd = new Date(2024, 10, 15)
       controller.render()
 
       // Nov 12 is in the middle of the range
       const middleButton = element.querySelector('[data-date="2024-11-12"]')
-      expect(middleButton.classList.contains("bg-accent/50")).toBe(true)
+      expect(middleButton.classList.contains("bg-accent")).toBe(true)
+      expect(middleButton.classList.contains("bg-accent/50")).toBe(false)
+      expect(middleButton.dataset.rangeMiddle).toBe("true")
     })
 
     test("range mode snapshot", () => {

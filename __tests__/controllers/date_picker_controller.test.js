@@ -309,11 +309,17 @@ describe("DatePickerController", () => {
 
       const grid = element.querySelector('[data-date-picker-target="grid"]')
       const dayButton = grid.querySelector('button[data-date]')
+      expect(dayButton.classList).toContain("min-w-(--cell-size)")
+      expect(dayButton.classList).toContain("size-auto")
       expect(dayButton.classList).toContain("focus-visible:border-ring")
       expect(dayButton.classList).toContain("focus-visible:ring-[3px]")
       expect(dayButton.classList).toContain("focus-visible:ring-ring/50")
       expect(dayButton.classList).not.toContain("focus:ring-1")
       expect(dayButton.classList).not.toContain("focus:outline-none")
+      expect(dayButton.classList).not.toContain("h-8")
+      expect(dayButton.classList).not.toContain("w-8")
+      expect(dayButton.dataset.slot).toBe("button")
+      expect(dayButton.dataset.day).toBe(dayButton.dataset.date)
     })
   })
 
@@ -558,7 +564,7 @@ describe("DatePickerController", () => {
       expect(firstButton.dataset.date).toBe("2024-11-01")
 
       // Empty divs should exist for October days
-      const emptyDivs = grid.querySelectorAll('div.h-8.w-8:not([data-date])')
+      const emptyDivs = grid.querySelectorAll('div.invisible:not([data-date])')
       expect(emptyDivs.length).toBeGreaterThan(0)
     })
 
