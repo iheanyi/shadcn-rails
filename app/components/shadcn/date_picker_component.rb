@@ -103,12 +103,13 @@ module Shadcn
       content_tag(:button,
         trigger_content,
         type: "button",
-        class: cn(TRIGGER_CLASSES, ("cursor-not-allowed opacity-50" if @disabled)),
+        class: cn(TRIGGER_CLASSES, "data-[empty=true]:text-muted-foreground", ("cursor-not-allowed opacity-50" if @disabled)),
         disabled: @disabled || nil,
         "aria-haspopup": "dialog",
         "aria-expanded": "false",
         data: {
           slot: "button",
+          empty: @selected ? nil : true,
           "shadcn--date-picker-target": "trigger",
           action: "click->shadcn--date-picker#toggle"
         }
@@ -148,7 +149,7 @@ module Shadcn
       if @selected
         content_tag(:span, format_date(@selected), data: { "shadcn--date-picker-target": "displayValue" })
       else
-        content_tag(:span, @placeholder, class: PLACEHOLDER_CLASSES, data: { "shadcn--date-picker-target": "displayValue" })
+        content_tag(:span, @placeholder, data: { "shadcn--date-picker-target": "displayValue" })
       end
     end
 
@@ -271,27 +272,29 @@ module Shadcn
       classes << CalendarComponent::DAY_OUTSIDE_CLASSES if is_outside
       classes << CalendarComponent::DAY_DISABLED_CLASSES if is_disabled
 
-      content_tag(:button,
-        date.day.to_s,
-        type: "button",
-        class: cn(*classes),
-        tabindex: is_disabled ? "-1" : "0",
-        "aria-selected": is_selected || nil,
-        "aria-disabled": is_disabled || nil,
-        disabled: is_disabled || nil,
-        data: {
-          slot: "button",
-          day: date.iso8601,
-          date: date.iso8601,
-          selected_single: is_selected || nil,
-          "shadcn--date-picker-target": "day",
-          action: is_disabled ? nil : "click->shadcn--date-picker#selectDay"
-        }.compact
-      )
+      content_tag(:div, class: CalendarComponent::DAY_WRAPPER_CLASSES, data: { selected: is_selected || nil }) do
+        content_tag(:button,
+          date.day.to_s,
+          type: "button",
+          class: cn(*classes),
+          tabindex: is_disabled ? "-1" : "0",
+          "aria-selected": is_selected || nil,
+          "aria-disabled": is_disabled || nil,
+          disabled: is_disabled || nil,
+          data: {
+            slot: "button",
+            day: date.iso8601,
+            date: date.iso8601,
+            selected_single: is_selected || nil,
+            "shadcn--date-picker-target": "day",
+            action: is_disabled ? nil : "click->shadcn--date-picker#selectDay"
+          }.compact
+        )
+      end
     end
 
     def empty_day
-      content_tag(:div, "", class: "invisible")
+      content_tag(:div, "", class: "invisible size-(--cell-size) min-w-(--cell-size) flex-1")
     end
 
     def date_disabled?(date)

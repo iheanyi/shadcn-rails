@@ -221,6 +221,12 @@ describe("CalendarController", () => {
       // Should be between 28 and 42 days depending on month layout
       expect(dayButtons.length).toBeGreaterThanOrEqual(28)
       expect(dayButtons.length).toBeLessThanOrEqual(42)
+
+      const weekRows = Array.from(grid.children)
+      expect(weekRows.length).toBeGreaterThan(0)
+      expect(weekRows.every(row => row.classList.contains("mt-2") && row.classList.contains("flex") && row.classList.contains("w-full"))).toBe(true)
+      expect(weekRows[0].children.length).toBe(7)
+      expect(weekRows.some(row => row.matches("button[data-date]"))).toBe(false)
     })
 
     test("renders day buttons with focus-visible ring styles", () => {
@@ -239,6 +245,8 @@ describe("CalendarController", () => {
       expect(dayButton.classList).not.toContain("w-8")
       expect(dayButton.dataset.slot).toBe("button")
       expect(dayButton.dataset.day).toBe(dayButton.dataset.date)
+      expect(dayButton.parentElement.classList).toContain("group/day")
+      expect(dayButton.parentElement.classList).toContain("flex-1")
     })
 
     test("marks today with special styling", () => {
@@ -938,6 +946,9 @@ describe("CalendarController", () => {
       // November 2024 starts on Friday, so first 5 cells should be empty divs
       const emptyDivs = grid.querySelectorAll('div.invisible:not([data-date])')
       expect(emptyDivs.length).toBeGreaterThan(0)
+      expect(emptyDivs[0].classList).toContain("size-(--cell-size)")
+      expect(emptyDivs[0].classList).toContain("min-w-(--cell-size)")
+      expect(emptyDivs[0].classList).toContain("flex-1")
 
       // First day button should be November 1
       const firstButton = grid.querySelector('button[data-date]')
@@ -983,6 +994,9 @@ describe("CalendarController", () => {
       // Verify empty divs are still present
       const emptyDivs = grid.querySelectorAll('div.invisible:not([data-date])')
       expect(emptyDivs.length).toBeGreaterThan(0)
+      expect(emptyDivs[0].classList).toContain("size-(--cell-size)")
+      expect(emptyDivs[0].classList).toContain("min-w-(--cell-size)")
+      expect(emptyDivs[0].classList).toContain("flex-1")
     })
 
     test("showOutsideDays: true (default) shows outside days", () => {

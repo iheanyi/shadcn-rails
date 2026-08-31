@@ -84,6 +84,9 @@ class CalendarComponentTest < ViewComponent::TestCase
     refute_includes classes, "w-8"
 
     assert_selector "button[data-slot='button'][data-day][data-shadcn--calendar-target='day']"
+    wrapper_classes = page.first("button[data-shadcn--calendar-target='day']").find(:xpath, "./parent::div")["class"].split
+    assert_includes wrapper_classes, "group/day"
+    assert_includes wrapper_classes, "flex-1"
   end
 
   def test_month_year_selects_use_focus_visible_ring_styles
@@ -196,6 +199,11 @@ class CalendarComponentTest < ViewComponent::TestCase
     assert_no_selector "button[data-date='2024-05-26']"
     # Should have empty placeholders instead
     assert_selector "div.invisible"
+    classes = page.first("div.invisible")["class"].split
+    assert_includes classes, "size-(--cell-size)"
+    assert_includes classes, "min-w-(--cell-size)"
+    assert_includes classes, "flex-1"
+    refute_includes rendered_content, 'class="invisible"></div>'
   end
 
   def test_passes_stimulus_data_attributes

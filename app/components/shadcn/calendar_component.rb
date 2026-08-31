@@ -23,6 +23,7 @@ module Shadcn
       "size-(--cell-size) p-0 select-none aria-disabled:opacity-50"
     ].join(" ")
     WEEKDAY_CLASSES = "flex-1 rounded-md text-[0.8rem] font-normal text-muted-foreground select-none"
+    DAY_WRAPPER_CLASSES = "group/day relative aspect-square h-full w-full flex-1 p-0 text-center select-none [&:last-child[data-selected=true]_button]:rounded-r-md [&:first-child[data-selected=true]_button]:rounded-l-md"
     DAY_CLASSES = [
       Shadcn::ButtonComponent::BASE_CLASSES,
       Shadcn::ButtonComponent::VARIANTS[:ghost],
@@ -112,7 +113,7 @@ module Shadcn
         name: @name,
         value: @selected&.iso8601,
         data: { "shadcn--calendar-target": "hiddenInput" }
-      )
+      end
     end
 
     def header
@@ -245,27 +246,29 @@ module Shadcn
       classes << DAY_OUTSIDE_CLASSES if is_outside
       classes << DAY_DISABLED_CLASSES if is_disabled
 
-      content_tag(:button,
-        date.day.to_s,
-        type: "button",
-        class: cn(*classes),
-        tabindex: is_disabled ? "-1" : "0",
-        "aria-selected": is_selected || nil,
-        "aria-disabled": is_disabled || nil,
-        disabled: is_disabled || nil,
-        data: {
-          slot: "button",
-          day: date.to_fs(:db),
-          date: date.iso8601,
-          selected_single: is_selected || nil,
-          "shadcn--calendar-target": "day",
-          action: is_disabled ? nil : "click->shadcn--calendar#selectDay"
-        }.compact
-      )
+      content_tag(:div, class: DAY_WRAPPER_CLASSES, data: { selected: is_selected || nil }) do
+        content_tag(:button,
+          date.day.to_s,
+          type: "button",
+          class: cn(*classes),
+          tabindex: is_disabled ? "-1" : "0",
+          "aria-selected": is_selected || nil,
+          "aria-disabled": is_disabled || nil,
+          disabled: is_disabled || nil,
+          data: {
+            slot: "button",
+            day: date.to_fs(:db),
+            date: date.iso8601,
+            selected_single: is_selected || nil,
+            "shadcn--calendar-target": "day",
+            action: is_disabled ? nil : "click->shadcn--calendar#selectDay"
+          }.compact
+        )
+      end
     end
 
     def empty_day
-      content_tag(:div, "", class: "invisible")
+      content_tag(:div, "", class: "invisible size-(--cell-size) min-w-(--cell-size) flex-1")
     end
 
     def date_disabled?(date)

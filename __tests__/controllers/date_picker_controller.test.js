@@ -302,6 +302,12 @@ describe("DatePickerController", () => {
       const dayButtons = grid.querySelectorAll('button[data-date]')
       expect(dayButtons.length).toBeGreaterThanOrEqual(28)
       expect(dayButtons.length).toBeLessThanOrEqual(42)
+
+      const weekRows = Array.from(grid.children)
+      expect(weekRows.length).toBeGreaterThan(0)
+      expect(weekRows.every(row => row.classList.contains("mt-2") && row.classList.contains("flex") && row.classList.contains("w-full"))).toBe(true)
+      expect(weekRows[0].children.length).toBe(7)
+      expect(weekRows.some(row => row.matches("button[data-date]"))).toBe(false)
     })
 
     test("renders day buttons with focus-visible ring styles", () => {
@@ -320,6 +326,8 @@ describe("DatePickerController", () => {
       expect(dayButton.classList).not.toContain("w-8")
       expect(dayButton.dataset.slot).toBe("button")
       expect(dayButton.dataset.day).toBe(dayButton.dataset.date)
+      expect(dayButton.parentElement.classList).toContain("group/day")
+      expect(dayButton.parentElement.classList).toContain("flex-1")
     })
   })
 
@@ -382,6 +390,7 @@ describe("DatePickerController", () => {
       expect(controller.selectedDate.getDate()).toBe(15)
       expect(controller.selectedDate.getMonth()).toBe(10)
       expect(controller.selectedValue).toBe("2024-11-15")
+      expect(element.querySelector('[data-date-picker-target="trigger"]').dataset.empty).toBe("false")
     })
 
     test("initializing with a selected value preserves the correct day", async () => {
@@ -566,6 +575,9 @@ describe("DatePickerController", () => {
       // Empty divs should exist for October days
       const emptyDivs = grid.querySelectorAll('div.invisible:not([data-date])')
       expect(emptyDivs.length).toBeGreaterThan(0)
+      expect(emptyDivs[0].classList).toContain("size-(--cell-size)")
+      expect(emptyDivs[0].classList).toContain("min-w-(--cell-size)")
+      expect(emptyDivs[0].classList).toContain("flex-1")
     })
 
     test("showOutsideDays persists after month navigation", async () => {

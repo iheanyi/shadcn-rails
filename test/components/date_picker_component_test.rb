@@ -33,7 +33,9 @@ class DatePickerComponentTest < ViewComponent::TestCase
     render_inline(Shadcn::DatePickerComponent.new(placeholder: "Select a date"))
 
     assert_text "Select a date"
-    assert_selector ".text-muted-foreground"
+    assert_selector "button[data-shadcn--date-picker-target='trigger'][data-empty='true']"
+    assert_includes page.find("button[data-shadcn--date-picker-target='trigger']")["class"], "data-[empty=true]:text-muted-foreground"
+    refute_includes page.find("span[data-shadcn--date-picker-target='displayValue']")["class"].to_s, "text-muted-foreground"
   end
 
   def test_renders_selected_date
@@ -42,6 +44,7 @@ class DatePickerComponentTest < ViewComponent::TestCase
 
     # Default medium format
     assert_text "June 15, 2024"
+    assert_no_selector "button[data-shadcn--date-picker-target='trigger'][data-empty='true']"
   end
 
   def test_renders_short_date_format
@@ -114,6 +117,7 @@ class DatePickerComponentTest < ViewComponent::TestCase
     assert_includes rendered_content, "data-shadcn--date-picker-target=\"day\""
     assert_includes rendered_content, "data-date=\"2024-06-15\""
     assert_includes rendered_content, "data-date=\"2024-06-01\""
+    assert_includes rendered_content, "mt-2 flex w-full"
   end
 
   def test_day_buttons_use_v4_focus_visible_ring_styles
@@ -129,6 +133,14 @@ class DatePickerComponentTest < ViewComponent::TestCase
     refute_includes rendered_content, "h-8 w-8"
     assert_includes rendered_content, 'data-slot="button"'
     assert_includes rendered_content, "data-day="
+    assert_includes rendered_content, "group/day"
+  end
+
+  def test_hidden_outside_days_keep_cell_width
+    render_inline(Shadcn::DatePickerComponent.new(month: Date.new(2024, 6, 1), show_outside_days: false))
+
+    assert_includes rendered_content, "invisible size-(--cell-size) min-w-(--cell-size) flex-1"
+    refute_includes rendered_content, 'class="invisible"></div>'
   end
 
   def test_renders_hidden_input_with_name
