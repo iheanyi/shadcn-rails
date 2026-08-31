@@ -48,12 +48,23 @@ class DocsParityTest < ViewComponent::TestCase
   end
 
   def test_dummy_app_layouts_link_compiled_tailwind_stylesheet
-    %w[application.html.erb app.html.erb].each do |layout_name|
+    %w[application.html.erb].each do |layout_name|
       layout = File.read(Rails.root.join("app/views/layouts/#{layout_name}"))
 
       assert_compiled_tailwind_and_components_css(layout)
       refute_includes layout, "tailwind.config"
     end
+
+    app_layout = File.read(Rails.root.join("app/views/layouts/app.html.erb"))
+
+    assert_includes app_layout, 'stylesheet_link_tag "tailwind"'
+    assert_includes app_layout, 'stylesheet_link_tag "shadcn/components"'
+    assert_includes app_layout, 'javascript_include_tag "application", "data-turbo-track": "reload", type: "module"'
+    assert_includes app_layout, "shadcn_theme"
+    refute_includes app_layout, "cdn.tailwindcss.com"
+    refute_includes app_layout, "unpkg.com/@hotwired/stimulus"
+    refute_includes app_layout, "tailwind.config"
+    refute_includes app_layout, 'File.read(Shadcn::Rails::Registry.gem_path("app/assets/stylesheets/shadcn/components.css")).html_safe'
   end
 
   def test_docs_controller_entries_match_registry_keys
