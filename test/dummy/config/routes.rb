@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   root "pages#index"
 
   get "components", to: "pages#components"
-  get "showcase", to: "pages#showcase"
+  get "showcase", to: redirect("/docs/components", status: 301)
   get "themes", to: "pages#themes"
   get "customization", to: "pages#customization"
   get "buttons", to: "pages#buttons"

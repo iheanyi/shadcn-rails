@@ -21,8 +21,8 @@ The documentation site will be available at `http://localhost:3000/docs`
 
 - `/` - Landing page
 - `/docs` - Documentation introduction
+- `/docs/components` - Component index with live examples
 - `/docs/components/{name}` - Individual component documentation
-- `/showcase` - Component showcase page
 
 ## Directory Structure
 
