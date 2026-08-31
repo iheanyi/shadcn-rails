@@ -10,6 +10,35 @@ class ToggleGroupComponentTest < ViewComponent::TestCase
     assert_selector "div[data-controller='shadcn--toggle-group']"
   end
 
+  def test_renders_new_york_v4_group_wrapper_classes
+    render_inline(Shadcn::ToggleGroupComponent.new)
+
+    group = page.find("div[role='group']")
+    classes = group[:class]
+
+    assert_includes classes, "group/toggle-group"
+    assert_includes classes, "flex"
+    assert_includes classes, "w-fit"
+    assert_includes classes, "items-center"
+    assert_includes classes, "gap-[--spacing(var(--gap))]"
+    assert_includes classes, "rounded-md"
+    assert_includes classes, "data-[spacing=default]:data-[variant=outline]:shadow-xs"
+    refute_includes classes, "inline-flex"
+    refute_includes classes, "justify-center"
+    refute_includes classes, "gap-1"
+    refute_includes classes, "rounded-lg"
+  end
+
+  def test_renders_new_york_v4_group_data_attributes
+    render_inline(Shadcn::ToggleGroupComponent.new(variant: :outline, size: :sm, spacing: 2))
+
+    assert_selector "div[data-slot='toggle-group']"
+    assert_selector "div[data-variant='outline']"
+    assert_selector "div[data-size='sm']"
+    assert_selector "div[data-spacing='2']"
+    assert_selector "div[style='--gap: 2;']"
+  end
+
   def test_renders_with_items
     render_inline(Shadcn::ToggleGroupComponent.new) do |group|
       group.with_item(value: "left") { "L" }

@@ -19,7 +19,7 @@ module Shadcn
   #   <% end %>
   #
   class ToggleGroupComponent < BaseComponent
-    BASE_CLASSES = "inline-flex items-center justify-center gap-1 rounded-lg"
+    BASE_CLASSES = "group/toggle-group flex w-fit items-center gap-[--spacing(var(--gap))] rounded-md data-[spacing=default]:data-[variant=outline]:shadow-xs"
 
     renders_many :items, ->(value:, pressed: false, disabled: false, aria_label: nil, **options, &block) do
       ToggleGroupItemComponent.new(
@@ -38,12 +38,14 @@ module Shadcn
     # @param type [Symbol] :single or :multiple selection mode
     # @param variant [Symbol] :default or :outline
     # @param size [Symbol] :sm, :default, or :lg
+    # @param spacing [Integer] Gap token value for spacing between items
     # @param value [String, Array] Currently selected value(s)
     # @param name [String] Form field name
     def initialize(
       type: :single,
       variant: :default,
       size: :default,
+      spacing: 0,
       value: nil,
       name: nil,
       **options
@@ -52,6 +54,7 @@ module Shadcn
       @type = type
       @variant = variant
       @size = size
+      @spacing = spacing
       @value = value
       @name = name
     end
@@ -62,7 +65,12 @@ module Shadcn
       merge_html_attributes(
         {
           role: "group",
-          class: group_classes
+          class: group_classes,
+          style: gap_style,
+          "data-slot": "toggle-group",
+          "data-variant": @variant,
+          "data-size": @size,
+          "data-spacing": @spacing
         },
         {
           controller: "shadcn--toggle-group",
@@ -83,6 +91,10 @@ module Shadcn
 
     def group_classes
       merge_classes(BASE_CLASSES)
+    end
+
+    def gap_style
+      "--gap: #{@spacing};"
     end
 
     def has_name?
