@@ -8,6 +8,7 @@ class PaginationComponentTest < ViewComponent::TestCase
 
     assert_selector "nav[role='navigation']"
     assert_selector "nav[aria-label='pagination']"
+    assert_selector "nav[data-slot='pagination']"
   end
 
   def test_renders_pagination_content
@@ -17,8 +18,41 @@ class PaginationComponentTest < ViewComponent::TestCase
       end
     end
 
-    assert_selector "ul"
-    assert_selector "li"
+    assert_selector "ul[data-slot='pagination-content']"
+    assert_selector "li[data-slot='pagination-item']"
+  end
+
+  def test_uses_new_york_v4_button_classes_for_page_links
+    render_inline(Shadcn::PaginationComponent.new) do |pagination|
+      pagination.with_pagination_content do |content|
+        content.with_item(href: "/page/1") { "1" }
+        content.with_item(href: "/page/2", active: true) { "2" }
+      end
+    end
+
+    page_link_classes = page.find("a[data-slot='pagination-link']", text: "1")["class"].split
+    active_link_classes = page.find("a[data-slot='pagination-link'][data-active='true']", text: "2")["class"].split
+
+    assert_includes page_link_classes, "transition-all"
+    assert_includes page_link_classes, "outline-none"
+    assert_includes page_link_classes, "focus-visible:border-ring"
+    assert_includes page_link_classes, "focus-visible:ring-[3px]"
+    assert_includes page_link_classes, "focus-visible:ring-ring/50"
+    assert_includes page_link_classes, "size-9"
+    assert_includes page_link_classes, "hover:bg-accent"
+    assert_includes page_link_classes, "dark:hover:bg-accent/50"
+
+    assert_includes active_link_classes, "border"
+    assert_includes active_link_classes, "bg-background"
+    assert_includes active_link_classes, "shadow-xs"
+    assert_includes active_link_classes, "dark:border-input"
+    assert_includes active_link_classes, "dark:bg-input/30"
+
+    refute_includes page_link_classes, "transition-colors"
+    refute_includes page_link_classes, "focus-visible:ring-1"
+    refute_includes page_link_classes, "h-9"
+    refute_includes page_link_classes, "w-9"
+    refute_includes rendered_content, "data-[size=default]"
   end
 
   def test_renders_pagination_items
@@ -58,6 +92,31 @@ class PaginationComponentTest < ViewComponent::TestCase
     assert_selector "svg" # Chevron icon
   end
 
+  def test_previous_uses_new_york_v4_default_size_classes
+    render_inline(Shadcn::PaginationComponent.new) do |pagination|
+      pagination.with_pagination_content do |content|
+        content.with_previous(href: "/page/1")
+      end
+    end
+
+    previous_link = page.find("a[data-slot='pagination-link'][aria-label='Go to previous page']")
+    classes = previous_link["class"].split
+
+    assert_includes classes, "transition-all"
+    assert_includes classes, "focus-visible:ring-[3px]"
+    assert_includes classes, "h-9"
+    assert_includes classes, "px-2.5"
+    assert_includes classes, "py-2"
+    assert_includes classes, "has-[>svg]:px-3"
+    assert_includes classes, "sm:pl-2.5"
+    assert_selector "a[aria-label='Go to previous page'] span.hidden.sm\\:block", text: "Previous"
+
+    refute_includes classes, "transition-colors"
+    refute_includes classes, "focus-visible:ring-1"
+    refute_includes classes, "pl-2.5"
+    refute_includes rendered_content, "data-[size=default]"
+  end
+
   def test_renders_next_button
     render_inline(Shadcn::PaginationComponent.new) do |pagination|
       pagination.with_pagination_content do |content|
@@ -67,6 +126,31 @@ class PaginationComponentTest < ViewComponent::TestCase
 
     assert_selector "a[href='/page/3']", text: /Next/
     assert_selector "svg" # Chevron icon
+  end
+
+  def test_next_uses_new_york_v4_default_size_classes
+    render_inline(Shadcn::PaginationComponent.new) do |pagination|
+      pagination.with_pagination_content do |content|
+        content.with_next_page(href: "/page/3")
+      end
+    end
+
+    next_link = page.find("a[data-slot='pagination-link'][aria-label='Go to next page']")
+    classes = next_link["class"].split
+
+    assert_includes classes, "transition-all"
+    assert_includes classes, "focus-visible:ring-[3px]"
+    assert_includes classes, "h-9"
+    assert_includes classes, "px-2.5"
+    assert_includes classes, "py-2"
+    assert_includes classes, "has-[>svg]:px-3"
+    assert_includes classes, "sm:pr-2.5"
+    assert_selector "a[aria-label='Go to next page'] span.hidden.sm\\:block", text: "Next"
+
+    refute_includes classes, "transition-colors"
+    refute_includes classes, "focus-visible:ring-1"
+    refute_includes classes, "pr-2.5"
+    refute_includes rendered_content, "data-[size=default]"
   end
 
   def test_renders_disabled_previous
@@ -88,6 +172,9 @@ class PaginationComponentTest < ViewComponent::TestCase
 
     assert_selector "span[aria-hidden='true']"
     assert_selector ".sr-only", text: "More pages", visible: :all
+    assert_selector "span[data-slot='pagination-ellipsis']"
+    assert_includes page.find("span[data-slot='pagination-ellipsis']")["class"].split, "size-9"
+    assert_includes page.find("span[data-slot='pagination-ellipsis'] svg")["class"].split, "size-4"
   end
 
   # ============================================

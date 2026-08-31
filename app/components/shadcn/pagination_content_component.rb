@@ -31,7 +31,7 @@ module Shadcn
     }
 
     def call
-      content_tag(:ul, list_content, class: merge_classes(BASE_CLASSES))
+      content_tag(:ul, list_content, class: merge_classes(BASE_CLASSES), "data-slot": "pagination-content")
     end
 
     private
