@@ -47,20 +47,30 @@ class ShadcnClassMergerTest < ActiveSupport::TestCase
 
   def test_merger_rebuilds_when_tailwind_prefix_changes
     Shadcn::Rails.configure do |config|
-      config.tailwind_prefix = "tw"
+      config.tailwind_prefix = "tw-"
     end
 
-    tw_classes = Shadcn::Rails::ClassMerger.merge("tw:px-4 tw:p-0").split
-    assert_includes tw_classes, "tw:p-0"
-    refute_includes tw_classes, "tw:px-4"
+    tw_classes = Shadcn::Rails::ClassMerger.merge("tw-px-4 tw-p-0").split
+    assert_includes tw_classes, "tw-p-0"
+    refute_includes tw_classes, "tw-px-4"
 
     Shadcn::Rails.configure do |config|
-      config.tailwind_prefix = "ui"
+      config.tailwind_prefix = "ui-"
     end
 
-    ui_classes = Shadcn::Rails::ClassMerger.merge("ui:px-4 ui:p-0").split
-    assert_includes ui_classes, "ui:p-0"
-    refute_includes ui_classes, "ui:px-4"
+    ui_classes = Shadcn::Rails::ClassMerger.merge("ui-px-4 ui-p-0").split
+    assert_includes ui_classes, "ui-p-0"
+    refute_includes ui_classes, "ui-px-4"
+  end
+
+  def test_prefixed_variant_classes_are_merged
+    Shadcn::Rails.configure do |config|
+      config.tailwind_prefix = "tw-"
+    end
+
+    classes = Shadcn::Rails::ClassMerger.merge("hover:tw-px-4 hover:tw-p-0").split
+    assert_includes classes, "hover:tw-p-0"
+    refute_includes classes, "hover:tw-px-4"
   end
 
   def test_focus_visible_ring_width_can_override_arbitrary_ring_width

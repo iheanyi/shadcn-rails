@@ -15,7 +15,11 @@ module Shadcn
           return "" if class_string.empty?
 
           merged = merger.merge(class_string)
-          tailwind_prefix.empty? ? merged : prefixed_tailwind_merger.merge(merged)
+          return merged if tailwind_prefix.empty?
+
+          denormalize_prefixed_classes(
+            prefixed_tailwind_merger.merge(normalize_prefixed_classes(merged))
+          )
         end
 
         private
@@ -38,6 +42,50 @@ module Shadcn
 
         def tailwind_prefix
           Shadcn::Rails.configuration.tailwind_prefix.to_s.delete_suffix("-")
+        end
+
+        def normalize_prefixed_classes(classes)
+          prefixed_class_prefix = "#{tailwind_prefix}-"
+
+          classes.split.map do |class_name|
+            variant_prefix, utility = split_variant_prefix(class_name)
+            important = utility.delete_prefix!("!") ? "!" : ""
+            negative = utility.delete_prefix!("-") ? "-" : ""
+
+            next class_name unless utility.start_with?(prefixed_class_prefix)
+
+            "#{tailwind_prefix}:#{variant_prefix}#{important}#{negative}#{utility.delete_prefix(prefixed_class_prefix)}"
+          end.join(" ")
+        end
+
+        def denormalize_prefixed_classes(classes)
+          classes.split.map { |class_name| denormalize_prefixed_class(class_name) }.join(" ")
+        end
+
+        def denormalize_prefixed_class(class_name)
+          prefixed_variant = "#{tailwind_prefix}:"
+          return class_name unless class_name.start_with?(prefixed_variant)
+
+          variant_prefix, utility = split_variant_prefix(class_name.delete_prefix(prefixed_variant))
+          important = utility.delete_prefix!("!") ? "!" : ""
+          negative = utility.delete_prefix!("-") ? "-" : ""
+
+          "#{variant_prefix}#{important}#{negative}#{tailwind_prefix}-#{utility}"
+        end
+
+        def split_variant_prefix(class_name)
+          bracket_depth = 0
+          split_at = nil
+
+          class_name.each_char.with_index do |char, index|
+            bracket_depth += 1 if char == "["
+            bracket_depth -= 1 if char == "]"
+            split_at = index if char == ":" && bracket_depth.zero?
+          end
+
+          return ["", class_name] unless split_at
+
+          [class_name[0..split_at], class_name[(split_at + 1)..]]
         end
 
         # Flatten nested arrays and handle conditional hashes
