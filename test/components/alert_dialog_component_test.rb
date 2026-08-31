@@ -152,6 +152,7 @@ class AlertDialogComponentTest < ViewComponent::TestCase
     content_tokens = content_classes.split
 
     assert_includes content_tokens, "group/alert-dialog-content"
+    assert_includes content_tokens, "shadcn-dialog-content"
     assert_includes content_tokens, "sm:max-w-lg"
     refute_includes content_classes, "data-[size=default]"
     refute_includes content_classes, "data-[size=sm]"
