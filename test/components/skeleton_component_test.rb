@@ -7,6 +7,9 @@ class SkeletonComponentTest < ViewComponent::TestCase
     render_inline(Shadcn::SkeletonComponent.new)
 
     assert_selector "div.animate-pulse.rounded-md"
+    assert_selector "div.bg-accent"
+    refute_selector "div.bg-primary\\/10"
+    assert_selector "div[data-slot='skeleton']"
   end
 
   def test_renders_with_custom_dimensions
