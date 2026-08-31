@@ -60,7 +60,7 @@ module Shadcn
     end
 
     def sheet_attributes
-      merge_html_attributes({ class: sheet_classes }, sheet_data_attrs)
+      merge_html_attributes({ class: sheet_classes, "data-slot": "sheet" }, sheet_data_attrs)
     end
   end
 end

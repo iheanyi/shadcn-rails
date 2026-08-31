@@ -8,6 +8,7 @@ class SheetComponentTest < ViewComponent::TestCase
     render_inline(Shadcn::SheetComponent.new)
 
     assert_selector "div[data-controller='shadcn--sheet']"
+    assert_selector "div[data-slot='sheet']"
   end
 
   def test_renders_with_trigger_slot
@@ -15,7 +16,7 @@ class SheetComponentTest < ViewComponent::TestCase
       sheet.with_trigger { "Open Sheet" }
     end
 
-    assert_selector "[data-shadcn--sheet-target='trigger']", text: "Open Sheet"
+    assert_selector "[data-slot='sheet-trigger'][data-shadcn--sheet-target='trigger']", text: "Open Sheet"
     assert_selector "[data-action='click->shadcn--sheet#open']"
   end
 
@@ -100,22 +101,125 @@ class SheetComponentTest < ViewComponent::TestCase
     assert_selector "template[data-shadcn--sheet-target='template']", visible: false
   end
 
-  def test_close_button_uses_ghost_hover_and_keyboard_focus_styles
+  def test_sheet_template_parts_have_v4_data_slots
+    result = render_inline(Shadcn::SheetComponent.new) do |sheet|
+      sheet.with_body do |body|
+        body.with_header do |header|
+          header.with_title { "Sheet Title" }
+          header.with_description { "Sheet description" }
+        end
+        body.with_footer { "Footer content" }
+      end
+    end
+
+    html = result.to_html
+    assert html.include?("data-slot=\"sheet-portal\"")
+    assert html.include?("data-slot=\"sheet-overlay\"")
+    assert html.include?("data-slot=\"sheet-content\"")
+    assert html.include?("data-slot=\"sheet-header\"")
+    assert html.include?("data-slot=\"sheet-footer\"")
+    assert html.include?("data-slot=\"sheet-title\"")
+    assert html.include?("data-slot=\"sheet-description\"")
+    assert html.include?("data-slot=\"sheet-close\"")
+  end
+
+  def test_content_uses_v4_flex_column_without_panel_padding
+    result = render_inline(Shadcn::SheetComponent.new) do |sheet|
+      sheet.with_body { "Content" }
+    end
+
+    content_tag = result.to_html[/<[^>]*data-slot="sheet-content"[^>]*>/m]
+    content_classes = content_tag[/class="([^"]*)"/, 1].split
+    assert_includes content_classes, "flex"
+    assert_includes content_classes, "flex-col"
+    assert_includes content_classes, "gap-4"
+    refute_includes content_classes, "p-6"
+  end
+
+  def test_header_uses_v4_gap_and_padding_classes
+    result = render_inline(Shadcn::SheetComponent.new) do |sheet|
+      sheet.with_body do |body|
+        body.with_header { "Header content" }
+      end
+    end
+
+    header_tag = result.to_html[/<[^>]*data-slot="sheet-header"[^>]*>/m]
+    header_classes = header_tag[/class="([^"]*)"/, 1].split
+    assert_includes header_classes, "gap-1.5"
+    assert_includes header_classes, "p-4"
+    refute_includes header_classes, "space-y-2"
+  end
+
+  def test_footer_uses_v4_auto_margin_and_padding_classes
+    result = render_inline(Shadcn::SheetComponent.new) do |sheet|
+      sheet.with_body do |body|
+        body.with_footer { "Footer content" }
+      end
+    end
+
+    footer_tag = result.to_html[/<[^>]*data-slot="sheet-footer"[^>]*>/m]
+    footer_classes = footer_tag[/class="([^"]*)"/, 1].split
+    assert_includes footer_classes, "mt-auto"
+    assert_includes footer_classes, "p-4"
+    assert_includes footer_classes, "flex-col"
+    refute_includes footer_classes, "flex-col-reverse"
+    refute_includes footer_classes, "sm:flex-row"
+  end
+
+  def test_title_uses_v4_typography_without_large_text_class
+    result = render_inline(Shadcn::SheetComponent.new) do |sheet|
+      sheet.with_body do |body|
+        body.with_title { "Sheet Title" }
+      end
+    end
+
+    title_tag = result.to_html[/<[^>]*data-slot="sheet-title"[^>]*>/m]
+    title_classes = title_tag[/class="([^"]*)"/, 1].split
+    assert_includes title_classes, "font-semibold"
+    assert_includes title_classes, "text-foreground"
+    refute_includes title_classes, "text-lg"
+  end
+
+  def test_description_keeps_v4_muted_small_text_classes
+    result = render_inline(Shadcn::SheetComponent.new) do |sheet|
+      sheet.with_body do |body|
+        body.with_description { "Sheet description" }
+      end
+    end
+
+    description_tag = result.to_html[/<[^>]*data-slot="sheet-description"[^>]*>/m]
+    description_classes = description_tag[/class="([^"]*)"/, 1].split
+    assert_includes description_classes, "text-sm"
+    assert_includes description_classes, "text-muted-foreground"
+  end
+
+  def test_close_button_uses_v4_focus_styles_and_icon_size
     result = render_inline(Shadcn::SheetComponent.new) do |sheet|
       sheet.with_body { "Content" }
     end
 
     html = result.to_html
-    close_button_match = html.match(/<button.*?aria-label="Close".*?>/m)
+    close_button_match = html.match(/<button.*?data-slot="sheet-close".*?>/m)
     assert close_button_match
 
     close_classes = close_button_match[0][/class="([^"]*)"/, 1].split
-    assert_includes close_classes, "hover:bg-accent"
-    assert_includes close_classes, "hover:text-accent-foreground"
-    assert_includes close_classes, "focus-visible:ring-2"
-    refute_includes close_classes, "focus:ring-2"
-    refute_includes close_classes, "ring-offset-2"
-    refute_includes close_classes, "ring-offset-background"
-    refute close_classes.any? { |class_name| class_name.start_with?("data-[state=open]:") }
+    assert_includes close_classes, "rounded-xs"
+    assert_includes close_classes, "ring-offset-background"
+    assert_includes close_classes, "focus:ring-2"
+    assert_includes close_classes, "focus:ring-ring"
+    assert_includes close_classes, "focus:ring-offset-2"
+    assert_includes close_classes, "focus:outline-hidden"
+    assert_includes close_classes, "data-[state=open]:bg-secondary"
+    refute_includes close_classes, "hover:bg-accent"
+    refute_includes close_classes, "hover:text-accent-foreground"
+    refute_includes close_classes, "focus-visible:ring-2"
+
+    close_icon_match = html.match(/<svg.*?class="([^"]*)".*?>/m)
+    assert close_icon_match
+
+    close_icon_classes = close_icon_match[1].split
+    assert_includes close_icon_classes, "size-4"
+    refute_includes close_icon_classes, "h-4"
+    refute_includes close_icon_classes, "w-4"
   end
 end
