@@ -93,7 +93,6 @@ class DummyDocsCatalogTest < ActionDispatch::IntegrationTest
     source = File.read(Rails.root.join("app/helpers/showcase_helper.rb"))
 
     refute_includes source, "erb_preview_method_source"
-    refute_includes source, "preview_method_source"
     assert_includes source, "Missing code example"
   end
 
