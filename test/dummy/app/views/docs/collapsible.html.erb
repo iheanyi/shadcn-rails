@@ -268,8 +268,8 @@
       controller_name: "shadcn--collapsible",
       description: "Manages the collapsible state and handles smooth expand/collapse animations with automatic height calculation.",
       values: [
-        { name: "open", type: "Boolean", description: "Current open/closed state of the collapsible" },
-        { name: "disabled", type: "Boolean", description: "Whether the collapsible is disabled" }
+        { name: "open", type: "Boolean", default: "false", description: "Current open/closed state of the collapsible" },
+        { name: "disabled", type: "Boolean", default: "false", description: "Whether the collapsible is disabled" }
       ],
       actions: [
         { name: "toggle", description: "Toggles between open and closed states (respects disabled)" },

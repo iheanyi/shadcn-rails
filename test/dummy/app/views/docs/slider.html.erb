@@ -270,7 +270,7 @@
     controller_name: "shadcn--slider",
     description: "Updates the slider's visual fill and supports one-way output sync and two-way input binding.",
     values: [
-      { name: "outputFormat", type: "String", description: "Format string for output ({value} and {percent} placeholders)" }
+      { name: "outputFormat", type: "String", default: '"{value}"', description: "Format string for output ({value} and {percent} placeholders)" }
     ],
     targets: [
       { name: "output", description: "Element to display the current value (auto-synced on change)" }

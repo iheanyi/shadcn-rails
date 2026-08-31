@@ -256,12 +256,12 @@
     controller_name: "shadcn--carousel",
     description: "Manages carousel navigation, autoplay, keyboard navigation, and touch/swipe gestures.",
     values: [
-      { name: "orientation", type: "String", description: "Direction (horizontal or vertical)" },
-      { name: "loop", type: "Boolean", description: "Whether to loop infinitely" },
-      { name: "autoplay", type: "Boolean", description: "Whether to auto-advance" },
-      { name: "autoplayInterval", type: "Number", description: "Milliseconds between auto-advance" },
-      { name: "align", type: "String", description: "Item alignment (start, center, end)" },
-      { name: "selectedIndex", type: "Number", description: "Currently selected slide index" }
+      { name: "orientation", type: "String", default: '"horizontal"', description: "Direction (horizontal or vertical)" },
+      { name: "loop", type: "Boolean", default: "false", description: "Whether to loop infinitely" },
+      { name: "autoplay", type: "Boolean", default: "false", description: "Whether to auto-advance" },
+      { name: "autoplayInterval", type: "Number", default: "4000", description: "Milliseconds between auto-advance" },
+      { name: "align", type: "String", default: '"start"', description: "Item alignment (start, center, end)" },
+      { name: "selectedIndex", type: "Number", default: "0", description: "Currently selected slide index" }
     ],
     actions: [
       { name: "previous", description: "Go to the previous slide" },

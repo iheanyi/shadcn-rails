@@ -9,7 +9,7 @@
 <% title ||= nil %>
 <% show_copy = local_assigns.fetch(:show_copy, true) %>
 
-<div class="relative my-4" data-controller="clipboard">
+<div class="relative my-4 min-w-0 max-w-full" data-controller="clipboard">
   <% if title %>
     <div class="flex items-center justify-between rounded-t-lg border border-b-0 bg-muted px-4 py-2">
       <span class="text-sm font-medium text-muted-foreground"><%= title %></span>
@@ -26,7 +26,7 @@
     </div>
   <% end %>
 
-  <div class="<%= title ? 'rounded-b-lg border-t-0' : 'rounded-lg' %> code-block border">
+  <div class="<%= title ? 'rounded-b-lg border-t-0' : 'rounded-lg' %> code-block border max-w-full">
     <pre data-clipboard-target="source"><code class="language-<%= language %>"><%= code %></code></pre>
   </div>
 

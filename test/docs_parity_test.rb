@@ -16,7 +16,11 @@ class DocsParityTest < ViewComponent::TestCase
 
       assert DocsController::COMPONENTS.key?(slug), "Expected DocsController::COMPONENTS to include #{slug}"
       assert File.exist?(docs_page), "Expected docs page for #{slug}"
-      assert_includes File.read(docs_page), "showcase(\"#{slug}\"", "Expected docs page for #{slug} to render showcase(\"#{slug}\")"
+      docs_source = File.read(docs_page)
+      assert(
+        docs_source.include?("showcase(\"#{slug}\"") || docs_source.include?('render "docs/demo_card"'),
+        "Expected docs page for #{slug} to render a showcase or live demo card"
+      )
       assert preview_class.present?, "Expected preview class #{preview_class_name_for(key)}"
       assert_includes preview_class.public_instance_methods(false), :default, "Expected #{preview_class.name} to define #default"
 

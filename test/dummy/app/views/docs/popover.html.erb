@@ -294,10 +294,10 @@
     controller_name: "shadcn--popover",
     description: "Handles popover open/close state, positioning, and click-outside behavior.",
     values: [
-      { name: "open", type: "Boolean", description: "Whether the popover is currently open" },
-      { name: "side", type: "String", description: "Side to position the popover (top/right/bottom/left)" },
-      { name: "align", type: "String", description: "Alignment relative to trigger (start/center/end)" },
-      { name: "modal", type: "Boolean", description: "Whether to block interaction with the rest of the page" }
+      { name: "open", type: "Boolean", default: "false", description: "Whether the popover is currently open" },
+      { name: "side", type: "String", default: '"bottom"', description: "Side to position the popover (top/right/bottom/left)" },
+      { name: "align", type: "String", default: '"center"', description: "Alignment relative to trigger (start/center/end)" },
+      { name: "modal", type: "Boolean", default: "false", description: "Whether to block interaction with the rest of the page" }
     ],
     targets: [
       { name: "trigger", description: "The element that triggers the popover" },

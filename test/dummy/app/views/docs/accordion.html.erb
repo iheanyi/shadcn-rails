@@ -200,9 +200,9 @@
     controller_name: "shadcn--accordion",
     description: "Manages accordion state and handles expand/collapse animations.",
     values: [
-      { name: "type", type: "String", description: "Accordion type (single or multiple)" },
-      { name: "collapsible", type: "Boolean", description: "Whether single accordion can be fully collapsed" },
-      { name: "default", type: "String", description: "Comma-separated list of default open item values" }
+      { name: "type", type: "String", default: '"single"', description: "Accordion type (single or multiple)" },
+      { name: "collapsible", type: "Boolean", default: "false", description: "Whether single accordion can be fully collapsed" },
+      { name: "default", type: "String", default: '""', description: "Comma-separated list of default open item values" }
     ],
     actions: [
       { name: "toggle", description: "Toggles an accordion item's expanded state" }

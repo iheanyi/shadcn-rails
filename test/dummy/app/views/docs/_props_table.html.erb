@@ -3,10 +3,12 @@
       - props: Array of Hashes (required) - Each hash should have :name, :type, :default, :description
       - title: String (optional) - Section title (default: "API Reference")
 %>
-<% title ||= "API Reference" %>
+<% title = local_assigns.fetch(:title, "API Reference") %>
 
 <div class="my-6">
-  <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4"><%= title %></h2>
+  <% if title.present? %>
+    <h2 class="scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight mb-4"><%= title %></h2>
+  <% end %>
   <div class="relative w-full overflow-auto">
     <table class="w-full caption-bottom text-sm">
       <thead class="[&_tr]:border-b">
@@ -19,23 +21,28 @@
       </thead>
       <tbody class="[&_tr:last-child]:border-0">
         <% props.each do |prop| %>
+          <% name = prop[:name] || prop["name"] %>
+          <% type = prop[:type] || prop["type"] %>
+          <% description = prop[:description] || prop["description"] %>
+          <% has_default = prop.key?(:default) || prop.key?("default") %>
+          <% default_value = prop.key?(:default) ? prop[:default] : prop["default"] %>
           <tr class="border-b transition-colors hover:bg-muted/50">
-            <td class="p-4 align-middle font-mono text-sm"><%= prop[:name] %></td>
+            <td class="p-4 align-middle font-mono text-sm"><%= name %></td>
             <td class="p-4 align-middle">
               <code class="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm">
-                <%= prop[:type] %>
+                <%= type %>
               </code>
             </td>
             <td class="p-4 align-middle">
-              <% if prop[:default] %>
+              <% if has_default %>
                 <code class="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm">
-                  <%= prop[:default] %>
+                  <%= default_value.nil? ? "nil" : default_value %>
                 </code>
               <% else %>
                 <span class="text-muted-foreground">-</span>
               <% end %>
             </td>
-            <td class="p-4 align-middle text-muted-foreground"><%= prop[:description] %></td>
+            <td class="p-4 align-middle text-muted-foreground"><%= description %></td>
           </tr>
         <% end %>
       </tbody>
