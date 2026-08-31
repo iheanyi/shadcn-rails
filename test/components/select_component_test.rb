@@ -184,7 +184,7 @@ class SelectComponentTest < ViewComponent::TestCase
     assert_includes classes, "relative"
     assert_includes classes, "z-50"
     assert_includes classes, "max-h-(--radix-select-content-available-height)"
-    assert_includes classes, "min-w-[8rem]"
+    assert_includes classes, "min-w-[var(--radix-select-trigger-width)]"
     assert_includes classes, "origin-(--radix-select-content-transform-origin)"
     assert_includes classes, "overflow-x-hidden"
     assert_includes classes, "overflow-y-auto"
@@ -198,7 +198,7 @@ class SelectComponentTest < ViewComponent::TestCase
     refute_includes classes, "top-full"
     refute_includes classes, "mt-1"
     refute_includes classes, "max-h-96"
-    refute_includes classes, "min-w-[var(--radix-select-trigger-width)]"
+    refute_includes classes, "min-w-[8rem]"
     refute_includes classes, "overflow-hidden"
   end
 

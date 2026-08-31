@@ -37,6 +37,8 @@ export type FloatingOptions = {
   placement?: Placement | string
   offset?: number
   sameWidth?: boolean
+  minWidth?: boolean
+  referenceWidthVariable?: string | null
   maxHeight?: number | null
   onPositioned?: ((position: FloatingPosition) => void) | null
 }
@@ -79,6 +81,8 @@ function normalizePlacement(placement: Placement | string): Placement {
  * @param {string} options.placement - Placement (top, bottom, left, right, with -start/-end variants)
  * @param {number} options.offset - Offset distance in pixels (default: 4)
  * @param {boolean} options.sameWidth - Make floating element same width as reference
+ * @param {boolean} options.minWidth - Make floating element at least as wide as reference while allowing growth
+ * @param {string} options.referenceWidthVariable - CSS variable to populate with the reference width
  * @param {number} options.maxHeight - Maximum height for the floating element
  * @param {Function} options.onPositioned - Callback after positioning
  * @returns {Function} Cleanup function to stop auto-updates
@@ -88,6 +92,8 @@ export function positionFloating(reference: HTMLElement, floating: HTMLElement, 
     placement = "bottom-start",
     offset: offsetValue = 4,
     sameWidth = false,
+    minWidth = false,
+    referenceWidthVariable = null,
     maxHeight = null,
     onPositioned = null
   } = options
@@ -103,14 +109,21 @@ export function positionFloating(reference: HTMLElement, floating: HTMLElement, 
   ]
 
   // Add size middleware if needed
-  if (maxHeight || sameWidth) {
+  if (maxHeight || sameWidth || minWidth || referenceWidthVariable) {
     middleware.push(size({
       apply({ availableWidth, availableHeight, elements, rects }) {
         const styles: Partial<CSSStyleDeclaration> = {}
+        const referenceWidth = `${rects.reference.width}px`
 
         if (sameWidth) {
-          styles.width = `${rects.reference.width}px`
-          styles.minWidth = `${rects.reference.width}px`
+          styles.width = referenceWidth
+          styles.minWidth = referenceWidth
+        } else if (minWidth) {
+          styles.minWidth = referenceWidth
+        }
+
+        if (referenceWidthVariable) {
+          elements.floating.style.setProperty(referenceWidthVariable, referenceWidth)
         }
 
         if (maxHeight) {

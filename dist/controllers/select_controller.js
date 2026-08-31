@@ -53,7 +53,8 @@ export default class default_1 extends Controller {
             if (this.hasTriggerTarget) {
                 this.cleanupFloating = positionFloating(this.triggerTarget, this.contentTarget, {
                     placement: this.placementValue,
-                    sameWidth: this.sameWidthValue,
+                    minWidth: true,
+                    referenceWidthVariable: "--radix-select-trigger-width",
                     maxHeight: 384 // max-h-96
                 });
             }

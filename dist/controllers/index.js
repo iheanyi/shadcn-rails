@@ -3520,12 +3520,14 @@ function normalizePlacement(placement) {
  * @param {string} options.placement - Placement (top, bottom, left, right, with -start/-end variants)
  * @param {number} options.offset - Offset distance in pixels (default: 4)
  * @param {boolean} options.sameWidth - Make floating element same width as reference
+ * @param {boolean} options.minWidth - Make floating element at least as wide as reference while allowing growth
+ * @param {string} options.referenceWidthVariable - CSS variable to populate with the reference width
  * @param {number} options.maxHeight - Maximum height for the floating element
  * @param {Function} options.onPositioned - Callback after positioning
  * @returns {Function} Cleanup function to stop auto-updates
  */
 function positionFloating(reference, floating, options = {}) {
-    const { placement = "bottom-start", offset: offsetValue = 4, sameWidth = false, maxHeight = null, onPositioned = null } = options;
+    const { placement = "bottom-start", offset: offsetValue = 4, sameWidth = false, minWidth = false, referenceWidthVariable = null, maxHeight = null, onPositioned = null } = options;
     // Build middleware array
     const middleware = [
         offset(offsetValue),
@@ -3536,13 +3538,20 @@ function positionFloating(reference, floating, options = {}) {
         shift({ padding: 8 })
     ];
     // Add size middleware if needed
-    if (maxHeight || sameWidth) {
+    if (maxHeight || sameWidth || minWidth || referenceWidthVariable) {
         middleware.push(size({
             apply({ availableWidth, availableHeight, elements, rects }) {
                 const styles = {};
+                const referenceWidth = `${rects.reference.width}px`;
                 if (sameWidth) {
-                    styles.width = `${rects.reference.width}px`;
-                    styles.minWidth = `${rects.reference.width}px`;
+                    styles.width = referenceWidth;
+                    styles.minWidth = referenceWidth;
+                }
+                else if (minWidth) {
+                    styles.minWidth = referenceWidth;
+                }
+                if (referenceWidthVariable) {
+                    elements.floating.style.setProperty(referenceWidthVariable, referenceWidth);
                 }
                 if (maxHeight) {
                     styles.maxHeight = `${Math.min(maxHeight, availableHeight - 10)}px`;
@@ -5715,7 +5724,8 @@ let default_1$a = class default_1 extends stimulus.Controller {
             if (this.hasTriggerTarget) {
                 this.cleanupFloating = positionFloating(this.triggerTarget, this.contentTarget, {
                     placement: this.placementValue,
-                    sameWidth: this.sameWidthValue,
+                    minWidth: true,
+                    referenceWidthVariable: "--radix-select-trigger-width",
                     maxHeight: 384 // max-h-96
                 });
             }
