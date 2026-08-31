@@ -3,10 +3,10 @@
 module Shadcn
   # Card Footer component
   class CardFooterComponent < BaseComponent
-    BASE_CLASSES = "flex items-center p-6 pt-0"
+    BASE_CLASSES = "flex items-center px-6 [.border-t]:pt-6"
 
     def call
-      content_tag(:div, content, class: merge_classes(BASE_CLASSES), **html_options)
+      content_tag(:div, content, **merge_html_attributes({ class: merge_classes(BASE_CLASSES), "data-slot": "card-footer" }))
     end
   end
 end

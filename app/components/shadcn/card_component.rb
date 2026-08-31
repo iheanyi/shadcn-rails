@@ -48,12 +48,12 @@ module Shadcn
       CardFooterComponent.new(**options, &block)
     }
 
-    BASE_CLASSES = "rounded-xl border bg-card text-card-foreground shadow"
+    BASE_CLASSES = "flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm"
 
     private
 
-    def card_classes
-      merge_classes(BASE_CLASSES)
+    def card_attributes
+      merge_html_attributes({ class: merge_classes(BASE_CLASSES), "data-slot": "card" })
     end
   end
 end
