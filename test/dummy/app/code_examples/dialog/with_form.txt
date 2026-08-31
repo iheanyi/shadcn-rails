@@ -1,15 +1,24 @@
 <%= render Shadcn::Dialog.new do |dialog| %>
   <% dialog.with_trigger do %>
-    <%= render Shadcn::Button.new(variant: :destructive) { "Delete Account" } %>
+    <%= render Shadcn::Button.new(variant: :outline) { "Edit Profile" } %>
   <% end %>
   <% dialog.with_body do |body| %>
     <% body.with_header do |header| %>
-      <% header.with_title { "Are you absolutely sure?" } %>
-      <% header.with_description { "This action cannot be undone. This will permanently delete your account and remove your data from our servers." } %>
+      <% header.with_title { "Edit profile" } %>
+      <% header.with_description { "Make changes to your profile here. Click save when you're done." } %>
     <% end %>
+    <div class="grid gap-4 py-4">
+      <div class="grid grid-cols-4 items-center gap-4">
+        <label for="name" class="text-right text-sm font-medium leading-none">Name</label>
+        <input type="text" id="name" value="Pedro Duarte" class="col-span-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+      </div>
+      <div class="grid grid-cols-4 items-center gap-4">
+        <label for="username" class="text-right text-sm font-medium leading-none">Username</label>
+        <input type="text" id="username" value="@peduarte" class="col-span-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+      </div>
+    </div>
     <% body.with_footer do %>
-      <%= render Shadcn::Button.new(variant: :outline, class_name: "mr-2") { "Cancel" } %>
-      <%= render Shadcn::Button.new(variant: :destructive) { "Delete Account" } %>
+      <%= render Shadcn::Button.new { "Save changes" } %>
     <% end %>
   <% end %>
 <% end %>

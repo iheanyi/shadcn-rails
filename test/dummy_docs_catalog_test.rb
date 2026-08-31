@@ -149,6 +149,42 @@ class DummyDocsCatalogTest < ActionDispatch::IntegrationTest
     refute_includes html, "render Shadcn::ChartComponent.new(", "Chart docs should not expose Lookbook Ruby snippets"
   end
 
+  def test_alert_badge_and_dialog_usage_show_public_pasteable_erb
+    {
+      "alert" => "Alert",
+      "badge" => "Badge",
+      "dialog" => "Dialog"
+    }.each do |slug, public_name|
+      get "/docs/components/#{slug}"
+
+      assert_response :success, "Expected #{slug} docs to render"
+      assert_select "#usage" do |sections|
+        usage_html = CGI.unescapeHTML(sections.first.to_s)
+
+        assert_includes usage_html, "<%= render Shadcn::#{public_name}.new",
+          "#{slug} Usage should show the public component name"
+        refute_includes usage_html, "#{public_name}ComponentPreview",
+          "#{slug} Usage should not mention the Lookbook preview"
+        refute_includes usage_html, "owned by",
+          "#{slug} Usage should not describe preview ownership"
+      end
+    end
+  end
+
+  def test_usage_sections_do_not_reference_lookbook_preview_internals
+    docs_views.each do |view|
+      usage_source = usage_section_source(File.read(view))
+      next unless usage_source
+
+      refute_includes usage_source, "ComponentPreview",
+        "#{view.basename} Usage should show pasteable ERB, not preview internals"
+      refute_includes usage_source, "preview method source",
+        "#{view.basename} Usage should not mention preview source"
+      refute_includes usage_source, "owned by",
+        "#{view.basename} Usage should not mention preview ownership"
+    end
+  end
+
   def test_usage_snippets_do_not_show_preview_method_wrappers
     editable_component_slugs.each do |slug|
       get "/docs/components/#{slug}"
@@ -192,6 +228,10 @@ class DummyDocsCatalogTest < ActionDispatch::IntegrationTest
       Rails.root.join("app/code_examples/#{slug}/#{example}.txt"),
       Rails.root.join("app/code_examples/#{slug}/#{example.tr('_', '-')}.txt")
     ].find { |path| File.exist?(path) }
+  end
+
+  def usage_section_source(source)
+    source[/<div id="usage"[\s\S]*?(?=\n\s*<!-- Examples -->|\n\s*<div id="examples")/]
   end
 
   def assert_code_example_compiles(example)

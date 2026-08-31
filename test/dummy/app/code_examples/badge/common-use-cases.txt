@@ -1,18 +1,18 @@
 <div class="flex flex-wrap gap-4">
   <div class="flex items-center gap-2">
     <span class="text-sm font-medium">Status:</span>
-    <%= render Shadcn::BadgeComponent.new { "Active" } %>
+    <%= render Shadcn::Badge.new { "Active" } %>
   </div>
   <div class="flex items-center gap-2">
     <span class="text-sm font-medium">Version:</span>
-    <%= render Shadcn::BadgeComponent.new(variant: :outline) { "v2.0.0" } %>
+    <%= render Shadcn::Badge.new(variant: :outline) { "v2.0.0" } %>
   </div>
   <div class="flex items-center gap-2">
     <span class="text-sm font-medium">Draft:</span>
-    <%= render Shadcn::BadgeComponent.new(variant: :secondary) { "Draft" } %>
+    <%= render Shadcn::Badge.new(variant: :secondary) { "Draft" } %>
   </div>
   <div class="flex items-center gap-2">
     <span class="text-sm font-medium">Error:</span>
-    <%= render Shadcn::BadgeComponent.new(variant: :destructive) { "Failed" } %>
+    <%= render Shadcn::Badge.new(variant: :destructive) { "Failed" } %>
   </div>
 </div>
