@@ -159,6 +159,7 @@ describe("SelectController", () => {
       <div data-controller="shadcn--select"
            data-shadcn--select-value-value="">
         <button data-shadcn--select-target="trigger"
+                data-placeholder
                 data-action="click->shadcn--select#toggle">
           <span data-shadcn--select-target="display">Select...</span>
         </button>
@@ -210,6 +211,23 @@ describe("SelectController", () => {
       await nextFrame()
 
       expect(controller.inputTarget.value).toBe("banana")
+    })
+
+    test("removes placeholder state from trigger after selection", async () => {
+      controller.open()
+      const appleItem = controller.itemTargets[0]
+      click(appleItem)
+      await nextFrame()
+
+      expect(controller.triggerTarget.hasAttribute("data-placeholder")).toBe(false)
+    })
+
+    test("restores placeholder state when value is cleared", () => {
+      controller.triggerTarget.removeAttribute("data-placeholder")
+
+      controller.selectByValue("")
+
+      expect(controller.triggerTarget.hasAttribute("data-placeholder")).toBe(true)
     })
 
     test("closes dropdown after selection", async () => {
@@ -520,16 +538,24 @@ describe("SelectController", () => {
     })
   })
 
-  describe("trigger width synchronization", () => {
+  describe("trigger min-width synchronization", () => {
     const widthSyncHTML = `
       <div data-controller="shadcn--select">
         <button data-shadcn--select-target="trigger"
                 style="width: 200px;"
                 data-action="click->shadcn--select#toggle">
-          <span data-shadcn--select-target="display">Select...</span>
+          <span data-shadcn--select-target="display">Orange</span>
         </button>
-        <div data-shadcn--select-target="content" hidden>
+        <div data-shadcn--select-target="content"
+             class="shadcn-select-content min-w-[8rem] overflow-hidden"
+             hidden>
+          <div class="p-1 h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1">
           <div data-shadcn--select-target="item" data-value="apple">Apple</div>
+          <div data-shadcn--select-target="item" data-value="banana">Banana</div>
+          <div data-shadcn--select-target="item" data-value="orange">Orange</div>
+          <div data-shadcn--select-target="item" data-value="grape">Grape</div>
+          <div data-shadcn--select-target="item" data-value="strawberry">Strawberry</div>
+          </div>
         </div>
       </div>
     `
@@ -539,15 +565,35 @@ describe("SelectController", () => {
       application = setup.application
       element = setup.element
       controller = setup.controller
+
+      Object.defineProperty(controller.triggerTarget, "getBoundingClientRect", {
+        configurable: true,
+        value: () => ({
+          width: 96,
+          height: 40,
+          x: 0,
+          y: 0,
+          top: 0,
+          left: 0,
+          right: 96,
+          bottom: 40
+        })
+      })
     })
 
-    test("uses Floating UI sameWidth for trigger width synchronization", async () => {
+    test("uses trigger min-width without locking content width", async () => {
       controller.open()
       await nextFrame()
 
-      // Floating UI with sameWidth option sets width directly on the content element
-      // The mock calls the size middleware's apply function
+      expect(controller.contentTarget.innerHTML).toContain("Strawberry")
       expect(controller.contentTarget.style.position).toBe("absolute")
+      expect(controller.contentTarget.className).toContain("shadcn-select-content")
+      expect(controller.contentTarget.className).toContain("min-w-[8rem]")
+      expect(controller.contentTarget.className).not.toContain("min-w-[var(--radix-select-trigger-width)]")
+      expect(controller.contentTarget.style.getPropertyValue("--radix-select-trigger-width")).toBe("96px")
+      expect(controller.contentTarget.style.getPropertyValue("--radix-select-trigger-height")).toBe("40px")
+      expect(controller.contentTarget.style.minWidth).toBe("96px")
+      expect(controller.contentTarget.style.width).not.toBe("96px")
     })
   })
 

@@ -53,7 +53,9 @@ export default class default_1 extends Controller {
             if (this.hasTriggerTarget) {
                 this.cleanupFloating = positionFloating(this.triggerTarget, this.contentTarget, {
                     placement: this.placementValue,
-                    sameWidth: this.sameWidthValue,
+                    minWidth: true,
+                    referenceWidthVariable: "--radix-select-trigger-width",
+                    referenceHeightVariable: "--radix-select-trigger-height",
                     maxHeight: 384 // max-h-96
                 });
             }
@@ -110,6 +112,14 @@ export default class default_1 extends Controller {
     }
     selectByValue(value, dispatch = true) {
         this.valueValue = value;
+        if (this.hasTriggerTarget) {
+            if (value) {
+                this.triggerTarget.removeAttribute("data-placeholder");
+            }
+            else {
+                this.triggerTarget.setAttribute("data-placeholder", "");
+            }
+        }
         // Update hidden input
         if (this.hasInputTarget) {
             this.inputTarget.value = value;
