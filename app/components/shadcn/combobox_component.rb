@@ -30,10 +30,8 @@ module Shadcn
   #   ) %>
   #
   class ComboboxComponent < BaseComponent
-    TRIGGER_CLASSES = "w-[200px] justify-between"
-    POPOVER_CONTENT_CLASSES = "w-[200px] p-0"
-    CHEVRON_CLASSES = "ml-2 h-4 w-4 shrink-0 opacity-50"
-    CHECK_CLASSES = "mr-2 h-4 w-4"
+    CHEVRON_CLASSES = "ml-2 size-4 shrink-0 opacity-50"
+    CHECK_CLASSES = "absolute right-2 size-4"
 
     # @param items [Array<Hash>] Array of items with :value and :label keys
     # @param value [String, nil] Currently selected value
@@ -141,11 +139,12 @@ module Shadcn
         type: "button",
         role: "combobox",
         class: cn(
-          "inline-flex items-center whitespace-nowrap rounded-md text-sm font-medium transition-colors",
-          "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
-          "disabled:pointer-events-none disabled:opacity-50",
-          "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
-          "h-9 px-4 py-2",
+          "inline-flex shrink-0 items-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none",
+          "focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50",
+          "disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40",
+          "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+          "h-9 px-4 py-2 has-[>svg]:px-3",
           @width,
           "justify-between"
         ),
@@ -192,7 +191,7 @@ module Shadcn
 
     def search_icon
       content_tag(:svg,
-        class: "mr-2 h-4 w-4 shrink-0 opacity-50",
+        class: "mr-2 size-4 shrink-0 opacity-50",
         xmlns: "http://www.w3.org/2000/svg",
         width: "24",
         height: "24",
@@ -241,8 +240,8 @@ module Shadcn
 
       content_tag(:div, **item_attributes(item, is_selected)) do
         safe_join([
-          check_icon(is_selected),
-          item[:label]
+          item[:label],
+          check_icon(is_selected)
         ])
       end
     end
@@ -267,10 +266,10 @@ module Shadcn
     def item_attributes(item, is_selected)
       {
         class: cn(
-          "relative flex cursor-default gap-2 select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none",
-          "data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground",
+          "relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none",
           "data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50",
-          "hover:bg-accent hover:text-accent-foreground cursor-pointer"
+          "hover:bg-accent hover:text-accent-foreground cursor-pointer",
+          "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
         ),
         role: "option",
         tabindex: "0",
@@ -287,7 +286,7 @@ module Shadcn
     def popover_content_attributes
       {
         class: cn(
-          "absolute z-50 mt-1 rounded-md border bg-popover text-popover-foreground shadow-md outline-none",
+          "absolute z-50 mt-1 rounded-md bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 outline-none duration-100",
           "data-[state=open]:animate-in data-[state=closed]:animate-out",
           "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
           "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",

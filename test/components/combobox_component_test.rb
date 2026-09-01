@@ -98,6 +98,31 @@ class ComboboxComponentTest < ViewComponent::TestCase
     assert_selector "button[disabled]"
   end
 
+  def test_trigger_uses_new_york_v4_button_outline_classes
+    render_inline(Shadcn::ComboboxComponent.new(items: frameworks))
+
+    assert_includes rendered_content, "transition-all"
+    assert_includes rendered_content, "outline-none"
+    assert_includes rendered_content, "focus-visible:border-ring"
+    assert_includes rendered_content, "focus-visible:ring-[3px]"
+    assert_includes rendered_content, "focus-visible:ring-ring/50"
+    assert_includes rendered_content, "shadow-xs"
+    assert_includes rendered_content, "has-[&gt;svg]:px-3"
+
+    refute_includes rendered_content, "focus-visible:ring-1"
+    refute_includes rendered_content, "focus-visible:ring-ring\""
+    refute_includes rendered_content, "border-input bg-background shadow-sm"
+  end
+
+  def test_icons_use_size_4_token
+    render_inline(Shadcn::ComboboxComponent.new(items: frameworks))
+
+    assert_includes rendered_content, "ml-2 size-4 shrink-0 opacity-50"
+    assert_includes rendered_content, "mr-2 size-4 shrink-0 opacity-50"
+
+    refute_includes rendered_content, "h-4 w-4"
+  end
+
   def test_renders_with_aria_attributes
     render_inline(Shadcn::ComboboxComponent.new(items: frameworks))
 
@@ -118,6 +143,18 @@ class ComboboxComponentTest < ViewComponent::TestCase
     assert_includes rendered_content, "opacity-0"
   end
 
+  def test_check_icon_is_positioned_as_right_indicator
+    render_inline(Shadcn::ComboboxComponent.new(
+      items: frameworks,
+      value: "rails"
+    ))
+
+    assert_includes rendered_content, "absolute right-2 size-4 opacity-100"
+    assert_includes rendered_content, "absolute right-2 size-4 opacity-0"
+
+    refute_includes rendered_content, "mr-2 h-4 w-4"
+  end
+
   def test_renders_search_icon
     render_inline(Shadcn::ComboboxComponent.new(items: frameworks))
 
@@ -131,6 +168,18 @@ class ComboboxComponentTest < ViewComponent::TestCase
     # Hidden attribute on popover content
     assert_includes rendered_content, 'data-shadcn--combobox-target="content"'
     assert_includes rendered_content, "hidden"
+  end
+
+  def test_popover_content_uses_new_york_v4_ring_chrome
+    render_inline(Shadcn::ComboboxComponent.new(items: frameworks))
+
+    assert_includes rendered_content, "bg-popover"
+    assert_includes rendered_content, "shadow-md"
+    assert_includes rendered_content, "ring-1"
+    assert_includes rendered_content, "ring-foreground/10"
+    assert_includes rendered_content, "duration-100"
+
+    refute_includes rendered_content, "rounded-md border bg-popover"
   end
 
   def test_hidden_input_has_selected_value
