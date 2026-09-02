@@ -24,7 +24,7 @@ module Shadcn
   #   <% end %>
   #
   class EmptyComponent < BaseComponent
-    BASE_CLASSES = "flex flex-col items-center justify-center gap-6 py-16 text-center"
+    BASE_CLASSES = "flex min-w-0 flex-1 flex-col items-center justify-center gap-6 rounded-lg border-dashed p-6 text-center text-balance md:p-12"
 
     # Header slot containing media, title, and description
     renders_one :header, lambda { |**options|
@@ -40,7 +40,7 @@ module Shadcn
     alias_method :with_content, :with_content_slot
 
     def call
-      content_tag(:div, class: merge_classes(BASE_CLASSES), **html_options.merge(build_data)) do
+      content_tag(:div, **merge_html_attributes({ class: merge_classes(BASE_CLASSES), "data-slot": "empty" })) do
         safe_join([header, content_slot, content].compact)
       end
     end

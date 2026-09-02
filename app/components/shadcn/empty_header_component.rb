@@ -3,7 +3,7 @@
 module Shadcn
   # Empty Header component - wraps media, title, and description
   class EmptyHeaderComponent < BaseComponent
-    BASE_CLASSES = "flex flex-col items-center gap-2"
+    BASE_CLASSES = "flex max-w-sm flex-col items-center gap-2 text-center"
 
     # Media slot for icon, image, or avatar
     renders_one :media, lambda { |variant: :default, **options|
@@ -21,7 +21,7 @@ module Shadcn
     }
 
     def call
-      content_tag(:div, class: merge_classes(BASE_CLASSES), **html_options.merge(build_data)) do
+      content_tag(:div, **merge_html_attributes({ class: merge_classes(BASE_CLASSES), "data-slot": "empty-header" })) do
         safe_join([media, title, description, content].compact)
       end
     end
