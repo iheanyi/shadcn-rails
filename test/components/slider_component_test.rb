@@ -110,6 +110,9 @@ class SliderComponentTest < ViewComponent::TestCase
 
   def slider_css(stylesheet)
     css = File.read(stylesheet)
-    css[/\/\* Slider Component.*?\/\* ============================================\n   Checkbox Component/m]
+    start_index = css.index("Slider Component")
+    end_index = css.index("Checkbox Component", start_index)
+
+    css[start_index...end_index]
   end
 end
