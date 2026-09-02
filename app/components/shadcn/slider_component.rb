@@ -12,7 +12,7 @@ module Shadcn
   #   <%= render Shadcn::SliderComponent.new(name: "rating", value: 3, min: 1, max: 5, step: 1) %>
   #
   class SliderComponent < BaseComponent
-    BASE_CLASSES = "shadcn-slider w-full h-1.5 rounded-full appearance-none cursor-pointer bg-primary/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+    BASE_CLASSES = "shadcn-slider w-full h-1.5 rounded-full appearance-none cursor-pointer bg-muted focus:outline-none disabled:pointer-events-none disabled:opacity-50"
 
     # @param name [String] Input name attribute
     # @param value [Numeric] Current value
