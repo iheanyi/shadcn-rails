@@ -77,6 +77,7 @@ module Shadcn
         ),
         role: "region",
         "aria-roledescription": "carousel",
+        "data-slot": "carousel",
         "data-controller": "shadcn--carousel",
         "data-shadcn--carousel-orientation-value": @orientation.to_s,
         "data-shadcn--carousel-loop-value": @loop.to_s,
@@ -118,6 +119,7 @@ module Shadcn
     def wrapper_attributes
       {
         class: "overflow-hidden",
+        "data-slot": "carousel-content",
         "data-shadcn--carousel-target": "viewport"
       }
     end
@@ -158,6 +160,7 @@ module Shadcn
           @basis || "basis-full",
           class_name
         ),
+        "data-slot": "carousel-item",
         "data-shadcn--carousel-target": "item"
       }
     end
@@ -165,13 +168,24 @@ module Shadcn
 
   # Previous button component
   class CarouselPreviousComponent < BaseComponent
-    def initialize(orientation: :horizontal, **options)
+    def initialize(orientation: :horizontal, variant: :outline, size: :icon, **options)
       super(**options)
       @orientation = orientation.to_sym
+      @variant = variant.to_sym
+      @size = size.to_sym
     end
 
     def call
-      content_tag(:button, button_content, button_attributes)
+      render ButtonComponent.new(
+        variant: @variant,
+        size: @size,
+        class_name: button_classes,
+        data: button_data,
+        "aria-label": "Previous slide",
+        **button_options
+      ) do
+        button_content
+      end
     end
 
     private
@@ -187,46 +201,58 @@ module Shadcn
     def default_icon
       # Left arrow for horizontal, up arrow for vertical
       if @orientation == :horizontal
-        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>'.html_safe
+        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg><span class="sr-only">Previous slide</span>'.html_safe
       else
-        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="m18 15-6-6-6 6"/></svg>'.html_safe
+        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg><span class="sr-only">Previous slide</span>'.html_safe
       end
     end
 
-    def button_attributes
+    def button_classes
       position_classes = if @orientation == :horizontal
-        "-left-12 top-1/2 -translate-y-1/2"
+        "top-1/2 -left-12 -translate-y-1/2"
       else
         "-top-12 left-1/2 -translate-x-1/2 rotate-90"
       end
 
-      {
-        type: "button",
-        class: cn(
-          "absolute h-8 w-8 rounded-full",
-          "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium",
-          "ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-          "disabled:pointer-events-none disabled:opacity-50",
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-          position_classes,
-          class_name
-        ),
-        "data-shadcn--carousel-target": "prevButton",
-        "data-action": "click->shadcn--carousel#previous",
-        "aria-label": "Previous slide"
-      }
+      cn(
+        "absolute size-8 rounded-full",
+        position_classes,
+        class_name
+      )
+    end
+
+    def button_data
+      merge_data_attributes(
+        { slot: "carousel-previous", "shadcn--carousel-target": "prevButton", action: "click->shadcn--carousel#previous" },
+        data
+      ).transform_keys { |key| key.delete_prefix("data-") }
+    end
+
+    def button_options
+      html_options.except(:href, "href")
     end
   end
 
   # Next button component
   class CarouselNextComponent < BaseComponent
-    def initialize(orientation: :horizontal, **options)
+    def initialize(orientation: :horizontal, variant: :outline, size: :icon, **options)
       super(**options)
       @orientation = orientation.to_sym
+      @variant = variant.to_sym
+      @size = size.to_sym
     end
 
     def call
-      content_tag(:button, button_content, button_attributes)
+      render ButtonComponent.new(
+        variant: @variant,
+        size: @size,
+        class_name: button_classes,
+        data: button_data,
+        "aria-label": "Next slide",
+        **button_options
+      ) do
+        button_content
+      end
     end
 
     private
@@ -242,34 +268,35 @@ module Shadcn
     def default_icon
       # Right arrow for horizontal, down arrow for vertical
       if @orientation == :horizontal
-        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>'.html_safe
+        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg><span class="sr-only">Next slide</span>'.html_safe
       else
-        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="m6 9 6 6 6-6"/></svg>'.html_safe
+        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg><span class="sr-only">Next slide</span>'.html_safe
       end
     end
 
-    def button_attributes
+    def button_classes
       position_classes = if @orientation == :horizontal
-        "-right-12 top-1/2 -translate-y-1/2"
+        "top-1/2 -right-12 -translate-y-1/2"
       else
         "-bottom-12 left-1/2 -translate-x-1/2 rotate-90"
       end
 
-      {
-        type: "button",
-        class: cn(
-          "absolute h-8 w-8 rounded-full",
-          "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium",
-          "ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-          "disabled:pointer-events-none disabled:opacity-50",
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-          position_classes,
-          class_name
-        ),
-        "data-shadcn--carousel-target": "nextButton",
-        "data-action": "click->shadcn--carousel#next",
-        "aria-label": "Next slide"
-      }
+      cn(
+        "absolute size-8 rounded-full",
+        position_classes,
+        class_name
+      )
+    end
+
+    def button_data
+      merge_data_attributes(
+        { slot: "carousel-next", "shadcn--carousel-target": "nextButton", action: "click->shadcn--carousel#next" },
+        data
+      ).transform_keys { |key| key.delete_prefix("data-") }
+    end
+
+    def button_options
+      html_options.except(:href, "href")
     end
   end
 end
