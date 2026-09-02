@@ -3,14 +3,6 @@
 require "view_component"
 require "active_support/all"
 
-# Try to load tailwind_merge, fall back to custom merger if not available
-begin
-  require "tailwind_merge"
-  TAILWIND_MERGE_AVAILABLE = true
-rescue LoadError
-  TAILWIND_MERGE_AVAILABLE = false
-end
-
 require_relative "rails/version"
 require_relative "rails/configuration"
 require_relative "rails/class_merger"
@@ -30,11 +22,6 @@ module Shadcn
       # Access the configuration
       def configuration
         @configuration ||= Configuration.new
-      end
-
-      # TailwindMerge instance (singleton)
-      def tailwind_merger
-        @tailwind_merger ||= TailwindMerge::Merger.new if TAILWIND_MERGE_AVAILABLE
       end
 
       # Configure the gem
@@ -113,40 +100,13 @@ module Shadcn
       end
 
       # Shorthand for the cn() class merger
-      # Uses tailwind_merge gem if available, falls back to custom ClassMerger
       # @param args [Array] Classes to merge (strings, hashes, arrays, or nil)
       # @return [String] Merged class string with conflicts resolved
       def cn(*args)
-        # Flatten and filter the arguments first
-        classes = flatten_class_args(args)
-        class_string = classes.join(" ")
-
-        if tailwind_merger
-          tailwind_merger.merge(class_string)
-        else
-          ClassMerger.merge(*args)
-        end
+        ClassMerger.merge(*args)
       end
 
       private
-
-      # Flatten nested arrays and handle conditional hashes for cn()
-      def flatten_class_args(args)
-        args.flat_map do |arg|
-          case arg
-          when nil, false
-            []
-          when String
-            arg.split
-          when Array
-            flatten_class_args(arg)
-          when Hash
-            arg.filter_map { |klass, condition| klass.to_s if condition }
-          else
-            arg.to_s.split
-          end
-        end
-      end
 
       def configured_theme_css
         File.read(theme_path)

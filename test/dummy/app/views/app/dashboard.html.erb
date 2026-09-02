@@ -92,7 +92,7 @@
           <% end %>
 
           <div class="flex gap-2">
-            <%= render Shadcn::Button.new(type: "submit") { "Apply" } %>
+            <%= render Shadcn::Button.new(type: "submit", class: "px-8") { "Apply" } %>
             <%= render Shadcn::Button.new(href: app_dashboard_path, variant: :outline) { "Reset" } %>
           </div>
         <% end %>
@@ -118,7 +118,7 @@
           <% end %>
           <% table.with_column(:status, sortable: true) do |transaction| %>
             <% variant = transaction[:status] == "Pending" ? :secondary : (transaction[:status] == "Failed" ? :destructive : :outline) %>
-            <%= render Shadcn::Badge.new(variant: variant) { transaction[:status] } %>
+            <%= render Shadcn::Badge.new(variant: variant, class: "px-4") { transaction[:status] } %>
           <% end %>
           <% table.with_column(:date, sortable: true) do |transaction| %>
             <span class="text-muted-foreground"><%= transaction[:date].strftime("%b %-d, %Y") %></span>

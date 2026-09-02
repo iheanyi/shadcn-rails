@@ -43,6 +43,8 @@ module Shadcn
     # @param default_classes [String] Default component classes
     # @return [String] Merged class string
     def merge_classes(default_classes)
+      # Merge first while classes are still unprefixed; host overrides are usually
+      # passed as plain Tailwind utilities, then the configured prefix is applied.
       prefix_classes(cn(default_classes, class_name))
     end
 

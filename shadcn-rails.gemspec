@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description = "A Rails port of shadcn/ui - a collection of components built with ViewComponents, Stimulus, and Tailwind CSS. Includes theming support, dark mode, and generators for copying component source into your application."
   spec.homepage = "https://github.com/iheanyi/shadcn-rails"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 3.1.0"
+  spec.required_ruby_version = ">= 3.2.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/iheanyi/shadcn-rails"
@@ -46,7 +46,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "view_component", ">= 3.0"
   spec.add_dependency "stimulus-rails", ">= 1.0"
   spec.add_dependency "turbo-rails", ">= 1.0"
-  spec.add_dependency "tailwind_merge", ">= 0.10"
+  spec.add_dependency "tailwind_merge", ">= 1.5"
 
   # Development dependencies
   spec.add_development_dependency "rake", "~> 13.0"

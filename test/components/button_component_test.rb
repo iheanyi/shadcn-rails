@@ -103,6 +103,15 @@ class ButtonComponentTest < ViewComponent::TestCase
     assert_selector "button.my-custom-class"
   end
 
+  def test_class_option_overrides_default_padding
+    render_inline(Shadcn::Button.new(class: "p-0")) { "Flush" }
+
+    classes = page.find("button", text: "Flush")["class"].split
+    assert_includes classes, "p-0"
+    refute_includes classes, "px-4"
+    refute_includes classes, "py-2"
+  end
+
   def test_renders_with_data_attributes
     render_inline(Shadcn::ButtonComponent.new(data: { action: "click->test#action" })) { "Data" }
 
