@@ -20,9 +20,9 @@ module Shadcn
   #   <% end %>
   #
   class ScrollAreaComponent < BaseComponent
-    BASE_CLASSES = "relative overflow-hidden"
-    VIEWPORT_CLASSES = "h-full w-full rounded-[inherit]"
-    SCROLLBAR_CLASSES = "flex touch-none select-none transition-colors"
+    BASE_CLASSES = "relative"
+    VIEWPORT_CLASSES = "size-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1"
+    SCROLLBAR_CLASSES = "flex touch-none p-px transition-colors select-none"
     THUMB_CLASSES = "relative flex-1 rounded-full bg-border"
 
     # @param orientation [Symbol] Scroll orientation (:vertical, :horizontal, :both)
@@ -68,7 +68,7 @@ module Shadcn
 
     def vertical_scrollbar
       content_tag(:div, scrollbar_thumb, {
-        class: cn(SCROLLBAR_CLASSES, "h-full w-2.5 border-l border-l-transparent p-[1px]"),
+        class: cn(SCROLLBAR_CLASSES, "h-full w-2.5 border-l border-l-transparent"),
         "data-orientation": "vertical",
         "data-shadcn--scroll-area-target": "scrollbar"
       })
@@ -76,7 +76,7 @@ module Shadcn
 
     def horizontal_scrollbar
       content_tag(:div, scrollbar_thumb, {
-        class: cn(SCROLLBAR_CLASSES, "h-2.5 flex-col border-t border-t-transparent p-[1px]"),
+        class: cn(SCROLLBAR_CLASSES, "h-2.5 flex-col border-t border-t-transparent"),
         "data-orientation": "horizontal",
         "data-shadcn--scroll-area-target": "scrollbar"
       })

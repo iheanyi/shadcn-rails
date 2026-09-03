@@ -81,4 +81,12 @@ class SidebarComponentTest < ViewComponent::TestCase
     assert_selector "aside[data-action*='keydown.ctrl+b@window->shadcn--sidebar#toggle']"
     assert_selector "aside[data-action*='keydown.meta+b@window->shadcn--sidebar#toggle']"
   end
+
+  def test_group_label_uses_v4_margin_opacity_transition_token
+    render_inline(Shadcn::SidebarGroupLabelComponent.new) { "Projects" }
+
+    label = page.find("[data-sidebar='group-label']")
+    assert_includes label["class"], "transition-[margin,opacity]"
+    refute_includes label["class"], "transition-[margin,opa]"
+  end
 end

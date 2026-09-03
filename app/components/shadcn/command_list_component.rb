@@ -3,7 +3,7 @@
 module Shadcn
   # Command List component - container for command groups and items
   class CommandListComponent < BaseComponent
-    BASE_CLASSES = "max-h-[300px] overflow-y-auto overflow-x-hidden"
+    BASE_CLASSES = "max-h-[300px] scroll-py-1 overflow-x-hidden overflow-y-auto"
 
     # Empty state slot
     renders_one :empty, lambda { |**options|

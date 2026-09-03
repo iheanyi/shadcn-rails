@@ -3,7 +3,7 @@
 module Shadcn
   # Container for navigation menu items
   class NavigationMenuListComponent < BaseComponent
-    BASE_CLASSES = "group flex flex-1 list-none items-center justify-center space-x-1"
+    BASE_CLASSES = "group flex flex-1 list-none items-center justify-center gap-1"
 
     renders_many :items, lambda { |**options|
       NavigationMenuItemComponent.new(**options)

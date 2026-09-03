@@ -3,7 +3,7 @@
 module Shadcn
   # Command Group component - groups related command items
   class CommandGroupComponent < BaseComponent
-    BASE_CLASSES = "overflow-hidden p-1 text-foreground"
+    BASE_CLASSES = "overflow-hidden p-1 text-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground"
     HEADING_CLASSES = "px-2 py-1.5 text-xs font-medium text-muted-foreground"
 
     # Items in this group
@@ -25,7 +25,7 @@ module Shadcn
 
     def group_content
       parts = []
-      parts << content_tag(:div, @heading, class: HEADING_CLASSES, "aria-hidden": true) if @heading.present?
+      parts << content_tag(:div, @heading, class: HEADING_CLASSES, "aria-hidden": true, "cmdk-group-heading": "") if @heading.present?
       parts << safe_join(items)
       parts << content
       safe_join(parts.compact)

@@ -219,6 +219,14 @@ class CommandInputComponentTest < ViewComponent::TestCase
 
     assert_selector "input[data-action='input->shadcn--command#filter']"
   end
+
+  def test_input_uses_v4_wrapper_and_outline_tokens
+    render_inline(Shadcn::CommandInputComponent.new)
+
+    assert_selector "div.h-9.gap-2.border-b"
+    assert_selector "input.outline-hidden"
+    assert_selector "svg.size-4"
+  end
 end
 
 class CommandListComponentTest < ViewComponent::TestCase
@@ -235,6 +243,12 @@ class CommandListComponentTest < ViewComponent::TestCase
 
     assert_selector "div[data-shadcn--command-target='empty']", text: "Nothing here"
   end
+
+  def test_list_uses_v4_scroll_padding
+    render_inline(Shadcn::CommandListComponent.new)
+
+    assert_selector ".scroll-py-1"
+  end
 end
 
 class CommandGroupComponentTest < ViewComponent::TestCase
@@ -249,6 +263,8 @@ class CommandGroupComponentTest < ViewComponent::TestCase
     render_inline(Shadcn::CommandGroupComponent.new(heading: "Applications"))
 
     assert_text "Applications"
+    assert_selector "[cmdk-group-heading]", text: "Applications"
+    assert_includes rendered_content, "[&amp;_[cmdk-group-heading]]:text-muted-foreground"
   end
 
   def test_renders_items
@@ -295,6 +311,14 @@ class CommandItemComponentTest < ViewComponent::TestCase
 
     assert_selector "div[data-action='click->shadcn--command#select']"
   end
+
+  def test_uses_v4_outline_and_svg_tokens
+    render_inline(Shadcn::CommandItemComponent.new(value: "test")) { "Test" }
+
+    assert_includes rendered_content, "outline-hidden"
+    assert_includes rendered_content, "[&amp;_svg:not([class*=&#39;size-&#39;])]:size-4"
+    assert_includes rendered_content, "[&amp;_svg:not([class*=&#39;text-&#39;])]:text-muted-foreground"
+  end
 end
 
 class CommandEmptyComponentTest < ViewComponent::TestCase
@@ -314,6 +338,12 @@ class CommandEmptyComponentTest < ViewComponent::TestCase
     render_inline(Shadcn::CommandEmptyComponent.new)
 
     assert_selector "div[data-shadcn--command-target='empty']"
+  end
+
+  def test_empty_text_no_longer_forces_muted_foreground
+    render_inline(Shadcn::CommandEmptyComponent.new)
+
+    refute_includes page.find("div[data-shadcn--command-target='empty']")["class"], "text-muted-foreground"
   end
 end
 

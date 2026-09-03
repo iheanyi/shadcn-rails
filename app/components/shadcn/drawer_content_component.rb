@@ -3,12 +3,12 @@
 module Shadcn
   # Drawer Content component
   class DrawerContentComponent < BaseComponent
-    OVERLAY_CLASSES = "fixed inset-0 z-50 bg-black/80"
+    OVERLAY_CLASSES = "fixed inset-0 z-50 bg-black/50 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0"
     CONTENT_CLASSES = {
-      bottom: "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border bg-background",
-      top: "fixed inset-x-0 top-0 z-50 mb-24 flex h-auto flex-col rounded-b-[10px] border bg-background",
-      left: "fixed inset-y-0 left-0 z-50 h-full w-3/4 max-w-sm flex flex-col border-r bg-background",
-      right: "fixed inset-y-0 right-0 z-50 h-full w-3/4 max-w-sm flex flex-col border-l bg-background"
+      bottom: "group/drawer-content fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto max-h-[80vh] flex-col rounded-t-lg border-t bg-background",
+      top: "group/drawer-content fixed inset-x-0 top-0 z-50 mb-24 flex h-auto max-h-[80vh] flex-col rounded-b-lg border-b bg-background",
+      left: "group/drawer-content fixed inset-y-0 left-0 z-50 flex h-auto w-3/4 flex-col border-r bg-background sm:max-w-sm",
+      right: "group/drawer-content fixed inset-y-0 right-0 z-50 flex h-auto w-3/4 flex-col border-l bg-background sm:max-w-sm"
     }.freeze
 
     renders_one :header, lambda { |**options|
@@ -70,7 +70,7 @@ module Shadcn
     def handle_bar
       return unless [:bottom, :top].include?(@direction)
 
-      content_tag(:div, class: "mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted") { "" }
+      content_tag(:div, class: "mx-auto mt-4 h-2 w-[100px] shrink-0 rounded-full bg-muted") { "" }
     end
   end
 end

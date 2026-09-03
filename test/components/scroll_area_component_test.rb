@@ -7,13 +7,17 @@ class ScrollAreaComponentTest < ViewComponent::TestCase
     render_inline(Shadcn::ScrollAreaComponent.new) { "Content" }
 
     assert_selector "div[data-controller='shadcn--scroll-area']"
-    assert_selector "div.relative.overflow-hidden"
+    assert_selector "div.relative"
   end
 
   def test_renders_viewport
     render_inline(Shadcn::ScrollAreaComponent.new) { "Scrollable content" }
 
     assert_selector "div[data-shadcn--scroll-area-target='viewport']"
+    viewport = page.find("div[data-shadcn--scroll-area-target='viewport']")
+    assert_includes viewport["class"], "size-full"
+    assert_includes viewport["class"], "transition-[color,box-shadow]"
+    assert_includes viewport["class"], "focus-visible:ring-[3px]"
   end
 
   def test_renders_vertical_scrollbar_by_default
@@ -21,6 +25,8 @@ class ScrollAreaComponentTest < ViewComponent::TestCase
 
     assert_selector "div[data-orientation='vertical']"
     assert_selector "div[data-shadcn--scroll-area-target='scrollbar']"
+    scrollbar = page.find("div[data-orientation='vertical']")
+    assert_includes scrollbar["class"], "p-px"
   end
 
   def test_renders_horizontal_scrollbar

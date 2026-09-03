@@ -24,7 +24,26 @@ class MenubarComponentTest < ViewComponent::TestCase
     assert_selector "div.rounded-md"
     assert_selector "div.border"
     assert_selector "div.bg-background"
-    assert_selector "div.shadow-sm"
+    assert_selector "div.shadow-xs"
+    assert_selector "div.gap-1"
+    assert_no_selector "div.space-x-1"
+  end
+
+  def test_content_uses_v4_animation_origin_and_side_tokens
+    render_inline(Shadcn::MenubarContentComponent.new)
+
+    assert_includes rendered_content, "origin-(--radix-menubar-content-transform-origin)"
+    assert_includes rendered_content, "data-[side=bottom]:slide-in-from-top-2"
+    assert_selector "[data-side='bottom']", visible: :all
+  end
+
+  def test_item_uses_v4_item_tokens
+    render_inline(Shadcn::MenubarItemComponent.new(inset: true, variant: :destructive)) { "Delete" }
+
+    assert_includes rendered_content, "outline-hidden"
+    assert_includes rendered_content, "[&amp;_svg:not([class*=&#39;size-&#39;])]:size-4"
+    assert_selector "[data-inset]", visible: :all
+    assert_selector "[data-variant='destructive']", visible: :all
   end
 
   # Menu slots
