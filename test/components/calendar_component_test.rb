@@ -73,7 +73,8 @@ class CalendarComponentTest < ViewComponent::TestCase
     render_inline(Shadcn::CalendarComponent.new(selected: selected, month: selected))
 
     assert_selector "button[aria-selected='true']", text: "15"
-    assert_includes rendered_content, "bg-primary text-primary-foreground"
+    assert_includes rendered_content, "data-[selected-single=true]:bg-primary"
+    assert_includes rendered_content, "data-[selected-single=true]:text-primary-foreground"
   end
 
   def test_renders_today_styling
