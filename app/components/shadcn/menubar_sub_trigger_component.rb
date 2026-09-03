@@ -48,6 +48,7 @@ module Shadcn
         "aria-haspopup": "menu",
         "aria-expanded": "false",
         "data-state": "closed",
+        "data-inset": @inset ? "" : nil,
         "data-shadcn--menubar-target": "subTrigger",
         "data-action": "mouseenter->shadcn--menubar#openSub mouseleave->shadcn--menubar#startCloseSubTimer"
       }
