@@ -14,15 +14,21 @@ module Shadcn
   #   <%= render Shadcn::CalendarComponent.new(name: "event[date]") %>
   #
   class CalendarComponent < BaseComponent
-    CONTAINER_CLASSES = "p-3 rounded-md border bg-background"
-    HEADER_CLASSES = "flex items-center justify-between mb-4"
-    MONTH_YEAR_CLASSES = "text-sm font-medium"
-    NAV_BUTTON_CLASSES = "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-7 w-7"
-    WEEKDAY_CLASSES = "text-center text-xs font-medium text-muted-foreground"
-    DAY_CLASSES = "h-8 w-8 text-center text-sm p-0 relative flex items-center justify-center rounded-md cursor-pointer hover:bg-accent hover:text-accent-foreground outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
-    DAY_SELECTED_CLASSES = "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground"
-    DAY_TODAY_CLASSES = "bg-accent text-accent-foreground"
-    DAY_OUTSIDE_CLASSES = "text-muted-foreground opacity-50"
+    CONTAINER_CLASSES = "group/calendar bg-background p-3 [--cell-size:--spacing(8)] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent"
+    MONTHS_CLASSES = "relative flex flex-col gap-4 md:flex-row"
+    MONTH_CLASSES = "flex w-full flex-col gap-4"
+    NAV_CLASSES = "absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1"
+    MONTH_CAPTION_CLASSES = "flex h-(--cell-size) w-full items-center justify-center px-(--cell-size)"
+    MONTH_YEAR_CLASSES = "flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-sm font-medium"
+    NAV_BUTTON_CLASSES = "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground size-(--cell-size) p-0 select-none aria-disabled:opacity-50"
+    MONTH_GRID_CLASSES = "w-full border-collapse"
+    WEEKDAY_ROW_CLASSES = "flex"
+    WEEKDAY_CLASSES = "flex-1 rounded-md text-[0.8rem] font-normal text-muted-foreground select-none"
+    WEEK_CLASSES = "mt-2 flex w-full"
+    DAY_CLASSES = "group/day relative aspect-square h-full w-full p-0 text-center select-none [&:last-child[data-selected=true]_button]:rounded-r-md [&:first-child[data-selected=true]_button]:rounded-l-md"
+    DAY_BUTTON_CLASSES = "flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-accent-foreground [&>span]:text-xs [&>span]:opacity-70"
+    DAY_TODAY_CLASSES = "rounded-md bg-accent text-accent-foreground data-[selected=true]:rounded-none"
+    DAY_OUTSIDE_CLASSES = "text-muted-foreground aria-selected:text-muted-foreground"
     DAY_DISABLED_CLASSES = "text-muted-foreground opacity-50 pointer-events-none"
 
     WEEKDAYS = %w[Su Mo Tu We Th Fr Sa].freeze
@@ -88,9 +94,7 @@ module Shadcn
     def calendar_content
       safe_join([
         hidden_input,
-        header,
-        weekday_header,
-        days_grid
+        content_tag(:div, month_content, class: MONTHS_CLASSES)
       ].compact)
     end
 
@@ -100,17 +104,16 @@ module Shadcn
       tag.input(
         type: "hidden",
         name: @name,
-        value: @selected&.iso8601,
+        value: format_selected_value,
         data: { "shadcn--calendar-target": "hiddenInput" }
       )
     end
 
     def header
-      content_tag(:div, class: HEADER_CLASSES) do
+      content_tag(:div, class: MONTH_CAPTION_CLASSES) do
         safe_join([
-          prev_button,
-          month_year_selectors,
-          next_button
+          content_tag(:div, safe_join([prev_button, next_button]), class: NAV_CLASSES),
+          month_year_selectors
         ])
       end
     end
@@ -136,7 +139,7 @@ module Shadcn
     end
 
     def month_year_selectors
-      content_tag(:div, class: "flex items-center gap-1") do
+      content_tag(:div, class: MONTH_YEAR_CLASSES) do
         safe_join([
           month_select,
           year_select
@@ -147,9 +150,9 @@ module Shadcn
     def month_select
       content_tag(:select,
         class: cn(
-          "appearance-none bg-transparent text-sm font-medium cursor-pointer",
-          "hover:bg-accent hover:text-accent-foreground rounded px-2 py-1",
-          "outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+          "relative rounded-md border border-input bg-transparent text-sm font-medium shadow-xs cursor-pointer",
+          "hover:bg-accent hover:text-accent-foreground px-2 py-1",
+          "outline-hidden has-focus:border-ring has-focus:ring-[3px] has-focus:ring-ring/50 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
         ),
         data: {
           "shadcn--calendar-target": "monthSelect",
@@ -169,9 +172,9 @@ module Shadcn
 
       content_tag(:select,
         class: cn(
-          "appearance-none bg-transparent text-sm font-medium cursor-pointer",
-          "hover:bg-accent hover:text-accent-foreground rounded px-2 py-1",
-          "outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+          "relative rounded-md border border-input bg-transparent text-sm font-medium shadow-xs cursor-pointer",
+          "hover:bg-accent hover:text-accent-foreground px-2 py-1",
+          "outline-hidden has-focus:border-ring has-focus:ring-[3px] has-focus:ring-ring/50 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
         ),
         data: {
           "shadcn--calendar-target": "yearSelect",
@@ -185,7 +188,7 @@ module Shadcn
     end
 
     def weekday_header
-      content_tag(:div, class: "grid grid-cols-7 gap-1 mb-2") do
+      content_tag(:div, class: WEEKDAY_ROW_CLASSES) do
         safe_join(rotated_weekdays.map { |day| content_tag(:div, day, class: WEEKDAY_CLASSES) })
       end
     end
@@ -195,9 +198,13 @@ module Shadcn
     end
 
     def days_grid
-      content_tag(:div, class: "grid grid-cols-7 gap-1", data: { "shadcn--calendar-target": "grid" }) do
-        safe_join(calendar_days.map { |day| render_day(day) })
+      content_tag(:div, class: MONTH_GRID_CLASSES, data: { "shadcn--calendar-target": "grid" }) do
+        safe_join(calendar_weeks.map { |week| content_tag(:div, safe_join(week.map { |day| render_day(day) }), class: WEEK_CLASSES) })
       end
+    end
+
+    def month_content
+      content_tag(:div, safe_join([header, weekday_header, days_grid]), class: MONTH_CLASSES)
     end
 
     def calendar_days
@@ -215,38 +222,99 @@ module Shadcn
       (start_date..end_date).to_a
     end
 
+    def calendar_weeks
+      calendar_days.each_slice(7)
+    end
+
     def render_day(date)
       is_outside = date.month != @month.month
-      is_selected = @selected && date == @selected
+      is_selected = selected_date?(date)
       is_today = date == Date.today
       is_disabled = date_disabled?(date)
 
       return empty_day if is_outside && !@show_outside_days
 
-      classes = [DAY_CLASSES]
-      classes << DAY_SELECTED_CLASSES if is_selected
-      classes << DAY_TODAY_CLASSES if is_today && !is_selected
-      classes << DAY_OUTSIDE_CLASSES if is_outside
-      classes << DAY_DISABLED_CLASSES if is_disabled
+      content_tag(:div, day_button(date, is_selected, is_today, is_outside, is_disabled), day_cell_attributes(date, is_selected))
+    end
 
+    def empty_day
+      content_tag(:div, "", class: "invisible")
+    end
+
+    def day_button(date, is_selected, is_today, is_outside, is_disabled)
       content_tag(:button,
         date.day.to_s,
         type: "button",
-        class: cn(*classes),
+        class: cn(
+          DAY_BUTTON_CLASSES,
+          is_today && !is_selected ? DAY_TODAY_CLASSES : "",
+          is_outside ? DAY_OUTSIDE_CLASSES : "",
+          is_disabled ? DAY_DISABLED_CLASSES : ""
+        ),
         tabindex: is_disabled ? "-1" : "0",
         "aria-selected": is_selected || nil,
         "aria-disabled": is_disabled || nil,
         disabled: is_disabled || nil,
-        data: {
-          date: date.iso8601,
-          "shadcn--calendar-target": "day",
-          action: is_disabled ? nil : "click->shadcn--calendar#selectDay"
-        }.compact
+        data: day_button_data(date, is_selected, is_disabled)
       )
     end
 
-    def empty_day
-      content_tag(:div, "", class: "h-8 w-8")
+    def day_cell_attributes(date, is_selected)
+      {
+        class: cn(DAY_CLASSES, range_cell_classes(date)),
+        "data-selected": is_selected ? "true" : nil,
+        "data-focused": "false"
+      }.compact
+    end
+
+    def day_button_data(date, is_selected, is_disabled)
+      {
+        date: date.iso8601,
+        "shadcn--calendar-target": "day",
+        action: is_disabled ? nil : "click->shadcn--calendar#selectDay",
+        selected: is_selected ? "true" : nil,
+        "selected-single": @mode == :single && is_selected ? "true" : nil,
+        "range-start": range_start?(date) ? "true" : nil,
+        "range-middle": range_middle?(date) ? "true" : nil,
+        "range-end": range_end?(date) ? "true" : nil
+      }.compact
+    end
+
+    def range_cell_classes(date)
+      return "" unless @mode == :range
+
+      if range_start?(date)
+        "rounded-l-md bg-accent"
+      elsif range_middle?(date)
+        "rounded-none"
+      elsif range_end?(date)
+        "rounded-r-md bg-accent"
+      else
+        ""
+      end
+    end
+
+    def selected_date?(date)
+      case @selected
+      when Array
+        @selected.include?(date) || (@mode == :range && range_middle?(date))
+      else
+        @selected && date == @selected
+      end
+    end
+
+    def range_start?(date)
+      @mode == :range && @selected.is_a?(Array) && @selected.first == date
+    end
+
+    def range_middle?(date)
+      return false unless @mode == :range && @selected.is_a?(Array) && @selected.size >= 2
+
+      date > @selected.first && date < @selected.last
+    end
+
+    def range_end?(date)
+      @mode == :range && @selected.is_a?(Array) && @selected.last == date
     end
 
     def date_disabled?(date)

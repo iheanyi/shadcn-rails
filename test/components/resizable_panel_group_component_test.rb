@@ -27,7 +27,7 @@ class ResizablePanelGroupComponentTest < ViewComponent::TestCase
   def test_renders_with_horizontal_flex_classes
     render_inline(Shadcn::ResizablePanelGroupComponent.new(direction: :horizontal))
 
-    assert_selector "div.flex.h-full"
+    assert_selector "div.flex.h-full.w-full"
   end
 
   def test_renders_vertical_direction
@@ -140,6 +140,19 @@ class ResizablePanelGroupComponentTest < ViewComponent::TestCase
 
     assert_selector "[data-action*='mousedown->shadcn--resizable#startResize']"
     assert_selector "[data-action*='touchstart->shadcn--resizable#startResize']"
+  end
+
+  def test_handle_uses_v4_orientation_aware_focus_and_hit_target_classes
+    render_inline(Shadcn::ResizablePanelGroupComponent.new(direction: :vertical)) do |group|
+      group.with_handle(with_handle: true)
+    end
+
+    handle = page.find("[data-shadcn--resizable-target='handle']")
+    assert_includes handle["class"], "after:w-1"
+    assert_includes handle["class"], "focus-visible:outline-hidden"
+    assert_includes handle["class"], "aria-[orientation=horizontal]:after:h-1"
+    assert_includes handle["class"], "[&[aria-orientation=horizontal]>div]:rotate-90"
+    assert_selector "[aria-orientation='horizontal']"
   end
 
   # Handle with grip indicator

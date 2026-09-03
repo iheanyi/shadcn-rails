@@ -25,7 +25,7 @@ module Shadcn
   #   <% end %>
   #
   class NavigationMenuComponent < BaseComponent
-    BASE_CLASSES = "relative z-10 flex max-w-max flex-1 items-center justify-center"
+    BASE_CLASSES = "group/navigation-menu relative flex max-w-max flex-1 items-center justify-center"
 
     renders_one :list, lambda { |**options|
       NavigationMenuListComponent.new(**options)
@@ -42,7 +42,7 @@ module Shadcn
     end
 
     def viewport
-      content_tag(:div, viewport_inner, class: "absolute left-0 top-full flex justify-center")
+      content_tag(:div, viewport_inner, class: "absolute top-full left-0 isolate z-50 flex justify-center")
     end
 
     def viewport_inner
@@ -56,6 +56,7 @@ module Shadcn
           "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90",
           "md:w-[var(--radix-navigation-menu-viewport-width)]"
         ),
+        "data-slot": "navigation-menu-viewport",
         "data-shadcn--navigation-menu-target": "viewport",
         "data-state": "closed",
         hidden: true

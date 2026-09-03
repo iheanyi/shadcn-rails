@@ -4,7 +4,7 @@ module Shadcn
   # Menubar Radio Item component
   # A radio button within a radio group
   class MenubarRadioItemComponent < BaseComponent
-    BASE_CLASSES = "relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+    BASE_CLASSES = "relative flex cursor-default items-center gap-2 rounded-xs py-1.5 pr-2 pl-8 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
 
     renders_one :shortcut, lambda { |**options|
       MenubarShortcutComponent.new(**options)
@@ -35,7 +35,7 @@ module Shadcn
     end
 
     def radio_indicator
-      content_tag(:span, radio_icon, class: "absolute left-2 flex h-3.5 w-3.5 items-center justify-center")
+      content_tag(:span, radio_icon, class: "absolute left-2 flex size-3.5 items-center justify-center")
     end
 
     def radio_icon
@@ -48,7 +48,7 @@ module Shadcn
         viewBox: "0 0 24 24",
         fill: "currentColor",
         stroke: "none",
-        class: "h-4 w-4"
+        class: "size-4"
       })
     end
 

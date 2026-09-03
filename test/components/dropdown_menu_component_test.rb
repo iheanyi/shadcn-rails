@@ -131,4 +131,30 @@ class DropdownMenuComponentTest < ViewComponent::TestCase
     assert_selector "[data-shadcn--dropdown-target='trigger']"
     assert_text "Content"
   end
+
+  def test_content_uses_v4_origin_available_height_tokens
+    render_inline(Shadcn::DropdownMenuContentComponent.new)
+
+    assert_includes rendered_content, "max-h-(--radix-dropdown-menu-content-available-height)"
+    assert_includes rendered_content, "origin-(--radix-dropdown-menu-content-transform-origin)"
+    assert_includes rendered_content, "overflow-y-auto"
+  end
+
+  def test_item_uses_v4_inset_destructive_svg_tokens
+    render_inline(Shadcn::DropdownMenuItemComponent.new(inset: true, variant: :destructive)) { "Delete" }
+
+    assert_includes rendered_content, "outline-hidden"
+    assert_includes rendered_content, "data-[inset]:pl-8"
+    assert_selector "[data-inset]", visible: :all
+    assert_selector "[data-variant='destructive']", visible: :all
+  end
+
+  def test_separator_and_indicators_use_v4_tokens
+    render_inline(Shadcn::DropdownMenuSeparatorComponent.new)
+    assert_selector ".bg-border"
+
+    render_inline(Shadcn::DropdownMenuCheckboxItemComponent.new(checked: true)) { "Checked" }
+    assert_includes rendered_content, "size-3.5"
+    assert_includes rendered_content, "size-4"
+  end
 end

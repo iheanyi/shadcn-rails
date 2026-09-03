@@ -87,4 +87,21 @@ class DrawerComponentTest < ViewComponent::TestCase
 
     assert_selector "[data-testid='drawer']"
   end
+
+  def test_overlay_uses_v4_background_and_animation_tokens
+    render_inline(Shadcn::DrawerContentComponent.new)
+
+    assert_includes rendered_content, "bg-black/50"
+    assert_includes rendered_content, "data-[state=closed]:animate-out"
+    assert_includes rendered_content, "data-[state=open]:fade-in-0"
+  end
+
+  def test_panel_uses_v4_direction_shape_tokens
+    render_inline(Shadcn::DrawerContentComponent.new(direction: :bottom))
+
+    assert_includes rendered_content, "group/drawer-content"
+    assert_includes rendered_content, "max-h-[80vh]"
+    assert_includes rendered_content, "rounded-t-lg"
+    assert_includes rendered_content, "border-t"
+  end
 end

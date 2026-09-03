@@ -4,11 +4,11 @@ module Shadcn
   # Menubar Item component
   # Individual menu item within menubar content
   class MenubarItemComponent < BaseComponent
-    BASE_CLASSES = "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+    BASE_CLASSES = "relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground"
 
     VARIANTS = {
       default: "",
-      destructive: "text-destructive focus:bg-destructive focus:text-destructive-foreground"
+      destructive: "text-destructive focus:bg-destructive/10 focus:text-destructive dark:focus:bg-destructive/20 data-[variant=destructive]:*:[svg]:text-destructive!"
     }.freeze
 
     renders_one :shortcut, lambda { |**options|
@@ -42,7 +42,7 @@ module Shadcn
       cn(
         BASE_CLASSES,
         VARIANTS[@variant],
-        @inset ? "pl-8" : "",
+        @inset ? "data-[inset]:pl-8" : "",
         class_name
       )
     end
@@ -54,6 +54,8 @@ module Shadcn
         tabindex: @disabled ? nil : "-1",
         href: @href,
         "data-disabled": @disabled ? "" : nil,
+        "data-inset": @inset ? "" : nil,
+        "data-variant": @variant.to_s,
         "data-shadcn--menubar-target": "item",
         "data-action": "click->shadcn--menubar#selectItem"
       }

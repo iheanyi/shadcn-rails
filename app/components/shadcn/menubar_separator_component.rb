@@ -4,7 +4,7 @@ module Shadcn
   # Menubar Separator component
   # Visual separator between menu items
   class MenubarSeparatorComponent < BaseComponent
-    BASE_CLASSES = "-mx-1 my-1 h-px bg-muted"
+    BASE_CLASSES = "-mx-1 my-1 h-px bg-border"
 
     def call
       content_tag(:div, "", separator_attributes)

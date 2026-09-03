@@ -59,8 +59,8 @@ module Shadcn
     }
 
     DIRECTIONS = {
-      horizontal: "flex h-full",
-      vertical: "flex flex-col"
+      horizontal: "flex h-full w-full",
+      vertical: "flex h-full w-full flex-col"
     }.freeze
 
     # @param direction [Symbol] Direction of the panels (:horizontal, :vertical)

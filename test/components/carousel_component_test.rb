@@ -147,6 +147,17 @@ class CarouselComponentTest < ViewComponent::TestCase
     assert_selector "button[aria-label='Previous slide']"
   end
 
+  def test_previous_button_uses_v4_size_and_vertical_positioning
+    render_inline(Shadcn::CarouselComponent.new(orientation: :vertical)) do |carousel|
+      carousel.with_previous
+    end
+
+    button = page.find("button[data-shadcn--carousel-target='prevButton']")
+    assert_includes button["class"], "size-8"
+    assert_includes button["class"], "-top-12"
+    assert_includes button["class"], "rotate-90"
+  end
+
   def test_renders_with_next_button
     render_inline(Shadcn::CarouselComponent.new) do |carousel|
       carousel.with_next { "Next" }
@@ -169,6 +180,17 @@ class CarouselComponentTest < ViewComponent::TestCase
     end
 
     assert_selector "button[aria-label='Next slide']"
+  end
+
+  def test_next_button_uses_v4_size_and_vertical_positioning
+    render_inline(Shadcn::CarouselComponent.new(orientation: :vertical)) do |carousel|
+      carousel.with_next
+    end
+
+    button = page.find("button[data-shadcn--carousel-target='nextButton']")
+    assert_includes button["class"], "size-8"
+    assert_includes button["class"], "-bottom-12"
+    assert_includes button["class"], "rotate-90"
   end
 
   # Default icons
