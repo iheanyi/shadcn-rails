@@ -3,11 +3,11 @@
 module Shadcn
   # Context Menu Item component
   class ContextMenuItemComponent < BaseComponent
-    BASE_CLASSES = "relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0"
+    BASE_CLASSES = "relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground data-[variant=destructive]:*:[svg]:text-destructive!"
 
     VARIANTS = {
       default: "",
-      destructive: "text-destructive hover:bg-destructive hover:text-destructive-foreground focus:bg-destructive focus:text-destructive-foreground"
+      destructive: ""
     }.freeze
 
     renders_one :shortcut, lambda { |**options|
@@ -41,7 +41,6 @@ module Shadcn
       cn(
         BASE_CLASSES,
         VARIANTS[@variant],
-        @inset ? "pl-8" : "",
         class_name
       )
     end
@@ -52,7 +51,10 @@ module Shadcn
         role: "menuitem",
         tabindex: @disabled ? nil : "-1",
         href: @href,
+        "data-slot": "context-menu-item",
         "data-disabled": @disabled ? "" : nil,
+        "data-inset": @inset ? "" : nil,
+        "data-variant": @variant,
         "data-shadcn--context-menu-target": "item",
         "data-action": "click->shadcn--context-menu#selectItem"
       }
