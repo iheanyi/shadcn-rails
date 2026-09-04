@@ -3,13 +3,14 @@
 module Shadcn
   # Drawer Content component
   class DrawerContentComponent < BaseComponent
-    OVERLAY_CLASSES = "fixed inset-0 z-50 bg-black/80"
-    CONTENT_CLASSES = {
-      bottom: "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border bg-background",
-      top: "fixed inset-x-0 top-0 z-50 mb-24 flex h-auto flex-col rounded-b-[10px] border bg-background",
-      left: "fixed inset-y-0 left-0 z-50 h-full w-3/4 max-w-sm flex flex-col border-r bg-background",
-      right: "fixed inset-y-0 right-0 z-50 h-full w-3/4 max-w-sm flex flex-col border-l bg-background"
-    }.freeze
+    OVERLAY_CLASSES = "fixed inset-0 z-50 bg-black/50 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0"
+    CONTENT_CLASSES = [
+      "group/drawer-content fixed z-50 flex h-auto flex-col bg-background",
+      "data-[vaul-drawer-direction=top]:inset-x-0 data-[vaul-drawer-direction=top]:top-0 data-[vaul-drawer-direction=top]:mb-24 data-[vaul-drawer-direction=top]:max-h-[80vh] data-[vaul-drawer-direction=top]:rounded-b-lg data-[vaul-drawer-direction=top]:border-b",
+      "data-[vaul-drawer-direction=bottom]:inset-x-0 data-[vaul-drawer-direction=bottom]:bottom-0 data-[vaul-drawer-direction=bottom]:mt-24 data-[vaul-drawer-direction=bottom]:max-h-[80vh] data-[vaul-drawer-direction=bottom]:rounded-t-lg data-[vaul-drawer-direction=bottom]:border-t",
+      "data-[vaul-drawer-direction=right]:inset-y-0 data-[vaul-drawer-direction=right]:right-0 data-[vaul-drawer-direction=right]:w-3/4 data-[vaul-drawer-direction=right]:border-l data-[vaul-drawer-direction=right]:sm:max-w-sm",
+      "data-[vaul-drawer-direction=left]:inset-y-0 data-[vaul-drawer-direction=left]:left-0 data-[vaul-drawer-direction=left]:w-3/4 data-[vaul-drawer-direction=left]:border-r data-[vaul-drawer-direction=left]:sm:max-w-sm"
+    ].join(" ").freeze
 
     renders_one :header, lambda { |**options|
       DrawerHeaderComponent.new(**options)
@@ -25,7 +26,7 @@ module Shadcn
     end
 
     def call
-      content_tag(:template, content_wrapper, { "data-shadcn--drawer-target": "template" })
+      content_tag(:template, content_wrapper, { "data-slot": "drawer-portal", "data-shadcn--drawer-target": "template" })
     end
 
     private
@@ -40,6 +41,7 @@ module Shadcn
     def overlay
       content_tag(:div, "", {
         class: OVERLAY_CLASSES,
+        "data-slot": "drawer-overlay",
         "data-shadcn--drawer-target": "overlay",
         "data-action": "click->shadcn--drawer#close",
         "data-state": "closed"
@@ -47,13 +49,19 @@ module Shadcn
     end
 
     def drawer_panel
-      content_tag(:div, panel_content, {
-        class: cn(CONTENT_CLASSES[@direction] || CONTENT_CLASSES[:bottom], class_name),
+      content_tag(:div, panel_content, **panel_attributes)
+    end
+
+    def panel_attributes
+      merge_html_attributes({
+        class: merge_classes(CONTENT_CLASSES),
         role: "dialog",
         "aria-modal": "true",
+        "data-slot": "drawer-content",
         "data-shadcn--drawer-target": "content",
         "data-state": "closed",
         "data-direction": @direction.to_s,
+        "data-vaul-drawer-direction": @direction.to_s,
         tabindex: "-1"
       })
     end
@@ -68,9 +76,7 @@ module Shadcn
     end
 
     def handle_bar
-      return unless [:bottom, :top].include?(@direction)
-
-      content_tag(:div, class: "mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted") { "" }
+      content_tag(:div, "", class: "mx-auto mt-4 hidden h-2 w-[100px] shrink-0 rounded-full bg-muted group-data-[vaul-drawer-direction=bottom]/drawer-content:block")
     end
   end
 end
