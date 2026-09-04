@@ -6,7 +6,7 @@ module Shadcn
     BASE_CLASSES = "ml-auto text-xs tracking-widest text-muted-foreground"
 
     def call
-      content_tag(:span, content, class: merge_classes(BASE_CLASSES), **html_options.merge(build_data))
+      content_tag(:span, content, class: merge_classes(BASE_CLASSES), "data-slot": "command-shortcut", **html_options.merge(build_data))
     end
   end
 end

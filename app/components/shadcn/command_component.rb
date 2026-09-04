@@ -42,6 +42,7 @@ module Shadcn
     def command_attributes
       {
         class: merge_classes(BASE_CLASSES),
+        "data-slot": "command",
         data: {
           controller: "shadcn--command",
           action: "keydown->shadcn--command#handleKeydown"

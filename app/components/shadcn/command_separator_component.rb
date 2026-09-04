@@ -6,7 +6,7 @@ module Shadcn
     BASE_CLASSES = "-mx-1 h-px bg-border"
 
     def call
-      content_tag(:div, "", class: merge_classes(BASE_CLASSES), role: "separator", **html_options.merge(build_data))
+      content_tag(:div, "", class: merge_classes(BASE_CLASSES), "data-slot": "command-separator", role: "separator", **html_options.merge(build_data))
     end
   end
 end

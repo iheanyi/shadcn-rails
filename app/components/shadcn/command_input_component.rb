@@ -3,9 +3,9 @@
 module Shadcn
   # Command Input component - search input for command palette
   class CommandInputComponent < BaseComponent
-    WRAPPER_CLASSES = "flex items-center border-b px-3"
-    INPUT_CLASSES = "flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
-    ICON_CLASSES = "mr-2 h-4 w-4 shrink-0 opacity-50"
+    WRAPPER_CLASSES = "flex h-9 items-center gap-2 border-b px-3"
+    INPUT_CLASSES = "flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-hidden placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+    ICON_CLASSES = "size-4 shrink-0 opacity-50"
 
     # @param placeholder [String] Placeholder text
     # @param autofocus [Boolean] Whether to autofocus the input
@@ -16,7 +16,7 @@ module Shadcn
     end
 
     def call
-      content_tag(:div, class: WRAPPER_CLASSES) do
+      content_tag(:div, class: WRAPPER_CLASSES, "data-slot": "command-input-wrapper") do
         safe_join([
           search_icon,
           tag.input(
@@ -24,6 +24,7 @@ module Shadcn
             placeholder: @placeholder,
             autofocus: @autofocus || nil,
             class: merge_classes(INPUT_CLASSES),
+            "data-slot": "command-input",
             data: {
               "shadcn--command-target": "input",
               action: "input->shadcn--command#filter"

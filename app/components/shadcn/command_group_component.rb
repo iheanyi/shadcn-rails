@@ -3,7 +3,7 @@
 module Shadcn
   # Command Group component - groups related command items
   class CommandGroupComponent < BaseComponent
-    BASE_CLASSES = "overflow-hidden p-1 text-foreground"
+    BASE_CLASSES = "overflow-hidden p-1 text-foreground [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground"
     HEADING_CLASSES = "px-2 py-1.5 text-xs font-medium text-muted-foreground"
 
     # Items in this group
@@ -18,7 +18,7 @@ module Shadcn
     end
 
     def call
-      content_tag(:div, group_content, class: merge_classes(BASE_CLASSES), role: "group", data: { "shadcn--command-target": "group" }, **html_options.merge(build_data))
+      content_tag(:div, group_content, class: merge_classes(BASE_CLASSES), "data-slot": "command-group", role: "group", data: { "shadcn--command-target": "group" }, **html_options.merge(build_data))
     end
 
     private

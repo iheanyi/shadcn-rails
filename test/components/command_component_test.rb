@@ -108,6 +108,13 @@ class CommandComponentTest < ViewComponent::TestCase
     assert_selector "div.custom-command"
   end
 
+  def test_renders_upstream_command_slot_and_classes
+    render_inline(Shadcn::CommandComponent.new)
+
+    assert_selector "div[data-slot='command']"
+    assert_includes rendered_content, "flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground"
+  end
+
   def test_input_has_search_icon
     render_inline(Shadcn::CommandComponent.new) do |command|
       command.with_input
@@ -186,6 +193,19 @@ class CommandDialogComponentTest < ViewComponent::TestCase
     # Template elements are not visible in Capybara, check the raw HTML
     assert_includes rendered_content, "data-shadcn--command-dialog-target=\"template\""
   end
+
+  def test_dialog_uses_upstream_overlay_content_and_command_tokens
+    render_inline(Shadcn::CommandDialogComponent.new) do |dialog|
+      dialog.with_command
+    end
+
+    assert_includes rendered_content, "bg-black/50"
+    assert_includes rendered_content, "overflow-hidden p-0"
+    assert_includes rendered_content, "**:data-[slot=command-input-wrapper]:h-12"
+    refute_includes rendered_content, "bg-black/80"
+    refute_includes rendered_content, "[&amp;_[data-shadcn--command-target=&#39;input&#39;]]:h-12"
+    refute_includes rendered_content, "rounded-lg border shadow-md md:min-w-[450px]"
+  end
 end
 
 class CommandInputComponentTest < ViewComponent::TestCase
@@ -219,6 +239,19 @@ class CommandInputComponentTest < ViewComponent::TestCase
 
     assert_selector "input[data-action='input->shadcn--command#filter']"
   end
+
+  def test_uses_upstream_input_wrapper_icon_and_input_tokens
+    render_inline(Shadcn::CommandInputComponent.new)
+
+    assert_selector "div[data-slot='command-input-wrapper']"
+    assert_selector "input[data-slot='command-input']"
+    assert_includes rendered_content, "flex h-9 items-center gap-2 border-b px-3"
+    assert_includes rendered_content, "size-4 shrink-0 opacity-50"
+    assert_includes rendered_content, "outline-hidden"
+    refute_includes rendered_content, "flex items-center border-b px-3"
+    refute_includes rendered_content, "mr-2 h-4 w-4"
+    refute_includes rendered_content, "outline-none"
+  end
 end
 
 class CommandListComponentTest < ViewComponent::TestCase
@@ -234,6 +267,14 @@ class CommandListComponentTest < ViewComponent::TestCase
     end
 
     assert_selector "div[data-shadcn--command-target='empty']", text: "Nothing here"
+  end
+
+  def test_uses_upstream_list_tokens
+    render_inline(Shadcn::CommandListComponent.new)
+
+    assert_selector "div[data-slot='command-list']"
+    assert_includes rendered_content, "max-h-[300px] scroll-py-1 overflow-x-hidden overflow-y-auto"
+    refute_includes rendered_content, "max-h-[300px] overflow-y-auto overflow-x-hidden"
   end
 end
 
@@ -257,6 +298,14 @@ class CommandGroupComponentTest < ViewComponent::TestCase
     end
 
     assert_text "Test Item"
+  end
+
+  def test_uses_upstream_group_slot_and_heading_tokens
+    render_inline(Shadcn::CommandGroupComponent.new(heading: "Applications"))
+
+    assert_selector "div[data-slot='command-group']"
+    assert_includes rendered_content, "[&amp;_[cmdk-group-heading]]:px-2"
+    assert_includes rendered_content, "[&amp;_[cmdk-group-heading]]:text-muted-foreground"
   end
 end
 
@@ -295,6 +344,17 @@ class CommandItemComponentTest < ViewComponent::TestCase
 
     assert_selector "div[data-action='click->shadcn--command#select']"
   end
+
+  def test_uses_upstream_item_slot_and_svg_tokens
+    render_inline(Shadcn::CommandItemComponent.new(value: "calendar")) { "Calendar" }
+
+    assert_selector "div[data-slot='command-item']"
+    assert_includes rendered_content, "relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none"
+    assert_includes rendered_content, "[&amp;_svg:not([class*=&#39;size-&#39;])]:size-4"
+    assert_includes rendered_content, "[&amp;_svg:not([class*=&#39;text-&#39;])]:text-muted-foreground"
+    refute_includes rendered_content, "outline-none"
+    refute_includes rendered_content, "[&amp;_svg]:size-4"
+  end
 end
 
 class CommandEmptyComponentTest < ViewComponent::TestCase
@@ -315,6 +375,14 @@ class CommandEmptyComponentTest < ViewComponent::TestCase
 
     assert_selector "div[data-shadcn--command-target='empty']"
   end
+
+  def test_uses_upstream_empty_slot_and_tokens
+    render_inline(Shadcn::CommandEmptyComponent.new)
+
+    assert_selector "div[data-slot='command-empty']"
+    assert_includes rendered_content, "py-6 text-center text-sm"
+    refute_includes rendered_content, "py-6 text-center text-sm text-muted-foreground"
+  end
 end
 
 class CommandSeparatorComponentTest < ViewComponent::TestCase
@@ -323,6 +391,13 @@ class CommandSeparatorComponentTest < ViewComponent::TestCase
 
     assert_selector "div[role='separator']"
   end
+
+  def test_uses_upstream_separator_slot_and_tokens
+    render_inline(Shadcn::CommandSeparatorComponent.new)
+
+    assert_selector "div[data-slot='command-separator']"
+    assert_includes rendered_content, "-mx-1 h-px bg-border"
+  end
 end
 
 class CommandShortcutComponentTest < ViewComponent::TestCase
@@ -330,5 +405,12 @@ class CommandShortcutComponentTest < ViewComponent::TestCase
     render_inline(Shadcn::CommandShortcutComponent.new) { "⌘K" }
 
     assert_selector "span", text: "⌘K"
+  end
+
+  def test_uses_upstream_shortcut_slot_and_tokens
+    render_inline(Shadcn::CommandShortcutComponent.new) { "⌘K" }
+
+    assert_selector "span[data-slot='command-shortcut']"
+    assert_includes rendered_content, "ml-auto text-xs tracking-widest text-muted-foreground"
   end
 end

@@ -3,7 +3,7 @@
 module Shadcn
   # Command List component - container for command groups and items
   class CommandListComponent < BaseComponent
-    BASE_CLASSES = "max-h-[300px] overflow-y-auto overflow-x-hidden"
+    BASE_CLASSES = "max-h-[300px] scroll-py-1 overflow-x-hidden overflow-y-auto"
 
     # Empty state slot
     renders_one :empty, lambda { |**options|
@@ -33,7 +33,7 @@ module Shadcn
     }
 
     def call
-      content_tag(:div, list_content, class: merge_classes(BASE_CLASSES), data: { "shadcn--command-target": "list" }, **html_options.merge(build_data))
+      content_tag(:div, list_content, class: merge_classes(BASE_CLASSES), "data-slot": "command-list", data: { "shadcn--command-target": "list" }, **html_options.merge(build_data))
     end
 
     private

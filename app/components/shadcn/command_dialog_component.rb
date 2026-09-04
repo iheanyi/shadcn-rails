@@ -21,9 +21,9 @@ module Shadcn
   #   <% end %>
   #
   class CommandDialogComponent < BaseComponent
-    OVERLAY_CLASSES = "fixed inset-0 z-50 bg-black/80"
-    CONTENT_CLASSES = "fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] shadow-lg"
-    COMMAND_CLASSES = "[&_[data-shadcn--command-target='input']]:h-12"
+    OVERLAY_CLASSES = "fixed inset-0 z-50 bg-black/50"
+    CONTENT_CLASSES = "fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] overflow-hidden p-0 shadow-lg"
+    COMMAND_CLASSES = "**:data-[slot=command-input-wrapper]:h-12 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]]:px-2 [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5"
 
     # Trigger slot - simple wrapper that renders content
     renders_one :trigger, lambda { |**options, &block|
@@ -32,7 +32,7 @@ module Shadcn
 
     # Command slot
     renders_one :command, lambda { |**options|
-      CommandComponent.new(class_name: "rounded-lg border shadow-md md:min-w-[450px] #{COMMAND_CLASSES}", **options)
+      CommandComponent.new(class_name: COMMAND_CLASSES, **options)
     }
 
     # @param shortcut [String] Keyboard shortcut to open (e.g., "k" for Cmd+K)

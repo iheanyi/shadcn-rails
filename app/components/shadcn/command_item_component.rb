@@ -3,7 +3,7 @@
 module Shadcn
   # Command Item component - individual selectable command
   class CommandItemComponent < BaseComponent
-    BASE_CLASSES = "relative flex cursor-default gap-2 select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none data-[disabled=true]:pointer-events-none data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0"
+    BASE_CLASSES = "relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground"
 
     # Shortcut slot
     renders_one :shortcut, lambda { |**options|
@@ -33,6 +33,7 @@ module Shadcn
     def item_attributes
       {
         class: merge_classes(BASE_CLASSES),
+        "data-slot": "command-item",
         role: "option",
         tabindex: @disabled ? nil : "0",
         data: {
