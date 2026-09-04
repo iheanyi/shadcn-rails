@@ -4,7 +4,10 @@ module Shadcn
   # Dropdown Menu Group component
   class DropdownMenuGroupComponent < BaseComponent
     def call
-      content_tag(:div, content, role: "group", **html_options)
+      content_tag(:div, content, **merge_html_attributes({
+        role: "group",
+        "data-slot": "dropdown-menu-group"
+      }))
     end
   end
 end

@@ -53,7 +53,7 @@ module Shadcn
     end
 
     def dropdown_attributes
-      merge_html_attributes({ class: dropdown_classes }, dropdown_data_attrs)
+      merge_html_attributes({ class: dropdown_classes, "data-slot": "dropdown-menu" }, dropdown_data_attrs)
     end
   end
 end

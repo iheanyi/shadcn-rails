@@ -32,6 +32,7 @@ module Shadcn
       attrs = {
         class: class_name,
         role: "group",
+        "data-slot": "dropdown-menu-radio-group",
         "data-value": @value
       }
       attrs.merge!(html_options)

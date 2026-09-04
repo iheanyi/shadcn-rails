@@ -3,7 +3,7 @@
 module Shadcn
   # Dropdown Menu Label component
   class DropdownMenuLabelComponent < BaseComponent
-    BASE_CLASSES = "px-2 py-1.5 text-sm font-semibold"
+    BASE_CLASSES = "px-2 py-1.5 text-sm font-medium data-[inset]:pl-8"
 
     # @param inset [Boolean] Whether to add left padding
     def initialize(inset: false, **options, &block)
@@ -12,7 +12,11 @@ module Shadcn
     end
 
     def call
-      content_tag(:div, content, class: cn(BASE_CLASSES, @inset ? "pl-8" : "", class_name))
+      content_tag(:div, content, **merge_html_attributes({
+        class: cn(BASE_CLASSES, class_name),
+        "data-slot": "dropdown-menu-label",
+        "data-inset": @inset ? "" : nil
+      }))
     end
   end
 end

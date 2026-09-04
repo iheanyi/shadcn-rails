@@ -1,6 +1,6 @@
 <%= tag.div(**dropdown_attributes) do %>
   <% if trigger? %>
-    <div data-shadcn--dropdown-target="trigger" data-action="click->shadcn--dropdown#toggle">
+    <div data-slot="dropdown-menu-trigger" data-shadcn--dropdown-target="trigger" data-action="click->shadcn--dropdown#toggle">
       <%= trigger %>
     </div>
   <% end %>
