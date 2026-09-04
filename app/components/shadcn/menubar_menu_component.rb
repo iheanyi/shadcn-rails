@@ -24,6 +24,7 @@ module Shadcn
     def menu_attributes
       attrs = {
         class: cn("relative", class_name),
+        "data-slot": "menubar-menu",
         "data-shadcn--menubar-target": "menu"
       }
       attrs.merge!(html_options)

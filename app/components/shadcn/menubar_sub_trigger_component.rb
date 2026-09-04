@@ -4,7 +4,7 @@ module Shadcn
   # Menubar Sub Trigger component
   # Button that opens a submenu
   class MenubarSubTriggerComponent < BaseComponent
-    BASE_CLASSES = "flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
+    BASE_CLASSES = "flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-none select-none focus:bg-accent focus:text-accent-foreground data-[inset]:pl-8 data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
 
     # @param inset [Boolean] Whether to add left padding
     def initialize(inset: false, **options, &block)
@@ -43,11 +43,13 @@ module Shadcn
 
     def trigger_attributes
       attrs = {
-        class: cn(BASE_CLASSES, @inset ? "pl-8" : "", class_name),
+        class: cn(BASE_CLASSES, class_name),
         role: "menuitem",
         "aria-haspopup": "menu",
         "aria-expanded": "false",
         "data-state": "closed",
+        "data-inset": @inset ? "" : nil,
+        "data-slot": "menubar-sub-trigger",
         "data-shadcn--menubar-target": "subTrigger",
         "data-action": "mouseenter->shadcn--menubar#openSub mouseleave->shadcn--menubar#startCloseSubTimer"
       }

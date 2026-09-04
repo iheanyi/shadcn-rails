@@ -14,7 +14,8 @@ module Shadcn
 
     def shortcut_attributes
       {
-        class: cn(BASE_CLASSES, class_name)
+        class: cn(BASE_CLASSES, class_name),
+        "data-slot": "menubar-shortcut"
       }
     end
   end

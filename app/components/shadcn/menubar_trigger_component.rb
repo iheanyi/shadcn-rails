@@ -4,7 +4,7 @@ module Shadcn
   # Menubar Trigger component
   # Button that opens the menu dropdown
   class MenubarTriggerComponent < BaseComponent
-    BASE_CLASSES = "flex cursor-default select-none items-center rounded-sm px-3 py-1 text-sm font-medium outline-none focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
+    BASE_CLASSES = "flex items-center rounded-sm px-2 py-1 text-sm font-medium outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
 
     def call
       content_tag(:button, content, trigger_attributes)
@@ -20,6 +20,7 @@ module Shadcn
         "aria-haspopup": "menu",
         "aria-expanded": "false",
         "data-state": "closed",
+        "data-slot": "menubar-trigger",
         "data-shadcn--menubar-target": "trigger",
         "data-action": "click->shadcn--menubar#toggle mouseenter->shadcn--menubar#hoverOpen"
       }
