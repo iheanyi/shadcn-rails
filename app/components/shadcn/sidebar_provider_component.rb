@@ -3,7 +3,7 @@
 module Shadcn
   # SidebarProvider component - wrapper that provides sidebar context and state
   class SidebarProviderComponent < BaseComponent
-    BASE_CLASSES = "group/sidebar-wrapper flex min-h-svh w-full has-[[data-variant=inset]]:bg-sidebar"
+    BASE_CLASSES = "group/sidebar-wrapper flex min-h-svh w-full has-data-[variant=inset]:bg-sidebar"
 
     renders_one :sidebar, lambda { |**options|
       SidebarComponent.new(**options)
@@ -33,6 +33,7 @@ module Shadcn
       attrs = {
         class: cn(BASE_CLASSES, class_name),
         style: sidebar_style,
+        "data-slot": "sidebar-wrapper",
         "data-controller": "shadcn--sidebar",
         "data-shadcn--sidebar-open-value": initial_open_state,
         "data-shadcn--sidebar-keyboard-shortcut-value": @keyboard_shortcut

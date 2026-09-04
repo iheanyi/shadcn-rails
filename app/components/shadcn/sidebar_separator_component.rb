@@ -14,7 +14,8 @@ module Shadcn
     def separator_attributes
       attrs = {
         class: cn(BASE_CLASSES, class_name),
-        "data-sidebar": "separator"
+        "data-sidebar": "separator",
+        "data-slot": "sidebar-separator"
       }
       attrs.merge!(html_options)
       attrs.merge!(build_data)

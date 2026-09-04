@@ -31,7 +31,8 @@ module Shadcn
     def item_attributes
       attrs = {
         class: cn(BASE_CLASSES, class_name),
-        "data-sidebar": "menu-item"
+        "data-sidebar": "menu-item",
+        "data-slot": "sidebar-menu-item"
       }
       attrs.merge!(html_options)
       attrs.merge!(build_data)

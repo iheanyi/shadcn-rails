@@ -3,14 +3,14 @@
 module Shadcn
   # SidebarTrigger component - button to toggle sidebar open/closed
   class SidebarTriggerComponent < BaseComponent
-    BASE_CLASSES = "h-7 w-7"
+    BASE_CLASSES = "size-7"
 
     def call
       render ButtonComponent.new(
         variant: :ghost,
         size: :icon,
         class_name: cn(BASE_CLASSES, class_name),
-        data: { sidebar: "trigger", action: "click->shadcn--sidebar#toggle" },
+        data: { slot: "sidebar-trigger", sidebar: "trigger", action: "click->shadcn--sidebar#toggle" },
         **html_options
       ) do
         trigger_content

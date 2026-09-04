@@ -14,7 +14,8 @@ module Shadcn
     def header_attributes
       attrs = {
         class: cn(BASE_CLASSES, class_name),
-        "data-sidebar": "header"
+        "data-sidebar": "header",
+        "data-slot": "sidebar-header"
       }
       attrs.merge!(html_options)
       attrs.merge!(build_data)

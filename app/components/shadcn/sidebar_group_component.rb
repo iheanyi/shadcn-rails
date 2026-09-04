@@ -28,7 +28,8 @@ module Shadcn
     def group_attributes
       attrs = {
         class: cn(BASE_CLASSES, class_name),
-        "data-sidebar": "group"
+        "data-sidebar": "group",
+        "data-slot": "sidebar-group"
       }
       attrs.merge!(html_options)
       attrs.merge!(build_data)

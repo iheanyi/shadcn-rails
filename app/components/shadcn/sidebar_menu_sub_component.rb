@@ -23,7 +23,8 @@ module Shadcn
     def sub_attributes
       attrs = {
         class: cn(BASE_CLASSES, COLLAPSED_CLASSES, class_name),
-        "data-sidebar": "menu-sub"
+        "data-sidebar": "menu-sub",
+        "data-slot": "sidebar-menu-sub"
       }
       attrs.merge!(html_options)
       attrs.merge!(build_data)

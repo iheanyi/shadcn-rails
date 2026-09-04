@@ -22,7 +22,8 @@ module Shadcn
     def content_attributes
       attrs = {
         class: cn(BASE_CLASSES, class_name),
-        "data-sidebar": "content"
+        "data-sidebar": "content",
+        "data-slot": "sidebar-content"
       }
       attrs.merge!(html_options)
       attrs.merge!(build_data)

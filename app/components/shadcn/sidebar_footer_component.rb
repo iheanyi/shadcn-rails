@@ -14,7 +14,8 @@ module Shadcn
     def footer_attributes
       attrs = {
         class: cn(BASE_CLASSES, class_name),
-        "data-sidebar": "footer"
+        "data-sidebar": "footer",
+        "data-slot": "sidebar-footer"
       }
       attrs.merge!(html_options)
       attrs.merge!(build_data)
