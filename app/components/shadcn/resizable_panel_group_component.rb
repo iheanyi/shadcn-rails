@@ -58,10 +58,7 @@ module Shadcn
       }
     }
 
-    DIRECTIONS = {
-      horizontal: "flex h-full",
-      vertical: "flex flex-col"
-    }.freeze
+    BASE_CLASSES = "flex h-full w-full aria-[orientation=vertical]:flex-col"
 
     # @param direction [Symbol] Direction of the panels (:horizontal, :vertical)
     # @param auto_save_id [String] ID for persisting panel sizes to localStorage
@@ -88,16 +85,18 @@ module Shadcn
       {
         class: class_names,
         "data-controller": "shadcn--resizable",
+        "data-slot": "resizable-panel-group",
         "data-shadcn--resizable-direction-value": @direction.to_s,
         "data-shadcn--resizable-auto-save-id-value": @auto_save_id,
         "data-panel-group": "",
-        "data-panel-group-direction": @direction.to_s
+        "data-panel-group-direction": @direction.to_s,
+        "aria-orientation": @direction.to_s
       }.merge(html_options).compact
     end
 
     def class_names
       cn(
-        DIRECTIONS[@direction],
+        BASE_CLASSES,
         @class_name
       )
     end

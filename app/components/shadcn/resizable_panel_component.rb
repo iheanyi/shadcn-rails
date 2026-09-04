@@ -3,8 +3,6 @@
 module Shadcn
   # Individual panel within a ResizablePanelGroup
   class ResizablePanelComponent < BaseComponent
-    BASE_CLASSES = "relative"
-
     # @param default_size [Integer] Initial size percentage (0-100)
     # @param min_size [Integer] Minimum size percentage
     # @param max_size [Integer] Maximum size percentage
@@ -27,6 +25,7 @@ module Shadcn
       {
         class: class_names,
         style: panel_style,
+        "data-slot": "resizable-panel",
         "data-panel": "",
         "data-panel-size": @default_size,
         "data-shadcn--resizable-target": "panel",
@@ -46,11 +45,7 @@ module Shadcn
     end
 
     def class_names
-      cn(
-        BASE_CLASSES,
-        "overflow-hidden",
-        @class_name
-      )
+      @class_name
     end
   end
 end

@@ -30,6 +30,20 @@ class ResizablePanelGroupComponentTest < ViewComponent::TestCase
     assert_selector "div.flex.h-full"
   end
 
+  def test_panel_group_matches_new_york_v4_classes_and_slot
+    render_inline(Shadcn::ResizablePanelGroupComponent.new(direction: :horizontal))
+
+    group = page.find("[data-controller='shadcn--resizable']")
+    class_tokens = group[:class].split
+
+    assert_equal "resizable-panel-group", group["data-slot"]
+    assert_equal "horizontal", group["aria-orientation"]
+    assert_includes class_tokens, "flex"
+    assert_includes class_tokens, "h-full"
+    assert_includes class_tokens, "w-full"
+    assert_includes class_tokens, "aria-[orientation=vertical]:flex-col"
+  end
+
   def test_renders_vertical_direction
     render_inline(Shadcn::ResizablePanelGroupComponent.new(direction: :vertical))
 
@@ -40,7 +54,13 @@ class ResizablePanelGroupComponentTest < ViewComponent::TestCase
   def test_renders_with_vertical_flex_classes
     render_inline(Shadcn::ResizablePanelGroupComponent.new(direction: :vertical))
 
-    assert_selector "div.flex.flex-col"
+    group = page.find("[data-controller='shadcn--resizable']")
+    class_tokens = group[:class].split
+
+    assert_selector "div.flex"
+    assert_equal "vertical", group["aria-orientation"]
+    assert_includes class_tokens, "aria-[orientation=vertical]:flex-col"
+    refute_includes class_tokens, "flex-col"
   end
 
   # Auto save ID for persistence
@@ -73,10 +93,24 @@ class ResizablePanelGroupComponentTest < ViewComponent::TestCase
       group.with_panel(default_size: 30, min_size: 10, max_size: 50) { "Content" }
     end
 
-    assert_selector "[data-panel]"
+    panel = page.find("[data-panel]")
+
+    assert_equal "resizable-panel", panel["data-slot"]
     assert_selector "[data-panel-size='30']"
     assert_selector "[data-min-size='10']"
     assert_selector "[data-max-size='50']"
+  end
+
+  def test_panel_does_not_add_non_upstream_classes
+    render_inline(Shadcn::ResizablePanelGroupComponent.new) do |group|
+      group.with_panel(default_size: 30) { "Content" }
+    end
+
+    panel = page.find("[data-panel]")
+    classes = panel[:class].to_s.split
+
+    refute_includes classes, "relative"
+    refute_includes classes, "overflow-hidden"
   end
 
   def test_panel_has_flex_basis_style
@@ -95,8 +129,52 @@ class ResizablePanelGroupComponentTest < ViewComponent::TestCase
       group.with_panel(default_size: 50) { "Panel 2" }
     end
 
-    assert_selector "[data-shadcn--resizable-target='handle']"
+    handle = page.find("[data-shadcn--resizable-target='handle']")
+
+    assert_equal "resizable-handle", handle["data-slot"]
     assert_selector "[data-panel-resize-handle]"
+  end
+
+  def test_handle_matches_new_york_v4_classes
+    render_inline(Shadcn::ResizablePanelGroupComponent.new) do |group|
+      group.with_handle(with_handle: true)
+    end
+
+    handle = page.find("[data-panel-resize-handle]")
+    class_tokens = handle[:class].split
+
+    %w[
+      relative
+      flex
+      w-px
+      items-center
+      justify-center
+      bg-border
+      after:absolute
+      after:inset-y-0
+      after:left-1/2
+      after:w-1
+      after:-translate-x-1/2
+      focus-visible:ring-1
+      focus-visible:ring-ring
+      focus-visible:ring-offset-1
+      focus-visible:outline-hidden
+      aria-[orientation=horizontal]:h-px
+      aria-[orientation=horizontal]:w-full
+      aria-[orientation=horizontal]:after:left-0
+      aria-[orientation=horizontal]:after:h-1
+      aria-[orientation=horizontal]:after:w-full
+      aria-[orientation=horizontal]:after:translate-x-0
+      aria-[orientation=horizontal]:after:-translate-y-1/2
+      [&[aria-orientation=horizontal]>div]:rotate-90
+    ].each do |class_name|
+      assert_includes class_tokens, class_name
+    end
+
+    refute_includes class_tokens, "focus-visible:outline-none"
+    refute_includes class_tokens, "hover:bg-primary/50"
+    refute_includes class_tokens, "transition-colors"
+    refute_includes class_tokens, "[&[data-state=dragging]]:bg-primary"
   end
 
   def test_handle_has_separator_role
@@ -157,6 +235,27 @@ class ResizablePanelGroupComponentTest < ViewComponent::TestCase
     end
 
     assert_no_selector "[data-panel-resize-handle] svg"
+  end
+
+  def test_handle_grip_indicator_matches_new_york_v4_classes
+    render_inline(Shadcn::ResizablePanelGroupComponent.new) do |group|
+      group.with_handle(with_handle: true)
+    end
+
+    indicator = page.find("[data-panel-resize-handle] > div")
+    indicator_tokens = indicator[:class].split
+    grip_tokens = page.find("[data-panel-resize-handle] svg")[:class].split
+
+    %w[z-10 flex h-4 w-3 items-center justify-center rounded-xs border bg-border].each do |class_name|
+      assert_includes indicator_tokens, class_name
+    end
+
+    assert_includes grip_tokens, "size-2.5"
+    refute_includes indicator_tokens, "rounded-sm"
+    refute_includes indicator_tokens, "w-4"
+    refute_includes indicator_tokens, "h-3"
+    refute_includes grip_tokens, "h-2.5"
+    refute_includes grip_tokens, "w-2.5"
   end
 
   # Custom class
