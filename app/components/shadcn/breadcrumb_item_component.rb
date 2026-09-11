@@ -28,23 +28,21 @@ module Shadcn
     private
 
     def item_attributes
-      attrs = {
+      merge_html_attributes({
         role: "link",
         class: cn(PAGE_CLASSES, @class_name),
+        "data-slot": "breadcrumb-page",
         "aria-current": "page",
         "aria-disabled": "true"
-      }
-      attrs.merge!(html_options.except(:href))
-      attrs.compact
+      }).except(:href, "href")
     end
 
     def link_attributes
-      attrs = {
+      merge_html_attributes({
         href: @href,
-        class: cn(LINK_CLASSES, @class_name)
-      }
-      attrs.merge!(html_options)
-      attrs.compact
+        class: cn(LINK_CLASSES, @class_name),
+        "data-slot": "breadcrumb-link"
+      })
     end
   end
 end
