@@ -124,10 +124,23 @@ class ToggleGroupComponentTest < ViewComponent::TestCase
 
     assert_includes classes, "data-[spacing=0]:rounded-none"
     assert_includes classes, "data-[spacing=0]:shadow-none"
-    assert_includes classes, "data-[spacing=0]:first:rounded-l-md"
-    assert_includes classes, "data-[spacing=0]:last:rounded-r-md"
+    assert_includes classes, "data-[spacing=0]:first-of-type:rounded-l-md"
+    assert_includes classes, "data-[spacing=0]:last-of-type:rounded-r-md"
     assert_includes classes, "data-[spacing=0]:data-[variant=outline]:border-l-0"
-    assert_includes classes, "data-[spacing=0]:data-[variant=outline]:first:border-l"
+    assert_includes classes, "data-[spacing=0]:data-[variant=outline]:first-of-type:border-l"
+  end
+
+  def test_form_bound_joined_edge_classes_ignore_hidden_input
+    render_inline(Shadcn::ToggleGroupComponent.new(name: "alignment", variant: :outline)) do |group|
+      group.with_item(value: "left") { "L" }
+    end
+
+    assert_selector "div[role='group'] > input[type='hidden']:first-child", visible: :all
+
+    classes = page.find("button[data-slot='toggle-group-item']")[:class].split
+
+    assert_includes classes, "data-[spacing=0]:first-of-type:rounded-l-md"
+    assert_includes classes, "data-[spacing=0]:data-[variant=outline]:first-of-type:border-l"
   end
 
   def test_item_emits_context_data_attributes_from_group

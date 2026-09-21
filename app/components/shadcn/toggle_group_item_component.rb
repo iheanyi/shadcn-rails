@@ -21,7 +21,7 @@ module Shadcn
     GROUP_ITEM_CLASSES = "w-auto min-w-0 shrink-0 px-3 focus:z-10 focus-visible:z-10"
 
     # Joined-edge treatment when the parent group renders with spacing=0.
-    SPACING_CLASSES = "data-[spacing=0]:rounded-none data-[spacing=0]:shadow-none data-[spacing=0]:first:rounded-l-md data-[spacing=0]:last:rounded-r-md data-[spacing=0]:data-[variant=outline]:border-l-0 data-[spacing=0]:data-[variant=outline]:first:border-l"
+    SPACING_CLASSES = "data-[spacing=0]:rounded-none data-[spacing=0]:shadow-none data-[spacing=0]:first-of-type:rounded-l-md data-[spacing=0]:last-of-type:rounded-r-md data-[spacing=0]:data-[variant=outline]:border-l-0 data-[spacing=0]:data-[variant=outline]:first-of-type:border-l"
 
     def initialize(
       value:,
