@@ -29,6 +29,7 @@ module Shadcn
         aria_label: aria_label,
         variant: @variant,
         size: @size,
+        spacing: @spacing,
         group_type: @type,
         **options,
         &block
