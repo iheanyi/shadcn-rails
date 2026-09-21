@@ -53,6 +53,7 @@ class PopoverComponentTest < ViewComponent::TestCase
     assert_includes classes, "shadcn-popover"
     assert_includes classes, "z-50"
     assert_includes classes, "w-72"
+    assert_includes classes, "origin-(--radix-popover-content-transform-origin)"
     assert_includes classes, "rounded-md"
     assert_includes classes, "border"
     assert_includes classes, "bg-popover"
@@ -72,7 +73,6 @@ class PopoverComponentTest < ViewComponent::TestCase
     assert_includes classes, "data-[state=open]:zoom-in-95"
 
     refute_includes classes, "outline-none"
-    refute_includes classes, "origin-(--radix-popover-content-transform-origin)"
     refute_includes classes, "data-[size=default]"
   end
 
