@@ -248,6 +248,16 @@ class SelectComponentTest < ViewComponent::TestCase
     refute_includes classes, "hover:text-accent-foreground"
   end
 
+  def test_item_check_icon_uses_new_york_v4_size_token
+    render_inline(Shadcn::SelectItemComponent.new(value: "apple")) { "Apple" }
+
+    icon_classes = page.find("svg[data-shadcn--select-target='checkIcon']", visible: :all)[:class].split
+    assert_includes icon_classes, "size-4"
+    assert_includes icon_classes, "opacity-0"
+    refute_includes icon_classes, "h-4"
+    refute_includes icon_classes, "w-4"
+  end
+
   # Groups slot
   def test_renders_with_groups
     render_inline(Shadcn::SelectComponent.new) do |select|

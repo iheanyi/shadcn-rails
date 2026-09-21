@@ -38,7 +38,7 @@ module Shadcn
         height: "12",
         viewBox: "0 0 24 24",
         fill: "none",
-        class: "h-4 w-4 opacity-0",
+        class: "size-4 opacity-0",
         "data-shadcn--select-target": "checkIcon"
       )
     end

@@ -90,18 +90,60 @@ class ToggleGroupComponentTest < ViewComponent::TestCase
     assert_selector "button.border"
   end
 
-  def test_item_classes_match_toggle_new_york_v4
+  def test_item_classes_match_toggle_group_item_new_york_v4
     render_inline(Shadcn::ToggleGroupComponent.new) do |group|
       group.with_item(value: "test") { "Test" }
     end
 
-    assert_selector "button[data-slot='toggle-group-item']"
-    assert_includes rendered_content, "gap-2"
-    assert_includes rendered_content, "focus-visible:ring-[3px]"
-    assert_includes rendered_content, "min-w-9"
-    assert_includes rendered_content, "px-2"
-    refute_includes rendered_content, "focus-visible:ring-1"
-    refute_includes rendered_content, "px-3"
+    classes = page.find("button[data-slot='toggle-group-item']")[:class].split
+
+    # toggleVariants base
+    assert_includes classes, "gap-2"
+    assert_includes classes, "rounded-md"
+    assert_includes classes, "h-9"
+    assert_includes classes, "focus-visible:ring-[3px]"
+    refute_includes classes, "focus-visible:ring-1"
+
+    # ToggleGroupItem overrides layered on top of toggleVariants
+    assert_includes classes, "w-auto"
+    assert_includes classes, "min-w-0"
+    assert_includes classes, "shrink-0"
+    assert_includes classes, "px-3"
+    assert_includes classes, "focus:z-10"
+    assert_includes classes, "focus-visible:z-10"
+    refute_includes classes, "min-w-9"
+    refute_includes classes, "px-2"
+  end
+
+  def test_item_renders_joined_edge_classes_for_spacing_zero
+    render_inline(Shadcn::ToggleGroupComponent.new) do |group|
+      group.with_item(value: "test") { "Test" }
+    end
+
+    classes = page.find("button[data-slot='toggle-group-item']")[:class].split
+
+    assert_includes classes, "data-[spacing=0]:rounded-none"
+    assert_includes classes, "data-[spacing=0]:shadow-none"
+    assert_includes classes, "data-[spacing=0]:first:rounded-l-md"
+    assert_includes classes, "data-[spacing=0]:last:rounded-r-md"
+    assert_includes classes, "data-[spacing=0]:data-[variant=outline]:border-l-0"
+    assert_includes classes, "data-[spacing=0]:data-[variant=outline]:first:border-l"
+  end
+
+  def test_item_emits_context_data_attributes_from_group
+    render_inline(Shadcn::ToggleGroupComponent.new) do |group|
+      group.with_item(value: "test") { "Test" }
+    end
+
+    assert_selector "button[data-slot='toggle-group-item'][data-variant='default'][data-size='default'][data-spacing='0']"
+  end
+
+  def test_item_inherits_custom_context_from_group
+    render_inline(Shadcn::ToggleGroupComponent.new(variant: :outline, size: :sm, spacing: 2)) do |group|
+      group.with_item(value: "test") { "Test" }
+    end
+
+    assert_selector "button[data-slot='toggle-group-item'][data-variant='outline'][data-size='sm'][data-spacing='2']"
   end
 
   def test_item_outline_variant_uses_toggle_new_york_v4_shadow
