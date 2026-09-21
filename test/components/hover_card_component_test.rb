@@ -50,6 +50,15 @@ class HoverCardComponentTest < ViewComponent::TestCase
     refute_includes classes, "outline-none"
   end
 
+  def test_content_uses_new_york_v4_transform_origin_class
+    render_inline(Shadcn::HoverCardComponent.new) do |card|
+      card.with_card_content { "Info" }
+    end
+
+    classes = page.find("[data-shadcn--hover-card-target='content']", visible: :all)[:class].split
+    assert_includes classes, "origin-(--radix-hover-card-content-transform-origin)"
+  end
+
   def test_renders_content_hidden_by_default
     render_inline(Shadcn::HoverCardComponent.new) do |card|
       card.with_card_content { "Hidden content" }
